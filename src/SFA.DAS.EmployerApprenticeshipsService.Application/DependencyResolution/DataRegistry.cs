@@ -1,12 +1,10 @@
 ﻿using System.Data.Common;
 using System.Data.SqlClient;
-using NServiceBus.Persistence;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.NServiceBus.ClientOutbox;
-using SFA.DAS.NServiceBus.SqlServer.ClientOutbox;
-using SFA.DAS.UnitOfWork;
+using SFA.DAS.EmployerFinance.Configuration;
 using StructureMap;
+using LevyDeclarationProviderConfiguration = SFA.DAS.EAS.Domain.Configuration.LevyDeclarationProviderConfiguration;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
 {
@@ -15,19 +13,8 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public DataRegistry()
         {
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
-            For<EmployerAccountsDbContext>().Use(c => GetDbContext(c));
+            For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
             For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString));
-        }
-
-        private EmployerAccountsDbContext GetDbContext(IContext context)
-        {
-            var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
-            // neither of these resolve in ioc.
-            var clientSession = unitOfWorkContext.TryGet<IClientOutboxTransaction>();
-            var serverSession = unitOfWorkContext.TryGet<SynchronizedStorageSession>();
-            var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();
-
-            return new EmployerAccountsDbContext(sqlSession.Connection, sqlSession.Transaction);
         }
     }
 }
