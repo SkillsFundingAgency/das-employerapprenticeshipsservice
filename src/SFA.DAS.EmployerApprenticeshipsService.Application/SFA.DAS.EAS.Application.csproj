@@ -510,9 +510,6 @@
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountProviderPayments\GetAccountProviderPaymentsByDateRangeValidator.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryQueryHandler.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryRequest.cs" />
-    <Compile Include="Queries\AccountTransactions\GetAccountTransactionSummary\GetAccountTransactionSummaryResponse.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsRequest.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountTransactions\GetAccountTransactionsResponse.cs" />
@@ -602,10 +599,6 @@
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionValidator.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsValidator.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountByHashedIdValidator.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHashedHandler.cs" />

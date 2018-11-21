@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.GetAccountTransactionSummary;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountTransactionSummaryTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountTransactionSummaryTests
 {
     public class WhenIGetAccountTransactionSummary
     {

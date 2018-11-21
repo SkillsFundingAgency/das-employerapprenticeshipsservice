@@ -358,7 +358,6 @@
     <Compile Include="Queries\GetAccountTasksTests\WhenIGetAnAccountsTasks.cs" />
     <Compile Include="Queries\GetAccountTasksTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetAccountTransactionSummaryTests\WhenIGetAccountTransactionSummary.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
@@ -374,8 +373,6 @@
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByIdRequest.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIGetEmployerTransactions.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementTemplateTests\WhenIRequestTheLatestEmployerAgreementTemplate.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIGetEnglishFractions.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIValidateTheQuery.cs" />
