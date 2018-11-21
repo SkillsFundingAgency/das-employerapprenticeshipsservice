@@ -317,7 +317,6 @@
     <Compile Include="Commands\CreateLegalEntityCommandTests\WhenICallCreateLegalEntityWhenNotAccountOwner.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandlerTests.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
     <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />

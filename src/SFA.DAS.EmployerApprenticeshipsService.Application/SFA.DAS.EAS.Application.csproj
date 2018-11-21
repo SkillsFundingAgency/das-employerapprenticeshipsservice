@@ -333,13 +333,11 @@
   <ItemGroup>
     <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityValidator.cs" />
     <Compile Include="Extensions\AddressExtensions.cs" />
+    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityResponse.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityValidator.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommand.cs" />
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandValidator.cs" />
