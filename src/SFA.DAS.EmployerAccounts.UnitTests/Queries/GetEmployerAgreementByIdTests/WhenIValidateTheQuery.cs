@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementByIdTests
 {
     internal class WhenIValidateTheQuery
     {
