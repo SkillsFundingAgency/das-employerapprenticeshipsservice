@@ -1,6 +1,7 @@
-using System.Web.Mvc;
-using SFA.DAS.EAS.Account.Api.Helpers;
+using System.Web.Http;
 using SFA.DAS.EAS.Domain.Configuration;
+using StructureMap;
+using WebApi.StructureMap;
 using UrlHelper = System.Web.Http.Routing.UrlHelper;
 
 namespace SFA.DAS.EAS.Account.Api.Extensions
@@ -9,9 +10,9 @@ namespace SFA.DAS.EAS.Account.Api.Extensions
     {
         public static string EmployerAccountsApiAction(this UrlHelper helper, string pathAndQuery)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
+            var configuration = container.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
             var baseUrl = configuration.EmployerAccountsApiBaseUrl;
-            baseUrl = "https://localhost:44330/";
 
             return Action(baseUrl, pathAndQuery);
         }
@@ -19,9 +20,9 @@ namespace SFA.DAS.EAS.Account.Api.Extensions
 
         public static string EmployerFinanceApiAction(this UrlHelper helper, string pathAndQuery)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
+            var configuration = container.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
             var baseUrl = configuration.EmployerFinanceApiBaseUrl;
-            baseUrl = "https://localhost:44330/";
 
             return Action(baseUrl, pathAndQuery);
         }
