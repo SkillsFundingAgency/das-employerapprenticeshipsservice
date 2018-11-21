@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using SFA.DAS.Authorization.Mvc;
 
 namespace SFA.DAS.Authorization
 {
-    public abstract class MembershipMessage : IAccountMessage, IUserMessage
+    public abstract class MembershipMessage : IAccountMessage, IUserMessage, IAccountViewModel
     {
         [IgnoreMap]
         [Required]
