@@ -62,6 +62,7 @@
   <ItemGroup>
     <Compile Include="Extensions\LevyDeclarationExtensionsTests.cs" />
     <Compile Include="PayrollPeriodComparerTests.cs" />
+    <Compile Include="Rules\Infratsructure\DeclarationSummaryFactoryTests.cs" />
     <Compile Include="Rules\ScenarioTests.cs" />
     <Compile Include="Rules\YearEndAdjustmentsShouldBeCummulativeTests.cs" />
     <Compile Include="Rules\SupercededLevyShouldNotResultInATransactionTests.cs" />

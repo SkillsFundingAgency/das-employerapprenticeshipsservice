@@ -8,10 +8,12 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
     public class RuleRepository : IRuleRepository
     {
         private readonly IRule[] _allRules;
+        private readonly IDeclarationSummaryFactory _declarationSummaryFactory;
 
-        public RuleRepository(IRule[] allRules)
+        public RuleRepository(IRule[] allRules, IDeclarationSummaryFactory declarationSummaryFactory)
         {
             _allRules = allRules;
+            _declarationSummaryFactory = declarationSummaryFactory;
         }
 
         public IRuleSetEvaluationResult ApplyAllRules(Account account)
@@ -40,6 +42,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
                 }
             }
 
+            if (!result.IsValid)
+            {
+                AddDeclarationSummaries(result, account);
+            }
+
             return result;
         }
 
@@ -50,6 +57,15 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
             var result = new RuleEvaluationResult(rule.Name, rule.RequiredValidationObject, account.Id);
             rule.Validate(account, result);
             return result;
+        }
+
+        private void AddDeclarationSummaries(RuleSetEvaluationResult ruleSetEvaluationResult, Account account)
+        {
+            for (int i = 0; i < account.LevyDeclarations.Length; i++)
+            {
+                var declarationSummary = _declarationSummaryFactory.Create(account, i);
+                ruleSetEvaluationResult.AddDeclarationSummary(declarationSummary);
+            }
         }
     }
 }

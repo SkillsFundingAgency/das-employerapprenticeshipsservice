@@ -105,6 +105,10 @@
     <Compile Include="Rules\CalculatedLevyDeclation.cs" />
     <Compile Include="Rules\Infrastructure\AccountValidationResult.cs" />
     <Compile Include="Rules\Infrastructure\AllAccountValidationResult.cs" />
+    <Compile Include="Rules\Infrastructure\DeclarationState.cs" />
+    <Compile Include="Rules\Infrastructure\DeclarationSummary.cs" />
+    <Compile Include="Rules\Infrastructure\DeclarationSummaryFactory.cs" />
+    <Compile Include="Interfaces\IDeclarationSummaryFactory.cs" />
     <Compile Include="Rules\Infrastructure\RuleSetEvaluationResult.cs" />
     <Compile Include="Rules\YearEndAdjustmentsShouldBeCummulative.cs" />
     <Compile Include="Rules\LevyDeclaredForMonthShouldMatchExpected.cs" />

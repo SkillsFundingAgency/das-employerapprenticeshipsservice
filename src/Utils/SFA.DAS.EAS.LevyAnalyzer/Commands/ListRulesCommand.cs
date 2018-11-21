@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
         {
             foreach (var rule in _ruleRepository.AvailableRules)
             {
-                Console.WriteLine($"{rule.Name, 50} works-against: {rule.RequiredValidationObject}");
+                Console.WriteLine($"{rule.Name, -50} works-against: {rule.RequiredValidationObject}");
             }
 
             return Task.CompletedTask;

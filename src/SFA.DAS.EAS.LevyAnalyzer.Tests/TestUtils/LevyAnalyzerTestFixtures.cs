@@ -87,11 +87,18 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
             return this;
         }
 
-        private Account CreateAccount()
+        public LevyAnalyzerTestFixtures WithPeriodEndDate(string payrollYear, byte payrollMonth, DateTime lastSubmissionDate)
         {
-            const long testAccountId = 123;
+            var payrollPeriodRange = new DateRange
+            {
+                EndDate = lastSubmissionDate
+            };
 
-            return new Account(testAccountId, Transactions.ToArray(), Declarations.ToArray());
+            HmrcDateServiceMock
+                .Setup(ds => ds.GetDateRangeForPayrollPeriod(payrollYear, payrollMonth))
+                .Returns(payrollPeriodRange);
+
+            return this;
         }
 
         public void RunValidate(IRule rule, Action<RuleEvaluationResult, Account> check)
@@ -165,6 +172,22 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
             }
         }
 
+        public void AssertDeclarationSummaryIs(long submissionId, DeclarationState expectedState)
+        {
+            var declarationSummaryFactory = new DeclarationSummaryFactory(HmrcDateService);
+
+            var declaration = Declarations.Single(d => d.SubmissionId == submissionId);
+
+            var index = Declarations.IndexOf(declaration);
+
+            var account = CreateAccount();
+
+            var declarationSummary = declarationSummaryFactory.Create(account, index);
+
+            Assert.AreEqual(expectedState, declarationSummary.State);
+        }
+
+
         public void AssertIsValid(IRule rule)
         {
             RunValidate(rule, (result, account) => {
@@ -232,6 +255,13 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
             Assert.IsFalse(foundErrors, "The active submissions are not those expected");
         }
 
+        private Account CreateAccount()
+        {
+            const long testAccountId = 123;
+
+            return new Account(testAccountId, Transactions.ToArray(), Declarations.ToArray());
+        }
+
         private bool AddSubmissionIds(StringBuilder sb, string message, List<long> submissionIds)
         {
             if (submissionIds.Count == 0)
@@ -266,6 +296,10 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
             HmrcDateServiceMock
                 .Setup(ds => ds.IsDateInPayrollPeriod(payrollYear, payrollMonth, submissionDate))
                 .Returns(isOnTime);
+
+            var periodEndDate = isOnTime ? submissionDate.AddDays(1) : submissionDate.AddDays(-1);
+
+            WithPeriodEndDate(payrollYear, payrollMonth, periodEndDate);
 
             Declarations.Add(levy);
 
@@ -305,7 +339,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
                 new YearEndAdjustmentsShouldBeCummulative(HmrcDateService)
             };
 
-            return new RuleRepository(rules);
+            return new RuleRepository(rules, new DeclarationSummaryFactory(HmrcDateService));
         }
     }
 }

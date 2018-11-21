@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure;
 
 namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
 {
@@ -10,5 +11,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
         IReadOnlyCollection<IRuleEvaluationResult> RuleEvaluationResults { get; }
 
         bool IsValid { get; }
+
+        IReadOnlyCollection<DeclarationSummary> DeclarationSummaries { get; }
     }
 }
