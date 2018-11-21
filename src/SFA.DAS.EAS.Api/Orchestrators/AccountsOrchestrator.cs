@@ -3,8 +3,6 @@ using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
-using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Transfers;
@@ -72,47 +70,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
             var viewModel = ConvertPayeSchemeToViewModel(hashedAccountId, payeSchemeResult);
             return new OrchestratorResponse<PayeSchemeViewModel> { Data = viewModel };
-        }
-
-
-        public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
-        {
-            _logger.Info($"Requesting levy declaration for account {hashedAccountId}");
-
-            var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationRequest { HashedAccountId = hashedAccountId });
-            if (levyDeclarations.Declarations == null)
-            {
-                return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
-            }
-
-            var levyViewModels = levyDeclarations.Declarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
-            levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
-
-            return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
-            {
-                Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
-                Status = HttpStatusCode.OK
-            };
-        }
-
-        public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId, string payrollYear, short payrollMonth)
-        {
-            _logger.Info($"Requesting levy declaration for account {hashedAccountId}, year {payrollYear} and month {payrollMonth}");
-
-            var levyDeclarations = await _mediator.SendAsync(new GetLevyDeclarationsByAccountAndPeriodRequest { HashedAccountId = hashedAccountId, PayrollYear = payrollYear, PayrollMonth = payrollMonth });
-            if (levyDeclarations.Declarations == null)
-            {
-                return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>> { Data = null };
-            }
-
-            var levyViewModels = levyDeclarations.Declarations.Select(x => _mapper.Map<LevyDeclarationViewModel>(x)).ToList();
-            levyViewModels.ForEach(x => x.HashedAccountId = hashedAccountId);
-
-            return new OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>
-            {
-                Data = new AccountResourceList<LevyDeclarationViewModel>(levyViewModels),
-                Status = HttpStatusCode.OK
-            };
         }
 
         private PayeSchemeViewModel ConvertPayeSchemeToViewModel(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)

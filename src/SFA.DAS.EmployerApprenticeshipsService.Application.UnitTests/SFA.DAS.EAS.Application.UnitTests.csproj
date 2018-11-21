@@ -368,9 +368,6 @@
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEmployerAgreementQueryTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIGetLevyDeclarations.cs" />
-    <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriodTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetOrganisationTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Queries\GetOrganisationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeByRefTests\WhenIGetAPayeScheme.cs" />
@@ -387,8 +384,6 @@
     <Compile Include="Queries\GetEnglishFrationDetail\WhenIGetEnglishFractionDetail.cs" />
     <Compile Include="Queries\GetEnglishFrationDetail\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetLatestAccountAgreementTemplateTests\WhenIRequestTheLatestAgreementTemplate.cs" />
-    <Compile Include="Queries\GetLevyDeclarationTests\WhenIGetLevyDeclarations.cs" />
-    <Compile Include="Queries\GetLevyDeclarationTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetPayeSchemeInUseTests\WhenIQueryExistingSchemes.cs" />
