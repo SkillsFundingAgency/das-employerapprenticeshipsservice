@@ -1,10 +1,8 @@
-﻿using MediatR;
-using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Application.Messages;
+﻿using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnections
 {
-    public class GetTransferConnectionsQuery : AccountMessage, IAsyncRequest<GetTransferConnectionsResponse>
+    public class GetTransferConnectionsQuery : AccountMessage
     {
     }
 }
