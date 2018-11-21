@@ -611,9 +611,6 @@
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionValidator.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
@@ -677,10 +674,6 @@
     <Compile Include="Queries\GetTeamUser\GetTeamUserHandler.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamMemberQuery.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamMemberResponse.cs" />
-    <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequest.cs" />
-    <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestHandler.cs" />
-    <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestValidator.cs" />
-    <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQuery.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationQueryHandler.cs" />
     <Compile Include="Queries\SendTransferConnectionInvitation\SendTransferConnectionInvitationQuery.cs" />
