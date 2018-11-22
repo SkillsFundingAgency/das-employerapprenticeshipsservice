@@ -8,7 +8,9 @@ using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
@@ -24,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         private MembershipView _callerMembership;
         private TeamMember _userMembership;
         private Mock<IMediator> _mediator;
+        private Mock<IEventPublisher> _eventPublisher;
 
         [SetUp]
         public void Setup()
@@ -58,8 +61,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _membershipRepository.Setup(x => x.Get(_callerMembership.AccountId, _command.Email)).ReturnsAsync(_userMembership);
 
             _mediator = new Mock<IMediator>();
+            _eventPublisher = new Mock<IEventPublisher>();
 
-            _handler = new ChangeTeamMemberRoleCommandHandler(_membershipRepository.Object, _mediator.Object);
+            _handler = new ChangeTeamMemberRoleCommandHandler(_membershipRepository.Object, _mediator.Object, _eventPublisher.Object);
             
         }
 
@@ -175,6 +179,18 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             await _handler.Handle(_command);
 
             _membershipRepository.Verify(x => x.ChangeRole(_userMembership.Id, _callerMembership.AccountId, _command.RoleId), Times.Once);
+        }
+
+        [Test]
+        public async Task WillPublishUserRoleUpdatedEvent()
+        {
+            await _handler.Handle(_command);
+
+            _eventPublisher.Verify(x => x.Publish(It.Is<UserRoleUpdatedEvent>(
+                p => p.AccountId  == _callerMembership.AccountId &&
+                     p.UserRef == _callerMembership.UserRef &&
+                     p.Roles.Contains(_command.RoleId)))
+                , Times.Once);
         }
 
         [Test]
