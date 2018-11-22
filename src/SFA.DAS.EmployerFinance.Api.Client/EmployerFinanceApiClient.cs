@@ -18,6 +18,12 @@ namespace SFA.DAS.EmployerFinance.Api.Client
             _httpClient = new SecureHttpClient(configuration);
         }
 
+        public EmployerFinanceApiClient(IEmployerFinanceApiClientConfiguration configuration, SecureHttpClient httpClient)
+        {
+            _configuration = configuration;
+            _httpClient = httpClient;
+        }
+
         public Task HealthCheck()
         {
             var baseUrl = GetBaseUrl();
