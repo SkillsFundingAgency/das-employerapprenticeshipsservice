@@ -9,7 +9,7 @@ BEGIN
 			ALE.Name, 
 			ISNULL(Signed.StatusId, Pending.StatusId) AS Status, 
 			a.HashedId, 
-			le.Code,
+			le.Code as LegalEntityCode,
 			le.[Source] as LegalEntitySource
 	FROM	employer_account.AccountLegalEntity AS ALE
 			JOIN employer_account.Account AS A
