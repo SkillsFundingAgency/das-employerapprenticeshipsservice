@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@accountId", accountId, DbType.Int64);
 
             return _db.Value.Database.Connection.QuerySingleAsync<decimal>(
-                sql: "SELECT SUM(Amount) FROM [employer_financial].[TransactionLine] WHERE AccountId = @accountId AND TransactionType in (1, 2, 3, 4)",
+                sql: "SELECT ISNULL(SUM(Amount),0) FROM [employer_financial].[TransactionLine] WHERE AccountId = @accountId AND TransactionType in (1, 2, 3, 4)",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

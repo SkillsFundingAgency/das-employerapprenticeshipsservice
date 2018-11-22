@@ -393,7 +393,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
         }
 
-        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string accountLegalEntityPublicHashedId, string organisationName, string organisationAddress)
+        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(
+            string accountLegalEntityPublicHashedId, string organisationName, string organisationAddress, string hashedAccountId, string userId)
         {
             var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
             {
@@ -402,11 +403,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             try
             {
-                var request = new UpdateOrganisationDetailsRequest
+                var request = new UpdateOrganisationDetailsCommand
                 {
                     AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId),
                     Name = organisationName,
-                    Address = organisationAddress
+                    Address = organisationAddress,
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId
                 };
 
                 await _mediator.SendAsync(request);

@@ -156,7 +156,7 @@
                 <div class="js-float">
                     <p class="floating-head-text">Your employer account </p>
                     <nav id="user-nav">
-                        <ul role="menubar">
+                        <ul>
                             <li>
                                 <a href="@Url.Action("Help", "Home")">Help</a>
                             </li>
@@ -217,7 +217,7 @@
         {
             <div class="header-organisation" role="navigation">
                 <nav class="header-inner">
-                    <ul role="menubar" id="global-nav-links">
+                    <ul id="global-nav-links">
                         <li>
                             <a href="@Url.EmployerAccountsAction("teams")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a>
                         </li>

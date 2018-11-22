@@ -344,10 +344,9 @@
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandValidator.cs" />
     <Compile Include="DependencyResolution\ApprenticeshipLevyRegistry.cs" />
-    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsHandler.cs" />
-    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsRequest.cs" />
-    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsResponse.cs" />
-    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsValidator.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsCommandHandler.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsCommand.cs" />
+    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsCommandValidator.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
