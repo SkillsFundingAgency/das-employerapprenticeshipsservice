@@ -38,10 +38,14 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreements
             Query = new GetAccountEmployerAgreementsRemoveRequest {HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId};
 
             _repository = new Mock<IEmployerAgreementRepository>();
-            _repository.Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
+            _repository
+                .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
                 .ReturnsAsync(new List<RemoveEmployerAgreementView>
                 {
-                    new RemoveEmployerAgreementView {Name = "test company", CanBeRemoved = true, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode}   
+                    new RemoveEmployerAgreementView
+                    {
+                        Name = "test company", CanBeRemoved = true, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode, HashedAgreementId = "hashed stuff"
+                    }   
                 });
 
             _commitmentsApi = new Mock<IEmployerCommitmentApi>();
