@@ -7,8 +7,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class TransferConnectionInvitationViewModel : MembershipMessage
     {
-        public long AccountId { get; set; }
-
         [Required(ErrorMessage = "Option required")]
         [RegularExpression("Confirm|GoToTransfersPage", ErrorMessage = "Option required")]
         public string Choice { get; set; }

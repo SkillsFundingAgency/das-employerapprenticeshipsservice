@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountTransactionSummary
             //Arrange
             var accountId = 1234;
             _hashingService.Setup(x => x.DecodeValue(_query.HashedAccountId)).Returns(accountId);
-            var expectedTransactionSummary = new List<TransactionSummary>();
+            var expectedTransactionSummary = new TransactionSummary[0];
             _repository.Setup(x => x.GetAccountTransactionSummary(accountId)).ReturnsAsync(expectedTransactionSummary);
 
             //Act
