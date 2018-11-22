@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
 
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                           .ReturnsAsync(new List<TransactionLine>());
+                           .ReturnsAsync(new TransactionLine[0]);
 
             _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(2);
@@ -121,7 +121,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Arrange
-            var transactions = new List<TransactionLine>
+            var transactions = new TransactionLine[]
                 {
                     new LevyDeclarationTransactionLine
                     {
@@ -143,7 +143,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             Assert.AreEqual(_request.HashedAccountId, response.Data.HashedAccountId);
             Assert.AreEqual(1, response.Data.AccountId);
-            Assert.AreEqual(1, response.Data.TransactionLines.Count);
+            Assert.AreEqual(1, response.Data.TransactionLines.Length);
         }
 
 
@@ -164,7 +164,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         {
             //Arrange
             var expectedUkprn = 545646541;
-            var transactions = new List<TransactionLine>
+            var transactions = new TransactionLine[]
                 {
                     new PaymentTransactionLine()
                     {
@@ -192,7 +192,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenTheProviderNameIsNotRecognisedIfTheRecordThrowsAndException()
         {
             //Arrange
-            var transactions = new List<TransactionLine>
+            var transactions = new TransactionLine[]
                 {
                     new PaymentTransactionLine
                     {
@@ -220,7 +220,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenTheProviderNameIsSetToUnknownProviderIfTheRecordCantBeFound()
         {
             //Arrange
-            var transactions = new List<TransactionLine>
+            var transactions = new TransactionLine[]
             {
                 new PaymentTransactionLine
                 {
@@ -248,7 +248,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenShouldLogIfExceptionOccursWhenGettingProviderName()
         {
             //Arrange
-            var transactions = new List<TransactionLine>
+            var transactions = new TransactionLine[]
             {
                 new PaymentTransactionLine
                 {
@@ -259,6 +259,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                     UkPrn = 1254545
                 }
             };
+
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(transactions);
 
@@ -283,7 +284,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             };
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<TransactionLine>
+                .ReturnsAsync(new TransactionLine[]
                 {
                     transaction
                 });
@@ -310,7 +311,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             };
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<TransactionLine>
+                .ReturnsAsync(new TransactionLine[]
                 {
                     transaction
                 });
@@ -341,7 +342,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 .Returns(new ProvidersView { Provider = provider });
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<TransactionLine>
+                .ReturnsAsync(new TransactionLine[]
                 {
                     transaction
                 });
@@ -375,7 +376,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 .Returns(new ProvidersView { Provider = provider });
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<TransactionLine>
+                .ReturnsAsync(new TransactionLine[]
                 {
                     transaction
                 });
@@ -412,7 +413,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             var p = _apprenticshipInfoService.Object.GetProvider(100);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<TransactionLine>
+                .ReturnsAsync(new TransactionLine[]
                 {
                     transaction
                 });
@@ -434,7 +435,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenShouldReturnPreviousTransactionsAreAvailableIfThereAreSome()
         {
             //Arrange
-            var transactions = new List<TransactionLine>
+            var transactions = new TransactionLine[]
             {
                 new LevyDeclarationTransactionLine
                 {
@@ -461,8 +462,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenShouldReturnPreviousTransactionsAreNotAvailableIfThereAreNone()
         {
             //Arrange
-            //Arrange
-            var transactions = new List<TransactionLine>
+            var transactions = new TransactionLine[]
             {
                 new LevyDeclarationTransactionLine
                 {
@@ -503,7 +503,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
 
             _dasLevyService.Setup(x =>
                     x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<TransactionLine>
+                .ReturnsAsync(new TransactionLine[]
                 {
                     transaction
                 });
@@ -534,7 +534,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
 
             _dasLevyService.Setup(x =>
                     x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<TransactionLine>
+                .ReturnsAsync(new TransactionLine[]
                 {
                     transaction
                 });

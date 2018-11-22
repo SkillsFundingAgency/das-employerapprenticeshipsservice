@@ -1,13 +1,13 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Linq;
+using AutoMapper;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.Provider.Events.Api.Types;
 using StructureMap.TypeRules;
-using System;
-using System.Linq;
 using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Mapping.PaymentMappingTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Mappings
 {
     class WhenIMapAPaymentToPaymentDetails
     {
@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Mapping.PaymentMappingTests
         {
             var profiles = AppDomain.CurrentDomain
                 .GetAssemblies()
-                .Where(a => a.FullName.StartsWith("SFA.DAS.EAS"))
+                .Where(a => a.FullName.StartsWith("SFA.DAS.EmployerFinance"))
                 .SelectMany(a => a.GetTypes())
                 .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
                 .Select(t => (Profile)Activator.CreateInstance(t))
