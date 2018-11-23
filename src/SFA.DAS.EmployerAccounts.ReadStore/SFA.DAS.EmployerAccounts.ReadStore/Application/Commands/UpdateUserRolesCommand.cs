@@ -4,7 +4,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
 {
-    internal class UserRolesUpdatedCommand : IReadStoreRequest<Unit>
+    internal class UpdateUserRolesCommand : IReadStoreRequest<Unit>
     {
         public long AccountId { get; }
         public Guid UserRef { get; }
@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
         public string MessageId { get; }
         public DateTime Updated { get; }
 
-        public UserRolesUpdatedCommand(long accountId, Guid userRef, HashSet<short> roles, string messageId, DateTime updated)
+        public UpdateUserRolesCommand(long accountId, Guid userRef, HashSet<short> roles, string messageId, DateTime updated)
         {
             AccountId = accountId;
             UserRef = userRef;

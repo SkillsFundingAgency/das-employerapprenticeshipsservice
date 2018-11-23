@@ -7,15 +7,15 @@ using SFA.DAS.EmployerAccounts.ReadStore.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
 {
-    internal class UserRolesUpdatedCommandHandler : IReadStoreRequestHandler<UserRolesUpdatedCommand, Unit>
+    internal class UpdateUserRolesCommandHandler : IReadStoreRequestHandler<UpdateUserRolesCommand, Unit>
     {
         private readonly IUsersRolesRepository _usersRolesRepository;
 
-        public UserRolesUpdatedCommandHandler(IUsersRolesRepository usersRolesRepository)
+        public UpdateUserRolesCommandHandler(IUsersRolesRepository usersRolesRepository)
         {
             _usersRolesRepository = usersRolesRepository;
         }
-        public async Task<Unit> Handle(UserRolesUpdatedCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateUserRolesCommand request, CancellationToken cancellationToken)
         {
             var user = _usersRolesRepository.CreateQuery()
                 .SingleOrDefault(x => x.UserRef == request.UserRef && x.AccountId == request.AccountId);

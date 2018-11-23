@@ -5,4 +5,5 @@
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.Api.Client")]
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.Api.Client.UnitTests")]
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.MessageHandlers")]
+[assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
