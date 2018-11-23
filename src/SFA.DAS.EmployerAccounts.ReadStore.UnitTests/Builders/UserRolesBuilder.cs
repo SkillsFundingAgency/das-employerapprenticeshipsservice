@@ -1,97 +1,64 @@
-//using System;
-//using System.Collections.Generic;
-//using SFA.DAS.ProviderRelationships.ReadStore.Models;
-//using SFA.DAS.ProviderRelationships.Types.Models;
+using System;
+using System.Collections.Generic;
+using SFA.DAS.EmployerAccounts.ReadStore.Models;
+using SFA.DAS.EmployerAccounts.Types.Models;
 
-//namespace SFA.DAS.ProviderRelationships.ReadStore.UnitTests.Builders
-//{
-//    internal class RelationshipBuilder
-//    {
-//        private readonly Relationship _relationship;
+namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Builders
+{
+    internal class UserRolesBuilder
+    {
+        private readonly UserRoles _userRoles;
 
-//        public RelationshipBuilder()
-//        {
-//            _relationship = (Relationship)Activator.CreateInstance(typeof(Relationship), true);
-//        }
+        public UserRolesBuilder()
+        {
+            _userRoles = (UserRoles)Activator.CreateInstance(typeof(UserRoles), true);
+        }
 
-//        public RelationshipBuilder WithId(Guid id)
-//        {
-//            _relationship.SetPropertyTo(p => p.Id, id);
+        public UserRolesBuilder WithId(Guid id)
+        {
+            _userRoles.SetPropertyTo(p => p.Id, id);
 
-//            return this;
-//        }
+            return this;
+        }
 
-//        public RelationshipBuilder WithETag(string eTag)
-//        {
-//            _relationship.SetPropertyTo(p => p.ETag, eTag);
+        public UserRolesBuilder WithAccountId(long accountId)
+        {
+            _userRoles.SetPropertyTo(p => p.AccountId, accountId);
 
-//            return this;
-//        }
+            return this;
+        }
 
-//        public RelationshipBuilder WithUkprn(long ukprn)
-//        {
-//            _relationship.SetPropertyTo(p => p.Ukprn, ukprn);
+        public UserRolesBuilder WithUserRef(Guid userRef)
+        {
+            _userRoles.SetPropertyTo(p => p.UserRef, userRef);
 
-//            return this;
-//        }
+            return this;
+        }
 
-//        public RelationshipBuilder WithAccountId(long employerAccountId)
-//        {
-//            _relationship.SetPropertyTo(p => p.AccountId, employerAccountId);
-            
-//            return this;
-//        }
+        public UserRolesBuilder WithRoles(HashSet<UserRole> roles)
+        {
+            _userRoles.SetPropertyTo(p => p.Roles, roles);
 
+            return this;
+        }
 
-//        public RelationshipBuilder WithAccountLegalEntityId(long employerAccountLegalEntityId)
-//        {
-//            _relationship.SetPropertyTo(p => p.AccountLegalEntityId, employerAccountLegalEntityId);
-            
-//            return this;
-//        }
+        public UserRolesBuilder WithUpdated(DateTime updated)
+        {
+            _userRoles.SetPropertyTo(p => p.Updated, updated);
 
-//        public RelationshipBuilder WithAccountProviderId(int employerAccountProviderId)
-//        {
-//            _relationship.SetPropertyTo(p => p.AccountProviderId, employerAccountProviderId);
-            
-//            return this;
-//        }
+            return this;
+        }
 
+        public UserRolesBuilder WithDeleted(DateTime? deleted)
+        {
+            _userRoles.SetPropertyTo(p => p.Deleted, deleted);
 
-//        public RelationshipBuilder WithOperation(Operation operation)
-//        {
-//            _relationship.SetPropertyTo(p => p.Operations, new List<Operation> { operation });
-            
-//            return this;
-//        }
+            return this;
+        }
 
-//        public RelationshipBuilder WithOutboxMessage(OutboxMessage item)
-//        {
-//            var outboxData = (List<OutboxMessage>)_relationship.OutboxData;
-            
-//            outboxData.Clear();
-//            outboxData.Add(item);
-
-//            return this;
-//        }
-
-//        public RelationshipBuilder WithDeleted(DateTime deleted)
-//        {
-//            _relationship.SetPropertyTo(p => p.Deleted, deleted);
-
-//            return this;
-//        }
-
-//        public RelationshipBuilder WithUpdated(DateTime updated)
-//        {
-//            _relationship.SetPropertyTo(p => p.Updated, updated);
-
-//            return this;
-//        }
-
-//        public Relationship Build()
-//        {
-//            return _relationship;
-//        }
-//    }
-//}
+        public UserRoles Build()
+        {
+            return _userRoles;
+        }
+    }
+}
