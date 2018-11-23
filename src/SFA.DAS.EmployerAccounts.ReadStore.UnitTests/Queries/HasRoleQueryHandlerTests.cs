@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddSingleMatchingUserRole()
         {
             Roles.AddRange(new []{
-                new UserRoles(Query.UserRef, Query.EmployerAccountId, Query.UserRoles, DateTime.UtcNow), //matching
+                new UserRoles(Query.UserRef, Query.EmployerAccountId, Query.UserRoles, "MessageID", DateTime.UtcNow), //matching
             });
 
             return this;
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddNonMatchingOnUserRefRole()
         {
             Roles.AddRange(new[]{
-                new UserRoles(Guid.NewGuid(), Query.EmployerAccountId, Query.UserRoles, DateTime.UtcNow), //not matching on UserRef
+                new UserRoles(Guid.NewGuid(), Query.EmployerAccountId, Query.UserRoles, "MessageID", DateTime.UtcNow), //not matching on UserRef
             });
 
             return this;
@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddNonMatchingOnAccountIdRole()
         {
             Roles.AddRange(new[]{
-                new UserRoles(Query.UserRef, 214, Query.UserRoles, DateTime.UtcNow), //not matching on account id
+                new UserRoles(Query.UserRef, 214, Query.UserRoles, "MessageID", DateTime.UtcNow), //not matching on account id
             });
 
             return this;
@@ -114,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddNonMatchingOnRoleEnumRole()
         {
             Roles.AddRange(new[]{
-                new UserRoles(Query.UserRef, Query.EmployerAccountId, new HashSet<UserRole>{ UserRole.Transactor}, DateTime.UtcNow), //not matching on role
+                new UserRoles(Query.UserRef, Query.EmployerAccountId, new HashSet<UserRole>{ UserRole.Transactor}, "MessageID", DateTime.UtcNow), //not matching on role
             });
 
             return this;

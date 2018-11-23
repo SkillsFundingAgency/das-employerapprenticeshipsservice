@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
 
             if (user == null)
             {
-                user = new UserRoles(request.UserRef, request.AccountId, request.Roles, request.Updated);
+                user = new UserRoles(request.UserRef, request.AccountId, request.Roles, request.MessageId, request.Updated);
                 await _usersRolesRepository.Add(user, null, cancellationToken);
             }
             //else
