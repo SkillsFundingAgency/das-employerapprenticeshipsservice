@@ -16,18 +16,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
         private TransferConnectionInvitationsController _controller;
         private SendTransferConnectionInvitationViewModel _viewModel;
-        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Arrange()
         {
+            _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<long>>())).ReturnsAsync(TransferConnectionId);
 
             _controller = new TransferConnectionInvitationsController(null, _mediator.Object);
 
             _viewModel = new SendTransferConnectionInvitationViewModel
             {
-                SendTransferConnectionInvitationCommand = new SendTransferConnectionInvitationCommand()
+                ReceiverAccountPublicHashedId = "ABC123"
             };
         }
 
@@ -38,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Send(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationCommand), Times.Once);
+            _mediator.Verify(m => m.SendAsync(It.Is<SendTransferConnectionInvitationCommand>(c => c.ReceiverAccountPublicHashedId == _viewModel.ReceiverAccountPublicHashedId)), Times.Once);
         }
 
         [Test]
@@ -63,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Send(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(_viewModel.SendTransferConnectionInvitationCommand), Times.Never);
+            _mediator.Verify(m => m.SendAsync(It.IsAny<SendTransferConnectionInvitationCommand>()), Times.Never);
         }
 
         [Test]

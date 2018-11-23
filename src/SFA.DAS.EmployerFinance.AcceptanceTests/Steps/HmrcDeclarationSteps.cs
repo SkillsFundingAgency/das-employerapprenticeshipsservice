@@ -14,6 +14,7 @@ using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Paye;
+using SFA.DAS.NLog.Logger;
 using TechTalk.SpecFlow;
 
 
@@ -22,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
     [Binding]
     public class HmrcDeclarationSteps : TechTalk.SpecFlow.Steps
     {
-        public const int StepTimeout = 3 * 60 * 1000;
+        public const int StepTimeout = 2 * 60 * 1000;   // 1 minute
 
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
@@ -45,28 +46,43 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [When(@"we refresh levy data for paye scheme")]
         public Task WhenWeRefreshLevyData()
         {
-            return _objectContainer.ScopeAsync(async c =>
-            {
-                var empref = _objectContext.GetEmpRef();
+            var timeout = Debugger.IsAttached ? 10 * 60 * 1000 : StepTimeout;
+            var cancellationTokenSource = new CancellationTokenSource(timeout);
 
-                var cancellationTokenSource = new CancellationTokenSource(Debugger.IsAttached ? -1 : StepTimeout);
-                var account = _objectContext.Get<Account>();
+            var account = _objectContext.Get<Account>();
 
-                await c.Resolve<IMessageSession>().Send(new ImportAccountLevyDeclarationsCommand
-                {
-                    AccountId = account.Id,
-                     PayeRef = empref
-                });
+            _objectContainer.Resolve<ILog>().Info("About to start levy run task.");
 
-                var allLevyDeclarationsLoaded = await c.Resolve<ITransactionRepository>()
-                    .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
+            return _objectContainer.RunStepsInIsolation(cancellationTokenSource.Token,
+                    // step 1: send request to get levy declarations to start that process running...
+                    c =>
+                    {
+                        _objectContainer.Resolve<ILog>().Info("About to start levy run.");
 
-                if (!allLevyDeclarationsLoaded)
-                {
-                    throw new Exception($"The levy declarations have not been completely loaded within the allowed time ({StepTimeout} msecs). Either they are still loading or something has failed.");
-                }
-            });
+                        var empref = _objectContext.GetEmpRef();
+
+                        return c.Resolve<IMessageSession>().Send(new ImportAccountLevyDeclarationsCommand
+                        {
+                            AccountId = account.Id,
+                            PayeRef = empref
+                        });
+                    },
+
+                    // step 2: wait for the levy declaration process to finish writing the transactions...
+                    async c => 
+                    {
+                        _objectContainer.Resolve<ILog>().Info("About to start polling for levy decalaration.");
+
+                        var allLevyDeclarationsLoaded = await c.Resolve<ITransactionRepository>()
+                            .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
+
+                        if (!allLevyDeclarationsLoaded)
+                        {
+                            throw new Exception($"The levy declarations have not been completely loaded within the allowed time ({timeout} msecs). Either they are still loading or something has failed.");
+                        }
+                    });
         }
+
 
         [When(@"all the transaction lines in this scenario have had their transaction date updated to their created date")]
         public Task WhenScenarioTransactionLinesTransactionDateHaveBeenUpdatedToTheirCreatedDate()

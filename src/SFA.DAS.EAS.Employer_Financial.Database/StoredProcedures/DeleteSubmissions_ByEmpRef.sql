@@ -4,18 +4,23 @@ AS
 
 	SET NOCOUNT ON
 
-	DELETE	
-	FROM	employer_financial.TransactionLine 
+	DECLARE @SubmissionIdsInUseByEmpRef AS table(submissionId bigint);
+
+	INSERT INTO @SubmissionIdsInUseByEmpRef
+	SELECT	SubmissionId
+	FROM	employer_financial.LevyDeclaration
 	WHERE	EmpRef = @empRef;
 
-	DELETE ldt
-	FROM	employer_financial.LevyDeclarationTopup ldt
-	INNER JOIN	employer_financial.LevyDeclaration ld 
-		On ld.SubmissionId= ldt.SubmissionId
-	WHERE	ld.EmpRef = @empRef;
+	DELETE	
+	FROM	employer_financial.TransactionLine 
+	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef);
+
+	DELETE 
+	FROM	employer_financial.LevyDeclarationTopup
+	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef);
 
 	DELETE 
 	FROM	employer_financial.LevyDeclaration 
-	WHERE	EmpRef = @empRef;
+	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef);
 
 	

@@ -2,7 +2,6 @@
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.ViewModels
 @using SFA.DAS.Extensions
 
 <!DOCTYPE html>
@@ -11,6 +10,19 @@
 <html lang="en">
 <!--<![endif]-->
 <head>
+
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage apprentices</title>
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDesc))
@@ -51,16 +63,6 @@
     <!-- This is from individual pages -->
     @RenderSection("gaDataLayer", required: false)
 
-    <!-- Google Tag Manager -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-83918739-9"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'UA-83918739-9');
-    </script>
-    <!-- End Google Tag Manager -->
-
     <script type="text/javascript">
         var appInsights = window.appInsights || function (config) {
             function r(config) { t[config] = function () { var i = arguments; t.queue.push(function () { t[config].apply(t, i) }) } } var t = { config: config }, u = document, e = window, o = "script", s = u.createElement(o), i, f; s.src = config.url || "//az416426.vo.msecnd.net/scripts/a/ai.0.js"; u.getElementsByTagName(o)[0].parentNode.appendChild(s); try { t.cookie = u.cookie } catch (h) { } for (t.queue = [], i = ["Event", "Exception", "Metric", "PageView", "Trace", "Dependency"]; i.length;) r("track" + i.pop()); return r("setAuthenticatedUserContext"), r("clearAuthenticatedUserContext"), config.disableExceptionTracking || (i = "onerror", r("_" + i), f = e[i], e[i] = function (config, r, u, e, o) { var s = f && f(config, r, u, e, o); return s !== !0 && t["_" + i](config, r, u, e, o), s }), t
@@ -77,8 +79,10 @@
 <body id="@ViewBag.PageID">
 
     <!-- Google Tag Manager (noscript) -->
-    <script>(function (w, d, s, l, i) { w[l]‌‌=w[l]‌‌|| []‌‌; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' }); var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f); })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <!-- End Google Tag Manager (noscript) -->
 
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
@@ -130,7 +134,7 @@
                 <div class="js-float">
                     <p class="floating-head-text">Your employer account </p>
                     <nav id="user-nav">
-                        <ul role="menubar">
+                        <ul>
                             <li><a href="@Url.Action("Help", "Home")">Help</a></li>
                             @if (HttpContext.Current.User.Identity.IsAuthenticated)
                             {
@@ -175,13 +179,13 @@ if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetPro
         {
             <div class="header-organisation" role="navigation">
                 <nav class="header-inner">
-                    <ul role="menubar" id="global-nav-links">
+                    <ul id="global-nav-links">
                         <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a></li>
-                        <li><a href="@Url.LegacyEasAccountAction("finance")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
+                        <li><a href="@Url.EmployerFinanceAction("finance")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
                         @if (Html.IsAuthorized(FeatureType.Recruitments))
-                            {
-                                <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
-                            }
+                        {
+                            <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
+                        }
                         <li><a href="@Url.EmployerCommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                         <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a></li>

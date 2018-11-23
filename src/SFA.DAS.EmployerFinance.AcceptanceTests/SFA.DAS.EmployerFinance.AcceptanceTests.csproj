@@ -93,6 +93,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="App.Debug.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="App.Release.config">
+      <IsTransformFile>true</IsTransformFile>
+      <DependentUpon>App.config</DependentUpon>
+    </None>
     <None Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature">
       <LastGenOutput>Scenario-01-Single-PAYE-no-adjustments.feature.cs</LastGenOutput>
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -5,13 +5,13 @@ using System.Web.Mvc;
 namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
     public static class UrlHelperExtensions
-    {
-        public static string EmployerAccountsAction(this UrlHelper helper, string path)
+    { 
+        public static string EmployerAccountsAction(this UrlHelper helper, string path, bool includedAccountId = true)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
             var baseUrl = configuration.EmployerAccountsBaseUrl;
 
-            return AccountAction(helper, baseUrl, path);
+            return includedAccountId ? AccountAction(helper, baseUrl, path) : Action(baseUrl, path);
         }
 
         public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
