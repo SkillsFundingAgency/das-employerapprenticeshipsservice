@@ -63,7 +63,9 @@ namespace SFA.DAS.EmployerFinance.Api.Client
 
         private string GetBaseUrl()
         {
-            return _configuration.ApiBaseUrl.Trim('/');
+            return _configuration.ApiBaseUrl.EndsWith("/")
+                ? _configuration.ApiBaseUrl
+                : _configuration.ApiBaseUrl + "/";
         }
     }
 }

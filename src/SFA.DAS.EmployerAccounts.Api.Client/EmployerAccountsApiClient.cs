@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
         public async Task<EmployerAgreementView> GetEmployerAgreement(string accountId, string legalEntityId, string agreementId)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/accounts/{accountId}/legalEntities/{legalEntityId}/agreements/{agreementId}/agreement";
+            var url = $"{baseUrl}api/accounts/{accountId}/legalEntities/{legalEntityId}/agreements/{agreementId}";
             var json = await _httpClient.GetAsync(url);
 
             return JsonConvert.DeserializeObject<EmployerAgreementView>(json);
