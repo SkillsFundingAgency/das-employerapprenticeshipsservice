@@ -158,7 +158,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
 
             //Assert
             Assert.IsTrue(actual.IsValid());
-            //Assert.Contains(new KeyValuePair<string, string>("HashedLegalAgreementId", "Agreement has already been signed and has active commitments"), actual.ValidationDictionary);
         }
 
         [Test]
