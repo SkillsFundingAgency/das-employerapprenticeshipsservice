@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Queries
                 .Where(r => r.UserRef == request.UserRef
                           && r.AccountId == request.EmployerAccountId).ToListAsync(cancellationToken);
 
-            var hasRole = userRoles.Any(r => r.Roles.Any(role => request.UserRoles.Any(requestRole => (short)requestRole == role)));
+            var hasRole = userRoles.Any(r => r.Roles.Any(role => request.UserRoles.Any(requestRole => requestRole == role)));
 
             return new HasRoleQueryResult{ HasRole = hasRole };
         }

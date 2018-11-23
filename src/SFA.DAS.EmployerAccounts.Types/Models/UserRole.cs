@@ -2,8 +2,8 @@
 {
     public enum UserRole
     {
-        Viewer = 0,
-        Transactor = 1,
-        Administrator = 2
+        Viewer = 3,
+        Transactor = 2,
+        Owner = 1
     }
 }

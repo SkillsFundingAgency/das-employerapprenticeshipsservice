@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
+using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
@@ -37,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
 
-        public HashSet<short> Roles = new HashSet<short>();
+        public HashSet<UserRole> Roles = new HashSet<UserRole>();
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;

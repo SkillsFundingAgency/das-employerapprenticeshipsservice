@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             var result = await _mediator.Send(new HasRoleQuery(
                 roleRequest.UserRef,
                 roleRequest.EmployerAccountId,
-                roleRequest.Roles.Select(r => (UserRole) r).ToArray()
+                new HashSet<UserRole>(roleRequest.Roles)
             ), cancellationToken);
 
             return result.HasRole;
@@ -50,13 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
     {
         public Guid UserRef { get; set; }
         public long EmployerAccountId { get; set; }
-        public Role[] Roles { get; set; }
+        public UserRole[] Roles { get; set; }
     }
 
-    public enum Role
-    {
-        Owner = 1,
-        Transactor = 2,
-        Viewer = 3
-    }
 }

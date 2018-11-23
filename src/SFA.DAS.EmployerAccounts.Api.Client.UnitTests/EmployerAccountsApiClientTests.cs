@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.ReadStore.Queries;
+using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
@@ -47,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             {
                 EmployerAccountId = 112,
                 UserRef = Guid.NewGuid(),
-                Roles = new[] {Role.Owner, Role.Transactor}
+                Roles = new[] {UserRole.Owner, UserRole.Transactor}
             };
 
             MockApiMediator
@@ -67,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             MockApiMediator.Verify(m => m.Send(It.Is<HasRoleQuery>(q => 
                 q.UserRef == HasRoleRequest.UserRef
                 && q.EmployerAccountId == HasRoleRequest.EmployerAccountId
-                && q.UserRoles.Length == HasRoleRequest.Roles.Length
+                && q.UserRoles.Count == HasRoleRequest.Roles.Length
                 && q.UserRoles.All(role => HasRoleRequest.Roles.Any(requestRole => (short)requestRole == (short)role))
             ), CancellationToken));
         }

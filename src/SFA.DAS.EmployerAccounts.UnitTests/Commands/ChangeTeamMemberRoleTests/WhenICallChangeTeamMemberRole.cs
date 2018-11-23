@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 
@@ -189,7 +190,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _eventPublisher.Verify(x => x.Publish(It.Is<UserRolesUpdatedEvent>(
                 p => p.AccountId  == _callerMembership.AccountId &&
                      p.UserRef == _callerMembership.UserRef &&
-                     p.Roles.Contains(_command.RoleId)))
+                     p.Roles.Contains((UserRole)_command.RoleId)))
                 , Times.Once);
         }
 

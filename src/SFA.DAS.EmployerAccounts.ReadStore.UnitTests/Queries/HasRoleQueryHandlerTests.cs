@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 
         public HasRoleQueryHandlerTestsFixture()
         {
-            Query = new HasRoleQuery(Guid.NewGuid(), 112, new []{ UserRole.Administrator });
+            Query = new HasRoleQuery(Guid.NewGuid(), 112, new HashSet<UserRole>{ UserRole.Owner });
             CancellationToken = CancellationToken.None;
             MockUserRolesRepository = new Mock<IUsersRolesRepository>();
             Roles = new List<UserRoles>();
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddSingleMatchingUserRole()
         {
             Roles.AddRange(new []{
-                new UserRoles(Query.UserRef, Query.EmployerAccountId, new HashSet<short>(Query.UserRoles.Select(role => (short)role), null), DateTime.UtcNow), //matching
+                new UserRoles(Query.UserRef, Query.EmployerAccountId, Query.UserRoles, DateTime.UtcNow), //matching
             });
 
             return this;
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddNonMatchingOnUserRefRole()
         {
             Roles.AddRange(new[]{
-                new UserRoles(Guid.NewGuid(), Query.EmployerAccountId, new HashSet<short>(Query.UserRoles.Select(role => (short)role), null), DateTime.UtcNow), //not matching on UserRef
+                new UserRoles(Guid.NewGuid(), Query.EmployerAccountId, Query.UserRoles, DateTime.UtcNow), //not matching on UserRef
             });
 
             return this;
@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddNonMatchingOnAccountIdRole()
         {
             Roles.AddRange(new[]{
-                new UserRoles(Query.UserRef, 214, new HashSet<short>(Query.UserRoles.Select(role => (short)role), null), DateTime.UtcNow), //not matching on account id
+                new UserRoles(Query.UserRef, 214, Query.UserRoles, DateTime.UtcNow), //not matching on account id
             });
 
             return this;
@@ -114,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         public HasRoleQueryHandlerTestsFixture AddNonMatchingOnRoleEnumRole()
         {
             Roles.AddRange(new[]{
-                new UserRoles(Query.UserRef, Query.EmployerAccountId, new HashSet<short>(new[]{ (short)UserRole.Transactor }, null), DateTime.UtcNow), //not matching on role
+                new UserRoles(Query.UserRef, Query.EmployerAccountId, new HashSet<UserRole>{ UserRole.Transactor}, DateTime.UtcNow), //not matching on role
             });
 
             return this;

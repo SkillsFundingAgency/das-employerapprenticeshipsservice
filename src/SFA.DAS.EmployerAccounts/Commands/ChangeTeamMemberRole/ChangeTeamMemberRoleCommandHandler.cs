@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
 {
@@ -56,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
             await _membershipRepository.ChangeRole(existing.Id, caller.AccountId, message.RoleId);
 
             await _eventPublisher.Publish(new UserRolesUpdatedEvent(caller.AccountId, existing.UserRef,
-                new HashSet<short> {message.RoleId}, DateTime.Now));
+                new HashSet<UserRole> {(UserRole)message.RoleId}, DateTime.Now));
 
 
             await _mediator.SendAsync(new CreateAuditCommand
