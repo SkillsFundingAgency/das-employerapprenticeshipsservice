@@ -11,9 +11,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
         public EmployerAccountsApiClientRegistry()
         {
             For<IEmployerAccountsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerAccountsApiClientConfiguration>("SFA.DAS.EmployerAccounts.Api.Client")).Singleton();
-            For<ApiServiceFactory>().Use<ApiServiceFactory>(c => c.GetInstance);
-            For<IApiMediator>().Use<ApiMediator>();
-            For<IApiRequestHandler<HasRoleQuery, HasRoleQueryResult>>().Use<HasRoleQueryHandler>();
+            For<ReadStoreServiceFactory>().Use<ReadStoreServiceFactory>(c => c.GetInstance);
+            For<IReadStoreMediator>().Use<ReadStoreMediator>();
+            For<IReadStoreRequestHandler<HasRoleQuery, HasRoleQueryResult>>().Use<HasRoleQueryHandler>();
             For<IDocumentClient>().Add(c => c.GetInstance<IDocumentClientFactory>().CreateDocumentClient())
                 .Named(GetType().FullName).Singleton();
             For<IDocumentClientFactory>().Use<DocumentClientFactory>();

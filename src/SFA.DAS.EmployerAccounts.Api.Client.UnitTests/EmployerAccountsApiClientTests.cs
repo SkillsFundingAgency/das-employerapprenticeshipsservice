@@ -31,13 +31,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
     {
         public HasRoleRequest HasRoleRequest { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        public Mock<IApiMediator> MockApiMediator { get; set; }
+        public Mock<IReadStoreMediator> MockApiMediator { get; set; }
         public IEmployerAccountsApiClient EmployerAccountsApiClient { get; set; }
 
         public EmployerAccountsApiClientTestsFixture()
         {
             CancellationToken = CancellationToken.None;
-            MockApiMediator = new Mock<IApiMediator>();
+            MockApiMediator = new Mock<IReadStoreMediator>();
             EmployerAccountsApiClient = new EmployerAccountsApiClient(null, MockApiMediator.Object);
         }
 
@@ -71,6 +71,5 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
                 && q.UserRoles.All(role => HasRoleRequest.Roles.Any(requestRole => (short)requestRole == (short)role))
             ), CancellationToken));
         }
-
     }
 }

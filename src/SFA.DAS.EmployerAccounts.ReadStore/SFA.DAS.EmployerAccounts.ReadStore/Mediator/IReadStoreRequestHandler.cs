@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Mediator
 {
-    internal interface IApiRequestHandler<in TRequest, TResponse> where TRequest : IApiRequest<TResponse>
+    internal interface IReadStoreRequestHandler<in TRequest, TResponse> where TRequest : IReadStoreRequest<TResponse>
     {
         Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken);
     }

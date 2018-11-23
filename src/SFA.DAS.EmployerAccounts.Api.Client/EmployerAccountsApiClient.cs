@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
     {
         private readonly IEmployerAccountsApiClientConfiguration _configuration;
         private readonly SecureHttpClient _httpClient;
-        private readonly IApiMediator _mediator;
+        private readonly IReadStoreMediator _mediator;
 
-        public EmployerAccountsApiClient(IEmployerAccountsApiClientConfiguration configuration, IApiMediator mediator)
+        public EmployerAccountsApiClient(IEmployerAccountsApiClientConfiguration configuration, IReadStoreMediator mediator)
         {
             _configuration = configuration;
             _mediator = mediator;

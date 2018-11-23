@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
     {
         internal HasRoleQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        internal IApiRequestHandler<HasRoleQuery,HasRoleQueryResult> Handler { get; set; }
+        internal IReadStoreRequestHandler<HasRoleQuery,HasRoleQueryResult> Handler { get; set; }
         internal Mock<IUsersRolesRepository> MockUserRolesRepository { get; set; }
         internal IOrderedQueryable<UserRoles> DocumentQuery { get; set; }
         internal List<UserRoles> Roles { get; set; }

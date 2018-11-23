@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Queries
 {
-    internal class HasRoleQuery : IApiRequest<HasRoleQueryResult>
+    internal class HasRoleQuery : IReadStoreRequest<HasRoleQueryResult>
     {
         public Guid UserRef { get; set; }
         public long EmployerAccountId { get; set; }

@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Mediator
 {
-    internal class ApiMediator : IApiMediator
+    internal class ReadStoreMediator : IReadStoreMediator
     {
         private static readonly ConcurrentDictionary<Type, object> RequestHandlers = new ConcurrentDictionary<Type, object>();
         
-        private readonly ApiServiceFactory _serviceFactory;
+        private readonly ReadStoreServiceFactory _serviceFactory;
 
-        public ApiMediator(ApiServiceFactory serviceFactory)
+        public ReadStoreMediator(ReadStoreServiceFactory serviceFactory)
         {
             _serviceFactory = serviceFactory;
         }
 
-        public Task<TResponse> Send<TResponse>(IApiRequest<TResponse> request, CancellationToken cancellationToken = default)
+        public Task<TResponse> Send<TResponse>(IReadStoreRequest<TResponse> request, CancellationToken cancellationToken = default)
         {
             if (request == null)
             {
@@ -40,14 +40,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Mediator
         
         private abstract class RequestHandler<TResponse>
         {
-            public abstract Task<TResponse> Handle(IApiRequest<TResponse> request, CancellationToken cancellationToken, ApiServiceFactory serviceFactory);
+            public abstract Task<TResponse> Handle(IReadStoreRequest<TResponse> request, CancellationToken cancellationToken, ReadStoreServiceFactory serviceFactory);
         }
     
-        private class RequestHandler<TRequest, TResponse> : RequestHandler<TResponse> where TRequest : IApiRequest<TResponse>
+        private class RequestHandler<TRequest, TResponse> : RequestHandler<TResponse> where TRequest : IReadStoreRequest<TResponse>
         {
-            public override Task<TResponse> Handle(IApiRequest<TResponse> request, CancellationToken cancellationToken, ApiServiceFactory serviceFactory)
+            public override Task<TResponse> Handle(IReadStoreRequest<TResponse> request, CancellationToken cancellationToken, ReadStoreServiceFactory serviceFactory)
             {
-                var handler = serviceFactory.GetInstance<IApiRequestHandler<TRequest, TResponse>>();
+                var handler = serviceFactory.GetInstance<IReadStoreRequestHandler<TRequest, TResponse>>();
             
                 return handler.Handle((TRequest)request, cancellationToken);
             }
