@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
 
         public override void HttpClientSetup()
         {
-            _uri = $"/api/accounts/{HashedAccountId}/legalEntities/{HashedlegalEntityId}/agreements/{HashedAgreementId}/agreement";
+            _uri = $"/api/accounts/{HashedAccountId}/legalEntities/{HashedlegalEntityId}/agreements/{HashedAgreementId}";
             var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
 
             var agreement = new EmployerAgreementView { HashedAccountId = HashedAccountId };
