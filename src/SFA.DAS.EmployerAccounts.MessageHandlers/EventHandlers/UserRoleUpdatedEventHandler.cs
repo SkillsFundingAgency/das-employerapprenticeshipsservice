@@ -1,26 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using NServiceBus;
-using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
+using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
 {
-    public class UserRoleUpdatedEventHandler : IHandleMessages<UserJoinedEvent>
+    public class UserRoleUpdatedEventHandler : IHandleMessages<UserRolesUpdatedEvent>
     {
-        private readonly IMessagePublisher _messagePublisher;
+        private readonly IReadStoreMediator _mediator;
 
-        public UserRoleUpdatedEventHandler(IMessagePublisher messagePublisher)
+        public UserRoleUpdatedEventHandler(IReadStoreMediator mediator)
         {
-            _messagePublisher = messagePublisher;
+            _mediator = mediator;
         }
-        public async Task Handle(UserJoinedEvent message, IMessageHandlerContext context)
+        public async Task Handle(UserRolesUpdatedEvent message, IMessageHandlerContext context)
         {
-            await _messagePublisher.PublishAsync(
-                new UserJoinedMessage(
-                    message.AccountId,
-                    message.UserName,
-                    message.UserRef.ToString()));
+            await _mediator.Send(new UserRolesUpdatedCommand(message.AccountId, Guid.Parse(message.UserRef), message.Roles, context.MessageId, message.Updated));
         }
     }
 }
