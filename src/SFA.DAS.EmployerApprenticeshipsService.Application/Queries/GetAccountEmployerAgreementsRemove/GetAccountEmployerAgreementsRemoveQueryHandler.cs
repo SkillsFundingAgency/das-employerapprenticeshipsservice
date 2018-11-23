@@ -59,6 +59,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreementsRemove
 
             foreach (var removeEmployerAgreementView in result)
             {
+                removeEmployerAgreementView.HashedAgreementId = _hashingService.HashValue(removeEmployerAgreementView.Id);
                 removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
 
                 if (result.Count == 1) continue;
