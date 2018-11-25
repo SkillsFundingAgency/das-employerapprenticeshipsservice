@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
                         SenderAccountName = SenderAccountName,
                         ReceiverAccountId = ReceiverAccountId,
                         ReceiverAccountName = ReceiverAccountName,
-                        CommitmentId = 1,
+                        ApprenticeshipId = 1,
                         CourseName = FirstCourseName,
                         Amount = 123.4567M,
                         PeriodEnd = PeriodEnd
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
                         SenderAccountName = SenderAccountName,
                         ReceiverAccountId = ReceiverAccountId,
                         ReceiverAccountName = ReceiverAccountName,
-                        CommitmentId = 2,
+                        ApprenticeshipId = 2,
                         CourseName = SecondCourseName,
                         Amount = 346.789M,
                         PeriodEnd = PeriodEnd
@@ -120,7 +120,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetail
                         SenderAccountName = SenderAccountName,
                         ReceiverAccountId = ReceiverAccountId,
                         ReceiverAccountName = ReceiverAccountName,
-                        CommitmentId = 3,
+                        ApprenticeshipId = 3,
                         CourseName = SecondCourseName,
                         Amount = 234.56M,
                         PeriodEnd = PeriodEnd

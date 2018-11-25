@@ -43,12 +43,14 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails
 
             var courseTransfers = transfers.GroupBy(t => new { t.CourseName, t.CourseLevel });
 
+            var x = courseTransfers.ToArray();
+
             var transferDetails = courseTransfers.Select(ct => new AccountTransferDetails
             {
                 CourseName = ct.First().CourseName,
                 CourseLevel = ct.First().CourseLevel,
                 PaymentTotal = ct.Sum(t => t.Amount),
-                ApprenticeCount = (uint)ct.DistinctBy(t => t.CommitmentId).Count()
+                ApprenticeCount = (uint)ct.DistinctBy(t => t.ApprenticeshipId).Count()
             }).ToArray();
 
             //NOTE: We should only get one transfer transaction per sender per period end
