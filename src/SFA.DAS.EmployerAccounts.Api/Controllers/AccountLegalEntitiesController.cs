@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 using MediatR;
+using SFA.DAS.EmployerAccounts.Api.Attributes;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedAccountLegalEntities;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
-    //[ApiAuthorize(Roles = "ReadUserAccounts")]
+    [ApiAuthorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/accountlegalentities")]
     public class AccountLegalEntitiesController : ApiController
     {
