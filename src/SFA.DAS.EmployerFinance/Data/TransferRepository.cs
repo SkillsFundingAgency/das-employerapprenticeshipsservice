@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerFinance.Data
 
             parameters.Add("@receiverAccountId", transfer.ReceiverAccountId, DbType.Int64);
             parameters.Add("@periodEnd", transfer.PeriodEnd, DbType.String);
-            parameters.Add("@apprenticeshipId", transfer.CommitmentId, DbType.Int64);
+            parameters.Add("@apprenticeshipId", transfer.ApprenticeshipId, DbType.Int64);
 
             return _db.Value.Database.Connection.QuerySingleOrDefaultAsync<AccountTransferDetails>(
                 sql: "[employer_financial].[GetTransferPaymentDetails]",
@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerFinance.Data
                     transfer.SenderAccountName,
                     transfer.ReceiverAccountId,
                     transfer.ReceiverAccountName,
-                    transfer.CommitmentId,
+                    transfer.ApprenticeshipId,
                     transfer.CourseName,
                     transfer.CourseLevel,
                     transfer.Amount,

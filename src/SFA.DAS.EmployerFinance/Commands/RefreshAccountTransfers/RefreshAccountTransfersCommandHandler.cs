@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
                 //Handle multiple transfers for the same account, period end and commitment ID by grouping them together
                 //This can happen if delivery months are different by collection months are not for payments
-                var transfers = paymentTransfers.GroupBy(t => new { t.SenderAccountId, t.ReceiverAccountId, t.CommitmentId, t.PeriodEnd })
+                var transfers = paymentTransfers.GroupBy(t => new { t.SenderAccountId, t.ReceiverAccountId, CommitmentId = t.ApprenticeshipId, t.PeriodEnd })
                     .Select(g =>
                     {
                         var firstGroupItem = g.First();
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                         {
                             PeriodEnd = firstGroupItem.PeriodEnd,
                             Amount = g.Sum(x => x.Amount),
-                            CommitmentId = firstGroupItem.CommitmentId,
+                            ApprenticeshipId = firstGroupItem.ApprenticeshipId,
                             ReceiverAccountId = firstGroupItem.ReceiverAccountId,
                             ReceiverAccountName = firstGroupItem.ReceiverAccountName,
                             SenderAccountId = firstGroupItem.SenderAccountId,
