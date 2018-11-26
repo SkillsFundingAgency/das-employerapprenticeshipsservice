@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerFinance.Services
         DateTime GetDateFromPayrollYearMonth(string payrollYear, int payrollMonth);
         bool DoesSubmissionPreDateLevy(string payrollYear);
         DateRange GetDateRangeForPayrollPeriod(string payrollYear, int payrollMonth);
+        bool IsDateOntimeForPayrollPeriod(string payrollYear, int payrollMonth, DateTime dateTime);
         bool IsDateInPayrollPeriod(string payrollYear, int payrollMonth, DateTime dateTime);
     }
 }

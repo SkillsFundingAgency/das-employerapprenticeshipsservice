@@ -1,23 +1,22 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models;
+using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
 using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
+using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
+using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Models;
-using SFA.DAS.EmployerFinance.Models.Levy;
-using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
-using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
-using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
-using SFA.DAS.Validation;
-using TransactionViewModel = SFA.DAS.EmployerFinance.Web.ViewModels.TransactionViewModel;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -181,8 +180,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 };
             }
         }
-		
-		public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
+
+        public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
             string hashedAccountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode,
             DateTime fromDate, DateTime toDate, string externalUserId)
         {
