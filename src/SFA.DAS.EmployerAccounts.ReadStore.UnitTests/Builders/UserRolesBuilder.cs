@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Builders
         public UserRolesBuilder()
         {
             _userRoles = (UserRoles)Activator.CreateInstance(typeof(UserRoles), true);
+            _userRoles.SetPropertyTo(p => p.Roles, new HashSet<UserRole>());
         }
 
         public UserRolesBuilder WithId(Guid id)
@@ -52,6 +53,16 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Builders
         public UserRolesBuilder WithDeleted(DateTime? deleted)
         {
             _userRoles.SetPropertyTo(p => p.Deleted, deleted);
+
+            return this;
+        }
+
+        public UserRolesBuilder WithOutboxMessage(OutboxMessage item)
+        {
+            var outboxData = (List<OutboxMessage>)_userRoles.OutboxData;
+
+            outboxData.Clear();
+            outboxData.Add(item);
 
             return this;
         }

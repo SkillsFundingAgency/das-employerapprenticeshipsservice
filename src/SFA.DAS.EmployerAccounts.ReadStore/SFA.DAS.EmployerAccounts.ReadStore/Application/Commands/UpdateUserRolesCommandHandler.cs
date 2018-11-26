@@ -25,12 +25,11 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
                 user = new UserRoles(request.UserRef, request.AccountId, request.Roles, request.MessageId, request.Updated);
                 await _usersRolesRepository.Add(user, null, cancellationToken);
             }
-            //else
-            //{
-            //    user.UpdateRoles(request.Roles, request.Updated);
-            //    await _usersRolesRepository.Add(user, null, cancellationToken);
-
-            //}
+            else
+            {
+                user.UpdateRoles(request.Roles, request.Updated, request.MessageId);
+                await _usersRolesRepository.Update(user, null, cancellationToken);
+            }
 
             return Unit.Value;
         }
