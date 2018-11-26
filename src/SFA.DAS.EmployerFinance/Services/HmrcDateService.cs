@@ -64,6 +64,14 @@ namespace SFA.DAS.EmployerFinance.Services
             
             return new DateTime(yearToUse,monthToUse,20);
         }
+
+        public bool IsDateOntimeForPayrollPeriod(string payrollYear, int payrollMonth, DateTime dateTime)
+        {
+            var dateRange = GetDateRangeForPayrollPeriod(payrollYear, payrollMonth);
+
+            return dateTime <= dateRange.EndDate;
+        }
+
         public bool IsDateInPayrollPeriod(string payrollYear, int payrollMonth, DateTime dateTime)
         {
             var dateRange = GetDateRangeForPayrollPeriod(payrollYear, payrollMonth);
