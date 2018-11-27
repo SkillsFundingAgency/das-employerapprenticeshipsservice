@@ -670,10 +670,6 @@ h2 {
   }
 }
 
-.js-hidden {
-  display: none;
-}
-
 #page-company-homepage {
   #pane-tasks {
     .button-link {
@@ -686,56 +682,70 @@ h2 {
 
 //ACTIVITY LOG: Vertical line with bulleted list
 #item-list {
-  position: relative;
-  padding-left: 1px;
-  line-height: 18px;
-  border-left: 1px solid $border-colour;
-  margin-left: 10px;
-  margin-top: 10px;
-  .item {
     position: relative;
-    text-align: left;
-    display: block;
-    padding: 0 18px;
-    margin-bottom: 40px;
-    .item-label {
-      position: relative;
-      color: $secondary-text-colour;
-    }
-    .item-description {
-      .grey-text {
-        color: $secondary-text-colour;
-      }
-      p {
-        margin-bottom: 5px;
-      }
-    }
-    .item-label:before {
-      content: '';
-      position: absolute;
-      top: 0px;
-      left: -28px;
-      width: 17px;
-      height: 17px;
-      border-radius: 100%;
-      background: $border-colour;
-    }
-  }
-  .all-activity {
-    margin-bottom: 10px;
-    .item-label {
-      a {
-        padding-top: 16px;
+    padding-left: 1px;
+    line-height: 18px;
+    border-left: 1px solid $border-colour;
+    margin-left: 10px;
+    margin-top: 10px;
+
+    .item {
+        position: relative;
+        text-align: left;
         display: block;
-      }
+        padding: 0 18px;
+        margin-bottom: 40px;
+
+        .item-label {
+            position: relative;
+            color: $secondary-text-colour;
+        }
+
+        .item-description {
+            max-width: 220px;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            -ms-word-break: break-all;
+            word-break: break-all;
+            word-break: break-word;
+            .grey-text {
+                color: $secondary-text-colour;
+            }
+
+            p {
+                margin-bottom: 5px;
+            }
+        }
+
+        .item-label:before {
+            content: '';
+            position: absolute;
+            top: 0px;
+            left: -28px;
+            width: 17px;
+            height: 17px;
+            border-radius: 100%;
+            background: $border-colour;
+        }
     }
-    .item-label:before {
-      top: 15px;
-      width: 22px;
-      height: 22px;
-      left: -30px;
+
+    .all-activity {
+        margin-bottom: 10px;
+
+        .item-label {
+            a {
+                padding-top: 16px;
+                display: block;
+            }
+        }
+
+        .item-label:before {
+            top: 15px;
+            width: 22px;
+            height: 22px;
+            left: -30px;
+        }
     }
-  }
 }
 
 /*Finance dashboard UI new*/
