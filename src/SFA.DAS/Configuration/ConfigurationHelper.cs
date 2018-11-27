@@ -42,7 +42,8 @@ namespace SFA.DAS.Configuration
         public static T GetConfiguration<T>(string serviceName)
         {
             var configurationService = CreateConfigurationService(serviceName);
-            return configurationService.Get<T>();
+            var result = configurationService.Get<T>();
+            return result;
         }
 
         public static Task<T> GetConfigurationAsync<T>(string serviceName)
