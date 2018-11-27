@@ -191,8 +191,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             return _handler.Handle(new RefreshPaymentDataCommand
             {
                 AccountId = _accountId,
-                PeriodEnd = _periodEnd,
-                PaymentUrl = "http://someurl"
+                PeriodEnd = _periodEnd
             });
         }
 

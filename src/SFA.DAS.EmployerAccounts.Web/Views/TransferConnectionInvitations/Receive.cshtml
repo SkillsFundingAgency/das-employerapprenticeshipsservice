@@ -17,8 +17,7 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.ApproveTransferConnectionInvitationCommand.TransferConnectionInvitationId)
-            @Html.HiddenFor(m => m.RejectTransferConnectionInvitationCommand.TransferConnectionInvitationId)
+            @Html.HiddenFor(m => m.TransferConnectionInvitationId)
             <div class="form-group">
                 <table>
                     <tbody>
