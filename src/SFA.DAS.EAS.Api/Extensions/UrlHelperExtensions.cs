@@ -30,9 +30,9 @@ namespace SFA.DAS.EAS.Account.Api.Extensions
         private static string Action(string baseUrl, string path)
         {
             var trimmedBaseUrl = baseUrl?.TrimEnd('/') ?? string.Empty;
-            var trimmedPath = path?.TrimStart('/') ?? string.Empty;
+            var trimmedPath = path?.Trim('/') ?? string.Empty;
 
-            return $"{trimmedBaseUrl}/{trimmedPath}".TrimEnd('/');
+            return $"{trimmedBaseUrl}/{trimmedPath}";
         }
     }
 }

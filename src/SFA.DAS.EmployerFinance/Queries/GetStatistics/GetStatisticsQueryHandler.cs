@@ -18,15 +18,10 @@ namespace SFA.DAS.EmployerFinance.Queries.GetStatistics
 
         public async Task<GetStatisticsResponse> Handle(GetStatisticsQuery message)
         {
-            // TODO When decoupling
-            //var accountsQuery = _accountDb.Value.Accounts.FutureCount();
-            //var payeSchemesQuery = _accountDb.Value.Payees.FutureCount();
             var paymentsQuery = _financeDb.Payments.FutureCount();
 
             var statistics = new StatisticsViewModel
             {
-                //TotalAccounts = await accountsQuery.ValueAsync(),
-                //TotalPayeSchemes = await payeSchemesQuery.ValueAsync(),
                 TotalPayments = await paymentsQuery.ValueAsync()
             };
 
