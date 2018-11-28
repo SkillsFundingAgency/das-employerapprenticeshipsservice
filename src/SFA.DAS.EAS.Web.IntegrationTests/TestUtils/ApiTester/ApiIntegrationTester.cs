@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,7 +13,6 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Owin;
-using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
@@ -26,7 +24,6 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.UnitOfWork;
 using StructureMap;
 using WebApi.StructureMap;
-using SFA.DAS.UnitOfWork.WebApi;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
