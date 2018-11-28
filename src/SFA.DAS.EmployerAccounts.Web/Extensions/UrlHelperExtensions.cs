@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public static string ProviderRelationshipsAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var baseUrl = configuration.ProviderPermissionsBaseUrl;
+            var baseUrl = configuration.ProviderRelationshipsBaseUrl;
 
             return AccountAction(helper, baseUrl, path);
         }
