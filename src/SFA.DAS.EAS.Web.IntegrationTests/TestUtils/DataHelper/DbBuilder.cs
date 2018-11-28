@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
     {
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
-        private readonly EmployerAccountsDbContext _dbContext;
+        private EmployerAccountsDbContext _dbContext;
 
         public DbBuilder(
             DbBuilderDependentRepositories dependentRepositories,
@@ -59,7 +59,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public async Task<DbBuilder> EnsureAccountExistsAsync(EmployerAccountInput input)
         {
-            var output = await DependentRepositories.DbDirectRepository.GetAccountDetailsAsync(input.OrganisationName);
+            var output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
 
             if (output == null)
             {
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                     input.PublicSectorDataSource,
                     input.Sector);
 
-                output = await DependentRepositories.DbDirectRepository.GetAccountDetailsAsync(input.OrganisationName);
+                output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
             }
 
             if (string.IsNullOrWhiteSpace(output.HashedAccountId))

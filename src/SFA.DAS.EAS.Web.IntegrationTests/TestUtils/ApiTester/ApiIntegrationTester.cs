@@ -26,6 +26,7 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.UnitOfWork;
 using StructureMap;
 using WebApi.StructureMap;
+using SFA.DAS.UnitOfWork.WebApi;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
@@ -110,16 +111,52 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
             var callResponse = new CallResponse();
-            await FetchInitialResponseAsync(call, callResponse);
+            await StartTransactionAsync();
+            try
+            {
+                await FetchInitialResponseAsync(call, callResponse);
+            }
+            finally
+            {
+                await EndTransactionAsync();
+            }
+
             return callResponse;
         }
 
         private async Task<CallResponse<TResult>> GetResponseAsync<TResult>(CallRequirements call)
         {
             var callResponse = new CallResponse<TResult>();
-            await FetchInitialResponseAsync(call, callResponse);
-            await FetchCompleteResponseAsync(callResponse);
+            await StartTransactionAsync();
+            try
+            {
+                await FetchInitialResponseAsync(call, callResponse);
+                await FetchCompleteResponseAsync(callResponse);
+            }
+            finally
+            {
+                await EndTransactionAsync();
+            }
+
             return callResponse;
+        }
+
+        private IUnitOfWorkManager unitOfWorkManager = null;
+
+        private Task StartTransactionAsync()
+        {
+            return Task.CompletedTask;
+            unitOfWorkManager = _dependencyResolver.GetService<IUnitOfWorkManager>();
+
+            return unitOfWorkManager.BeginAsync();
+        }
+
+        private Task EndTransactionAsync()
+        {
+            return Task.CompletedTask;
+            unitOfWorkManager = _dependencyResolver.GetService<IUnitOfWorkManager>();
+
+            return unitOfWorkManager.EndAsync();
         }
 
         private async Task FetchInitialResponseAsync(CallRequirements call, CallResponse response)
@@ -170,6 +207,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             WebApiConfig.Register(config);
             CustomiseConfig(config);
             app.UseWebApi(config);
+            config.Filters.AddUnitOfWorkFilter();
         }
 
         private void CustomiseConfig(HttpConfiguration config)

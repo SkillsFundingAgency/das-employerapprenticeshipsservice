@@ -103,6 +103,9 @@
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
     </Reference>
+    <Reference Include="NServiceBus.Core, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.7.0.1\lib\net452\NServiceBus.Core.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
@@ -126,6 +129,9 @@
     </Reference>
     <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.UnitOfWork.WebApi, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.WebApi.1.0.17\lib\net462\SFA.DAS.UnitOfWork.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>
@@ -216,10 +222,8 @@
     <Compile Include="TestUtils\DataHelper\DbBuilder.cs" />
     <Compile Include="TestUtils\DataHelper\DbBuilderContext.cs" />
     <Compile Include="TestUtils\DataHelper\DbBuilderDependentRepositories.cs" />
-    <Compile Include="TestUtils\DataHelper\DbDirectRepository.cs" />
     <Compile Include="TestUtils\DataHelper\DbDtoBuilderExtensions.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountInput.cs" />
-    <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEnityWithAgreementOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEntityWithAgreementInput.cs" />
     <Compile Include="TestUtils\DataHelper\Adapters\LegalEntityWithAgreementInputAdapter.cs" />
