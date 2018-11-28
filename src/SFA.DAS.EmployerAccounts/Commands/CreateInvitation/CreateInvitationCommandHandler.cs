@@ -131,7 +131,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation
 
             var callerExternalUserId = Guid.Parse(caller.UserRef);
 
-            await PublishUserInvitedEvent(caller.AccountId, message.NameOfPersonBeingInvited, caller.FullName(), callerExternalUserId);
+            await PublishUserInvitedEvent(caller.AccountId, caller.FullName(), message.NameOfPersonBeingInvited, callerExternalUserId);
         }
 
         private Task PublishUserInvitedEvent(long accountId, string personInvited, string invitedByUserName, Guid invitedByUserRef)

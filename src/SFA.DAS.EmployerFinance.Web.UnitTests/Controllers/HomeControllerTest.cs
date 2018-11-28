@@ -10,39 +10,17 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
     [TestFixture]
     public class HomeControllerTest
     {
-        private EmployerFinanceConfiguration _configuration;
-        private Mock<IDependencyResolver> _dependancyResolver;
-        private HomeController _homeController;
-
-        [SetUp]
-        public void Arrange()
-        {
-            _configuration = new EmployerFinanceConfiguration
-            {
-                EmployerPortalBaseUrl = "https://localhost"
-            };
-
-            _dependancyResolver = new Mock<IDependencyResolver>();
-            _dependancyResolver.Setup(r => r.GetService(typeof(EmployerFinanceConfiguration))).Returns(_configuration);
-
-            DependencyResolver.SetResolver(_dependancyResolver.Object);
-
-            _homeController =
-                new HomeController(Mock.Of<IAuthenticationService>(), Mock.Of<EmployerFinanceConfiguration>())
-                {
-                    Url = new UrlHelper()
-                };
-        }
-
         [Test]
-        public void IndexRedirectsToPortalSite()
+        public void Index()
         {
+            // Arrange
+            HomeController controller = new HomeController(Mock.Of<IAuthenticationService>(), Mock.Of<EmployerFinanceConfiguration>());
+
             // Act
-            var result = _homeController.Index() as RedirectResult;
+            ViewResult result = controller.Index() as ViewResult;
 
             // Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(_configuration.EmployerPortalBaseUrl, result.Url);
         }
     }
 }

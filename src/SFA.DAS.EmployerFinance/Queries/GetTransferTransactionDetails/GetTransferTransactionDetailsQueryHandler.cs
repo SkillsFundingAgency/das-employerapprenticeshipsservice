@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
-using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.Hashing;
 using System.Collections.Generic;
@@ -43,28 +42,17 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails
 
             var courseTransfers = transfers.GroupBy(t => new { t.CourseName, t.CourseLevel });
 
-            var x = courseTransfers.ToArray();
-
             var transferDetails = courseTransfers.Select(ct => new AccountTransferDetails
             {
                 CourseName = ct.First().CourseName,
                 CourseLevel = ct.First().CourseLevel,
                 PaymentTotal = ct.Sum(t => t.Amount),
-                ApprenticeCount = (uint)ct.DistinctBy(t => t.ApprenticeshipId).Count()
+                ApprenticeCount = (uint)ct.DistinctBy(t => t.CommitmentId).Count()
             }).ToArray();
 
-            //NOTE: We should only get one transfer transaction per sender per period end
-            // as this is how transfers are grouped together when creating transfer transactions
-            var transferTransaction = _dbContext.Transactions.Single(t =>
-                t.AccountId == query.AccountId &&
-                t.TransactionType == TransactionItemType.Transfer &&
-                t.TransferSenderAccountId != null &&
-                t.TransferReceiverAccountId != null &&
-                t.TransferSenderAccountId == firstTransfer.SenderAccountId &&
-                t.TransferReceiverAccountId == firstTransfer.ReceiverAccountId &&
-                t.PeriodEnd.Equals(query.PeriodEnd));
+            var periodEnd = _dbContext.PeriodEnds.Single(p => p.PeriodEndId.Equals(firstTransfer.PeriodEnd));
 
-            var transferDate = transferTransaction.DateCreated;
+            var transferDate = periodEnd.CompletionDateTime;
             var transfersPaymentTotal = transferDetails.Sum(t => t.PaymentTotal);
 
             var isCurrentAccountSender = query.AccountId.GetValueOrDefault() == firstTransfer.SenderAccountId;

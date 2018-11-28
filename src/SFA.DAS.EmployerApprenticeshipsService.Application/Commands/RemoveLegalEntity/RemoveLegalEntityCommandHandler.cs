@@ -85,7 +85,6 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
 
             await CreateEvent(message.HashedLegalAgreementId);
 
-            // it appears that an agreement is created whenever we create a legal entity, so there should always be an agreement associated with a legal entity
             if (agreement != null)
             {
                 var agreementSigned = agreement.Status == EmployerAgreementStatus.Signed;
@@ -98,15 +97,14 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                     agreementSigned, 
                     createdByName, 
                     agreement.LegalEntityId, 
-                    agreement.LegalEntityName,
-                    agreement.AccountLegalEntityId,
+                    agreement.LegalEntityName, 
                     message.UserId);
             }
         }
 
         private Task PublishLegalEntityRemovedMessage(
             long accountId, long agreementId, bool agreementSigned, string createdBy,
-            long legalEntityId, string organisationName, long accountLegalEntityId, string userRef)
+            long legalEntityId, string organisationName, string userRef)
         {
             return _eventPublisher.Publish(new RemovedLegalEntityEvent
             {
@@ -115,7 +113,6 @@ namespace SFA.DAS.EAS.Application.Commands.RemoveLegalEntity
                 LegalEntityId = legalEntityId,
                 AgreementSigned = agreementSigned,
                 OrganisationName = organisationName,
-                AccountLegalEntityId = accountLegalEntityId,
                 Created = DateTime.UtcNow,
                 UserName = createdBy,
                 UserRef = Guid.Parse(userRef)

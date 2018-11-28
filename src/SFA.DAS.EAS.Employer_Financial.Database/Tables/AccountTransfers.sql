@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [employer_financial].[AccountTransfers]
 (
-    [Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
+    [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [SenderAccountId] BIGINT NOT NULL, 
     [SenderAccountName] NVARCHAR(100) NOT NULL, 
     [ReceiverAccountId] BIGINT NOT NULL, 

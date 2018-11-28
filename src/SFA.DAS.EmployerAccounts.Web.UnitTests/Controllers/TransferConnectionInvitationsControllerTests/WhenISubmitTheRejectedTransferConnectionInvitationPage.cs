@@ -14,19 +14,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
     {
         private TransferConnectionInvitationsController _controller;
         private RejectedTransferConnectionInvitationViewModel _viewModel;
-        private Mock<IMediator> _mediator;
+        private readonly Mock<IMediator> _mediator = new Mock<IMediator>();
 
         [SetUp]
         public void Arrange()
         {
-            _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(It.IsAny<IAsyncRequest<long>>()));
 
             _controller = new TransferConnectionInvitationsController(null, _mediator.Object);
 
             _viewModel = new RejectedTransferConnectionInvitationViewModel
             {
-                TransferConnectionInvitationId = 123
+                DeleteTransferConnectionInvitationCommand = new DeleteTransferConnectionInvitationCommand()
             };
         }
 
@@ -37,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Rejected(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(It.Is<DeleteTransferConnectionInvitationCommand>(c => c.TransferConnectionInvitationId == _viewModel.TransferConnectionInvitationId)), Times.Once);
+            _mediator.Verify(m => m.SendAsync(_viewModel.DeleteTransferConnectionInvitationCommand), Times.Once);
         }
 
         [Test]
@@ -60,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
 
             await _controller.Rejected(_viewModel);
 
-            _mediator.Verify(m => m.SendAsync(It.IsAny<DeleteTransferConnectionInvitationCommand>()), Times.Never);
+            _mediator.Verify(m => m.SendAsync(_viewModel.DeleteTransferConnectionInvitationCommand), Times.Never);
         }
 
         [Test]

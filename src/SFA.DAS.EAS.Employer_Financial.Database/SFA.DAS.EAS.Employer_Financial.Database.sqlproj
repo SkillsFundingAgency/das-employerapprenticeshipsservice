@@ -157,7 +157,6 @@
     <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
     <Build Include="StoredProcedures\GetProviderName.sql" />
     <Build Include="StoredProcedures\DeleteSubmissions_ByEmpRef.sql" />
-    <Build Include="StoredProcedures\GetEffectivePeriod12Declaration.sql" />
     <None Include="Scripts\Manual\GetAccountTransactionTotalsByMonth.sql" />
   </ItemGroup>
   <ItemGroup>
@@ -165,7 +164,6 @@
     <None Include="Scripts\Manual\AML-2408-UpdateIncorrectLevyAdjustmentEntries.sql" />
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
     <None Include="Scripts\PreDeployment\AML-2505-PopulateNullProviderNames.sql" />
-    <None Include="Scripts\PreDeployment\AML-2873_TransferPaymentDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />

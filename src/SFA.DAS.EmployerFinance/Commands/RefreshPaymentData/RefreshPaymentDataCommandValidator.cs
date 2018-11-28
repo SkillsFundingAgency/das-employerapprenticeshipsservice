@@ -19,6 +19,10 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
                 validationResult.AddError(nameof(item.PeriodEnd), "PeriodEnd has not been supplied");
             }
 
+            if (string.IsNullOrEmpty(item.PaymentUrl))
+            {
+                validationResult.AddError(nameof(item.PaymentUrl), "PaymentUrl has not been supplied");
+            }
             return validationResult;
         }
 

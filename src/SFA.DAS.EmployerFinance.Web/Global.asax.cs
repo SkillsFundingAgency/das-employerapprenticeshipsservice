@@ -28,12 +28,6 @@ using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using Environment = SFA.DAS.Configuration.Environment;
-using Microsoft.ApplicationInsights.Extensibility;
-using System.Configuration;
-using SFA.DAS.Audit.Client.Web;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using SFA.DAS.Audit.Client;
-using SFA.DAS.Audit.Types;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -52,20 +46,6 @@ namespace SFA.DAS.EmployerFinance.Web
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             LoggingConfig.ConfigureLogging();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
-            WebMessageBuilders.Register();
-            WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
-            WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
-
-            AuditMessageFactory.RegisterBuilder(m =>
-            {
-                m.Source = new Source
-                {
-                    Component = "EmployerFinance-Web",
-                    System = "EmployerFinance",
-                    Version = typeof(MvcApplication).Assembly.GetName().Version.ToString()
-                };
-            });
 
             if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
             {

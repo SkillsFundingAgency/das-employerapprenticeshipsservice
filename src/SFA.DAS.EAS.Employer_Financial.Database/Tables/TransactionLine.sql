@@ -1,6 +1,5 @@
 ﻿CREATE TABLE [employer_financial].[TransactionLine]
 (
-	[Id] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
     AccountId BIGINT NOT NULL,
     DateCreated DATETIME NOT NULL,
     SubmissionId BIGINT NULL,

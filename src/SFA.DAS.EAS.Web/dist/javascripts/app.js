@@ -50,7 +50,7 @@ sfa.navigation = {
         this.setupEvents(this.elems.userNav);
     },
     setupMenus: function (menu) {
-        menu.find('ul').addClass("js-hidden").attr("aria-expanded", "false");
+       menu.find('ul').addClass("js-hidden").attr("aria-hidden", "true");
     },
     setupEvents: function (menu) {
         var that = this;
@@ -75,23 +75,23 @@ sfa.navigation = {
         if ($li.hasClass("open")) {
             // Close menu
             $li.removeClass("open");
-            subMenu.addClass("js-hidden").attr("aria-expanded", "false");
+            subMenu.addClass("js-hidden").attr("aria-hidden", "true");
         } else {
             // Open menu
             this.closeAllOpenMenus();         
             $li.addClass("open");
-            subMenu.removeClass("js-hidden").attr("aria-expanded", "true");
+            subMenu.removeClass("js-hidden").attr("aria-hidden", "false");
         }
     },
     closeAllOpenMenus: function () {
-        this.elems.userNav.find('li.has-sub-menu.open').removeClass('open').find('ul').addClass("js-hidden").attr("aria-expanded", "false");
-        this.elems.levyNav.find('li.open').removeClass('open').addClass("js-hidden").attr("aria-expanded", "false");
+        this.elems.userNav.find('li.has-sub-menu.open').removeClass('open').find('ul').addClass("js-hidden").attr("aria-hidden", "true");
+        this.elems.levyNav.find('li.open').removeClass('open').addClass("js-hidden").attr("aria-hidden", "true");
     },
     linkSettings: function () {
         var $settingsLink = $('a#link-settings'),
             that = this;
         this.toggleUserMenu();
-        $settingsLink.attr("aria-expanded", "false");
+        $settingsLink.attr("aria-hidden", "false");
         $settingsLink.on('click touchstart', function (e) {
             var target = $(this).attr('href');
             $(this).toggleClass('open');
@@ -103,10 +103,10 @@ sfa.navigation = {
         var $userNavParent = this.elems.userNav.parent();
         if ($userNavParent.hasClass("close")) {
             //open it
-            $userNavParent.removeClass("close").attr("aria-expanded", "true");
+            $userNavParent.removeClass("close").attr("aria-hidden", "false");
         } else {
             // close it 
-            $userNavParent.addClass("close").attr("aria-expanded", "false");
+            $userNavParent.addClass("close").attr("aria-hidden", "true");
         }
     }
 }

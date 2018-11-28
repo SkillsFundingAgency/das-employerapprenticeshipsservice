@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class StartTransferConnectionInvitationViewModel : MembershipMessage
+    public class StartTransferConnectionInvitationViewModel
     {
-        [Required(ErrorMessage = "You must enter a valid account ID")]
-        [RegularExpression(EmployerAccounts.Constants.AccountHashedIdRegex, ErrorMessage = "You must enter a valid account ID")]
-        public string ReceiverAccountPublicHashedId { get; set; }
+        [Required]
+        public SendTransferConnectionInvitationQuery SendTransferConnectionInvitationQuery { get; set; }
     }
 }

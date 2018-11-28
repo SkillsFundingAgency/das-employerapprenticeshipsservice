@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
-            SetupGetTransactionsResponse(2017, 5);
+            SetupGetTransactionsResponse(2017, 5, null);
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             //Arrange
             const int year = 2016;
             const int month = 2;
-            SetupGetTransactionsResponse(year, month);
+            SetupGetTransactionsResponse(year, month, null);
 
             //Act
             var result = await _orchestrator.GetAccountTransactions(HashedAccountId, year, month, ExternalUser);
@@ -105,11 +105,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         {
             //Arrange
             _currentTime.Setup(x => x.Now).Returns(new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1));
-            SetupGetTransactionsResponse(DateTime.Now.Year, DateTime.Now.Month);
+            SetupGetTransactionsResponse(DateTime.Now.Year, DateTime.Now.Month, null);
 
             //Act
             var resultLatestMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, DateTime.Now.Year, DateTime.Now.Month, ExternalUser);
-            SetupGetTransactionsResponse(2016, 1);
+            SetupGetTransactionsResponse(2016, 1, null);
             var resultHistoricalMonth = await _orchestrator.GetAccountTransactions(HashedAccountId, 2016, 1, ExternalUser);
 
             //Assert
@@ -185,7 +185,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             //Assert
             Assert.IsNotNull(paymenTransaction);
-            Assert.AreEqual(2, actualTransactions.Length);
+            Assert.AreEqual(2, actualTransactions.Count);
         }
 
         [Test]
@@ -247,19 +247,19 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         }
 
 
-        private void SetupGetTransactionsResponse(int year, int month)
+        private void SetupGetTransactionsResponse(int year, int month, ICollection<TransactionLine> transactions)
         {
-            SetupGetTransactionsResponse(year, month, new TransactionLine[0]);
-        }
+            transactions = transactions ?? new List<TransactionLine>
+            {
+                new TransactionLine()
+            };
 
-        private void SetupGetTransactionsResponse(int year, int month, IEnumerable<TransactionLine> transactions)
-        {
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()))
                 .ReturnsAsync(new GetEmployerAccountTransactionsResponse
                 {
                     Data = new AggregationData
                     {
-                        TransactionLines = transactions.ToArray()
+                        TransactionLines = transactions
                     },
                     Year = year,
                     Month = month,

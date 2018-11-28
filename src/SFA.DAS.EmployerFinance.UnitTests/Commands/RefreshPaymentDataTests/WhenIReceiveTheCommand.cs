@@ -47,7 +47,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             _command = new RefreshPaymentDataCommand
             {
                 AccountId = AccountId,
-                PeriodEnd = PeriodEnd
+                PeriodEnd = PeriodEnd,
+                PaymentUrl = "http://someurl"
             };
 
             _existingPaymentIds = new List<Guid>

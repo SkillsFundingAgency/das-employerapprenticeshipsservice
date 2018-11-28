@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class SendTransferConnectionInvitationViewModel : MembershipMessage
+    public class SendTransferConnectionInvitationViewModel
     {
         [Required(ErrorMessage = "Option required")]
         [RegularExpression("Confirm|ReEnterAccountId", ErrorMessage = "Option required")]
@@ -15,7 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public AccountDto SenderAccount { get; set; }
 
         [Required]
-        [RegularExpression(SFA.DAS.EmployerAccounts.Constants.AccountHashedIdRegex)]
-        public string ReceiverAccountPublicHashedId { get; set; }
+        public SendTransferConnectionInvitationCommand SendTransferConnectionInvitationCommand { get; set; }
     }
 }

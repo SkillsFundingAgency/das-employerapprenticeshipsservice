@@ -83,8 +83,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 AccountId = parameters.Get<long>("@accountId"),
                 LegalEntityId = parameters.Get<long>("@legalentityId"),
-                EmployerAgreementId = parameters.Get<long>("@employerAgreementId"),
-                AccountLegalEntityId = accountLegalEntityId
+                EmployerAgreementId = parameters.Get<long>("@employerAgreementId")
             };
         }
 
@@ -126,7 +125,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             {
                 Id = agreementId,
                 AccountId = createParams.AccountId,
-                AccountLegalEntityId = accountLegalEntityId,
+                AccountLegalentityId = accountLegalEntityId,
                 LegalEntityId = legalEntityId,
                 LegalEntityName = createParams.Name,
                 LegalEntityCode = createParams.Code,

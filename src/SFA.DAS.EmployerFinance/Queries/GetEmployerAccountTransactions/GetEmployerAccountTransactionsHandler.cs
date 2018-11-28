@@ -60,9 +60,13 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var transactions = await _dasLevyService.GetAccountTransactionsByDateRange(accountId, fromDate, toDate);
-            var balance = await _dasLevyService.GetAccountBalance(accountId);
 
             var hasPreviousTransactions = await _dasLevyService.GetPreviousAccountTransaction(accountId, fromDate) > 0;
+
+            if (!transactions.Any())
+            {
+                return GetResponse(message.HashedAccountId, accountId, hasPreviousTransactions, toDate.Year, toDate.Month);
+            }
 
             foreach (var transaction in transactions)
             {
@@ -71,14 +75,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 
             PopulateTransferPublicHashedIds(transactions);
 
-            return GetResponse(
-                message.HashedAccountId, 
-                accountId, 
-                transactions, 
-                balance, 
-                hasPreviousTransactions, 
-                toDate.Year, 
-                toDate.Month);
+            return GetResponse(message.HashedAccountId, accountId, transactions, hasPreviousTransactions, toDate.Year, toDate.Month);
         }
 
         private static DateTime CalculateToDate(GetEmployerAccountTransactionsQuery message)
@@ -138,14 +135,13 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             return $"{transactionPrefix}Training provider - name not recognised";
         }
 
+        private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions, int year, int month)
+        {
+            return GetResponse(hashedAccountId, accountId, new List<TransactionLine>(), hasPreviousTransactions, year, month);
+        }
+
         private static GetEmployerAccountTransactionsResponse GetResponse(
-            string hashedAccountId, 
-            long accountId, 
-            TransactionLine[] transactions, 
-            decimal balance,
-            bool hasPreviousTransactions, 
-            int year, 
-            int month)
+            string hashedAccountId, long accountId, ICollection<TransactionLine> transactions, bool hasPreviousTransactions, int year, int month)
         {
             return new GetEmployerAccountTransactionsResponse
             {
@@ -153,7 +149,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
                 {
                     HashedAccountId = hashedAccountId,
                     AccountId = accountId,
-                    Balance = balance,
                     TransactionLines = transactions
                 },
                 AccountHasPreviousTransactions = hasPreviousTransactions,

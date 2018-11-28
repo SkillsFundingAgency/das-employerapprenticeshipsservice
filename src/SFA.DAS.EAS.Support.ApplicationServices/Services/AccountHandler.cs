@@ -60,19 +60,15 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Services
                 StatusCode = SearchResponseCodes.NoSearchResultsFound
             };
 
-            var getAccountTask = _accountRepository.Get(id, AccountFieldsSelection.Finance);
-            var getBalanceTask = _accountRepository.GetAccountBalance(id);
-
-            await Task.WhenAll(getAccountTask, getBalanceTask);
-
-            var account = getAccountTask.Result;
-            var balance = getBalanceTask.Result;
+            var account = await _accountRepository.Get(id, AccountFieldsSelection.Finance);
 
             if (account != null)
             {
                 response.StatusCode = SearchResponseCodes.Success;
                 response.Account = account;
-                response.Balance = balance;
+                response.Balance = account.Transactions.Any()
+                    ? account.Transactions.First().Balance
+                    : await _accountRepository.GetAccountBalance(id);
             }
 
             return response;

@@ -21,8 +21,7 @@ namespace SFA.DAS.EmployerFinance.Data
         private readonly IMapper _mapper;
         private readonly Lazy<EmployerFinanceDbContext> _db;
 
-        public TransactionRepository(EmployerFinanceConfiguration configuration, IMapper mapper, ILog logger,
-            Lazy<EmployerFinanceDbContext> db)
+        public TransactionRepository(EmployerFinanceConfiguration configuration, IMapper mapper, ILog logger, Lazy<EmployerFinanceDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _mapper = mapper;
@@ -34,8 +33,7 @@ namespace SFA.DAS.EmployerFinance.Data
             var transactionTable = CreateTransferTransactionDataTable(transactions);
             var parameters = new DynamicParameters();
 
-            parameters.Add("@transferTransactions",
-                transactionTable.AsTableValuedParameter("[employer_financial].[TransferTransactionsTable]"));
+            parameters.Add("@transferTransactions", transactionTable.AsTableValuedParameter("[employer_financial].[TransferTransactionsTable]"));
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[CreateAccountTransferTransactions]",
@@ -53,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.Data
 
             try
             {
-                return await _db.Value.Database.Connection.ExecuteScalarAsync<int>(
+                return await  _db.Value.Database.Connection.ExecuteScalarAsync<int>(
                     sql: "[employer_financial].[GetPreviousTransactionsCount]",
                     param: parameters,
                     transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
@@ -67,19 +65,7 @@ namespace SFA.DAS.EmployerFinance.Data
             }
         }
 
-        public Task<decimal> GetAccountBalance(long accountId)
-        {
-            var parameters = new DynamicParameters();
-            parameters.Add("@accountId", accountId, DbType.Int64);
-
-            return _db.Value.Database.Connection.QuerySingleAsync<decimal>(
-                sql: "SELECT ISNULL(SUM(Amount),0) FROM [employer_financial].[TransactionLine] WHERE AccountId = @accountId AND TransactionType in (1, 2, 3, 4)",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
-        }
-    
-        public async Task<TransactionLine[]> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var parameters = new DynamicParameters();
 
@@ -132,7 +118,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return table;
         }
 
-        public async Task<TransactionLine[]> GetAccountTransactionByProviderAndDateRange(long accountId, long ukprn, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountTransactionByProviderAndDateRange(long accountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
             var parameters = new DynamicParameters();
 
@@ -150,31 +136,39 @@ namespace SFA.DAS.EmployerFinance.Data
             return MapTransactions(result);
         }
 
-        private TransactionLine[] MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
+        private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
         {
-            return transactionEntities.Select(entity => { 
+            var transactions = new List<TransactionLine>();
+
+            foreach (var entity in transactionEntities)
+            {
                 switch (entity.TransactionType)
                 {
                     case TransactionItemType.Declaration:
                     case TransactionItemType.TopUp:
-                        return _mapper.Map<LevyDeclarationTransactionLine>(entity);
+                        transactions.Add(_mapper.Map<LevyDeclarationTransactionLine>(entity));
+                        break;
 
                     case TransactionItemType.Payment:
-                        return _mapper.Map<PaymentTransactionLine>(entity);
+                        transactions.Add(_mapper.Map<PaymentTransactionLine>(entity));
+                        break;
 
                     case TransactionItemType.Transfer:
-                        return _mapper.Map<TransferTransactionLine>(entity);
+                        transactions.Add(_mapper.Map<TransferTransactionLine>(entity));
+                        break;
 
                     case TransactionItemType.Unknown:
-                        return _mapper.Map<TransactionLine>(entity);
+                        transactions.Add(_mapper.Map<TransactionLine>(entity));
+                        break;
 
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
-            }).ToArray();
+            }
+            return transactions;
         }
 
-        public async Task<TransactionLine[]> GetAccountCoursePaymentsByDateRange(long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionLine>> GetAccountCoursePaymentsByDateRange(long accountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
             var parameters = new DynamicParameters();
 
@@ -194,7 +188,7 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return MapTransactions(result);
         }
-		public async Task<TransactionLine[]> GetAccountLevyTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
+		public async Task<List<TransactionLine>> GetAccountLevyTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
         {
             var parameters = new DynamicParameters();
 
@@ -227,7 +221,7 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
             
         }
-        public async Task<TransactionDownloadLine[]> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate)
+        public async Task<List<TransactionDownloadLine>> GetAllTransactionDetailsForAccountByDate(long accountId, DateTime fromDate, DateTime toDate)
         {
             var parameters = new DynamicParameters();
 
@@ -252,7 +246,7 @@ namespace SFA.DAS.EmployerFinance.Data
                 }
             }
 
-            return transactionDownloadLines.OrderByDescending(txn => txn.DateCreated).ToArray();
+            return transactionDownloadLines.OrderByDescending(txn => txn.DateCreated).ToList();
         }
     }
 }

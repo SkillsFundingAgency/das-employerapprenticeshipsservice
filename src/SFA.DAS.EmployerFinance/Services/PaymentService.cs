@@ -86,7 +86,7 @@ namespace SFA.DAS.EmployerFinance.Services
                     ReceiverAccountId = item.ReceiverAccountId,
                     PeriodEnd = periodEnd,
                     Amount = item.Amount,
-                    ApprenticeshipId = item.CommitmentId,
+                    CommitmentId = item.CommitmentId,
                     Type = item.Type.ToString(),
                     RequiredPaymentId = item.RequiredPaymentId
                 });

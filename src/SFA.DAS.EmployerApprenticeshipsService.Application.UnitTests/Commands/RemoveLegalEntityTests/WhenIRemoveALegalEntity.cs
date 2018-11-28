@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Infrastructure.Features;
-using SFA.DAS.EmployerAccounts.Messages.Events;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
 {
@@ -36,14 +35,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
         private Mock<IAgreementService> _agreementService;
         private Mock<IMembershipRepository> _membershipRepository;
-        private Mock<IEventPublisher> _eventPublisher;
 
         private const string ExpectedHashedAccountId = "34RFD";
         private const long ExpectedAccountId = 123455;
         private const long ExpectedLegalEntityId = 98854;
-        private const string ExpectedLegalEntityName = "Hogwarts";
-        private const long ExpectedAccountLegalEntityId = 2017;
-        private readonly string _expectedUserId = Guid.NewGuid().ToString();
+        private const string ExpectedUserId = "LASDA234E";
         private const long ExpectedEmployerAgreementId = 5533678;
         private const string ExpectedHashedEmployerAgreementId = "FGDFH45645";
 
@@ -58,14 +54,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _mediator = new Mock<IMediator>();
 
             _repository = new Mock<IEmployerAgreementRepository>();
-            _repository.Setup(r => r.GetEmployerAgreement(ExpectedEmployerAgreementId))
-                .ReturnsAsync(new EmployerAgreementView
-                {
-                    AccountLegalEntityId = ExpectedAccountLegalEntityId,
-                    LegalEntityId = ExpectedLegalEntityId,
-                    LegalEntityName = ExpectedLegalEntityName,
-                    Status = EmployerAgreementStatus.Signed
-                });
 
             _agreementService = new Mock<IAgreementService>();
 
@@ -80,13 +68,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
 
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository
-                .Setup(mr => mr.GetCaller(ExpectedAccountId, _expectedUserId))
+                .Setup(mr => mr.GetCaller(ExpectedAccountId, ExpectedUserId))
                 .Returns<long, string>((accountId, userRef) => Task.FromResult(new MembershipView {AccountId = ExpectedAccountId, FirstName = "Harry", LastName = "Potter"}));
 
-            _eventPublisher = new Mock<IEventPublisher>();
-
-            _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = _expectedUserId, HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
-
+            _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
             _handler = new RemoveLegalEntityCommandHandler(
                 _validator.Object,
                 _logger.Object,
@@ -97,11 +82,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
                 _employerAgreementEventFactory.Object,
                 _agreementService.Object,
                 _membershipRepository.Object,
-                _eventPublisher.Object);
+                Mock.Of<IEventPublisher>());
         }
 
         [Test]
-        public void ThenTheValidatorIsCalledAndAnInvalidRequestExceptionThrownIfItIsNotValid()
+        public void ThenTheValidatorIsCalledAnAndInvalidRequestExceptionThrownIfIsItNotValid()
         {
             //Arrange
             _validator.Setup(x => x.ValidateAsync(It.IsAny<RemoveLegalEntityCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
@@ -130,7 +115,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             //Assert
             _validator.Verify(x => x.ValidateAsync(It.Is<RemoveLegalEntityCommand>(c =>
                                                                           c.HashedAccountId.Equals(ExpectedHashedAccountId)
-                                                                          && c.UserId.Equals(_expectedUserId))));
+                                                                          && c.UserId.Equals(ExpectedUserId))));
             _repository.Verify(x => x.RemoveLegalEntityFromAccount(ExpectedEmployerAgreementId));
         }
 
@@ -166,21 +151,5 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
             _mediator.Verify(x => x.SendAsync(It.Is<PublishGenericEventCommand>(c => c.Event.Payload.Equals(ExpectedHashedEmployerAgreementId))));
         }
 
-        [Test]
-        public async Task ThenTheRemovedLegalEntityEventIsPublished()
-        {
-            await _handler.Handle(_command);
-
-            _eventPublisher.Verify(ep => ep.Publish(It.Is<RemovedLegalEntityEvent>(e => 
-                e.AccountId.Equals(ExpectedAccountId)
-                && e.AgreementId.Equals(ExpectedEmployerAgreementId)
-                && e.LegalEntityId.Equals(ExpectedLegalEntityId)
-                && e.AgreementSigned.Equals(true)
-                && e.OrganisationName.Equals(ExpectedLegalEntityName)
-                && e.AccountLegalEntityId.Equals(ExpectedAccountLegalEntityId)
-                && e.UserName.Equals("Harry Potter")
-                && e.UserRef.Equals(Guid.Parse(_expectedUserId))
-                )));
-        }
     }
 }

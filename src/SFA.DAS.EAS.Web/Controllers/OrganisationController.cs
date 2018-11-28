@@ -195,9 +195,7 @@ namespace SFA.DAS.EAS.Web.Controllers
                     var response = await _orchestrator.UpdateOrganisation(
                         accountLegalEntityPublicHashedId,
                         organisationName,
-                        organisationAddress,
-                        hashedAccountId,
-                        OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+                        organisationAddress);
 
                     return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
 

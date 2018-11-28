@@ -5,7 +5,6 @@
         NotSpecified,
         Activities,
         Projections,
-        ProviderRelationships,
         Recruitments,
         TransferConnectionRequests,
         Transfers,

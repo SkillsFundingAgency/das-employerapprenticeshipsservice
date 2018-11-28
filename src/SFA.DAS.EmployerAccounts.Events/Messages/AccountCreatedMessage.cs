@@ -11,7 +11,8 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
         {}
 
         public AccountCreatedMessage(long accountId, string creatorName, string creatorUserRef) : base(accountId, creatorName, creatorUserRef)
-        {
+        { 
+
         }
     }
 }

@@ -15,7 +15,7 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.ReceiverAccountPublicHashedId)
+            @Html.HiddenFor(m => m.SendTransferConnectionInvitationCommand.ReceiverAccountPublicHashedId)
             <div class="form-group">
                 <table>
                     <tbody>

@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountLevyDecla
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
                                             (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                           .ReturnsAsync(new []
+                           .ReturnsAsync(new List<LevyDeclarationTransactionLine>()
                 {
                     new LevyDeclarationTransactionLine()
                 });
@@ -100,7 +100,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountLevyDecla
             //Arrange
             _dasLevyService.Setup(x => x.GetAccountLevyTransactionsByDateRange<LevyDeclarationTransactionLine>
                                             (It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                           .ReturnsAsync(new []
+                           .ReturnsAsync(new List<LevyDeclarationTransactionLine>
             {
                 new LevyDeclarationTransactionLine {LineAmount=10,EnglishFraction = 0.5m,TransactionType = TransactionItemType.Declaration},
                 new LevyDeclarationTransactionLine {LineAmount=1,EnglishFraction = 0.5m,TransactionType = TransactionItemType.TopUp}

@@ -1,10 +1,20 @@
 {
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-clean-css": "^3.10.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-rename": "^1.4.0",
-    "gulp-uglify": "^3.0.1"
-  }
+    "name": "manage-my-apprenticeships",
+    "description": "SASS and JS",
+    "license": "UNLICENSED",
+    "author": "Skills Funding Agency",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice"
+    },
+    "devDependencies": {
+        "grunt": "^1.0.3",
+        "grunt-contrib-clean": "^1.1.0",
+        "grunt-contrib-watch": "^1.1.0",
+        "grunt-sass": "^3.0.1",
+        "grunt-svg-sprite": "^1.4.0",
+        "load-grunt-tasks": "^4.0.0",
+        "node-sass": "^4.9.3"
+    },
+    "dependencies": {}
 }

@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerFinance.Models.Transaction
 {
-    public enum TransactionItemType : byte
+    public enum TransactionItemType : short
     {
         Unknown = 0,
         Declaration = 1,

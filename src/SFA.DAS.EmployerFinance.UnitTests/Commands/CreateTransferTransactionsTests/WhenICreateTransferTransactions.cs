@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateTransferTransactionsT
                     SenderAccountName = SenderAccountName,
                     ReceiverAccountId = 2,
                     ReceiverAccountName = ReceiverAccountName,
-                    ApprenticeshipId = 100,
+                    CommitmentId = 100,
                     Amount = 200
                 }
             };
@@ -144,7 +144,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateTransferTransactionsT
                 SenderAccountName = SenderAccountName,
                 ReceiverAccountId = 2,
                 ReceiverAccountName = ReceiverAccountName,
-                ApprenticeshipId = 200,
+                CommitmentId = 200,
                 Amount = 100
             });
 
@@ -173,7 +173,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateTransferTransactionsT
                 SenderAccountName = SenderAccountName,
                 ReceiverAccountId = 2,
                 ReceiverAccountName = ReceiverAccountName,
-                ApprenticeshipId = 200,
+                CommitmentId = 200,
                 Amount = 100
             });
 
@@ -200,16 +200,16 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateTransferTransactionsT
             _accountTransfers = new List<AccountTransfer>
             {
                 new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
-                                      ApprenticeshipId = 100, Amount = 100 },
+                                      CommitmentId = 100, Amount = 100 },
 
                 new AccountTransfer { SenderAccountId = 1, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
-                                      ApprenticeshipId = 200, Amount = 200 },
+                                      CommitmentId = 200, Amount = 200 },
 
                 new AccountTransfer { SenderAccountId = 2, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
-                                      ApprenticeshipId = 300, Amount = 400 },
+                                      CommitmentId = 300, Amount = 400 },
 
                 new AccountTransfer { SenderAccountId = 2, ReceiverAccountId = 3, ReceiverAccountName = ReceiverAccountName,
-                                      ApprenticeshipId = 400, Amount = 800 }
+                                      CommitmentId = 400, Amount = 800 }
             };
 
             _transferRepository.Setup(x => x.GetReceiverAccountTransfersByPeriodEnd(It.IsAny<long>(), It.IsAny<string>()))

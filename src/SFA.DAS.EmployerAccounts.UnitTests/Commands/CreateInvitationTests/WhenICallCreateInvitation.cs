@@ -10,7 +10,6 @@ using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.UnitTests.Fakes;
@@ -38,8 +37,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
         private const string ExpectedHashedId = "aaa415ss1";
         private const string ExpectedCallerEmail = "test.user@test.local";
         private const string ExpectedExistingUserEmail = "registered@test.local";
-        private const string NameOfPersonBeingInvited = "Invited User";
-
 
         private static readonly string ExpectedExternalUserId = Guid.NewGuid().ToString();
 
@@ -76,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
             {
                 HashedAccountId = ExpectedHashedId,
                 EmailOfPersonBeingInvited = ExpectedCallerEmail,
-                NameOfPersonBeingInvited = NameOfPersonBeingInvited,
+                NameOfPersonBeingInvited = "Test User",
                 RoleIdOfPersonBeingInvited = Role.Owner,
                 ExternalUserId = ExpectedExternalUserId
             };
@@ -87,15 +84,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
         public void Teardown()
         {
             DateTimeProvider.ResetToDefault();
-        }
-
-        [Test]
-        public async Task Then_InvitedUserEventPublishedWithCorrectPersonInvited()
-        {
-            //Act
-            await _handler.Handle(_command);
-
-            _endpoint.Verify(e =>e.Publish(It.Is<InvitedUserEvent>(i => i.PersonInvited == NameOfPersonBeingInvited)));
         }
 
         [Test]

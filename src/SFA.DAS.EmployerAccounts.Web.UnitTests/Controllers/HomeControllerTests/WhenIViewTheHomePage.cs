@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -16,7 +15,6 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 using SignInUserViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.SignInUserViewModel;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -30,8 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-        private Mock<IDependencyResolver> _dependancyResolver;
-
 
         [SetUp]
         public void Arrange()
@@ -63,25 +59,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
                     ChangePasswordLink = "123",
                     ChangeEmailLink = "123",
                     ClaimIdentifierConfiguration = new ClaimIdentifierConfiguration {ClaimsBaseUrl = "http://claims.test/"}
-                },
-                EmployerPortalBaseUrl = "https://localhost"
+                }
             };
-
-            _dependancyResolver = new Mock<IDependencyResolver>();
-            _dependancyResolver.Setup(r => r.GetService(typeof(EmployerAccountsConfiguration))).Returns(_configuration);
-
-            DependencyResolver.SetResolver(_dependancyResolver.Object);
 
             _featureToggle = new Mock<IAuthorizationService>();
             _userTestingService = new Mock<IMultiVariantTestingService>();
 
             _homeController = new HomeController(
                 _owinWrapper.Object, _homeOrchestrator.Object, _configuration, _featureToggle.Object,
-                _userTestingService.Object, _flashMessage.Object)
-            {
-                Url = new UrlHelper()
-            };
-
+                _userTestingService.Object,_flashMessage.Object);
         }
 
         [Test]
@@ -160,7 +146,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
-        public async Task ThenTheUSerIsRedirectedToThePortalSiteWhenUserIsNotLoggedIn()
+        public async Task ThenTheUnauthenticatedViewIsReturnedWhenNoUserIsLoggedIn()
         {
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("");
@@ -170,9 +156,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualViewResult = actual as RedirectResult;
+            var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual(_configuration.EmployerPortalBaseUrl, actualViewResult.Url);
+            Assert.AreEqual("ServiceStartPage", actualViewResult.ViewName);
         }
 
         [Test]

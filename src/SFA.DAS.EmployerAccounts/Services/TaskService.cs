@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "Could not dismiss account tasks successfully");
+                _logger.Error(ex, "Could not retrieve account tasks successfully");
             }
         }
     }

@@ -1,12 +1,12 @@
-using MediatR;
-using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Models.Transfers;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
+using SFA.DAS.Validation;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models.Transfers;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Commands.CreateTransferTransactions
 {
@@ -45,8 +45,6 @@ namespace SFA.DAS.EmployerFinance.Commands.CreateTransferTransactions
 
                 var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
 
-                //If this code changes you need to check that the transfer transaction details 
-                // code supports the change as it currently relies on grouping by sender for the transactions
                 var senderTransfers = accountTransfers.GroupBy(t => t.SenderAccountId);
 
                 var transactions = senderTransfers.SelectMany(CreateTransactions).ToArray();

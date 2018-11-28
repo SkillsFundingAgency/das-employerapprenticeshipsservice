@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransactionsDownloadTests
             _transactionFormatterFactory.Setup(x => x.GetTransactionsFormatterByType(It.IsAny<DownloadFormatType>())).Returns(new CsvTransactionFormatter());
 
             _transactionsRepository.Setup(x => x.GetAllTransactionDetailsForAccountByDate(AccountId, StartDate.ToDate(), ToDate))
-                .ReturnsAsync(new TransactionDownloadLine[] { new TransactionDownloadLine() });
+                .ReturnsAsync(new List<TransactionDownloadLine> { new TransactionDownloadLine() });
 
             _handler = new GetTransactionsDownloadQueryHandler(_transactionFormatterFactory.Object, _transactionsRepository.Object);
 
@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransactionsDownloadTests
         public void TheShouldThrowValidationExceptionIfNoTransactionFound()
         {
             _transactionsRepository.Setup(r => r.GetAllTransactionDetailsForAccountByDate(AccountId, StartDate, ToDate))
-                .ReturnsAsync(new TransactionDownloadLine[0]);
+                .ReturnsAsync(new List<TransactionDownloadLine>());
 
             Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query), "There are no transactions in the date range");
         }

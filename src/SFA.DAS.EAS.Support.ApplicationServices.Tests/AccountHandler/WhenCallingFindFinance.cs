@@ -21,6 +21,24 @@ namespace SFA.DAS.EAS.Support.ApplicationServices.Tests.AccountHandler
         }
 
         [Test]
+        public async Task ItShouldReturnTheAccountWithBalanceFromTransactionsIfFound()
+        {
+            MockAccountRepository.Setup(x => x.Get(Id, AccountFieldsSelection.Finance))
+                .ReturnsAsync(new Core.Models.Account
+                {
+                    Transactions = new List<TransactionViewModel> {new TransactionViewModel {Balance = 100m}}
+                });
+
+            var actual = await Unit.FindFinance(Id);
+
+            MockAccountRepository.Verify(x => x.GetAccountBalance(Id), Times.Never);
+
+            Assert.AreEqual(SearchResponseCodes.Success, actual.StatusCode);
+            Assert.IsNotNull(actual.Account);
+        }
+
+
+        [Test]
         public async Task ItShouldReturnTheAccountWithBallanceLookupIfNoTransactionsAreFound()
         {
             MockAccountRepository.Setup(x => x.Get(Id, AccountFieldsSelection.Finance))
