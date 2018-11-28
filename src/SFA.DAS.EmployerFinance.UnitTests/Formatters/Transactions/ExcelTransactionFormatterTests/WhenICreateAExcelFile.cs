@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions.ExcelTransac
                 {
                     "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Levy declared",
                     "English %", "10% top up", "Training provider", "Unique learner number",
-                    "Apprentice", "Apprenticeship training course", "Apprenticeship training course level", "Paid from levy", "Your contribution",
+                    "Apprentice", "Apprenticeship training course", "Course level", "Paid from levy", "Your contribution",
                     "Government contribution", "Total"
                 },
                 new[]

@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
             Assert.AreEqual("Unique learner number", headerColumns[8]);
             Assert.AreEqual("Apprentice", headerColumns[9]);
             Assert.AreEqual("Apprenticeship training course", headerColumns[10]);
-            Assert.AreEqual("Apprenticeship training course level", headerColumns[11]);
+            Assert.AreEqual("Course level", headerColumns[11]);
             Assert.AreEqual("Paid from levy", headerColumns[12]);
             Assert.AreEqual("Your contribution", headerColumns[13]);
             Assert.AreEqual("Government contribution", headerColumns[14]);

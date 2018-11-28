@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
             headerBuilder.Append("Unique learner number,");
             headerBuilder.Append("Apprentice,");
             headerBuilder.Append("Apprenticeship training course,");
-            headerBuilder.Append("Apprenticeship training course level,");
+            headerBuilder.Append("Course level,");
             headerBuilder.Append("Paid from levy,");
             headerBuilder.Append("Your contribution,");
             headerBuilder.Append("Government contribution,");
