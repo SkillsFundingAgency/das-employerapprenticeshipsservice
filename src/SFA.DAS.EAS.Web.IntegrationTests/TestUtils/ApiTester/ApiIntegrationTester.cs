@@ -108,15 +108,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
             var callResponse = new CallResponse();
-            await StartTransactionAsync();
-            try
-            {
-                await FetchInitialResponseAsync(call, callResponse);
-            }
-            finally
-            {
-                await EndTransactionAsync();
-            }
+
+            await FetchInitialResponseAsync(call, callResponse);
 
             return callResponse;
         }
@@ -124,37 +117,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private async Task<CallResponse<TResult>> GetResponseAsync<TResult>(CallRequirements call)
         {
             var callResponse = new CallResponse<TResult>();
-            await StartTransactionAsync();
-            try
-            {
-                await FetchInitialResponseAsync(call, callResponse);
-                await FetchCompleteResponseAsync(callResponse);
-            }
-            finally
-            {
-                await EndTransactionAsync();
-            }
+
+            await FetchInitialResponseAsync(call, callResponse);
+            await FetchCompleteResponseAsync(callResponse);
 
             return callResponse;
         }
 
         private IUnitOfWorkManager unitOfWorkManager = null;
-
-        private Task StartTransactionAsync()
-        {
-            return Task.CompletedTask;
-            unitOfWorkManager = _dependencyResolver.GetService<IUnitOfWorkManager>();
-
-            return unitOfWorkManager.BeginAsync();
-        }
-
-        private Task EndTransactionAsync()
-        {
-            return Task.CompletedTask;
-            unitOfWorkManager = _dependencyResolver.GetService<IUnitOfWorkManager>();
-
-            return unitOfWorkManager.EndAsync();
-        }
 
         private async Task FetchInitialResponseAsync(CallRequirements call, CallResponse response)
         {
@@ -204,7 +174,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             WebApiConfig.Register(config);
             CustomiseConfig(config);
             app.UseWebApi(config);
-            // config.Filters.AddUnitOfWorkFilter();
         }
 
         private void CustomiseConfig(HttpConfiguration config)
@@ -219,8 +188,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
                 c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
                 c.AddRegistry<DataRegistry>();
-                c.For<Lazy<EmployerAccountsDbContext>>()
-                    .Use(y => new Lazy<EmployerAccountsDbContext>(y.GetInstance<EmployerAccountsDbContext>));
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);
