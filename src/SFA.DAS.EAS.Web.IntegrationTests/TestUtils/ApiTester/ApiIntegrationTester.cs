@@ -207,7 +207,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             WebApiConfig.Register(config);
             CustomiseConfig(config);
             app.UseWebApi(config);
-            config.Filters.AddUnitOfWorkFilter();
+            // config.Filters.AddUnitOfWorkFilter();
         }
 
         private void CustomiseConfig(HttpConfiguration config)
