@@ -173,7 +173,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ty
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.ReadStore.UnitTests", "SFA.DAS.EmployerAccounts.ReadStore.UnitTests\SFA.DAS.EmployerAccounts.ReadStore.UnitTests.csproj", "{80E4594E-FD83-4DD4-9458-053CDBFC6C60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.ApiClient.TestHarness", "SFA.DAS.EmployerAccounts.ApiClient.TestHarness\SFA.DAS.EmployerAccounts.ApiClient.TestHarness.csproj", "{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.ApiClient.TestHarness", "SFA.DAS.EmployerAccounts.ApiClient.TestHarness\SFA.DAS.EmployerAccounts.ApiClient.TestHarness.csproj", "{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness", "SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness\SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.csproj", "{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -446,6 +448,10 @@ Global
 		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -505,6 +511,7 @@ Global
 		{D3AA1CAA-4367-48A2-B796-FC392B9BEC49} = {A177AC61-DF6E-4A04-8EFE-1E7004277669}
 		{80E4594E-FD83-4DD4-9458-053CDBFC6C60} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
+		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7BB69664-F8C0-4231-9940-51CE90904197}
