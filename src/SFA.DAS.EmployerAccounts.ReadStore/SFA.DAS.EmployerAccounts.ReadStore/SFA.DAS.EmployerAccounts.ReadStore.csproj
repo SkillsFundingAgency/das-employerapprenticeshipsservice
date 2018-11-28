@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="SFA.DAS.CosmosDb" Version="0.1.5" />
+    <PackageReference Include="StructureMap" Version="4.6.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
+using SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
@@ -27,6 +28,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<ReadStoreDataRegistry>();
+                c.AddRegistry<ReadStoreMediatorRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

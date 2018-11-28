@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.CosmosDb;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
@@ -17,12 +17,12 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
         }
         public async Task<Unit> Handle(UpdateUserRolesCommand request, CancellationToken cancellationToken)
         {
-            var user = _usersRolesRepository.CreateQuery()
-                .SingleOrDefault(x => x.UserRef == request.UserRef && x.AccountId == request.AccountId);
+            var user = await _usersRolesRepository.CreateQuery().SingleOrDefaultAsync(x => x.UserRef == request.UserRef && x.AccountId == request.AccountId, cancellationToken);
 
             if (user == null)
             {
-                user = new UserRoles(request.UserRef, request.AccountId, request.Roles, request.MessageId, request.Updated);
+                user = new UserRoles(request.UserRef, request.AccountId, request.Roles, request.MessageId,
+                    request.Updated);
                 await _usersRolesRepository.Add(user, null, cancellationToken);
             }
             else

@@ -4,9 +4,9 @@ using SFA.DAS.EmployerAccounts.ReadStore.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Data
 {
-    internal class UserRolesRepository : DocumentRepository<UserRoles>, IUsersRolesRepository
+    internal class UsersRolesRepository : DocumentRepository<UserRoles>, IUsersRolesRepository
     {
-        public UserRolesRepository(IDocumentClient documentClient)
+        public UsersRolesRepository(IDocumentClient documentClient)
             : base(documentClient, DocumentSettings.DatabaseName, DocumentSettings.UsersCollectionName)
         {
         }
