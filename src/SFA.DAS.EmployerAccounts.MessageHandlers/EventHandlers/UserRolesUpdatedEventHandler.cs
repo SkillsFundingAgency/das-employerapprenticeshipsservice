@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
         }
         public async Task Handle(UserRolesUpdatedEvent message, IMessageHandlerContext context)
         {
-            await _mediator.Send(new UpdateUserRolesCommand(message.AccountId, Guid.Parse(message.UserRef), message.Roles, context.MessageId, message.Updated));
+            await _mediator.Send(new UpdateUserRolesCommand(message.AccountId, Guid.Parse(message.UserRef), message.Roles, context.MessageId, message.Created));
         }
     }
 }
