@@ -45,10 +45,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
             Assert.AreEqual("Unique learner number", headerColumns[8]);
             Assert.AreEqual("Apprentice", headerColumns[9]);
             Assert.AreEqual("Apprenticeship training course", headerColumns[10]);
-            Assert.AreEqual("Paid from levy", headerColumns[11]);
-            Assert.AreEqual("Your contribution", headerColumns[12]);
-            Assert.AreEqual("Government contribution", headerColumns[13]);
-            Assert.AreEqual("Total", headerColumns[14]);
+            Assert.AreEqual("Apprenticeship training course level", headerColumns[11]);
+            Assert.AreEqual("Paid from levy", headerColumns[12]);
+            Assert.AreEqual("Your contribution", headerColumns[13]);
+            Assert.AreEqual("Government contribution", headerColumns[14]);
+            Assert.AreEqual("Total", headerColumns[15]);
         }
 
         [Test]
@@ -83,10 +84,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
                 Assert.AreEqual($"{UlnPrefix}{i}", dataRow[8]);
                 Assert.AreEqual($"{ApprenticePrefix}{i}", dataRow[9]);
                 Assert.AreEqual($"{ApprenticeTrainingCoursePrefix}{i}", dataRow[10]);
-                Assert.AreEqual((i * 10).ToString("0.00", CultureInfo.CurrentCulture), dataRow[11]);
-                Assert.AreEqual((i).ToString("0.00", CultureInfo.CurrentCulture), dataRow[12]);
-                Assert.AreEqual((i * 10000).ToString("0.00", CultureInfo.CurrentCulture), dataRow[13]);
-                Assert.AreEqual(((i* 1000) + (i * 100)).ToString("0.00", CultureInfo.CurrentCulture), dataRow[14]);
+                Assert.AreEqual($"{ApprenticeTrainingCourseLevel}{i}", dataRow[11]);
+                Assert.AreEqual((i * 10).ToString("0.00", CultureInfo.CurrentCulture), dataRow[12]);
+                Assert.AreEqual((i).ToString("0.00", CultureInfo.CurrentCulture), dataRow[13]);
+                Assert.AreEqual((i * 10000).ToString("0.00", CultureInfo.CurrentCulture), dataRow[14]);
+                Assert.AreEqual(((i* 1000) + (i * 100)).ToString("0.00", CultureInfo.CurrentCulture), dataRow[15]);
                 i++;
             }
         }
