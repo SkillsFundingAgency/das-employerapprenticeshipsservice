@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,9 +14,13 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Owin;
+using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.UnitOfWork;
@@ -171,13 +176,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             var container = config.DependencyResolver.GetService<IContainer>();
             var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
-
+            var connection2 = container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString;
+            var dbContext = new EmployerAccountsDbContext(connection2);
             container.Configure(c =>
             {
+                c.For<EmployerAccountsDbContext>().Use(dbContext);
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
                 c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
-                //===============
-                //c.For<IUnitOfWorkManager>().Use(Mock.Of<IUnitOfWorkManager>());
+                c.AddRegistry<DataRegistry>();
+                c.For<Lazy<EmployerAccountsDbContext>>()
+                    .Use(y => new Lazy<EmployerAccountsDbContext>(y.GetInstance<EmployerAccountsDbContext>));
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);

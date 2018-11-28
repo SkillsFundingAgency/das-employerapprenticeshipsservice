@@ -1,9 +1,11 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 
@@ -13,20 +15,37 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
     {
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
+        private readonly EmployerAccountsDbContext _dbContext;
 
         public DbBuilder(
             DbBuilderDependentRepositories dependentRepositories,
             IHashingService hashingService,
-            IPublicHashingService publicHashingService)
+            IPublicHashingService publicHashingService,
+            EmployerAccountsDbContext dbContext)
         {
             DependentRepositories = dependentRepositories;
             _hashingService = hashingService;
             _publicHashingService = publicHashingService;
+            _dbContext = dbContext;
         }
 
         public DbBuilderContext Context { get;  } = new DbBuilderContext();
 
         public DbBuilderDependentRepositories DependentRepositories { get; }
+
+        public DbBuilder BeginTransaction()
+        {
+            _dbContext.Database.BeginTransaction();
+            return this;
+        }
+
+        public DbBuilder CommitTransaction()
+        {
+            if (_dbContext.Database.CurrentTransaction == null) return this;
+
+            _dbContext.Database.CurrentTransaction.Commit();
+            return this;
+        }
 
         public DbBuilder EnsureAccountExists(EmployerAccountInput input)
         {
@@ -110,21 +129,37 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public async Task<DbBuilder> EnsureUserExistsAsync(UserInput input)
         {
-            var output = new UserOutput();
+            try
+            {
+                var output = new UserOutput();
 
-            await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
-            var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
-            output.UserRef = input.UserRef;
-            output.UserId = user.Id;
-            Context.ActiveUser = output;
-            return this;
+                await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
+                var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
+                output.UserRef = input.UserRef;
+                output.UserId = user.Id;
+                Context.ActiveUser = output;
+                return this;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private TResult WaitDbAction<TResult>(Task<TResult> action, CancellationToken cancellationToken)
         {
-            action.Wait((int) TestConstants.DbTimeout.TotalMilliseconds, cancellationToken);
-            CheckTaskResult(action);
-            return action.Result;
+            try
+            {
+                action.Wait((int) TestConstants.DbTimeout.TotalMilliseconds, cancellationToken);
+                CheckTaskResult(action);
+                return action.Result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
         }
 
         private void CheckTaskResult(Task action)
