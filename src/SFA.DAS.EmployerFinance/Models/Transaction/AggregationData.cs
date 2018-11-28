@@ -6,6 +6,7 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
     {
         public long AccountId { get; set; }
         public string HashedAccountId { get; set; }
-        public ICollection<TransactionLine> TransactionLines { get; set; }
+        public decimal Balance { get; set; }
+        public TransactionLine[] TransactionLines { get; set; }
     }
 }

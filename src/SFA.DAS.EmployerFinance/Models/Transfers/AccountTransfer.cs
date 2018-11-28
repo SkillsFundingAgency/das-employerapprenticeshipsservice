@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Models.Transfers
         public string SenderAccountName { get; set; }
         public long ReceiverAccountId { get; set; }
         public string ReceiverAccountName { get; set; }
-        public long CommitmentId { get; set; }
+        public long ApprenticeshipId { get; set; }
         public string CourseName { get; set; }
         public int? CourseLevel { get; set; }
         public uint ApprenticeCount { get; set; }

@@ -177,6 +177,23 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<DasDeclaration> GetEffectivePeriod12Declaration(string empRef, string payrollYear, DateTime yearEndAdjustmentCutOff)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@empRef", empRef, DbType.String);
+            parameters.Add("@payrollYear", payrollYear, DbType.String);
+            parameters.Add("@yearEndAdjustmentCutOff", yearEndAdjustmentCutOff, DbType.DateTime);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<DasDeclaration>(
+                sql: "[employer_financial].[GetEffectivePeriod12Declaration]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.SingleOrDefault();
+        }
+
         public Task ProcessDeclarations(long accountId, string empRef)
         {
             var parameters = new DynamicParameters();
