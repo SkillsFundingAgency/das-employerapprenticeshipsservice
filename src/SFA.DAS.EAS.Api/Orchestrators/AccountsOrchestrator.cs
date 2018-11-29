@@ -94,6 +94,12 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(long accountId)
         {
             var hashedAccountId = _hashingService.HashValue(accountId);
+
+            if (string.IsNullOrWhiteSpace(hashedAccountId))
+            {
+                return new OrchestratorResponse<AccountDetailViewModel> { Data = null };
+            }
+
             var response = await GetAccount(hashedAccountId);
             return response;
         }
