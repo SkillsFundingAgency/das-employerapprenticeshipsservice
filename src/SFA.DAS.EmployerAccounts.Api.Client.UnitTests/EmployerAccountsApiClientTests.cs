@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
-using SFA.DAS.EmployerAccounts.ReadStore.Queries;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
 
             MockApiMediator
                 .Setup(m => m.Send(It.IsAny<HasRoleQuery>(), CancellationToken))
-                .ReturnsAsync(new HasRoleQueryResult() {HasRole = true});
+                .ReturnsAsync(true);
 
             return this;
         }

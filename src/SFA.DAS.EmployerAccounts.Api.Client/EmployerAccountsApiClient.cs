@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
-using SFA.DAS.EmployerAccounts.ReadStore.Queries;
 using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
@@ -31,13 +31,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
 
         public async Task<bool> HasRole(HasRoleRequest roleRequest, CancellationToken cancellationToken)
         {
-            var result = await _mediator.Send(new HasRoleQuery(
+            var hasRole = await _mediator.Send(new HasRoleQuery(
                 roleRequest.UserRef,
                 roleRequest.EmployerAccountId,
                 new HashSet<UserRole>(roleRequest.Roles)
             ), cancellationToken);
 
-            return result.HasRole;
+            return hasRole;
         }
 
         private string GetBaseUrl()

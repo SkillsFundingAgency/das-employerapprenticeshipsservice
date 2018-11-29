@@ -5,9 +5,9 @@ using SFA.DAS.CosmosDb;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
-namespace SFA.DAS.EmployerAccounts.ReadStore.Queries
+namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
 {
-    internal class HasRoleQueryHandler : IReadStoreRequestHandler<HasRoleQuery, HasRoleQueryResult>
+    internal class HasRoleQueryHandler : IReadStoreRequestHandler<HasRoleQuery, bool>
     {
         private readonly IUsersRolesRepository _usersRolesRepository;
 
@@ -16,16 +16,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Queries
             _usersRolesRepository = usersRolesRepository;
         }
 
-        public async Task<HasRoleQueryResult> Handle(HasRoleQuery request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(HasRoleQuery request, CancellationToken cancellationToken)
         {
             var userRoles = await _usersRolesRepository
                 .CreateQuery()
                 .Where(r => r.UserRef == request.UserRef
                           && r.AccountId == request.EmployerAccountId).ToListAsync(cancellationToken);
 
-            var hasRole = userRoles.Any(r => r.Roles.Any(role => request.UserRoles.Any(requestRole => requestRole == role)));
-
-            return new HasRoleQueryResult{ HasRole = hasRole };
+            return userRoles.Any(r => r.Roles.Any(role => request.UserRoles.Any(requestRole => requestRole == role)));
         }
     }
 }

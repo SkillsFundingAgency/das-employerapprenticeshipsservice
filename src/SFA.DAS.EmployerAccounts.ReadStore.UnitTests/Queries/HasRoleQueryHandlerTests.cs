@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
-using SFA.DAS.EmployerAccounts.ReadStore.Queries;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
@@ -22,31 +22,31 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         [Test]
         public Task Handle_ShouldReturnTrueOnMatch()
         {
-            return RunAsync(f => f.AddSingleMatchingUserRole(), f => f.Handle(), (f, r) => r.HasRole.Should().BeTrue());
+            return RunAsync(f => f.AddSingleMatchingUserRole(), f => f.Handle(), (f, r) => r.Should().BeTrue());
         }
 
         [Test]
         public Task Handle_ShouldReturnFalseWhenNotMatchingBecauseOfNonMatchingUserRef()
         {
-            return RunAsync(f => f.AddNonMatchingOnUserRefRole(), f => f.Handle(), (f, r) => r.HasRole.Should().BeFalse());
+            return RunAsync(f => f.AddNonMatchingOnUserRefRole(), f => f.Handle(), (f, r) => r.Should().BeFalse());
         }
 
         [Test]
         public Task Handle_ShouldReturnFalseWhenNotMatchingBecauseOfNonMatchingAccountId()
         {
-            return RunAsync(f => f.AddNonMatchingOnAccountIdRole(), f => f.Handle(), (f, r) => r.HasRole.Should().BeFalse());
+            return RunAsync(f => f.AddNonMatchingOnAccountIdRole(), f => f.Handle(), (f, r) => r.Should().BeFalse());
         }
 
         [Test]
         public Task Handle_ShouldReturnFalseWhenNotMatchingBecauseOfNonMatchingRoleEnum()
         {
-            return RunAsync(f => f.AddNonMatchingOnRoleEnumRole(), f => f.Handle(), (f, r) => r.HasRole.Should().BeFalse());
+            return RunAsync(f => f.AddNonMatchingOnRoleEnumRole(), f => f.Handle(), (f, r) => r.Should().BeFalse());
         }
 
         [Test]
         public Task Handle_ShouldReturnTrueWhenMultipleRolesArePassedAndOnlyOneMatches()
         {
-            return RunAsync(f => f.SetMultipleRolesInQuery().AddSingleMatchingUserRole(), f => f.Handle(), (f, r) => r.HasRole.Should().BeTrue());
+            return RunAsync(f => f.SetMultipleRolesInQuery().AddSingleMatchingUserRole(), f => f.Handle(), (f, r) => r.Should().BeTrue());
         }
     }
 
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
     {
         internal HasRoleQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        internal IReadStoreRequestHandler<HasRoleQuery,HasRoleQueryResult> Handler { get; set; }
+        internal IReadStoreRequestHandler<HasRoleQuery,bool> Handler { get; set; }
         internal Mock<IUsersRolesRepository> MockUserRolesRepository { get; set; }
         internal IOrderedQueryable<UserRoles> DocumentQuery { get; set; }
         internal List<UserRoles> Roles { get; set; }
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             Handler = new HasRoleQueryHandler(MockUserRolesRepository.Object);
         }
 
-        internal Task<HasRoleQueryResult> Handle()
+        internal Task<bool> Handle()
         {
             return Handler.Handle(Query, CancellationToken);
         }
