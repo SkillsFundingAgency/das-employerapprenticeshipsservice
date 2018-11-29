@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisitcsControllerTests
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
 {
     [TestFixture]
     public class WhenIGetTheStatistics
@@ -19,10 +14,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisitcsControllerTests
             var call = new CallRequirements("api/statistics")
                 .AllowStatusCodes(HttpStatusCode.OK);
 
-            await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
+            var response = await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
 
             // Assert
-            Assert.Pass("Verified we got OK");
+            Assert.That(response.Response.StatusCode == HttpStatusCode.OK);
         }
     }
 }
