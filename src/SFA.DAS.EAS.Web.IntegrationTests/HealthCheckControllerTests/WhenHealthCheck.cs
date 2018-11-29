@@ -17,10 +17,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.HealthCheckControllerTests
                             .AllowStatusCodes(HttpStatusCode.OK);
 
             // Act
-            await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
+            var response = await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
 
             // Assert
-            Assert.Pass("Verified we got OK");
+            Assert.That(response.Response.StatusCode == HttpStatusCode.OK);
         }
     }
 }
