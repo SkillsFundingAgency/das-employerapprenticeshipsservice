@@ -50,9 +50,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
 
             var builder = _tester.DbBuilder;
             builder
+                .BeginTransaction()
                 .EnsureUserExists(builder.BuildUserInput())
                 .EnsureAccountExists(builder.BuildEmployerAccountInput(accountName))
-                .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName));
+                .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName))
+                .CommitTransaction();
+            
 
             var hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
 
