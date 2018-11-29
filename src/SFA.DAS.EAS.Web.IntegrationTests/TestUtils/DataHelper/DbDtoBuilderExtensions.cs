@@ -5,12 +5,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 {
     static class DbDtoBuilderExtensions
     {
-        public static EmployerAccountInput BuildEmployerAccountInput(this DbBuilder dbBuilder, string accountName)
+        public static EmployerAccountInput BuildEmployerAccountInput(this DbBuilder dbBuilder, string accountName, string payeReference)
         {
             return new EmployerAccountInput
             { 
                 OrganisationName = accountName,
-                PayeReference = "AB1234",
+                PayeReference = payeReference,
                 UserId = dbBuilder.Context.ActiveUser.UserId 
             };
         }

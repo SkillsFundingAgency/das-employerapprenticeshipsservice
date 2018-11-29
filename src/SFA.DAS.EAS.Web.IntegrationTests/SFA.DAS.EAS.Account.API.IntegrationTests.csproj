@@ -201,9 +201,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
+    <Compile Include="Extensions\DbBuilderExtension.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />

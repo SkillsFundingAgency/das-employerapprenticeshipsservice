@@ -16,6 +16,7 @@ using Owin;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -90,6 +91,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         public Task<CallResponse<TResult>> InvokeGetAsync<TResult>(CallRequirements call)
         {
+            DbBuilder.EnsureTransaction();
+
             return GetResponseAsync<TResult>(call);
         }
 

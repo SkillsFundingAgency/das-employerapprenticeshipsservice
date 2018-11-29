@@ -33,6 +33,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public DbBuilderDependentRepositories DependentRepositories { get; }
 
+        public bool HasTransaction()
+        {
+            
+            return (_dbContext.Database.CurrentTransaction != null);
+        }
+
         public DbBuilder BeginTransaction()
         {
             _dbContext.Database.BeginTransaction();
