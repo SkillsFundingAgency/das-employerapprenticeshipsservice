@@ -38,27 +38,38 @@
                         Organisation
                     </th>
                     <td>
-                        <dl class="inline">
-                            <dt>Name:</dt>
-                            <dd>@Model.Data.OrganisationName</dd>
-                            
-                            <dt>Address:</dt>
-                            <dd>@Model.Data.RegisteredAddress</dd>
-                            
-                            @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
-                           {
-                               if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
-                               {
-                                   <dt>Companies House number:</dt>
-                               }
-                               else
-                               {
-                                    <dt>Charity number:</dt>
-                               }
-                               <dd>@Model.Data.OrganisationReferenceNumber</dd>
-                           }
-                        </dl>
+                        @Model.Data.OrganisationName
                     </td>
+                    </tr>
+                <tr>
+                    <th scope="row">
+                        Address
+                    </th>
+                    <td>
+                        @Model.Data.RegisteredAddress
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+                        {
+                            if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
+                            {
+                                <span>Companies House number</span>
+                            }
+                            else
+                            {
+                                <span>Charity number</span>
+                            }
+                        }
+                    </th>
+                    <td>
+                        @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+                        {
+                            <span>@Model.Data.OrganisationReferenceNumber</span>
+                        }
+                        </td>
+                 
                 </tr>
                 <tr>
                     <th scope="row">
