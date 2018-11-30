@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
@@ -11,6 +9,7 @@ using SFA.DAS.Support.Shared.Authentication;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
+    [Authorize(Roles = "das-support-portal")]
     public class ChallengeController : Controller
     {
         private readonly IChallengeHandler _handler;
