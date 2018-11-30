@@ -14,12 +14,14 @@ using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 {
+    [TestFixture]
+    [Parallelizable]
     internal class UserRolesUpdatedEventHandlerTests : FluentTest<UserRolesUpdatedEventHandlerTestsFixture>
     {
         [Test]
         public Task Handle_WhenHandlingEvent_ThenShouldSendUpdateRelationshipCommand()
         {
-            return RunAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
+            return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
                 f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<UpdateUserRolesCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&

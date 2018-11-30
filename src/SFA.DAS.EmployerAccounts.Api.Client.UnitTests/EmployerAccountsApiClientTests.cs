@@ -13,18 +13,19 @@ using SFA.DAS.Testing;
 namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
 {
     [TestFixture]
+    [Parallelizable]
     public class EmployerAccountsApiClientTests : FluentTest<EmployerAccountsApiClientTestsFixture>
     {
         [Test]
         public Task HasRole_ShouldCallTheMediatorCorrectly()
         {
-            return RunAsync(f => f.SetupHasRole(), f => f.HasRole(), f => f.VerifyMediatorCall());
+            return TestAsync(f => f.SetupHasRole(), f => f.HasRole(), f => f.VerifyMediatorCall());
         }
 
         [Test]
         public Task HasRole_ShouldReturnTheExpectedValue()
         {
-            return RunAsync(f => f.SetupHasRole(), f => f.HasRole(), (f, r) => r.Should().BeTrue());
+            return TestAsync(f => f.SetupHasRole(), f => f.HasRole(), (f, r) => r.Should().BeTrue());
         }
     }
 

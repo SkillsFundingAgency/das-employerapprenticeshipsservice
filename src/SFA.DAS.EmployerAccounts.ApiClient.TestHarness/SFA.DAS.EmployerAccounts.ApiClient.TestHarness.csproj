@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -6,9 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Moq" Version="4.5.28" />
-    <PackageReference Include="SFA.DAS.CosmosDb" Version="0.1.5" />
+    <PackageReference Include="Moq" Version="4.10.0" />
+    <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.15" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
+    <PackageReference Include="StructureMap" Version="4.6.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,12 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.5.28\lib\net45\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\..\..\..\Users\Tom\.nuget\packages\structuremap\4.6.1\lib\netstandard2.0\StructureMap.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>

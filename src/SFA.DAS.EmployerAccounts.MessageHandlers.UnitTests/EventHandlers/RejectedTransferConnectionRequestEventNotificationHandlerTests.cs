@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         [Test]
         public Task Handle_WhenRejectedTransferConnectionRequestEventIsHandled_ThenShouldNotifyAccountOwnersRequiringNotification()
         {
-            return RunAsync(f => f.Handle(),
+            return TestAsync(f => f.Handle(),
                 f => f.NotificationsApiClient.Verify(
                     r => r.SendEmail(It.Is<Email>(e =>
                         !string.IsNullOrWhiteSpace(e.Tokens["link_notification_page"])
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         [Test]
         public Task Handle_WhenRejectedTransferConnectionRequestEventIsHandled_ThenShouldSentNotificationWithCorrectProperties()
         {
-            return RunAsync(f => f.Handle(),
+            return TestAsync(f => f.Handle(),
                 f => f.NotificationsApiClient.Verify(
                     r => r.SendEmail(It.Is<Email>(e =>
                         e.RecipientsAddress == f.SenderAccountOwner1.Email
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         }
     }
 
-    public class RejectedTransferConnectionRequestEventNotificationHandlerTestFixture : FluentTestFixture
+    public class RejectedTransferConnectionRequestEventNotificationHandlerTestFixture
     {
         public RejectedTransferConnectionRequestEventNotificationHandler Handler { get; set; }
         public EmployerAccountsConfiguration Configuration { get; set; }

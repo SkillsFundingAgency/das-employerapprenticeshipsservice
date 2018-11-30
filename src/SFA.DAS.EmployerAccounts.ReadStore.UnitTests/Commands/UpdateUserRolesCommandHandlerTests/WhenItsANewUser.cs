@@ -5,10 +5,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
-using SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Builders;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
         [Test]
         public Task Handle_ThenShouldAddNewDocumentToRepository()
         {
-            return RunAsync(f => f.Handler.Handle(f.Command, CancellationToken.None),
+            return TestAsync(f => f.Handler.Handle(f.Command, CancellationToken.None),
                 f => f.UserRoleRepository.Verify(x => x.Add(It.Is<UserRoles>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
         [Test]
         public Task Handle_ThenShouldAddMessageIdToOutbox()
         {
-            return RunAsync(f => f.Handler.Handle(f.Command, CancellationToken.None),
+            return TestAsync(f => f.Handler.Handle(f.Command, CancellationToken.None),
                 f => f.UserRoleRepository.Verify(x => x.Add(It.Is<UserRoles>(p =>
                         p.OutboxData.Count(o => o.MessageId == f.MessageId) == 1
                     ), null,
