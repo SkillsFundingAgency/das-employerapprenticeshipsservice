@@ -201,7 +201,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
