@@ -201,7 +201,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EmployerAccountControllerTests\WhenGetAccounts.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
