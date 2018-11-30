@@ -1,8 +1,6 @@
-﻿using SFA.DAS.NServiceBus;
-
-namespace SFA.DAS.EmployerFinance.Messages.Commands
+﻿namespace SFA.DAS.EmployerFinance.Messages.Commands
 {
-    public class ImportAccountPaymentsCommand : Command
+    public class ImportAccountPaymentsCommand 
     {
         public long AccountId { get; set; }
         public string PeriodEndRef { get; set; }

@@ -1,13 +1,11 @@
-﻿using SFA.DAS.NServiceBus;
-
-namespace SFA.DAS.EmployerFinance.Messages.Events
+﻿namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class RefreshPaymentDataCompletedEvent : Event
+    public class RefreshPaymentDataCompletedEvent 
     {
         public long AccountId { get; set; }
         public string PeriodEnd { get; set; }
         /// <summary>
-        /// true if we have processed some payments; otherwsie false;
+        /// true if we have processed some payments; otherwise false;
         /// </summary>
         public bool PaymentsProcessed { get; set; }
     }

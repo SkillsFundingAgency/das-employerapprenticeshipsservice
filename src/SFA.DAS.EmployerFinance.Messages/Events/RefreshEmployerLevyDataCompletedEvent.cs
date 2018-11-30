@@ -1,9 +1,6 @@
-﻿using System;
-using SFA.DAS.NServiceBus;
-
-namespace SFA.DAS.EmployerFinance.Messages.Events
+﻿namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class RefreshEmployerLevyDataCompletedEvent : Event
+    public class RefreshEmployerLevyDataCompletedEvent 
     {
         public long AccountId { get; set; }
         public short PeriodMonth { get; set; }
