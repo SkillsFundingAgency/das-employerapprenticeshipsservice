@@ -1,8 +1,6 @@
-﻿using SFA.DAS.NServiceBus;
-
-namespace SFA.DAS.EmployerFinance.Messages.Events
+﻿namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class HealthCheckEvent : Event
+    public class HealthCheckEvent
     {
         public int Id { get; set; }
     }
