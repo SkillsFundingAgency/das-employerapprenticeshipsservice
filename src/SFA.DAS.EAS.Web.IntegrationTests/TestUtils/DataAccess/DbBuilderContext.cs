@@ -1,7 +1,7 @@
-﻿using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+﻿using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 using SFA.DAS.EAS.Domain.Models.Account;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
 {
     /// <summary>
     ///     Represents the current selections that have been made when building up the db.

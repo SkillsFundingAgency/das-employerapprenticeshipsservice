@@ -3,13 +3,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Adapters;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
 {
     class DbBuilder
     {
