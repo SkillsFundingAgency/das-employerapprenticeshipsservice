@@ -35,7 +35,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public bool HasTransaction()
         {
-            
             return (_dbContext.Database.CurrentTransaction != null);
         }
 
