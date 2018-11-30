@@ -34,15 +34,30 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private IntegrationTestExceptionLogger _exceptionLogger;
 
         private readonly Lazy<DbBuilder> _dbBuilder;
+        private readonly Lazy<EmployerApprenticeshipsServiceConfiguration> _accountConfig;
+        private readonly Lazy<LevyDeclarationProviderConfiguration> _financeConfig;
 
-        public bool IsTestServerStarted => TestServer != null;
+        private bool IsTestServerStarted => TestServer != null;
 
         public ApiIntegrationTester()
         {
             _dbBuilder = new Lazy<DbBuilder>(Resolve<DbBuilder>);
+            _accountConfig =
+                new Lazy<EmployerApprenticeshipsServiceConfiguration>(
+                    Resolve<EmployerApprenticeshipsServiceConfiguration>);
+            _financeConfig =
+                new Lazy<LevyDeclarationProviderConfiguration>(
+                    Resolve<LevyDeclarationProviderConfiguration>);
         }
 
-        public TestServer TestServer { get; private set; }
+        private TestServer TestServer { get; set; }
+        internal DbBuilder DbBuilder => _dbBuilder.Value;
+
+        internal EmployerApprenticeshipsServiceConfiguration EmployerApprenticeshipsServiceConfiguration =>
+            _accountConfig.Value;
+
+        internal LevyDeclarationProviderConfiguration LevyDeclarationProviderConfiguration => 
+            _financeConfig.Value;
 
         /// <summary>
         ///     Send a GET to the specified URI using a test server and configuration created just for this call.
@@ -103,7 +118,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             return _dependencyResolver.Container.GetInstance<T>();
         }
 
-        public DbBuilder DbBuilder => _dbBuilder.Value;
+        
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
