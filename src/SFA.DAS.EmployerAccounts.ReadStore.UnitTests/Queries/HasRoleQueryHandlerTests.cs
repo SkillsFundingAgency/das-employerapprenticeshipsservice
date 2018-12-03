@@ -28,6 +28,18 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         }
 
         [Test]
+        public Task Handle_WhenNoMatchingUserFound_ShouldReturnFalse()
+        {
+            return TestAsync(f => f.Handle(), (f, r) => r.Should().BeFalse());
+        }
+
+        [Test]
+        public Task Handle_WhenMultipleMatchingUsersFound_ShouldThrowException()
+        {
+            return TestExceptionAsync(f => f.AddMultipleMatchingUsers(), f => f.Handle(), (f, r) => r.ShouldThrow<Exception>());
+        }
+
+        [Test]
         public Task Handle_WhenNonMatchingBecauseOfUserRef_ShouldReturnFalse()
         {
             return TestAsync(f => f.AddNonMatchingOnUserRef(), f => f.Handle(), (f, r) => r.Should().BeFalse());

@@ -18,12 +18,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
 
         public async Task<bool> Handle(HasRoleQuery request, CancellationToken cancellationToken)
         {
-            var userRoles = await _usersRolesRepository
+            var user = await _usersRolesRepository
                 .CreateQuery()
-                .Where(r => r.UserRef == request.UserRef
-                          && r.AccountId == request.EmployerAccountId).ToListAsync(cancellationToken);
+                .SingleOrDefaultAsync(r => r.UserRef == request.UserRef && r.AccountId == request.EmployerAccountId && r.Removed == null, cancellationToken);
 
-            return userRoles.Any(r => r.Roles.Any(role => request.UserRoles.Any(requestRole => requestRole == role)));
+            if (user == null)
+                return false;
+
+            return user.Roles.Any(role => request.UserRoles.Any(requestRole => requestRole == role));
         }
     }
 }
