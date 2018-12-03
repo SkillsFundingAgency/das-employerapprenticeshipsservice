@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
                 {
                     Paths = new Collection<string>
                         {
-                            "/userRef"
+                            "/accountId"
                         }
                 },
                 UniqueKeyPolicy = new UniqueKeyPolicy
@@ -40,8 +40,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
                         {
                             new UniqueKey
                             {
-                                Paths = new Collection<string> { "/accountId", "/metaData/schemaType" }
+                                Paths = new Collection<string> { "/userRef" }
+                            },
+                            new UniqueKey
+                            {
+                                Paths = new Collection<string> { "/userId" }
                             }
+
                         }
                 }
             };

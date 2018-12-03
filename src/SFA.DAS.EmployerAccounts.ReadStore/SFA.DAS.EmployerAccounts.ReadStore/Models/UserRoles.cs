@@ -8,11 +8,16 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 {
     internal class UserRoles : Document
     {
-        [JsonProperty("userRef")] public Guid UserRef { get; protected set; }
+        [JsonProperty("userRef")]
+        public Guid UserRef { get; protected set; }
 
-        [JsonProperty("accountId")] public long AccountId { get; protected set; }
+        public long UserId { get; protected set; }
 
-        [JsonProperty("roles")] public IEnumerable<UserRole> Roles { get; protected set; } = new HashSet<UserRole>();
+        [JsonProperty("accountId")]
+        public long AccountId { get; protected set; }
+
+        [JsonProperty("roles")]
+        public IEnumerable<UserRole> Roles { get; protected set; } = new HashSet<UserRole>();
 
         [JsonProperty("outboxData")]
         public IEnumerable<OutboxMessage> OutboxData => _outboxData;
@@ -26,9 +31,10 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
-        public UserRoles(Guid userRef, long accountId, HashSet<UserRole> roles, string messageId, DateTime created) : base(1, "userRoles")
+        public UserRoles(Guid userRef, long userId, long accountId, HashSet<UserRole> roles, string messageId, DateTime created) : base(1, "userRoles")
         {
             UserRef = userRef;
+            UserId = userId;
             AccountId = accountId;
             Roles = roles;
             Updated = created;
@@ -40,17 +46,30 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
         }
 
-        public void UpdateRoles(HashSet<UserRole> roles, DateTime updated, string messageId)
+        public void UpdateRoles(long userId, HashSet<UserRole> roles, DateTime updated, string messageId)
         {
             ProcessMessage(messageId, updated,
                 () =>
                 {
+                    UserId = userId;
                     Roles = roles;
                     Updated = updated;
                     Deleted = null;
                 }
             );
         }
+
+        public void Remove(DateTime deleted, string messageId)
+        {
+            ProcessMessage(messageId, deleted,
+                () =>
+                {
+                    Roles = new List<UserRole>();
+                    Deleted = deleted;
+                }
+            );
+        }
+
 
         private void ProcessMessage(string messageId, DateTime messageCreated, Action action)
         {

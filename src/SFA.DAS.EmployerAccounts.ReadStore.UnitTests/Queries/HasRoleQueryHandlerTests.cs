@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 {
@@ -21,33 +22,39 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
     public class HasRoleQueryHandlerTests : FluentTest<HasRoleQueryHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_ShouldReturnTrueOnMatch()
+        public Task Handle_WhenSingleMatchingUserFound_ShouldReturnTrue()
         {
-            return TestAsync(f => f.AddSingleMatchingUserRole(), f => f.Handle(), (f, r) => r.Should().BeTrue());
+            return TestAsync(f => f.AddSingleMatchingUser(), f => f.Handle(), (f, r) => r.Should().BeTrue());
         }
 
         [Test]
-        public Task Handle_ShouldReturnFalseWhenNotMatchingBecauseOfNonMatchingUserRef()
+        public Task Handle_WhenNonMatchingBecauseOfUserRef_ShouldReturnFalse()
         {
-            return TestAsync(f => f.AddNonMatchingOnUserRefRole(), f => f.Handle(), (f, r) => r.Should().BeFalse());
+            return TestAsync(f => f.AddNonMatchingOnUserRef(), f => f.Handle(), (f, r) => r.Should().BeFalse());
         }
 
         [Test]
-        public Task Handle_ShouldReturnFalseWhenNotMatchingBecauseOfNonMatchingAccountId()
+        public Task Handle_WhenNotMatchingBecauseOfAccountId_ShouldReturnFalse()
         {
-            return TestAsync(f => f.AddNonMatchingOnAccountIdRole(), f => f.Handle(), (f, r) => r.Should().BeFalse());
+            return TestAsync(f => f.AddNonMatchingOnAccountId(), f => f.Handle(), (f, r) => r.Should().BeFalse());
         }
 
         [Test]
-        public Task Handle_ShouldReturnFalseWhenNotMatchingBecauseOfNonMatchingRoleEnum()
+        public Task Handle_WhenNotMatchingBecauseOfRole_ShouldReturnFalse()
         {
-            return TestAsync(f => f.AddNonMatchingOnRoleEnumRole(), f => f.Handle(), (f, r) => r.Should().BeFalse());
+            return TestAsync(f => f.AddNonMatchingOnRoleEnum(), f => f.Handle(), (f, r) => r.Should().BeFalse());
         }
 
         [Test]
-        public Task Handle_ShouldReturnTrueWhenMultipleRolesArePassedAndOnlyOneMatches()
+        public Task Handle_WhenNotMatchingBecauseThereIsNoRole_ShouldReturnFalse()
         {
-            return TestAsync(f => f.SetMultipleRolesInQuery().AddSingleMatchingUserRole(), f => f.Handle(), (f, r) => r.Should().BeTrue());
+            return TestAsync(f => f.AddNonMatchingNRoles(), f => f.Handle(), (f, r) => r.Should().BeFalse());
+        }
+
+        [Test]
+        public Task Handle_WhenMultipleRolesArePassedAndOnlyOneMatches_ShouldReturnTrue()
+        {
+            return TestAsync(f => f.SetMultipleRolesInQuery().AddSingleMatchingUser(), f => f.Handle(), (f, r) => r.Should().BeTrue());
         }
     }
 
@@ -82,40 +89,59 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             return this;
         }
 
-        public HasRoleQueryHandlerTestsFixture AddSingleMatchingUserRole()
+        public HasRoleQueryHandlerTestsFixture AddSingleMatchingUser()
         {
-            Roles.AddRange(new []{
-                new UserRoles(Query.UserRef, Query.EmployerAccountId, Query.UserRoles, "MessageID", DateTime.UtcNow), //matching
-            });
+            Roles.Add(CreateBasicMatchingUserRolesWithOwnerRole()); //matching
 
             return this;
         }
 
-        public HasRoleQueryHandlerTestsFixture AddNonMatchingOnUserRefRole()
+        public HasRoleQueryHandlerTestsFixture AddMultipleMatchingUsers()
         {
-            Roles.AddRange(new[]{
-                new UserRoles(Guid.NewGuid(), Query.EmployerAccountId, Query.UserRoles, "MessageID", DateTime.UtcNow), //not matching on UserRef
-            });
+            Roles.Add(CreateBasicMatchingUserRolesWithOwnerRole());
+            Roles.Add(CreateBasicMatchingUserRolesWithOwnerRole());
 
             return this;
         }
 
-        public HasRoleQueryHandlerTestsFixture AddNonMatchingOnAccountIdRole()
+        public HasRoleQueryHandlerTestsFixture AddNonMatchingOnUserRef()
         {
-            Roles.AddRange(new[]{
-                new UserRoles(Query.UserRef, 214, Query.UserRoles, "MessageID", DateTime.UtcNow), //not matching on account id
-            });
+            Roles.Add(CreateBasicMatchingUserRolesWithOwnerRole().Set(x => x.UserRef, Guid.NewGuid()));
 
             return this;
         }
 
-        public HasRoleQueryHandlerTestsFixture AddNonMatchingOnRoleEnumRole()
+        public HasRoleQueryHandlerTestsFixture AddNonMatchingOnAccountId()
         {
-            Roles.AddRange(new[]{
-                new UserRoles(Query.UserRef, Query.EmployerAccountId, new HashSet<UserRole>{ UserRole.Transactor}, "MessageID", DateTime.UtcNow), //not matching on role
-            });
+            Roles.Add(CreateBasicMatchingUserRolesWithOwnerRole().Set(x=>x.AccountId, 214));
 
             return this;
+        }
+
+        public HasRoleQueryHandlerTestsFixture AddNonMatchingOnRoleEnum()
+        {
+            Roles.Add(CreateBasicMatchingUserRolesObject().Add(x=>x.Roles, UserRole.Transactor)); //not matching on role
+
+            return this;
+        }
+
+        public HasRoleQueryHandlerTestsFixture AddNonMatchingNRoles()
+        {
+            Roles.Add(CreateBasicMatchingUserRolesObject()); //not matching no roles
+
+            return this;
+        }
+
+        private UserRoles CreateBasicMatchingUserRolesWithOwnerRole()
+        {
+            return CreateBasicMatchingUserRolesObject().Add(x => x.Roles, UserRole.Owner);
+        }
+
+        private UserRoles CreateBasicMatchingUserRolesObject()
+        {
+            return ObjectActivator.CreateInstance<UserRoles>()
+                .Set(x => x.UserRef, Query.UserRef)
+                .Set(x => x.AccountId, Query.EmployerAccountId);
         }
     }
 }

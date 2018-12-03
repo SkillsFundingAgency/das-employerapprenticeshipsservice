@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
@@ -22,20 +23,25 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
         private RemoveTeamMemberCommandHandler _handler;
         private Mock<IValidator<RemoveTeamMemberCommand>> _validator;
         private RemoveTeamMemberCommand _command;
+        private User _user;
         private Membership _teamMember;
         private MembershipView _owner;
         private Mock<IMediator> _mediator;
+        private Mock<IEventPublisher> _publisher;
 
         private const long ExpectedAccountId = 54561561;
 
         [SetUp]
         public void Setup()
         {
+            _user = new User {UserRef = Guid.NewGuid().ToString()};
+
             _teamMember = new Membership
             {
                 UserId = 12,
                 AccountId = ExpectedAccountId,
-                RoleId = (int)Role.Owner
+                RoleId = (int)Role.Owner,
+                User = _user
             };
 
             _owner = new MembershipView
@@ -62,7 +68,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             _membershipRepository.Setup(x => x.Get(_teamMember.UserId, _teamMember.AccountId)).ReturnsAsync(_teamMember);
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(_owner);
             
-            _handler = new RemoveTeamMemberCommandHandler(_mediator.Object, _membershipRepository.Object, _validator.Object);
+            _publisher = new Mock<IEventPublisher>();
+
+            _handler = new RemoveTeamMemberCommandHandler(_mediator.Object, _membershipRepository.Object, _validator.Object, _publisher.Object);
         }
 
         [Test]

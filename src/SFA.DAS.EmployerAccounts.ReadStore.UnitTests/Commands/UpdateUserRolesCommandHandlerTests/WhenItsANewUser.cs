@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
                 f => f.UserRoleRepository.Verify(x => x.Add(It.Is<UserRoles>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
+                        p.UserId == f.UserId &&
                         p.Roles.Equals(f.Roles) &&
                         p.Updated == f.Updated
                     ), null,
@@ -44,6 +45,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
         public string MessageId = "messageId";
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
+        public long UserId = 22323;
         public HashSet<UserRole> Roles = new HashSet<UserRole> { UserRole.Owner };
         public DateTime Updated = DateTime.Now.AddMinutes(-1);
 
@@ -59,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
 
             Handler = new UpdateUserRolesCommandHandler(UserRoleRepository.Object);
 
-            Command = new UpdateUserRolesCommand(AccountId, UserRef, Roles, MessageId, Updated);
+            Command = new UpdateUserRolesCommand(AccountId, UserRef, UserId, Roles, MessageId, Updated);
         }
     }
 }

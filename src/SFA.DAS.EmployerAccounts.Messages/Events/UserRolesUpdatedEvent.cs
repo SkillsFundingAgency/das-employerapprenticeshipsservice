@@ -8,12 +8,14 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
     public class UserRolesUpdatedEvent : Event
     {
         public long AccountId { get; }
-        public string UserRef { get; }
+        public Guid UserRef { get; }
+        public long UserId { get; }
         public HashSet<UserRole> Roles { get; }
-        public UserRolesUpdatedEvent(long accountId, string userRef, HashSet<UserRole> roles, DateTime created)
+        public UserRolesUpdatedEvent(long accountId, Guid userRef, long userId, HashSet<UserRole> roles, DateTime created)
         {
             AccountId = accountId;
             UserRef = userRef;
+            UserId = userId;
             Roles = roles;
             Created = created;
         }

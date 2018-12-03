@@ -25,9 +25,9 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             return TestAsync(f => f.Run(), f => f.DocumentClient.Verify(c => c.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(DocumentSettings.DatabaseName),
                 It.Is<DocumentCollection>(d =>
                     d.Id == DocumentSettings.UsersCollectionName &&
-                    d.PartitionKey.Paths.Contains("/userRef") &&
-                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/accountId") &&
-                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/metaData/schemaType")
+                    d.PartitionKey.Paths.Contains("/accountId") &&
+                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/userRef") &&
+                    d.UniqueKeyPolicy.UniqueKeys[1].Paths.Contains("/userId")
                 ), null), Times.Once));
         }
     }

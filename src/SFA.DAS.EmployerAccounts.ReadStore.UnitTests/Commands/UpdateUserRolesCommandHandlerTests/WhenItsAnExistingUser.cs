@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
                 f => f.UserRolesRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
+                        p.UserId == f.UserId &&
                         p.Roles.Equals(f.NewRoles) &&
                         p.Updated == f.Updated
                     ), null,
@@ -94,8 +95,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
                     ), null,
                     It.IsAny<CancellationToken>())));
         }
-
-
     }
 
     internal class WhenItsAnExistingUserFixture
@@ -104,6 +103,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
         public string UpdateMessageId = "updateMessageId";
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
+        public long UserId = 76682;
         public HashSet<UserRole> NewRoles = new HashSet<UserRole> { UserRole.Owner };
         public DateTime Updated = DateTime.Now.AddMinutes(-1);
 
@@ -120,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands.UpdateUserRolesC
 
             Handler = new UpdateUserRolesCommandHandler(UserRolesRepository.Object);
 
-            Command = new UpdateUserRolesCommand(AccountId, UserRef, NewRoles, UpdateMessageId, Updated);
+            Command = new UpdateUserRolesCommand(AccountId, UserRef, UserId, NewRoles, UpdateMessageId, Updated);
         }
 
         public WhenItsAnExistingUserFixture AddMatchingUserWhichWasDeletedLaterThanNewMessage()

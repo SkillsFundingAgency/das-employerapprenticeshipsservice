@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
                 f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<UpdateUserRolesCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
+                        p.UserId == f.UserId &&
                         p.AccountId == f.AccountId &&
                         p.Updated == f.Created &&
                         p.MessageId == f.MessageId
@@ -39,6 +40,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         public UserRolesUpdatedEvent Message;
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
+        public long UserId = 877664;
 
         public HashSet<UserRole> Roles = new HashSet<UserRole>();
         public DateTime Created = DateTime.Now.AddMinutes(-1);
@@ -53,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
-            Message = new UserRolesUpdatedEvent(AccountId, UserRef.ToString(), Roles, Created);
+            Message = new UserRolesUpdatedEvent(AccountId, UserRef, UserId, Roles, Created);
 
             Handler = new UserRolesUpdatedEventHandler(ReadStoreMediator.Object);
         }
