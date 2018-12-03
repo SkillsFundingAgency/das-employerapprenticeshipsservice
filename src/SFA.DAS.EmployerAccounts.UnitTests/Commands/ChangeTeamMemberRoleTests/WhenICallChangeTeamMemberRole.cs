@@ -46,6 +46,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _callerMembership = new MembershipView
             {
                 AccountId = ExpectedAccountId,
+                UserRef = Guid.NewGuid().ToString(),
                 UserId = 1,
                 RoleId = (int)Role.Owner
             };
@@ -53,6 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _userMembership = new TeamMember
             {
                 AccountId = _callerMembership.AccountId,
+                UserRef = Guid.NewGuid().ToString(),
                 Id = _callerMembership.UserId + 1,
                 Role = (Role)_command.RoleId
             };
@@ -188,8 +190,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             await _handler.Handle(_command);
 
             _eventPublisher.Verify(x => x.Publish(It.Is<UserRolesUpdatedEvent>(
-                p => p.AccountId  == _callerMembership.AccountId &&
-                     p.UserRef.ToString() == _callerMembership.UserRef &&
+                p => p.AccountId  == _userMembership.AccountId &&
+                     p.UserRef.ToString() == _userMembership.UserRef &&
+                     p.UserId == _userMembership.Id &&
                      p.Roles.Contains((UserRole)_command.RoleId)))
                 , Times.Once);
         }
