@@ -16,7 +16,7 @@ using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 {
-    internal class RemoveUserRolesCommandHandlerTests : FluentTest<RemoveUserRolesCommandHandlerTestsFixture>
+    internal class RemoveAccountUserCommandHandlerTests : FluentTest<RemoveUserRolesCommandHandlerTestsFixture>
     {
         [Test]
         public Task Handle_WhenUserHasNotBeenRemoved_ThenShouldMarkUserAsRemovedAndClearRoles()

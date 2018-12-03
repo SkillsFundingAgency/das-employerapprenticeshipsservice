@@ -16,7 +16,7 @@ using SFA.DAS.Testing.Builders;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 {
-    internal class UpdateUserRolesCommandHandlerTests : FluentTest<WhenItsAnExistingUserFixture>
+    internal class UpdateAccountUserCommandHandlerTests : FluentTest<WhenItsAnExistingUserFixture>
     {
         [Test]
         public Task Handle_WhenItsANewUser_ThenShouldAddNewDocumentToRepositoryWithANonEmptyId()
