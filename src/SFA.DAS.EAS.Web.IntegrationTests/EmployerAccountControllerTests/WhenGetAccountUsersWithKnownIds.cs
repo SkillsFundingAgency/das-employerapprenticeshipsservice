@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+using SFA.DAS.EAS.Infrastructure.Data;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
@@ -37,20 +39,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
             const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
 
-            var builder = _tester.DbBuilder;
-
-            builder
-                .BeginTransaction()
+            var testDbContext = _tester.GetInstanceOfEmployerAccountsDbBuilderWithTransaction();
+            testDbContext
                 .EnsureUserExists(new UserInput
                 {
                     UserRef = userRef,
                     Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
                 })
-                .EnsureAccountExists(builder.BuildEmployerAccountInput(accountName, payeReference))
-                .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName))
-                .CommitTransaction();
+                .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
+                .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
 
-            var hashedAccountId = _tester.DbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
+            var hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
 
             var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users")
                 .ExpectControllerType(typeof(EmployerAccountsController))
@@ -62,7 +61,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Assert
             Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
-            Assert.AreEqual(builder.Context.ActiveUser.UserRef.ToLower(), account.Data.Last().UserRef.ToLower());
+            Assert.AreEqual(userRef.ToLower(),
+                account.Data.Last().UserRef.ToLower());
         }
     }
 }

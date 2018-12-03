@@ -206,7 +206,8 @@
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
-    <Compile Include="Extensions\DbBuilderExtension.cs" />
+    <Compile Include="Extensions\EmployerFinanceDbBuilderExtension.cs" />
+    <Compile Include="Extensions\EmployerAccountsDbBuilderExtension.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
@@ -218,7 +219,8 @@
     <Compile Include="TestUtils\ApiTester\TestWebApiResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNonExistentKey.cs" />
-    <Compile Include="TestUtils\DataHelper\DbBuilder.cs" />
+    <Compile Include="TestUtils\DataHelper\EmployerFinanceDbBuilder.cs" />
+    <Compile Include="TestUtils\DataHelper\EmployerAccountsDbBuilder.cs" />
     <Compile Include="TestUtils\DataHelper\DbBuilderContext.cs" />
     <Compile Include="TestUtils\DataHelper\DbBuilderDependentRepositories.cs" />
     <Compile Include="TestUtils\DataHelper\DbDtoBuilderExtensions.cs" />

@@ -22,7 +22,6 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.UnitOfWork;
 using StructureMap;
 using WebApi.StructureMap;
 
@@ -34,14 +33,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private IntegrationTestExceptionLogger _exceptionLogger;
 
-        private readonly Lazy<DbBuilder> _dbBuilder;
-
         public bool IsTestServerStarted => TestServer != null;
-
-        public ApiIntegrationTester()
-        {
-            _dbBuilder = new Lazy<DbBuilder>(Resolve<DbBuilder>);
-        }
 
         public TestServer TestServer { get; private set; }
 
@@ -69,7 +61,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             TestServer = TestServer.Create(InitialiseHost);
         }
-
+        
         public void Dispose()
         {
             if (IsTestServerStarted)
@@ -91,22 +83,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         public Task<CallResponse<TResult>> InvokeGetAsync<TResult>(CallRequirements call)
         {
-            DbBuilder.EnsureTransaction();
+            EnsureStarted();
+            EnsureTesterDbContextsHaveTransactions();
 
             return GetResponseAsync<TResult>(call);
         }
-
-        /// <summary>
-        ///     Use the DI container used for the test to resolve the specified service.
-        /// </summary>
-        public T Resolve<T>()
-        {
-            EnsureStarted();
-
-            return _dependencyResolver.Container.GetInstance<T>();
-        }
-
-        public DbBuilder DbBuilder => _dbBuilder.Value;
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
@@ -126,8 +107,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
             return callResponse;
         }
-
-        private IUnitOfWorkManager unitOfWorkManager = null;
 
         private async Task FetchInitialResponseAsync(CallRequirements call, CallResponse response)
         {
@@ -168,6 +147,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             {
                 BeginTests();
             }
+        }
+
+        private void EnsureTesterDbContextsHaveTransactions()
+        {
+            GetInstanceOfEmployerAccountsDbBuilderWithTransaction(_dependencyResolver.Container);
+            GetInstanceOfEmployerFinanceDbBuilderWithTransaction(_dependencyResolver.Container);
         }
 
         private void InitialiseHost(IAppBuilder app)
@@ -270,6 +255,36 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private bool IsAcceptableStatusCode(CallResponse response, IEnumerable<HttpStatusCode> acceptableStatusCodes)
         {
             return acceptableStatusCodes == null || acceptableStatusCodes.Contains(response.Response.StatusCode);
+        }
+
+        private EmployerAccountsDbBuilder GetInstanceOfEmployerAccountsDbBuilderWithTransaction(IContainer container)
+        {
+            var _ = container.GetInstance<EmployerAccountsDbBuilder>();
+            EmployerAccountsDbBuilderExtension.EnsureTransaction(_);
+            return _;
+        }
+
+        private EmployerFinanceDbBuilder GetInstanceOfEmployerFinanceDbBuilderWithTransaction(IContainer container)
+        {
+            var _ = container.GetInstance<EmployerFinanceDbBuilder>();
+            _.EnsureTransaction();
+            return _;
+        }
+
+        public EmployerAccountsDbBuilder GetInstanceOfEmployerAccountsDbBuilderWithTransaction()
+        {
+            EnsureStarted();
+
+            var nestedContainer = _dependencyResolver.Container.GetNestedContainer();
+            return GetInstanceOfEmployerAccountsDbBuilderWithTransaction(nestedContainer);
+        }
+
+        public EmployerFinanceDbBuilder GetInstanceOfEmployerFinanceDbBuilderWithTransaction()
+        {
+            EnsureStarted();
+
+            var nestedContainer = _dependencyResolver.Container.GetNestedContainer();
+            return GetInstanceOfEmployerFinanceDbBuilderWithTransaction(nestedContainer);
         }
     }
 }

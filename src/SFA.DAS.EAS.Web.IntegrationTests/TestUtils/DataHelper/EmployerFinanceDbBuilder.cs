@@ -11,17 +11,17 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 {
-    class DbBuilder
+    class EmployerFinanceDbBuilder
     {
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
-        private EmployerAccountsDbContext _dbContext;
+        private EmployerFinanceDbContext _dbContext;
 
-        public DbBuilder(
+        public EmployerFinanceDbBuilder(
             DbBuilderDependentRepositories dependentRepositories,
             IHashingService hashingService,
             IPublicHashingService publicHashingService,
-            EmployerAccountsDbContext dbContext)
+            EmployerFinanceDbContext dbContext)
         {
             DependentRepositories = dependentRepositories;
             _hashingService = hashingService;
@@ -39,13 +39,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return (_dbContext.Database.CurrentTransaction != null);
         }
 
-        public DbBuilder BeginTransaction()
+        public EmployerFinanceDbBuilder BeginTransaction()
         {
             _dbContext.Database.BeginTransaction();
             return this;
         }
 
-        public DbBuilder CommitTransaction()
+        public EmployerFinanceDbBuilder CommitTransaction()
         {
             if (_dbContext.Database.CurrentTransaction == null) return this;
 
@@ -53,17 +53,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return this;
         }
 
-        public DbBuilder EnsureAccountExists(EmployerAccountInput input)
+        public EmployerFinanceDbBuilder EnsureAccountExists(EmployerAccountInput input)
         {
             return EnsureAccountExists(input, CancellationToken.None);
         }
 
-        public DbBuilder EnsureAccountExists(EmployerAccountInput input, CancellationToken cancellationToken)
+        public EmployerFinanceDbBuilder EnsureAccountExists(EmployerAccountInput input, CancellationToken cancellationToken)
         {
             return WaitDbAction(EnsureAccountExistsAsync(input), cancellationToken);
         }
 
-        public async Task<DbBuilder> EnsureAccountExistsAsync(EmployerAccountInput input)
+        public async Task<EmployerFinanceDbBuilder> EnsureAccountExistsAsync(EmployerAccountInput input)
         {
             var output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
 
@@ -99,17 +99,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return this;
         }
 
-        public DbBuilder WithLegalEntity(LegalEntityWithAgreementInput input)
+        public EmployerFinanceDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input)
         {
             return WithLegalEntity(input, CancellationToken.None);
         }
 
-        public DbBuilder WithLegalEntity(LegalEntityWithAgreementInput input, CancellationToken cancellationToken)
+        public EmployerFinanceDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input, CancellationToken cancellationToken)
         {
             return WaitDbAction(WithLegalEntityAsync(input), cancellationToken);
         }
 
-        public async Task<DbBuilder> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
+        public async Task<EmployerFinanceDbBuilder> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
         {
             var output = new LegalEnityWithAgreementOutput();
 
@@ -123,17 +123,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return this;
         }
 
-        public DbBuilder EnsureUserExists(UserInput input)
+        public EmployerFinanceDbBuilder EnsureUserExists(UserInput input)
         {
             return EnsureUserExists(input, CancellationToken.None);
         }
 
-        public DbBuilder EnsureUserExists(UserInput input, CancellationToken cancellationToken)
+        public EmployerFinanceDbBuilder EnsureUserExists(UserInput input, CancellationToken cancellationToken)
         {
             return WaitDbAction(EnsureUserExistsAsync(input), cancellationToken);
         }
 
-        public async Task<DbBuilder> EnsureUserExistsAsync(UserInput input)
+        public async Task<EmployerFinanceDbBuilder> EnsureUserExistsAsync(UserInput input)
         {
             try
             {

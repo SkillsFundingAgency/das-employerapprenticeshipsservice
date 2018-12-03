@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.Extensions
 {
-    internal static class DbBuilderExtension
+    internal static class EmployeFinanceDbBuilderExtension
     {
-        internal static DbBuilder EnsureTransaction(this DbBuilder builder)
+        internal static EmployerFinanceDbBuilder EnsureTransaction(this EmployerFinanceDbBuilder builder)
         {
             if (!builder.HasTransaction())
             {
