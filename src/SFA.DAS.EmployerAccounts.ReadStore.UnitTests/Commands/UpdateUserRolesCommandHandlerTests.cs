@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
@@ -119,6 +120,15 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                     ), null,
                     It.IsAny<CancellationToken>())));
         }
+
+        [Test]
+        public Task Handle_WhenUserIdDoesNotMatchTheSelectedUserDocument_ThenShouldThrowException()
+        {
+            return TestExceptionAsync(
+                f => f.AddMatchingUserExceptForUserId(),
+                f => f.Handler.Handle(f.Command, CancellationToken.None),
+                (f, r) => r.ShouldThrow<InvalidOperationException>());
+        }
     }
 
     internal class WhenItsAnExistingUserFixture
@@ -182,6 +192,12 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return this;
         }
 
+        public WhenItsAnExistingUserFixture AddMatchingUserExceptForUserId()
+        {
+            Users.Add(CreateBasicUser().Set(x => x.UserId, UserId + 1));
+            return this;
+        }
+
         public WhenItsAnExistingUserFixture AddMatchingUser()
         {
             Users.Add(CreateBasicUser());
@@ -192,6 +208,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return ObjectActivator.CreateInstance<UserRoles>()
                 .Set(x=>x.AccountId, AccountId)
+                .Set(x=>x.UserId, UserId)
                 .Set(x=>x.UserRef, UserRef);
         }
     }

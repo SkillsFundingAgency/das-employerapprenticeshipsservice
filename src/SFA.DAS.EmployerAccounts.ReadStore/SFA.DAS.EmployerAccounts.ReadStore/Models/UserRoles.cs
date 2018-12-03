@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonProperty("userRef")]
         public Guid UserRef { get; protected set; }
 
+        [JsonProperty("userId")]
         public long UserId { get; protected set; }
 
         [JsonProperty("accountId")]
@@ -55,7 +56,8 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             ProcessMessage(messageId, updated,
                 () =>
                 {
-                    UserId = userId;
+                    if (UserId != userId)
+                        throw new InvalidOperationException("UserId does not match");
                     Roles = roles;
                     Updated = updated;
                     Removed = null;
