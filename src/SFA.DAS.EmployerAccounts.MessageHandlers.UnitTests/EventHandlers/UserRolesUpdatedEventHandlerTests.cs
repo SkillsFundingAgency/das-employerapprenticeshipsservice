@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         public Task Handle_WhenHandlingEvent_ThenShouldSendUpdateUserRolesCommand()
         {
             return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
-                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<UpdateUserRolesCommand>(p =>
+                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<UpdateAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
                         p.UserId == f.UserId &&

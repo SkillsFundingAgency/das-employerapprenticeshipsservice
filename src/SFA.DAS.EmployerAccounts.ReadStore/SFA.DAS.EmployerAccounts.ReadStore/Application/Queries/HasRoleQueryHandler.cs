@@ -9,16 +9,16 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
 {
     internal class HasRoleQueryHandler : IReadStoreRequestHandler<HasRoleQuery, bool>
     {
-        private readonly IUsersRolesRepository _usersRolesRepository;
+        private readonly IAccountUsersRepository _accountUsersRepository;
 
-        public HasRoleQueryHandler(IUsersRolesRepository usersRolesRepository)
+        public HasRoleQueryHandler(IAccountUsersRepository accountUsersRepository)
         {
-            _usersRolesRepository = usersRolesRepository;
+            _accountUsersRepository = accountUsersRepository;
         }
 
         public async Task<bool> Handle(HasRoleQuery request, CancellationToken cancellationToken)
         {
-            var user = await _usersRolesRepository
+            var user = await _accountUsersRepository
                 .CreateQuery()
                 .SingleOrDefaultAsync(r => r.UserRef == request.UserRef && r.AccountId == request.EmployerAccountId && r.Removed == null, cancellationToken);
 

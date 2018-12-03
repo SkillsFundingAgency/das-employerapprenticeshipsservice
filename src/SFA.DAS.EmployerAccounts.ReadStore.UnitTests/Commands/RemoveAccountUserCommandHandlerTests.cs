@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return TestAsync(
                 f => f.AddMatchingNonRemovedUserWithOwnerRole(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Removed == f.Removed &&
                         p.Roles.Any() == false
                     ), null,
@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return TestAsync(
                 f => f.AddMatchingNonRemovedUserWithOwnerRole(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.OutboxData.Count(o => o.MessageId == f.MessageId) == 1
                     ), null,
                     It.IsAny<CancellationToken>())));
@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return TestAsync(
                 f => f.AddMatchingRecentlyUpdatedUserWithViewerRole(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Removed == null &&
                         p.Roles.Any() &&
                         p.OutboxData.Count(o => o.MessageId == f.MessageId) == 1
@@ -82,23 +82,23 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         public long UserId = 22323;
         public HashSet<UserRole> Roles = new HashSet<UserRole> { UserRole.Owner };
         public DateTime Removed = DateTime.Now.AddMinutes(-1);
-        public List<UserRoles> Users;
+        public List<AccountUser> Users;
 
-        public Mock<IUsersRolesRepository> UserRoleRepository;
+        public Mock<IAccountUsersRepository> UserRoleRepository;
 
-        public RemoveUserRolesCommand Command;
-        public RemoveUserRolesCommandHandler Handler;
+        public RemoveAccountUserCommand Command;
+        public RemoveAccountUserCommandHandler Handler;
 
         public RemoveUserRolesCommandHandlerTestsFixture()
         {
-            Users = new List<UserRoles>();
+            Users = new List<AccountUser>();
 
-            UserRoleRepository = new Mock<IUsersRolesRepository>();
+            UserRoleRepository = new Mock<IAccountUsersRepository>();
             UserRoleRepository.SetupInMemoryCollection(Users);
 
-            Handler = new RemoveUserRolesCommandHandler(UserRoleRepository.Object);
+            Handler = new RemoveAccountUserCommandHandler(UserRoleRepository.Object);
 
-            Command = new RemoveUserRolesCommand(AccountId, UserId, MessageId, Removed);
+            Command = new RemoveAccountUserCommand(AccountId, UserId, MessageId, Removed);
         }
 
         public RemoveUserRolesCommandHandlerTestsFixture AddMatchingNonRemovedUserWithOwnerRole()
@@ -125,9 +125,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return this;
         }
 
-        private UserRoles CreateBasicUser()
+        private AccountUser CreateBasicUser()
         {
-            return ObjectActivator.CreateInstance<UserRoles>()
+            return ObjectActivator.CreateInstance<AccountUser>()
                 .Set(x => x.AccountId, AccountId)
                 .Set(x => x.Created, Removed.AddDays(-10))
                 .Set(x => x.UserId, UserId)

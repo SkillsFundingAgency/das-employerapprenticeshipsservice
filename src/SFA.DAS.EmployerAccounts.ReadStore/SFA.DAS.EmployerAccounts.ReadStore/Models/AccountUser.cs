@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 {
-    internal class UserRoles : Document
+    internal class AccountUser : Document
     {
         [JsonProperty("userRef")]
         public Guid UserRef { get; protected set; }
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
-        public UserRoles(Guid userRef, long userId, long accountId, HashSet<UserRole> roles, string messageId, DateTime created) : base(1, "userRoles")
+        public AccountUser(Guid userRef, long userId, long accountId, HashSet<UserRole> roles, string messageId, DateTime created) : base(1, "userRoles")
         {
             UserRef = userRef;
             UserId = userId;
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         }
 
         [JsonConstructor]
-        protected UserRoles()
+        protected AccountUser()
         {
         }
 
@@ -77,7 +77,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                 }
             );
         }
-
 
         private void ProcessMessage(string messageId, DateTime messageCreated, Action action)
         {
@@ -117,6 +116,5 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                 throw new InvalidOperationException("User has already been removed");
             }
         }
-
     }
 }

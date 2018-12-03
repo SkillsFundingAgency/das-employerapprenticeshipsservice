@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         public Task Handle_WhenHandlingEvent_ThenShouldSendRemoveUserRolesCommand()
         {
             return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
-                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<RemoveUserRolesCommand>(p =>
+                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<RemoveAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserId == f.UserId &&
                         p.AccountId == f.AccountId &&

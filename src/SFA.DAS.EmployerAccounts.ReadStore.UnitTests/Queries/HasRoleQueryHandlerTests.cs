@@ -75,15 +75,15 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         internal HasRoleQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
         internal IReadStoreRequestHandler<HasRoleQuery,bool> Handler { get; set; }
-        internal Mock<IUsersRolesRepository> UserRolesRepository { get; set; }
-        internal List<UserRoles> Roles { get; set; }
+        internal Mock<IAccountUsersRepository> UserRolesRepository { get; set; }
+        internal List<AccountUser> Roles { get; set; }
 
         public HasRoleQueryHandlerTestsFixture()
         {
             Query = new HasRoleQuery(Guid.NewGuid(), 112, new HashSet<UserRole>{ UserRole.Owner });
             CancellationToken = CancellationToken.None;
-            UserRolesRepository = new Mock<IUsersRolesRepository>();
-            Roles = new List<UserRoles>();
+            UserRolesRepository = new Mock<IAccountUsersRepository>();
+            Roles = new List<AccountUser>();
             UserRolesRepository.SetupInMemoryCollection(Roles);
 
             Handler = new HasRoleQueryHandler(UserRolesRepository.Object);
@@ -144,14 +144,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             return this;
         }
 
-        private UserRoles CreateBasicMatchingUserRolesWithOwnerRole()
+        private AccountUser CreateBasicMatchingUserRolesWithOwnerRole()
         {
             return CreateBasicMatchingUserRolesObject().Add(x => x.Roles, UserRole.Owner);
         }
 
-        private UserRoles CreateBasicMatchingUserRolesObject()
+        private AccountUser CreateBasicMatchingUserRolesObject()
         {
-            return ObjectActivator.CreateInstance<UserRoles>()
+            return ObjectActivator.CreateInstance<AccountUser>()
                 .Set(x => x.UserRef, Query.UserRef)
                 .Set(x => x.AccountId, Query.EmployerAccountId);
         }

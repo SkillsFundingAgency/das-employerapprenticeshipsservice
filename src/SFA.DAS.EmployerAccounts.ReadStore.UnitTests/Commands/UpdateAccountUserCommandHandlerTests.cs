@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         public Task Handle_WhenItsANewUser_ThenShouldAddNewDocumentToRepositoryWithANonEmptyId()
         {
             return TestAsync(f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Add(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Add(It.Is<AccountUser>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
                         p.UserId == f.UserId &&
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         public Task Handle_WhenItsANewUser_ThenShouldAddMessageIdToOutbox()
         {
             return TestAsync(f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Add(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Add(It.Is<AccountUser>(p =>
                         p.OutboxData.Count(o => o.MessageId == f.UpdateMessageId) == 1
                     ), null,
                     It.IsAny<CancellationToken>())));
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestAsync(f => f.AddMatchingUser(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
                         p.UserId == f.UserId &&
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestAsync(f => f.AddMatchingUser(), 
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.OutboxData.Count(o => o.MessageId == f.UpdateMessageId) == 1
                     ), null,
                     It.IsAny<CancellationToken>())));
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestAsync(f => f.AddMatchingUserWithMessageAlreadyProcessed(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Roles.Contains(UserRole.Owner) == false && 
                         p.OutboxData.Count() == 1
                     ), null,
@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestAsync(f => f.AddMatchingUserWhichWasUpdatedLaterThanNewMessage(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Roles.Contains(UserRole.Owner) == false &&
                         p.OutboxData.Count() == 2 &&
                         p.OutboxData.Count(o => o.MessageId == f.UpdateMessageId) == 1
@@ -98,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestAsync(f => f.AddMatchingUserWhichWasRemovedLaterThanNewMessage(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Roles.Contains(UserRole.Owner) == false &&
                         p.Removed != null &&
                         p.OutboxData.Count() == 2 &&
@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestAsync(f => f.AddMatchingUserWhichWasRemovedEarlierThanNewMessage(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<UserRoles>(p =>
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Roles.Contains(UserRole.Owner) &&
                         p.Removed == null &&
                         p.OutboxData.Count() == 2 &&
@@ -141,20 +141,20 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         public HashSet<UserRole> NewRoles = new HashSet<UserRole> { UserRole.Owner };
         public DateTime Updated = DateTime.Now.AddMinutes(-1);
 
-        public Mock<IUsersRolesRepository> UserRolesRepository;
-        public List<UserRoles> Users = new List<UserRoles>();
+        public Mock<IAccountUsersRepository> UserRolesRepository;
+        public List<AccountUser> Users = new List<AccountUser>();
 
-        public UpdateUserRolesCommand Command;
-        public UpdateUserRolesCommandHandler Handler;
+        public UpdateAccountUserCommand Command;
+        public UpdateAccountUserCommandHandler Handler;
 
         public WhenItsAnExistingUserFixture()
         {
-            UserRolesRepository = new Mock<IUsersRolesRepository>();
+            UserRolesRepository = new Mock<IAccountUsersRepository>();
             UserRolesRepository.SetupInMemoryCollection(Users);
 
-            Handler = new UpdateUserRolesCommandHandler(UserRolesRepository.Object);
+            Handler = new UpdateAccountUserCommandHandler(UserRolesRepository.Object);
 
-            Command = new UpdateUserRolesCommand(AccountId, UserRef, UserId, NewRoles, UpdateMessageId, Updated);
+            Command = new UpdateAccountUserCommand(AccountId, UserRef, UserId, NewRoles, UpdateMessageId, Updated);
         }
 
         public WhenItsAnExistingUserFixture AddMatchingUserWhichWasRemovedLaterThanNewMessage()
@@ -204,9 +204,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return this;
         }
 
-        private UserRoles CreateBasicUser()
+        private AccountUser CreateBasicUser()
         {
-            return ObjectActivator.CreateInstance<UserRoles>()
+            return ObjectActivator.CreateInstance<AccountUser>()
                 .Set(x=>x.AccountId, AccountId)
                 .Set(x=>x.UserId, UserId)
                 .Set(x=>x.UserRef, UserRef);
