@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
         {
             var user = await _usersRolesRepository.CreateQuery().SingleAsync(x => x.UserId == request.UserId && x.AccountId == request.AccountId, cancellationToken);
 
-            user.Remove(request.Updated, request.MessageId);
+            user.Remove(request.Removed, request.MessageId);
             await _usersRolesRepository.Update(user, null, cancellationToken);
 
             return Unit.Value;

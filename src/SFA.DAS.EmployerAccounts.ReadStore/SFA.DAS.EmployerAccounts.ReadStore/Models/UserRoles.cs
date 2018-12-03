@@ -22,11 +22,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonProperty("outboxData")]
         public IEnumerable<OutboxMessage> OutboxData => _outboxData;
 
-        [JsonProperty("updated")]
-        public DateTime Updated { get; protected set; }
+        [JsonProperty("Created")]
+        public DateTime Created { get; protected set; }
 
-        [JsonProperty("deleted")]
-        public DateTime? Deleted { get; protected set; }
+        [JsonProperty("updated")]
+        public DateTime? Updated { get; protected set; }
+
+        [JsonProperty("removed")]
+        public DateTime? Removed { get; protected set; }
 
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
@@ -37,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             UserId = userId;
             AccountId = accountId;
             Roles = roles;
-            Updated = created;
+            Created = created;
             AddMessageToOutbox(messageId, created);
         }
 
@@ -54,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                     UserId = userId;
                     Roles = roles;
                     Updated = updated;
-                    Deleted = null;
+                    Removed = null;
                 }
             );
         }
@@ -64,8 +67,10 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             ProcessMessage(messageId, deleted,
                 () =>
                 {
+                    EnsureUserHasNotBeenRemoved();
+
                     Roles = new List<UserRole>();
-                    Deleted = deleted;
+                    Removed = deleted;
                 }
             );
         }
@@ -86,9 +91,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 
         private bool IsMessageChronological(DateTime messageDateTime)
         {
-            var deleted = Deleted ?? DateTime.MinValue;
+            return messageDateTime > Created && (Updated == null || messageDateTime > Updated.Value) && 
+                   (Removed == null || messageDateTime > Removed.Value);
 
-            return messageDateTime > Updated && messageDateTime > deleted;
         }
 
         private bool MessageAlreadyProcessed(string messageId)
@@ -101,5 +106,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             if (messageId is null) throw new ArgumentNullException(nameof(messageId));
             _outboxData.Add(new OutboxMessage(messageId, created));
         }
+
+        private void EnsureUserHasNotBeenRemoved()
+        {
+            if (Removed != null)
+            {
+                throw new InvalidOperationException("User has already been removed");
+            }
+        }
+
     }
 }

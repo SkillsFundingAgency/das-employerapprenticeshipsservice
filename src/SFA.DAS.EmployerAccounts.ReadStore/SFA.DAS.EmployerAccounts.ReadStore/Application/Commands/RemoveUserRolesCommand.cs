@@ -8,14 +8,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
         public long AccountId { get; }
         public long UserId { get; }
         public string MessageId { get; }
-        public DateTime Updated { get; }
+        public DateTime Removed { get; }
 
-        public RemoveUserRolesCommand(long accountId, long userId, string messageId, DateTime updated)
+        public RemoveUserRolesCommand(long accountId, long userId, string messageId, DateTime removed)
         {
             AccountId = accountId;
             UserId = userId;
             MessageId = messageId;
-            Updated = updated;
+            Removed = removed;
         }
     }
 }
