@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
@@ -37,7 +38,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
             const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
 
-            var testDbContext = _tester.GetInstanceOfEmployerAccountsDbBuilderWithTransaction();
+            var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>();
             testDbContext
                 .EnsureUserExists(new UserInput
                 {

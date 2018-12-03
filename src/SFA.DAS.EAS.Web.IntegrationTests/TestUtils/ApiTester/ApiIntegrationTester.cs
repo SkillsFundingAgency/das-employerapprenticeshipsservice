@@ -13,10 +13,8 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Owin;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -84,9 +82,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         public Task<CallResponse<TResult>> InvokeGetAsync<TResult>(CallRequirements call)
         {
             EnsureStarted();
-            EnsureInstanceOfDbContextsHaveTransactions();
 
             return GetResponseAsync<TResult>(call);
+        }
+
+        public T GetTransientInstance<T>()
+        {
+            EnsureStarted();
+
+            return _dependencyResolver.Container.GetNestedContainer().GetInstance<T>();
         }
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
@@ -147,12 +151,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             {
                 BeginTests();
             }
-        }
-
-        private void EnsureInstanceOfDbContextsHaveTransactions()
-        {
-            GetInstanceOfEmployerAccountsDbBuilderWithTransaction(_dependencyResolver.Container);
-            GetInstanceOfEmployerFinanceDbBuilderWithTransaction(_dependencyResolver.Container);
         }
 
         private void InitialiseHost(IAppBuilder app)
@@ -255,36 +253,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private bool IsAcceptableStatusCode(CallResponse response, IEnumerable<HttpStatusCode> acceptableStatusCodes)
         {
             return acceptableStatusCodes == null || acceptableStatusCodes.Contains(response.Response.StatusCode);
-        }
-
-        private EmployerAccountsDbBuilder GetInstanceOfEmployerAccountsDbBuilderWithTransaction(IContainer container)
-        {
-            var employerAccountsDbBuilder = container.GetInstance<EmployerAccountsDbBuilder>();
-            employerAccountsDbBuilder.EnsureTransaction();
-            return employerAccountsDbBuilder;
-        }
-
-        private EmployerFinanceDbBuilder GetInstanceOfEmployerFinanceDbBuilderWithTransaction(IContainer container)
-        {
-            var employerFinanceDbBuilder = container.GetInstance<EmployerFinanceDbBuilder>();
-            employerFinanceDbBuilder.EnsureTransaction();
-            return employerFinanceDbBuilder;
-        }
-
-        public EmployerAccountsDbBuilder GetInstanceOfEmployerAccountsDbBuilderWithTransaction()
-        {
-            EnsureStarted();
-
-            var nestedContainer = _dependencyResolver.Container.GetNestedContainer();
-            return GetInstanceOfEmployerAccountsDbBuilderWithTransaction(nestedContainer);
-        }
-
-        public EmployerFinanceDbBuilder GetInstanceOfEmployerFinanceDbBuilderWithTransaction()
-        {
-            EnsureStarted();
-
-            var nestedContainer = _dependencyResolver.Container.GetNestedContainer();
-            return GetInstanceOfEmployerFinanceDbBuilderWithTransaction(nestedContainer);
         }
     }
 }
