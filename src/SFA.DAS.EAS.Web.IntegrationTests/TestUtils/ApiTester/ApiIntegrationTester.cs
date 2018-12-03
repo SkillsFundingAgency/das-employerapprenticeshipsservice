@@ -84,7 +84,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         public Task<CallResponse<TResult>> InvokeGetAsync<TResult>(CallRequirements call)
         {
             EnsureStarted();
-            EnsureTesterDbContextsHaveTransactions();
+            EnsureInstanceOfDbContextsHaveTransactions();
 
             return GetResponseAsync<TResult>(call);
         }
@@ -149,7 +149,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             }
         }
 
-        private void EnsureTesterDbContextsHaveTransactions()
+        private void EnsureInstanceOfDbContextsHaveTransactions()
         {
             GetInstanceOfEmployerAccountsDbBuilderWithTransaction(_dependencyResolver.Container);
             GetInstanceOfEmployerFinanceDbBuilderWithTransaction(_dependencyResolver.Container);
