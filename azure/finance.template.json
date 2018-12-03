@@ -1,0 +1,368 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "uiAppServiceName": {
+            "type": "string"
+        },
+        "sharedAppServicePlanName": {
+            "type": "string"
+        },
+        "sharedAppServicePlanResourceGroup": {
+            "type": "string"
+        },
+        "ApiAppServiceName": {
+            "type": "string"
+        },
+        "workerAppServiceName": {
+            "type": "string"
+        },
+        "workerAppServicePlanName": {
+            "type": "string"
+        },
+        "aseHostingEnvironmentName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "aseResourceGroup": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "environmentName": {
+            "type": "string"
+        },
+        "configurationStorageConnectionString": {
+            "type": "string"
+        },
+        "loggingRedisConnectionString": {
+            "type": "string"
+        },
+        "loggingRedisKey": {
+            "type": "string"
+        },
+        "storageConnectionString": {
+            "type": "string"
+        },
+        "tokenCertificateThumbprint": {
+            "type": "string"
+        },
+        "keyVaultCertificateName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "keyVaultName": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "keyVaultResourceGroup": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "uiCustomHostname": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "uiCertificateName": {
+            "type": "string"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "apiVersion": "2017-08-01",
+            "name": "UIAppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/application-insights.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[parameters('uiAppServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[parameters('uiAppServiceName')]"
+                    }
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "ApiAppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/application-insights.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[parameters('ApiAppServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[parameters('ApiAppServiceName')]"
+                    }
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "UIAppService",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[parameters('uiAppServiceName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('sharedAppServicePlanName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[parameters('sharedAppServicePlanResourceGroup')]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "LoggingRedisConnectionString",
+                                "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                                "name": "LoggingRedisKey",
+                                "value": "[parameters('loggingRedisKey')]"
+                            },
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentName')]"
+                            },
+                            {
+                                "name": "StorageConnectionString",
+                                "value": "[parameters('storageConnectionString')]"
+                            },
+                            {
+                                "name": "InstrumentationKey",
+                                "value": "[reference('UIAppInsights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "WEBSITE_LOAD_CERTIFICATES",
+                                "value": "[parameters('tokenCertificateThumbprint')]"
+                            },
+                            {
+                                "name": "TokenCertificateThumbprint",
+                                "value": "[parameters('tokenCertificateThumbprint')]"
+                            }
+                        ]
+                    },
+                    "customHostName": {
+                        "value": "[parameters('uiCustomHostname')]"
+                    },
+                    "certificateThumbprint": {
+                        "value": "[reference(resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/certificates', parameters('uiCertificateName')), '2016-03-01').Thumbprint]"
+                    }
+                }
+            },
+            "dependsOn": [
+                "UIAppInsights"
+            ]
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "ApiAppService",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[parameters('ApiAppServiceName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('SharedAppServicePlanName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[parameters('SharedAppServicePlanResourceGroup')]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "LoggingRedisConnectionString",
+                                "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                                "name": "LoggingRedisKey",
+                                "value": "[parameters('loggingRedisKey')]"
+                            },
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentName')]"
+                            },
+                            {
+                                "name": "InstrumentationKey",
+                                "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
+                            }
+                        ]
+                    }
+                }
+            },
+            "dependsOn": [
+                "ApiAppInsights"
+            ]
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "WorkerAppServicePlan",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service-plan.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServicePlanName": {
+                        "value": "[parameters('workerAppServicePlanName')]"
+                    },
+                    "aseHostingEnvironmentName": {
+                        "value": "[parameters('aseHostingEnvironmentName')]"
+                    },
+                    "aseResourceGroup": {
+                        "value": "[parameters('aseResourceGroup')]"
+                    },
+                    "aspSize": {
+                        "value": "1"
+                    },
+                    "aspInstances": {
+                        "value": 1
+                    },
+                    "nonASETier": {
+                        "value": "Basic"
+                    }
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "apiVersion": "2017-08-01",
+            "name": "WorkerAppService",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appServiceName": {
+                        "value": "[parameters('workerAppServiceName')]"
+                    },
+                    "appServicePlanName": {
+                        "value": "[parameters('workerAppServicePlanName')]"
+                    },
+                    "appServicePlanResourceGroup": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "appServiceAppSettings": {
+                        "value": [
+                            {
+                                "name": "LoggingRedisConnectionString",
+                                "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                                "name": "LoggingRedisKey",
+                                "value": "[parameters('loggingRedisKey')]"
+                            },
+                            {
+                                "name": "ConfigurationStorageConnectionString",
+                                "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                                "name": "EnvironmentName",
+                                "value": "[parameters('environmentName')]"
+                            },
+                            {
+                                "name": "StorageConnectionString",
+                                "value": "[parameters('storageConnectionString')]"
+                            },
+                            {
+                                "name": "WEBSITE_LOAD_CERTIFICATES",
+                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
+                            },
+                            {
+                                "name": "TokenServiceCertificateThumbprint",
+                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
+                            }
+                        ]
+                    },
+                    "appServiceConnectionStrings": {
+                        "value": [
+                            {
+                                "name": "AzureWebJobsDashboard",
+                                "connectionString": "[parameters('storageConnectionString')]",
+                                "type": "Custom"
+                            },
+                            {
+                                "name": "AzureWebJobsStorage",
+                                "connectionString": "[parameters('storageConnectionString')]",
+                                "type": "Custom"
+                            }
+                        ]
+                    },
+                    "deployStagingSlot": {
+                        "value": false
+                    }
+                }
+            },
+            "dependsOn": [
+                "WorkerAppServicePlan"
+            ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "TokenServiceCert",
+            "condition": "[and(and(greater(length(parameters('keyVaultCertificateName')),0), greater(length(parameters('keyVaultName')),0)), greater(length(parameters('keyVaultResourceGroup')),0))]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service-certificate.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultCertificateName": {
+                        "value": "[parameters('keyVaultCertificateName')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyVaultName')]"
+                    },
+                    "keyVaultResourceGroup": {
+                        "value": "[parameters('keyVaultResourceGroup')]"
+                    },
+                    "serverFarmId": {
+                        "value": "[reference('WorkerAppServicePlan').outputs.appServicePlanId.value]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}

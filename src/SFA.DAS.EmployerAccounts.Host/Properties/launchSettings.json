@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SFA.DAS.EmployerAccounts.Host": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Program Files\\IIS Express\\iisexpress.exe",
+      "commandLineArgs": "/path:\"$(SolutionDir)$(ProjectName)\""
+    }
+  }
+}

@@ -15,55 +15,58 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class UserAccountRepository : BaseRepository, IUserAccountRepository
     {
-        public UserAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        private readonly Lazy<EmployerAccountsDbContext> _db;
+
+        public UserAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
+            _db = db;
         }
 
-        public async Task<Accounts<Account>> GetAccountsByUserRef(string userRef)
+        public async Task<Accounts<Domain.Models.Account.Account>> GetAccountsByUserRef(string userRef)
         {
-            var result = await WithConnection(async c =>
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@userRef", Guid.Parse(userRef), DbType.Guid);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
+                sql: @"[employer_account].[GetAccounts_ByUserRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return new Accounts<Domain.Models.Account.Account>
             {
-                var parameters = new DynamicParameters();
-                parameters.Add("@userRef", Guid.Parse(userRef), DbType.Guid);
-
-                return await c.QueryAsync<Account>(
-                    sql: @"[employer_account].[GetAccounts_ByUserRef]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
-
-            return new Accounts<Account> { AccountList = (List<Account>)result };
+                AccountList = (List<Domain.Models.Account.Account>)result
+            };
         }
 
         public async Task<User> Get(string email)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@email", email, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email;",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            parameters.Add("@email", email, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<User>(
+                sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email;",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
 
             return result.SingleOrDefault();
         }
 
         public async Task<User> Get(long id)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@id", id, DbType.Int64);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<User>(
-                    sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id;",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            parameters.Add("@id", id, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<User>(
+                sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id;",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
 
             return result.SingleOrDefault();
         }

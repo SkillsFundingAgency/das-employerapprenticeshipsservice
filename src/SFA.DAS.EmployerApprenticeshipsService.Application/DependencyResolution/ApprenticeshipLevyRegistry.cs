@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Net.Http;
 using HMRC.ESFA.Levy.Api.Client;
+using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.DependencyResolution;
 using StructureMap;
 
 

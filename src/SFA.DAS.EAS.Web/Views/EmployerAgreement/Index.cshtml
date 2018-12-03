@@ -1,4 +1,5 @@
-﻿@using SFA.DAS.EAS.Domain.Models.Features
+﻿@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EAS.Infrastructure.Authorization
 @using SFA.DAS.EAS.Web;
 @using SFA.DAS.EAS.Web.Extensions
@@ -36,8 +37,8 @@
 </div>
 <div class="grid-row">
     <div class="column-two-thirds">
-        <details class="transfers-status" role="group">
-            <summary role="button" aria-controls="transfers-status" aria-expanded="false">
+        <details class="transfers-status">
+            <summary>
                 <span class="summary">Transfers status: 
                     <span class="bold">
                         @switch (Html.GetAuthorizationResult(FeatureType.TransferConnectionRequests))
@@ -54,7 +55,7 @@
                     </span>
                 </span>
             </summary>
-            <div class="text panel" id="transfers-status" aria-hidden="true">
+            <div class="text panel">
                 <p>You must sign the most up-to-date agreement for all organisations to use transfers functionality.</p>
             </div>
         </details>

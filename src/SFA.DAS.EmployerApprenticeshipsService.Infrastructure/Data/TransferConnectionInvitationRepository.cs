@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -8,23 +9,23 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class TransferConnectionInvitationRepository : ITransferConnectionInvitationRepository
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public TransferConnectionInvitationRepository(EmployerAccountDbContext db)
+        public TransferConnectionInvitationRepository(Lazy<EmployerAccountsDbContext> db)
         {
             _db = db;
         }
 
         public Task Add(TransferConnectionInvitation transferConnectionInvitation)
         {
-            _db.TransferConnectionInvitations.Add(transferConnectionInvitation);
+            _db.Value.TransferConnectionInvitations.Add(transferConnectionInvitation);
 
-            return _db.SaveChangesAsync();
+            return _db.Value.SaveChangesAsync();
         }
 
         public Task<TransferConnectionInvitation> GetTransferConnectionInvitationById(int transferConnectionInvitationId)
         {
-            return _db.TransferConnectionInvitations
+            return _db.Value.TransferConnectionInvitations
                 .Include(i => i.Changes)
                 .Include(i => i.ReceiverAccount)
                 .Include(i => i.SenderAccount)

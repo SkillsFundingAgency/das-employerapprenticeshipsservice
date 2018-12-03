@@ -1,146 +1,148 @@
-﻿using System.Collections.Generic;
+﻿using Dapper;
+using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Sql.Client;
+using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.Sql.Client;
-using SFA.DAS.NLog.Logger;
+using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
     public class EmployerAccountRepository : BaseRepository, IEmployerAccountRepository
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
+        private readonly ILog _logger;
 
-        public EmployerAccountRepository(EmployerAccountDbContext db, EmployerApprenticeshipsServiceConfiguration configuration, ILog logger)
+        public EmployerAccountRepository(EmployerApprenticeshipsServiceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
+            _logger = logger;
         }
 
         public Task<Account> GetAccountById(long id)
         {
-            return _db.Accounts.SingleOrDefaultAsync(a => a.Id == id);
+            return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<Account> GetAccountByHashedId(string hashedAccountId)
+        public async Task<Domain.Models.Account.Account> GetAccountByHashedId(string hashedAccountId)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<Account>(
-                    sql: "select a.* from [employer_account].[Account] a where a.HashedId = @HashedAccountId;",
-                    param: parameters,
-                    commandType: CommandType.Text);
-            });
+            parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
+                sql: "select a.* from [employer_account].[Account] a where a.HashedId = @HashedAccountId;",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
             return result.SingleOrDefault();
         }
 
-        public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
+        public async Task<Accounts<Domain.Models.Account.Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
         {
             var parameters = new DynamicParameters();
+
             parameters.Add("@toDate", toDate);
+
             var offset = pageSize * (pageNumber - 1);
 
-            var countResult = await GetNumberOfAccounts();
+            var countResult = await _db.Value.Database.Connection.QueryAsync<int>(
+                sql: $"select count(*) from [employer_account].[Account] a;",
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
-            var result = await WithConnection(async c => await c.QueryAsync<Account>(
-                sql:    $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;", 
-                commandType: CommandType.Text));
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
+                sql: $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;",
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
-            return new Accounts<Account> {AccountsCount = countResult.First(), AccountList = result.ToList()};
+            return new Accounts<Domain.Models.Account.Account>
+            {
+                AccountsCount = countResult.First(),
+                AccountList = result.ToList()
+            };
         }
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
+            var sw = new Stopwatch();
             AccountDetail accountDetail = null;
 
-            await WithConnection(async c =>
+            sw.Start();
+            accountDetail = await _db.Value.Accounts
+                .Where(ac => ac.HashedId == hashedAccountId)
+                .Select(ac => new AccountDetail
+                {
+                    AccountId = ac.Id,
+                    HashedId = ac.HashedId,
+                    PublicHashedId = ac.PublicHashedId,
+                    Name = ac.Name,
+                    CreatedDate = ac.CreatedDate
+                }).FirstOrDefaultAsync();
+
+            if (accountDetail == null)
             {
-                var parameters = new DynamicParameters();
+                _logger.Warn($"An attempt to fetch an account using an unknown account - {hashedAccountId}");
+                return null;
+            }
 
-                parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
+            accountDetail.OwnerEmail = await _db.Value.Memberships
+                .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
+                .OrderBy(m => m.CreatedDate)
+                .Select(m => m.User.Email)
+                .FirstOrDefaultAsync();
 
-                return await c.QueryAsync<AccountDetail, string, long, AccountDetail>(
-                    sql: "[employer_account].[GetAccountDetails_ByHashedId]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure,
-                    splitOn: "PayeSchemeId,LegalEntityId",
-                    map: (parent, payeSchemeRef, legalEntityId) =>
-                    {
-                        if (accountDetail == null)
-                        {
-                            accountDetail = parent;
-                        }
+            accountDetail.PayeSchemes = await _db.Value.AccountHistory
+                .Where(ach => ach.AccountId == accountDetail.AccountId)
+                .Select(ach => ach.PayeRef)
+                .ToListAsync();
 
-                        if (!accountDetail.PayeSchemes.Contains(payeSchemeRef))
-                        {
-                            accountDetail.PayeSchemes.Add(payeSchemeRef);
-                        }
+            accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
+                .Where(ale => ale.AccountId == accountDetail.AccountId
+                                && ale.Deleted == null
+                                && ale.Agreements.Any(ea =>
+                                    ea.StatusId == EmployerAgreementStatus.Pending ||
+                                    ea.StatusId == EmployerAgreementStatus.Signed))
+                .Select(ale => ale.LegalEntityId)
+                .ToListAsync();
 
-                        if (!accountDetail.LegalEntities.Contains(legalEntityId))
-                        {
-                            accountDetail.LegalEntities.Add(legalEntityId);
-                        }
-
-                        return accountDetail;
-                    });
-            });
+            sw.Stop();
+            _logger.Debug($"Fetched account with {accountDetail.LegalEntities.Count} legal entities and {accountDetail.PayeSchemes.Count} PAYE schemes in {sw.ElapsedMilliseconds} msecs");
 
             return accountDetail;
         }
 
-        public async Task<List<Account>> GetAllAccounts()
+        public async Task<List<Domain.Models.Account.Account>> GetAllAccounts()
         {
-            var result = await WithConnection(async c => 
-                await c.QueryAsync<Account>("select * from [employer_account].[Account]", commandType: CommandType.Text));
+            var result = await _db.Value.Database.Connection.QueryAsync<Domain.Models.Account.Account>(
+                sql: "select * from [employer_account].[Account]",
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
 
             return result.AsList();
         }
 
         public async Task<List<AccountHistoryEntry>> GetAccountHistory(long accountId)
         {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
+            var parameters = new DynamicParameters();
 
-                return await c.QueryAsync<AccountHistoryEntry>(
-                    sql: "[employer_account].[GetAccountHistory]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
+            parameters.Add("@accountId", accountId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<AccountHistoryEntry>(
+                sql: "[employer_account].[GetAccountHistory]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
 
             return result.ToList();
         }
-
-        public async Task RenameAccount(long accountId, string name)
-        {
-            var result = await WithConnection(async c =>
-            {
-                var parameters = new DynamicParameters();
-                parameters.Add("@accountId", accountId, DbType.Int64);
-                parameters.Add("@accountName", name, DbType.String);
-
-                return await c.ExecuteAsync(
-                    sql: "[employer_account].[UpdateAccount_SetAccountName]",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure);
-            });
-		}
-
-        private async Task<IEnumerable<int>> GetNumberOfAccounts()
-        {
-            var countResult =
-                await WithConnection(async c => await c.QueryAsync<int>(sql: $"select count(*) from [employer_account].[Account] a;"));
-            return countResult;
-        }
     }
 }
-

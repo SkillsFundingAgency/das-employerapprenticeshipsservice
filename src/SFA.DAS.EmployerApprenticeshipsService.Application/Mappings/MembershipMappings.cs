@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
-using SFA.DAS.EAS.Domain.Models.Authorization;
 
 namespace SFA.DAS.EAS.Application.Mappings
 {

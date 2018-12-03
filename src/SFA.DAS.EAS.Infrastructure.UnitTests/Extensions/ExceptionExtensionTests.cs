@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.Net;
+using System.Net.Http;
 using System.Web;
 using NUnit.Framework;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.Logging;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Extensions
 {
@@ -25,7 +27,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Extensions
         [Test]
         public void GetAppropriateExceptionFormatter_WhenCalledWithHttpException_GetsHttpExceptionHandler()
         {
-            TestExpectedExceptionHandler(new HttpException("outermessage"), typeof(HttpException));
+            TestExpectedExceptionHandler(new HttpRequestException("outermessage"), typeof(HttpRequestException));
         }
 
         [Test]
@@ -115,7 +117,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Extensions
         [Test]
         public void GetDetailedMessage_WhenCalledWithHttpExceptions_ContainsHttpErrorCode()
         {
-            TestDetailedMessage(new HttpException((int)HttpStatusCode.Conflict, ""),
+            TestDetailedMessage(new HttpRequestException((int)HttpStatusCode.Conflict + ""),
                 ((int)HttpStatusCode.Conflict).ToString(CultureInfo.InvariantCulture));
         }
 

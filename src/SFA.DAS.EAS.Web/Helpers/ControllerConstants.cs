@@ -13,20 +13,24 @@
         public const string AddOrganisationViewName = "AddOrganisation";
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string CodeKeyName = "code";
-        public const string CommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
         public const string CoursePaymentSummaryViewName = "CoursePaymentSummary";
         public const string EmailClaimKeyName = "email";
+        public const string EmployerAccountsBaseUrlKeyName = "EmployerAccountsBaseUrl";
         public const string EmployerAccountOrganisationControllerName = "EmployerAccountOrganisation";
         public const string EmployerAccountViewName = "EmployerAccount";
         public const string EmployerAccountControllerName = "EmployerAccount";
         public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
         public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";
         public const string EmployerAgreementControllerName = "EmployerAgreement";
+        public const string EmployerCommitmentsBaseUrlKeyName = "EmployerCommitmentsBaseUrl";
         public const string EmployerCommitmentsControllerName = "EmployerCommitments";
+        public const string EmployerFinanceBaseUrlKeyName = "EmployerFinanceBaseUrl";
+        public const string EmployerProjectionsBaseUrlKeyName = "EmployerProjectionsBaseUrl";
+        public const string EmployerRecruitBaseUrlKeyName = "EmployerRecruitBaseUrl";
         public const string EmployerTeamActionName = "EmployerTeam";
         public const string EmployerTeamControllerName = "EmployerTeam";
         public const string ErrorControllerName = "Error";
@@ -44,7 +48,6 @@
         public const string InvitationControllerName = "Invitation";
         public const string InvitationIndexName = "All";
         public const string LegalAgreementViewName = "LegalAgreement";
-        public const string LevyDeclarationDetailViewName = "LevyDeclarationDetail";
         public const string ModelStateTempDataKey = "ModelState";
         public const string NextStepsActionName = "NextSteps";
         public const string NotFoundViewName = "NotFound";
@@ -55,9 +58,7 @@
         public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
         public const string OrganisationControllerName = "Organisation";
         public const string OrganisationSharedControllerName = "OrganisationShared";
-        public const string ProjectionsBaseUrlKeyName = "EmployerProjectionsBaseUrl";
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
-        public const string RecruitmentsBaseUrlKeyName = "EmployerRecruitBaseUrl";
         public const string PdfContentTypeName = "application/pdf";
         public const string RegisterUserActionName = "RegisterUser";
         public const string RemoveViewName = "Remove";
@@ -71,12 +72,12 @@
         public const string SetupAccountViewName = "SetupAccount";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
-        public const string UserExternalIdClaimKeyName = "sub";
         public const string SummaryActionName = "Summary";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
         public const string WhatYoullNeedActionName = "WhatYoullNeed";
         public const string TransfersControllerName = "Transfers";
         public const string TransferDetailsViewName = "TransferDetails";
+        public const string UserRefClaimKeyName = "sub";
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -12,10 +13,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitatio
 {
     public class GetRejectedTransferConnectionInvitationQueryHandler : IAsyncRequestHandler<GetRejectedTransferConnectionInvitationQuery, GetRejectedTransferConnectionInvitationResponse>
     {
-        private readonly EmployerAccountDbContext _db;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IConfigurationProvider _configurationProvider;
 
-        public GetRejectedTransferConnectionInvitationQueryHandler(EmployerAccountDbContext db, IConfigurationProvider configurationProvider)
+        public GetRejectedTransferConnectionInvitationQueryHandler(Lazy<EmployerAccountsDbContext> db, IConfigurationProvider configurationProvider)
         {
             _db = db;
             _configurationProvider = configurationProvider;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetRejectedTransferConnectionInvitatio
 
         public async Task<GetRejectedTransferConnectionInvitationResponse> Handle(GetRejectedTransferConnectionInvitationQuery message)
         {
-            var transferConnectionInvitation = await _db.TransferConnectionInvitations
+            var transferConnectionInvitation = await _db.Value.TransferConnectionInvitations
                 .Where(i => 
                     i.Id == message.TransferConnectionInvitationId.Value &&
                     i.ReceiverAccount.Id == message.AccountId.Value &&

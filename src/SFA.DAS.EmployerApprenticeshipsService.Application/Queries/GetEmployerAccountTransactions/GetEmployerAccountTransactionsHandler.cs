@@ -1,6 +1,5 @@
 ﻿using MediatR;
-using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
@@ -12,8 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -126,7 +124,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 var ukprn = Convert.ToInt32(transaction.UkPrn);
                 var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
-
                 return $"{transactionPrefix}{providerName.Provider.ProviderName}";
             }
             catch (Exception ex)

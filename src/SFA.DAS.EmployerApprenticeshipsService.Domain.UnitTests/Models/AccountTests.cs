@@ -6,6 +6,8 @@ using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.TestCommon;
 using SFA.DAS.EAS.TestCommon.Builders;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.UnitOfWork;
 
 namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
 {
@@ -49,6 +51,7 @@ namespace SFA.DAS.EmployerApprenticeshipsService.Domain.UnitTests.Models
 
     public class AccountTestsFixture : FluentTestFixture
     {
+        public IUnitOfWorkContext UnitOfWorkContext { get; set; } = new UnitOfWorkContext();
         public Account SenderAccount { get; set; }
         public Account ReceiverAccount { get; set; }
         public User SenderUser { get; set; }

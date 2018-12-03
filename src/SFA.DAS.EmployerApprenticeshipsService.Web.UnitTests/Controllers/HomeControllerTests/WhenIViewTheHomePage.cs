@@ -4,16 +4,18 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Infrastructure.Authentication;
-using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Web.Authentication;
 using SFA.DAS.EAS.Web.Controllers;
 using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using ClaimIdentifierConfiguration = SFA.DAS.EAS.Domain.Configuration.ClaimIdentifierConfiguration;
+using IdentityServerConfiguration = SFA.DAS.EAS.Domain.Configuration.IdentityServerConfiguration;
 using SignInUserViewModel = SFA.DAS.EAS.Web.ViewModels.SignInUserViewModel;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
@@ -44,9 +46,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
                 {
                     Data = new UserAccountsViewModel
                     {
-                        Accounts = new Accounts<Account>
+                        Accounts = new Accounts<Domain.Models.Account.Account>
                         {
-                            AccountList = new List<Account> {new Account()}
+                            AccountList = new List<Domain.Models.Account.Account> {new Domain.Models.Account.Account()}
                         }
                     }
                 });
@@ -189,9 +191,9 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers.HomeControllerTests
                 {
                     Data = new UserAccountsViewModel
                     {
-                        Accounts = new Accounts<Account>
+                        Accounts = new Accounts<Domain.Models.Account.Account>
                         {
-                            AccountList = new List<Account> { new Account(), new Account() }
+                            AccountList = new List<Domain.Models.Account.Account> { new Domain.Models.Account.Account(), new Domain.Models.Account.Account() }
                         }
                     }
                 });

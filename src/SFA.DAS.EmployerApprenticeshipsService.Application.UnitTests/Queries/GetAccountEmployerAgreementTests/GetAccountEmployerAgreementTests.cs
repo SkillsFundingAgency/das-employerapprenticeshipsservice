@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
@@ -218,7 +218,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
                 .ReturnsAsync(ValidationResult);
 
             var queryHandler = new GetAccountEmployerAgreementsQueryHandler(
-                EmployerAgreementBuilder.EmployerAccountDbContext, 
+                new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext), 
                 EmployerAgreementBuilder.HashingService,
                 Validator, ConfigurationProvider);
 

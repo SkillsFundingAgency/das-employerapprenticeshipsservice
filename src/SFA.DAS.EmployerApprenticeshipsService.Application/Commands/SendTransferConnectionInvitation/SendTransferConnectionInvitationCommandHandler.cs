@@ -2,8 +2,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Infrastructure.Interfaces;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
 {
@@ -34,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendTransferConnectionInvitation
             var receiverAccountId = _publicHashingService.DecodeValue(message.ReceiverAccountPublicHashedId);
             var senderAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
             var receiverAccount = await _employerAccountRepository.GetAccountById(receiverAccountId);
-            var senderUser = await _userRepository.GetUserById(message.UserId.Value);
+            var senderUser = await _userRepository.GetUserByRef(message.UserRef.Value);
             var senderAccountTransferAllowance = await _transferAllowanceService.GetTransferAllowance(message.AccountId.Value);
             var transferConnectionInvitation = senderAccount.SendTransferConnectionInvitation(receiverAccount, senderUser, senderAccountTransferAllowance.RemainingTransferAllowance ?? 0);
 

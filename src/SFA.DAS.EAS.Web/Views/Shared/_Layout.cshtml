@@ -1,18 +1,28 @@
-﻿
-@using Microsoft.ApplicationInsights.Extensibility
-@using SFA.DAS.EAS.Domain.Models.Features
+﻿@using Microsoft.ApplicationInsights.Extensibility
+@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EAS.Web
 @using SFA.DAS.EAS.Web.Extensions
-@using SFA.DAS.EAS.Web.Models
 @using SFA.DAS.EAS.Web.ViewModels
-@using StringExtensions = SFA.DAS.EAS.Web.Extensions.StringExtensions
-
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
 <!--[if gt IE 8]><!-->
 <html lang="en">
 <!--<![endif]-->
 <head>
+
+    <!-- Google Tag Manager -->
+    <script>
+    (function (w, d, s, l, i) {
+        w[l] = w[l] || []; w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        }); var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage apprentices</title>
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDesc))
@@ -48,18 +58,9 @@
     <!--<![endif]-->
 
     @Html.Partial("GoogleAnalyticsInfo")
-    
+
     <!-- This is from individual pages -->
     @RenderSection("gaDataLayer", required: false)
-
-    <!-- Google Tag Manager -->
-    <script>
-    (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-	@Html.Raw(GoogleAnalyticsModel.Instance.GoogleHeaderUrl);f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-KWQBWGJ');</script>
-    <!-- End Google Tag Manager -->
 
     <script type="text/javascript">
         var appInsights = window.appInsights || function (config) {
@@ -78,7 +79,7 @@
 
     <!-- Google Tag Manager (noscript) -->
     <noscript>
-        <iframe src="@Html.Raw(GoogleAnalyticsModel.Instance.GoogleBodyUrl)"
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
@@ -132,7 +133,7 @@
                 <div class="js-float">
                     <p class="floating-head-text">Your employer account </p>
                     <nav id="user-nav">
-                        <ul role="menubar">
+                        <ul>
                             <li><a href="@Url.Action("Help", "Home")">Help</a></li>
                             @if (HttpContext.Current.User.Identity.IsAuthenticated)
                             {
@@ -146,16 +147,16 @@
                                         }
                                         <li><a href="@UserLinksViewModel.ChangePasswordLink" class="sub-menu-item">Change your password</a></li>
                                         <li><a href="@UserLinksViewModel.ChangeEmailLink" class="sub-menu-item">Change your email address</a></li>
-				        @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
-				        {
-					    <li><a href="@Url.Action("NotificationSettings", "Settings")" class="sub-menu-item">Notification settings</a></li>
-				        }
+                                        @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
+                                        {
+                                            <li><a href="@Url.Action("NotificationSettings", "Settings")" class="sub-menu-item">Notification settings</a></li>
+                                        }
                                     </ul>
                                 </li>
                                 <li><a href="@Url.Action("SignOut", "Home")" role="menuitem">Sign out</a></li>
                             }
                             else
-            if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
+if (HttpContext.Current.User.Identity.IsAuthenticated || Model?.GetType().GetProperty("HideHeaderSignInLink") == null)
 
                             {
                                 {
@@ -169,7 +170,7 @@
             </div>
         </div> <!--/floating-menu-holder-->
     }
-  
+
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
@@ -177,14 +178,14 @@
         {
             <div class="header-organisation" role="navigation">
                 <nav class="header-inner">
-                    <ul role="menubar" id="global-nav-links">
+                    <ul id="global-nav-links">
                         <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
                         @if (Html.IsAuthorized(FeatureType.Recruitments))
                         {
-                            <li><a href="@Url.RecruitmentsAction()" role="menuitem">Recruitment</a></li>
+                            <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
                         }
-                        <li><a href="@Url.CommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
+                        <li><a href="@Url.EmployerCommitmentsAction("apprentices/home")" class="@(controllerString == "EmployerCommitments" ? "selected" : "")" role="menuitem">Apprentices</a></li>
                         <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="@(ViewBag.Section == "team" ? "selected" : "")" role="menuitem">Your team</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAgreement")" class="@(ViewBag.Section == "organisations" ? "selected" : "")" role="menuitem">Your organisations and agreements</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAccountPaye")" class="@(ViewBag.Section == "paye" ? "selected" : "")" role="menuitem">PAYE schemes</a></li>

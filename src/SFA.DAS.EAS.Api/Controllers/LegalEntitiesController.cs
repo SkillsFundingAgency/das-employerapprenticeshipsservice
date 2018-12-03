@@ -4,6 +4,7 @@ using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
+using SFA.DAS.Validation.WebApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {

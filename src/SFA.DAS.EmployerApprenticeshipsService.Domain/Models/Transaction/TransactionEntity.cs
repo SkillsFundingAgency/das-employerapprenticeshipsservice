@@ -1,7 +1,6 @@
-﻿using SFA.DAS.EAS.Domain.Models.Transaction;
-using System;
+﻿using System;
 
-namespace SFA.DAS.EAS.Domain.Data.Entities.Transaction
+namespace SFA.DAS.EAS.Domain.Models.Transaction
 {
     public class TransactionEntity
     {

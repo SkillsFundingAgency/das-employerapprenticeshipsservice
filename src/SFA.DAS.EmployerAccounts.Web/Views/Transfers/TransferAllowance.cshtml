@@ -1,0 +1,20 @@
+﻿@using System.Globalization
+
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.TransferAllowanceViewModel
+
+@{
+    var culture = new CultureInfo("en-GB");
+}
+
+<div class="grid-row">
+    <div class="column-full">
+        <div class="data-wrap">
+            <div class="data">
+                <dl class="transfer-funds">
+                    <dt>Remaining transfer allowance</dt>
+                    <dd>@Model.RemainingTransferAllowance.ToString("C0", culture)</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>

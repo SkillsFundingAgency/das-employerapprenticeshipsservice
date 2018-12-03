@@ -4,10 +4,11 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Http;
+using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Models.Employer;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Http;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.CompaniesHouseEmployerVerificationServiceTests
 {

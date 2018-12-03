@@ -1,7 +1,10 @@
-﻿using MediatR;
+﻿using System;
+using System.Data.Entity;
+using System.Threading.Tasks;
+using MediatR;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Models.Features;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 using SFA.DAS.EAS.Infrastructure.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -13,19 +16,19 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
 {
     public class GetTransferConnectionInvitationAuthorizationQueryHandler : IAsyncRequestHandler<GetTransferConnectionInvitationAuthorizationQuery, GetTransferConnectionInvitationAuthorizationResponse>
     {
-        private readonly EmployerAccountDbContext _accountDb;
-        private readonly EmployerFinancialDbContext _financialDb;
+        private readonly Lazy<EmployerAccountsDbContext> _accountDb;
+        private readonly EmployerFinanceDbContext _financeDb;
         private readonly LevyDeclarationProviderConfiguration _configuration;
         private readonly IAuthorizationService _authorizationService;
 
         public GetTransferConnectionInvitationAuthorizationQueryHandler(
-            EmployerAccountDbContext accountDb,
-            EmployerFinancialDbContext financialDb,
+            Lazy<EmployerAccountsDbContext> accountDb,
+            EmployerFinanceDbContext financeDb,
             LevyDeclarationProviderConfiguration configuration,
             IAuthorizationService authorizationService)
         {
             _accountDb = accountDb;
-            _financialDb = financialDb;
+            _financeDb = financeDb;
             _configuration = configuration;
             _authorizationService = authorizationService;
         }
@@ -33,9 +36,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
         public async Task<GetTransferConnectionInvitationAuthorizationResponse> Handle(GetTransferConnectionInvitationAuthorizationQuery message)
         {
             var authorizationResult = await _authorizationService.GetAuthorizationResultAsync(FeatureType.TransferConnectionRequests);
-            var transferAllowance = await _financialDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
+            var transferAllowance = await _financeDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
 
-            var isReceiver = await _accountDb.TransferConnectionInvitations.AnyAsync(i =>
+            var isReceiver = await _accountDb.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.ReceiverAccount.Id == message.AccountId && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));

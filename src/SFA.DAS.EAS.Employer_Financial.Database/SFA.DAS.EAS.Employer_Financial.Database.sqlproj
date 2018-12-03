@@ -144,16 +144,36 @@
     <None Include="Scripts\Manual\CreateNonTransferPayments.sql" />
     <None Include="Scripts\Manual\CreateTransferLevy.sql" />
     <None Include="Scripts\Manual\CreateTransferPayments.sql" />
+    <Build Include="Tables\ClientOutboxData.sql" />
+    <Build Include="Tables\OutboxData.sql" />
+    <Build Include="StoredProcedures\UpdateTransactionLineDateCreatedToTransactionDate_BySubmissionId.sql" />
+    <Build Include="Types\SubmissionIds.sql" />
+    <Build Include="Types\SubmissionIdsDate.sql" />
+    <Build Include="StoredProcedures\UpdateTransactionLinesDateCreated_BySubmissionId.sql" />
     <None Include="Scripts\Manual\GetPaymentTotals.sql" />
     <None Include="Scripts\PreDeployment\AML-2643-DeleteDuplicateTransactionLines.sql" />
     <None Include="Scripts\PreDeployment\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql" />
+    <Build Include="Tables\HealthChecks.sql" />
+    <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
+    <Build Include="StoredProcedures\GetProviderName.sql" />
+    <Build Include="StoredProcedures\DeleteSubmissions_ByEmpRef.sql" />
+    <Build Include="StoredProcedures\GetEffectivePeriod12Declaration.sql" />
+    <None Include="Scripts\Manual\GetAccountTransactionTotalsByMonth.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
     <None Include="Scripts\Manual\AML-2408-UpdateIncorrectLevyAdjustmentEntries.sql" />
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
+    <None Include="Scripts\PreDeployment\AML-2505-PopulateNullProviderNames.sql" />
+    <None Include="Scripts\PreDeployment\AML-2873_TransferPaymentDate.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PreDeployment\AML-2671-PopulateNullApprenticeshipCourseNames.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scripts\PreDeployment\AML-2395-DropDeprecatedView.sql" />
   </ItemGroup>
 </Project>

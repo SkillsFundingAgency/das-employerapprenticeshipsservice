@@ -31,12 +31,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="HMRC.ESFA.Levy.Api.Types, Version=1.0.43.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HMRC.ESFA.Levy.Api.Types.1.0.43\lib\net452\HMRC.ESFA.Levy.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.2.0.4\lib\net45\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Data.Edm, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Edm.5.8.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
@@ -55,10 +60,12 @@
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.ServiceBus.3.3.2\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
+      <HintPath>..\packages\WindowsAzure.ServiceBus.4.1.0\lib\net45-full\Microsoft.ServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.2.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
@@ -66,23 +73,47 @@
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=8.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\WindowsAzure.Storage.8.7.0\lib\net45\Microsoft.WindowsAzure.Storage.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\packages\NLog.4.5.0\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Azure.Transports.WindowsAzureServiceBus, Version=8.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Azure.Transports.WindowsAzureServiceBus.8.0.0\lib\net452\NServiceBus.Azure.Transports.WindowsAzureServiceBus.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Core, Version=7.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.7.0.1\lib\net452\NServiceBus.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Heartbeat, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Heartbeat.3.0.0\lib\net452\NServiceBus.Heartbeat.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Metrics, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Metrics.3.0.0\lib\net452\NServiceBus.Metrics.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Metrics.ServiceControl, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Metrics.ServiceControl.3.0.1\lib\net452\NServiceBus.Metrics.ServiceControl.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Newtonsoft.Json, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Newtonsoft.Json.2.1.0\lib\net452\NServiceBus.Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.NLog, Version=3.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.NLog.3.0.0\lib\net452\NServiceBus.NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.ObjectBuilder.StructureMap, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.StructureMap.7.0.0\lib\net452\NServiceBus.ObjectBuilder.StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="NServiceBus.Persistence.Sql, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9fc386479f8a226c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NServiceBus.Persistence.Sql.4.1.1\lib\net452\NServiceBus.Persistence.Sql.dll</HintPath>
     </Reference>
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Audit.Client, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Audit.Types, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.151.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.151\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
@@ -107,7 +138,6 @@
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Client, Version=1.20.0.26497, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Client.1.20.0.26497\lib\net45\SFA.DAS.Events.Api.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Events.Api.Types, Version=2.0.0.36524, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Events.Api.Types.2.0.0.36524\lib\net45\SFA.DAS.Events.Api.Types.dll</HintPath>
@@ -124,16 +154,17 @@
     <Reference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.AzureServiceBus.StructureMap.3.0.0.63765\lib\net45\SFA.DAS.Messaging.AzureServiceBus.StructureMap.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.1.5\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.0.0.56651, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.0.0.56651\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Client, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Client.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Client.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Notifications.Api.Types, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    </Reference>
+    <Reference Include="SFA.DAS.NServiceBus, Version=2.0.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.2.0.12\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Provider.Events.Api.Client, Version=2.1.30.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Provider.Events.Api.Client.2.1.30\lib\net45\SFA.DAS.Provider.Events.Api.Client.dll</HintPath>
@@ -147,43 +178,73 @@
     <Reference Include="SFA.DAS.ReferenceData.Types, Version=1.1.32.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.ReferenceData.Api.Client.1.1.32\lib\net45\SFA.DAS.ReferenceData.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.8.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.8.12\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.0.0.26382, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.0.0.26382\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
+      <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.SqlClient, Version=4.2.0.2, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Data.SqlClient.4.4.3\lib\net461\System.Data.SqlClient.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Spatial, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.8.2\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="WebApi.StructureMap, Version=1.0.21.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebApi.StructureMap.1.0.21\lib\net462\WebApi.StructureMap.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
@@ -193,7 +254,9 @@
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
     <Compile Include="Configuration\WebJobConfig.cs" />
-    <Compile Include="Extensions\UserExtension.cs" />
+    <Compile Include="Interfaces\DateRange.cs" />
+    <Compile Include="Interfaces\IHmrcDateService.cs" />
+    <Compile Include="Models\Account\AccountHistory.cs" />
     <Compile Include="Models\Account\AccountLegalEntity.cs" />
     <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
     <Compile Include="Models\Account\AccountSpecificLegalEntity.cs" />
@@ -207,23 +270,11 @@
     <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\Repositories\ITransferRepository.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
-    <Compile Include="Http\InternalServerErrorException.cs" />
-    <Compile Include="Http\RequestTimeOutException.cs" />
-    <Compile Include="Interfaces\IAgreementService.cs" />
     <Compile Include="Interfaces\IApprenticeshipInfoServiceWrapper.cs" />
-    <Compile Include="Interfaces\IAzureAdAuthenticationService.cs" />
-    <Compile Include="Interfaces\ICallerContextProvider.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
-    <Compile Include="Http\HttpException.cs" />
-    <Compile Include="Http\ResourceNotFoundException.cs" />
-    <Compile Include="Http\ServiceUnavailableException.cs" />
-    <Compile Include="Http\TooManyRequestsException.cs" />
     <Compile Include="Interfaces\IExcelService.cs" />
-    <Compile Include="Interfaces\IHmrcDateService.cs" />
-    <Compile Include="Interfaces\IHttpResponseLogger.cs" />
-    <Compile Include="Interfaces\IInProcessCache.cs" />
     <Compile Include="Interfaces\IPdfService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
@@ -244,16 +295,6 @@
     <Compile Include="Models\ApprenticeshipProvider\Provider.cs" />
     <Compile Include="Models\ApprenticeshipProvider\Providers.cs" />
     <Compile Include="Models\ApprenticeshipProvider\ProvidersView.cs" />
-    <Compile Include="Models\Authorization\AccountContext.cs" />
-    <Compile Include="Models\Authorization\CallerContext.cs" />
-    <Compile Include="Models\Authorization\IAccountContext.cs" />
-    <Compile Include="Models\Authorization\IAuthorizationContext.cs" />
-    <Compile Include="Models\Authorization\ICallerContext.cs" />
-    <Compile Include="Models\Authorization\IMembershipContext.cs" />
-    <Compile Include="Models\Authorization\IUserContext.cs" />
-    <Compile Include="Models\Authorization\AuthorizationContext.cs" />
-    <Compile Include="Models\Authorization\MembershipContext.cs" />
-    <Compile Include="Models\Authorization\UserContext.cs" />
     <Compile Include="Models\Commitment\Commitment.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementStatus.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />
@@ -261,8 +302,6 @@
     <Compile Include="Models\EmployerAgreement\RemoveEmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Entity.cs" />
-    <Compile Include="Models\Features\FeatureType.cs" />
-    <Compile Include="Models\IEntity.cs" />
     <Compile Include="Models\Organisation\AccountLegalEntityModel.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
@@ -307,14 +346,11 @@
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
     <Compile Include="Interfaces\IAddressLookupService.cs" />
     <Compile Include="Interfaces\IAuditService.cs" />
-    <Compile Include="Interfaces\IDistributedCache.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
-    <Compile Include="Interfaces\IDasAccountService.cs" />
     <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
-    <Compile Include="Http\IHttpClientWrapper.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Models\AccountTeam\Invitation.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
@@ -329,11 +365,8 @@
     <Compile Include="Models\Transaction\TransactionItemType.cs" />
     <Compile Include="Models\AccountTeam\Membership.cs" />
     <Compile Include="Models\AccountTeam\MembershipView.cs" />
-    <Compile Include="Interfaces\IPaymentService.cs" />
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
-    <Compile Include="Models\Features\Feature.cs" />
-    <Compile Include="Models\Features\FeaturesConfiguration.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
     <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
@@ -365,7 +398,6 @@
     <Compile Include="Models\Transfers\AccountTransferDetails.cs" />
     <Compile Include="Models\Transfers\TransferAllowance.cs" />
     <Compile Include="Models\Transfers\TransferTransactionLine.cs" />
-    <Compile Include="Models\UserProfile\Role.cs" />
     <Compile Include="Models\UserProfile\User.cs" />
     <Compile Include="Models\UserProfile\UserAccountSetting.cs" />
     <Compile Include="Models\UserProfile\Users.cs" />
@@ -381,19 +413,27 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
       <Project>{0e46510c-0d06-4b63-8e17-b9037db7c7ed}</Project>
       <Name>SFA.DAS.EmployerAccounts.Events</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
+      <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
+      <Project>{c15dec5c-666d-4cb2-968e-a273eb60d15e}</Project>
+      <Name>SFA.DAS.EmployerFinance.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
+      <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
+      <Name>SFA.DAS</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\Statistics\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

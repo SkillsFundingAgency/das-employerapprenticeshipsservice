@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.EAS.Account.Api.Types.Events.Agreement;
-using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Application.Factories
 {

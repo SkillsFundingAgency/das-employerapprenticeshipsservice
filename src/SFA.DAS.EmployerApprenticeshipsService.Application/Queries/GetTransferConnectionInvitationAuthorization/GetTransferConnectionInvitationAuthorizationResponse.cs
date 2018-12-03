@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Infrastructure.Authorization;
+﻿using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Infrastructure.Authorization;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthorization
 {

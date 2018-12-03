@@ -4,39 +4,36 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Authorization;
-using SFA.DAS.EAS.Domain.Models.Features;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.EntityFramework;
 using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EAS.Infrastructure.Authorization
 {
 	public class AuthorizationService : IAuthorizationService
     {
-        private readonly EmployerAccountDbContext _db;
         private readonly IAuthorizationContextCache _authorizationContextCache;
         private readonly IEnumerable<IAuthorizationHandler> _handlers;
         private readonly ICallerContextProvider _callerContextProvider;
         private readonly IConfigurationProvider _configurationProvider;
         private readonly IFeatureService _featureService;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
         public AuthorizationService(
-            EmployerAccountDbContext db,
             IAuthorizationContextCache authorizationContextCache,
             IEnumerable<IAuthorizationHandler> handlers,
             ICallerContextProvider callerContextProvider,
             IConfigurationProvider configurationProvider,
-            IFeatureService featureService)
+            IFeatureService featureService,
+            Lazy<EmployerAccountsDbContext> db)
         {
-            _db = db;
             _authorizationContextCache = authorizationContextCache;
             _handlers = handlers;
             _callerContextProvider = callerContextProvider;
             _configurationProvider = configurationProvider;
             _featureService = featureService;
+            _db = db;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
@@ -55,18 +52,18 @@ namespace SFA.DAS.EAS.Infrastructure.Authorization
 
             var callerContext = _callerContextProvider.GetCallerContext();
 
-            var accountContextQuery = callerContext.AccountId == null ? null : _db.Accounts
+            var accountContextQuery = callerContext.AccountId == null ? null : _db.Value.Accounts
                 .Where(a => a.Id == callerContext.AccountId.Value)
                 .ProjectTo<AccountContext>(_configurationProvider)
                 .Future();
 
-            var userContextQuery = callerContext.UserExternalId == null ? null : _db.Users
-                .Where(u => u.ExternalId == callerContext.UserExternalId.Value)
+            var userContextQuery = callerContext.UserRef == null ? null : _db.Value.Users
+                .Where(u => u.Ref == callerContext.UserRef.Value)
                 .ProjectTo<UserContext>(_configurationProvider)
                 .Future();
 
-            var membershipContextQuery = callerContext.AccountId == null || callerContext.UserExternalId == null ? null : _db.Memberships
-                .Where(m => m.Account.Id == callerContext.AccountId.Value && m.User.ExternalId == callerContext.UserExternalId.Value)
+            var membershipContextQuery = callerContext.AccountId == null || callerContext.UserRef == null ? null : _db.Value.Memberships
+                .Where(m => m.Account.Id == callerContext.AccountId.Value && m.User.Ref == callerContext.UserRef.Value)
                 .ProjectTo<MembershipContext>(_configurationProvider)
                 .Future();
 

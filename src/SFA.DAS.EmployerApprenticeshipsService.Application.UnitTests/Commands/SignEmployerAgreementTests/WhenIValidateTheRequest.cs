@@ -2,10 +2,8 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 using SFA.DAS.EAS.Application.Commands.SignEmployerAgreement;
 using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 

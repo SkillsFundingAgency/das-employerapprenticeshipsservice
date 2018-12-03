@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.Validation;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.Queries.GetPostcodeAddress
 {

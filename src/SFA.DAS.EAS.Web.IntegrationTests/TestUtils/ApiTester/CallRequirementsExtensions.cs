@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
-using SFA.DAS.EAS.Application.Exceptions;
+using SFA.DAS.Validation;
 using ValidationException = FluentValidation.ValidationException;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester

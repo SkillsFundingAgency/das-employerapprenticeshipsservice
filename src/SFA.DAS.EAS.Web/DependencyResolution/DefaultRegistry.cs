@@ -1,10 +1,10 @@
-using System.Web;
+using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.CookieService;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EAS.Web.Controllers;
 using StructureMap;
-using StructureMap.Pipeline;
+using System.Web;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -16,12 +16,14 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             {
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
+                s.With(new ControllerConvention());
             });
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
+            For<ICallerContextProvider>().Use<CallerContextProvider>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-            ForConcreteType<TransfersController>().Configure.SetLifecycleTo<UniquePerRequestLifecycle>();
         }
     }
 }

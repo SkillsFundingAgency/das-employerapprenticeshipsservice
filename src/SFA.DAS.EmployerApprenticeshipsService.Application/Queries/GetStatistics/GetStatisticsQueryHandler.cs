@@ -5,28 +5,29 @@ using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EntityFramework;
 using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
 
 namespace SFA.DAS.EAS.Application.Queries.GetStatistics
 {
     public class GetStatisticsQueryHandler : IAsyncRequestHandler<GetStatisticsQuery, GetStatisticsResponse>
     {
-        private readonly EmployerAccountDbContext _accountDb;
-        private readonly EmployerFinancialDbContext _financialDb;
+        private readonly Lazy<EmployerAccountsDbContext> _accountDb;
+        private readonly EmployerFinanceDbContext _financeDb;
 
-        public GetStatisticsQueryHandler(EmployerAccountDbContext accountDb, EmployerFinancialDbContext financialDb)
+        public GetStatisticsQueryHandler(Lazy<EmployerAccountsDbContext> accountDb, EmployerFinanceDbContext financeDb)
         {
             _accountDb = accountDb;
-            _financialDb = financialDb;
+            _financeDb = financeDb;
         }
 
         public async Task<GetStatisticsResponse> Handle(GetStatisticsQuery message)
         {
-            var accountsQuery = _accountDb.Accounts.FutureCount();
-            var legalEntitiesQuery = _accountDb.LegalEntities.FutureCount();
-            var payeSchemesQuery = _accountDb.Payees.FutureCount();
-            var agreementsQuery = _accountDb.Agreements.Where(a => a.StatusId == EmployerAgreementStatus.Signed).FutureCount();
-            var paymentsQuery = _financialDb.Payments.FutureCount();
+            var accountsQuery = _accountDb.Value.Accounts.FutureCount();
+            var legalEntitiesQuery = _accountDb.Value.LegalEntities.FutureCount();
+            var payeSchemesQuery = _accountDb.Value.Payees.FutureCount();
+            var agreementsQuery = _accountDb.Value.Agreements.Where(a => a.StatusId == EmployerAgreementStatus.Signed).FutureCount();
+            var paymentsQuery = _financeDb.Payments.FutureCount();
 
             var statistics = new StatisticsViewModel
             {

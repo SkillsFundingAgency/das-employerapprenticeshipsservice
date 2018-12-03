@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Domain.Models.AccountTeam
@@ -9,7 +10,7 @@ namespace SFA.DAS.EAS.Domain.Models.AccountTeam
         public virtual long AccountId { get; set; }
         public virtual User User { get; set; }
         public virtual long UserId { get; set; }
-
+        public virtual DateTime CreatedDate { get; set; }
         public virtual Role Role
         {
             get => _role ?? (Role)_roleId.Value;

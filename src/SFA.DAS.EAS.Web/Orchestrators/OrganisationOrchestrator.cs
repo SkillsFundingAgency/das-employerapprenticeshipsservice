@@ -1,33 +1,33 @@
-﻿using System;
+﻿using AutoMapper;
+using MediatR;
+using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
+using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
+using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
+using SFA.DAS.EAS.Application.Extensions;
+using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
+using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
+using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
+using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
+using SFA.DAS.EAS.Application.Queries.GetTeamUser;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.EAS.Web.Validation;
+using SFA.DAS.EAS.Web.ViewModels;
+using SFA.DAS.EAS.Web.ViewModels.Organisation;
+using SFA.DAS.Hashing;
+using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using AutoMapper;
-using MediatR;
-using SFA.DAS.EAS.Application.Commands.CreateLegalEntity;
-using SFA.DAS.EAS.Application.Commands.CreateOrganisationAddress;
-using SFA.DAS.EAS.Application.Queries.GetEmployerInformation;
-using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
-using SFA.DAS.EAS.Application.Queries.GetTeamUser;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Web.Helpers;
-using SFA.DAS.EAS.Web.ViewModels;
-using SFA.DAS.EAS.Web.ViewModels.Organisation;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Application.Commands.UpdateOrganisationDetails;
-using SFA.DAS.EAS.Application.Exceptions;
-using SFA.DAS.EAS.Application.Extensions;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy;
-using SFA.DAS.EAS.Application.Queries.GetOrganisationById;
-using SFA.DAS.EAS.Infrastructure.Extensions;
-using SFA.DAS.EAS.Infrastructure.Hashing;
-using SFA.DAS.EAS.Web.Validation;
 
 namespace SFA.DAS.EAS.Web.Orchestrators
 {
@@ -46,9 +46,9 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public OrganisationOrchestrator(
-            IMediator mediator, 
-            ILog logger, 
-            IMapper mapper, 
+            IMediator mediator,
+            ILog logger,
+            IMapper mapper,
             ICookieStorageService<EmployerAccountData> cookieService,
             IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
             : base(mediator)
@@ -60,10 +60,10 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             _accountLegalEntityHashingService = accountLegalEntityHashingService;
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(
-            CreateNewLegalEntityViewModel request)
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntityViewModel request)
         {
-            var createLegalEntityResponse = await _mediator.SendAsync(new CreateLegalEntityCommand
+
+            var result = await _mediator.SendAsync(new CreateLegalEntityCommand
             {
                 HashedAccountId = request.HashedAccountId,
                 Code = request.Code,
@@ -81,14 +81,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             {
                 Data = new EmployerAgreementViewModel
                 {
-                    EmployerAgreement = createLegalEntityResponse.AgreementView
+                    EmployerAgreement = result.AgreementView
                 },
                 Status = HttpStatusCode.OK
             };
+
         }
 
-        public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(
-            string hashedAccountId)
+        public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -101,8 +101,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(
-            OrganisationDetailsViewModel request)
+        public virtual async Task<OrchestratorResponse<OrganisationDetailsViewModel>> ValidateLegalEntityName(OrganisationDetailsViewModel request)
         {
             var response = new OrchestratorResponse<OrganisationDetailsViewModel>
             {
@@ -134,8 +133,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return response;
         }
 
-        public virtual OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(
-            AddOrganisationAddressViewModel viewModel)
+        public virtual OrchestratorResponse<OrganisationDetailsViewModel> AddOrganisationAddress(AddOrganisationAddressViewModel viewModel)
         {
             try
             {
@@ -187,7 +185,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
         public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
         {
-            _cookieService.Create(data,CookieName, 365);
+            _cookieService.Create(data, CookieName, 365);
         }
 
         public virtual async Task<OrchestratorResponse<SelectOrganisationAddressViewModel>> GetAddressesFromPostcode(
@@ -208,7 +206,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             try
             {
-                var addresses = await _mediator.SendAsync(new GetPostcodeAddressRequest {Postcode = request.Postcode});
+                var addresses = await _mediator.SendAsync(new GetPostcodeAddressRequest { Postcode = request.Postcode });
 
                 viewModel.Addresses = addresses?.Addresses?.Select(x => _mapper.Map<AddressViewModel>(x)).ToList();
 
@@ -270,14 +268,14 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var accountLegalEntitiesHelper = new AccountLegalEntitiesHelper(_mediator);
             var accountEntities = await accountLegalEntitiesHelper.GetAccountLegalEntities(hashedLegalEntityId, userIdClaim);
 
-            if(accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountEntities, null, legalEntityCode, organisationType))
+            if (accountLegalEntitiesHelper.IsLegalEntityAlreadyAddedToAccount(accountEntities, null, legalEntityCode, organisationType))
             {
                 var conflictResponse = new OrchestratorResponse<OrganisationDetailsViewModel>
                 {
                     Data = new OrganisationDetailsViewModel(),
                     Status = HttpStatusCode.Conflict
                 };
-                
+
                 return conflictResponse;
             }
 
@@ -331,16 +329,16 @@ namespace SFA.DAS.EAS.Web.Orchestrators
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
-            string organisationName, 
-            string userId, 
-            string hashedAccountId, 
+            string organisationName,
+            string userId,
+            string hashedAccountId,
             string hashedAgreementId)
         {
             var showWizard = await UserShownWizard(userId, hashedAccountId);
 
             return new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
             {
-                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard, HashedAgreementId = hashedAgreementId}
+                Data = new OrganisationAddedNextStepsViewModel { OrganisationName = organisationName, ShowWizard = showWizard, HashedAgreementId = hashedAgreementId }
             };
         }
 
@@ -395,7 +393,8 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
         }
 
-        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(string accountLegalEntityPublicHashedId, string organisationName, string organisationAddress)
+        public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(
+            string accountLegalEntityPublicHashedId, string organisationName, string organisationAddress, string hashedAccountId, string userId)
         {
             var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
             {
@@ -404,11 +403,13 @@ namespace SFA.DAS.EAS.Web.Orchestrators
 
             try
             {
-                var request = new UpdateOrganisationDetailsRequest
+                var request = new UpdateOrganisationDetailsCommand
                 {
                     AccountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(accountLegalEntityPublicHashedId),
                     Name = organisationName,
-                    Address = organisationAddress
+                    Address = organisationAddress,
+                    HashedAccountId = hashedAccountId,
+                    UserId = userId
                 };
 
                 await _mediator.SendAsync(request);

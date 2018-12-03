@@ -1,6 +1,4 @@
-﻿SET NOCOUNT ON;
-
-IF EXISTS(SELECT	1 
+﻿IF EXISTS(SELECT	1 
 			FROM	INFORMATION_SCHEMA.COLUMNS
 		    WHERE	TABLE_SCHEMA = 'employer_account' AND
 					TABLE_NAME = 'EmployerAgreement' AND
@@ -97,6 +95,3 @@ BEGIN
 
 	END CATCH;
 END;
-
-GO
-

@@ -1,0 +1,101 @@
+﻿@using System.Globalization
+@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
+
+@model OrchestratorResponse<FinanceDashboardViewModel>
+
+@{
+    ViewBag.PageID = "page-finance";
+    ViewBag.Section = "finance";
+    ViewBag.Title = "Finance";
+    ViewBag.GaData.Vpv = "/accounts/finance";
+
+    var culture = new CultureInfo("en-GB");
+    var now = DateTime.UtcNow.ToGmtStandardTime();
+}
+
+<div class="grid-row">
+    <div class="column-full">
+        <h1 class="heading-xlarge">
+            Finance
+        </h1>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-full">
+        <div class="data-wrap">
+            <div class="data">
+                <dl class="transfer-funds">
+                    <dt>
+                        Current funds
+                    </dt>
+                    @{
+                        var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+                        var balanceClass = string.Empty;
+
+                        if (balance.Length > 8)
+                        {
+                            balanceClass = "long";
+                        }
+                        if (balance.Length > 10)
+                        {
+                            balanceClass = "longer";
+                        }
+                    }
+                    <dd class="@balanceClass">@balance</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="grid-row">
+    <div class="column-half">
+        <h2 class="heading-medium">
+            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId, year = now.Year, month = now.Month })">
+                View transactions
+            </a>
+        </h2>
+        <p>View payments made into and out of your apprenticeship service account. </p>
+    </div>
+    <div class="column-half">
+        <h2 class="heading-medium">
+            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId })">
+                Download transactions
+            </a>
+        </h2>
+        <p>Download your financial transactions within a specific date range. </p>
+    </div>
+    @if (Html.IsAuthorized(FeatureType.Projections))
+    {
+        <div class="column-half">
+            <h2 class="heading-medium">
+                <a title="Funding projection" href="@Url.EmployerProjectionsAction("forecasting/projections")">
+                    Funding projection
+                </a>
+            </h2>
+            <p>View funding projection to plan your future spending. </p>
+        </div>
+    }
+    <div class="column-half">
+        <h2 class="heading-medium">
+            <a title="Manage transfers" href="@Url.EmployerAccountsAction("transfers")">
+                Transfers
+            </a>
+        </h2>
+        <p>Connect with other employers and send or receive transfer funds. </p>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            
+            <li><a href="@Url.EmployerAccountsAction("teams")">Home</a></li>
+            <li>@ViewBag.Title</li>
+        </ol>
+    </div>
+}
+
+@section pageSpecificJS {
+    <script language="javascript" type="text/javascript" src="~/bundles/modernizr"></script>
+}

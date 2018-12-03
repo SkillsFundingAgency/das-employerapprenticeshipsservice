@@ -4,8 +4,8 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using IdentityModel.Client;
+using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Authentication;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Authentication
@@ -74,13 +74,13 @@ namespace SFA.DAS.EAS.Web.Authentication
 
                 if (claim.Item1.Equals(DasClaimTypes.RequiresVerification))
                 {
-                    var requiresValidationClaim =
-                        identity.Claims.FirstOrDefault(c => c.Type == DasClaimTypes.RequiresVerification);
+                    var requiresValidationClaim = identity.Claims.FirstOrDefault(c => c.Type == DasClaimTypes.RequiresVerification);
 
                     if (requiresValidationClaim != null)
                     {
                         identity.RemoveClaim(requiresValidationClaim);
                     }
+
                     identity.AddClaim(new Claim(DasClaimTypes.RequiresVerification, claim.Item2));
                 }
             }
