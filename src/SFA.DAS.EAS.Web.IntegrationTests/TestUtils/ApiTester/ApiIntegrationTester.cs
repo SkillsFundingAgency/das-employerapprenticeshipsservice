@@ -259,16 +259,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private EmployerAccountsDbBuilder GetInstanceOfEmployerAccountsDbBuilderWithTransaction(IContainer container)
         {
-            var _ = container.GetInstance<EmployerAccountsDbBuilder>();
-            EmployerAccountsDbBuilderExtension.EnsureTransaction(_);
-            return _;
+            var employerAccountsDbBuilder = container.GetInstance<EmployerAccountsDbBuilder>();
+            employerAccountsDbBuilder.EnsureTransaction();
+            return employerAccountsDbBuilder;
         }
 
         private EmployerFinanceDbBuilder GetInstanceOfEmployerFinanceDbBuilderWithTransaction(IContainer container)
         {
-            var _ = container.GetInstance<EmployerFinanceDbBuilder>();
-            _.EnsureTransaction();
-            return _;
+            var employerFinanceDbBuilder = container.GetInstance<EmployerFinanceDbBuilder>();
+            employerFinanceDbBuilder.EnsureTransaction();
+            return employerFinanceDbBuilder;
         }
 
         public EmployerAccountsDbBuilder GetInstanceOfEmployerAccountsDbBuilderWithTransaction()

@@ -6,16 +6,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.Extensions
 {
     internal static class EmployerAccountsDbBuilderExtension
     {
-        internal static EmployerAccountsDbBuilder EnsureTransaction(this EmployerAccountsDbBuilder builder)
-        {
-            if (!builder.HasTransaction())
-            {
-                builder.EnsureTransaction();
-            }
-
-            return builder;
-        }
-
         public static EmployerAccountInput BuildEmployerAccountInput(this EmployerAccountsDbBuilder dbBuilder, string accountName, string payeReference)
         {
             return new EmployerAccountInput

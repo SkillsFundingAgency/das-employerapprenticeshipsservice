@@ -30,6 +30,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return this;
         }
 
+        public EmployerFinanceDbBuilder EnsureTransaction()
+        {
+            if (_dbContext.Database.CurrentTransaction == null)
+                _dbContext.Database.BeginTransaction();
+
+            return this;
+        }
+
         public EmployerFinanceDbBuilder CommitTransaction()
         {
             if (_dbContext.Database.CurrentTransaction == null) return this;

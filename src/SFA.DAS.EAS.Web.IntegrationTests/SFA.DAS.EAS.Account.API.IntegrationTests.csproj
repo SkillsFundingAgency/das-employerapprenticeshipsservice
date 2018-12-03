@@ -206,7 +206,6 @@
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
-    <Compile Include="Extensions\EmployerFinanceDbBuilderExtension.cs" />
     <Compile Include="Extensions\EmployerAccountsDbBuilderExtension.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
