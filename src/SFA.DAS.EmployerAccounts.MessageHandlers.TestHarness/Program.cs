@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness
 
                 await startup.StartAsync();
 
-                var scenario = container.GetInstance<PublishUserRolesUpdatedEvents>();
+                var scenario = container.GetInstance<PublishUserRolesUpdatedAndDeletedEvents>();
 
                 try
                 {

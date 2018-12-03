@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
     internal class UpdateUserRolesCommandHandlerTests : FluentTest<WhenItsAnExistingUserFixture>
     {
         [Test]
-        public Task Handle_WhenItsANewUser_ThenShouldAddNewDocumentToRepository()
+        public Task Handle_WhenItsANewUser_ThenShouldAddNewDocumentToRepositoryWithANonEmptyId()
         {
             return TestAsync(f => f.Handler.Handle(f.Command, CancellationToken.None),
                 f => f.UserRolesRepository.Verify(x => x.Add(It.Is<UserRoles>(p =>
@@ -26,7 +26,8 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                         p.UserRef == f.UserRef &&
                         p.UserId == f.UserId &&
                         p.Roles.Equals(f.NewRoles) &&
-                        p.Created == f.Updated
+                        p.Created == f.Updated && 
+                        p.Id != Guid.Empty
                     ), null,
                     It.IsAny<CancellationToken>())));
         }

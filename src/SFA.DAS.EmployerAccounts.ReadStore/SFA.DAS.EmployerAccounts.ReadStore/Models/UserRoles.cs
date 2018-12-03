@@ -42,6 +42,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             Roles = roles;
             Created = created;
             AddMessageToOutbox(messageId, created);
+            Id = Guid.NewGuid();
         }
 
         [JsonConstructor]

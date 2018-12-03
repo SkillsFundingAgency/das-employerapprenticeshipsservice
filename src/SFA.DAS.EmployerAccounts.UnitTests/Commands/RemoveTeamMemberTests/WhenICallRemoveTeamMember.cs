@@ -9,6 +9,7 @@ using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.NServiceBus;
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             _validator = new Mock<IValidator<RemoveTeamMemberCommand>>();
 
             _validator.Setup(x => x.Validate(It.IsAny<RemoveTeamMemberCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string>()});
-
+            
             _mediator = new Mock<IMediator>();
             _membershipRepository = new Mock<IMembershipRepository>();
 
@@ -80,7 +81,18 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
 
             _membershipRepository.Verify(x => x.Remove(_command.UserId, ExpectedAccountId), Times.Once);
         }
-        
+
+        [Test]
+        public async Task WillPublishUserRoleRemovedEvent()
+        {
+            await _handler.Handle(_command);
+
+            _publisher.Verify(x => x.Publish(It.Is<UserRolesRemovedEvent>(
+                    p => p.AccountId == _teamMember.AccountId &&
+                         p.UserId == _teamMember.UserId))
+                , Times.Once);
+        }
+
         [Test]
         public void IfMembershipNotFoundThenMembershipIsNotRemoved()
         {

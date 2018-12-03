@@ -7,20 +7,20 @@ using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
 {
-    public class PublishUserRolesUpdatedEvents
+    public class PublishUserRolesUpdatedAndDeletedEvents
     {
         private readonly IMessageSession _messageSession;
 
-        public PublishUserRolesUpdatedEvents(IMessageSession messageSession)
+        public PublishUserRolesUpdatedAndDeletedEvents(IMessageSession messageSession)
         {
             _messageSession = messageSession;
         }
 
         public async Task Run()
         {
-            Guid userRef = Guid.NewGuid(); // Guid.Parse("3FCDF9A5-695B-4B16-A710-CBA708E2AA30");
+            Guid userRef = Guid.Parse("D543F6C7-87BF-42AD-B30A-2B27B9796B3F");
             long accountId = 2134;
-            long userId = 876876;
+            long userId = 5765876;
             var roles = new HashSet<UserRole> {UserRole.Viewer};
 
             var newUserEvent = new UserRolesUpdatedEvent(accountId, userRef, userId, roles, DateTime.Now) ;
@@ -30,6 +30,12 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
             var updateUserEvent = new UserRolesUpdatedEvent(accountId, userRef, userId, roles, DateTime.Now);
 
             await _messageSession.Publish(updateUserEvent);
+
+            var removeUserEvent = new UserRolesRemovedEvent(accountId, userId, DateTime.Now);
+
+            await _messageSession.Publish(removeUserEvent);
+
+
         }
     }
 }
