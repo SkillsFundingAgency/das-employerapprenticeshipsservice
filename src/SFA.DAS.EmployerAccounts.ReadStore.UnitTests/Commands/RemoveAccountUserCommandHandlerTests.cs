@@ -53,17 +53,12 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         }
 
         [Test]
-        public Task Handle_WhenDeleteCommandArrivesOutOfOrderAfterALaterUpdateCommand_ThenSwallowMessageWithoutAction()
+        public Task Handle_WhenDeleteCommandArrivesOutOfOrderAfterALaterUpdateCommand_ThenThrowException()
         {
-            return TestAsync(
+            return TestExceptionAsync(
                 f => f.AddMatchingRecentlyUpdatedUserWithViewerRole(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
-                        p.Removed == null &&
-                        p.Roles.Any() &&
-                        p.OutboxData.Count(o => o.MessageId == f.MessageId) == 1
-                    ), null,
-                    It.IsAny<CancellationToken>())));
+                (f,r) => r.ShouldThrow<InvalidOperationException>());
         }
 
         [Test]

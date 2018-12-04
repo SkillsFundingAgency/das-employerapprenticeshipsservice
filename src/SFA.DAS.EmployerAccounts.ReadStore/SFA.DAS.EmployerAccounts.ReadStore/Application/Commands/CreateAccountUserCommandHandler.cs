@@ -21,13 +21,12 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
 
             if (user == null)
             {
-                user = new AccountUser(request.UserRef, request.AccountId, request.Roles, request.MessageId,
-                    request.Created);
+                user = new AccountUser(request.UserRef, request.AccountId, request.Roles, request.Created, request.MessageId);
                 await _accountUsersRepository.Add(user, null, cancellationToken);
             }
             else
             {
-                user.UpdateRoles(request.Roles, request.Created, request.MessageId);
+                user.Reinvoke(request.Roles, request.Created, request.MessageId);
                 await _accountUsersRepository.Update(user, null, cancellationToken);
             }
 

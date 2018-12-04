@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
-        public AccountUser(Guid userRef, long accountId, HashSet<UserRole> roles, string messageId, DateTime created) : base(1, "userRoles")
+        public AccountUser(Guid userRef, long accountId, HashSet<UserRole> roles, DateTime created, string messageId) : base(1, "userRoles")
         {
             UserRef = userRef;
             AccountId = accountId;
@@ -47,14 +47,34 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
         }
 
+        public void Reinvoke(HashSet<UserRole> roles, DateTime recreated, string messageId)
+        {
+            ProcessMessage(messageId, recreated,
+                () =>
+                {
+                    EnsureUserHasBeenRemoved();
+
+                    Roles = roles;
+                    Created = recreated;
+                    Updated = null;
+                    Removed = null;
+                }
+            );
+        }
+
+
         public void UpdateRoles(HashSet<UserRole> roles, DateTime updated, string messageId)
         {
             ProcessMessage(messageId, updated,
                 () =>
                 {
-                    Roles = roles;
-                    Updated = updated;
-                    Removed = null;
+                    EnsureUserHasNotBeenRemoved();
+
+                    if (IsMessageChronological(updated))
+                    {
+                        Roles = roles;
+                        Updated = updated;
+                    }
                 }
             );
         }
@@ -65,6 +85,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                 () =>
                 {
                     EnsureUserHasNotBeenRemoved();
+                    EnsureUserHasNotBeenCreatedOrUpdatedAfterRemoveAction(deleted);
 
                     Roles = new List<UserRole>();
                     Removed = deleted;
@@ -77,18 +98,13 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             if (MessageAlreadyProcessed(messageId))
                 return;
 
-            AddMessageToOutbox(messageId, messageCreated);
-            if (!IsMessageChronological(messageCreated))
-            {
-                return;
-            }
             action();
+            AddMessageToOutbox(messageId, messageCreated);
         }
 
         private bool IsMessageChronological(DateTime messageDateTime)
         {
-            return messageDateTime > Created && (Updated == null || messageDateTime > Updated.Value) && 
-                   (Removed == null || messageDateTime > Removed.Value);
+            return messageDateTime > Created && (Updated == null || messageDateTime > Updated.Value);
 
         }
 
@@ -103,11 +119,27 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             _outboxData.Add(new OutboxMessage(messageId, created));
         }
 
+        private void EnsureUserHasBeenRemoved()
+        {
+            if (Removed == null)
+            {
+                throw new InvalidOperationException("User has not been removed");
+            }
+        }
+
         private void EnsureUserHasNotBeenRemoved()
         {
             if (Removed != null)
             {
                 throw new InvalidOperationException("User has already been removed");
+            }
+        }
+
+        private void EnsureUserHasNotBeenCreatedOrUpdatedAfterRemoveAction(DateTime removed)
+        {
+            if (!IsMessageChronological(removed))
+            {
+                throw new InvalidOperationException("User has been reinvoked or updated after remove request");
             }
         }
     }
