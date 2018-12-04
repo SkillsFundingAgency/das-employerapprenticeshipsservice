@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
         private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
-        private readonly IHashingService _publicHashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
         private readonly IAgreementService _agreementService;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             ILegalEntityEventFactory legalEntityEventFactory,
             IEventPublisher eventPublisher,
             IHashingService hashingService,
-            IPublicHashingService publicHashingService,
+            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
             IAgreementService agreementService,
             IEmployerAgreementRepository employerAgreementRepository, 
             IValidator<CreateLegalEntityCommand> validator)
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
             _legalEntityEventFactory = legalEntityEventFactory;
             _eventPublisher = eventPublisher;
             _hashingService = hashingService;
-            _publicHashingService = publicHashingService;
+            _accountLegalEntityHashingService = accountLegalEntityHashingService;
             _agreementService = agreementService;
             _employerAgreementRepository = employerAgreementRepository;
             _validator = validator;
@@ -106,7 +106,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateLegalEntity
 
             await EvaluateEmployerLegalEntityAgreementStatus(owner.AccountId, agreementView.LegalEntityId);
 
-            agreementView.AccountLegalEntityPublicHashedId = _publicHashingService.HashValue(agreementView.AccountLegalEntityId);
+            agreementView.AccountLegalEntityPublicHashedId = _accountLegalEntityHashingService.HashValue(agreementView.AccountLegalEntityId);
 
             await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId,
                 agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, ownerExternalUserId);
