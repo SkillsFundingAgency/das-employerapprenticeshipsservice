@@ -18,32 +18,32 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public DbBuilderDependentRepositories DependentRepositories { get; }
 
-        public bool HasTransaction()
-        {
+        //public bool HasTransaction()
+        //{
             
-            return (_dbContext.Database.CurrentTransaction != null);
-        }
+        //    return (_dbContext.Database.CurrentTransaction != null);
+        //}
 
-        public EmployerFinanceDbBuilder BeginTransaction()
-        {
-            _dbContext.Database.BeginTransaction();
-            return this;
-        }
+        //public EmployerFinanceDbBuilder BeginTransaction()
+        //{
+        //    _dbContext.Database.BeginTransaction();
+        //    return this;
+        //}
 
-        public EmployerFinanceDbBuilder EnsureTransaction()
-        {
-            if (_dbContext.Database.CurrentTransaction == null)
-                _dbContext.Database.BeginTransaction();
+        //public EmployerFinanceDbBuilder EnsureTransaction()
+        //{
+        //    if (!HasTransaction())
+        //        _dbContext.Database.BeginTransaction();
 
-            return this;
-        }
+        //    return this;
+        //}
 
-        public EmployerFinanceDbBuilder CommitTransaction()
-        {
-            if (_dbContext.Database.CurrentTransaction == null) return this;
+        //public EmployerFinanceDbBuilder CommitTransaction()
+        //{
+        //    if (_dbContext.Database.CurrentTransaction == null) return this;
 
-            _dbContext.Database.CurrentTransaction.Commit();
-            return this;
-        }
+        //    _dbContext.Database.CurrentTransaction.Commit();
+        //    return this;
+        //}
     }
 }
