@@ -7,17 +7,17 @@ using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
 {
-    public class UserRolesRemovedEventHandler : IHandleMessages<UserRolesRemovedEvent>
+    public class AccountUserRolesUpdatedEventHandler : IHandleMessages<AccountUserRolesUpdatedEvent>
     {
         private readonly IReadStoreMediator _mediator;
 
-        public UserRolesRemovedEventHandler(IReadStoreMediator mediator)
+        public AccountUserRolesUpdatedEventHandler(IReadStoreMediator mediator)
         {
             _mediator = mediator;
         }
-        public async Task Handle(UserRolesRemovedEvent message, IMessageHandlerContext context)
+        public async Task Handle(AccountUserRolesUpdatedEvent message, IMessageHandlerContext context)
         {
-            await _mediator.Send(new RemoveAccountUserCommand(message.AccountId, message.UserRef, context.MessageId, message.Created));
+            await _mediator.Send(new UpdateAccountUserCommand(message.AccountId, message.UserRef, message.Roles, context.MessageId, message.Created));
         }
     }
 }

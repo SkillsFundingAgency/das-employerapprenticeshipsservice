@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -9,54 +8,51 @@ using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
-using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 {
     [TestFixture]
     [Parallelizable]
-    internal class UserRolesUpdatedEventHandlerTests : FluentTest<UserRolesUpdatedEventHandlerTestsFixture>
+    internal class AccountUserRemovedEventHandlerTests : FluentTest<UserRolesRemovedEventHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_WhenHandlingEvent_ThenShouldSendUpdateAccountUserCommand()
+        public Task Handle_WhenHandlingEvent_ThenShouldSendRemoveAccountUserCommand()
         {
             return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
-                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<UpdateAccountUserCommand>(p =>
+                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<RemoveAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
                         p.AccountId == f.AccountId &&
-                        p.Updated == f.Created &&
+                        p.Removed == f.Created &&
                         p.MessageId == f.MessageId
                     ),
                     It.IsAny<CancellationToken>())));
         }
     }
 
-    internal class UserRolesUpdatedEventHandlerTestsFixture
+    internal class UserRolesRemovedEventHandlerTestsFixture
     {
         public string MessageId = "messageId";
-        public UserRolesUpdatedEvent Message;
+        public AccountUserRolesRemovedEvent Message;
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
-        public long UserId = 877664;
 
-        public HashSet<UserRole> Roles = new HashSet<UserRole>();
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
         public Mock<IReadStoreMediator> ReadStoreMediator;
-        public UserRolesUpdatedEventHandler Handler;
+        public AccountUserRemovedEventHandler Handler;
 
-        public UserRolesUpdatedEventHandlerTestsFixture()
+        public UserRolesRemovedEventHandlerTestsFixture()
         {
             ReadStoreMediator = new Mock<IReadStoreMediator>();
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
-            Message = new UserRolesUpdatedEvent(AccountId, UserRef, Roles, Created);
+            Message = new AccountUserRolesRemovedEvent(AccountId, UserRef, Created);
 
-            Handler = new UserRolesUpdatedEventHandler(ReadStoreMediator.Object);
+            Handler = new AccountUserRemovedEventHandler(ReadStoreMediator.Object);
         }
     }
 }

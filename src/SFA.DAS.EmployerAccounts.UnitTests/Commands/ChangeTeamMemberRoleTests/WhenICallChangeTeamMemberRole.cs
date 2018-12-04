@@ -189,7 +189,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             await _handler.Handle(_command);
 
-            _eventPublisher.Verify(x => x.Publish(It.Is<UserRolesUpdatedEvent>(
+            _eventPublisher.Verify(x => x.Publish(It.Is<AccountUserRolesUpdatedEvent>(
                 p => p.AccountId  == _userMembership.AccountId &&
                      p.UserRef.ToString() == _userMembership.UserRef &&
                      p.Roles.Contains((UserRole)_command.RoleId)))

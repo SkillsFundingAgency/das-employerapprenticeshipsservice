@@ -22,15 +22,15 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
             long accountId = 2134;
             var roles = new HashSet<UserRole> {UserRole.Viewer};
 
-            var newUserEvent = new UserRolesUpdatedEvent(accountId, userRef, roles, DateTime.Now) ;
+            var newUserEvent = new AccountUserRolesUpdatedEvent(accountId, userRef, roles, DateTime.Now) ;
 
             await _messageSession.Publish(newUserEvent);
 
-            var updateUserEvent = new UserRolesUpdatedEvent(accountId, userRef, roles, DateTime.Now);
+            var updateUserEvent = new AccountUserRolesUpdatedEvent(accountId, userRef, roles, DateTime.Now);
 
             await _messageSession.Publish(updateUserEvent);
 
-            var removeUserEvent = new UserRolesRemovedEvent(accountId, userRef, DateTime.Now);
+            var removeUserEvent = new AccountUserRolesRemovedEvent(accountId, userRef, DateTime.Now);
 
             await _messageSession.Publish(removeUserEvent);
 

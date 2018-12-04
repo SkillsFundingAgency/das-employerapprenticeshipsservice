@@ -5,12 +5,12 @@ using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class UserRolesUpdatedEvent : Event
+    public class AccountUserRolesUpdatedEvent : Event
     {
         public long AccountId { get; }
         public Guid UserRef { get; }
         public HashSet<UserRole> Roles { get; }
-        public UserRolesUpdatedEvent(long accountId, Guid userRef, HashSet<UserRole> roles, DateTime created)
+        public AccountUserRolesUpdatedEvent(long accountId, Guid userRef, HashSet<UserRole> roles, DateTime created)
         {
             AccountId = accountId;
             UserRef = userRef;
