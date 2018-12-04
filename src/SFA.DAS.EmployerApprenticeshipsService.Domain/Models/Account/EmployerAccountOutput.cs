@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos
+﻿namespace SFA.DAS.EAS.Domain.Models.Account
 {
     public class EmployerAccountOutput
     {

@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
                 SenderAccountName = SenderAccountName,
                 ReceiverAccountId = ReceiverAccountId,
                 ReceiverAccountName = ReceiverAccountName,
-                CommitmentId = 1245,
+                ApprenticeshipId = 1245,
                 Amount = 1200
             };
 
@@ -119,7 +119,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
 
             //Assert
             _transferRepository.Verify(x => x.CreateAccountTransfers(It.Is<IEnumerable<AccountTransfer>>(t =>
-                t.All(at => at.CommitmentId.Equals(_accountTransfer.CommitmentId) &&
+                t.All(at => at.ApprenticeshipId.Equals(_accountTransfer.ApprenticeshipId) &&
                             at.SenderAccountId.Equals(_accountTransfer.SenderAccountId) &&
                             at.SenderAccountName.Equals(_accountTransfer.SenderAccountName) &&
                             at.ReceiverAccountId.Equals(_accountTransfer.ReceiverAccountId) &&
@@ -248,7 +248,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             foreach (var transfer in _transfers)
             {
                 _transferRepository.Verify(x => x.GetTransferPaymentDetails(It.Is<AccountTransfer>(t =>
-                                t.CommitmentId.Equals(_accountTransfer.CommitmentId) &&
+                                t.ApprenticeshipId.Equals(_accountTransfer.ApprenticeshipId) &&
                                 t.SenderAccountId.Equals(_accountTransfer.SenderAccountId) &&
                                 t.SenderAccountName.Equals(_accountTransfer.SenderAccountName) &&
                                 t.ReceiverAccountId.Equals(_accountTransfer.ReceiverAccountId) &&
@@ -331,7 +331,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
                 PeriodEnd = _accountTransfer.PeriodEnd,
                 SenderAccountId = _accountTransfer.SenderAccountId,
                 ReceiverAccountId = _accountTransfer.ReceiverAccountId,
-                CommitmentId = _accountTransfer.CommitmentId + 1
+                ApprenticeshipId = _accountTransfer.ApprenticeshipId + 1
             });
 
 
