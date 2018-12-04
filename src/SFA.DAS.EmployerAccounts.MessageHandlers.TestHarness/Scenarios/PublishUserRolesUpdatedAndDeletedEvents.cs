@@ -20,18 +20,17 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
         {
             Guid userRef = Guid.Parse("D543F6C7-87BF-42AD-B30A-2B27B9796B3F");
             long accountId = 2134;
-            long userId = 5765876;
             var roles = new HashSet<UserRole> {UserRole.Viewer};
 
-            var newUserEvent = new UserRolesUpdatedEvent(accountId, userRef, userId, roles, DateTime.Now) ;
+            var newUserEvent = new UserRolesUpdatedEvent(accountId, userRef, roles, DateTime.Now) ;
 
             await _messageSession.Publish(newUserEvent);
 
-            var updateUserEvent = new UserRolesUpdatedEvent(accountId, userRef, userId, roles, DateTime.Now);
+            var updateUserEvent = new UserRolesUpdatedEvent(accountId, userRef, roles, DateTime.Now);
 
             await _messageSession.Publish(updateUserEvent);
 
-            var removeUserEvent = new UserRolesRemovedEvent(accountId, userId, DateTime.Now);
+            var removeUserEvent = new UserRolesRemovedEvent(accountId, userRef, DateTime.Now);
 
             await _messageSession.Publish(removeUserEvent);
 

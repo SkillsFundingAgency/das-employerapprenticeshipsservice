@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
                 f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<UpdateAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.UserId == f.UserId &&
                         p.AccountId == f.AccountId &&
                         p.Updated == f.Created &&
                         p.MessageId == f.MessageId
@@ -55,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
-            Message = new UserRolesUpdatedEvent(AccountId, UserRef, UserId, Roles, Created);
+            Message = new UserRolesUpdatedEvent(AccountId, UserRef, Roles, Created);
 
             Handler = new UserRolesUpdatedEventHandler(ReadStoreMediator.Object);
         }

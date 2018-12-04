@@ -11,9 +11,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonProperty("userRef")]
         public Guid UserRef { get; protected set; }
 
-        [JsonProperty("userId")]
-        public long UserId { get; protected set; }
-
         [JsonProperty("accountId")]
         public long AccountId { get; protected set; }
 
@@ -35,10 +32,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
-        public AccountUser(Guid userRef, long userId, long accountId, HashSet<UserRole> roles, string messageId, DateTime created) : base(1, "userRoles")
+        public AccountUser(Guid userRef, long accountId, HashSet<UserRole> roles, string messageId, DateTime created) : base(1, "userRoles")
         {
             UserRef = userRef;
-            UserId = userId;
             AccountId = accountId;
             Roles = roles;
             Created = created;
@@ -51,13 +47,11 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
         }
 
-        public void UpdateRoles(long userId, HashSet<UserRole> roles, DateTime updated, string messageId)
+        public void UpdateRoles(HashSet<UserRole> roles, DateTime updated, string messageId)
         {
             ProcessMessage(messageId, updated,
                 () =>
                 {
-                    if (UserId != userId)
-                        throw new InvalidOperationException("UserId does not match");
                     Roles = roles;
                     Updated = updated;
                     Removed = null;

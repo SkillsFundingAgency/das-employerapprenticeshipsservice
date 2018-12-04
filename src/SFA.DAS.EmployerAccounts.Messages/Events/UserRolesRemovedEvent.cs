@@ -6,11 +6,11 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
     public class UserRolesRemovedEvent : Event
     {
         public long AccountId { get; }
-        public long UserId { get; }
-        public UserRolesRemovedEvent(long accountId, long userId, DateTime created)
+        public Guid UserRef { get; }
+        public UserRolesRemovedEvent(long accountId, Guid userRef, DateTime created)
         {
             AccountId = accountId;
-            UserId = userId;
+            UserRef = userRef;
             Created = created;
         }
     }

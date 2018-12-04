@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
         }
         public async Task Handle(UserRolesRemovedEvent message, IMessageHandlerContext context)
         {
-            await _mediator.Send(new RemoveAccountUserCommand(message.AccountId, message.UserId, context.MessageId, message.Created));
+            await _mediator.Send(new RemoveAccountUserCommand(message.AccountId, message.UserRef, context.MessageId, message.Created));
         }
     }
 }

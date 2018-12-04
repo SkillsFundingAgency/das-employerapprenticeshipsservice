@@ -7,27 +7,27 @@ using SFA.DAS.EmployerAccounts.ReadStore.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
 {
-    internal class UpdateAccountUserCommandHandler : IReadStoreRequestHandler<UpdateAccountUserCommand, Unit>
+    internal class CreateAccountUserCommandHandler : IReadStoreRequestHandler<CreateAccountUserCommand, Unit>
     {
         private readonly IAccountUsersRepository _accountUsersRepository;
 
-        public UpdateAccountUserCommandHandler(IAccountUsersRepository accountUsersRepository)
+        public CreateAccountUserCommandHandler(IAccountUsersRepository accountUsersRepository)
         {
             _accountUsersRepository = accountUsersRepository;
         }
-        public async Task<Unit> Handle(UpdateAccountUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateAccountUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _accountUsersRepository.CreateQuery().SingleOrDefaultAsync(x => x.UserRef == request.UserRef && x.AccountId == request.AccountId, cancellationToken);
 
             if (user == null)
             {
                 user = new AccountUser(request.UserRef, request.AccountId, request.Roles, request.MessageId,
-                    request.Updated);
+                    request.Created);
                 await _accountUsersRepository.Add(user, null, cancellationToken);
             }
             else
             {
-                user.UpdateRoles(request.Roles, request.Updated, request.MessageId);
+                user.UpdateRoles(request.Roles, request.Created, request.MessageId);
                 await _accountUsersRepository.Update(user, null, cancellationToken);
             }
 

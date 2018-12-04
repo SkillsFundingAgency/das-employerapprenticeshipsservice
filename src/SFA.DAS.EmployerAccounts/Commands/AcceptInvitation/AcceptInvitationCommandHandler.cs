@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.TimeProvider;
@@ -71,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
 
 
 
-            await PublishUserJoinedMessage(invitation.AccountId, user);
+            await PublishUserJoinedMessage(invitation.AccountId, user, invitation);
         }
 
         private async Task CheckIfUserIsAlreadyAMember(Invitation invitation, User user)
@@ -121,13 +122,15 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
             });
         }
 
-        private Task PublishUserJoinedMessage(long accountId, User user)
+        private Task PublishUserJoinedMessage(long accountId, User user, Invitation existing)
         {
             return _eventPublisher.Publish(new UserJoinedEvent
             {
                 AccountId = accountId,
                 UserName = user.FullName,
                 UserRef = user.Ref,
+                UserId = user.Id,
+                Roles = new HashSet<UserRole> {(UserRole)existing.RoleId},
                 Created = DateTime.UtcNow
             });
         }

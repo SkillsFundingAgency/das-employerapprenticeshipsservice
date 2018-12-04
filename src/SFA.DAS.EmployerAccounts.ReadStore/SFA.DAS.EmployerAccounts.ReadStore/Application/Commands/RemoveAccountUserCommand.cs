@@ -6,14 +6,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
     internal class RemoveAccountUserCommand : IReadStoreRequest<Unit>
     {
         public long AccountId { get; }
-        public long UserId { get; }
+        public Guid UserRef { get; }
         public string MessageId { get; }
         public DateTime Removed { get; }
 
-        public RemoveAccountUserCommand(long accountId, long userId, string messageId, DateTime removed)
+        public RemoveAccountUserCommand(long accountId, Guid userRef, string messageId, DateTime removed)
         {
             AccountId = accountId;
-            UserId = userId;
+            UserRef = userRef;
             MessageId = messageId;
             Removed = removed;
         }

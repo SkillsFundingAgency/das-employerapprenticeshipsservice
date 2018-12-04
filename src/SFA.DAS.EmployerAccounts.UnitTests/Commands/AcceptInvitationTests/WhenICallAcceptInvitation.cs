@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.TimeProvider;
@@ -164,7 +165,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
         }
 
         [Test]
-        public async Task ThenTheUserFullNameShouldBeUsed()
+        public async Task ThenTheUserJoinedEventShouldContainUsersProperties()
         {
             //Assign
             var user = new User { FirstName = "Bill", LastName = "Green", UserRef = Guid.NewGuid().ToString() };
@@ -180,7 +181,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
 
             var message = _eventPublisher.Events.OfType<UserJoinedEvent>().Single();
 
+            message.UserRef.Should().Be(Guid.Parse(user.UserRef));
+            message.AccountId.Should().Be(_invitation.AccountId);
             message.UserName.Should().Be(user.FullName);
+            message.Roles.Count().Should().Be(1);
+            message.Roles.First().Should().Be((UserRole)_invitation.RoleId);
         }
     }
 }

@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                 f => f.UserRolesRepository.Verify(x => x.Add(It.Is<AccountUser>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.UserId == f.UserId &&
                         p.Roles.Equals(f.NewRoles) &&
                         p.Created == f.Updated && 
                         p.Id != Guid.Empty
@@ -50,7 +49,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                 f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.UserId == f.UserId &&
                         p.Roles.Equals(f.NewRoles) &&
                         p.Updated == f.Updated
                     ), null,
@@ -120,15 +118,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                     ), null,
                     It.IsAny<CancellationToken>())));
         }
-
-        [Test]
-        public Task Handle_WhenUserIdDoesNotMatchTheSelectedUserDocument_ThenShouldThrowException()
-        {
-            return TestExceptionAsync(
-                f => f.AddMatchingUserExceptForUserId(),
-                f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f, r) => r.ShouldThrow<InvalidOperationException>());
-        }
     }
 
     internal class WhenItsAnExistingUserFixture
@@ -154,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 
             Handler = new UpdateAccountUserCommandHandler(UserRolesRepository.Object);
 
-            Command = new UpdateAccountUserCommand(AccountId, UserRef, UserId, NewRoles, UpdateMessageId, Updated);
+            Command = new UpdateAccountUserCommand(AccountId, UserRef, NewRoles, UpdateMessageId, Updated);
         }
 
         public WhenItsAnExistingUserFixture AddMatchingUserWhichWasRemovedLaterThanNewMessage()
@@ -192,12 +181,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return this;
         }
 
-        public WhenItsAnExistingUserFixture AddMatchingUserExceptForUserId()
-        {
-            Users.Add(CreateBasicUser().Set(x => x.UserId, UserId + 1));
-            return this;
-        }
-
         public WhenItsAnExistingUserFixture AddMatchingUser()
         {
             Users.Add(CreateBasicUser());
@@ -208,7 +191,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return ObjectActivator.CreateInstance<AccountUser>()
                 .Set(x=>x.AccountId, AccountId)
-                .Set(x=>x.UserId, UserId)
                 .Set(x=>x.UserRef, UserRef);
         }
     }

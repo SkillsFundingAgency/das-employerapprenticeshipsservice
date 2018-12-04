@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
             return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
                 f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<RemoveAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
-                        p.UserId == f.UserId &&
+                        p.UserRef == f.UserRef &&
                         p.AccountId == f.AccountId &&
                         p.Removed == f.Created &&
                         p.MessageId == f.MessageId
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         public string MessageId = "messageId";
         public UserRolesRemovedEvent Message;
         public long AccountId = 333333;
-        public long UserId = 877664;
+        public Guid UserRef = Guid.NewGuid();
 
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
-            Message = new UserRolesRemovedEvent(AccountId, UserId, Created);
+            Message = new UserRolesRemovedEvent(AccountId, UserRef, Created);
 
             Handler = new UserRolesRemovedEventHandler(ReadStoreMediator.Object);
         }

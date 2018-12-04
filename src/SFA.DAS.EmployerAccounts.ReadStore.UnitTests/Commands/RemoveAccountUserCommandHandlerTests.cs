@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
     {
         public string MessageId = "messageId";
         public long AccountId = 333333;
-        public long UserId = 22323;
+        public Guid UserRef = Guid.NewGuid();
         public HashSet<UserRole> Roles = new HashSet<UserRole> { UserRole.Owner };
         public DateTime Removed = DateTime.Now.AddMinutes(-1);
         public List<AccountUser> Users;
@@ -98,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 
             Handler = new RemoveAccountUserCommandHandler(UserRoleRepository.Object);
 
-            Command = new RemoveAccountUserCommand(AccountId, UserId, MessageId, Removed);
+            Command = new RemoveAccountUserCommand(AccountId, UserRef, MessageId, Removed);
         }
 
         public RemoveUserRolesCommandHandlerTestsFixture AddMatchingNonRemovedUserWithOwnerRole()
@@ -130,8 +130,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return ObjectActivator.CreateInstance<AccountUser>()
                 .Set(x => x.AccountId, AccountId)
                 .Set(x => x.Created, Removed.AddDays(-10))
-                .Set(x => x.UserId, UserId)
-                .Set(x => x.UserRef, Guid.NewGuid());
+                .Set(x => x.UserRef, UserRef);
         }
     }
 }
