@@ -22,8 +22,8 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         private EmployerAccountsDbContext GetDbContext(IContext context)
         {
             var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
-            var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
-            var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
+            var clientSession = unitOfWorkContext.TryGet<IClientOutboxTransaction>();
+            var serverSession = unitOfWorkContext.TryGet<SynchronizedStorageSession>();
             var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();
 
             return new EmployerAccountsDbContext(sqlSession.Connection, sqlSession.Transaction);
