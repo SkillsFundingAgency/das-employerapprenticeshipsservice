@@ -38,17 +38,20 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
             const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
 
-            var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>();
-            testDbContext
-                .EnsureUserExists(new UserInput
-                {
-                    UserRef = userRef,
-                    Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
-                })
-                .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
-                .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
+            string hashedAccountId;
+            using (var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            {
+                testDbContext
+                    .EnsureUserExists(new UserInput
+                    {
+                        UserRef = userRef,
+                        Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
+                    })
+                    .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
+                    .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
 
-            var hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
+                hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
+            }
 
             var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users")
                 .ExpectControllerType(typeof(EmployerAccountsController))

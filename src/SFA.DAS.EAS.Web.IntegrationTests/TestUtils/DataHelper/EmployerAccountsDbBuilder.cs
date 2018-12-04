@@ -11,7 +11,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 {
-    class EmployerAccountsDbBuilder
+    class EmployerAccountsDbBuilder : IDisposable
     {
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
@@ -186,6 +186,18 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                 failMessage.AppendLine(
                     $"A DB task has been canceled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
             }
+        }
+
+        public void Dispose()
+        {
+            if (!HasTransaction()) return;
+
+            _dbContext.Database.CurrentTransaction.Commit();
+        }
+
+        public bool HasTransaction()
+        {
+            return (_dbContext.Database.CurrentTransaction != null);
         }
     }
 }
