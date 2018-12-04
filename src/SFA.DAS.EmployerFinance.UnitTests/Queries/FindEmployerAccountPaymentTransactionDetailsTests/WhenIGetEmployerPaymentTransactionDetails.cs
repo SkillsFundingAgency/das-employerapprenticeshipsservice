@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTr
             _dasLevyService = new Mock<IDasLevyService>();
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
                                             (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                           .ReturnsAsync(new List<PaymentTransactionLine>
+                           .ReturnsAsync(new []
                 {
                     new PaymentTransactionLine { ProviderName = ProviderName }
                 });
@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTr
             var transactionDate = DateTime.Now.AddDays(-2);
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
                                            (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                           .ReturnsAsync(new List<PaymentTransactionLine>
+                           .ReturnsAsync(new []
                {
                     new PaymentTransactionLine {TransactionDate = transactionDate}
                });
@@ -147,7 +147,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTr
             //Arrange
             _dasLevyService.Setup(x => x.GetAccountProviderPaymentsByDateRange<PaymentTransactionLine>
                     (It.IsAny<long>(), It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(new List<PaymentTransactionLine>());
+                .ReturnsAsync(new PaymentTransactionLine[0]);
 
             //Act
             Assert.ThrowsAsync<NotFoundException>(async () => await RequestHandler.Handle(Query));

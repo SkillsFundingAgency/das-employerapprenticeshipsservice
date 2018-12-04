@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string EmployerPortalBaseUrl { get; set; }
         public string EmployerProjectionsBaseUrl { get; set; }
         public string EmployerRecruitBaseUrl { get; set; }
+        public string ProviderRelationshipsBaseUrl { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }

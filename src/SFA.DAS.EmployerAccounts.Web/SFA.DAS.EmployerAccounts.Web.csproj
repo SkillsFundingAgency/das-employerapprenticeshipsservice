@@ -49,10 +49,10 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
     <PackageReference Include="BrockAllen.CookieTempData.dll" Version="1.3.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.4.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.4.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.8.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.8.1" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
-    <PackageReference Include="Microsoft.AspNet.TelemetryCorrelation" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNet.TelemetryCorrelation" Version="1.0.4" />
     <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.1" />
@@ -60,6 +60,7 @@
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
+    <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.3.0.44308" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
@@ -570,7 +571,7 @@
     <Content Include="src\sass\_tables.scss" />
     <Content Include="src\sass\_tabs.scss" />
     <Content Include="src\sass\_tasks.scss" />
-    <Content Include="src\sass\_typography.scss" />
+    <Content Include="src\sass\_type.scss" />
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />

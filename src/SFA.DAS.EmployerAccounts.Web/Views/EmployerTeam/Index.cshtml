@@ -33,11 +33,6 @@ else
 
 
         <div class="column-two-thirds">
-            <div class="info-summary info-summary-heading">
-                <h3 class="heading-medium">Apprentice records in 2017 to 2018</h3>
-                <p>It is critical that you complete and approve any apprentice records for the academic year ending 31 July 2018 before <span class="bold">18:00 on 18 October 2018</span>.</p>
-                <p>You will not be able to update apprentice details or make payments to your training providers for the 2017 to 2018 academic year after 18 October 2018.</p>
-            </div>
             <div class="grid-row">
                 <div class="column-half">
                     <h2 class="heading-medium">
@@ -52,10 +47,17 @@ else
                         <a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a>
                     </h2>
                     <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
+                    @if (Html.IsAuthorized(FeatureType.ProviderRelationships))
+                    {
+                        <h2 class="heading-medium">
+                            <a href="@Url.ProviderRelationshipsAction("providers")">Training provider permissions</a>
+                        </h2>
+                        <p>Set training provider permissions and control what tasks they can do on your behalf.</p>
+                    }
                 </div>
                 <div class="column-half">
                     <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerAccountTransactions")">Finance</a>
+                        <a href="@Url.EmployerFinanceAction("finance")">Finance</a>
                     </h2>
                     <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
                     <h2 class="heading-medium">
