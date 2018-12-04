@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
-        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             IValidator<CreateAccountCommand> validator,
             IHashingService hashingService,
             IPublicHashingService publicHashingService,
-            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
+            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             IGenericEventFactory genericEventFactory,
             IAccountEventFactory accountEventFactory,
             IRefreshEmployerLevyService refreshEmployerLevyService,
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
             _validator = validator;
             _hashingService = hashingService;
             _publicHashingService = publicHashingService;
-            _accountLegalEntityHashingService = accountLegalEntityHashingService;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _genericEventFactory = genericEventFactory;
             _accountEventFactory = accountEventFactory;
             _refreshEmployerLevyService = refreshEmployerLevyService;
@@ -136,7 +136,7 @@ namespace SFA.DAS.EAS.Application.Commands.CreateAccount
 
         private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string userName, Guid userRef)
         {
-            var accountLegalEntityPublicHashedId = _accountLegalEntityHashingService.HashValue(accountLegalEntityId);
+            var accountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(accountLegalEntityId);
 
             return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
