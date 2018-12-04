@@ -33,25 +33,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public DbBuilderDependentRepositories DependentRepositories { get; }
 
-        //public bool HasTransaction()
-        //{
-        //    return (_dbContext.Database.CurrentTransaction != null);
-        //}
-
-        //public EmployerAccountsDbBuilder EnsureTransaction()
-        //{
-        //    if(!HasTransaction())
-        //        _dbContext.Database.BeginTransaction();
-
-        //    return this;
-        //}
-
-        //public EmployerAccountsDbBuilder CommitTransaction()
-        //{
-        //    _dbContext.Database.CurrentTransaction.Commit();
-        //    return this;
-        //}
-
         public EmployerAccountsDbBuilder EnsureAccountExists(EmployerAccountInput input)
         {
             return EnsureAccountExists(input, CancellationToken.None);
