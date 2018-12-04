@@ -6,13 +6,13 @@ using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore
 {
-    public class CreatedAccountEventHandlerForReadStore : IHandleMessages<CreatedAccountEvent>
+    public class CreatedAccountEventHandler : IHandleMessages<CreatedAccountEvent>
     {
         private readonly IReadStoreMediator _mediator;
 
-        public CreatedAccountEventHandlerForReadStore(IReadStoreMediator mediator)
+        public CreatedAccountEventHandler(IReadStoreMediator mediator)
         {
             _mediator = mediator;
         }

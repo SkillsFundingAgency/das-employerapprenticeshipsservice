@@ -4,13 +4,13 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore
 {
-    public class UserJoinedEventHandlerForReadStore : IHandleMessages<UserJoinedEvent>
+    public class UserJoinedEventHandler : IHandleMessages<UserJoinedEvent>
     {
         private readonly IReadStoreMediator _mediator;
 
-        public UserJoinedEventHandlerForReadStore(IReadStoreMediator mediator)
+        public UserJoinedEventHandler(IReadStoreMediator mediator)
         {
             _mediator = mediator;
         }

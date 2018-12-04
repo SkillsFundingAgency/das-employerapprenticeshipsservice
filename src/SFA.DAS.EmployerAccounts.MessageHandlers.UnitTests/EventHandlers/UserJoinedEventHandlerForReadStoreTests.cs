@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
+using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
         public Mock<IReadStoreMediator> ReadStoreMediator;
-        public UserJoinedEventHandlerForReadStore Handler;
+        public UserJoinedEventHandler Handler;
 
         public UserJoinedEventHandlerForReadStoreTestsFixture()
         {
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
                 Roles = Roles,
                 Created = Created};
 
-            Handler = new UserJoinedEventHandlerForReadStore(ReadStoreMediator.Object);
+            Handler = new UserJoinedEventHandler(ReadStoreMediator.Object);
         }
     }
 }
