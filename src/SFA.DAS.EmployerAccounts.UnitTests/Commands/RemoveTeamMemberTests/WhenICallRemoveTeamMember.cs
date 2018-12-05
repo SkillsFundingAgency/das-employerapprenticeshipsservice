@@ -55,6 +55,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             _command = new RemoveTeamMemberCommand
             {
                 UserId = _teamMember.UserId,
+                UserRef = Guid.NewGuid(),
                 HashedAccountId = "123a",
                 ExternalUserId = Guid.NewGuid().ToString()
             };
@@ -89,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
 
             _publisher.Verify(x => x.Publish(It.Is<AccountUserRemovedEvent>(
                     p => p.AccountId == _teamMember.AccountId &&
-                         p.UserRef == Guid.Parse(_teamMember.User.UserRef)))
+                         p.UserRef == _command.UserRef))
                 , Times.Once);
         }
 

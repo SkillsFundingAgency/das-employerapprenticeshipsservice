@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
@@ -18,6 +19,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 {
     class WhenIRemoveATeamMember
     {
+        const string Email = "test@test.com";
+
         private Mock<IMediator> _mediator;
         private EmployerTeamOrchestrator _orchestrator;
 
@@ -33,20 +36,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 {
                     TeamMembers = new List<TeamMember>()
                 });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse
+            {
+                User = new User
+                {
+                    Email = Email,
+                    UserRef = Guid.NewGuid().ToString()
+                }
+            });
         }
 
         [Test]
         public async Task ThenIShouldGetASuccessMessage()
         {
-            //Assign
-            const string email = "test@test.com";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse
-            {
-                User = new User
-                {
-                    Email = email
-                }
-            });
+            //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).ReturnsAsync(Unit.Value);
 
             //Act
@@ -55,13 +59,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.AreEqual(HttpStatusCode.OK, result.Status);
             Assert.AreEqual("Team member removed", result.FlashMessage.Headline);
-            Assert.AreEqual($"You've removed <strong>{email}</strong>", result.FlashMessage.Message);
+            Assert.AreEqual($"You've removed <strong>{Email}</strong>", result.FlashMessage.Message);
         }
 
         [Test]
         public async Task ThenIShouldGetANotFoundErrorMessageIfNoUserCanBeFound()
         {
-            //Assign
+            //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse());
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).ReturnsAsync(Unit.Value);
 
@@ -75,8 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenIShouldGetAInvalidRequestErrorMessageIfExceptionIsThrow()
         {
-            //Assign
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse {User = new User()});
+            //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
@@ -89,8 +92,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenIShouldGetAUnauthorisedErrorMessageIfExceptionIsThrow()
         {
-            //Assign
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserQuery>())).ReturnsAsync(new GetUserResponse { User = new User() });
+            //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveTeamMemberCommand>())).Throws<UnauthorizedAccessException>();
 
             //Act
