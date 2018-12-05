@@ -205,6 +205,8 @@
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
+    <Compile Include="LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithKnownIds.cs" />
+    <Compile Include="LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithUnknownIds.cs" />
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
     <Compile Include="TestUtils\ApiTester\CallRequirements.cs" />
