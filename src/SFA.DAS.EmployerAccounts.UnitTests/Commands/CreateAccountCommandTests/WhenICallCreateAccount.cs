@@ -33,6 +33,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IValidator<CreateAccountCommand>> _validator;
         private Mock<IHashingService> _hashingService;
         private Mock<IPublicHashingService> _externalhashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityHashingService;
+
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IAccountEventFactory> _accountEventFactory;
         private Mock<IMembershipRepository> _mockMembershipRepository;
@@ -72,7 +74,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
 
             _externalhashingService = new Mock<IPublicHashingService>();
             _externalhashingService.Setup(x => x.HashValue(ExpectedAccountId)).Returns(ExpectedPublicHashString);
-            _externalhashingService.Setup(x => x.HashValue(ExpectedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+
+            _accountLegalEntityHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _accountLegalEntityHashingService.Setup(x => x.HashValue(ExpectedAccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _accountEventFactory = new Mock<IAccountEventFactory>();
@@ -89,6 +93,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                 _validator.Object,
                 _hashingService.Object,
                 _externalhashingService.Object,
+                _accountLegalEntityHashingService.Object,
                 _genericEventFactory.Object,
                 _accountEventFactory.Object,
                 _mockMembershipRepository.Object,
@@ -278,6 +283,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             var createdAccountEvent = _eventPublisher.Events.OfType<CreatedAccountEvent>().Single();
 
             createdAccountEvent.AccountId.Should().Be(ExpectedAccountId);
+            createdAccountEvent.HashedId.Should().Be(ExpectedHashString);
             createdAccountEvent.PublicHashedId.Should().Be(ExpectedPublicHashString);
             createdAccountEvent.Name.Should().Be(organisationName);
             createdAccountEvent.UserName.Should().Be(_user.FullName);

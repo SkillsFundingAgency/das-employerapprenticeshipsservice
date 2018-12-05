@@ -216,14 +216,14 @@
     <Reference Include="SFA.DAS.NLog.Targets.Redis, Version=1.0.0.47445, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NLog.Targets.Redis.1.0.0.47445\lib\net45\SFA.DAS.NLog.Targets.Redis.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.UnitOfWork, Version=4.0.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.UnitOfWork.4.0.9\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
+    <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.UnitOfWork.EntityFramework, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.UnitOfWork.EntityFramework.1.0.17\lib\net462\SFA.DAS.UnitOfWork.EntityFramework.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.UnitOfWork.SqlServer, Version=4.0.9.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.UnitOfWork.SqlServer.4.0.9\lib\netstandard2.0\SFA.DAS.UnitOfWork.SqlServer.dll</HintPath>
+    <Reference Include="SFA.DAS.UnitOfWork.SqlServer, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.UnitOfWork.SqlServer.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>

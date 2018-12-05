@@ -28,7 +28,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
         private readonly IMediator _mediator;
         private readonly IValidator<CreateAccountCommand> _validator;
         private readonly IHashingService _hashingService;
-        private readonly IHashingService _publicHashingService;
+        private readonly IPublicHashingService _publicHashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IAccountEventFactory _accountEventFactory;
         private readonly IMembershipRepository _membershipRepository;
@@ -41,6 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             IValidator<CreateAccountCommand> validator,
             IHashingService hashingService,
             IPublicHashingService publicHashingService,
+            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             IGenericEventFactory genericEventFactory,
             IAccountEventFactory accountEventFactory,
             IMembershipRepository membershipRepository,
@@ -52,6 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             _validator = validator;
             _hashingService = hashingService;
             _publicHashingService = publicHashingService;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _genericEventFactory = genericEventFactory;
             _accountEventFactory = accountEventFactory;
             _membershipRepository = membershipRepository;
@@ -88,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             var createdByName = caller.FullName();
             await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref);
 
-            await PublishAccountCreatedMessage(createAccountResult.AccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId);
+            await PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId);
 
             await NotifyAccountCreated(hashedAccountId);
 
@@ -127,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
 
         private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string userName, Guid userRef)
         {
-            var accountLegalEntityPublicHashedId = _publicHashingService.HashValue(accountLegalEntityId);
+            var accountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(accountLegalEntityId);
 
             return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
@@ -164,11 +167,12 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             });
         }
 
-        private Task PublishAccountCreatedMessage(long accountId, string publicHashedId, string name, string createdByName, Guid userRef)
+        private Task PublishAccountCreatedMessage(long accountId, string hashedId, string publicHashedId, string name, string createdByName, Guid userRef)
         {
             return _eventPublisher.Publish(new CreatedAccountEvent
             { 
                 AccountId = accountId,
+                HashedId = hashedId, 
                 PublicHashedId = publicHashedId,
                 Name = name,
                 UserName = createdByName,
