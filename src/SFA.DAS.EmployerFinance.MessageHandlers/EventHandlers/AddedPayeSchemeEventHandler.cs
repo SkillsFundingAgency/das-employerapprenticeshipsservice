@@ -8,16 +8,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 {
     public class AddedPayeSchemeEventHandler : IHandleMessages<AddedPayeSchemeEvent>
     {
-        private readonly IMessagePublisher _messagePublisher;
-
-        public AddedPayeSchemeEventHandler(IMessagePublisher messagePublisher)
-        {
-            _messagePublisher = messagePublisher;
-        }
-
         public async Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
         {
-            await _messagePublisher.PublishAsync(
+            await context.SendLocal(
                 new ImportAccountLevyDeclarationsCommand
                 {
                     AccountId = message.AccountId,
