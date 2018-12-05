@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
         {
             await _handler.Handle(_command);
 
-            _publisher.Verify(x => x.Publish(It.Is<AccountUserRolesRemovedEvent>(
+            _publisher.Verify(x => x.Publish(It.Is<AccountUserRemovedEvent>(
                     p => p.AccountId == _teamMember.AccountId &&
                          p.UserRef == Guid.Parse(_teamMember.User.UserRef)))
                 , Times.Once);

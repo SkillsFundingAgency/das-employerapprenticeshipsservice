@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution
         {
             For<ReadStoreServiceFactory>().Use<ReadStoreServiceFactory>(c => c.GetInstance);
             For<IReadStoreMediator>().Use<ReadStoreMediator>();
+            For<IReadStoreRequestHandler<CreateAccountUserCommand, Unit>>().Use<CreateAccountUserCommandHandler>();
             For<IReadStoreRequestHandler<UpdateAccountUserCommand, Unit>>().Use<UpdateAccountUserCommandHandler>();
             For<IReadStoreRequestHandler<RemoveAccountUserCommand, Unit>>().Use<RemoveAccountUserCommandHandler>();
         }

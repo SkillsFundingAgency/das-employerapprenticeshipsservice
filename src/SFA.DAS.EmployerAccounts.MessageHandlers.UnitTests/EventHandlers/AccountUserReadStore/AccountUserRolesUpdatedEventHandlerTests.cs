@@ -12,31 +12,31 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.AccountUserReadStore
 {
     [TestFixture]
     [Parallelizable]
-    internal class UserJoinedEventHandlerForReadStoreTests : FluentTest<UserJoinedEventHandlerForReadStoreTestsFixture>
+    internal class AccountUserRolesUpdatedEventHandlerTests : FluentTest<UserRolesUpdatedEventHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_WhenHandlingEvent_ThenShouldSendCreateAccountUserCommand()
+        public Task Handle_WhenHandlingEvent_ThenShouldSendUpdateAccountUserCommand()
         {
             return TestAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
-                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<CreateAccountUserCommand>(p =>
+                f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<UpdateAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.Roles == f.Roles &&
-                        p.Created == f.Created &&
+                        p.AccountId == f.AccountId &&
+                        p.Updated == f.Created &&
                         p.MessageId == f.MessageId
                     ),
                     It.IsAny<CancellationToken>())));
         }
     }
 
-    internal class UserJoinedEventHandlerForReadStoreTestsFixture
+    internal class UserRolesUpdatedEventHandlerTestsFixture
     {
         public string MessageId = "messageId";
-        public UserJoinedEvent Message;
+        public AccountUserRolesUpdatedEvent Message;
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
         public long UserId = 877664;
@@ -46,21 +46,17 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
         public Mock<IReadStoreMediator> ReadStoreMediator;
-        public UserJoinedEventHandler Handler;
+        public AccountUserRolesUpdatedEventHandler Handler;
 
-        public UserJoinedEventHandlerForReadStoreTestsFixture()
+        public UserRolesUpdatedEventHandlerTestsFixture()
         {
             ReadStoreMediator = new Mock<IReadStoreMediator>();
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
-            Message = new UserJoinedEvent {
-                AccountId = AccountId,
-                UserRef = UserRef,
-                Roles = Roles,
-                Created = Created};
+            Message = new AccountUserRolesUpdatedEvent(AccountId, UserRef, Roles, Created);
 
-            Handler = new UserJoinedEventHandler(ReadStoreMediator.Object);
+            Handler = new AccountUserRolesUpdatedEventHandler(ReadStoreMediator.Object);
         }
     }
 }

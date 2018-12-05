@@ -12,11 +12,11 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.AccountUserReadStore
 {
     [TestFixture]
     [Parallelizable]
-    internal class CreatedAccountEventHandlerForReadStoreTests : FluentTest<CreatedAccountEventHandlerForReadStoreTestsFixture>
+    internal class CreatedAccountEventHandlerTests : FluentTest<CreatedAccountEventHandlerForReadStoreTestsFixture>
     {
         [Test]
         public Task Handle_WhenHandlingEvent_ThenShouldSendCreateAccountUserCommand()

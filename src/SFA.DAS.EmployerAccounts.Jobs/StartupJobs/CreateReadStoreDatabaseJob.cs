@@ -41,12 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
                             new UniqueKey
                             {
                                 Paths = new Collection<string> { "/userRef" }
-                            },
-                            new UniqueKey
-                            {
-                                Paths = new Collection<string> { "/userId" }
                             }
-
                         }
                 }
             };
