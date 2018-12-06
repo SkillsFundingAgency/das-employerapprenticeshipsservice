@@ -13,15 +13,15 @@
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.TimeProvider" version="1.0.0.3956" />
     <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71" />
-    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="2.1.151" />
-    <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="2.1.151" />
+    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="2.1.716" />
+    <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="2.1.716" />
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
     <PackageReference Include="SFA.DAS.CookieService" Version="1.0.0.27423" />
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.0.0.36524" />
-    <PackageReference Include="SFA.DAS.Http" Version="1.0.0.39136" />
+    <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765" />
