@@ -177,10 +177,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (updateChoice)
             {
                 case "update":
+
+                    var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+
                     var response = await _orchestrator.UpdateOrganisation(
                         accountLegalEntityPublicHashedId,
                         organisationName,
-                        organisationAddress);
+                        organisationAddress, hashedAccountId, userId);
 
                     return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
 

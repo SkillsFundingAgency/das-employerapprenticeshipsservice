@@ -27,16 +27,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("organisations/confirm"));
         }
 
-            return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName,
-                new
-                {
-                    hashedAccountId,
-                    organisationName = name,
-                    hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
-                });
-
-        }
-
         [HttpGet]
         [Route("nextStep")]
         public async Task<ActionResult> OrganisationAddedNextSteps()

@@ -200,8 +200,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             await _handler.Handle(cmd);
 
             _accountRepository.Verify(x => x.CreateAccount(_user.Id, cmd.OrganisationReferenceNumber, cmd.OrganisationName, cmd.OrganisationAddress, cmd.OrganisationDateOfInception, cmd.PayeReference, cmd.AccessToken, cmd.RefreshToken, cmd.OrganisationStatus, cmd.EmployerRefName, (short)cmd.OrganisationType, cmd.PublicSectorDataSource, cmd.Sector));
-            _refreshEmployerLevyService.Verify(x => x.QueueRefreshLevyMessage(accountId, cmd.PayeReference));
-
+            
         }
 
         [Test]

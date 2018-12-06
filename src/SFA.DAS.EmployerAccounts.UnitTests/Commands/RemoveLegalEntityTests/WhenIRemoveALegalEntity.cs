@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Events.Agreement;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Features;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
