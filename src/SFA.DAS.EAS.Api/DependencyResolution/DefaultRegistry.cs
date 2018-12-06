@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
 
             For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
             For<EmployerAccountsDbContext>().Use(c => GetAcccountsDbContext(c));
-            For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString));
+            For<EmployerFinanceDbContext>().Use(c => GetFinanceDbContext(c));
             For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
             For<ICallerContextProvider>().Use<CallerContextProvider>();
         }
@@ -29,6 +29,13 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
         private EmployerAccountsDbContext GetAcccountsDbContext(IContext context)
         {
             var db = new EmployerAccountsDbContext(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString);
+            db.Database.BeginTransaction();
+            return db;
+        }
+
+        private EmployerFinanceDbContext GetFinanceDbContext(IContext context)
+        {
+            var db = new EmployerFinanceDbContext(context.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString);
             db.Database.BeginTransaction();
             return db;
         }
