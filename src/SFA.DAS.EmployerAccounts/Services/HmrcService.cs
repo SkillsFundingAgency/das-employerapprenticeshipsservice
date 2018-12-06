@@ -104,66 +104,66 @@ namespace SFA.DAS.EmployerAccounts.Services
             });
         }
 
-        //public async Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef)
-        //{
-        //    return await GetLevyDeclarations(empRef, null);
-        //}
+        public async Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef)
+        {
+            return await GetLevyDeclarations(empRef, null);
+        }
 
-        //public async Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef, DateTime? fromDate)
-        //{
-        //    return await _executionPolicy.ExecuteAsync(async () =>
-        //    {
-        //        var accessToken = await GetOgdAccessToken();
+        public async Task<HMRC.ESFA.Levy.Api.Types.LevyDeclarations> GetLevyDeclarations(string empRef, DateTime? fromDate)
+        {
+            return await _executionPolicy.ExecuteAsync(async () =>
+            {
+                var accessToken = await GetOgdAccessToken();
 
-        //        var earliestDate = new DateTime(2017, 04, 01);
-        //        if (!fromDate.HasValue || fromDate.Value < earliestDate)
-        //        {
-        //            fromDate = earliestDate;
-        //        }
+                var earliestDate = new DateTime(2017, 04, 01);
+                if (!fromDate.HasValue || fromDate.Value < earliestDate)
+                {
+                    fromDate = earliestDate;
+                }
 
-        //        var levyDeclartions = await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
+                var levyDeclartions = await _apprenticeshipLevyApiClient.GetEmployerLevyDeclarations(accessToken, empRef, fromDate);
 
-        //        _log.Debug($"Received {levyDeclartions?.Declarations?.Count} levy declarations empRef:{empRef} fromDate:{fromDate}");
-        //        return levyDeclartions;
-        //    });
-        //}
+                _log.Debug($"Received {levyDeclartions?.Declarations?.Count} levy declarations empRef:{empRef} fromDate:{fromDate}");
+                return levyDeclartions;
+            });
+        }
 
-        //public async Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef)
-        //{
-        //    return await GetEnglishFractions(empRef, null);
-        //}
+        public async Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef)
+        {
+            return await GetEnglishFractions(empRef, null);
+        }
 
-        //public async Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate)
-        //{
-        //    return await _executionPolicy.ExecuteAsync(async () =>
-        //    {
-        //        var accessToken = await GetOgdAccessToken();
+        public async Task<HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations> GetEnglishFractions(string empRef, DateTime? fromDate)
+        {
+            return await _executionPolicy.ExecuteAsync(async () =>
+            {
+                var accessToken = await GetOgdAccessToken();
 
-        //        return await _apprenticeshipLevyApiClient.GetEmployerFractionCalculations(accessToken, empRef, fromDate);
-        //    });
-        //}
+                return await _apprenticeshipLevyApiClient.GetEmployerFractionCalculations(accessToken, empRef, fromDate);
+            });
+        }
 
-        //public async Task<DateTime> GetLastEnglishFractionUpdate()
-        //{
-        //    var hmrcLatestUpdateDate = _inProcessCache.Get<DateTime?>("HmrcFractionLastCalculatedDate");
-        //    if (hmrcLatestUpdateDate == null)
-        //    {
-        //        return await _executionPolicy.ExecuteAsync(async () =>
-        //        {
-        //            var accessToken = await GetOgdAccessToken();
+        public async Task<DateTime> GetLastEnglishFractionUpdate()
+        {
+            var hmrcLatestUpdateDate = _inProcessCache.Get<DateTime?>("HmrcFractionLastCalculatedDate");
+            if (hmrcLatestUpdateDate == null)
+            {
+                return await _executionPolicy.ExecuteAsync(async () =>
+                {
+                    var accessToken = await GetOgdAccessToken();
 
-        //            hmrcLatestUpdateDate =  await _apprenticeshipLevyApiClient.GetLastEnglishFractionUpdate(accessToken);
+                    hmrcLatestUpdateDate = await _apprenticeshipLevyApiClient.GetLastEnglishFractionUpdate(accessToken);
 
-        //            if (hmrcLatestUpdateDate != null)
-        //            {
-        //                _inProcessCache.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value,new TimeSpan(0,0,30,0));
-        //            }
+                    if (hmrcLatestUpdateDate != null)
+                    {
+                        _inProcessCache.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value, new TimeSpan(0, 0, 30, 0));
+                    }
 
-        //            return hmrcLatestUpdateDate.Value;
-        //        });
-        //    }
-        //    return hmrcLatestUpdateDate.Value;
-        //}
+                    return hmrcLatestUpdateDate.Value;
+                });
+            }
+            return hmrcLatestUpdateDate.Value;
+        }
 
         public async Task<string> GetOgdAccessToken()
         {

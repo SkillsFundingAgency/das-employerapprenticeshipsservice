@@ -34,7 +34,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
             {
                 Hmrc = new HmrcConfiguration ()
             };
-            //new Mock<IEmpRefFileBasedService>();
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IHashingService>());
         }
