@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Azure.Documents;
-using Microsoft.Azure.Documents.Client;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
@@ -37,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         }
 
         [Test]
-        public Task Run_WhenRunningJobFirstTime_ThenShouldMarkJobAsPopulate()
+        public Task Run_WhenRunningJobFirstTime_ThenShouldMarkJobAsPopulated()
         {
             return TestAsync(f => f.Run(), f => f.VerifyMarkAsPopulatedWasRun());
         }
@@ -55,7 +52,6 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             return TestAsync(f => f.CreateTwoNewUsers().AddFirstUserToReadStore(), f => f.Run(),
                 f => f.VerifyAddDocumentWasRun(1).VerifyUserWasMappedCorrectly(f.NewUser2));
         }
-
     }
 
     public class PopulateAccountUsersInCollectionJobTestsFixture
