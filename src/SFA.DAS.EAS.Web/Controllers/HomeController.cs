@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("Index")]
         public ActionResult Index()
         {
-            return Redirect(Url.EmployerAccountsAction("service/accounts"));
+            return Redirect(Url.EmployerAccountsAction("service/index", false));
         }
 
         [AuthoriseActiveUser]
