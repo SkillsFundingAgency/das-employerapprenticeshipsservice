@@ -11,13 +11,13 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 {
-    class DbBuilder
+    class EmployerAccountsDbBuilder : IDisposable
     {
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
-        private EmployerAccountsDbContext _dbContext;
+        private readonly EmployerAccountsDbContext _dbContext;
 
-        public DbBuilder(
+        public EmployerAccountsDbBuilder(
             DbBuilderDependentRepositories dependentRepositories,
             IHashingService hashingService,
             IPublicHashingService publicHashingService,
@@ -33,31 +33,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public DbBuilderDependentRepositories DependentRepositories { get; }
 
-        public DbBuilder BeginTransaction()
-        {
-            _dbContext.Database.BeginTransaction();
-            return this;
-        }
-
-        public DbBuilder CommitTransaction()
-        {
-            if (_dbContext.Database.CurrentTransaction == null) return this;
-
-            _dbContext.Database.CurrentTransaction.Commit();
-            return this;
-        }
-
-        public DbBuilder EnsureAccountExists(EmployerAccountInput input)
+        public EmployerAccountsDbBuilder EnsureAccountExists(EmployerAccountInput input)
         {
             return EnsureAccountExists(input, CancellationToken.None);
         }
 
-        public DbBuilder EnsureAccountExists(EmployerAccountInput input, CancellationToken cancellationToken)
+        public EmployerAccountsDbBuilder EnsureAccountExists(EmployerAccountInput input, CancellationToken cancellationToken)
         {
             return WaitDbAction(EnsureAccountExistsAsync(input), cancellationToken);
         }
 
-        public async Task<DbBuilder> EnsureAccountExistsAsync(EmployerAccountInput input)
+        public async Task<EmployerAccountsDbBuilder> EnsureAccountExistsAsync(EmployerAccountInput input)
         {
             var output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
 
@@ -93,17 +79,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return this;
         }
 
-        public DbBuilder WithLegalEntity(LegalEntityWithAgreementInput input)
+        public EmployerAccountsDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input)
         {
             return WithLegalEntity(input, CancellationToken.None);
         }
 
-        public DbBuilder WithLegalEntity(LegalEntityWithAgreementInput input, CancellationToken cancellationToken)
+        public EmployerAccountsDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input, CancellationToken cancellationToken)
         {
             return WaitDbAction(WithLegalEntityAsync(input), cancellationToken);
         }
 
-        public async Task<DbBuilder> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
+        public async Task<EmployerAccountsDbBuilder> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
         {
             var output = new LegalEnityWithAgreementOutput();
 
@@ -117,17 +103,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return this;
         }
 
-        public DbBuilder EnsureUserExists(UserInput input)
+        public EmployerAccountsDbBuilder EnsureUserExists(UserInput input)
         {
             return EnsureUserExists(input, CancellationToken.None);
         }
 
-        public DbBuilder EnsureUserExists(UserInput input, CancellationToken cancellationToken)
+        public EmployerAccountsDbBuilder EnsureUserExists(UserInput input, CancellationToken cancellationToken)
         {
             return WaitDbAction(EnsureUserExistsAsync(input), cancellationToken);
         }
 
-        public async Task<DbBuilder> EnsureUserExistsAsync(UserInput input)
+        public async Task<EmployerAccountsDbBuilder> EnsureUserExistsAsync(UserInput input)
         {
             try
             {
@@ -153,6 +139,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             {
                 action.Wait((int) TestConstants.DbTimeout.TotalMilliseconds, cancellationToken);
                 CheckTaskResult(action);
+
                 return action.Result;
             }
             catch (Exception e)
@@ -160,6 +147,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                 Console.WriteLine(e);
                 throw;
             }
+
         }
 
         private void CheckTaskResult(Task action)
@@ -199,5 +187,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                     $"A DB task has been canceled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
             }
         }
+
+        public void Dispose()
+        {
+            if (!HasTransaction) return;
+
+            _dbContext.Database.CurrentTransaction.Commit();
+        }
+
+        public bool HasTransaction => (_dbContext.Database.CurrentTransaction != null);
     }
 }
