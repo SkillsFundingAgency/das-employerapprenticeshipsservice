@@ -11,12 +11,12 @@ using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
 {
-    internal class PopulateAccountUsersInCollection
+    internal class PopulateAccountUsersInCollectionJob
     {
         private readonly IAccountUsersRepository _accountUsersRepository;
         private readonly IPopulateRepository _populateRepository;
 
-        public PopulateAccountUsersInCollection(IAccountUsersRepository accountUsersRepository, IPopulateRepository populateRepository)
+        public PopulateAccountUsersInCollectionJob(IAccountUsersRepository accountUsersRepository, IPopulateRepository populateRepository)
         {
             _accountUsersRepository = accountUsersRepository;
             _populateRepository = populateRepository;
@@ -32,11 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
 
             var populateMessageId = Guid.NewGuid().ToString();
 
-            // Read In Users
-            var users = await _populateRepository.GetAllAccountUsers();
-
-            // For each user add record to collection if not exists
-            foreach (var user in users)
+            foreach (var user in await _populateRepository.GetAllAccountUsers())
             {
                 if (await _accountUsersRepository.CreateQuery().AnyAsync(x => x.AccountId == user.AccountId && x.UserRef == user.UserRef) == false)
                 {

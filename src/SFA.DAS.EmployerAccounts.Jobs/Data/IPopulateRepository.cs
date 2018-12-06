@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.Data
 {
-    internal interface IPopulateRepository
+    public interface IPopulateRepository
     {
         Task<IEnumerable<MembershipUser>> GetAllAccountUsers();
         Task<bool> AlreadyPopulated();

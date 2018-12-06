@@ -1,5 +1,6 @@
 ﻿using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
+using NLog.Internal;
 using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
 
                 await startup.StartAsync();
                 await jobHost.CallAsync(typeof(CreateReadStoreDatabaseJob).GetMethod(nameof(CreateReadStoreDatabaseJob.Run)));
-                await jobHost.CallAsync(typeof(PopulateAccountUsersInCollection).GetMethod(nameof(PopulateAccountUsersInCollection.Run)));
+                await jobHost.CallAsync(typeof(PopulateAccountUsersInCollectionJob).GetMethod(nameof(PopulateAccountUsersInCollectionJob.Run)));
 
                 jobHost.RunAndBlock();
 

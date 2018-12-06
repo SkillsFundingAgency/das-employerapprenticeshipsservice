@@ -2,6 +2,7 @@
 
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts")]
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.Jobs")]
+[assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.Jobs.UnitTests")]
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.ReadStore.UnitTests")]
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.Api.Client")]
 [assembly: InternalsVisibleTo("SFA.DAS.EmployerAccounts.Api.Client.UnitTests")]
