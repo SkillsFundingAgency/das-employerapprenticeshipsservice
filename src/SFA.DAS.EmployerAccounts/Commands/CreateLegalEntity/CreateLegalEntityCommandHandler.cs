@@ -18,6 +18,7 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using SFA.DAS.Hashing;
 
 
 namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
@@ -33,6 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 
         private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly IAgreementService _agreementService;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
@@ -44,6 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             ILegalEntityEventFactory legalEntityEventFactory,
             IEventPublisher eventPublisher,
             IHashingService hashingService,
+            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             IAgreementService agreementService,
             IEmployerAgreementRepository employerAgreementRepository, 
             IValidator<CreateLegalEntityCommand> validator)
@@ -55,6 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             _legalEntityEventFactory = legalEntityEventFactory;
             _eventPublisher = eventPublisher;
             _hashingService = hashingService;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _agreementService = agreementService;
             _employerAgreementRepository = employerAgreementRepository;
             _validator = validator;
@@ -103,7 +107,10 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 
             await EvaluateEmployerLegalEntityAgreementStatus(owner.AccountId, agreementView.LegalEntityId);
 
-            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
+            agreementView.AccountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(agreementView.AccountLegalEntityId);
+
+            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId,
+                agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, ownerExternalUserId);
 
             await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
 
@@ -115,13 +122,15 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             };
         }
 
-        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, Guid userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, long accountLegalEntityId, string accountLegalEntityPublicHashedId, Guid userRef)
         {
             return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
                 AccountId = accountId,
                 AgreementId = agreementId,
                 LegalEntityId = legalEntityId,
+                AccountLegalEntityId = accountLegalEntityId,
+                AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
                 OrganisationName = organisationName,
                 UserName = createdByName,
                 UserRef = userRef,

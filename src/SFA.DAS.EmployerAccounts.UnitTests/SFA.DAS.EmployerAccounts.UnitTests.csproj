@@ -14,7 +14,7 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="2.0.12" />
-    <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="1.0.14" />
+    <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
   </ItemGroup>
 
   <ItemGroup>

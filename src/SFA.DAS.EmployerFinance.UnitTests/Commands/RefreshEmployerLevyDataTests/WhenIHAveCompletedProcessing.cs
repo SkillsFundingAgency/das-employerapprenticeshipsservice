@@ -77,9 +77,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
 
             _hmrcDateService = new Mock<IHmrcDateService>();
 
+            var levyImportCleanerStrategy = new LevyImportCleanerStrategy(_dasLevyRepository.Object, _hmrcDateService.Object, logger.Object);
 
-            _handler = new RefreshEmployerLevyDataCommandHandler(validator.Object, _dasLevyRepository.Object, mediator.Object, _hmrcDateService.Object,
-                levyEventFactory.Object, genericEventFactory.Object, hashingService.Object, logger.Object, _eventPublisher);
+            _handler = new RefreshEmployerLevyDataCommandHandler(validator.Object, _dasLevyRepository.Object, mediator.Object,
+                levyEventFactory.Object, genericEventFactory.Object, hashingService.Object, levyImportCleanerStrategy, _eventPublisher);
         }
 
         public RefreshEmployerLevyDataCommandHandlerTestsFixture SetAccountId(long accountId)

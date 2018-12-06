@@ -595,7 +595,7 @@
     <Content Include="src\sass\_tables.scss" />
     <Content Include="src\sass\_tabs.scss" />
     <Content Include="src\sass\_tasks.scss" />
-    <Content Include="src\sass\_typography.scss" />
+    <Content Include="src\sass\_type.scss" />
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />

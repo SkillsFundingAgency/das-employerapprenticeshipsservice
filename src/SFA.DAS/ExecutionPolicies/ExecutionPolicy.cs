@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Polly;
+using System;
 using System.Threading.Tasks;
-using Polly;
 
 namespace SFA.DAS.ExecutionPolicies
 {
@@ -88,6 +88,20 @@ namespace SFA.DAS.ExecutionPolicies
                 waits[i] = waitBetweenTries;
             }
             return Policy.Handle<T>().WaitAndRetryAsync(waits, (ex, wait) =>
+            {
+                onRetryableFailure?.Invoke(ex);
+            });
+        }
+
+        protected static Policy CreateAsyncRetryPolicy<T>(Func<T, bool> canHandle, int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
+            where T : Exception
+        {
+            var waits = new TimeSpan[numberOfRetries];
+            for (var i = 0; i < waits.Length; i++)
+            {
+                waits[i] = waitBetweenTries;
+            }
+            return Policy.Handle<T>(canHandle).WaitAndRetryAsync(waits, (ex, wait) =>
             {
                 onRetryableFailure?.Invoke(ex);
             });

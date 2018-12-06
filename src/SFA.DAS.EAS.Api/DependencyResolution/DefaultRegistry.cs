@@ -1,5 +1,10 @@
+using System.Data.Common;
+using System.Data.SqlClient;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.WebApi;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.UnitOfWork;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Account.Api.DependencyResolution
@@ -14,8 +19,19 @@ namespace SFA.DAS.EAS.Account.Api.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
+            For<DbConnection>().Use(c => new SqlConnection(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
+            For<EmployerAccountsDbContext>().Use(c => GetAcccountsDbContext(c));
+            For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<LevyDeclarationProviderConfiguration>().DatabaseConnectionString));
             For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
             For<ICallerContextProvider>().Use<CallerContextProvider>();
         }
+
+        private EmployerAccountsDbContext GetAcccountsDbContext(IContext context)
+        {
+            var db = new EmployerAccountsDbContext(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString);
+            db.Database.BeginTransaction();
+            return db;
+        }
+
     }
 }

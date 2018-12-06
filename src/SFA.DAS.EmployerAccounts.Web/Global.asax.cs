@@ -45,6 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         protected void Application_Start()
         {
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+            AntiForgeryConfig.RequireSsl = true;
             AreaRegistration.RegisterAllAreas();
             BinderConfig.RegisterBinders(ModelBinders.Binders);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
