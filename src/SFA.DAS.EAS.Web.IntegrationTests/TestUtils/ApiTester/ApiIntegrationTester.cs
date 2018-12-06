@@ -167,18 +167,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             var container = config.DependencyResolver.GetService<IContainer>();
             var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
-            var connection2 = container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString;
-            var dbContext = new EmployerAccountsDbContext(connection2);
-
             container.Configure(c =>
             {
-                c.For<EmployerAccountsDbBuilder>().Use(new EmployerAccountsDbBuilder(
-                    container.GetInstance<DbBuilderDependentRepositories>(),
-                    container.GetInstance<IHashingService>(),
-                    container.GetInstance<IPublicHashingService>(),
-                    new EmployerAccountsDbContext(connection2)
-                ));
-                c.For<EmployerAccountsDbContext>().Use(dbContext);
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
             });
 

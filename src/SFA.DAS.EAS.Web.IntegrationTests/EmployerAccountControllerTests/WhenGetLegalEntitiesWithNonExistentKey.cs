@@ -50,13 +50,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string legalEntityName = "RoadRunner Pest Control";
             const string payeReference = "Acme PAYE";
 
-            var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>();
-            testDbContext
-                .EnsureUserExists(testDbContext.BuildUserInput())
-                .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
-                .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
+            string hashedAccountId;
+            using (var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            {
+                testDbContext
+                    .EnsureUserExists(testDbContext.BuildUserInput())
+                    .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
+                    .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
 
-            var hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
+                hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
+            }
 
             var callRequirements =
                 new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")

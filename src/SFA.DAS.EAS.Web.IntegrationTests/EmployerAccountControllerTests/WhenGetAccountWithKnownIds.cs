@@ -26,14 +26,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string legalEntityName = "RoadRunner Pest Control";
             const string payeReference = "Acme PAYE";
 
-            var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>();
-            testDbContext
-                .EnsureUserExists(testDbContext.BuildUserInput())
-                .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
-                .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
+            using (var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            {
+                testDbContext
+                    .EnsureUserExists(testDbContext.BuildUserInput())
+                    .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
+                    .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
 
-            _hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
-            _accountId = testDbContext.Context.ActiveEmployerAccount.AccountId;
+                _hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
+                _accountId = testDbContext.Context.ActiveEmployerAccount.AccountId;
+            }
         }
 
         [TearDown]

@@ -34,7 +34,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public EmployerAccountsDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-            Database.BeginTransaction();
         }
 
         public EmployerAccountsDbContext(DbConnection connection, DbTransaction transaction)
