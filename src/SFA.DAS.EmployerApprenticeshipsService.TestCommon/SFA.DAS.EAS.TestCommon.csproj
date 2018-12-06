@@ -286,7 +286,6 @@
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="FluentTestFixture.cs" />
     <Compile Include="MockModels\MockMessage.cs" />
-    <Compile Include="ObjectMothers\AddPayeToNewLegalEntityCommandObjectMother.cs" />
     <Compile Include="ObjectMothers\ApprenticeshipObjectMother.cs" />
     <Compile Include="ObjectMothers\FrameworkObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationSourceDataObjectMother.cs" />

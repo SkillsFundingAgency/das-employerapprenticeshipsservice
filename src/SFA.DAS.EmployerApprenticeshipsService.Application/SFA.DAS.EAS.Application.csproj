@@ -387,6 +387,10 @@
     <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdRequest.cs" />
     <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdResponse.cs" />
     <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdValidator.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefHandler.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefResponse.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefValidator.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQuery.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
@@ -441,9 +445,6 @@
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommand.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsCommandHandler.cs" />
     <Compile Include="Commands\UpdateUserNotificationSettings\UpdateUserNotificationSettingsValidator.cs" />
-    <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommand.cs" />
-    <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommandValidator.cs" />
-    <Compile Include="Commands\AddPayeToAccount\AddPayeToAccountCommandHandler.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommand.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandHandler.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandValidator.cs" />
@@ -460,9 +461,6 @@
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommand.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandHandler.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandResponse.cs" />
-    <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommand.cs" />
-    <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandHandler.cs" />
-    <Compile Include="Commands\RemovePayeFromAccount\RemovePayeFromAccountCommandValidator.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommand.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
     <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
@@ -555,10 +553,6 @@
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsValidator.cs" />
-    <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQueryValidator.cs" />
-    <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesQuery.cs" />
-    <Compile Include="Queries\GetAccountPayeSchemes\GetAccountPayeSchemesResponse.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsHandler.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsQuery.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsQueryValidator.cs" />
@@ -598,10 +592,6 @@
     <Compile Include="Queries\GetOrganisations\GetOrganisationsRequest.cs" />
     <Compile Include="Queries\GetOrganisations\GetOrganisationsResponse.cs" />
     <Compile Include="Queries\GetOrganisations\GetOrganisationsValidator.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefHandler.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefResponse.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefValidator.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdResponse.cs" />
