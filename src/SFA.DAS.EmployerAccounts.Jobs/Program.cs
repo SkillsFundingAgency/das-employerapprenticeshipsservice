@@ -37,6 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
 
                 await startup.StartAsync();
                 await jobHost.CallAsync(typeof(CreateReadStoreDatabaseJob).GetMethod(nameof(CreateReadStoreDatabaseJob.Run)));
+                await jobHost.CallAsync(typeof(PopulateAccountUsersInCollection).GetMethod(nameof(PopulateAccountUsersInCollection.Run)));
 
                 jobHost.RunAndBlock();
 
