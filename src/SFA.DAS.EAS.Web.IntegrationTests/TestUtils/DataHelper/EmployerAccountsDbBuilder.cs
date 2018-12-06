@@ -190,14 +190,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public void Dispose()
         {
-            if (!HasTransaction()) return;
+            if (!HasTransaction) return;
 
             _dbContext.Database.CurrentTransaction.Commit();
         }
 
-        public bool HasTransaction()
-        {
-            return (_dbContext.Database.CurrentTransaction != null);
-        }
+        public bool HasTransaction => (_dbContext.Database.CurrentTransaction != null);
     }
 }

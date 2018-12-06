@@ -39,18 +39,18 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
 
             string hashedAccountId;
-            using (var testDbContext = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            using (var testEmployerAccountsDbBuilder = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
             {
-                testDbContext
+                testEmployerAccountsDbBuilder
                     .EnsureUserExists(new UserInput
                     {
                         UserRef = userRef,
                         Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
                     })
-                    .EnsureAccountExists(testDbContext.BuildEmployerAccountInput(accountName, payeReference))
-                    .WithLegalEntity(testDbContext.BuildEntityWithAgreementInput(legalEntityName));
+                    .EnsureAccountExists(testEmployerAccountsDbBuilder.BuildEmployerAccountInput(accountName, payeReference))
+                    .WithLegalEntity(testEmployerAccountsDbBuilder.BuildEntityWithAgreementInput(legalEntityName));
 
-                hashedAccountId = testDbContext.Context.ActiveEmployerAccount.HashedAccountId;
+                hashedAccountId = testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
             }
 
             var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users")
