@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
                     var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
                     var accountRepo = new AccountRepository(_apiTester.EmployerApprenticeshipsServiceConfiguration,
                         Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
-                    await accountRepo.CreateAccount(10003/**/, "234", "integration-tests", "address", DateTime.Today, "emp-ref", 
+                    await accountRepo.CreateAccount(10003/*todo:get proper id*/, "234", "integration-tests", "address", DateTime.Today, "emp-ref", 
                         "access-token", "refresh-token", "company-status", "emp ref name", 2, 1, "sector");
                     transaction.Commit();
                 }

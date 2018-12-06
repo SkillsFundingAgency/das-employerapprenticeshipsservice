@@ -215,9 +215,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
+    <Compile Include="Extensions\EmployerAccountsDbBuilderExtension.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
@@ -231,7 +234,6 @@
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNonExistentKey.cs" />
     <Compile Include="TestUtils\DataAccess\DataHelpers\AccountStatisticsDataHelper.cs" />
     <Compile Include="TestUtils\DataAccess\DataHelpers\FinanceStatisticsDataHelper.cs" />
-    <Compile Include="TestUtils\DataAccess\DbBuilder.cs" />
     <Compile Include="TestUtils\DataAccess\DbBuilderContext.cs" />
     <Compile Include="TestUtils\DataAccess\DbBuilderDependentRepositories.cs" />
     <Compile Include="TestUtils\DataAccess\DbDtoBuilderExtensions.cs" />
@@ -239,6 +241,8 @@
     <Compile Include="TestUtils\DataAccess\Dtos\LegalEnityWithAgreementOutput.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\LegalEntityWithAgreementInput.cs" />
     <Compile Include="TestUtils\DataAccess\Adapters\LegalEntityWithAgreementInputAdapter.cs" />
+    <Compile Include="TestUtils\DataAccess\EmployerAccountsDbBuilder.cs" />
+    <Compile Include="TestUtils\DataAccess\EmployerFinanceDbBuilder.cs" />
     <Compile Include="TestUtils\DataAccess\TestConstants.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\UserInput.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\UserOutput.cs" />

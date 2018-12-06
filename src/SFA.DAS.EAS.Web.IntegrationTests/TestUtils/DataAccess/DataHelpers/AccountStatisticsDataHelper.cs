@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -39,19 +38,5 @@ select (
   where a.StatusId = 2 -- signed
 ) as TotalAgreements;";
 
-        /*public async Task<int> AddAccount(CreateAccountModel model)
-        {
-            using (var connection = new SqlConnection(_databaseConnectionString))
-            {
-                return await connection.ExecuteAsync("[employer_account].[CreateAccount]", model, 
-                    connection., null, CommandType.StoredProcedure);
-            }
-        }*/
-    }
-
-    internal class CreateAccountModel
-    {
-        public long UserId { get; set; }
-        public string EmployerNumber { get; set; }
     }
 }
