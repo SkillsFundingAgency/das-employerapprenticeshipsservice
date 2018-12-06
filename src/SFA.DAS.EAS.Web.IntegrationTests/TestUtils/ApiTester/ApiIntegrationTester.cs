@@ -16,8 +16,12 @@ using Owin;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.UnitOfWork;
 using StructureMap;
 using WebApi.StructureMap;
 
@@ -104,17 +108,23 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
             var callResponse = new CallResponse();
+
             await FetchInitialResponseAsync(call, callResponse);
+
             return callResponse;
         }
 
         private async Task<CallResponse<TResult>> GetResponseAsync<TResult>(CallRequirements call)
         {
             var callResponse = new CallResponse<TResult>();
+
             await FetchInitialResponseAsync(call, callResponse);
             await FetchCompleteResponseAsync(callResponse);
+
             return callResponse;
         }
+
+        private IUnitOfWorkManager unitOfWorkManager = null;
 
         private async Task FetchInitialResponseAsync(CallRequirements call, CallResponse response)
         {
@@ -170,11 +180,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             var container = config.DependencyResolver.GetService<IContainer>();
             var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
-
+            var connection2 = container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString;
+            var dbContext = new EmployerAccountsDbContext(connection2);
             container.Configure(c =>
             {
+                c.For<EmployerAccountsDbContext>().Use(dbContext);
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
                 c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
+                c.AddRegistry<DataRegistry>();
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);

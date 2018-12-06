@@ -261,6 +261,7 @@
     <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
     <Compile Include="Models\Account\AccountSpecificLegalEntity.cs" />
     <Compile Include="Models\Account\AgreementTemplate.cs" />
+    <Compile Include="Models\Account\EmployerAccountOutput.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Data\Entities\Statistics\StatisticsAccounts.cs" />
     <Compile Include="Data\Entities\Statistics\StatisticsFinancial.cs" />
