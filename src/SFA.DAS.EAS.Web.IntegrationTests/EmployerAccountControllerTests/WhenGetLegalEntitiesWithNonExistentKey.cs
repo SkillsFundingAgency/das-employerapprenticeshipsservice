@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [SetUp]
         public void SetUp()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
         }
 
         [TearDown]
@@ -50,16 +50,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string legalEntityName = "RoadRunner Pest Control";
             const string payeReference = "Acme PAYE";
 
-            string hashedAccountId;
-            using (var testEmployerAccountsDbBuilder = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            string hashedAccountId = null;
+            _tester.InitialiseData<EmployerAccountsDbBuilder>(builder =>
             {
-                testEmployerAccountsDbBuilder
-                    .EnsureUserExists(testEmployerAccountsDbBuilder.BuildUserInput())
-                    .EnsureAccountExists(testEmployerAccountsDbBuilder.BuildEmployerAccountInput(accountName, payeReference))
-                    .WithLegalEntity(testEmployerAccountsDbBuilder.BuildEntityWithAgreementInput(legalEntityName));
+                builder
+                    .EnsureUserExists(builder.BuildUserInput())
+                    .EnsureAccountExists(builder.BuildEmployerAccountInput(accountName, payeReference))
+                    .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName));
 
-                hashedAccountId = testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
-            }
+                hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
+            });
 
             var callRequirements =
                 new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")

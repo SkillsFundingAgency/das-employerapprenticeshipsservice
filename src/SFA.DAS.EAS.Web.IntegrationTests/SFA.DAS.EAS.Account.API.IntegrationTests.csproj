@@ -201,6 +201,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
@@ -227,6 +228,7 @@
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEnityWithAgreementOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEntityWithAgreementInput.cs" />
     <Compile Include="TestUtils\DataHelper\Adapters\LegalEntityWithAgreementInputAdapter.cs" />
+    <Compile Include="TestUtils\DataHelper\IDbBuilder.cs" />
     <Compile Include="TestUtils\DataHelper\TestConstants.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\UserInput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\UserOutput.cs" />
