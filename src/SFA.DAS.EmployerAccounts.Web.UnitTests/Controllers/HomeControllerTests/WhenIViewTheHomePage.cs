@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -16,7 +15,6 @@ using SFA.DAS.EmployerUsers.WebClientComponents;
 using SignInUserViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.SignInUserViewModel;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -91,7 +89,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             await _homeController.Index();
 
             //Assert
-            _homeOrchestrator.Verify(x=>x.GetUserAccounts(It.IsAny<string>()),Times.Never);
+            _homeOrchestrator.Verify(x => x.GetUserAccounts(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -101,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(
                 new EmployerAccountsConfiguration
                 {
-                    Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity" ,AccountActivationUrl = "/confirm"}
+                    Identity = new IdentityServerConfiguration { BaseAddress = "http://test.local/identity", AccountActivationUrl = "/confirm" }
                 });
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
             _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.RequiresVerification)).Returns("true");
@@ -160,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
-        public async Task ThenTheUSerIsRedirectedToThePortalSiteWhenUserIsNotLoggedIn()
+        public async Task ThenTheUnauthenticatedViewIsReturnedWhenNoUserIsLoggedIn()
         {
             //Arrange
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns("");
@@ -170,9 +168,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             Assert.IsNotNull(actual);
-            var actualViewResult = actual as RedirectResult;
+            var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual(_configuration.EmployerPortalBaseUrl, actualViewResult.Url);
+            Assert.AreEqual("ServiceStartPage", actualViewResult.ViewName);
         }
 
         [Test]
@@ -217,8 +215,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actual);
             var actualViewResult = actual as ViewResult;
             Assert.IsNotNull(actualViewResult);
-            Assert.AreEqual("",actualViewResult.ViewName);
-            
+            Assert.AreEqual("", actualViewResult.ViewName);
         }
     }
 }

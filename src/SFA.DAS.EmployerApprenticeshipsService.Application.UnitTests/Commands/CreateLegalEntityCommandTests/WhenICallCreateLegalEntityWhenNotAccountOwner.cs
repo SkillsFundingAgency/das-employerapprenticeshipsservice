@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -10,6 +9,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Infrastructure.Features;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
@@ -28,9 +28,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private EmployerAgreementView _agreementView;
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
         private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
+
+        private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
         [SetUp]
         public void Arrange()
@@ -82,6 +85,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
+
+            _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _accountLegalEntityPublicHashingService.Setup(x => x.HashValue(_agreementView.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
             _validator = new Mock<IValidator<CreateLegalEntityCommand>>();
@@ -96,6 +103,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _legalEntityEventFactory.Object,
                 Mock.Of<IEventPublisher>(),
                 _hashingService.Object,
+                _accountLegalEntityPublicHashingService.Object,
                 _agreementService.Object,
                 _employerAgreementRepository.Object,
                 _validator.Object

@@ -153,9 +153,12 @@
     }
 }
 
-.floating-menu nav#user-nav #settings-menu a.sub-menu-item{
-    color:#fff;
-    @include media(tablet){
-        color:#4c2c92 !important;
+.floating-menu nav#user-nav #settings-menu a.sub-menu-item {
+    color: #fff;
+}
+
+.js-enabled .floating-menu nav#user-nav #settings-menu a.sub-menu-item {
+    @include media(tablet) {
+        color: #4c2c92;
     }
 }

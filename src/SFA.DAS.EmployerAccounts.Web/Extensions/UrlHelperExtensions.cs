@@ -46,6 +46,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return AccountAction(helper, baseUrl, "");
         }
 
+        public static string ProviderRelationshipsAction(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.ProviderRelationshipsBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
+        }
+
         public static string LegacyEasAccountAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();

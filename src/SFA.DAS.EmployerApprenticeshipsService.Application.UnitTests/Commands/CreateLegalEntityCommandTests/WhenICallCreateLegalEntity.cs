@@ -16,7 +16,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Infrastructure.Features;
 using SFA.DAS.Validation;
-
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -32,9 +33,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private EmployerAgreementView _agreementView;
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
         private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
+        private Mock<IEventPublisher> _eventPublisher;
+
+        private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
         [SetUp]
         public void Arrange()
@@ -65,7 +70,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 LegalEntityCode = "3476782638",
                 LegalEntitySource = OrganisationType.CompaniesHouse,
                 LegalEntityAddress = "12, test street",
-                LegalEntityInceptionDate = DateTime.Now
+                LegalEntityInceptionDate = DateTime.Now,
+                AccountLegalEntityId = 830
             };
 
             _command = new CreateLegalEntityCommand
@@ -73,7 +79,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 HashedAccountId = "ABC123",
                 SignAgreement = true,
                 SignedDate = DateTime.Now.AddDays(-10),
-                ExternalUserId = _owner.UserRef
+                ExternalUserId = _owner.UserRef,
+                Name = "Org Ltd"
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
@@ -86,11 +93,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
-            _hashingService = new Mock<IHashingService>();
+            _eventPublisher = new Mock<IEventPublisher>();
             _agreementService = new Mock<IAgreementService>();
 
+            _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
+
+            _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _accountLegalEntityPublicHashingService.Setup(x => x.HashValue(_agreementView.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
             _validator = new Mock<IValidator<CreateLegalEntityCommand>>();
@@ -104,8 +116,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _mediator.Object,
                 _genericEventFactory.Object,
                 _legalEntityEventFactory.Object,
-                Mock.Of<IEventPublisher>(),
+                _eventPublisher.Object,
                 _hashingService.Object,
+                _accountLegalEntityPublicHashingService.Object,
                 _agreementService.Object,
                 _employerAgreementRepository.Object, 
                 _validator.Object
@@ -198,6 +211,23 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             await _commandHandler.Handle(_command);
 
             _agreementService.Verify(s => s.RemoveFromCacheAsync(_owner.AccountId));
+        }
+
+        [Test]
+        public async Task ThenAddedLegalEntityEventIsPublished()
+        {
+            await _commandHandler.Handle(_command);
+
+            _eventPublisher.Verify(ep => ep.Publish(It.Is<AddedLegalEntityEvent>(e =>
+                e.AccountId.Equals(_owner.AccountId) &&
+                e.AgreementId.Equals(_agreementView.Id) &&
+                e.LegalEntityId.Equals(_agreementView.LegalEntityId) &&
+                e.AccountLegalEntityId.Equals(_agreementView.AccountLegalEntityId) &&
+                e.AccountLegalEntityPublicHashedId.Equals(ExpectedAccountLegalEntityPublicHashString) &&
+                e.OrganisationName.Equals(_command.Name) &&
+                e.UserName.Equals(_owner.FullName()) &&
+                e.UserRef.Equals(Guid.Parse(_owner.UserRef)))));
+            //e.Created.)));
         }
     }
 }

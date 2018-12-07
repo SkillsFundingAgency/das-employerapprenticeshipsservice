@@ -1,22 +1,22 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models;
+using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
 using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
+using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
+using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Models;
-using SFA.DAS.EmployerFinance.Models.Levy;
-using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
-using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
-using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -180,8 +180,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 };
             }
         }
-		
-		public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
+
+        public virtual async Task<OrchestratorResponse<CoursePaymentDetailsViewModel>> GetCoursePaymentSummary(
             string hashedAccountId, long ukprn, string courseName, int? courseLevel, int? pathwayCode,
             DateTime fromDate, DateTime toDate, string externalUserId)
         {
@@ -333,16 +333,12 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     });
 
 
-            var latestLineItem = data?.Data?.TransactionLines?.FirstOrDefault();
-
-            var currentBalance = latestLineItem?.Balance ?? 0;
-
             return new OrchestratorResponse<FinanceDashboardViewModel>
             {
                 Data = new FinanceDashboardViewModel
                 {
                     Account = employerAccountResult.Account,
-                    CurrentLevyFunds = currentBalance
+                    CurrentLevyFunds = data.Data.Balance
                 }
             };
         }
@@ -355,39 +351,17 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 {
                     AccountId = aggregationData.AccountId,
                     HashedAccountId = aggregationData.HashedAccountId,
-                }
+                },
+                CurrentBalance = aggregationData.Balance
             };
-            SetCurrentBalance(viewModel, aggregationData.TransactionLines, year, month);
-            SetTransactionLines(viewModel, aggregationData.TransactionLines);
+
+            SetTransactionLines(viewModel, aggregationData);
             return viewModel;
         }
 
-        private void SetCurrentBalance(TransactionViewModel viewModel, ICollection<TransactionLine> transactionLines, int year, int month)
+        private void SetTransactionLines(TransactionViewModel viewModel, AggregationData aggregatedTransactionData)
         {
-            var latestLineItem = transactionLines.FirstOrDefault();
-
-            if (latestLineItem != null)
-            {
-                viewModel.CurrentBalance = latestLineItem.Balance;
-                viewModel.CurrentBalanceCalcultedOn = latestLineItem.TransactionDate;
-            }
-            else
-            {
-                viewModel.CurrentBalance = 0;
-                viewModel.CurrentBalanceCalcultedOn = new DateTime(year, month, 1).AddMonths(1).AddDays(-1);
-            }
-        }
-
-        private void SetTransactionLines(TransactionViewModel viewModel, ICollection<TransactionLine> transactionLines)
-        {
-            viewModel.Data.TransactionLines = AggregateLevyTransactions(transactionLines);
-        }
-
-        private static ICollection<TransactionLine> AggregateLevyTransactions(ICollection<TransactionLine> transactions)
-        {
-            var result = new List<TransactionLine>();
-
-            var aggregatedLevyTransactions = transactions
+            var aggregatedLevyTransactions = aggregatedTransactionData.TransactionLines
                 .Where(t => t.TransactionType == TransactionItemType.Declaration)
                 .GroupBy(t => t.DateCreated.Date)
                 .Select(grp =>
@@ -397,7 +371,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     {
                         AccountId = firstLevyTransactionInDay.AccountId,
                         DateCreated = firstLevyTransactionInDay.DateCreated,
-                        Balance = firstLevyTransactionInDay.Balance,
                         Amount = grp.Sum(ltl => ltl.Amount),
                         TransactionType = TransactionItemType.Declaration,
                         Description = firstLevyTransactionInDay.Description,
@@ -407,10 +380,12 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     };
                 });
 
-            return transactions
+            var newTransactionLines = aggregatedTransactionData.TransactionLines
                 .Where(t => t.TransactionType != TransactionItemType.Declaration)
                 .Union(aggregatedLevyTransactions)
-                .ToList();
+                .ToArray();
+
+            viewModel.Data.TransactionLines = newTransactionLines;
         }
 
         public async Task<OrchestratorResponse<TransactionLineViewModel<LevyDeclarationTransactionLine>>>

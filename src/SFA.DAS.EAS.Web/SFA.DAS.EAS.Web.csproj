@@ -233,11 +233,11 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=1.2.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.56\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=1.2.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.71\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=1.2.56.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.56\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=1.2.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.71\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Client.0.11.39\lib\net462\SFA.DAS.Apprenticeships.Api.Client.dll</HintPath>
@@ -257,14 +257,14 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.151.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.151\lib\net45\SFA.DAS.Commitments.Api.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.151.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.151\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Common.Domain, Version=1.3.0.44308, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Common.Domain.1.3.0.44308\lib\net45\SFA.DAS.Common.Domain.dll</HintPath>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.43.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.43\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.53229\lib\net45\SFA.DAS.Configuration.dll</HintPath>
@@ -296,8 +296,8 @@
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.57835, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.57835\lib\net45\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Http, Version=1.0.0.39136, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Http.1.0.0.39136\lib\net45\SFA.DAS.Http.dll</HintPath>
+    <Reference Include="SFA.DAS.Http, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Http.1.2.4\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Messaging.3.0.0.63765\lib\net45\SFA.DAS.Messaging.dll</HintPath>
@@ -343,11 +343,11 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Client, Version=1.8.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Client.1.8.12\lib\net45\SFA.DAS.Tasks.API.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.7.0.49084, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.7.0.49084\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Tasks.API.Types, Version=1.8.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Tasks.Api.Types.1.8.12\lib\net45\SFA.DAS.Tasks.API.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.TokenService.Api.Client, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Client.dll</HintPath>
@@ -523,7 +523,6 @@
     <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="Extensions\DynamicExtentions.cs" />
@@ -535,10 +534,7 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
-    <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
-    <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
-    <Compile Include="ViewModels\AccountPaye\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Organisation\IncorrectOrganisationDetailsViewModel.cs" />
@@ -583,7 +579,6 @@
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationAddedNextStepsViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
@@ -591,14 +586,11 @@
     <Compile Include="ViewModels\Organisation\AddOrganisationAddressViewModel.cs" />
     <Compile Include="Models\ApprenticeshipPaymentGroup.cs" />
     <Compile Include="ViewModels\BeginNewPayeSchemeViewModel.cs" />
-    <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\Organisation\AddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\FindOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrgainsationViewModelBase.cs" />
     <Compile Include="ViewModels\Organisation\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
-    <Compile Include="ViewModels\GatewayInformViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\PayeSchemeDetailViewModel.cs" />
@@ -611,7 +603,6 @@
     <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
-    <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitations\ReceiveTransferConnectionInvitationViewModel.cs" />
@@ -632,8 +623,6 @@
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -668,7 +657,6 @@
     <Compile Include="WebRole.cs" />
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
     <Content Include="Views\Organisation\OrganisationUpdatedNextSteps.cshtml" />
-    <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\Activities\Latest.cshtml" />
@@ -678,6 +666,7 @@
     <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
     <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
     <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
+    <Content Include="src\sass\_type.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -960,16 +949,11 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
-    <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
     <Content Include="Views\Home\Privacy.cshtml" />
@@ -1039,13 +1023,11 @@
     <Content Include="src\sass\_layouts.scss" />
     <Content Include="src\sass\_mixins.scss" />
     <Content Include="src\sass\_tables.scss" />
-    <Content Include="src\sass\_typography.scss" />
     <Content Include="src\sass\screen-ie8.scss" />
     <Content Include="src\sass\_panels.scss" />
     <Content Include="src\sass\_commitments.scss" />
     <Content Include="Views\EmployerAccountTransactions\PaymentDetails.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
-    <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
@@ -1053,8 +1035,6 @@
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\Home\ServiceStartPage.cshtml" />
-    <Content Include="Views\EmployerAccount\LegalAgreement.cshtml" />
-    <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
@@ -1071,13 +1051,8 @@
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />
-    <Content Include="Views\Settings\NotificationSettings.cshtml" />
-    <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />
     <Content Include="Views\Shared\Pagination.cshtml" />
-    <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
-    <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
     <Content Include="src\sass\_search.scss" />
-    <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
     <Content Include="src\sass\_icons.scss" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
