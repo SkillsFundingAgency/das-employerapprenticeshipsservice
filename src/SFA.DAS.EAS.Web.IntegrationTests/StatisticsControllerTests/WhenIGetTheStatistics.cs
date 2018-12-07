@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Net;
 using System.Threading.Tasks;
+using AutoFixture;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -13,7 +14,6 @@ using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
 {
@@ -27,17 +27,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
         [SetUp]
         public async Task Setup()
         {
-            var call = new CallRequirements("api/statistics")
-                .AllowStatusCodes(HttpStatusCode.OK);
+            var fixture = new Fixture();
             _apiTester = new ApiIntegrationTester();
             var accountStatisticsDataHelper = new AccountStatisticsDataHelper(_apiTester.EmployerApprenticeshipsServiceConfiguration.DatabaseConnectionString);
             var financeStatisticsDataHelper = new FinanceStatisticsDataHelper(_apiTester.LevyDeclarationProviderConfiguration.DatabaseConnectionString);
             
             _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
-            if (_expectedStatisticsViewModel.TotalAccounts == 0
-                || _expectedStatisticsViewModel.TotalAgreements == 0
-                || _expectedStatisticsViewModel.TotalLegalEntities == 0
-                || _expectedStatisticsViewModel.TotalPayeSchemes == 0)
+            if (AnyAccountStatisticsAreZero(_expectedStatisticsViewModel))
             {
                 using (var connection = new SqlConnection(_apiTester.EmployerApprenticeshipsServiceConfiguration.DatabaseConnectionString))
                 {
@@ -47,7 +43,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
                     var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
                     var accountRepo = new AccountRepository(_apiTester.EmployerApprenticeshipsServiceConfiguration,
                         Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
-                    await accountRepo.CreateAccount(10003/*todo:get proper id*/, "234", "integration-tests", "address", DateTime.Today, "emp-ref", 
+                    await accountRepo.CreateAccount(10003/*todo:get proper id*/, "234", "emp name", "address", DateTime.Today, $"ref-{DateTime.Now.Ticks}", 
                         "access-token", "refresh-token", "company-status", "emp ref name", 2, 1, "sector");
                     transaction.Commit();
                 }
@@ -56,42 +52,24 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
             }
 
             var financialStatistics = await financeStatisticsDataHelper.GetStatistics();
-            if (financialStatistics.TotalPayments == 0)
+            if (AnyFinanceStatisticsAreZero(financialStatistics))
             {
                 var financeDbContext = new EmployerFinanceDbContext(_apiTester.LevyDeclarationProviderConfiguration.DatabaseConnectionString);
+                financeDbContext.Database.BeginTransaction();
                 var lazyDb = new Lazy<EmployerFinanceDbContext>(() => financeDbContext);
-                var levyRepository = new DasLevyRepository(_apiTester.LevyDeclarationProviderConfiguration,
-                    Mock.Of<ILog>(), lazyDb);
+                var levyRepository = new DasLevyRepository(_apiTester.LevyDeclarationProviderConfiguration, Mock.Of<ILog>(), lazyDb);
                 await levyRepository.CreatePayments(new List<PaymentDetails>
                 {
-                    new PaymentDetails
-                    {
-                        ProviderName = "prov name",
-                        StandardCode = 31,
-                        ProgrammeType = 3,
-                        CourseName = "course name",
-                        ApprenticeName = "apprentice name",
-                        ApprenticeNINumber = "nin",
-                        CourseLevel = 3,
-                        CourseStartDate = DateTime.Today,
-
-                        Ukprn = 134234,
-                        Uln   = 323423,
-                        EmployerAccountId = 342,
-                        ApprenticeshipId = 1,
-                        DeliveryPeriodMonth = 5,
-                        DeliveryPeriodYear = 2018,
-                        CollectionPeriodId = "R05",
-                        CollectionPeriodMonth = 4,
-                        CollectionPeriodYear = 2018,
-                        EvidenceSubmittedOn = DateTime.Today,
-                        EmployerAccountVersion = "emp acct ver",
-                        ApprenticeshipVersion = "appr ver",
-                        FundingSource = FundingSource.Levy,
-                        TransactionType = TransactionType.Learning,
-                        Amount = 234,
-                        PeriodEnd = "R06"
-                    }
+                    fixture
+                        .Build<PaymentDetails>()
+                        .With(details => details.CollectionPeriodId, "R05")
+                        .With(details => details.PeriodEnd, "R12")
+                        .With(details => details.EmployerAccountVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
+                        .With(details => details.ApprenticeshipVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
+                        .Without(details => details.FrameworkCode)
+                        .Without(details => details.PathwayCode)
+                        .Without(details => details.PathwayName)
+                        .Create()
                 });
                 financeDbContext.Database.CurrentTransaction.Commit();
 
@@ -100,7 +78,20 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
 
             _expectedStatisticsViewModel.TotalPayments = financialStatistics.TotalPayments;
 
-            _actualResponse = await _apiTester.InvokeGetAsync<StatisticsViewModel>(call);
+            _actualResponse = await _apiTester.InvokeGetAsync<StatisticsViewModel>(new CallRequirements("api/statistics"));
+        }
+
+        private static bool AnyAccountStatisticsAreZero(StatisticsViewModel accountStatistics)
+        {
+            return accountStatistics.TotalAccounts == 0
+                   || accountStatistics.TotalAgreements == 0
+                   || accountStatistics.TotalLegalEntities == 0
+                   || accountStatistics.TotalPayeSchemes == 0;
+        }
+
+        private static bool AnyFinanceStatisticsAreZero(StatisticsViewModel financialStatistics)
+        {
+            return financialStatistics.TotalPayments == 0;
         }
 
         [Test]
