@@ -108,9 +108,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public async Task ThenIfTheAgreementIsSignedThenTheApiIsCheckedForActiveCommitments()
         {
             //Arrange
-            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
                 .ReturnsAsync(new List<ApprenticeshipStatusSummary> { new ApprenticeshipStatusSummary {LegalEntityIdentifier = ExpectedLegalEntityCode,ActiveCount = 1} });
-            _repository.Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
+            _repository
+                .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
                 .ReturnsAsync(new List<RemoveEmployerAgreementView>
                 {
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
@@ -124,16 +126,44 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         }
 
         [Test]
-        public async Task ThenIfTheAgreementIsSignedAndNoActiceCommitmentsTheAgreementCanBeRemoved()
+        public async Task ThenIfTheAgreementIsSignedAndNoActiveCommitmentsTheAgreementCanBeRemoved()
         {
             //Arrange
-            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
-                .ReturnsAsync(new List<ApprenticeshipStatusSummary> { new ApprenticeshipStatusSummary { LegalEntityIdentifier = ExpectedLegalEntityCode, CompletedCount = 1 } });
-            _repository.Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary { LegalEntityIdentifier = ExpectedLegalEntityCode, CompletedCount = 1 }
+                });
+            _repository
+                .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
                 .ReturnsAsync(new List<RemoveEmployerAgreementView>
                 {
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode}
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+            Assert.IsTrue(actual.Agreements.All(c => c.CanBeRemoved));
+        }
+
+        [Test]
+        public async Task ThenIfTheAgreementIsSignedAndNoActiveCommitmentsMatchingLegalEntitySourceTheAgreementCanBeRemoved()
+        {
+            //Arrange
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary { LegalEntityIdentifier = ExpectedLegalEntityCode, ActiveCount = 1, LegalEntityOrganisationType = OrganisationType.Charities }
+                });
+            _repository
+                .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
+                .ReturnsAsync(new List<RemoveEmployerAgreementView>
+                {
+                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
+                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode, LegalEntitySource = OrganisationType.Other }
                 });
 
             //Act

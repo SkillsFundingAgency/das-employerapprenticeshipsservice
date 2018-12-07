@@ -26,12 +26,9 @@
         <h1 class="heading-xlarge">Find organisation address</h1>
         @if (Model.Status == HttpStatusCode.OK)
         {
-
             if (Model?.Data?.Addresses == null || !Model.Data.Addresses.Any())
             {
-
                 noAddressesFound = $"No address found for the postcode {Model.Data.Postcode}";
-
             }
             else
             {

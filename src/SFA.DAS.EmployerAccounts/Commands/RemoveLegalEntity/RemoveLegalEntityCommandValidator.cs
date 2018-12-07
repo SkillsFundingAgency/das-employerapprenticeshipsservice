@@ -61,9 +61,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             }
 
             var accountId = _hashingService.DecodeValue(item.HashedAccountId);
-            var legalEntites = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
+            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
 
-            if (legalEntites != null && legalEntites.Count == 1)
+            if (legalEntities != null && legalEntities.Count == 1)
             {
                 validationResult.AddError(nameof(item.HashedLegalAgreementId), "There must be at least one legal entity on the account");
                 return validationResult;
@@ -77,11 +77,10 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                 
                 var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
 
-                // BUG: the look up on LegalEntityIdentifier by itself is invalid - it should also be by source, but this is not provided by commitments API
-                var returnValue = commitments
-                                    .FirstOrDefault(c => 
-                                        !string.IsNullOrEmpty(c.LegalEntityIdentifier) 
-                                        && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode));
+                var returnValue = commitments.FirstOrDefault(c => 
+                        !string.IsNullOrEmpty(c.LegalEntityIdentifier) 
+                        && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
+                        && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
                 
                 if (returnValue != null && (returnValue.ActiveCount + returnValue.PausedCount + returnValue.PendingApprovalCount) != 0)
                 {
@@ -89,7 +88,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                     return validationResult;
                 }
             }
-            
             
             if (agreement.AccountId != accountId )
             {

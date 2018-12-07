@@ -6,6 +6,7 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Events;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
@@ -23,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
     {
 
         private readonly IValidator<AddPayeToAccountCommand> _validator;
-        private readonly IAccountRepository _accountRepository;
+        private readonly IPayeRepository _payeRepository;
         private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IMediator _mediator;
@@ -33,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
 
         public AddPayeToAccountCommandHandler(
             IValidator<AddPayeToAccountCommand> validator,
-            IAccountRepository accountRepository,
+            IPayeRepository payeRepository,
             IEventPublisher eventPublisher,
             IHashingService hashingService,
             IMediator mediator,
@@ -42,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             IRefreshEmployerLevyService refreshEmployerLevyService)
         {
             _validator = validator;
-            _accountRepository = accountRepository;
+            _payeRepository = payeRepository;
             _eventPublisher = eventPublisher;
             _hashingService = hashingService;
             _mediator = mediator;
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            await _accountRepository.AddPayeToAccount(
+            await _payeRepository.AddPayeToAccount(
                     new Paye
                     {
                         AccessToken = message.AccessToken,

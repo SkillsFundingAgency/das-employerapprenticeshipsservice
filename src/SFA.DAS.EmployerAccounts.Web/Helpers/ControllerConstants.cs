@@ -43,6 +43,8 @@
         public const string HomeControllerName = "Home";
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";
+        public const string InvitationControllerName = "Invitation";
+        public const string InvitationIndexName = "All";
         public const string InviteActionName = "Invite";
         public const string LegacyEasBaseUrlKeyName = "LegacyEasBaseUrl";
         public const string LegalAgreementViewName = "LegalAgreement";

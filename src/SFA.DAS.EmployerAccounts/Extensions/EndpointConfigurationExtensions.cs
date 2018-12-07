@@ -12,8 +12,13 @@ namespace SFA.DAS.EmployerAccounts.Extensions
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder)
         {
             var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+
             config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
             {
+                r.RouteToEndpoint(
+                    typeof(ImportLevyDeclarationsCommand).Assembly,
+                    typeof(ImportLevyDeclarationsCommand).Namespace,
+                    "SFA.DAS.EmployerFinance.MessageHandlers");
             });
 
             return config;

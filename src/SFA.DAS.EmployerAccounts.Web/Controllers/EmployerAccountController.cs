@@ -169,15 +169,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{HashedAccountId}/rename")]
         public async Task<ActionResult> RenameAccount(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsAction("rename"));
-        }
-
-
-
-        private string GetUserId()
-        {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            return userIdClaim ?? "";
+            var vm = await _employerAccountOrchestrator.GetRenameEmployerAccountViewModel(hashedAccountId, userIdClaim);
+            return View(vm);
         }
 
         [HttpPost]
@@ -214,6 +208,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             errorResponse.Status = response.Status;
 
             return View(errorResponse);
+        }
+
+        private string GetUserId()
+        {
+            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            return userIdClaim ?? "";
         }
     }
 }
