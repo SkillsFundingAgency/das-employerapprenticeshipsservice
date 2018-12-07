@@ -1,10 +1,11 @@
 ﻿using System.Web.Http;
+using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
-    //[ApiAuthorize(Roles = "ReadUserAccounts")]
+    [ApiAuthorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/accountlegalentities")]
     public class AccountLegalEntitiesController : ApiController
     {

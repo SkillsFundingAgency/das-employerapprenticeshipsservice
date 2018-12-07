@@ -299,6 +299,19 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             return query.ToArray();
         }
 
+        public async Task<EmployerAccountOutput> GetAccountDetailsAsync(string accountName)
+        {
+            const string sql = "SELECT Id as AccountId, HashedId as HashedAccountId, PublicHashedId FROM [employer_account].Account WHERE Name = @accountName";
+
+            var query = await _db.Value.Database.Connection.QueryFirstOrDefaultAsync<EmployerAccountOutput>(
+                sql: sql, 
+                param: new { accountName },
+                    transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                    commandType: CommandType.Text);
+
+            return query;
+        }
+
         private Task UpdateAccountLegalEntityPublicHashedIdInternal(IDbConnection connection, IDbTransaction transaction, long accountLegalEntityId)
         {
             var parameters = new DynamicParameters();

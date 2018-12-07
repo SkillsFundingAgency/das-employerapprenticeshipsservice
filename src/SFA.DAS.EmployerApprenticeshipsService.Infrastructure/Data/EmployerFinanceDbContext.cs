@@ -22,7 +22,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public EmployerFinanceDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
-            Database.BeginTransaction();
         }
 
         protected EmployerFinanceDbContext()

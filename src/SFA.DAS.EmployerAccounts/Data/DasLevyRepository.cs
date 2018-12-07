@@ -39,5 +39,18 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.ToList();
         }
 
+        public Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@empRef", empRef, DbType.String);
+
+            return _db.Value.Database.Connection.QueryAsync<DasEnglishFraction>(
+                sql: "[employer_financial].[GetEnglishFraction_ByEmpRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }
