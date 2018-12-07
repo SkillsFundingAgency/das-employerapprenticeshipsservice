@@ -67,7 +67,6 @@
         public const string SearchForOrganisationViewName = "SearchForOrganisation";
         public const string SearchForOrganisationResultsActionName = "SearchForOrganisationResults";
         public const string SearchForOrganisationResultsViewName = "SearchForOrganisationResults";
-        public const string SelectEmployerActionName = "SelectEmployer";
         public const string ServiceStartPageViewName = "ServiceStartPage";
         public const string SetupAccountViewName = "SetupAccount";
         public const string SignAgreementViewName = "SignAgreement";

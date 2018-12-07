@@ -1,0 +1,93 @@
+﻿@using SFA.DAS.Common.Domain.Types
+@model OrchestratorResponse<SummaryViewModel>
+
+@{ViewBag.PageID = "page-onboard-paye-check-details"; }
+@{ViewBag.Title = "Check Details"; }
+@{ViewBag.HideNav = "true"; }
+@{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";}
+
+@if (string.IsNullOrEmpty(Model.Data.PayeReference))
+{
+    ViewBag.PageID = "page-onboard-paye-scheme-in-use";
+    ViewBag.Title = "PAYE scheme already in use";
+}
+@if (Model.Data.EmpRefNotFound)
+{
+    ViewBag.PageID = "page-onboard-paye-scheme-not-linked-to-credentials";
+    ViewBag.Title = "PAYE scheme not linked to credentials";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @if (string.IsNullOrEmpty(Model.Data.PayeReference) && !Model.Data.EmpRefNotFound)
+        {
+            <h1 class="heading-xlarge">PAYE scheme already in use</h1>
+            <p>The PAYE scheme for the Government Gateway details you entered is already added to an account.</p>
+            <p><a class="button" id="search_again" href="@Url.Action("Gateway","EmployerAccount")">Use different details</a></p>
+        }
+        else if (Model.Data.EmpRefNotFound)
+        {
+            @Html.Partial("_PayeNotFound", @Url.Action("Gateway", "EmployerAccount"))
+        }
+        else
+        {
+            <h1 class="heading-xlarge">Check details</h1>
+            <table class="top-border">
+                <tr>
+                    <th scope="row">
+                        Organisation
+                    </th>
+                    <td>
+                        <dl class="inline">
+                            <dt>Name:</dt>
+                            <dd>@Model.Data.OrganisationName</dd>
+                            
+                            <dt>Address:</dt>
+                            <dd>@Model.Data.RegisteredAddress</dd>
+                            
+                            @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+                           {
+                               if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
+                               {
+                                   <dt>Companies House number:</dt>
+                               }
+                               else
+                               {
+                                    <dt>Charity number:</dt>
+                               }
+                               <dd>@Model.Data.OrganisationReferenceNumber</dd>
+                           }
+                        </dl>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        PAYE scheme
+                    </th>
+                    <td>
+                        <dl class="inline">
+                            <dt>@Model.Data.PayeReference</dt>
+                            @if (!string.IsNullOrEmpty(Model.Data.EmployerRefName))
+                            {
+                                <dt>@Model.Data.EmployerRefName</dt>
+                            }
+                        </dl>
+                    </td>
+                </tr>
+            </table>
+            <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <button type="submit" class="button" id="continue">These details are correct</button>
+                    <a class="button-link" href="@Url.Action("SearchForOrganisation", "SearchOrganisation")">Change details</a>                
+                </div>
+            </form>
+        }
+    </div>
+</div>
+
+    @section breadcrumb {
+        <div class="breadcrumbs">
+            <a href="@Url.Action("GatewayInform", "EmployerAccount")" class="back-link">Back</a>
+        </div>
+    }

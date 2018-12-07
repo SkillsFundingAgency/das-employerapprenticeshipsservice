@@ -523,7 +523,6 @@
     <Compile Include="Controllers\OrganisationSharedController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="Extensions\DynamicExtentions.cs" />
@@ -535,9 +534,7 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
-    <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
-    <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Organisation\IncorrectOrganisationDetailsViewModel.cs" />
@@ -582,7 +579,6 @@
     <Compile Include="ViewModels\Organisation\EmployerAgreementPdfViewModel.cs" />
     <Compile Include="ViewModels\Organisation\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationAddedNextStepsViewModel.cs" />
-    <Compile Include="ViewModels\Organisation\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SearchOrganisationViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\AcknowledgementViewModel.cs" />
@@ -595,7 +591,6 @@
     <Compile Include="ViewModels\Organisation\OrgainsationViewModelBase.cs" />
     <Compile Include="ViewModels\Organisation\PublicSectorOrganisationSearchResultsViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
-    <Compile Include="ViewModels\GatewayInformViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\PayeSchemeDetailViewModel.cs" />
@@ -628,7 +623,6 @@
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -663,7 +657,6 @@
     <Compile Include="WebRole.cs" />
     <Content Include="Views\Organisation\AddOrganisation.cshtml" />
     <Content Include="Views\Organisation\OrganisationUpdatedNextSteps.cshtml" />
-    <Content Include="Views\SearchOrganisation\FindAddress.cshtml" />
     <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\Activities\Latest.cshtml" />
@@ -960,7 +953,6 @@
     <Content Include="Views\Shared\AccessDenied.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
-    <Content Include="Views\EmployerAccount\InvalidSummary.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
@@ -1036,7 +1028,6 @@
     <Content Include="src\sass\_commitments.scss" />
     <Content Include="Views\EmployerAccountTransactions\PaymentDetails.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
-    <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="src\sass\_custom.scss" />
     <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
@@ -1044,8 +1035,6 @@
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
     <Content Include="Views\Home\ServiceStartPage.cshtml" />
-    <Content Include="Views\EmployerAccount\LegalAgreement.cshtml" />
-    <Content Include="Views\EmployerAccount\Summary.cshtml" />
     <Content Include="Views\Organisation\OrganisationLegalAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
@@ -1062,11 +1051,7 @@
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="src\sass\_welcome.scss" />
-    <Content Include="Views\Settings\NotificationSettings.cshtml" />
-    <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />
     <Content Include="Views\Shared\Pagination.cshtml" />
-    <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
-    <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
     <Content Include="src\sass\_search.scss" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
     <Content Include="src\sass\_icons.scss" />
