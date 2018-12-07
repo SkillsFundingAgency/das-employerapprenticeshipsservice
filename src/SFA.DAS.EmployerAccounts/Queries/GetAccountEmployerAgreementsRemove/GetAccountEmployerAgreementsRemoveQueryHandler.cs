@@ -61,41 +61,44 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
             {
                 foreach (var removeEmployerAgreementView in result)
                 {
-                    removeEmployerAgreementView.HashedAgreementId = _hashingService.HashValue((long) removeEmployerAgreementView.Id);
+                    removeEmployerAgreementView.HashedAgreementId =
+                        _hashingService.HashValue((long) removeEmployerAgreementView.Id);
                     removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
 
-                if (result.Count == 1) continue;
+                    if (result.Count == 1) continue;
 
-                switch (removeEmployerAgreementView.Status)
-                {
-                    case EmployerAgreementStatus.Pending:
-                        removeEmployerAgreementView.CanBeRemoved = true;
-                        break;
-                    case EmployerAgreementStatus.Signed:
-
-                        var commitmentConnectedToEntity = commitments.FirstOrDefault(c => 
-                            !string.IsNullOrEmpty(c.LegalEntityIdentifier) 
-                            && c.LegalEntityIdentifier.Equals(removeEmployerAgreementView.LegalEntityCode)
-                            && c.LegalEntityOrganisationType == removeEmployerAgreementView.LegalEntitySource);
-
-                        if (commitmentConnectedToEntity != null &&
-                            (commitmentConnectedToEntity.ActiveCount +
-                             commitmentConnectedToEntity.PendingApprovalCount +
-                             commitmentConnectedToEntity.PausedCount) != 0)
-                        {
-                            removeEmployerAgreementView.CanBeRemoved = false;
-                        }
-                        else
-                        {
+                    switch (removeEmployerAgreementView.Status)
+                    {
+                        case EmployerAgreementStatus.Pending:
                             removeEmployerAgreementView.CanBeRemoved = true;
-                        }
+                            break;
+                        case EmployerAgreementStatus.Signed:
 
-                        break;
-                    default:
-                        removeEmployerAgreementView.CanBeRemoved = false;
-                        break;
+                            var commitmentConnectedToEntity = commitments.FirstOrDefault(c =>
+                                !string.IsNullOrEmpty(c.LegalEntityIdentifier)
+                                && c.LegalEntityIdentifier.Equals(removeEmployerAgreementView.LegalEntityCode)
+                                && c.LegalEntityOrganisationType == removeEmployerAgreementView.LegalEntitySource);
+
+                            if (commitmentConnectedToEntity != null &&
+                                (commitmentConnectedToEntity.ActiveCount +
+                                 commitmentConnectedToEntity.PendingApprovalCount +
+                                 commitmentConnectedToEntity.PausedCount) != 0)
+                            {
+                                removeEmployerAgreementView.CanBeRemoved = false;
+                            }
+                            else
+                            {
+                                removeEmployerAgreementView.CanBeRemoved = true;
+                            }
+
+                            break;
+                        default:
+                            removeEmployerAgreementView.CanBeRemoved = false;
+                            break;
+                    }
                 }
             }
+
             return new GetAccountEmployerAgreementsRemoveResponse { Agreements = result };
         }
     }

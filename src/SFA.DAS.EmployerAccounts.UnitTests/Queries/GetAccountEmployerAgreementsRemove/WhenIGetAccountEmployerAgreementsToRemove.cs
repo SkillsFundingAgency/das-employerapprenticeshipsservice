@@ -1,4 +1,6 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -156,14 +158,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
                 .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
                 .ReturnsAsync(new List<ApprenticeshipStatusSummary>
                 {
-                    new ApprenticeshipStatusSummary { LegalEntityIdentifier = ExpectedLegalEntityCode, ActiveCount = 1, LegalEntityOrganisationType = OrganisationType.Charities }
+                    new ApprenticeshipStatusSummary { LegalEntityIdentifier = ExpectedLegalEntityCode, ActiveCount = 1, LegalEntityOrganisationType = Common.Domain.Types.OrganisationType.Charities }
                 });
             _repository
                 .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
                 .ReturnsAsync(new List<RemoveEmployerAgreementView>
                 {
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
-                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode, LegalEntitySource = OrganisationType.Other }
+                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode, LegalEntitySource = Common.Domain.Types.OrganisationType.Other }
                 });
 
             //Act
