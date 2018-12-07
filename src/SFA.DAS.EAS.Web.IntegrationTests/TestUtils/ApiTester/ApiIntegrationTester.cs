@@ -13,10 +13,13 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Owin;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using WebApi.StructureMap;
@@ -29,14 +32,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private IntegrationTestExceptionLogger _exceptionLogger;
 
-        private readonly Lazy<DbBuilder> _dbBuilder;
-
         public bool IsTestServerStarted => TestServer != null;
-
-        public ApiIntegrationTester()
-        {
-            _dbBuilder = new Lazy<DbBuilder>(Resolve<DbBuilder>);
-        }
 
         public TestServer TestServer { get; private set; }
 
@@ -64,7 +60,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             TestServer = TestServer.Create(InitialiseHost);
         }
-
+        
         public void Dispose()
         {
             if (IsTestServerStarted)
@@ -86,33 +82,34 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         public Task<CallResponse<TResult>> InvokeGetAsync<TResult>(CallRequirements call)
         {
+            EnsureStarted();
+
             return GetResponseAsync<TResult>(call);
         }
 
-        /// <summary>
-        ///     Use the DI container used for the test to resolve the specified service.
-        /// </summary>
-        public T Resolve<T>()
+        public T GetTransientInstance<T>()
         {
             EnsureStarted();
 
-            return _dependencyResolver.Container.GetInstance<T>();
+            return _dependencyResolver.Container.GetNestedContainer().GetInstance<T>();
         }
-
-        public DbBuilder DbBuilder => _dbBuilder.Value;
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
             var callResponse = new CallResponse();
+
             await FetchInitialResponseAsync(call, callResponse);
+
             return callResponse;
         }
 
         private async Task<CallResponse<TResult>> GetResponseAsync<TResult>(CallRequirements call)
         {
             var callResponse = new CallResponse<TResult>();
+
             await FetchInitialResponseAsync(call, callResponse);
             await FetchCompleteResponseAsync(callResponse);
+
             return callResponse;
         }
 
@@ -170,11 +167,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             var container = config.DependencyResolver.GetService<IContainer>();
             var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
-
             container.Configure(c =>
             {
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
-                c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);

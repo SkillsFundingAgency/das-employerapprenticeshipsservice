@@ -1,75 +1,26 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.Helpers;
-using SFA.DAS.EAS.Web.Orchestrators;
-using SFA.DAS.EAS.Web.ViewModels;
+﻿using System.Web.Mvc;
+using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [RoutePrefix("settings")]
     [AuthoriseActiveUser]
-    public class SettingsController : BaseController
+    public class SettingsController : Controller
     {
-        private readonly UserSettingsOrchestrator _userSettingsOrchestrator;
-
-        public SettingsController(IAuthenticationService owinWrapper,
-            UserSettingsOrchestrator userSettingsOrchestrator,
-            IAuthorizationService authorization,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-            _userSettingsOrchestrator = userSettingsOrchestrator;
-        }
-
         [HttpGet]
         [Route("notifications")]
-        public async Task<ActionResult> NotificationSettings()
+        public ActionResult NotificationSettings()
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var vm = await _userSettingsOrchestrator.GetNotificationSettingsViewModel(userIdClaim);
-
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-
-            vm.FlashMessage = flashMessage;
-
-            return View(vm);
-        }
-
-        [HttpPost]
-        [Route("notifications")]
-        public async Task<ActionResult> NotificationSettings(NotificationSettingsViewModel vm)
-        {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            await _userSettingsOrchestrator.UpdateNotificationSettings(userIdClaim,
-                vm.NotificationSettings);
-
-            var flashMessage = new FlashMessageViewModel
-            {
-                Severity = FlashMessageSeverityLevel.Success,
-                Message = "Settings updated."
-            };
-
-            AddFlashMessageToCookie(flashMessage);
-
-            return RedirectToAction(ControllerConstants.NotificationSettingsActionName);
+            return Redirect(Url.EmployerAccountsAction("settings/notifications", false));
         }
 
         [HttpGet]
         [Route("notifications/unsubscribe/{hashedAccountId}")]
-        public async Task<ActionResult> NotificationUnsubscribe(string hashedAccountId)
+        public ActionResult NotificationUnsubscribe(string hashedAccountId)
         {
-            var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            
-            var url = Url.Action(ControllerConstants.NotificationSettingsActionName);
-            var model = await _userSettingsOrchestrator.Unsubscribe(userIdClaim, hashedAccountId, url);
-
-            return View(model);
+            return Redirect(Url.EmployerAccountsAction($"settings/notifications/unsubscribe/{hashedAccountId}", false));
         }
+
     }
 }
