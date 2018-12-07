@@ -9,10 +9,10 @@ using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.HmrcLevy;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
-using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 
@@ -59,6 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response.Url;
         }
 
+
         public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl, NameValueCollection nameValueCollection)
         {
             var errorResponse = nameValueCollection?["error"];
@@ -100,6 +101,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return new OrchestratorResponse<HmrcTokenResponse> { Data = response.HmrcTokenResponse };
         }
 
+
         public async Task<GetHmrcEmployerInformationResponse> GetHmrcEmployerInformation(string authToken, string email)
         {
             var response = new GetHmrcEmployerInformationResponse();
@@ -122,6 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return response;
         }
+
 
     }
 }

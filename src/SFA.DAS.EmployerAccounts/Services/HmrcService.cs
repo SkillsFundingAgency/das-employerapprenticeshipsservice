@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.Caches;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.HmrcLevy;
 using SFA.DAS.ExecutionPolicies;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
@@ -29,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
 
         public HmrcService(
-            EmployerAccountsConfiguration configuration, 
+            EmployerAccountsConfiguration configuration,
             IHttpClientWrapper httpClientWrapper,
             IApprenticeshipLevyApiClient apprenticeshipLevyApiClient,
             ITokenServiceApiClient tokenServiceApiClient, 
@@ -150,11 +152,11 @@ namespace SFA.DAS.EmployerAccounts.Services
                 {
                     var accessToken = await GetOgdAccessToken();
 
-                    hmrcLatestUpdateDate =  await _apprenticeshipLevyApiClient.GetLastEnglishFractionUpdate(accessToken);
+                    hmrcLatestUpdateDate = await _apprenticeshipLevyApiClient.GetLastEnglishFractionUpdate(accessToken);
 
                     if (hmrcLatestUpdateDate != null)
                     {
-                        _inProcessCache.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value,new TimeSpan(0,0,30,0));
+                        _inProcessCache.Set("HmrcFractionLastCalculatedDate", hmrcLatestUpdateDate.Value, new TimeSpan(0, 0, 30, 0));
                     }
 
                     return hmrcLatestUpdateDate.Value;
@@ -179,7 +181,7 @@ namespace SFA.DAS.EmployerAccounts.Services
                 var accessToken = await _tokenServiceApiClient.GetPrivilegedAccessTokenAsync();
                 return accessToken.AccessCode;
             }
-            
+
         }
     }
 }
