@@ -124,7 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             {
                 Id = agreementId,
                 AccountId = createParams.AccountId,
-                AccountLegalentityId = accountLegalEntityId,
+                AccountLegalEntityId = accountLegalEntityId,
                 LegalEntityId = legalEntityId,
                 LegalEntityName = createParams.Name,
                 LegalEntityCode = createParams.Code,
