@@ -1,22 +1,30 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
+using AutoFixture;
 using Dapper;
+using Moq;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
+using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.Hashing;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
 {
     internal class AccountStatisticsDataHelper
     {
-        private readonly string _databaseConnectionString;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         
-        public AccountStatisticsDataHelper(string databaseConnectionString)
+        public AccountStatisticsDataHelper(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _databaseConnectionString = databaseConnectionString;
+            _configuration = configuration;
         }
 
         public async Task<StatisticsViewModel> GetStatistics()
         {
-            using (var connection = new SqlConnection(_databaseConnectionString))
+            using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
             {   
                 return await connection.QuerySingleAsync<StatisticsViewModel>(GetStatisticsSql);
             }
@@ -38,5 +46,41 @@ select (
   where a.StatusId = 2 -- signed
 ) as TotalAgreements;";
 
+        public async Task CreateAccountStatistics()
+        {
+            var fixture = new Fixture();
+
+            var accountDbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
+            accountDbContext.Database.BeginTransaction();
+            var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
+            
+            var userRepo = new UserRepository(_configuration, Mock.Of<ILog>(), lazyDb);
+            var userToCreate = fixture
+                .Build<User>()
+                .Without(user => user.Id)
+                .Without(user => user.UserRef)
+                .Create();
+            await userRepo.Create(userToCreate);
+            var createdUser = await userRepo.GetUserByRef(userToCreate.UserRef);
+
+            var accountRepo = new AccountRepository(_configuration,
+                Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
+            await accountRepo.CreateAccount(
+                createdUser.Id, 
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                DateTime.Today, 
+                $"ref-{DateTime.Now.Ticks.ToString().Substring(4,10)}", 
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                fixture.Create<string>(),
+                2, 
+                1, 
+                fixture.Create<string>());
+            
+            accountDbContext.Database.CurrentTransaction.Commit();
+        }
     }
 }
