@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
+using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
 {
@@ -99,16 +100,64 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.RemoveLegalEntityTests
         {
             //Arrange
             var expectedLegalEntityCode = "test_code";
-            _commitmentsApi.Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId)).ReturnsAsync(new List<ApprenticeshipStatusSummary> { new ApprenticeshipStatusSummary {ActiveCount = 1,PausedCount = 1,PendingApprovalCount = 1,LegalEntityIdentifier = expectedLegalEntityCode } });
-            _employerAgreementRepository.Setup(
-                x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Signed, LegalEntityCode = expectedLegalEntityCode});
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary
+                    {
+                        ActiveCount = 1,PausedCount = 1,PendingApprovalCount = 1,LegalEntityIdentifier = expectedLegalEntityCode
+                    }
+                });
+
+            _employerAgreementRepository
+                .Setup(x => x.GetEmployerAgreement(ExpectedAgreementId))
+                .ReturnsAsync(new EmployerAgreementView
+                {
+                    Status = EmployerAgreementStatus.Signed, LegalEntityCode = expectedLegalEntityCode
+                });
 
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
+            {
+                HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId
+            });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("HashedLegalAgreementId", "Agreement has already been signed and has active commitments"), actual.ValidationDictionary);
+        }
+
+        [Test]
+        public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasActiveCommitmentsWithMatchingLegalEntitySource()
+        {
+            //Arrange
+            var expectedLegalEntityCode = "test_code";
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary
+                    {
+                        ActiveCount = 1,PausedCount = 1,PendingApprovalCount = 1,LegalEntityIdentifier = expectedLegalEntityCode, LegalEntityOrganisationType = OrganisationType.Charities
+                    }
+                });
+
+            _employerAgreementRepository
+                .Setup(x => x.GetEmployerAgreement(ExpectedAgreementId))
+                .ReturnsAsync(new EmployerAgreementView
+                {
+                    Status = EmployerAgreementStatus.Signed, LegalEntityCode = expectedLegalEntityCode, LegalEntitySource = OrganisationType.Other
+                });
+
+            //Act
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
+            {
+                HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId
+            });
+
+            //Assert
+            Assert.IsTrue(actual.IsValid());
         }
 
         [Test]
