@@ -228,7 +228,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 e.OrganisationName.Equals(_command.Name) &&
                 e.UserName.Equals(_owner.FullName()) &&
                 e.UserRef.Equals(Guid.Parse(_owner.UserRef)))));
-            //e.Created.)));
         }
     }
 }
