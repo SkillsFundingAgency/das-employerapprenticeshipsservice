@@ -19,8 +19,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
         public async Task Setup()
         {
             _apiTester = new ApiIntegrationTester();
-            var accountStatisticsDataHelper = new AccountStatisticsDataHelper(_apiTester.EmployerApprenticeshipsServiceConfiguration);
-            var financeStatisticsDataHelper = new FinanceStatisticsDataHelper(_apiTester.LevyDeclarationProviderConfiguration);
+            var accountStatisticsDataHelper = new AccountStatisticsDataHelper();
+            var financeStatisticsDataHelper = new FinanceStatisticsDataHelper();
             
             _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
             if (AnyAccountStatisticsAreZero(_expectedStatisticsViewModel))

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dapper;
 using Moq;
+using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -15,11 +16,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
 {
     internal class AccountStatisticsDataHelper
     {
+        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         
-        public AccountStatisticsDataHelper(EmployerApprenticeshipsServiceConfiguration configuration)
+        public AccountStatisticsDataHelper()
         {
-            _configuration = configuration;
+            _configuration = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
         }
 
         public async Task<StatisticsViewModel> GetStatistics()

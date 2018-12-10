@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dapper;
 using Moq;
+using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Payments;
@@ -15,11 +16,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
 {
     public class FinanceStatisticsDataHelper
     {
+        private const string ServiceName = "SFA.DAS.LevyAggregationProvider";
         private readonly LevyDeclarationProviderConfiguration _configuration;
 
-        public FinanceStatisticsDataHelper(LevyDeclarationProviderConfiguration configuration)
+        public FinanceStatisticsDataHelper()
         {
-            _configuration = configuration;
+            _configuration = ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>(ServiceName);
         }
 
         public async Task<StatisticsViewModel> GetStatistics()

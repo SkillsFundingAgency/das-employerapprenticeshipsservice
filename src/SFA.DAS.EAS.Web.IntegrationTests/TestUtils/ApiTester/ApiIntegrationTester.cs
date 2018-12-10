@@ -15,7 +15,6 @@ using NUnit.Framework;
 using Owin;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using WebApi.StructureMap;
@@ -28,28 +27,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private IntegrationTestExceptionLogger _exceptionLogger;
 
-        private readonly Lazy<EmployerApprenticeshipsServiceConfiguration> _accountConfig;
-        private readonly Lazy<LevyDeclarationProviderConfiguration> _financeConfig;
         private bool IsTestServerStarted => TestServer != null;
 
-        public ApiIntegrationTester()
-        {
-            _accountConfig =
-                new Lazy<EmployerApprenticeshipsServiceConfiguration>(
-                    GetTransientInstance<EmployerApprenticeshipsServiceConfiguration>);
-            _financeConfig =
-                new Lazy<LevyDeclarationProviderConfiguration>(
-                    GetTransientInstance<LevyDeclarationProviderConfiguration>);
-        }
-
-
         private TestServer TestServer { get; set; }
-
-        internal EmployerApprenticeshipsServiceConfiguration EmployerApprenticeshipsServiceConfiguration =>
-            _accountConfig.Value;
-
-        internal LevyDeclarationProviderConfiguration LevyDeclarationProviderConfiguration => 
-            _financeConfig.Value;
 
         /// <summary>
         ///     Send a GET to the specified URI using a test server and configuration created just for this call.
