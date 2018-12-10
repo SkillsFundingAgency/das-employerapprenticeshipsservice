@@ -21,6 +21,7 @@ BEGIN
 		le.DateOfIncorporation as LegalEntityInceptionDate,
 		le.Status as LegalEntityStatus,
 		le.Sector,
+		le.[Source] as LegalEntitySource,
 		ea.AccountLegalEntityId,
 		ale.PublicHashedId as AccountLegalEntityPublicHashedId
 	FROM [employer_account].[EmployerAgreement] ea

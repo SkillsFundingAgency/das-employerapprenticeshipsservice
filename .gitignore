@@ -242,6 +242,7 @@ FakesAssemblies/
 _Pvt_Extensions
 
 # Paket dependency manager
+**/package-lock.json
 .paket/paket.exe
 paket-files/
 
