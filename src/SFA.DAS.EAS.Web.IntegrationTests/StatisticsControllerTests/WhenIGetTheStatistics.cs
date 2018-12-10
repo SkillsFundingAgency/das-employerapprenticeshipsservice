@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -11,6 +12,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers;
 using SFA.DAS.EAS.Domain.Models.Payments;
+using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
@@ -35,18 +37,34 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
             _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
             if (AnyAccountStatisticsAreZero(_expectedStatisticsViewModel))
             {
-                using (var connection = new SqlConnection(_apiTester.EmployerApprenticeshipsServiceConfiguration.DatabaseConnectionString))
-                {
-                    connection.Open();
-                    var transaction = connection.BeginTransaction();
-                    var accountDbContext = new EmployerAccountsDbContext(connection, transaction);
-                    var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
-                    var accountRepo = new AccountRepository(_apiTester.EmployerApprenticeshipsServiceConfiguration,
-                        Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
-                    await accountRepo.CreateAccount(10003/*todo:get proper id*/, "234", "emp name", "address", DateTime.Today, $"ref-{DateTime.Now.Ticks}", 
-                        "access-token", "refresh-token", "company-status", "emp ref name", 2, 1, "sector");
-                    transaction.Commit();
-                }
+                var accountDbContext = new EmployerAccountsDbContext(_apiTester.EmployerApprenticeshipsServiceConfiguration.DatabaseConnectionString);
+                accountDbContext.Database.BeginTransaction();
+                var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
+                var accountRepo = new AccountRepository(_apiTester.EmployerApprenticeshipsServiceConfiguration,
+                    Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
+                var userRepo = new UserRepository(_apiTester.EmployerApprenticeshipsServiceConfiguration, Mock.Of<ILog>(), lazyDb);
+                var newUser = fixture
+                    .Build<User>()
+                    .Without(user => user.Id)
+                    .Without(user => user.UserRef)
+                    .Create();
+                await userRepo.Create(newUser);
+                var x = await userRepo.GetUserByRef(newUser.UserRef);
+                await accountRepo.CreateAccount(
+                    x.Id, 
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    DateTime.Today, 
+                    $"ref-{DateTime.Now.Ticks.ToString().Substring(4,10)}", 
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    2, 
+                    1, 
+                    fixture.Create<string>());
+                accountDbContext.Database.CurrentTransaction.Commit();
                 
                 _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
             }
@@ -63,6 +81,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
                     fixture
                         .Build<PaymentDetails>()
                         .With(details => details.CollectionPeriodId, "R05")
+                        // could put sanitised collection period and delivery period values in for mth and year
                         .With(details => details.PeriodEnd, "R12")
                         .With(details => details.EmployerAccountVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
                         .With(details => details.ApprenticeshipVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
