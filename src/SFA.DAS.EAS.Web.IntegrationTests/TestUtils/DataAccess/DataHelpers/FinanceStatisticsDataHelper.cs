@@ -41,24 +41,36 @@ from employer_financial.Payment;";
             var fixture = new Fixture();
 
             var financeDbContext = new EmployerFinanceDbContext(_configuration.DatabaseConnectionString);
-            financeDbContext.Database.BeginTransaction();
             var lazyDb = new Lazy<EmployerFinanceDbContext>(() => financeDbContext);
             var levyRepository = new DasLevyRepository(_configuration, Mock.Of<ILog>(), lazyDb);
-            await levyRepository.CreatePayments(new List<PaymentDetails>
+
+            try
             {
-                fixture
-                    .Build<PaymentDetails>()
-                    .With(details => details.CollectionPeriodId, "R05")
-                    // could put sanitised collection period and delivery period values in for mth and year
-                    .With(details => details.PeriodEnd, "R12")
-                    .With(details => details.EmployerAccountVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
-                    .With(details => details.ApprenticeshipVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
-                    .Without(details => details.FrameworkCode)
-                    .Without(details => details.PathwayCode)
-                    .Without(details => details.PathwayName)
-                    .Create()
-            });
-            financeDbContext.Database.CurrentTransaction.Commit();
+                financeDbContext.Database.BeginTransaction();
+
+                await levyRepository.CreatePayments(new List<PaymentDetails>
+                {
+                    fixture
+                        .Build<PaymentDetails>()
+                        .With(details => details.CollectionPeriodId, "R05")
+                        // could put sanitised collection period and delivery period values in for mth and year
+                        .With(details => details.PeriodEnd, "R12")
+                        .With(details => details.EmployerAccountVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
+                        .With(details => details.ApprenticeshipVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4,10)}")
+                        .Without(details => details.FrameworkCode)
+                        .Without(details => details.PathwayCode)
+                        .Without(details => details.PathwayName)
+                        .Create()
+                });
+
+                financeDbContext.Database.CurrentTransaction.Commit();
+            }
+            catch (Exception e)
+            {
+                financeDbContext.Database.CurrentTransaction.Rollback();
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }

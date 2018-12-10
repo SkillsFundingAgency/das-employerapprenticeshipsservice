@@ -53,36 +53,45 @@ select (
             var fixture = new Fixture();
 
             var accountDbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
-            accountDbContext.Database.BeginTransaction();
             var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
-            
             var userRepo = new UserRepository(_configuration, Mock.Of<ILog>(), lazyDb);
             var userToCreate = fixture
                 .Build<User>()
                 .Without(user => user.Id)
                 .Without(user => user.UserRef)
                 .Create();
-            await userRepo.Create(userToCreate);
-            var createdUser = await userRepo.GetUserByRef(userToCreate.UserRef);
-
             var accountRepo = new AccountRepository(_configuration,
                 Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
-            await accountRepo.CreateAccount(
-                createdUser.Id, 
-                fixture.Create<string>(),
-                fixture.Create<string>(),
-                fixture.Create<string>(),
-                DateTime.Today, 
-                $"ref-{DateTime.Now.Ticks.ToString().Substring(4,10)}", 
-                fixture.Create<string>(),
-                fixture.Create<string>(),
-                fixture.Create<string>(),
-                fixture.Create<string>(),
-                2, 
-                1, 
-                fixture.Create<string>());
-            
-            accountDbContext.Database.CurrentTransaction.Commit();
+
+            try
+            {
+                accountDbContext.Database.BeginTransaction();
+
+                await userRepo.Create(userToCreate);
+                var createdUser = await userRepo.GetUserByRef(userToCreate.UserRef);
+                await accountRepo.CreateAccount(
+                    createdUser.Id,
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    DateTime.Today,
+                    $"ref-{DateTime.Now.Ticks.ToString().Substring(4, 10)}",
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    fixture.Create<string>(),
+                    2,
+                    1,
+                    fixture.Create<string>());
+
+                accountDbContext.Database.CurrentTransaction.Commit();
+            }
+            catch (Exception e)
+            {
+                accountDbContext.Database.CurrentTransaction.Rollback();
+                Console.WriteLine(e);
+                throw;
+            }
         }
     }
 }
