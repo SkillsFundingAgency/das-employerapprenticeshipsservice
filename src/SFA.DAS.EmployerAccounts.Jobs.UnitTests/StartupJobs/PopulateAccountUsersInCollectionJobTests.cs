@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         public MembershipUser NewUser2 = new MembershipUser { AccountId = 2100, Role = 2, UserId = 2222, UserRef = Guid.NewGuid() };
         internal PopulateAccountUsersInCollectionJob PopulateAccountUsersInCollectionJob { get; set; }
 
-        private string _jobName = typeof(PopulateAccountUsersInCollectionJob).Name;
+        private readonly string _jobName = typeof(PopulateAccountUsersInCollectionJob).Name;
 
         public PopulateAccountUsersInCollectionJobTestsFixture()
         {
