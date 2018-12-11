@@ -932,7 +932,6 @@
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage.cshtml" />
     <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\FeatureNotEnabled.cshtml" />
     <Content Include="Views\Shared\UserNotAllowed.cshtml" />
