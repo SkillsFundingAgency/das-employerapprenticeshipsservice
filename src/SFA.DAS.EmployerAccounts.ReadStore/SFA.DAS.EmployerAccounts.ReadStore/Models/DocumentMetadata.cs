@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 {
-    internal class DocumentMetadata
+    public class DocumentMetadata
     {
         [JsonProperty("schemaType")]
         public string SchemaType { get; set; }

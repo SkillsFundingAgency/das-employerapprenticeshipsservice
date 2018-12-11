@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.Data
     public interface IPopulateRepository
     {
         Task<IEnumerable<MembershipUser>> GetAllAccountUsers();
-        Task<bool> AlreadyPopulated();
-        Task MarkAsPopulated();
+        Task<bool> HasJobRun(string job);
+        Task MarkJobAsRan(string job);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.DependencyResolution;
+using SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
@@ -11,6 +12,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
             {
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
+                c.AddRegistry<ReadStoreDataRegistry>();
+                c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
 

@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Jobs.Data;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
@@ -15,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
             });
 
             For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
+            For<IPopulateRepository>().Use< PopulateRepository>();
         }
     }
 }

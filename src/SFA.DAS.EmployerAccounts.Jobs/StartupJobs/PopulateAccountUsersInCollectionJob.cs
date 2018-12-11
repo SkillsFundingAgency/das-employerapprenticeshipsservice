@@ -11,21 +11,23 @@ using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
 {
-    internal class PopulateAccountUsersInCollectionJob
+    public class PopulateAccountUsersInCollectionJob
     {
         private readonly IAccountUsersRepository _accountUsersRepository;
         private readonly IPopulateRepository _populateRepository;
+        private readonly string _jobName;
 
         public PopulateAccountUsersInCollectionJob(IAccountUsersRepository accountUsersRepository, IPopulateRepository populateRepository)
         {
             _accountUsersRepository = accountUsersRepository;
             _populateRepository = populateRepository;
+            _jobName = typeof(PopulateAccountUsersInCollectionJob).Name;
         }
 
         [NoAutomaticTrigger]
         public async Task Run()
         {
-            if (await _populateRepository.AlreadyPopulated())
+            if (await _populateRepository.HasJobRun(_jobName))
             {
                 return;
             }
@@ -41,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
                 }
             }
 
-            await _populateRepository.MarkAsPopulated();
+            await _populateRepository.MarkJobAsRan(_jobName);
         }
     }
 }

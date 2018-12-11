@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 {
-    internal class AccountUser : Document
+    public class AccountUser : Document
     {
         [JsonProperty("userRef")]
         public Guid UserRef { get; protected set; }

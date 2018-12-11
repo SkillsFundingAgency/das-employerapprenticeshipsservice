@@ -66,6 +66,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         public MembershipUser NewUser2 = new MembershipUser { AccountId = 2100, Role = 2, UserId = 2222, UserRef = Guid.NewGuid() };
         internal PopulateAccountUsersInCollectionJob PopulateAccountUsersInCollectionJob { get; set; }
 
+        private string _jobName = typeof(PopulateAccountUsersInCollectionJob).Name;
+
         public PopulateAccountUsersInCollectionJobTestsFixture()
         {
             AccountUsersRepository = new Mock<IAccountUsersRepository>();
@@ -85,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         public PopulateAccountUsersInCollectionJobTestsFixture SetJobAsAlreadyRun()
         {
-            PopulateRepository.Setup(x => x.AlreadyPopulated()).ReturnsAsync(true);
+            PopulateRepository.Setup(x => x.HasJobRun(_jobName)).ReturnsAsync(true);
 
             return this;
         }
@@ -142,13 +144,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         public PopulateAccountUsersInCollectionJobTestsFixture VerifyMarkAsPopulatedNotRun()
         {
-            PopulateRepository.Verify(x => x.MarkAsPopulated(), Times.Never);
+            PopulateRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Never);
 
             return this;
         }
         public PopulateAccountUsersInCollectionJobTestsFixture VerifyMarkAsPopulatedWasRun()
         {
-            PopulateRepository.Verify(x => x.MarkAsPopulated(), Times.Once);
+            PopulateRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Once);
 
             return this;
         }
