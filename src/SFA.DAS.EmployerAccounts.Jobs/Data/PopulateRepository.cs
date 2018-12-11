@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,10 +15,10 @@ namespace SFA.DAS.EmployerAccounts.Jobs.Data
     {
         private readonly EmployerAccountsDbContext _db;
 
-        public PopulateRepository(EmployerAccountsConfiguration configuration, ILog logger, EmployerAccountsDbContext db) 
+        public PopulateRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db) 
             : base(configuration.DatabaseConnectionString, logger)
         {
-            _db = db;
+            _db = db.Value;
         }
 
         public async Task<IEnumerable<MembershipUser>> GetAllAccountUsers()

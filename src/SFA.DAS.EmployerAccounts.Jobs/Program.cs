@@ -1,7 +1,5 @@
 ﻿using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
-//using NLog.Internal;
-using System.Configuration;
 using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
@@ -23,17 +21,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs
                 var startup = container.GetInstance<EndpointStartup>();
                 var config = new JobHostConfiguration { JobActivator = new StructureMapJobActivator(container) };
                 var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
-                
-                var instrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
 
                 if (isDevelopment)
                 {
                     config.UseDevelopmentSettings();
                 }
 
-                //config.LoggerFactory = new LoggerFactory()
-                //    .AddApplicationInsights(instrumentationKey, null)
-                //    .AddNLog();
+                config.LoggerFactory = container.GetInstance<ILoggerFactory>();
 
                 config.UseTimers();
 

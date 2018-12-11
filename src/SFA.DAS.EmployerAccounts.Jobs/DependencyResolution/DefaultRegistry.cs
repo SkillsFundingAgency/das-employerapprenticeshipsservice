@@ -2,6 +2,9 @@
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.Data;
 using StructureMap;
+using Microsoft.Extensions.Logging;
+using System.Configuration;
+using NLog.Extensions.Logging;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
 {
@@ -15,6 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
 
+            For<ILoggerFactory>().Use(() => new LoggerFactory().AddApplicationInsights(ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"], null).AddNLog()).Singleton();
             For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
             For<IPopulateRepository>().Use< PopulateRepository>();
         }
