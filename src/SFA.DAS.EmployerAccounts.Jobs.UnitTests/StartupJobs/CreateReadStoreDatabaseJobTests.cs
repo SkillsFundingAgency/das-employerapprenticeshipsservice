@@ -35,13 +35,13 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
     public class CreateReadStoreDatabaseJobTestsFixture
     {
         public Mock<IDocumentClient> DocumentClient { get; set; }
-        public Mock<ILogger<CreateReadStoreDatabaseJob>> Logger { get; set; }
+        public Mock<ILogger> Logger { get; set; }
         public CreateReadStoreDatabaseJob CreateReadStoreDatabaseJob { get; set; }
 
         public CreateReadStoreDatabaseJobTestsFixture()
         {
             DocumentClient = new Mock<IDocumentClient>();
-            Logger = new Mock<ILogger<CreateReadStoreDatabaseJob>>();
+            Logger = new Mock<ILogger>();
             CreateReadStoreDatabaseJob = new CreateReadStoreDatabaseJob(DocumentClient.Object, Logger.Object);
         }
 

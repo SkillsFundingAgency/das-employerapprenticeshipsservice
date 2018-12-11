@@ -11,10 +11,10 @@ namespace SFA.DAS.EmployerAccounts.Jobs.Data
 {
     public class PopulateRepository : IPopulateRepository
     {
-        private readonly ILogger<PopulateRepository> _logger;
+        private readonly ILogger _logger;
         private readonly EmployerAccountsDbContext _db;
 
-        public PopulateRepository(Lazy<EmployerAccountsDbContext> db, ILogger<PopulateRepository> logger)
+        public PopulateRepository(Lazy<EmployerAccountsDbContext> db, ILogger logger)
         {
             _logger = logger;
             _db = db.Value;

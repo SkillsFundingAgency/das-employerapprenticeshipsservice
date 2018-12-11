@@ -17,11 +17,11 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
     {
         private readonly IAccountUsersRepository _accountUsersRepository;
         private readonly IPopulateRepository _populateRepository;
-        private readonly ILogger<PopulateAccountUsersInCollectionJob> _logger;
+        private readonly ILogger _logger;
         private readonly string _jobName;
 
 
-        public PopulateAccountUsersInCollectionJob(IAccountUsersRepository accountUsersRepository, IPopulateRepository populateRepository, ILogger<PopulateAccountUsersInCollectionJob> logger)
+        public PopulateAccountUsersInCollectionJob(IAccountUsersRepository accountUsersRepository, IPopulateRepository populateRepository, ILogger logger)
         {
             _accountUsersRepository = accountUsersRepository;
             _populateRepository = populateRepository;

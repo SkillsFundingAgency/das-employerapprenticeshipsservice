@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
     {
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
         internal Mock<IPopulateRepository> PopulateRepository { get; set; }
-        public Mock<ILogger<PopulateAccountUsersInCollectionJob>> Logger { get; set; }
+        public Mock<ILogger> Logger { get; set; }
 
         public ICollection<MembershipUser> Users = new List<MembershipUser>();
         internal ICollection<AccountUser> ReadStoreUsers = new List<AccountUser>();
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             PopulateRepository = new Mock<IPopulateRepository>();
             PopulateRepository.Setup(x => x.GetAllAccountUsers()).ReturnsAsync(Users);
 
-            Logger = new Mock<ILogger<PopulateAccountUsersInCollectionJob>>();
+            Logger = new Mock<ILogger>();
 
             PopulateAccountUsersInCollectionJob =
                 new PopulateAccountUsersInCollectionJob(AccountUsersRepository.Object, PopulateRepository.Object, Logger.Object);

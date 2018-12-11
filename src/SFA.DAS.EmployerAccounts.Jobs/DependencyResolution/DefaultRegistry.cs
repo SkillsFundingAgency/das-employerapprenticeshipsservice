@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
             });
 
             For<ILoggerFactory>().Use(() => new LoggerFactory().AddApplicationInsights(ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"], null).AddNLog()).Singleton();
-            For(typeof(ILogger<>)).Use(typeof(Logger<>));
+            For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType));
             For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
             For<IPopulateRepository>().Use< PopulateRepository>();
         }
