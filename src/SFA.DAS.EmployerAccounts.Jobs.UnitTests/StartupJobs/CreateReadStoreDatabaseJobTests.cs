@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
@@ -34,12 +35,14 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
     public class CreateReadStoreDatabaseJobTestsFixture
     {
         public Mock<IDocumentClient> DocumentClient { get; set; }
+        public Mock<ILogger<CreateReadStoreDatabaseJob>> Logger { get; set; }
         public CreateReadStoreDatabaseJob CreateReadStoreDatabaseJob { get; set; }
 
         public CreateReadStoreDatabaseJobTestsFixture()
         {
             DocumentClient = new Mock<IDocumentClient>();
-            CreateReadStoreDatabaseJob = new CreateReadStoreDatabaseJob(DocumentClient.Object);
+            Logger = new Mock<ILogger<CreateReadStoreDatabaseJob>>();
+            CreateReadStoreDatabaseJob = new CreateReadStoreDatabaseJob(DocumentClient.Object, Logger.Object);
         }
 
         public Task Run()

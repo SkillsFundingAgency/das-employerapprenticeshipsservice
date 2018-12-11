@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
@@ -58,6 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
     {
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
         internal Mock<IPopulateRepository> PopulateRepository { get; set; }
+        public Mock<ILogger<PopulateAccountUsersInCollectionJob>> Logger { get; set; }
 
         public ICollection<MembershipUser> Users = new List<MembershipUser>();
         internal ICollection<AccountUser> ReadStoreUsers = new List<AccountUser>();
@@ -76,8 +78,10 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             PopulateRepository = new Mock<IPopulateRepository>();
             PopulateRepository.Setup(x => x.GetAllAccountUsers()).ReturnsAsync(Users);
 
+            Logger = new Mock<ILogger<PopulateAccountUsersInCollectionJob>>();
+
             PopulateAccountUsersInCollectionJob =
-                new PopulateAccountUsersInCollectionJob(AccountUsersRepository.Object, PopulateRepository.Object);
+                new PopulateAccountUsersInCollectionJob(AccountUsersRepository.Object, PopulateRepository.Object, Logger.Object);
         }
 
         public Task Run()

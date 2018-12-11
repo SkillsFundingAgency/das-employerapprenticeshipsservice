@@ -4,25 +4,26 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using SFA.DAS.EmployerAccounts.Configuration;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.Data
 {
-    public class PopulateRepository : BaseRepository, IPopulateRepository
+    public class PopulateRepository : IPopulateRepository
     {
+        private readonly ILogger<PopulateRepository> _logger;
         private readonly EmployerAccountsDbContext _db;
 
-        public PopulateRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db) 
-            : base(configuration.DatabaseConnectionString, logger)
+        public PopulateRepository(Lazy<EmployerAccountsDbContext> db, ILogger<PopulateRepository> logger)
         {
+            _logger = logger;
             _db = db.Value;
         }
 
         public async Task<IEnumerable<MembershipUser>> GetAllAccountUsers()
         {
+            _logger.LogInformation("Getting All Users to be migrated");
+
             var result = await _db.Database.Connection.QueryAsync<MembershipUser>(
                 sql: @"SELECT M.UserId, U.UserRef, M.AccountId, M.RoleId FROM [employer_account].[Membership] M  
                             LEFT JOIN [employer_account].[User] U ON M.UserId = U.Id 
@@ -34,6 +35,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.Data
 
         public async Task<bool> HasJobRun(string job)
         {
+            _logger.LogInformation($"Checking if '{job}' has already run");
+
             var param = new DynamicParameters();
             param.Add("@job", job, DbType.String);
 
@@ -48,6 +51,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.Data
 
         public async Task MarkJobAsRan(string job)
         {
+            _logger.LogInformation($"Marking job '{job}' has as ran");
+
             var param = new DynamicParameters();
             param.Add("@job", job, DbType.String);
 

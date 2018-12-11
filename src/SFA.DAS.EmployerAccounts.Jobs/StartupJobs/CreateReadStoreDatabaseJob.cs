@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
@@ -10,10 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
     public class CreateReadStoreDatabaseJob
     {
         private readonly IDocumentClient _documentClient;
+        private readonly ILogger<CreateReadStoreDatabaseJob> _logger;
 
-        public CreateReadStoreDatabaseJob(IDocumentClient documentClient)
+        public CreateReadStoreDatabaseJob(IDocumentClient documentClient, ILogger<CreateReadStoreDatabaseJob> logger)
         {
-            _documentClient = documentClient; 
+            _documentClient = documentClient;
+            _logger = logger;
         }
 
         [NoAutomaticTrigger]
@@ -45,6 +48,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
                         }
                 }
             };
+
+            _logger.LogInformation("Creating ReadStore database and collection if they don't exist");
 
             await _documentClient.CreateDatabaseIfNotExistsAsync(database);
             await _documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(database.Id), documentCollection);
