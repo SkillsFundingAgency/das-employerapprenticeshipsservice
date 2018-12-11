@@ -237,7 +237,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{email}/role/change")]
         public async Task<ActionResult> ChangeRole(string hashedAccountId, string email)
         {
-            var teamMember = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var teamMember = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(teamMember);
         }
@@ -254,7 +254,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return View(ControllerConstants.ViewTeamViewName, response);
             }
 
-            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var teamMemberResponse = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             //We have to override flash message as the change role view has different model to view team view
             teamMemberResponse.FlashMessage = response.FlashMessage;
@@ -267,7 +267,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{email}/review/")]
         public async Task<ActionResult> Review(string hashedAccountId, string email)
         {
-            var invitation = await _employerTeamOrchestrator.GetTeamMember(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(invitation);
         }
