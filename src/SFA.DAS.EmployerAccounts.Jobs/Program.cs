@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EmployerAccounts.Jobs
 {
-    public partial class Program
+    public class Program
     {
         public static void Main()
         {

@@ -7,7 +7,7 @@
     <TargetFramework>net462</TargetFramework>
     <WebJobName>EmployerAccounts-Jobs</WebJobName>
     <WebJobType>Continuous</WebJobType>
-    <LangVersion>default</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -53,6 +53,10 @@
         <DependentUpon>App.config</DependentUpon>
         <IsTransformFile>True</IsTransformFile>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="SFA.DAS.EmployerAccounts.Jobs.csproj.DotSettings" />
   </ItemGroup>
 
   <ItemGroup>

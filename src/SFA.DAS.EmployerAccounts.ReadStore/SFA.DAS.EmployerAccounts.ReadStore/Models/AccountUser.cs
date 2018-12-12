@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             AccountId = accountId;
             Roles = roles;
             Created = created;
-            AddMessageToOutbox(messageId, created);
+            AddOutboxMessage(messageId, created);
             Id = Guid.NewGuid();
         }
 
@@ -47,31 +47,33 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
         }
 
-        public void Reinvoke(HashSet<UserRole> roles, DateTime recreated, string messageId)
+        public void Recreate(HashSet<UserRole> roles, DateTime recreated, string messageId)
         {
             ProcessMessage(messageId, recreated,
                 () =>
                 {
-                    EnsureUserHasBeenRemoved();
+                    if (IsRecreateDateChronological(recreated))
+                    {
+                        EnsureUserHasBeenRemoved();
 
-                    Roles = roles;
-                    Created = recreated;
-                    Updated = null;
-                    Removed = null;
+                        Roles = roles;
+                        Created = recreated;
+                        Updated = null;
+                        Removed = null;
+                    }
                 }
             );
         }
-
 
         public void UpdateRoles(HashSet<UserRole> roles, DateTime updated, string messageId)
         {
             ProcessMessage(messageId, updated,
                 () =>
                 {
-                    EnsureUserHasNotBeenRemoved();
-
-                    if (IsMessageChronological(updated))
+                    if (IsUpdatedRolesDateChronological(updated))
                     {
+                        EnsureUserHasNotBeenRemoved();
+
                         Roles = roles;
                         Updated = updated;
                     }
@@ -79,43 +81,62 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             );
         }
 
-        public void Remove(DateTime deleted, string messageId)
+        public void Remove(DateTime removed, string messageId)
         {
-            ProcessMessage(messageId, deleted,
+            ProcessMessage(messageId, removed,
                 () =>
                 {
-                    EnsureUserHasNotBeenRemoved();
-                    EnsureUserHasNotBeenCreatedOrUpdatedAfterRemoveAction(deleted);
+                    if (IsRemovedDateChronological(removed))
+                    {
+                        EnsureUserHasNotBeenRemoved();
 
-                    Roles = new List<UserRole>();
-                    Removed = deleted;
+                        Roles = new List<UserRole>();
+                        Removed = removed;
+                    }
                 }
             );
         }
 
+        public bool HasRole(HashSet<UserRole> roles)
+        {
+            return Roles.Any(role => roles.Any(requestRole => requestRole == role));
+        }
+
         private void ProcessMessage(string messageId, DateTime messageCreated, Action action)
         {
-            if (MessageAlreadyProcessed(messageId))
+            if (IsMessageProcessed(messageId))
                 return;
 
             action();
-            AddMessageToOutbox(messageId, messageCreated);
+            AddOutboxMessage(messageId, messageCreated);
         }
 
-        private bool IsMessageChronological(DateTime messageDateTime)
+        private bool IsRecreateDateChronological(DateTime recreate)
         {
-            return messageDateTime > Created && (Updated == null || messageDateTime > Updated.Value);
-
+            return recreate > Created;
         }
 
-        private bool MessageAlreadyProcessed(string messageId)
+        private bool IsUpdatedRolesDateChronological(DateTime updated)
+        {
+            return updated > Created && (Updated == null || updated > Updated.Value) && (Removed == null || updated > Removed.Value);
+        }
+
+        private bool IsRemovedDateChronological(DateTime removed)
+        {
+            return removed > Created && (Removed == null || removed > Removed.Value);
+        }
+
+        private bool IsMessageProcessed(string messageId)
         {
             return OutboxData.Any(x => x.MessageId == messageId);
         }
 
-        private void AddMessageToOutbox(string messageId, DateTime created)
+        private void AddOutboxMessage(string messageId, DateTime created)
         {
-            if (messageId is null) throw new ArgumentNullException(nameof(messageId));
+            if (messageId is null)
+            {
+                throw new ArgumentNullException(nameof(messageId));
+            }
             _outboxData.Add(new OutboxMessage(messageId, created));
         }
 
@@ -137,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 
         private void EnsureUserHasNotBeenCreatedOrUpdatedAfterRemoveAction(DateTime removed)
         {
-            if (!IsMessageChronological(removed))
+            if (!IsUpdatedRolesDateChronological(removed))
             {
                 throw new InvalidOperationException("User has been reinvoked or updated after remove request");
             }

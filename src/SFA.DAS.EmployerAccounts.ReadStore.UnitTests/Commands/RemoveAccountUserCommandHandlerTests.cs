@@ -53,12 +53,16 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         }
 
         [Test]
-        public Task Handle_WhenDeleteCommandArrivesOutOfOrderAfterALaterUpdateCommand_ThenThrowException()
+        public Task Handle_WhenRemoveCommandArrivesAfterALaterCreateCommand_ThenSwallowMessageAndAddToOutbox()
         {
-            return TestExceptionAsync(
-                f => f.AddMatchingRecentlyUpdatedUserWithViewerRole(),
+            return TestAsync(
+                f => f.AddMatchingRecentlyRecreatedUserWithViewerRole(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f,r) => r.ShouldThrow<InvalidOperationException>());
+                f => f.UserRoleRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
+                        p.Removed == null &&
+                        p.OutboxData.Count(o => o.MessageId == f.MessageId) == 1
+                    ), null,
+                    It.IsAny<CancellationToken>())));
         }
 
         [Test]
@@ -111,11 +115,11 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return this;
         }
 
-        public RemoveUserRolesCommandHandlerTestsFixture AddMatchingRecentlyUpdatedUserWithViewerRole()
+        public RemoveUserRolesCommandHandlerTestsFixture AddMatchingRecentlyRecreatedUserWithViewerRole()
         {
             Users.Add(CreateBasicUser()
                 .Add(x => x.Roles, UserRole.Viewer)
-                .Set(x => x.Updated, Removed.AddDays(1)));
+                .Set(x => x.Created, Removed.AddDays(1)));
 
             return this;
         }

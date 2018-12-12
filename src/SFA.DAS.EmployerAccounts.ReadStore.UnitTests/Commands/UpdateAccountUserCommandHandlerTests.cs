@@ -77,9 +77,22 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         }
 
         [Test]
-        public Task Handle_WhenUserHasBeenRemoved_ThenShouldThrowException()
+        public Task Handle_WhenUserHasBeenRemovedAndAnEarlierUpdateCommandArrives_ThenShouldSwallowMessageAndAddToOutbox()
         {
-            return TestExceptionAsync(f => f.AddMatchingUserWhichWasRemoved(),
+            return TestAsync(f => f.AddMatchingUserWhichWasRemovedLater(),
+                f => f.Handler.Handle(f.Command, CancellationToken.None),
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
+                        p.OutboxData.Count() == 2 &&
+                        p.OutboxData.Count(o => o.MessageId == f.UpdateMessageId) == 1
+                    ), null,
+                    It.IsAny<CancellationToken>())));
+        }
+
+
+        [Test]
+        public Task Handle_WhenUserHasBeenRemovedAndALaterUpdateCommandArrives_ThenShouldThrowException()
+        {
+            return TestExceptionAsync(f => f.AddMatchingUserWhichWasRemovedEarlier(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
                 (f,r) => r.ShouldThrow<InvalidOperationException>());
         }
@@ -125,11 +138,20 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             Command = new UpdateAccountUserCommand(AccountId, UserRef, NewRoles, UpdateMessageId, Updated);
         }
 
-        public UpdateAccountUserCommandHandlerTestsFixture AddMatchingUserWhichWasRemoved()
+        public UpdateAccountUserCommandHandlerTestsFixture AddMatchingUserWhichWasRemovedLater()
         {
             Users.Add(CreateBasicUser()
                 .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Updated))
                 .Set(x=>x.Removed, Updated.AddHours(1)));
+
+            return this;
+        }
+
+        public UpdateAccountUserCommandHandlerTestsFixture AddMatchingUserWhichWasRemovedEarlier()
+        {
+            Users.Add(CreateBasicUser()
+                .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Updated))
+                .Set(x => x.Removed, Updated.AddHours(-1)));
 
             return this;
         }

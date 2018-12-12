@@ -6,10 +6,10 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
     public class OutboxMessage
     {
         [JsonProperty("messageId")]
-        public string MessageId { get; protected set; }
+        public string MessageId { get; }
 
         [JsonProperty("created")]
-        public DateTime Created { get; protected set; }
+        public DateTime Created { get; }
 
         public OutboxMessage(string messageId, DateTime created)
         {

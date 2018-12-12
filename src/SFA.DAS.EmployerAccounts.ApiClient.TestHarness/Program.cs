@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Api.Client;
@@ -25,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness
                 try
                 {
                     var apiClient = container.GetInstance<IEmployerAccountsApiClient>();
-                    var hasRoleRequest = new HasRoleRequest { EmployerAccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f"), Roles = new []{ UserRole.Owner }};
+                    var hasRoleRequest = new HasRoleRequest { EmployerAccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f"), Roles = new HashSet<UserRole>{ UserRole.Owner }};
                     var response = await apiClient.HasRole(hasRoleRequest, CancellationToken.None);
 
                     Console.WriteLine("HasRole: " + response);

@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
             }
             else
             {
-                user.Reinvoke(request.Roles, request.Created, request.MessageId);
+                user.Recreate(request.Roles, request.Created, request.MessageId);
                 await _accountUsersRepository.Update(user, null, cancellationToken);
             }
 

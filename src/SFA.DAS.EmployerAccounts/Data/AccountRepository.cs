@@ -82,7 +82,8 @@ namespace SFA.DAS.EmployerAccounts.Data
             {
                 AccountId = parameters.Get<long>("@accountId"),
                 LegalEntityId = parameters.Get<long>("@legalentityId"),
-                EmployerAgreementId = parameters.Get<long>("@employerAgreementId")
+                EmployerAgreementId = parameters.Get<long>("@employerAgreementId"),
+                AccountLegalEntityId = accountLegalEntityId
             };
         }
 
@@ -124,7 +125,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             {
                 Id = agreementId,
                 AccountId = createParams.AccountId,
-                AccountLegalentityId = accountLegalEntityId,
+                AccountLegalEntityId = accountLegalEntityId,
                 LegalEntityId = legalEntityId,
                 LegalEntityName = createParams.Name,
                 LegalEntityCode = createParams.Code,

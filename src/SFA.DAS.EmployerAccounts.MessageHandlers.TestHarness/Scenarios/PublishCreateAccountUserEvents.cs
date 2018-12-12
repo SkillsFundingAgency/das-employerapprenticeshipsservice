@@ -27,16 +27,16 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
                 AccountId = accountId,
                 Name = "Test User",
                 UserRef = userRef,
-                Created = DateTime.Now
+                Created = DateTime.UtcNow
             };
 
             await _messageSession.Publish(newUserEvent);
 
-            var updateUserEvent = new AccountUserRolesUpdatedEvent(accountId, userRef, roles, DateTime.Now);
+            var updateUserEvent = new AccountUserRolesUpdatedEvent(accountId, userRef, roles, DateTime.UtcNow);
 
             await _messageSession.Publish(updateUserEvent);
 
-            var removeUserEvent = new AccountUserRemovedEvent(accountId, userRef, DateTime.Now);
+            var removeUserEvent = new AccountUserRemovedEvent(accountId, userRef, DateTime.UtcNow);
 
             await _messageSession.Publish(removeUserEvent);
         }

@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
 
             await _membershipRepository.Remove(message.UserId, owner.AccountId);
 
-            await _eventPublisher.Publish(new AccountUserRemovedEvent(teamMember.AccountId, message.UserRef, DateTime.Now));
+            await _eventPublisher.Publish(new AccountUserRemovedEvent(teamMember.AccountId, message.UserRef, DateTime.UtcNow));
         }
 
         private async Task AddAuditEntry(MembershipView owner, Membership teamMember)

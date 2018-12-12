@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.CosmosDb;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
@@ -20,12 +19,12 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
         {
             var user = await _accountUsersRepository
                 .CreateQuery()
-                .SingleOrDefaultAsync(r => r.UserRef == request.UserRef && r.AccountId == request.EmployerAccountId && r.Removed == null, cancellationToken);
+                .SingleOrDefaultAsync(r => r.UserRef == request.UserRef && r.AccountId == request.AccountId && r.Removed == null, cancellationToken);
 
             if (user == null)
                 return false;
 
-            return user.Roles.Any(role => request.UserRoles.Any(requestRole => requestRole == role));
+            return user.HasRole(request.UserRoles);
         }
     }
 }

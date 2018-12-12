@@ -153,7 +153,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         {
             return ObjectActivator.CreateInstance<AccountUser>()
                 .Set(x => x.UserRef, Query.UserRef)
-                .Set(x => x.AccountId, Query.EmployerAccountId);
+                .Set(x => x.AccountId, Query.AccountId);
         }
     }
 }

@@ -8,13 +8,13 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
     internal class HasRoleQuery : IReadStoreRequest<bool>
     {
         public Guid UserRef { get; }
-        public long EmployerAccountId { get; }
+        public long AccountId { get; }
         public HashSet<UserRole> UserRoles { get; }
 
-        public HasRoleQuery(Guid userRef, long employerAccountId, HashSet<UserRole> userRoles)
+        public HasRoleQuery(Guid userRef, long accountId, HashSet<UserRole> userRoles)
         {
             UserRef = userRef;
-            EmployerAccountId = employerAccountId;
+            AccountId = accountId;
             UserRoles = userRoles;
         }
     }
