@@ -1,12 +1,8 @@
-﻿using System.Web;
-using SFA.DAS.EmployerUsers.WebClientComponents;
+﻿using SFA.DAS.EmployerUsers.WebClientComponents;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.Orchestrators;
 using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -14,14 +10,10 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("service")]
     public class HomeController : BaseController
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
-
-        public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerApprenticeshipsServiceConfiguration configuration, IAuthorizationService authorization,
+        public HomeController(IAuthenticationService owinWrapper,
             IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _configuration = configuration;
         }
 
         [Route("~/")]
@@ -99,7 +91,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route("SignOutCleanup")]
-        public ActionResult SignOutCleanup()
+        public void SignOutCleanup()
         {
             OwinWrapper.SignOutUser();
         }
