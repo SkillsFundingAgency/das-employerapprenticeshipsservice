@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
@@ -28,9 +29,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         private EmployerAgreementView _agreementView;
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
         private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
+
+        private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
         [SetUp]
         public void Arrange()
@@ -82,11 +86,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
+
+            _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _accountLegalEntityPublicHashingService.Setup(x => x.HashValue(_agreementView.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
             _validator = new Mock<IValidator<CreateLegalEntityCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateLegalEntityCommand>()))
-                .ReturnsAsync(new ValidationResult() {IsUnauthorized = true});
+                .ReturnsAsync(new ValidationResult() { IsUnauthorized = true });
 
             _commandHandler = new CreateLegalEntityCommandHandler(
                 _accountRepository.Object,
@@ -96,6 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 _legalEntityEventFactory.Object,
                 Mock.Of<IEventPublisher>(),
                 _hashingService.Object,
+                _accountLegalEntityPublicHashingService.Object,
                 _agreementService.Object,
                 _employerAgreementRepository.Object,
                 _validator.Object
@@ -107,7 +116,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         {
             //Act &
             //Assert
-           Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _commandHandler.Handle(_command));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _commandHandler.Handle(_command));
         }
     }
 }
