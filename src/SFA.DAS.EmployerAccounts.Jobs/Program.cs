@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 
 namespace SFA.DAS.EmployerAccounts.Jobs
 {
-    public partial class Program
+    public class Program
     {
         public static void Main()
         {

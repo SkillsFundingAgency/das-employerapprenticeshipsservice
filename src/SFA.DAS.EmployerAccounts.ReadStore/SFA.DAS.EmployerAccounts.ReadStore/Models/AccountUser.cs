@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             AccountId = accountId;
             Roles = roles;
             Created = created;
-            AddMessageToOutbox(messageId, created);
+            AddOutboxMessage(messageId, created);
             Id = Guid.NewGuid();
         }
 
@@ -97,13 +97,18 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             );
         }
 
+        public bool HasRole(HashSet<UserRole> roles)
+        {
+            return Roles.Any(role => roles.Any(requestRole => requestRole == role));
+        }
+
         private void ProcessMessage(string messageId, DateTime messageCreated, Action action)
         {
-            if (MessageAlreadyProcessed(messageId))
+            if (IsMessageProcessed(messageId))
                 return;
 
             action();
-            AddMessageToOutbox(messageId, messageCreated);
+            AddOutboxMessage(messageId, messageCreated);
         }
 
         private bool IsRecreateDateChronological(DateTime recreate)
@@ -121,14 +126,17 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             return removed > Created && (Removed == null || removed > Removed.Value);
         }
 
-        private bool MessageAlreadyProcessed(string messageId)
+        private bool IsMessageProcessed(string messageId)
         {
             return OutboxData.Any(x => x.MessageId == messageId);
         }
 
-        private void AddMessageToOutbox(string messageId, DateTime created)
+        private void AddOutboxMessage(string messageId, DateTime created)
         {
-            if (messageId is null) throw new ArgumentNullException(nameof(messageId));
+            if (messageId is null)
+            {
+                throw new ArgumentNullException(nameof(messageId));
+            }
             _outboxData.Add(new OutboxMessage(messageId, created));
         }
 

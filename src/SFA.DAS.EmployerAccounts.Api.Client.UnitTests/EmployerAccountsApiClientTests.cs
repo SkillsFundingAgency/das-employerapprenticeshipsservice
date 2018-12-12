@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             {
                 EmployerAccountId = 112,
                 UserRef = Guid.NewGuid(),
-                Roles = new[] {UserRole.Owner, UserRole.Transactor}
+                Roles = new HashSet<UserRole> {UserRole.Owner, UserRole.Transactor}
             };
 
             MockApiMediator
@@ -68,8 +69,8 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         {
             MockApiMediator.Verify(m => m.Send(It.Is<HasRoleQuery>(q => 
                 q.UserRef == HasRoleRequest.UserRef
-                && q.EmployerAccountId == HasRoleRequest.EmployerAccountId
-                && q.UserRoles.Count == HasRoleRequest.Roles.Length
+                && q.AccountId == HasRoleRequest.EmployerAccountId
+                && q.UserRoles.Count == HasRoleRequest.Roles.Count
                 && q.UserRoles.All(role => HasRoleRequest.Roles.Any(requestRole => (short)requestRole == (short)role))
             ), CancellationToken));
         }

@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
             await _membershipRepository.ChangeRole(existing.Id, caller.AccountId, message.RoleId);
 
             await _eventPublisher.Publish(new AccountUserRolesUpdatedEvent(caller.AccountId, Guid.Parse(existing.UserRef),
-                new HashSet<UserRole> {(UserRole)message.RoleId}, DateTime.Now));
+                new HashSet<UserRole> {(UserRole)message.RoleId}, DateTime.UtcNow));
 
             await _mediator.SendAsync(new CreateAuditCommand
             {

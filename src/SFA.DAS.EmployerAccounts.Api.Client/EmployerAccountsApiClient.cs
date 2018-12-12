@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
@@ -45,12 +44,4 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             return _configuration.ApiBaseUrl.Trim('/');
         }
     }
-
-    public class HasRoleRequest
-    {
-        public Guid UserRef { get; set; }
-        public long EmployerAccountId { get; set; }
-        public UserRole[] Roles { get; set; }
-    }
-
 }

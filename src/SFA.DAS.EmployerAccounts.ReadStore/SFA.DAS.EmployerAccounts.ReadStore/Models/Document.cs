@@ -22,9 +22,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
             Metadata = new DocumentMetadata(schemaVersion, schemaType);
         }
+
         protected Document()
         {
         }
-
     }
 }

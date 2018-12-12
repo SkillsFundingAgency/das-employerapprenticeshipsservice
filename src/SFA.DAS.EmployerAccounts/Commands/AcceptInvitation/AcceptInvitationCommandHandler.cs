@@ -122,15 +122,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
             });
         }
 
-        private Task PublishUserJoinedMessage(long accountId, User user, Invitation existing)
+        private Task PublishUserJoinedMessage(long accountId, User user, Invitation invitation)
         {
             return _eventPublisher.Publish(new UserJoinedEvent
             {
                 AccountId = accountId,
                 UserName = user.FullName,
                 UserRef = user.Ref,
-                UserId = user.Id,
-                Roles = new HashSet<UserRole> {(UserRole)existing.RoleId},
+                Roles = new HashSet<UserRole> {(UserRole)invitation.RoleId},
                 Created = DateTime.UtcNow
             });
         }

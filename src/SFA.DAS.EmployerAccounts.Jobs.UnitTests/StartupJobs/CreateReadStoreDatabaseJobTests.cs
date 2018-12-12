@@ -20,14 +20,21 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         }
 
         [Test]
-        public Task Run_WhenRunningCreateReadStoreDatabaseJob_ThenShouldCreateReadStoreUsersCollection()
+        public Task Run_WhenRunningCreateReadStoreDatabaseJob_ThenShouldCreateReadStoreUsersCollectionWithPartitionAndUniqueKey()
         {
             return TestAsync(f => f.Run(), f => f.DocumentClient.Verify(c => c.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(DocumentSettings.DatabaseName),
                 It.Is<DocumentCollection>(d =>
                     d.Id == DocumentSettings.AccountUsersCollectionName &&
                     d.PartitionKey.Paths.Contains("/accountId") &&
                     d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/userRef")
-                ), null), Times.Once));
+                ), It.IsAny<RequestOptions>()), Times.Once));
+        }
+
+        [Test]
+        public Task Run_WhenRunningCreateReadStoreDatabaseJob_ThenShouldCreateReadStoreUsersCollectionWithOfferThroughputSet()
+        {
+            return TestAsync(f => f.Run(), f => f.DocumentClient.Verify(c => c.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(DocumentSettings.DatabaseName),
+                It.IsAny<DocumentCollection>(), It.Is<RequestOptions>(p=>p.OfferThroughput == 1000)), Times.Once));
         }
     }
 
