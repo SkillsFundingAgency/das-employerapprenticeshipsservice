@@ -1,12 +1,29 @@
-﻿using SFA.DAS.EmployerUsers.WebClientComponents;
+﻿using System.Web;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.Orchestrators;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [RoutePrefix("service")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+
+        public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
+            EmployerApprenticeshipsServiceConfiguration configuration, IAuthorizationService authorization,
+            IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+            _configuration = configuration;
+        }
+
         [Route("~/")]
         [Route]
         [Route("Index")]
@@ -82,8 +99,16 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [Route("SignOutCleanup")]
-        public void SignOutCleanup()
+        public ActionResult SignOutCleanup()
         {
+            OwinWrapper.SignOutUser();
+
+            var owinContext = HttpContext.GetOwinContext();
+            var authenticationManager = owinContext.Authentication;
+            var idToken = authenticationManager.User.FindFirst("id_token")?.Value;
+            var constants = new Constants(_configuration.Identity);
+
+            return new RedirectResult(string.Format(constants.LogoutEndpoint(), idToken));
         }
 
         [HttpGet]
