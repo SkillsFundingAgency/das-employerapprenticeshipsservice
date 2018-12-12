@@ -79,8 +79,19 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                     }
                 };
             }
-            catch (Exception)
+            catch (InvalidRequestException ex)
             {
+                _logger.Error(ex,
+                    $"An InvalidRequestException occurred getting EmployerAgreementListViewModel: {ex.ErrorMessages}");
+
+                return new OrchestratorResponse<EmployerAgreementListViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"An error occurred getting EmployerAgreementListViewModel: {ex.GetType()}");
                 return new OrchestratorResponse<EmployerAgreementListViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized

@@ -20,6 +20,7 @@ using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Dtos;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.UnitTests.Controllers
 {
@@ -324,7 +325,8 @@ namespace SFA.DAS.EAS.Web.UnitTests.Controllers
                 UserViewTestingService.Object,
                 FlashMessage.Object,
                 Mediator.Object,
-                Mapper.Object);
+                Mapper.Object,
+                Mock.Of<ILog>());
 
             return controller;
         }

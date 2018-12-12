@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -22,6 +23,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private readonly ILog _logger;
 
         public EmployerAgreementController(IAuthenticationService owinWrapper,
             EmployerAgreementOrchestrator orchestrator,
@@ -29,7 +31,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediator,
-            IMapper mapper)
+            IMapper mapper, ILog logger)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             if (owinWrapper == null)
@@ -40,15 +42,20 @@ namespace SFA.DAS.EAS.Web.Controllers
             _orchestrator = orchestrator;
             _mediator = mediator;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
         [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
-            await OwinWrapper.UpdateClaims();
-
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+
+            if (model.Status == HttpStatusCode.Unauthorized)
+            {
+                _logger.Info("");
+            }
+
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
