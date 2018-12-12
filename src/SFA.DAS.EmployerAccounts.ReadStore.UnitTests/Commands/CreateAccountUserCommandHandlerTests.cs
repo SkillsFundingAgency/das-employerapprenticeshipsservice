@@ -75,6 +75,27 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                     ), null,
                     It.IsAny<CancellationToken>())));
         }
+
+        [Test]
+        public Task Handle_WhenUserIsActiveAndThisIsAnOlderCreateCommand_ThenShouldSwallowMessageAndAddItToOutbox()
+        {
+            return TestAsync(f => f.AddMatchingViewUserWhichWasCreatedLaterThanNewMessage(),
+                f => f.Handler.Handle(f.Command, CancellationToken.None),
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
+                        p.Roles.Contains(UserRole.Owner) == false &&
+                        p.Roles.Contains(UserRole.Viewer) &&
+                        p.OutboxData.Count(o=>o.MessageId == f.Command.MessageId) == 1
+                    ), null,
+                    It.IsAny<CancellationToken>())));
+        }
+
+        [Test]
+        public Task Handle_WhenUserIsActiveAndThisIsALaterCreateCommand_ThenShouldThrowException()
+        {
+            return TestExceptionAsync(f => f.AddMatchingViewUserWhichWasCreatedEarlierThanNewMessage(),
+                f => f.Handler.Handle(f.Command, CancellationToken.None),
+                (f, r) => r.ShouldThrow<InvalidOperationException>());
+        }
     }
 
     internal class CreateAccountUserCommandHandlerTestsFixture
@@ -103,30 +124,21 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             Command = new CreateAccountUserCommand(AccountId, UserRef, NewRoles, MessageId, Created);
         }
 
-        public CreateAccountUserCommandHandlerTestsFixture AddMatchingUserWhichWasRemovedLaterThanNewMessage()
+        public CreateAccountUserCommandHandlerTestsFixture AddMatchingViewUserWhichWasCreatedLaterThanNewMessage()
         {
             Users.Add(CreateBasicUser()
                 .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Created))
-                .Set(x=>x.Removed, Created.AddHours(1)));
-
+                .Set(x => x.Created, Created.AddHours(1))
+                .Add(x => x.Roles, UserRole.Viewer));
             return this;
         }
 
-        public CreateAccountUserCommandHandlerTestsFixture AddMatchingUserWhichWasUpdatedLaterThanNewMessage()
+        public CreateAccountUserCommandHandlerTestsFixture AddMatchingViewUserWhichWasCreatedEarlierThanNewMessage()
         {
             Users.Add(CreateBasicUser()
                 .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Created))
-                .Set(x=>x.Updated, Created.AddHours(1)));
-
-            return this;
-        }
-
-        public CreateAccountUserCommandHandlerTestsFixture AddMatchingUserWhichWasRemovedEarlierThanNewMessage()
-        {
-            Users.Add(CreateBasicUser()
-                .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Created))
-                .Set(x => x.Updated, Created.AddHours(-1)));
-
+                .Set(x => x.Created, Created.AddHours(-1))
+                .Add(x => x.Roles, UserRole.Viewer));
             return this;
         }
 
