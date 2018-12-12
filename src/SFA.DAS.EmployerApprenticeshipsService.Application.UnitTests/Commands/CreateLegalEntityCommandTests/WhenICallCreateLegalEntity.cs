@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
         private EmployerAgreementView _agreementView;
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
-        private Mock<IPublicHashingService> _externalHashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
         private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
@@ -100,8 +100,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
 
-            _externalHashingService = new Mock<IPublicHashingService>();
-            _externalHashingService.Setup(x => x.HashValue(_agreementView.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
+            _accountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _accountLegalEntityPublicHashingService.Setup(x => x.HashValue(_agreementView.AccountLegalEntityId)).Returns(ExpectedAccountLegalEntityPublicHashString);
 
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
 
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Commands.CreateLegalEntityCommandTes
                 _legalEntityEventFactory.Object,
                 _eventPublisher.Object,
                 _hashingService.Object,
-                _externalHashingService.Object,
+                _accountLegalEntityPublicHashingService.Object,
                 _agreementService.Object,
                 _employerAgreementRepository.Object, 
                 _validator.Object

@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
             var errorResponse = nameValueCollection?["error"];
             if (errorResponse != null)
             {
-                if (nameValueCollection["error_Code"] == "USER_DENIED_AUTHORIZATION" )
+                if (nameValueCollection["error_Code"] == "USER_DENIED_AUTHORIZATION")
                 {
                     return new OrchestratorResponse<HmrcTokenResponse>
                     {
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                             Message = "You need to grant authority to HMRC to add an account.",
                             ErrorMessages = new Dictionary<string, string> { { "agree_and_continue", "Agree and continue" } }
                         }
-                        
+
                     };
                 }
                 return new OrchestratorResponse<HmrcTokenResponse>
@@ -113,7 +113,7 @@ namespace SFA.DAS.EAS.Web.Orchestrators
                 response.Empref = "";
                 response.EmprefNotFound = true;
             }
-            
+
             return response;
         }
 
