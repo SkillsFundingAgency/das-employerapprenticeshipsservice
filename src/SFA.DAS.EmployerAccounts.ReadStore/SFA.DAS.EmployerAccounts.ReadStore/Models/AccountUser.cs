@@ -47,31 +47,33 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
         }
 
-        public void Reinvoke(HashSet<UserRole> roles, DateTime recreated, string messageId)
+        public void Recreate(HashSet<UserRole> roles, DateTime recreated, string messageId)
         {
             ProcessMessage(messageId, recreated,
                 () =>
                 {
-                    EnsureUserHasBeenRemoved();
+                    if (IsRecreateDateChronological(recreated))
+                    {
+                        EnsureUserHasBeenRemoved();
 
-                    Roles = roles;
-                    Created = recreated;
-                    Updated = null;
-                    Removed = null;
+                        Roles = roles;
+                        Created = recreated;
+                        Updated = null;
+                        Removed = null;
+                    }
                 }
             );
         }
-
 
         public void UpdateRoles(HashSet<UserRole> roles, DateTime updated, string messageId)
         {
             ProcessMessage(messageId, updated,
                 () =>
                 {
-                    EnsureUserHasNotBeenRemoved();
-
-                    if (IsMessageChronological(updated))
+                    if (IsUpdatedRolesDateChronological(updated))
                     {
+                        EnsureUserHasNotBeenRemoved();
+
                         Roles = roles;
                         Updated = updated;
                     }
@@ -79,16 +81,18 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             );
         }
 
-        public void Remove(DateTime deleted, string messageId)
+        public void Remove(DateTime removed, string messageId)
         {
-            ProcessMessage(messageId, deleted,
+            ProcessMessage(messageId, removed,
                 () =>
                 {
-                    EnsureUserHasNotBeenRemoved();
-                    EnsureUserHasNotBeenCreatedOrUpdatedAfterRemoveAction(deleted);
+                    if (IsRemovedDateChronological(removed))
+                    {
+                        EnsureUserHasNotBeenRemoved();
 
-                    Roles = new List<UserRole>();
-                    Removed = deleted;
+                        Roles = new List<UserRole>();
+                        Removed = removed;
+                    }
                 }
             );
         }
@@ -102,10 +106,19 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             AddMessageToOutbox(messageId, messageCreated);
         }
 
-        private bool IsMessageChronological(DateTime messageDateTime)
+        private bool IsRecreateDateChronological(DateTime recreate)
         {
-            return messageDateTime > Created && (Updated == null || messageDateTime > Updated.Value);
+            return recreate > Created;
+        }
 
+        private bool IsUpdatedRolesDateChronological(DateTime updated)
+        {
+            return updated > Created && (Updated == null || updated > Updated.Value) && (Removed == null || updated > Removed.Value);
+        }
+
+        private bool IsRemovedDateChronological(DateTime removed)
+        {
+            return removed > Created && (Removed == null || removed > Removed.Value);
         }
 
         private bool MessageAlreadyProcessed(string messageId)
@@ -137,7 +150,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 
         private void EnsureUserHasNotBeenCreatedOrUpdatedAfterRemoveAction(DateTime removed)
         {
-            if (!IsMessageChronological(removed))
+            if (!IsUpdatedRolesDateChronological(removed))
             {
                 throw new InvalidOperationException("User has been reinvoked or updated after remove request");
             }
