@@ -51,12 +51,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         {
             var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            if (model.Status == HttpStatusCode.Unauthorized)
-            {
-                _logger.Info("");
-            }
-
-
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
             {
