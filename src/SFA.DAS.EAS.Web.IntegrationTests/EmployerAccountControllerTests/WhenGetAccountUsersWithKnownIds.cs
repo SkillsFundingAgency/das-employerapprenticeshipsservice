@@ -6,9 +6,8 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
@@ -39,17 +38,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
 
             string hashedAccountId = null;
+            var userInput = TestModelBuilder.User.CreateUserInput(userRef);
+
             _tester.InitialiseData<EmployerAccountsDbBuilder>(builder =>
             {
                 builder
-                    .EnsureUserExists(new UserInput
-                    {
-                        UserRef = userRef,
-                        Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
-                    })
-                    .EnsureAccountExists(
-                        builder.BuildEmployerAccountInput(accountName, payeReference))
-                    .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName));
+                    .EnsureUserExists(userInput)
+                    .EnsureAccountExists(TestModelBuilder.Account.CreateAccountInput(accountName, payeReference, builder.Context.ActiveUser.UserId))
+                    .WithLegalEntity(TestModelBuilder.LegalEntity.BuildEntityWithAgreementInput(legalEntityName, builder.Context.ActiveEmployerAccount.AccountId));
 
                 hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
             });
@@ -64,7 +60,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Assert
             Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
-            Assert.AreEqual(userRef.ToLower(),
+            Assert.AreEqual(userInput.UserRef.ToLower(),
                 account.Data.Last().UserRef.ToLower());
         }
     }
