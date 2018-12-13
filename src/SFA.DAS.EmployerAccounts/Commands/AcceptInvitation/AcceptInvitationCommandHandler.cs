@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
                 AccountId = accountId,
                 UserName = user.FullName,
                 UserRef = user.Ref,
-                Roles = new HashSet<UserRole> {(UserRole)invitation.RoleId},
+                Role = (UserRole)invitation.RoleId,
                 Created = DateTime.UtcNow
             });
         }

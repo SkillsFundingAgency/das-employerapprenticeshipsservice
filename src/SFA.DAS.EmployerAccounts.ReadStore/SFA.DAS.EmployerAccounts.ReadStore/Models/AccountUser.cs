@@ -14,8 +14,8 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonProperty("accountId")]
         public long AccountId { get; protected set; }
 
-        [JsonProperty("roles")]
-        public IEnumerable<UserRole> Roles { get; protected set; } = new HashSet<UserRole>();
+        [JsonProperty("role")]
+        public UserRole? Role { get; protected set; }
 
         [JsonProperty("outboxData")]
         public IEnumerable<OutboxMessage> OutboxData => _outboxData;
@@ -32,11 +32,11 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
-        public AccountUser(Guid userRef, long accountId, HashSet<UserRole> roles, DateTime created, string messageId) : base(1, "userRoles")
+        public AccountUser(Guid userRef, long accountId, UserRole role, DateTime created, string messageId) : base(1, "userRoles")
         {
             UserRef = userRef;
             AccountId = accountId;
-            Roles = roles;
+            Role = role;
             Created = created;
             AddOutboxMessage(messageId, created);
             Id = Guid.NewGuid();
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
         }
 
-        public void Recreate(HashSet<UserRole> roles, DateTime recreated, string messageId)
+        public void Recreate(UserRole role, DateTime recreated, string messageId)
         {
             ProcessMessage(messageId, recreated,
                 () =>
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                     {
                         EnsureUserHasBeenRemoved();
 
-                        Roles = roles;
+                        Role = role;
                         Created = recreated;
                         Updated = null;
                         Removed = null;
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
             );
         }
 
-        public void UpdateRoles(HashSet<UserRole> roles, DateTime updated, string messageId)
+        public void UpdateRoles(UserRole role, DateTime updated, string messageId)
         {
             ProcessMessage(messageId, updated,
                 () =>
@@ -74,7 +74,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                     {
                         EnsureUserHasNotBeenRemoved();
 
-                        Roles = roles;
+                        Role = role;
                         Updated = updated;
                     }
                 }
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                     {
                         EnsureUserHasNotBeenRemoved();
 
-                        Roles = new List<UserRole>();
+                        Role = null;
                         Removed = removed;
                     }
                 }
@@ -99,7 +99,8 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 
         public bool HasRole(HashSet<UserRole> roles)
         {
-            return Roles.Any(role => roles.Any(requestRole => requestRole == role));
+
+            return roles.Any(requestRole => requestRole == Role);
         }
 
         private void ProcessMessage(string messageId, DateTime messageCreated, Action action)

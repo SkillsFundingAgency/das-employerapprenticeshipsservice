@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore;
+using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.AccountUserReadStore
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerAccounts
 {
     [TestFixture]
     [Parallelizable]
-    internal class UserJoinedEventHandlerTests : FluentTest<UserJoinedEventHandlerForReadStoreTestsFixture>
+    internal class CreatedAccountEventHandlerTests : FluentTest<CreatedAccountEventHandlerForReadStoreTestsFixture>
     {
         [Test]
         public Task Handle_WhenHandlingEvent_ThenShouldSendCreateAccountUserCommand()
@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Accou
                 f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<CreateAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.Roles == f.Roles &&
+                        p.Role == UserRole.Owner &&
                         p.Created == f.Created &&
                         p.MessageId == f.MessageId
                     ),
@@ -33,34 +33,33 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Accou
         }
     }
 
-    internal class UserJoinedEventHandlerForReadStoreTestsFixture
+    internal class CreatedAccountEventHandlerForReadStoreTestsFixture
     {
         public string MessageId = "messageId";
-        public UserJoinedEvent Message;
+        public CreatedAccountEvent Message;
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
         public long UserId = 877664;
 
-        public HashSet<UserRole> Roles = new HashSet<UserRole>();
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
         public Mock<IReadStoreMediator> ReadStoreMediator;
-        public UserJoinedEventHandler Handler;
+        public CreatedAccountEventHandler Handler;
 
-        public UserJoinedEventHandlerForReadStoreTestsFixture()
+        public CreatedAccountEventHandlerForReadStoreTestsFixture()
         {
             ReadStoreMediator = new Mock<IReadStoreMediator>();
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
-            Message = new UserJoinedEvent {
+            Message = new CreatedAccountEvent
+            {
                 AccountId = AccountId,
                 UserRef = UserRef,
-                Roles = Roles,
                 Created = Created};
 
-            Handler = new UserJoinedEventHandler(ReadStoreMediator.Object);
+            Handler = new CreatedAccountEventHandler(ReadStoreMediator.Object);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
                 f => f.UserRoleRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Removed == f.Removed &&
-                        p.Roles.Any() == false
+                        p.Role == null
                     ), null,
                     It.IsAny<CancellationToken>())));
         }
@@ -102,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 
         public RemoveUserRolesCommandHandlerTestsFixture AddMatchingNonRemovedUserWithOwnerRole()
         {
-            Users.Add(CreateBasicUser().Add(x=>x.Roles, UserRole.Owner));
+            Users.Add(CreateBasicUser().Set(x=>x.Role, UserRole.Owner));
 
             return this;
         }
@@ -118,7 +118,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         public RemoveUserRolesCommandHandlerTestsFixture AddMatchingRecentlyRecreatedUserWithViewerRole()
         {
             Users.Add(CreateBasicUser()
-                .Add(x => x.Roles, UserRole.Viewer)
+                .Set(x => x.Role, UserRole.Viewer)
                 .Set(x => x.Created, Removed.AddDays(1)));
 
             return this;

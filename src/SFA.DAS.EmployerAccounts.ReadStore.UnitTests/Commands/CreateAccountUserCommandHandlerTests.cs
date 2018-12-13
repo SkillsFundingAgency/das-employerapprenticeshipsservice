@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                 f => f.UserRolesRepository.Verify(x => x.Add(It.Is<AccountUser>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.Roles.Equals(f.NewRoles) &&
+                        p.Role.Equals(f.NewRole) &&
                         p.Created == f.Created && 
                         p.Id != Guid.Empty
                     ), null,
@@ -70,7 +70,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return TestAsync(f => f.AddMatchingUserWithMessageAlreadyProcessed(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
                 f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
-                        p.Roles.Contains(UserRole.Owner) == false && 
                         p.OutboxData.Count() == 1
                     ), null,
                     It.IsAny<CancellationToken>())));
@@ -82,8 +81,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             return TestAsync(f => f.AddMatchingViewUserWhichWasCreatedLaterThanNewMessage(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
                 f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
-                        p.Roles.Contains(UserRole.Owner) == false &&
-                        p.Roles.Contains(UserRole.Viewer) &&
+                        p.Role == UserRole.Viewer &&
                         p.OutboxData.Count(o=>o.MessageId == f.Command.MessageId) == 1
                     ), null,
                     It.IsAny<CancellationToken>())));
@@ -105,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         public long AccountId = 333333;
         public Guid UserRef = Guid.NewGuid();
         public long UserId = 76682;
-        public HashSet<UserRole> NewRoles = new HashSet<UserRole> { UserRole.Owner };
+        public UserRole NewRole = UserRole.Owner;
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IAccountUsersRepository> UserRolesRepository;
@@ -121,7 +119,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 
             Handler = new CreateAccountUserCommandHandler(UserRolesRepository.Object);
 
-            Command = new CreateAccountUserCommand(AccountId, UserRef, NewRoles, MessageId, Created);
+            Command = new CreateAccountUserCommand(AccountId, UserRef, NewRole, MessageId, Created);
         }
 
         public CreateAccountUserCommandHandlerTestsFixture AddMatchingViewUserWhichWasCreatedLaterThanNewMessage()
@@ -129,7 +127,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             Users.Add(CreateBasicUser()
                 .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Created))
                 .Set(x => x.Created, Created.AddHours(1))
-                .Add(x => x.Roles, UserRole.Viewer));
+                .Set(x => x.Role, UserRole.Viewer));
             return this;
         }
 
@@ -138,7 +136,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             Users.Add(CreateBasicUser()
                 .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Created))
                 .Set(x => x.Created, Created.AddHours(-1))
-                .Add(x => x.Roles, UserRole.Viewer));
+                .Set(x => x.Role, UserRole.Viewer));
             return this;
         }
 
