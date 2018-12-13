@@ -184,8 +184,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             message.UserRef.Should().Be(Guid.Parse(user.UserRef));
             message.AccountId.Should().Be(_invitation.AccountId);
             message.UserName.Should().Be(user.FullName);
-            message.Roles.Count().Should().Be(1);
-            message.Roles.First().Should().Be((UserRole)_invitation.RoleId);
+            message.Role.Should().Be((UserRole)_invitation.RoleId);
         }
     }
 }

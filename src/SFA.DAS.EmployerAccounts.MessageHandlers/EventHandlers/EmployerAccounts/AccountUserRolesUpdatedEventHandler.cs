@@ -4,7 +4,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts
 {
     public class AccountUserRolesUpdatedEventHandler : IHandleMessages<AccountUserRolesUpdatedEvent>
     {
@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserRead
         }
         public async Task Handle(AccountUserRolesUpdatedEvent message, IMessageHandlerContext context)
         {
-            await _mediator.Send(new UpdateAccountUserCommand(message.AccountId, message.UserRef, message.Roles, context.MessageId, message.Created));
+            await _mediator.Send(new UpdateAccountUserCommand(message.AccountId, message.UserRef, message.Role, context.MessageId, message.Created));
         }
     }
 }

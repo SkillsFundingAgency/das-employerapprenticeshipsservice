@@ -132,7 +132,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 
         public HasRoleQueryHandlerTestsFixture AddNonMatchingOnRoleEnum()
         {
-            Roles.Add(CreateBasicMatchingUserRolesObject().Add(x=>x.Roles, UserRole.Transactor)); //not matching on role
+            Roles.Add(CreateBasicMatchingUserRolesObject().Set(x=>x.Role, UserRole.Transactor)); //not matching on role
 
             return this;
         }
@@ -146,7 +146,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 
         private AccountUser CreateBasicMatchingUserRolesWithOwnerRole()
         {
-            return CreateBasicMatchingUserRolesObject().Add(x => x.Roles, UserRole.Owner);
+            return CreateBasicMatchingUserRolesObject().Set(x => x.Role, UserRole.Owner);
         }
 
         private AccountUser CreateBasicMatchingUserRolesObject()

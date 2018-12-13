@@ -5,7 +5,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts
 {
     public class AccountUserRemovedEventHandler : IHandleMessages<AccountUserRemovedEvent>
     {

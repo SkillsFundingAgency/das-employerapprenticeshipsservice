@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
-using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
+using NUnit.Framework;using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
@@ -25,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
                 f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<CreateAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.Roles == f.Roles &&
+                        p.Role == f.Role &&
                         p.Created == f.Created &&
                         p.MessageId == f.MessageId
                     ),
@@ -41,12 +39,12 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public Guid UserRef = Guid.NewGuid();
         public long UserId = 877664;
 
-        public HashSet<UserRole> Roles = new HashSet<UserRole>();
+        public UserRole Role = UserRole.Transactor;
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
         public Mock<IReadStoreMediator> ReadStoreMediator;
-        public UserJoinedEventHandler Handler;
+        public SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts.UserJoinedEventHandler Handler;
 
         public UserJoinedEventHandlerForReadStoreTestsFixture()
         {
@@ -57,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
             Message = new UserJoinedEvent {
                 AccountId = AccountId,
                 UserRef = UserRef,
-                Roles = Roles,
+                Role = Role,
                 Created = Created};
 
             Handler = new UserJoinedEventHandler(ReadStoreMediator.Object);

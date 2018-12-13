@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
                 f => f.ReadStoreMediator.Verify(x => x.Send(It.Is<CreateAccountUserCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
-                        p.Roles.First() == UserRole.Owner &&
+                        p.Role == UserRole.Owner &&
                         p.Created == f.Created &&
                         p.MessageId == f.MessageId
                     ),

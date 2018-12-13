@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccount
         }
         public async Task Handle(UserJoinedEvent message, IMessageHandlerContext context)
         {
-            await _mediator.Send(new CreateAccountUserCommand(message.AccountId, message.UserRef, message.Roles, context.MessageId, message.Created));
+            await _mediator.Send(new CreateAccountUserCommand(message.AccountId, message.UserRef, message.Role, context.MessageId, message.Created));
         }
     }
 }

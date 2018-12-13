@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore;
+using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
@@ -41,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
         public Guid UserRef = Guid.NewGuid();
         public long UserId = 877664;
 
-        public HashSet<UserRole> Roles = new HashSet<UserRole>();
+        public UserRole Role = UserRole.Transactor;
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
         public Mock<IMessageHandlerContext> MessageHandlerContext;
@@ -54,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
-            Message = new AccountUserRolesUpdatedEvent(AccountId, UserRef, Roles, Created);
+            Message = new AccountUserRolesUpdatedEvent(AccountId, UserRef, Role, Created);
 
             Handler = new AccountUserRolesUpdatedEventHandler(ReadStoreMediator.Object);
         }

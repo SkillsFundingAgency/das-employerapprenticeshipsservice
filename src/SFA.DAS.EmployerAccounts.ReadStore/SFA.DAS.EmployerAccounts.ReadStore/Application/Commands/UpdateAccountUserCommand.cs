@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 
@@ -9,15 +8,15 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
     {
         public long AccountId { get; }
         public Guid UserRef { get; }
-        public HashSet<UserRole> Roles { get; }
+        public UserRole Role { get; }
         public string MessageId { get; }
         public DateTime Updated { get; }
 
-        public UpdateAccountUserCommand(long accountId, Guid userRef, HashSet<UserRole> roles, string messageId, DateTime updated)
+        public UpdateAccountUserCommand(long accountId, Guid userRef, UserRole role, string messageId, DateTime updated)
         {
             AccountId = accountId;
             UserRef = userRef;
-            Roles = roles;
+            Role = role;
             MessageId = messageId;
             Updated = updated;
         }
