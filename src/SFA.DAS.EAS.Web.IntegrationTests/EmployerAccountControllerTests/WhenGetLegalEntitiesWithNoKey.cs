@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             await ApiIntegrationTester.InvokeIsolatedGetAsync(callRequirements);
 
             // Assert
-            Assert.Pass("Verfiied we got a bad request type behaviour");
+            Assert.Pass("Verified we got a bad request type behaviour");
         }
     }
 }
