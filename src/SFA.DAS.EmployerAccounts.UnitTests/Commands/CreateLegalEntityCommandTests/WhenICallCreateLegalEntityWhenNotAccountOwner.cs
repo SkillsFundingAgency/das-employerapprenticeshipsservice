@@ -93,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             _validator = new Mock<IValidator<CreateLegalEntityCommand>>();
             _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateLegalEntityCommand>()))
-                .ReturnsAsync(new ValidationResult() {IsUnauthorized = true});
+                .ReturnsAsync(new ValidationResult() { IsUnauthorized = true });
 
             _commandHandler = new CreateLegalEntityCommandHandler(
                 _accountRepository.Object,
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         {
             //Act &
             //Assert
-           Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _commandHandler.Handle(_command));
+            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _commandHandler.Handle(_command));
         }
     }
 }

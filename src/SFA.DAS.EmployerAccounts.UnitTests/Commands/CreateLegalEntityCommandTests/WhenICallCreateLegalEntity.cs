@@ -10,9 +10,11 @@ using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Features;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
@@ -56,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 FirstName = "Bob",
                 LastName = "Green",
                 UserRef = Guid.NewGuid().ToString(),
-                RoleId= 1,
+                RoleId = 1,
             };
 
             _agreementView = new EmployerAgreementView
@@ -120,7 +122,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 _hashingService.Object,
                 _accountLegalEntityPublicHashingService.Object,
                 _agreementService.Object,
-                _employerAgreementRepository.Object, 
+                _employerAgreementRepository.Object,
                 _validator.Object
                 );
         }

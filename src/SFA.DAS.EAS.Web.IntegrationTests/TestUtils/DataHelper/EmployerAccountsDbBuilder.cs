@@ -11,7 +11,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 {
-    class EmployerAccountsDbBuilder : IDisposable
+    class EmployerAccountsDbBuilder : IDbBuilder
     {
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
@@ -184,7 +184,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             if (action.IsCanceled)
             {
                 failMessage.AppendLine(
-                    $"A DB task has been canceled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
+                    $"A DB task has been cancelled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
             }
         }
 
@@ -192,9 +192,39 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
         {
             if (!HasTransaction) return;
 
+            _dbContext.Database.CurrentTransaction.Dispose();
+        }
+
+        public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
+
+        public void BeginTransaction()
+        {
+            if (HasTransaction)
+            {
+                throw new InvalidOperationException("Cannot begin a transaction because a transaction has already been started");
+            }
+
+            _dbContext.Database.BeginTransaction();
+        }
+
+        public void CommitTransaction()
+        {
+            if (!HasTransaction)
+            {
+                throw new InvalidOperationException("Cannot commit a transaction because a transaction has not been started");
+            }
+
             _dbContext.Database.CurrentTransaction.Commit();
         }
 
-        public bool HasTransaction => (_dbContext.Database.CurrentTransaction != null);
+        public void RollbackTransaction()
+        {
+            if (!HasTransaction)
+            {
+                throw new InvalidOperationException("Cannot rollback a transaction because a transaction has not been started");
+            }
+
+            _dbContext.Database.CurrentTransaction.Rollback();
+        }
     }
 }

@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
@@ -48,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             IHashingService hashingService,
             IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             IAgreementService agreementService,
-            IEmployerAgreementRepository employerAgreementRepository, 
+            IEmployerAgreementRepository employerAgreementRepository,
             IValidator<CreateLegalEntityCommand> validator)
         {
             _accountRepository = accountRepository;
