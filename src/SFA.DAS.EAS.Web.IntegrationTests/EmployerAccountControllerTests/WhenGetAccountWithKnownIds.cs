@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
@@ -19,23 +19,24 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [SetUp]
         public void SetUp()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
 
             // Arrange
             const string accountName = "ACME Fireworks";
             const string legalEntityName = "RoadRunner Pest Control";
             const string payeReference = "Acme PAYE";
 
-            using (var testEmployerAccountsDbBuilder = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            _tester.InitialiseData<EmployerAccountsDbBuilder>(builder =>
             {
-                testEmployerAccountsDbBuilder
-                    .EnsureUserExists(testEmployerAccountsDbBuilder.BuildUserInput())
-                    .EnsureAccountExists(testEmployerAccountsDbBuilder.BuildEmployerAccountInput(accountName, payeReference))
-                    .WithLegalEntity(testEmployerAccountsDbBuilder.BuildEntityWithAgreementInput(legalEntityName));
+                // TODO: the way ids are propagated is a bit clunky
+                builder
+                    .EnsureUserExists(TestModelBuilder.User.CreateUserInput())
+                    .EnsureAccountExists(TestModelBuilder.Account.CreateAccountInput(accountName, payeReference, builder.Context.ActiveUser.UserId))
+                    .WithLegalEntity(TestModelBuilder.LegalEntity.BuildEntityWithAgreementInput(legalEntityName, builder.Context.ActiveEmployerAccount.AccountId));
 
-                _hashedAccountId = testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
-                _accountId = testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.AccountId;
-            }
+                _hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
+                _accountId = builder.Context.ActiveEmployerAccount.AccountId;
+            });
         }
 
         [TearDown]
