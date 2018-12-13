@@ -4,7 +4,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts
 {
     public class UserJoinedEventHandler : IHandleMessages<UserJoinedEvent>
     {
