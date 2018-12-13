@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.Data;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
@@ -14,6 +15,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
+using IMembershipRepository = SFA.DAS.EmployerAccounts.Jobs.Data.IMembershipRepository;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 {
@@ -58,7 +60,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
     public class PopulateAccountUsersInCollectionJobTestsFixture
     {
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
-        internal Mock<IPopulateRepository> PopulateRepository { get; set; }
+        internal Mock<IMembershipRepository> MembershipRepository { get; set; }
+        internal Mock<IJobHistoryRepository> JobHistoryRepository { get; set; }
         public Mock<ILogger> Logger { get; set; }
 
         public ICollection<MembershipUser> Users = new List<MembershipUser>();
@@ -75,13 +78,16 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             AccountUsersRepository = new Mock<IAccountUsersRepository>();
             AccountUsersRepository.SetupInMemoryCollection(ReadStoreUsers);
 
-            PopulateRepository = new Mock<IPopulateRepository>();
-            PopulateRepository.Setup(x => x.GetAllAccountUsers()).ReturnsAsync(Users);
+            MembershipRepository = new Mock<IMembershipRepository>();
+            MembershipRepository.Setup(x => x.GetAllAccountUsers()).ReturnsAsync(Users);
+
+            JobHistoryRepository = new Mock<IJobHistoryRepository>();
 
             Logger = new Mock<ILogger>();
 
             PopulateAccountUsersInCollectionJob =
-                new PopulateAccountUsersInCollectionJob(AccountUsersRepository.Object, PopulateRepository.Object, Logger.Object);
+                new PopulateAccountUsersInCollectionJob(AccountUsersRepository.Object, MembershipRepository.Object, 
+                    JobHistoryRepository.Object, Logger.Object);
         }
 
         public Task Run()
@@ -91,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         public PopulateAccountUsersInCollectionJobTestsFixture SetJobAsAlreadyRun()
         {
-            PopulateRepository.Setup(x => x.HasJobRun(_jobName)).ReturnsAsync(true);
+            JobHistoryRepository.Setup(x => x.HasJobRun(_jobName)).ReturnsAsync(true);
 
             return this;
         }
@@ -115,7 +121,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         public PopulateAccountUsersInCollectionJobTestsFixture VerifyUserQueryNotRun()
         {
-            PopulateRepository.Verify(x => x.GetAllAccountUsers(), Times.Never);
+            MembershipRepository.Verify(x => x.GetAllAccountUsers(), Times.Never);
 
             return this;
         }
@@ -141,20 +147,20 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         public PopulateAccountUsersInCollectionJobTestsFixture VerifyUserQueryWasRun()
         {
-            PopulateRepository.Verify(x => x.GetAllAccountUsers(), Times.Once);
+            MembershipRepository.Verify(x => x.GetAllAccountUsers(), Times.Once);
 
             return this;
         }
 
         public PopulateAccountUsersInCollectionJobTestsFixture VerifyMarkAsPopulatedNotRun()
         {
-            PopulateRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Never);
+            JobHistoryRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Never);
 
             return this;
         }
         public PopulateAccountUsersInCollectionJobTestsFixture VerifyMarkAsPopulatedWasRun()
         {
-            PopulateRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Once);
+            JobHistoryRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Once);
 
             return this;
         }

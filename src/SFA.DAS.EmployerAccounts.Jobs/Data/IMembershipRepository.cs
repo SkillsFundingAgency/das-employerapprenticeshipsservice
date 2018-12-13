@@ -3,10 +3,8 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.Data
 {
-    public interface IPopulateRepository
+    public interface IMembershipRepository
     {
         Task<IEnumerable<MembershipUser>> GetAllAccountUsers();
-        Task<bool> HasJobRun(string job);
-        Task MarkJobAsRan(string job);
     }
 }
