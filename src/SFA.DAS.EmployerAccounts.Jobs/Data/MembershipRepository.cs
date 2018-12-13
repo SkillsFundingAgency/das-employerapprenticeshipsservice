@@ -28,10 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.Data
                 @"SELECT M.UserId, U.UserRef, M.AccountId, M.RoleId FROM [employer_account].[Membership] M  
                             LEFT JOIN [employer_account].[User] U ON M.UserId = U.Id 
                             WHERE M.RoleId IN @Roles",
-                new []
-                {
-                    new { Roles = new HashSet<UserRole> { UserRole.Owner, UserRole.Transactor, UserRole.Transactor } }
-                },
+                new { Roles = new HashSet<UserRole> { UserRole.Owner, UserRole.Transactor, UserRole.Transactor } },
                 commandType: CommandType.Text);
 
             return result;
