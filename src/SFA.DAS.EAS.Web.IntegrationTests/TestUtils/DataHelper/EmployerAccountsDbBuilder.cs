@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -29,67 +30,38 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             _dbContext = dbContext;
         }
 
-        public DbBuilderContext Context { get;  } = new DbBuilderContext();
-
         public DbBuilderDependentRepositories DependentRepositories { get; }
 
-        public EmployerAccountsDbBuilder EnsureAccountExists(EmployerAccountInput input)
+        public async Task<EmployerAccountOutput> EnsureAccountExistsAsync(EmployerAccountInput input)
         {
-            return EnsureAccountExists(input, CancellationToken.None);
-        }
+            var createResult = await DependentRepositories.AccountRepository.CreateAccount(
+                input.UserId(),
+                input.OrganisationReferenceNumber,
+                input.OrganisationName,
+                input.OrganisationRegisteredAddress,
+                input.OrganisationDateOfInception,
+                input.PayeReference,
+                input.AccessToken,
+                input.RefreshToken,
+                input.OrganisationStatus,
+                input.EmployerRefName,
+                input.Source,
+                input.PublicSectorDataSource,
+                input.Sector);
 
-        public EmployerAccountsDbBuilder EnsureAccountExists(EmployerAccountInput input, CancellationToken cancellationToken)
-        {
-            return WaitDbAction(EnsureAccountExistsAsync(input), cancellationToken);
-        }
-
-        public async Task<EmployerAccountsDbBuilder> EnsureAccountExistsAsync(EmployerAccountInput input)
-        {
-            var output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
-
-            if (output == null)
+            var output = new EmployerAccountOutput
             {
-                await DependentRepositories.AccountRepository.CreateAccount(
-                    input.UserId,
-                    input.OrganisationReferenceNumber,
-                    input.OrganisationName,
-                    input.OrganisationRegisteredAddress,
-                    input.OrganisationDateOfInception,
-                    input.PayeReference,
-                    input.AccessToken,
-                    input.RefreshToken,
-                    input.OrganisationStatus,
-                    input.EmployerRefName,
-                    input.Source,
-                    input.PublicSectorDataSource,
-                    input.Sector);
+                AccountId = createResult.AccountId,
+                HashedAccountId = _hashingService.HashValue(createResult.AccountId),
+                PublicHashedAccountId = _publicHashingService.HashValue(createResult.AccountId)
+            };
 
-                output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
-            }
+            await DependentRepositories.AccountRepository.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
 
-            if (string.IsNullOrWhiteSpace(output.HashedAccountId))
-            {
-                output.HashedAccountId = _hashingService.HashValue(output.AccountId);
-                output.PublicHashedAccountId = _publicHashingService.HashValue(output.AccountId);
-                await DependentRepositories.AccountRepository.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
-            }
-
-            Context.ActiveEmployerAccount = output;
-
-            return this;
+            return output;
         }
 
-        public EmployerAccountsDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input)
-        {
-            return WithLegalEntity(input, CancellationToken.None);
-        }
-
-        public EmployerAccountsDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input, CancellationToken cancellationToken)
-        {
-            return WaitDbAction(WithLegalEntityAsync(input), cancellationToken);
-        }
-
-        public async Task<EmployerAccountsDbBuilder> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
+        public async Task<LegalEnityWithAgreementOutput> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
         {
             var output = new LegalEnityWithAgreementOutput();
 
@@ -100,20 +72,40 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             output.LegalEntityId = view.LegalEntityId;
             output.HashedAgreementId = view.HashedAgreementId;
 
+            return output;
+        }
+
+        public async Task<EmployerAccountsDbBuilder> SetupDataAsync(TestModelBuilder builder)
+        {
+            foreach (var userSetup in builder.Users)
+            {
+                userSetup.UserOutput = await EnsureUserExistsAsync(userSetup.UserInput);
+
+                await SetupAccountsForUserAsync(userSetup);
+            }
+
             return this;
         }
 
-        public EmployerAccountsDbBuilder EnsureUserExists(UserInput input)
+        private async Task SetupAccountsForUserAsync(UserSetup userSetup)
         {
-            return EnsureUserExists(input, CancellationToken.None);
+            foreach (var employerAccountSetup in userSetup.Accounts)
+            {
+                employerAccountSetup.AccountOutput = await EnsureAccountExistsAsync(employerAccountSetup.AccountInput);
+
+                await SetupLegalEntitiesForAccountsAsync(employerAccountSetup);
+            }
         }
 
-        public EmployerAccountsDbBuilder EnsureUserExists(UserInput input, CancellationToken cancellationToken)
+        private async Task SetupLegalEntitiesForAccountsAsync(EmployerAccountSetup accountSetup)
         {
-            return WaitDbAction(EnsureUserExistsAsync(input), cancellationToken);
+            foreach (var legalEntitySetup in accountSetup.LegalEntities)
+            {
+                legalEntitySetup.LegalEntityWithAgreementInputOutput = await WithLegalEntityAsync(legalEntitySetup.LegalEntityWithAgreementInputInput);
+            }
         }
 
-        public async Task<EmployerAccountsDbBuilder> EnsureUserExistsAsync(UserInput input)
+        public async Task<UserOutput> EnsureUserExistsAsync(UserInput input)
         {
             try
             {
@@ -123,44 +115,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
                 var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
                 output.UserRef = input.UserRef;
                 output.UserId = user.Id;
-                Context.ActiveUser = output;
-                return this;
+                return output;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
                 throw;
-            }
-        }
-
-        private TResult WaitDbAction<TResult>(Task<TResult> action, CancellationToken cancellationToken)
-        {
-            try
-            {
-                action.Wait((int) TestConstants.DbTimeout.TotalMilliseconds, cancellationToken);
-                CheckTaskResult(action);
-
-                return action.Result;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-        }
-
-        private void CheckTaskResult(Task action)
-        {
-            var failMessage = new StringBuilder();
-
-            CheckIfTaskCanceled(action, failMessage);
-
-            CheckIfTaskFaulted(action, failMessage);
-
-            if (failMessage.Length > 0)
-            {
-                Assert.Fail(failMessage.ToString());
             }
         }
 

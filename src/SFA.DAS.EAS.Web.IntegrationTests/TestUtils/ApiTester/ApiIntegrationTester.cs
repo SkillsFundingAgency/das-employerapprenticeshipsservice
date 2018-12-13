@@ -110,7 +110,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             return _dependencyResolver.Container.GetNestedContainer().GetInstance<T>();
         }
 
-        public void InitialiseData<TDbBuilder>(Action<TDbBuilder> initialiseAction) where TDbBuilder : IDbBuilder
+        public async Task InitialiseData<TDbBuilder>(Func<TDbBuilder, Task> initialiseAction) where TDbBuilder : IDbBuilder
         {
             Contract.Requires(_testSetupContainerInitialiser != null, "Cannot initialise data without an IoC container - please use the constructor that accepts a delegate that returns a test setup container");
             
@@ -121,7 +121,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             builder.BeginTransaction();
             try
             {
-                initialiseAction(builder);
+                await initialiseAction(builder);
                 builder.CommitTransaction();
             }
             catch (Exception)
