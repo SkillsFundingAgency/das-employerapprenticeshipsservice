@@ -31,8 +31,38 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
         }
 
         public DbBuilderDependentRepositories DependentRepositories { get; }
+        public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
 
-        public async Task<EmployerAccountOutput> EnsureAccountExistsAsync(EmployerAccountInput input)
+
+        /// <summary>
+        ///     Persists the data defined in <see cref="TestModelBuilder"/> to the database. Keys 
+        ///     will be propagated automatically. e.g. User Ids will be add to any accounts created
+        ///     for that user;
+        /// </summary>
+        public async Task<EmployerAccountsDbBuilder> SetupDataAsync(TestModelBuilder builder)
+        {
+            foreach (var userSetup in builder.Users)
+            {
+                userSetup.UserOutput = await CreateUserAsync(userSetup.UserInput);
+
+                await CreateAccountsForUserAsync(userSetup);
+            }
+
+            return this;
+        }
+
+        public async Task<UserOutput> CreateUserAsync(UserInput input)
+        {
+            var output = new UserOutput();
+
+            await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
+            var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
+            output.UserRef = input.UserRef;
+            output.UserId = user.Id;
+            return output;
+        }
+
+        public async Task<EmployerAccountOutput> CreateAccountAsync(EmployerAccountInput input)
         {
             var createResult = await DependentRepositories.AccountRepository.CreateAccount(
                 input.UserId(),
@@ -61,7 +91,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return output;
         }
 
-        public async Task<LegalEnityWithAgreementOutput> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
+        public async Task<LegalEnityWithAgreementOutput> CreateLegalEntityAsync(LegalEntityWithAgreementInput input)
         {
             var output = new LegalEnityWithAgreementOutput();
 
@@ -75,87 +105,23 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             return output;
         }
 
-        public async Task<EmployerAccountsDbBuilder> SetupDataAsync(TestModelBuilder builder)
-        {
-            foreach (var userSetup in builder.Users)
-            {
-                userSetup.UserOutput = await EnsureUserExistsAsync(userSetup.UserInput);
-
-                await SetupAccountsForUserAsync(userSetup);
-            }
-
-            return this;
-        }
-
-        private async Task SetupAccountsForUserAsync(UserSetup userSetup)
+        private async Task CreateAccountsForUserAsync(UserSetup userSetup)
         {
             foreach (var employerAccountSetup in userSetup.Accounts)
             {
-                employerAccountSetup.AccountOutput = await EnsureAccountExistsAsync(employerAccountSetup.AccountInput);
+                employerAccountSetup.AccountOutput = await CreateAccountAsync(employerAccountSetup.AccountInput);
 
-                await SetupLegalEntitiesForAccountsAsync(employerAccountSetup);
+                await CreateLegalEntitiesForAccountsAsync(employerAccountSetup);
             }
         }
 
-        private async Task SetupLegalEntitiesForAccountsAsync(EmployerAccountSetup accountSetup)
+        private async Task CreateLegalEntitiesForAccountsAsync(EmployerAccountSetup accountSetup)
         {
             foreach (var legalEntitySetup in accountSetup.LegalEntities)
             {
-                legalEntitySetup.LegalEntityWithAgreementInputOutput = await WithLegalEntityAsync(legalEntitySetup.LegalEntityWithAgreementInputInput);
+                legalEntitySetup.LegalEntityWithAgreementInputOutput = await CreateLegalEntityAsync(legalEntitySetup.LegalEntityWithAgreementInputInput);
             }
         }
-
-        public async Task<UserOutput> EnsureUserExistsAsync(UserInput input)
-        {
-            try
-            {
-                var output = new UserOutput();
-
-                await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
-                var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
-                output.UserRef = input.UserRef;
-                output.UserId = user.Id;
-                return output;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-
-        private static void CheckIfTaskFaulted(Task action, StringBuilder failMessage)
-        {
-            if (action.IsFaulted)
-            {
-                failMessage.Append("A DB task has faulted. ");
-                if (action.Exception != null)
-                {
-                    foreach (var exception in action.Exception.Flatten().InnerExceptions)
-                    {
-                        failMessage.AppendLine($">>:e => {exception.GetType().Name} : {exception.Message}");
-                    }
-                }
-            }
-        }
-
-        private static void CheckIfTaskCanceled(Task action, StringBuilder failMessage)
-        {
-            if (action.IsCanceled)
-            {
-                failMessage.AppendLine(
-                    $"A DB task has been cancelled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
-            }
-        }
-
-        public void Dispose()
-        {
-            if (!HasTransaction) return;
-
-            _dbContext.Database.CurrentTransaction.Dispose();
-        }
-
-        public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
 
         public void BeginTransaction()
         {
@@ -185,6 +151,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             }
 
             _dbContext.Database.CurrentTransaction.Rollback();
+        }
+
+        public void Dispose()
+        {
+            if (!HasTransaction) return;
+
+            _dbContext.Database.CurrentTransaction.Dispose();
         }
     }
 }
