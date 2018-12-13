@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -23,7 +22,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-        private readonly ILog _logger;
 
         public EmployerAgreementController(IAuthenticationService owinWrapper,
             EmployerAgreementOrchestrator orchestrator,
@@ -31,7 +29,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediator,
-            IMapper mapper, ILog logger)
+            IMapper mapper)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             if (owinWrapper == null)
@@ -42,7 +40,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             _orchestrator = orchestrator;
             _mediator = mediator;
             _mapper = mapper;
-            _logger = logger;
         }
 
         [HttpGet]
