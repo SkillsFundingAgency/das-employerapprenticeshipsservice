@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.AccountUserReadStore;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerAccounts;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
@@ -13,7 +12,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.AccountUserReadStore
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerAccounts
 {
     [TestFixture]
     [Parallelizable]
