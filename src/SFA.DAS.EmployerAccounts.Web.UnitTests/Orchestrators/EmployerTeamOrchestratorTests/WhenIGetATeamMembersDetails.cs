@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .ReturnsAsync(new GetUserAccountRoleResponse {UserRole = userRole});
 
             //Act
-            var result = await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            var result = await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetUserAccountRoleQuery>(q => 
@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
 
             //Act
-            var result = await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            var result = await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<GetMemberRequest>(r => 
@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = userRole });
 
             //Act
-            await _orchestrator.GetTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
+            await _orchestrator.GetActiveTeamMember(HashedAccountId, TeamMemberEmail, ExternalUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Never);
