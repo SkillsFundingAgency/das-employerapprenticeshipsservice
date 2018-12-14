@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -16,10 +17,6 @@ using Owin;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.Hashing;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using WebApi.StructureMap;
@@ -29,12 +26,27 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
     sealed class ApiIntegrationTester : IDisposable
     {
         private IntegrationTestDependencyResolver _dependencyResolver;
-
         private IntegrationTestExceptionLogger _exceptionLogger;
+        private readonly Func<IContainer> _testSetupContainerInitialiser;
+        private bool IsTestServerStarted => TestServer != null;
+        private TestServer TestServer { get; set; }
 
-        public bool IsTestServerStarted => TestServer != null;
+        /// <summary>
+        ///     Use this constructor for simple tests which do not require any data set up. If your test requires 
+        ///     data set up then use the constructor that accepts a delegate for obtaining a test set up container.
+        /// </summary>
+        public ApiIntegrationTester() : this(null)
+        {
+        }
 
-        public TestServer TestServer { get; private set; }
+        /// <summary>
+        ///     Constructor that takes a delegate that returns an IoC container to be used
+        ///     for setting up the test. 
+        /// </summary>
+        public ApiIntegrationTester(Func<IContainer> testSetupContainer)
+        {
+            _testSetupContainerInitialiser = testSetupContainer;
+        }
 
         /// <summary>
         ///     Send a GET to the specified URI using a test server and configuration created just for this call.
@@ -50,29 +62,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         public static async Task<CallResponse<TResult>> InvokeIsolatedGetAsync<TResult>(CallRequirements call)
         {
-            using (var tester = new ApiIntegrationTester())
+            using (var tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC))
             {
                 return await tester.InvokeGetAsync<TResult>(call);
             }
-        }
-
-        public void BeginTests()
-        {
-            TestServer = TestServer.Create(InitialiseHost);
-        }
-        
-        public void Dispose()
-        {
-            if (IsTestServerStarted)
-            {
-                EndTests();
-            }
-        }
-
-        public void EndTests()
-        {
-            TestServer?.Dispose();
-            TestServer = null;
         }
 
         public Task<CallResponse> InvokeGetAsync(CallRequirements call)
@@ -87,11 +80,51 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             return GetResponseAsync<TResult>(call);
         }
 
-        public T GetTransientInstance<T>()
+        /// <summary>
+        ///     Call this when you want to set up some data prior to running the actual test.
+        ///     A new container will be created and a new transaction will be started. 
+        /// </summary>
+        /// <typeparam name="TDbBuilder"></typeparam>
+        /// <param name="initialiseAction"></param>
+        /// <returns></returns>
+        public async Task InitialiseData<TDbBuilder>(Func<TDbBuilder, Task> initialiseAction) where TDbBuilder : IDbBuilder
         {
-            EnsureStarted();
+            Contract.Requires(_testSetupContainerInitialiser != null, "Cannot initialise data without an IoC container - please use the constructor that accepts a delegate that returns a test setup container");
+            
+            var container = _testSetupContainerInitialiser();
 
-            return _dependencyResolver.Container.GetNestedContainer().GetInstance<T>();
+            var builder = container.GetInstance<TDbBuilder>();
+
+            builder.BeginTransaction();
+            try
+            {
+                await initialiseAction(builder);
+                builder.CommitTransaction();
+            }
+            catch (Exception)
+            {
+                builder.RollbackTransaction();
+                throw;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (IsTestServerStarted)
+            {
+                EndTests();
+            }
+        }
+
+        private void BeginTests()
+        {
+            TestServer = TestServer.Create(InitialiseHost);
+        }
+
+        private void EndTests()
+        {
+            TestServer?.Dispose();
+            TestServer = null;
         }
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
@@ -156,6 +189,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private void InitialiseHost(IAppBuilder app)
         {
+            // TODO: this ties this class to the EAS project - it would be better to inject this into the test harness
             var config = new HttpConfiguration();
 
             WebApiConfig.Register(config);
@@ -165,18 +199,41 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private void CustomiseConfig(HttpConfiguration config)
         {
+            CustomiseIoC(config);
+            CustomiseDependencyResolver(config);
+            CustomiseExceptionLogger(config);
+            CustomiseAssemblyResolver(config);
+        }
+
+
+        private void CustomiseIoC(HttpConfiguration config)
+        {
             var container = config.DependencyResolver.GetService<IContainer>();
-            var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
             container.Configure(c =>
             {
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
             });
+        }
 
+        private void CustomiseDependencyResolver(HttpConfiguration config)
+        {
+            // This allows us to track all IoC resolves so we can check the controllers that are created
+            var container = config.DependencyResolver.GetService<IContainer>();
             _dependencyResolver = new IntegrationTestDependencyResolver(container);
-            _exceptionLogger = new IntegrationTestExceptionLogger();
-
             config.DependencyResolver = _dependencyResolver;
+        }
+
+        private void CustomiseExceptionLogger(HttpConfiguration config)
+        {
+            // This allows us to check any unhandled exceptions that get thrown by the controller
+            _exceptionLogger = new IntegrationTestExceptionLogger();
             config.Services.Add(typeof(IExceptionLogger), _exceptionLogger);
+        }
+
+        private void CustomiseAssemblyResolver(HttpConfiguration config)
+        {
+            // This allows us to point the owin test server at the web project to find the controllers and routes.
+            var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
             config.Services.Replace(typeof(IAssembliesResolver), assembliesResolver);
         }
 

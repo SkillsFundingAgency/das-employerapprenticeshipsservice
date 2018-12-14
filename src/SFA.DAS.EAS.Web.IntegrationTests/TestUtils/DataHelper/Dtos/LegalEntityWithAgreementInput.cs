@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos
 {
     public class LegalEntityWithAgreementInput
     {
-        public long AccountId { get; set; }
+        public Func<long> AccountId { get; set; }
         public string CompanyNumber { get; set; }
         public string CompanyName { get; set; }
         public string CompanyAddress { get; set; }

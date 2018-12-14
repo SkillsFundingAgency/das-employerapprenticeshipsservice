@@ -4,7 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [SetUp]
         public void SetUp()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
         }
 
         [TearDown]
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Arrange
             var callRequirements =
                 new CallRequirements("api/accounts/ZZZZZZ/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.NotFound)
+                    .ExpectStatusCodes(HttpStatusCode.NotFound)
                     .ExpectControllerType(typeof(LegalEntitiesController));
 
             // Act
@@ -50,20 +50,22 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string legalEntityName = "RoadRunner Pest Control";
             const string payeReference = "Acme PAYE";
 
-            string hashedAccountId;
-            using (var testEmployerAccountsDbBuilder = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            string hashedAccountId = null;
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
-                testEmployerAccountsDbBuilder
-                    .EnsureUserExists(testEmployerAccountsDbBuilder.BuildUserInput())
-                    .EnsureAccountExists(testEmployerAccountsDbBuilder.BuildEmployerAccountInput(accountName, payeReference))
-                    .WithLegalEntity(testEmployerAccountsDbBuilder.BuildEntityWithAgreementInput(legalEntityName));
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount(accountName, payeReference)
+                    .WithNewLegalEntity(legalEntityName);
 
-                hashedAccountId = testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
-            }
+                await builder.SetupDataAsync(data);
+
+                hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
+            });
 
             var callRequirements =
                 new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.OK)
+                    .ExpectStatusCodes(HttpStatusCode.OK)
                     .ExpectControllerType(typeof(LegalEntitiesController));
 
             // Act

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -6,9 +7,8 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.API.IntegrationTests.Extensions;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [SetUp]
         public void SetUp()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
         }
 
         [TearDown]
@@ -36,26 +36,26 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string accountName = "AccountWhenGetLegalEntitiesWithNonExistentKey";
             const string legalEntityName = "LegalEntityWhenGetLegalEntitiesWithNonExistentKey";
             const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
-            const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
 
-            string hashedAccountId;
-            using (var testEmployerAccountsDbBuilder = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            string hashedAccountId = null;
+            string userRef = null;
+
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
-                testEmployerAccountsDbBuilder
-                    .EnsureUserExists(new UserInput
-                    {
-                        UserRef = userRef,
-                        Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
-                    })
-                    .EnsureAccountExists(testEmployerAccountsDbBuilder.BuildEmployerAccountInput(accountName, payeReference))
-                    .WithLegalEntity(testEmployerAccountsDbBuilder.BuildEntityWithAgreementInput(legalEntityName));
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount(accountName, payeReference)
+                    .WithNewLegalEntity(legalEntityName);
 
-                hashedAccountId = testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
-            }
+                await builder.SetupDataAsync(data);
+
+                hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
+                userRef = data.CurrentUser.UserOutput.UserRef;
+            });
 
             var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
             
             // Act
             var account = await _tester.InvokeGetAsync<ICollection<TeamMemberViewModel>>(callRequirements);
@@ -63,8 +63,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Assert
             Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
-            Assert.AreEqual(userRef.ToLower(),
-                account.Data.Last().UserRef.ToLower());
+            Assert.IsTrue(string.Equals(userRef, account.Data.Last().UserRef, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }
