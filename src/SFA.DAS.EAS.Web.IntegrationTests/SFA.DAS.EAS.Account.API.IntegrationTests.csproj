@@ -221,6 +221,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
@@ -243,8 +244,12 @@
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNonExistentKey.cs" />
     <Compile Include="TestUtils\DataAccess\DataHelpers\AccountStatisticsDataHelper.cs" />
     <Compile Include="TestUtils\DataAccess\DataHelpers\FinanceStatisticsDataHelper.cs" />
-    <Compile Include="TestUtils\DataAccess\DbBuilderContext.cs" />
     <Compile Include="TestUtils\DataAccess\DbBuilderDependentRepositories.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountOutput.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountSetup.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\LegalEntityWithAgreementSetUp.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\UserSetUp.cs" />
+    <Compile Include="TestUtils\DataAccess\IDbBuilder.cs" />
     <Compile Include="TestUtils\DataAccess\DbDtoBuilderExtensions.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountInput.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\LegalEnityWithAgreementOutput.cs" />

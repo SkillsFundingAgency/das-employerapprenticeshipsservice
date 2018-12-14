@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Adapters
     {
         public LegalEntityWithAgreementInputAdapter(LegalEntityWithAgreementInput input)
         {
-            AccountId = input.AccountId;
+            AccountId = input.AccountId();
             Address = input.CompanyAddress;
             Code = null;
             DateOfIncorporation = input.CompanyDateOfIncorporation;
