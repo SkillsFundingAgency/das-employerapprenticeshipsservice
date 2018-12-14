@@ -48,8 +48,6 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         public Mock<IDocumentClient> DocumentClient { get; set; }
         public Mock<ILogger> Logger { get; set; }
         public CreateReadStoreDatabaseJob CreateReadStoreDatabaseJob { get; set; }
-        //public Mock<ResourceResponse<Database>> ResourceResponseDatabase { get; set; }
-        //public Mock<ResourceResponse<DocumentCollection>> ResourceResponseDocumentCollection { get; set; }
 
         public CreateReadStoreDatabaseJobTestsFixture()
         {
@@ -57,17 +55,11 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             Logger = new Mock<ILogger>();
             CreateReadStoreDatabaseJob = new CreateReadStoreDatabaseJob(DocumentClient.Object, Logger.Object);
 
-            //ResourceResponseDatabase = new Mock<ResourceResponse<Database>>();
-            //ResourceResponseDatabase.SetupGet(r => r.StatusCode).Returns(HttpStatusCode.Created);
-
             var resourceResponseDatabase = CreateResourceResponseWithStatusCode<Database>(HttpStatusCode.Created);
 
             DocumentClient.Setup(dc => dc.CreateDatabaseIfNotExistsAsync(It.Is<Database>(d =>
                         d.Id == "SFA.DAS.EmployerAccounts.ReadStore.Database"), null))
                 .ReturnsAsync(resourceResponseDatabase);
-
-            //ResourceResponseDocumentCollection = new Mock<ResourceResponse<DocumentCollection>>();
-            //ResourceResponseDocumentCollection.SetupGet(r => r.StatusCode).Returns(HttpStatusCode.Created);
 
             var resourceResponseDocumentCollection = CreateResourceResponseWithStatusCode<DocumentCollection>(HttpStatusCode.Created);
 
