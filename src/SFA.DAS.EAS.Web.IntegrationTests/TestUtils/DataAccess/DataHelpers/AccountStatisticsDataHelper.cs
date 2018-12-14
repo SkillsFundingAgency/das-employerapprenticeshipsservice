@@ -63,10 +63,10 @@ select (
             var accountRepo = new AccountRepository(_configuration,
                 Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
 
+            accountDbContext.Database.BeginTransaction();
+
             try
             {
-                accountDbContext.Database.BeginTransaction();
-
                 await userRepo.Create(userToCreate);
                 var createdUser = await userRepo.GetUserByRef(userToCreate.UserRef);
                 await accountRepo.CreateAccount(

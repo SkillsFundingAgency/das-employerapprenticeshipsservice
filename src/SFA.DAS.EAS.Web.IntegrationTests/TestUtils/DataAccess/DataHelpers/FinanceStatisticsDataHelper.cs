@@ -44,10 +44,10 @@ from employer_financial.Payment;";
             var lazyDb = new Lazy<EmployerFinanceDbContext>(() => financeDbContext);
             var levyRepository = new DasLevyRepository(_configuration, Mock.Of<ILog>(), lazyDb);
 
+            financeDbContext.Database.BeginTransaction();
+
             try
             {
-                financeDbContext.Database.BeginTransaction();
-
                 await levyRepository.CreatePayments(new List<PaymentDetails>
                 {
                     fixture
