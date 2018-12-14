@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Arrange
             var callRequirements =
                 new CallRequirements("api/accounts/ZZZZZZ/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.NotFound)
+                    .ExpectStatusCodes(HttpStatusCode.NotFound)
                     .ExpectControllerType(typeof(LegalEntitiesController));
 
             // Act
@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
 
             var callRequirements =
                 new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.OK)
+                    .ExpectStatusCodes(HttpStatusCode.OK)
                     .ExpectControllerType(typeof(LegalEntitiesController));
 
             // Act

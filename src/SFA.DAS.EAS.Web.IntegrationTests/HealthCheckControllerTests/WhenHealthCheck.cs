@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.HealthCheckControllerTests
         {
             // Arrange
             var call = new CallRequirements("api/HealthCheck")
-                            .AllowStatusCodes(HttpStatusCode.OK);
+                            .ExpectStatusCodes(HttpStatusCode.OK);
 
             // Act
             await ApiIntegrationTester.InvokeIsolatedGetAsync(call);

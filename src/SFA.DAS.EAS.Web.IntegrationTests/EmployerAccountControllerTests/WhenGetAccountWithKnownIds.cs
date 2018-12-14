@@ -51,7 +51,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
 
             var callRequirements = new CallRequirements($"api/accounts/{_employerAccount.HashedAccountId}")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
             
             // Act
             var account = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         {
             var callRequirements = new CallRequirements($"api/accounts/internal/{_employerAccount.AccountId}")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
 
             // Act
             var account = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);

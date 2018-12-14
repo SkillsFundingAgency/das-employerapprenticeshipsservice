@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
@@ -33,7 +30,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
         public DbBuilderDependentRepositories DependentRepositories { get; }
         public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
 
-
         /// <summary>
         ///     Persists the data defined in <see cref="TestModelBuilder"/> to the database. Keys 
         ///     will be propagated automatically. e.g. User Ids will be add to any accounts created
@@ -53,12 +49,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public async Task<UserOutput> CreateUserAsync(UserInput input)
         {
-            var output = new UserOutput();
-
             await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
             var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
-            output.UserRef = input.UserRef;
-            output.UserId = user.Id;
+
+            var output = new UserOutput
+            {
+                UserRef = input.UserRef,
+                UserId = user.Id
+            };
+
             return output;
         }
 
@@ -93,14 +92,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
 
         public async Task<LegalEnityWithAgreementOutput> CreateLegalEntityAsync(LegalEntityWithAgreementInput input)
         {
-            var output = new LegalEnityWithAgreementOutput();
-
             var view = await DependentRepositories.AccountRepository.CreateLegalEntityWithAgreement(
                new LegalEntityWithAgreementInputAdapter(input));
 
-            output.EmployerAgreementId = view.Id;
-            output.LegalEntityId = view.LegalEntityId;
-            output.HashedAgreementId = view.HashedAgreementId;
+            var output = new LegalEnityWithAgreementOutput
+            {
+                EmployerAgreementId = view.Id,
+                LegalEntityId = view.LegalEntityId,
+                HashedAgreementId = view.HashedAgreementId
+            };
 
             return output;
         }
