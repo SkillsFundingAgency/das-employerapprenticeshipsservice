@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 
@@ -20,7 +21,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.HealthCheckControllerTests
             var response = await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
 
             // Assert
-            Assert.That(response.Response.StatusCode == HttpStatusCode.OK);
+            response.Response.StatusCode
+                .Should().Be(HttpStatusCode.OK);
         }
     }
 }
