@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         public static CallRequirements ExpectValidationError(this CallRequirements call)
         {
             return call
-                .AllowStatusCodes(HttpStatusCode.BadRequest)
+                .ExpectStatusCodes(HttpStatusCode.BadRequest)
                 .IgnoreExceptionTypes(typeof(InvalidRequestException), typeof(ValidationException));
         }
 
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         ///     Specifies the response codes that indicate a successful call. Any other status codes will
         ///     cause the call to be considered a failure.
         /// </summary>
-        public static CallRequirements AllowStatusCodes(this CallRequirements call, params HttpStatusCode[] statuscodes)
+        public static CallRequirements ExpectStatusCodes(this CallRequirements call, params HttpStatusCode[] statuscodes)
         {
             call.AcceptableStatusCodes = statuscodes.ToArray();
             return call;

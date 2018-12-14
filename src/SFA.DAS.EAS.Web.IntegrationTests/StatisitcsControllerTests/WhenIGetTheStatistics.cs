@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisitcsControllerTests
         public async Task ThenTheStatusShouldBeOk()
         {
             var call = new CallRequirements("api/statistics")
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
 
             await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
 

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using NUnit.Framework;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 using SFA.DAS.EAS.Infrastructure.Data;
@@ -29,173 +27,101 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             _dbContext = dbContext;
         }
 
-        public DbBuilderContext Context { get;  } = new DbBuilderContext();
-
         public DbBuilderDependentRepositories DependentRepositories { get; }
+        public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
 
-        public EmployerAccountsDbBuilder EnsureAccountExists(EmployerAccountInput input)
+        /// <summary>
+        ///     Persists the data defined in <see cref="TestModelBuilder"/> to the database. Keys 
+        ///     will be propagated automatically. e.g. User Ids will be add to any accounts created
+        ///     for that user;
+        /// </summary>
+        public async Task<EmployerAccountsDbBuilder> SetupDataAsync(TestModelBuilder builder)
         {
-            return EnsureAccountExists(input, CancellationToken.None);
-        }
-
-        public EmployerAccountsDbBuilder EnsureAccountExists(EmployerAccountInput input, CancellationToken cancellationToken)
-        {
-            return WaitDbAction(EnsureAccountExistsAsync(input), cancellationToken);
-        }
-
-        public async Task<EmployerAccountsDbBuilder> EnsureAccountExistsAsync(EmployerAccountInput input)
-        {
-            var output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
-
-            if (output == null)
+            foreach (var userSetup in builder.Users)
             {
-                await DependentRepositories.AccountRepository.CreateAccount(
-                    input.UserId,
-                    input.OrganisationReferenceNumber,
-                    input.OrganisationName,
-                    input.OrganisationRegisteredAddress,
-                    input.OrganisationDateOfInception,
-                    input.PayeReference,
-                    input.AccessToken,
-                    input.RefreshToken,
-                    input.OrganisationStatus,
-                    input.EmployerRefName,
-                    input.Source,
-                    input.PublicSectorDataSource,
-                    input.Sector);
+                userSetup.UserOutput = await CreateUserAsync(userSetup.UserInput);
 
-                output = await DependentRepositories.AccountRepository.GetAccountDetailsAsync(input.OrganisationName);
+                await CreateAccountsForUserAsync(userSetup);
             }
-
-            if (string.IsNullOrWhiteSpace(output.HashedAccountId))
-            {
-                output.HashedAccountId = _hashingService.HashValue(output.AccountId);
-                output.PublicHashedAccountId = _publicHashingService.HashValue(output.AccountId);
-                await DependentRepositories.AccountRepository.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
-            }
-
-            Context.ActiveEmployerAccount = output;
 
             return this;
         }
 
-        public EmployerAccountsDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input)
+        public async Task<UserOutput> CreateUserAsync(UserInput input)
         {
-            return WithLegalEntity(input, CancellationToken.None);
+            await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
+            var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
+
+            var output = new UserOutput
+            {
+                UserRef = input.UserRef,
+                UserId = user.Id
+            };
+
+            return output;
         }
 
-        public EmployerAccountsDbBuilder WithLegalEntity(LegalEntityWithAgreementInput input, CancellationToken cancellationToken)
+        public async Task<EmployerAccountOutput> CreateAccountAsync(EmployerAccountInput input)
         {
-            return WaitDbAction(WithLegalEntityAsync(input), cancellationToken);
+            var createResult = await DependentRepositories.AccountRepository.CreateAccount(
+                input.UserId(),
+                input.OrganisationReferenceNumber,
+                input.OrganisationName,
+                input.OrganisationRegisteredAddress,
+                input.OrganisationDateOfInception,
+                input.PayeReference,
+                input.AccessToken,
+                input.RefreshToken,
+                input.OrganisationStatus,
+                input.EmployerRefName,
+                input.Source,
+                input.PublicSectorDataSource,
+                input.Sector);
+
+            var output = new EmployerAccountOutput
+            {
+                AccountId = createResult.AccountId,
+                HashedAccountId = _hashingService.HashValue(createResult.AccountId),
+                PublicHashedAccountId = _publicHashingService.HashValue(createResult.AccountId)
+            };
+
+            await DependentRepositories.AccountRepository.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
+
+            return output;
         }
 
-        public async Task<EmployerAccountsDbBuilder> WithLegalEntityAsync(LegalEntityWithAgreementInput input)
+        public async Task<LegalEnityWithAgreementOutput> CreateLegalEntityAsync(LegalEntityWithAgreementInput input)
         {
-            var output = new LegalEnityWithAgreementOutput();
-
             var view = await DependentRepositories.AccountRepository.CreateLegalEntityWithAgreement(
                new LegalEntityWithAgreementInputAdapter(input));
 
-            output.EmployerAgreementId = view.Id;
-            output.LegalEntityId = view.LegalEntityId;
-            output.HashedAgreementId = view.HashedAgreementId;
-
-            return this;
-        }
-
-        public EmployerAccountsDbBuilder EnsureUserExists(UserInput input)
-        {
-            return EnsureUserExists(input, CancellationToken.None);
-        }
-
-        public EmployerAccountsDbBuilder EnsureUserExists(UserInput input, CancellationToken cancellationToken)
-        {
-            return WaitDbAction(EnsureUserExistsAsync(input), cancellationToken);
-        }
-
-        public async Task<EmployerAccountsDbBuilder> EnsureUserExistsAsync(UserInput input)
-        {
-            try
+            var output = new LegalEnityWithAgreementOutput
             {
-                var output = new UserOutput();
+                EmployerAgreementId = view.Id,
+                LegalEntityId = view.LegalEntityId,
+                HashedAgreementId = view.HashedAgreementId
+            };
 
-                await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
-                var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
-                output.UserRef = input.UserRef;
-                output.UserId = user.Id;
-                Context.ActiveUser = output;
-                return this;
-            }
-            catch (Exception e)
+            return output;
+        }
+
+        private async Task CreateAccountsForUserAsync(UserSetup userSetup)
+        {
+            foreach (var employerAccountSetup in userSetup.Accounts)
             {
-                Console.WriteLine(e);
-                throw;
+                employerAccountSetup.AccountOutput = await CreateAccountAsync(employerAccountSetup.AccountInput);
+
+                await CreateLegalEntitiesForAccountsAsync(employerAccountSetup);
             }
         }
 
-        private TResult WaitDbAction<TResult>(Task<TResult> action, CancellationToken cancellationToken)
+        private async Task CreateLegalEntitiesForAccountsAsync(EmployerAccountSetup accountSetup)
         {
-            try
+            foreach (var legalEntitySetup in accountSetup.LegalEntities)
             {
-                action.Wait((int) TestConstants.DbTimeout.TotalMilliseconds, cancellationToken);
-                CheckTaskResult(action);
-
-                return action.Result;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-
-        }
-
-        private void CheckTaskResult(Task action)
-        {
-            var failMessage = new StringBuilder();
-
-            CheckIfTaskCanceled(action, failMessage);
-
-            CheckIfTaskFaulted(action, failMessage);
-
-            if (failMessage.Length > 0)
-            {
-                Assert.Fail(failMessage.ToString());
+                legalEntitySetup.LegalEntityWithAgreementInputOutput = await CreateLegalEntityAsync(legalEntitySetup.LegalEntityWithAgreementInputInput);
             }
         }
-
-        private static void CheckIfTaskFaulted(Task action, StringBuilder failMessage)
-        {
-            if (action.IsFaulted)
-            {
-                failMessage.Append("A DB task has faulted. ");
-                if (action.Exception != null)
-                {
-                    foreach (var exception in action.Exception.Flatten().InnerExceptions)
-                    {
-                        failMessage.AppendLine($">>:e => {exception.GetType().Name} : {exception.Message}");
-                    }
-                }
-            }
-        }
-
-        private static void CheckIfTaskCanceled(Task action, StringBuilder failMessage)
-        {
-            if (action.IsCanceled)
-            {
-                failMessage.AppendLine(
-                    $"A DB task has been cancelled, possibly because it has timed out. Timeout value is: {TestConstants.DbTimeout}");
-            }
-        }
-
-        public void Dispose()
-        {
-            if (!HasTransaction) return;
-
-            _dbContext.Database.CurrentTransaction.Dispose();
-        }
-
-        public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
 
         public void BeginTransaction()
         {
@@ -225,6 +151,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             }
 
             _dbContext.Database.CurrentTransaction.Rollback();
+        }
+
+        public void Dispose()
+        {
+            if (!HasTransaction) return;
+
+            _dbContext.Database.CurrentTransaction.Dispose();
         }
     }
 }

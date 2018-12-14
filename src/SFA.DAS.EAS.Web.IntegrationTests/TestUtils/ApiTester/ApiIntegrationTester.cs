@@ -26,10 +26,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
     sealed class ApiIntegrationTester : IDisposable
     {
         private IntegrationTestDependencyResolver _dependencyResolver;
-
         private IntegrationTestExceptionLogger _exceptionLogger;
-
         private readonly Func<IContainer> _testSetupContainerInitialiser;
+        private bool IsTestServerStarted => TestServer != null;
+        private TestServer TestServer { get; set; }
 
         /// <summary>
         ///     Use this constructor for simple tests which do not require any data set up. If your test requires 
@@ -47,10 +47,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             _testSetupContainerInitialiser = testSetupContainer;
         }
-
-        public bool IsTestServerStarted => TestServer != null;
-
-        public TestServer TestServer { get; private set; }
 
         /// <summary>
         ///     Send a GET to the specified URI using a test server and configuration created just for this call.
@@ -72,25 +68,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             }
         }
 
-        public void BeginTests()
-        {
-            TestServer = TestServer.Create(InitialiseHost);
-        }
-        
-        public void Dispose()
-        {
-            if (IsTestServerStarted)
-            {
-                EndTests();
-            }
-        }
-
-        public void EndTests()
-        {
-            TestServer?.Dispose();
-            TestServer = null;
-        }
-
         public Task<CallResponse> InvokeGetAsync(CallRequirements call)
         {
             return GetResponseAsync(call);
@@ -103,14 +80,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             return GetResponseAsync<TResult>(call);
         }
 
-        public T GetTransientInstance<T>()
-        {
-            EnsureStarted();
-
-            return _dependencyResolver.Container.GetNestedContainer().GetInstance<T>();
-        }
-
-        public void InitialiseData<TDbBuilder>(Action<TDbBuilder> initialiseAction) where TDbBuilder : IDbBuilder
+        /// <summary>
+        ///     Call this when you want to set up some data prior to running the actual test.
+        ///     A new container will be created and a new transaction will be started. 
+        /// </summary>
+        /// <typeparam name="TDbBuilder"></typeparam>
+        /// <param name="initialiseAction"></param>
+        /// <returns></returns>
+        public async Task InitialiseData<TDbBuilder>(Func<TDbBuilder, Task> initialiseAction) where TDbBuilder : IDbBuilder
         {
             Contract.Requires(_testSetupContainerInitialiser != null, "Cannot initialise data without an IoC container - please use the constructor that accepts a delegate that returns a test setup container");
             
@@ -121,7 +98,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             builder.BeginTransaction();
             try
             {
-                initialiseAction(builder);
+                await initialiseAction(builder);
                 builder.CommitTransaction();
             }
             catch (Exception)
@@ -129,6 +106,25 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
                 builder.RollbackTransaction();
                 throw;
             }
+        }
+
+        public void Dispose()
+        {
+            if (IsTestServerStarted)
+            {
+                EndTests();
+            }
+        }
+
+        private void BeginTests()
+        {
+            TestServer = TestServer.Create(InitialiseHost);
+        }
+
+        private void EndTests()
+        {
+            TestServer?.Dispose();
+            TestServer = null;
         }
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)

@@ -11,6 +11,9 @@ using StructureMap;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
+    /// <summary>
+    ///     IoC setup for creating test data. 
+    /// </summary>
     static class TestSetupIoC
     {
         private static readonly Lazy<EmployerApprenticeshipsServiceConfiguration> LazyAccountConfiguration = 
