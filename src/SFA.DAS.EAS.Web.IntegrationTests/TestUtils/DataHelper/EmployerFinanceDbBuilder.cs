@@ -14,8 +14,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
             _dbContext = dbContext;
         }
 
-        public DbBuilderContext Context { get;  } = new DbBuilderContext();
-
         public DbBuilderDependentRepositories DependentRepositories { get; }
     }
 }
