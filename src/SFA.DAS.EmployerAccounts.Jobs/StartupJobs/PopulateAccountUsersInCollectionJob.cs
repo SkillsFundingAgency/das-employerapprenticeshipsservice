@@ -21,8 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
         private readonly ILogger _logger;
         private readonly string _jobName;
 
-
-
         public PopulateAccountUsersInCollectionJob(IAccountUsersRepository accountUsersRepository, IMembershipRepository membershipRepository, 
             IJobHistoryRepository jobHistoryRepository, ILogger logger)
         {
@@ -54,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
             {
                 if (await _accountUsersRepository.CreateQuery().AnyAsync(x => x.AccountId == user.AccountId && x.UserRef == user.UserRef) == false)
                 {
-                    var document  = new AccountUser(user.UserRef, user.AccountId, new HashSet<UserRole> { (UserRole)user.Role }, DateTime.Now, populateMessageId);
+                    var document  = new AccountUser(user.UserRef, user.AccountId, (UserRole)user.Role, DateTime.Now, populateMessageId);
                     await _accountUsersRepository.Add(document, null, CancellationToken.None);
                 }
             }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -137,7 +136,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         {
             AccountUsersRepository.Verify(x => x.Add(It.Is<AccountUser>(p => p.AccountId == user.AccountId &&
                                                                              p.UserRef == user.UserRef &&
-                                                                             p.Roles.First() == (UserRole) user.Role), 
+                                                                             p.Role.Value == (UserRole) user.Role), 
                 null, 
                 CancellationToken.None), Times.Once);
 
