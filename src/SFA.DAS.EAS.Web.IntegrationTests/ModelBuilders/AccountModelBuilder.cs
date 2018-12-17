@@ -1,5 +1,5 @@
-﻿using System;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+﻿using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
+using System;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
 {

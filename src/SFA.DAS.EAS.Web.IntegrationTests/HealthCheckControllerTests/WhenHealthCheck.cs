@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;

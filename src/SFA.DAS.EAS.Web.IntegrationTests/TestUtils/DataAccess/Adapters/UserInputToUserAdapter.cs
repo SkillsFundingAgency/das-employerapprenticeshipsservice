@@ -1,7 +1,7 @@
-﻿using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+﻿using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Adapters
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Adapters
 {
     public class UserInputToUserAdapter : User
     {
