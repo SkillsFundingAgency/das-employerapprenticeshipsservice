@@ -50,11 +50,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
         public async Task<UserOutput> CreateUserAsync(UserInput input)
         {
             await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
-            var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
+            var user = await DependentRepositories.UserRepository.GetUserByRef(input.Ref);
 
             var output = new UserOutput
             {
-                UserRef = input.UserRef,
+                UserRef = input.Ref,
                 UserId = user.Id
             };
 

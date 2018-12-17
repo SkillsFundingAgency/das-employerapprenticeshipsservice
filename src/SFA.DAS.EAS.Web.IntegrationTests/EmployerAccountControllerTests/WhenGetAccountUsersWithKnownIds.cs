@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
 
             string hashedAccountId = null;
-            string userRef = null;
+            Guid userRef = Guid.Empty;
 
             await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
@@ -63,9 +63,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
 
             account.ExpectControllerType(typeof(EmployerAccountsController));
             account.ExpectStatusCodes(HttpStatusCode.OK);
-            NUnit.Framework.Assert.IsNotNull(account.Data);
+            Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
-            Assert.IsTrue(string.Equals(userRef, account.Data.Last().UserRef, StringComparison.InvariantCultureIgnoreCase));
+            Assert.AreEqual(userRef, Guid.Parse(account.Data.Last().UserRef));
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using AutoFixture;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 
@@ -14,10 +15,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
     /// </summary>
     public class TestModelBuilder
     {
-        private readonly UserModelBuilder _user = new UserModelBuilder();
-        private readonly AccountModelBuilder _account = new AccountModelBuilder();
         private readonly LegalEntityModelBuilder _legalEntity = new LegalEntityModelBuilder();
         private readonly List<UserSetup> _users = new List<UserSetup>();
+
+        private AutoFixture.Fixture _fixture;
 
         public ICollection<UserSetup> Users => _users;
 
@@ -27,6 +28,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
         public EmployerAccountSetup CurrentAccount => CurrentUser.Accounts.Last();
         public bool HasCurrentAccount => HasCurrentUser && _users.Last().Accounts.Count > 0;
 
+        public TestModelBuilder()
+        {
+            _fixture = new Fixture();
+        }
+
         /// <summary>
         ///     Add the information to create a new user. The user will be available in the <see cref="CurrentUser"/> but will not 
         ///     be persisted to the database until <see cref="EmployerAccountsDbBuilder.SetupDataAsync"/> is called.
@@ -35,7 +41,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
         {
             var userSetup = new UserSetup
             {
-                UserInput = _user.CreateUserInput()
+                UserInput = _fixture.Create<UserInput>()
             };
 
             _users.Add(userSetup);
@@ -60,12 +66,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
 
             var currentUser = CurrentUser;
 
-            var account = new EmployerAccountSetup
+            var account = _fixture
+                .Build<EmployerAccountInput>()
+                .With(input => input.UserId, () => currentUser.UserOutput.UserId)
+                .Create();
+
+            var accountSetup = new EmployerAccountSetup
             {
-                AccountInput = _account.CreateAccountInput(accountName, payeRef, () => currentUser.UserOutput.UserId)
+                AccountInput = account
             };
 
-            currentUser.Accounts.Add(account);
+            currentUser.Accounts.Add(accountSetup);
 
             return this;
         }
@@ -82,7 +93,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
 
             var currentAccount = CurrentAccount;
 
-            var legalEntity = new LegalEntityWithAgreementSetup
+            var legalEntity = new LegalEntityWithAgreementSetup // todo use autofixture
             {
                 LegalEntityWithAgreementInputInput = _legalEntity.BuildEntityWithAgreementInput(legalEntityName, () => currentAccount.AccountOutput.AccountId)
             };
