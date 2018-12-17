@@ -4,9 +4,9 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
 using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
@@ -22,16 +22,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
 
             // Arrange
-            const string accountName = "ACME Fireworks";
-            const string legalEntityName = "RoadRunner Pest Control";
-            const string payeReference = "Acme PAYE";
-
             await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
                 var data = new TestModelBuilder()
                         .WithNewUser()
-                        .WithNewAccount(accountName, payeReference)
-                        .WithNewLegalEntity(legalEntityName);
+                        .WithNewAccount()
+                        .WithNewLegalEntity();
 
                 await builder.SetupDataAsync(data);
 

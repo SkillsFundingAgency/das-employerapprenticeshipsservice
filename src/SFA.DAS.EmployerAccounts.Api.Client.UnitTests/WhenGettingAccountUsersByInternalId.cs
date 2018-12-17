@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoFixture;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
@@ -17,13 +18,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             _uri = $"/api/accounts/internal/{NumericalAccountId}/users";
             var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
 
-            _teamMember = new TeamMemberViewModel
-            {
-                Name = "Name",
-                UserRef = "2163",
-                Email = "test@test.com",
-                Role = "Viewer"
-            };
+            var fixture = new Fixture();
+
+            _teamMember = fixture.Create<TeamMemberViewModel>();
 
             var members = new List<TeamMemberViewModel> { _teamMember };
 

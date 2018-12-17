@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
+﻿namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
 {
     /// <summary>
     ///     Represents a db builder that will be used by the test harness.

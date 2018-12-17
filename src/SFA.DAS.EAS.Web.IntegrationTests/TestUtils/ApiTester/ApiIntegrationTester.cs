@@ -16,7 +16,7 @@ using NUnit.Framework;
 using Owin;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using WebApi.StructureMap;
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private void BeginTests()
         {
-            TestServer = TestServer.Create(InitialiseHost);
+            TestServer = Microsoft.Owin.Testing.TestServer.Create(InitialiseHost);
         }
 
         private void EndTests()
@@ -127,6 +127,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             TestServer = null;
         }
 
+        
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
             var callResponse = new CallResponse();
