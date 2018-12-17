@@ -22,14 +22,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
 
             // Arrange
-            const string legalEntityName = "RoadRunner Pest Control";
-
             await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
                 var data = new TestModelBuilder()
                         .WithNewUser()
                         .WithNewAccount()
-                        .WithNewLegalEntity(legalEntityName);
+                        .WithNewLegalEntity();
 
                 await builder.SetupDataAsync(data);
 

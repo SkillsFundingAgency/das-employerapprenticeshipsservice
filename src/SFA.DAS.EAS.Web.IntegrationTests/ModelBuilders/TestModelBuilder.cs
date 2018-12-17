@@ -15,7 +15,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
     /// </summary>
     public class TestModelBuilder
     {
-        private readonly LegalEntityModelBuilder _legalEntity = new LegalEntityModelBuilder();
         private readonly List<UserSetup> _users = new List<UserSetup>();
 
         private readonly Fixture _fixture;
@@ -82,18 +81,23 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
         ///     will be thrown if an account has not been created (via <see cref="WithNewAccount"/>. The legal entity will not 
         ///     be persisted to the database until <see cref="EmployerAccountsDbBuilder.SetupDataAsync"/> is called.
         /// </summary>
-        public TestModelBuilder WithNewLegalEntity(string legalEntityName)
+        public TestModelBuilder WithNewLegalEntity()
         {
             Contract.Assert(HasCurrentAccount, "Add an account before adding a legal entity");
 
             var currentAccount = CurrentAccount;
 
-            var legalEntity = new LegalEntityWithAgreementSetup // todo use autofixture
+            var legalEntity = _fixture
+                .Build<LegalEntityWithAgreementInput>()
+                .With(input => input.AccountId, () => currentAccount.AccountOutput.AccountId)
+                .Create();
+
+            var legalEntitySetup = new LegalEntityWithAgreementSetup
             {
-                LegalEntityWithAgreementInputInput = _legalEntity.BuildEntityWithAgreementInput(legalEntityName, () => currentAccount.AccountOutput.AccountId)
+                LegalEntityWithAgreementInput = legalEntity
             };
 
-            currentAccount.LegalEntities.Add(legalEntity);
+            currentAccount.LegalEntities.Add(legalEntitySetup);
 
             return this;
         }

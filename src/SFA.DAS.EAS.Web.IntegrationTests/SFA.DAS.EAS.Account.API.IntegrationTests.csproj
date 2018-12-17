@@ -230,7 +230,6 @@
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
-    <Compile Include="ModelBuilders\LegalEntityModelBuilder.cs" />
     <Compile Include="ModelBuilders\TestModelBuilder.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
     <Compile Include="TestUtils\ApiTester\CallRequirements.cs" />

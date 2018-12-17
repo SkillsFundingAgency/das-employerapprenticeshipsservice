@@ -34,8 +34,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         public async Task ThenTheStatusShouldBeFound_AndDataShouldContainOnlyTheExpectedUser()
         {
             // Arrange
-            const string legalEntityName = "LegalEntityWhenGetLegalEntitiesWithNonExistentKey";
-
             string hashedAccountId = null;
             var userRef = Guid.Empty;
 
@@ -44,7 +42,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
                 var data = new TestModelBuilder()
                     .WithNewUser()
                     .WithNewAccount()
-                    .WithNewLegalEntity(legalEntityName);
+                    .WithNewLegalEntity();
 
                 await builder.SetupDataAsync(data);
 
