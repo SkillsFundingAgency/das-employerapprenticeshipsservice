@@ -31,14 +31,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         {
             // Arrange
             var callRequirements =
-                new CallRequirements("api/accounts/ZZZZZZ/legalentities")
-                    .ExpectStatusCodes(HttpStatusCode.NotFound)
-                    .ExpectControllerType(typeof(LegalEntitiesController));
+                new CallRequirements("api/accounts/ZZZZZZ/legalentities");
 
             // Act
             var legalEntities = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
+
+            legalEntities.ExpectStatusCodes(HttpStatusCode.NotFound);
+            legalEntities.ExpectControllerType(typeof(LegalEntitiesController));
             Assert.IsNull(legalEntities.Data);
         }
 
@@ -64,14 +65,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             });
 
             var callRequirements =
-                new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")
-                    .ExpectStatusCodes(HttpStatusCode.OK)
-                    .ExpectControllerType(typeof(LegalEntitiesController));
+                new CallRequirements($"api/accounts/{hashedAccountId}/legalentities");
 
             // Act
             var legalEntities = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
+            legalEntities.ExpectStatusCodes(HttpStatusCode.OK);
+            legalEntities.ExpectControllerType(typeof(LegalEntitiesController));
             Assert.IsNotNull(legalEntities.Data);
         }
     }
