@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             For<IEmployerAccountsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerAccountsApiClientConfiguration>("SFA.DAS.EmployerAccounts.Api.Client")).Singleton();
             For<ReadStoreServiceFactory>().Use<ReadStoreServiceFactory>(c => c.GetInstance);
             For<IReadStoreMediator>().Use<ReadStoreMediator>();
-            For<IReadStoreRequestHandler<HasRoleQuery, bool>>().Use<HasRoleQueryHandler>();
+            For<IReadStoreRequestHandler<IsUserInRoleQuery, bool>>().Use<IsUserInRoleQueryHandler>();
             For<IDocumentClient>().Add(c => c.GetInstance<IDocumentClientFactory>().CreateDocumentClient())
                 .Named(GetType().FullName).Singleton();
             For<IDocumentClientFactory>().Use<DocumentClientFactory>();

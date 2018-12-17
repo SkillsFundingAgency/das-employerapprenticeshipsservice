@@ -28,15 +28,20 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             return _httpClient.GetAsync(url);
         }
 
-        public async Task<bool> HasRole(HasRoleRequest roleRequest, CancellationToken cancellationToken)
+        public Task<bool> IsUserInRole(IsUserInRoleRequest roleRequest, CancellationToken cancellationToken)
         {
-            var hasRole = await _mediator.Send(new HasRoleQuery(
+            return _mediator.Send(new IsUserInRoleQuery(
                 roleRequest.UserRef,
-                roleRequest.EmployerAccountId,
+                roleRequest.AccountId,
                 new HashSet<UserRole>(roleRequest.Roles)
             ), cancellationToken);
+        }
 
-            return hasRole;
+        public Task<bool> IsUserInAnyRole(IsUserInAnyRoleRequest roleRequest, CancellationToken cancellationToken)
+        {
+            return _mediator.Send(new IsUserInAnyRoleQuery(
+                roleRequest.UserRef,
+                roleRequest.AccountId), cancellationToken);
         }
 
         private string GetBaseUrl()

@@ -18,21 +18,34 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
     public class EmployerAccountsApiClientTests : FluentTest<EmployerAccountsApiClientTestsFixture>
     {
         [Test]
-        public Task HasRole_ShouldCallTheMediatorCorrectly()
+        public Task IsUserInRole_ShouldCallTheMediatorCorrectly()
         {
-            return TestAsync(f => f.SetupHasRole(), f => f.HasRole(), f => f.VerifyMediatorCall());
+            return TestAsync(f => f.IsUserInRole(), f => f.VerifyMediatorCallForIsUserInAny());
         }
 
         [Test]
-        public Task HasRole_ShouldReturnTheExpectedValue()
+        public Task IsUserInRole_ShouldReturnTheExpectedValue()
         {
-            return TestAsync(f => f.SetupHasRole(), f => f.HasRole(), (f, r) => r.Should().BeTrue());
+            return TestAsync(f => f.IsUserInRole(), (f, r) => r.Should().BeTrue());
+        }
+
+        [Test]
+        public Task IsUserInAnyRole_ShouldCallTheMediatorCorrectly()
+        {
+            return TestAsync(f => f.IsUserInRole(), f => f.VerifyMediatorCallForIsUserInAny());
+        }
+
+        [Test]
+        public Task IsUserInAnyRole_ShouldReturnTheExpectedValue()
+        {
+            return TestAsync(f => f.IsUserInRole(), (f, r) => r.Should().BeTrue());
         }
     }
 
     public class EmployerAccountsApiClientTestsFixture
     {
-        public HasRoleRequest HasRoleRequest { get; set; }
+        public IsUserInRoleRequest IsUserInRoleRequest { get; set; }
+        public IsUserInAnyRoleRequest IsUserInAnyRoleRequest { get; set; }
         public CancellationToken CancellationToken { get; set; }
         public Mock<IReadStoreMediator> MockApiMediator { get; set; }
         public IEmployerAccountsApiClient EmployerAccountsApiClient { get; set; }
@@ -42,36 +55,46 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             CancellationToken = CancellationToken.None;
             MockApiMediator = new Mock<IReadStoreMediator>();
             EmployerAccountsApiClient = new EmployerAccountsApiClient(null, MockApiMediator.Object);
-        }
 
-        public EmployerAccountsApiClientTestsFixture SetupHasRole()
-        {
-            HasRoleRequest = new HasRoleRequest
+            IsUserInRoleRequest = new IsUserInRoleRequest
             {
-                EmployerAccountId = 112,
+                AccountId = 112,
                 UserRef = Guid.NewGuid(),
                 Roles = new HashSet<UserRole> {UserRole.Owner, UserRole.Transactor}
             };
 
             MockApiMediator
-                .Setup(m => m.Send(It.IsAny<HasRoleQuery>(), CancellationToken))
+                .Setup(m => m.Send(It.IsAny<IsUserInRoleQuery>(), CancellationToken))
                 .ReturnsAsync(true);
 
-            return this;
+            IsUserInAnyRoleRequest = new IsUserInAnyRoleRequest
+            {
+                AccountId = 112,
+                UserRef = Guid.NewGuid()
+            };
+
+            MockApiMediator
+                .Setup(m => m.Send(It.IsAny<IsUserInAnyRoleQuery>(), CancellationToken))
+                .ReturnsAsync(true);
         }
 
-        public Task<bool> HasRole()
+        public Task<bool> IsUserInRole()
         {
-            return EmployerAccountsApiClient.HasRole(HasRoleRequest, CancellationToken);
+            return EmployerAccountsApiClient.IsUserInRole(IsUserInRoleRequest, CancellationToken);
         }
 
-        public void VerifyMediatorCall()
+        public Task<bool> IsUserInAnyRole()
         {
-            MockApiMediator.Verify(m => m.Send(It.Is<HasRoleQuery>(q => 
-                q.UserRef == HasRoleRequest.UserRef
-                && q.AccountId == HasRoleRequest.EmployerAccountId
-                && q.UserRoles.Count == HasRoleRequest.Roles.Count
-                && q.UserRoles.All(role => HasRoleRequest.Roles.Any(requestRole => (short)requestRole == (short)role))
+            return EmployerAccountsApiClient.IsUserInAnyRole(IsUserInAnyRoleRequest, CancellationToken);
+        }
+
+        public void VerifyMediatorCallForIsUserInAny()
+        {
+            MockApiMediator.Verify(m => m.Send(It.Is<IsUserInRoleQuery>(q => 
+                q.UserRef == IsUserInRoleRequest.UserRef
+                && q.AccountId == IsUserInRoleRequest.AccountId
+                && q.UserRoles.Count == IsUserInRoleRequest.Roles.Count
+                && q.UserRoles.All(role => IsUserInRoleRequest.Roles.Any(requestRole => (short)requestRole == (short)role))
             ), CancellationToken));
         }
     }
