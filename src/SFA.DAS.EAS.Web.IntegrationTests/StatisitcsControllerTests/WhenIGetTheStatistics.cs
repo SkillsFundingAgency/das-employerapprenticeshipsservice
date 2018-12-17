@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
-using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisitcsControllerTests
 {
@@ -17,7 +12,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisitcsControllerTests
         public async Task ThenTheStatusShouldBeOk()
         {
             var call = new CallRequirements("api/statistics")
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
 
             await ApiIntegrationTester.InvokeIsolatedGetAsync(call);
 

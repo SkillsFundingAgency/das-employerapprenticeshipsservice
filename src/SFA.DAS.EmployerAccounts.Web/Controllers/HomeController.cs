@@ -47,6 +47,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 var accounts = await _homeOrchestrator.GetUserAccounts(userId);
 
+                if (accounts.Data.Invitations > 0)
+                {
+                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName, new { });
+                }
+
                 if (accounts.Data.Accounts.AccountList.Count == 1)
                 {
                     var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
@@ -75,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             };
 
-            return new RedirectResult(Url.LegacyEasAction(string.Empty));
+            return View(ControllerConstants.ServiceStartPageViewName, model);
         }
 
         [AuthoriseActiveUser]
@@ -93,14 +98,51 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("usedServiceBefore")]
         public ActionResult UsedServiceBefore()
         {
-            return new RedirectResult(Url.LegacyEasAction("service/usedServiceBefore"));
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("usedServiceBefore")]
+        public ActionResult UsedServiceBefore(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction(ControllerConstants.WhatYoullNeedActionName); //No I have not used the service before
+                case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
+                default:
+
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        ErrorMessage = "You must select an option to continue."
+                    };
+
+                    return View(model); //No option entered
+            }
         }
 
         [HttpGet]
         [Route("whatYoullNeed")]
         public ActionResult WhatYoullNeed()
         {
-            return new RedirectResult(Url.LegacyEasAction("service/whatYoullNeed"));
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("whatYoullNeed")]
+        public ActionResult WhatYoullNeed(int? choice)
+        {
+            return RedirectToAction(ControllerConstants.RegisterUserActionName);
         }
 
         [HttpGet]
@@ -196,7 +238,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("privacy")]
         public ActionResult Privacy()
         {
-            return Redirect(Url.LegacyEasAction("service/privacy"));
+            return View();
         }
 
         [HttpGet]
@@ -210,7 +252,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("start")]
         public ActionResult ServiceStartPage()
         {
-            return new RedirectResult(Url.LegacyEasAction("service/start"));
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+            return View(model);
         }
 
 #if DEBUG

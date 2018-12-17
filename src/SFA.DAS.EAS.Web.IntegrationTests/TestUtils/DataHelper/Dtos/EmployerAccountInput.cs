@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos
 {
     public class EmployerAccountInput
     {
-        public long UserId { get; set; }
+        public Func<long> UserId { get; set; }
         public OrganisationType OrganisationType { get; set; }
         public short? PublicSectorDataSource { get; set; }
         public string OrganisationName { get; set; }
