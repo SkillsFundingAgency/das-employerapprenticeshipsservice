@@ -7,6 +7,6 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
     {
         Task HealthCheck();
         Task<bool> IsUserInRole(IsUserInRoleRequest roleRequest, CancellationToken cancellationToken);
-        Task<bool> IsUserInAnyRole(IsUserInRoleRequest roleRequest, CancellationToken cancellationToken);
+        Task<bool> IsUserInAnyRole(IsUserInAnyRoleRequest roleRequest, CancellationToken cancellationToken);
     }
 }
