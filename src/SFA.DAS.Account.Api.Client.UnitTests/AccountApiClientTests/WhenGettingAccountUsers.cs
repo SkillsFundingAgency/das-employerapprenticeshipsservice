@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoFixture;
 using FluentAssertions.Common;
 using Moq;
 using Newtonsoft.Json;
@@ -18,18 +19,14 @@ namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
         {
             _uri = $"/api/accounts/{TextualAccountId}/users";
             var absoluteUri = Configuration.ApiBaseUrl.TrimEnd('/') + _uri;
+            var fixture = new Fixture();
 
-            _teamMember = new TeamMemberViewModel
-            {
-                Name = "Name",
-                UserRef = "2163",
-                Email = "test@test.com",
-                Role = "Viewer"
-            };
+            _teamMember = fixture.Create<TeamMemberViewModel>();
 
             var members = new List<TeamMemberViewModel> { _teamMember };
 
-            HttpClient.Setup(c => c.GetAsync(absoluteUri))
+            HttpClient
+                .Setup(c => c.GetAsync(absoluteUri))
                 .Returns(Task.FromResult(JsonConvert.SerializeObject(members)));
         }
 
