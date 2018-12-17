@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
-        public AccountUser(Guid userRef, long accountId, UserRole role, DateTime created, string messageId) : base(1, "userRoles")
+        public AccountUser(Guid userRef, long accountId, UserRole role, DateTime created, string messageId) : base(1, "accountUser")
         {
             UserRef = userRef;
             AccountId = accountId;
@@ -95,12 +95,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
                     }
                 }
             );
-        }
-
-        public bool HasRole(HashSet<UserRole> roles)
-        {
-
-            return roles.Any(requestRole => requestRole == Role);
         }
 
         private void ProcessMessage(string messageId, DateTime messageCreated, Action action)

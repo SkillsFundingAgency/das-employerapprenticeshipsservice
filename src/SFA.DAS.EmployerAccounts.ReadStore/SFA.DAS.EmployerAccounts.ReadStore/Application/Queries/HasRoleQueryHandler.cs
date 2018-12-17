@@ -15,16 +15,15 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
             _accountUsersRepository = accountUsersRepository;
         }
 
-        public async Task<bool> Handle(HasRoleQuery request, CancellationToken cancellationToken)
+        public Task<bool> Handle(HasRoleQuery request, CancellationToken cancellationToken)
         {
-            var user = await _accountUsersRepository
+            return _accountUsersRepository
                 .CreateQuery()
-                .SingleOrDefaultAsync(r => r.UserRef == request.UserRef && r.AccountId == request.AccountId && r.Removed == null, cancellationToken);
-
-            if (user == null)
-                return false;
-
-            return user.HasRole(request.UserRoles);
+                .AnyAsync(r => 
+                    r.UserRef == request.UserRef && 
+                    r.AccountId == request.AccountId && 
+                    r.Removed == null &&
+                    r.Role != null && request.UserRoles.Contains(r.Role.Value), cancellationToken);
         }
     }
 }

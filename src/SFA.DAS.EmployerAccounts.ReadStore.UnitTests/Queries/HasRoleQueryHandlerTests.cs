@@ -34,9 +34,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         }
 
         [Test]
-        public Task Handle_WhenMultipleMatchingUsersFound_ShouldThrowException()
+        public Task Handle_WhenMultipleMatchingUsersFound_ShouldReturnTrue()
         {
-            return TestExceptionAsync(f => f.AddMultipleMatchingUsers(), f => f.Handle(), (f, r) => r.ShouldThrow<Exception>());
+            return TestAsync(f => f.AddMultipleMatchingUsers(), f => f.Handle(), (f, r) => r.Should().BeTrue());
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 
         public HasRoleQueryHandlerTestsFixture AddSingleMatchingUser()
         {
-            Roles.Add(CreateBasicMatchingUserRolesWithOwnerRole()); //matching
+            Roles.Add(CreateBasicMatchingUserRolesWithOwnerRole());
 
             return this;
         }
