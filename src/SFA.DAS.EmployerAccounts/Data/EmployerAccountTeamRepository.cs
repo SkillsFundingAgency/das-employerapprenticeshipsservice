@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@email", email, DbType.String);
 
             var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
-                sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE HashedId = @hashedAccountId AND Email = @email;",
+                sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE IsUser = 1 AND HashedId = @hashedAccountId AND Email = @email;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

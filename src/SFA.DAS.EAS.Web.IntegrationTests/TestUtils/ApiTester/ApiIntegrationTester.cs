@@ -13,15 +13,14 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Owin;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Application.DependencyResolution;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.UnitOfWork;
 using StructureMap;
 using WebApi.StructureMap;
 
@@ -33,14 +32,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private IntegrationTestExceptionLogger _exceptionLogger;
 
-        private readonly Lazy<DbBuilder> _dbBuilder;
-
         public bool IsTestServerStarted => TestServer != null;
-
-        public ApiIntegrationTester()
-        {
-            _dbBuilder = new Lazy<DbBuilder>(Resolve<DbBuilder>);
-        }
 
         public TestServer TestServer { get; private set; }
 
@@ -68,7 +60,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             TestServer = TestServer.Create(InitialiseHost);
         }
-
+        
         public void Dispose()
         {
             if (IsTestServerStarted)
@@ -90,20 +82,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         public Task<CallResponse<TResult>> InvokeGetAsync<TResult>(CallRequirements call)
         {
+            EnsureStarted();
+
             return GetResponseAsync<TResult>(call);
         }
 
-        /// <summary>
-        ///     Use the DI container used for the test to resolve the specified service.
-        /// </summary>
-        public T Resolve<T>()
+        public T GetTransientInstance<T>()
         {
             EnsureStarted();
 
-            return _dependencyResolver.Container.GetInstance<T>();
+            return _dependencyResolver.Container.GetNestedContainer().GetInstance<T>();
         }
-
-        public DbBuilder DbBuilder => _dbBuilder.Value;
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
@@ -123,8 +112,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
             return callResponse;
         }
-
-        private IUnitOfWorkManager unitOfWorkManager = null;
 
         private async Task FetchInitialResponseAsync(CallRequirements call, CallResponse response)
         {
@@ -180,14 +167,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             var container = config.DependencyResolver.GetService<IContainer>();
             var assembliesResolver = new TestWebApiResolver<LegalEntitiesController>();
-            var connection2 = container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString;
-            var dbContext = new EmployerAccountsDbContext(connection2);
             container.Configure(c =>
             {
-                c.For<EmployerAccountsDbContext>().Use(dbContext);
                 c.For<ILoggingContext>().Use(Mock.Of<ILoggingContext>());
-                c.For<IPublicHashingService>().Use(Mock.Of<IPublicHashingService>());
-                c.AddRegistry<DataRegistry>();
             });
 
             _dependencyResolver = new IntegrationTestDependencyResolver(container);

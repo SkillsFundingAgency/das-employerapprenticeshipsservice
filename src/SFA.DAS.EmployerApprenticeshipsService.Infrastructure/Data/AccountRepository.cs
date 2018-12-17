@@ -301,7 +301,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
         public async Task<EmployerAccountOutput> GetAccountDetailsAsync(string accountName)
         {
-            const string sql = "SELECT Id as AccountId, HashedId, PublicHashedId FROM [employer_account].Account WHERE Name = @accountName";
+            const string sql = "SELECT Id as AccountId, HashedId as HashedAccountId, PublicHashedId FROM [employer_account].Account WHERE Name = @accountName";
 
             var query = await _db.Value.Database.Connection.QueryFirstOrDefaultAsync<EmployerAccountOutput>(
                 sql: sql, 
