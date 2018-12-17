@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -35,24 +36,26 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string accountName = "AccountWhenGetLegalEntitiesWithNonExistentKey";
             const string legalEntityName = "LegalEntityWhenGetLegalEntitiesWithNonExistentKey";
             const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
-            const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
 
             string hashedAccountId = null;
-            var userInput = TestModelBuilder.User.CreateUserInput(userRef);
+            string userRef = null;
 
-            _tester.InitialiseData<EmployerAccountsDbBuilder>(builder =>
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
-                builder
-                    .EnsureUserExists(userInput)
-                    .EnsureAccountExists(TestModelBuilder.Account.CreateAccountInput(accountName, payeReference, builder.Context.ActiveUser.UserId))
-                    .WithLegalEntity(TestModelBuilder.LegalEntity.BuildEntityWithAgreementInput(legalEntityName, builder.Context.ActiveEmployerAccount.AccountId));
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount(accountName, payeReference)
+                    .WithNewLegalEntity(legalEntityName);
 
-                hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
+                await builder.SetupDataAsync(data);
+
+                hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
+                userRef = data.CurrentUser.UserOutput.UserRef;
             });
 
             var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
             
             // Act
             var account = await _tester.InvokeGetAsync<ICollection<TeamMemberViewModel>>(callRequirements);
@@ -60,8 +63,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Assert
             Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
-            Assert.AreEqual(userInput.UserRef.ToLower(),
-                account.Data.Last().UserRef.ToLower());
+            Assert.IsTrue(string.Equals(userRef, account.Data.Last().UserRef, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

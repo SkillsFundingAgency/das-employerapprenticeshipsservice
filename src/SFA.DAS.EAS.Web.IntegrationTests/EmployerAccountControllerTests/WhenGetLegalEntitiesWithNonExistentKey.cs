@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Arrange
             var callRequirements =
                 new CallRequirements("api/accounts/ZZZZZZ/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.NotFound)
+                    .ExpectStatusCodes(HttpStatusCode.NotFound)
                     .ExpectControllerType(typeof(LegalEntitiesController));
 
             // Act
@@ -51,20 +51,21 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             const string payeReference = "Acme PAYE";
 
             string hashedAccountId = null;
-            _tester.InitialiseData<EmployerAccountsDbBuilder>(builder =>
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
-                // TODO: the way ids are propagated is a bit clunky
-                builder
-                    .EnsureUserExists(TestModelBuilder.User.CreateUserInput())
-                    .EnsureAccountExists(TestModelBuilder.Account.CreateAccountInput(accountName, payeReference, builder.Context.ActiveUser.UserId))
-                    .WithLegalEntity(TestModelBuilder.LegalEntity.BuildEntityWithAgreementInput(legalEntityName, builder.Context.ActiveEmployerAccount.AccountId));
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount(accountName, payeReference)
+                    .WithNewLegalEntity(legalEntityName);
 
-                hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
+                await builder.SetupDataAsync(data);
+
+                hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
             });
 
             var callRequirements =
                 new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.OK)
+                    .ExpectStatusCodes(HttpStatusCode.OK)
                     .ExpectControllerType(typeof(LegalEntitiesController));
 
             // Act
