@@ -2,16 +2,19 @@
 using System.Threading.Tasks;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {
     public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmployerAgreementsRequest> 
     {
         private readonly IMembershipRepository _membershipRepository;
+        private readonly ILog _logger;
 
-        public GetAccountEmployerAgreementsValidator(IMembershipRepository membershipRepository)
+        public GetAccountEmployerAgreementsValidator(IMembershipRepository membershipRepository, ILog logger)
         {
             _membershipRepository = membershipRepository;
+            _logger = logger;
         }
 
         public ValidationResult Validate(GetAccountEmployerAgreementsRequest item)
@@ -41,6 +44,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
             if (membership == null)
             {
+                _logger.Warn($"Unauthorised user='{item.ExternalUserId}' account='{item.HashedAccountId}'");
+
                 validationResult.IsUnauthorized = true;
             }
                 

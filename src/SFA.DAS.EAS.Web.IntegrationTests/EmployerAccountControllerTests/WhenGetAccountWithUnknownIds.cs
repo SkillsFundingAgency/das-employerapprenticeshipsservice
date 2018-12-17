@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [SetUp]
         public void SetUp()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
         }
 
         [TearDown]
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Arrange
             var callRequirements = new CallRequirements($"api/accounts/internal/-1")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.NotFound);
+                .ExpectStatusCodes(HttpStatusCode.NotFound);
 
             // Act
             await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);
@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             // Arrange
             var callRequirements = new CallRequirements($"api/accounts/MADE*UP*ID")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.NotFound);
+                .ExpectStatusCodes(HttpStatusCode.NotFound);
 
             // Act
             await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);

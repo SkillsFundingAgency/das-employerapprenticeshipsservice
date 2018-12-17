@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
             set => _role = value;
         }
 
+        // BUG: this is marked obsolete but the Role property relies on the RoleId property being set.
         [Obsolete("Please use 'Role' instead.")]
         public int RoleId
         {

@@ -3,8 +3,10 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
@@ -12,23 +14,29 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
     public class WhenGetAccountWithKnownIds
     {
         private ApiIntegrationTester _tester;
+        private EmployerAccountOutput _employerAccount;
 
         [SetUp]
-        public void SetUp()
+        public async Task SetUp()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
 
             // Arrange
             const string accountName = "ACME Fireworks";
             const string legalEntityName = "RoadRunner Pest Control";
+            const string payeReference = "Acme PAYE";
 
-            var builder = _tester.DbBuilder;
-            builder
-                .BeginTransaction()
-                .EnsureUserExists(builder.BuildUserInput())
-                .EnsureAccountExists(builder.BuildEmployerAccountInput(accountName))
-                .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName))
-                .CommitTransaction();
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
+            {
+                var data = new TestModelBuilder()
+                        .WithNewUser()
+                        .WithNewAccount(accountName, payeReference)
+                        .WithNewLegalEntity(legalEntityName);
+
+                await builder.SetupDataAsync(data);
+
+                _employerAccount = data.CurrentAccount.AccountOutput;
+            });
         }
 
         [TearDown]
@@ -40,11 +48,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [Test]
         public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
         {
-            var hashedAccountId = _tester.DbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
 
-            var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}")
+            var callRequirements = new CallRequirements($"api/accounts/{_employerAccount.HashedAccountId}")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
             
             // Act
             var account = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);
@@ -57,11 +64,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [Test]
         public async Task ThenTheStatusShouldBeFound_ByAccountId()
         {
-            var accountId = _tester.DbBuilder.Context.ActiveEmployerAccount.AccountId;
-
-            var callRequirements = new CallRequirements($"api/accounts/internal/{accountId}")
+            var callRequirements = new CallRequirements($"api/accounts/internal/{_employerAccount.AccountId}")
                 .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+                .ExpectStatusCodes(HttpStatusCode.OK);
 
             // Act
             var account = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);

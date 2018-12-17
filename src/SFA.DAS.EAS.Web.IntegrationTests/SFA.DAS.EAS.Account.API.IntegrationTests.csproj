@@ -112,8 +112,8 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Common.Domain, Version=1.3.0.44308, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Common.Domain.1.3.0.44308\lib\net45\SFA.DAS.Common.Domain.dll</HintPath>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.43.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.43\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.57835, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.57835\lib\net45\SFA.DAS.HashingService.dll</HintPath>
@@ -201,10 +201,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
+    <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
+    <Compile Include="ModelBuilders\AccountModelBuilder.cs" />
+    <Compile Include="ModelBuilders\LegalEntityModelBuilder.cs" />
+    <Compile Include="ModelBuilders\TestModelBuilder.cs" />
+    <Compile Include="ModelBuilders\UserModelBuilder.cs" />
     <Compile Include="LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithKnownIds.cs" />
     <Compile Include="LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithUnknownIds.cs" />
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
@@ -217,14 +224,18 @@
     <Compile Include="TestUtils\ApiTester\TestWebApiResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNonExistentKey.cs" />
-    <Compile Include="TestUtils\DataHelper\DbBuilder.cs" />
-    <Compile Include="TestUtils\DataHelper\DbBuilderContext.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountOutput.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountSetup.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\LegalEntityWithAgreementSetUp.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\UserSetUp.cs" />
+    <Compile Include="TestUtils\DataHelper\EmployerFinanceDbBuilder.cs" />
+    <Compile Include="TestUtils\DataHelper\EmployerAccountsDbBuilder.cs" />
     <Compile Include="TestUtils\DataHelper\DbBuilderDependentRepositories.cs" />
-    <Compile Include="TestUtils\DataHelper\DbDtoBuilderExtensions.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountInput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEnityWithAgreementOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEntityWithAgreementInput.cs" />
     <Compile Include="TestUtils\DataHelper\Adapters\LegalEntityWithAgreementInputAdapter.cs" />
+    <Compile Include="TestUtils\DataHelper\IDbBuilder.cs" />
     <Compile Include="TestUtils\DataHelper\TestConstants.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\UserInput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\UserOutput.cs" />

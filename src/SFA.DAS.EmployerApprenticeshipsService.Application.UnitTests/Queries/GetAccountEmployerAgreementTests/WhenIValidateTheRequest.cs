@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementTests
 {
@@ -21,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountEmployerAgreementT
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId)).ReturnsAsync(new MembershipView());
 
-            _validator = new GetAccountEmployerAgreementsValidator(_membershipRepository.Object);
+            _validator = new GetAccountEmployerAgreementsValidator(_membershipRepository.Object, Mock.Of<ILog>());
         }
 
         [Test]
