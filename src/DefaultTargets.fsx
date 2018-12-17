@@ -34,6 +34,7 @@ let isAutomationProject = getBuildParamOrDefault "AcceptanceTests" "false"
 let devWebsitePort = getBuildParamOrDefault "devport" "7071"
 let accWebsitePort = getBuildParamOrDefault "accport" "5051"
 
+let integrationTestPlayList = getBuildParamOrDefault "playList" ""
 let acceptanceTestPlayList = getBuildParamOrDefault "playList" ""
 
 let mutable projectName = ""
@@ -463,6 +464,29 @@ Target "Run Acceptance Tests" (fun _ ->
                 })
 )
 
+Target "Run Integration Tests" (fun _ ->
+
+    trace "Run Integration Tests"
+
+    let mutable shouldRunTests = false
+
+    let testDlls = !! ("./**/bin/" + testDirectory + "/*.IntegrationTests.dll")
+
+    for testDll in testDlls do
+        shouldRunTests <- true
+
+    if shouldRunTests then
+        nUnitRunnerLocation <- GetToolPath(nUnitToolPath, nUnitRunner)
+        testDlls |> Fake.Testing.NUnit3.NUnit3 (fun p ->
+            {p with
+                ToolPath = nUnitRunnerLocation;
+                StopOnError = false;
+                Agents = Some 1;
+                Testlist = integrationTestPlayList;
+                ResultSpecs = [("TestResult.xml;format=" + nunitTestFormat)];
+                })
+)
+
 Target "Compile Views" (fun _ ->
     if shouldPublishSite then
         trace "Compiling views"
@@ -496,6 +520,15 @@ Target "Build Projects" (fun _ ->
     trace "Building Projects"
 
     !! (@".\**\*.csproj")
+      |> myBuildConfig "" "Rebuild"
+      |> Log "AppBuild-Output: "
+
+)
+
+Target "Building Integration Tests" (fun _ ->
+
+    trace "Building Integration Tests"
+    !! (".\**\*.IntegrationTests.csproj")
       |> myBuildConfig "" "Rebuild"
       |> Log "AppBuild-Output: "
 
