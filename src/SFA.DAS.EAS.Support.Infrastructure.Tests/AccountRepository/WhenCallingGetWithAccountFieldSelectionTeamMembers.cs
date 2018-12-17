@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoFixture;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -22,16 +23,11 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 
                 } );
 
-
+            var fixture = new Fixture();
             AccountApiClient.Setup(x => x.GetAccountUsers( It.IsAny<string>())).ReturnsAsync(new List<TeamMemberViewModel>()
             {
-                new TeamMemberViewModel() { 
-                    Status = InvitationStatus.Accepted, Role = "Role", 
-                    Email = "name1@mail.com", Name = "Name1", CanReceiveNotifications = true, UserRef = ""},
-                new TeamMemberViewModel() { 
-                    Status = InvitationStatus.Accepted, Role = "Role", 
-                    Email = "name2@mail.com", Name = "Name2", CanReceiveNotifications = true, UserRef = ""}
-
+                fixture.Create<TeamMemberViewModel>(),
+                fixture.Create<TeamMemberViewModel>()
             } );
 
             var actual = await _sut.Get(id, AccountFieldsSelection.TeamMembers);

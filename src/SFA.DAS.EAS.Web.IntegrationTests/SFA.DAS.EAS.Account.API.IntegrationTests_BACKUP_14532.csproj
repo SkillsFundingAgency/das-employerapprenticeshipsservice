@@ -229,17 +229,17 @@
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
-    <Compile Include="ModelBuilders\AccountModelBuilder.cs" />
-    <Compile Include="ModelBuilders\LegalEntityModelBuilder.cs" />
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="ModelBuilders\TestModelBuilder.cs" />
+<<<<<<< HEAD
     <Compile Include="ModelBuilders\UserModelBuilder.cs" />
     <Compile Include="LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithKnownIds.cs" />
     <Compile Include="LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithUnknownIds.cs" />
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
+=======
+>>>>>>> master
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
     <Compile Include="TestUtils\ApiTester\CallRequirements.cs" />
-    <Compile Include="TestUtils\ApiTester\CallRequirementsExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponse.cs" />
     <Compile Include="TestUtils\ApiTester\IntegrationTestExceptionLogger.cs" />
     <Compile Include="TestUtils\ApiTester\IntegrationTestDependencyResolver.cs" />

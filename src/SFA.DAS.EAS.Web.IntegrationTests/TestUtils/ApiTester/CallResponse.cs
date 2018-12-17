@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 {
@@ -7,6 +9,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         public HttpResponseMessage Response { get; set; }
         public bool Failed { get; set; }
         public string FailureMessage { get; set; }
+        public List<Type> CreatedControllerTypes { get; } = new List<Type>();
+        public Exception UnhandledException { get; set; }
     }
 
     /// <summary>
