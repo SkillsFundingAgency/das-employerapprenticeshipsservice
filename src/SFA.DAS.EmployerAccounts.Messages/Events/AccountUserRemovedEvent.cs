@@ -7,6 +7,7 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
     {
         public long AccountId { get; }
         public Guid UserRef { get; }
+
         public AccountUserRemovedEvent(long accountId, Guid userRef, DateTime created)
         {
             AccountId = accountId;
