@@ -1,6 +1,7 @@
 ﻿using System;
 using NServiceBus;
 using SFA.DAS.Configuration;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.AzureServiceBus;
 using Environment = SFA.DAS.Configuration.Environment;
 
@@ -12,7 +13,13 @@ namespace SFA.DAS.EmployerAccounts.Extensions
         {
             var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
 
-            config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r => {});
+            config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
+            {
+                r.RouteToEndpoint(
+                    typeof(ImportLevyDeclarationsCommand).Assembly,
+                    typeof(ImportLevyDeclarationsCommand).Namespace,
+                    "SFA.DAS.EmployerFinance.MessageHandlers");
+            });
 
             return config;
         }
