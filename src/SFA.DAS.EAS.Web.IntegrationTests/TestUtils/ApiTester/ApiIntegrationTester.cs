@@ -16,7 +16,7 @@ using NUnit.Framework;
 using Owin;
 using SFA.DAS.EAS.Account.Api;
 using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using WebApi.StructureMap;
@@ -118,7 +118,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private void BeginTests()
         {
-            TestServer = TestServer.Create(InitialiseHost);
+            TestServer = Microsoft.Owin.Testing.TestServer.Create(InitialiseHost);
         }
 
         private void EndTests()
@@ -127,6 +127,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             TestServer = null;
         }
 
+        
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
         {
             var callResponse = new CallResponse();
@@ -151,7 +152,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             EnsureStarted();
             ClearDownForNewTest();
             await MakeCall(call, response);
-            CheckCallWasSuccessful(call, response);
+            SaveCallDetails(response);
         }
 
         private async Task MakeCall(CallRequirements call, CallResponse response)
@@ -237,75 +238,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             config.Services.Replace(typeof(IAssembliesResolver), assembliesResolver);
         }
 
-        private void CheckCallWasSuccessful(CallRequirements call, CallResponse response)
+        private void SaveCallDetails(CallResponse callResponse)
         {
-            StringBuilder failMessage = new StringBuilder();
-
-            CheckStatusCode(call, response, failMessage);
-
-            CheckUnhandledExceptions(call, failMessage);
-
-            CheckExpectedControllerCalled(call, failMessage);
-
-            if (failMessage.Length > 0)
-            {
-                response.Failed = true;
-                response.FailureMessage = failMessage.ToString();
-                Assert.Fail(response.FailureMessage);
-            }
+            callResponse.CreatedControllerTypes.AddRange(GetCreatedControllers());
+            callResponse.UnhandledException = _exceptionLogger.Exception;
         }
 
-        private void CheckExpectedControllerCalled(CallRequirements call, StringBuilder failMessage)
-        {
-            if (!WasExpectedControllerCreated(call.ExpectedControllerType))
-            {
-                failMessage.AppendLine($"The controller {call.ExpectedControllerType.Name} was not created by DI. " +
-                                       $"Controllers that were created are: {string.Join(",", GetCreatedControllers())}");
-            }
-        }
-
-        private void CheckUnhandledExceptions(CallRequirements call, StringBuilder failMessage)
-        {
-            if (WasUnacceptableExceptionThrownInServer(call))
-            {
-                failMessage.AppendLine(
-                    $"An unexpected unhandled exception occurred in the server during the call:{_exceptionLogger.Exception.GetType().Name} - {_exceptionLogger.Exception.Message}");
-            }
-        }
-
-        private void CheckStatusCode(CallRequirements call, CallResponse response, StringBuilder failMessage)
-        {
-            if (!IsAcceptableStatusCode(response, call.AcceptableStatusCodes))
-            {
-                failMessage.AppendLine($"Received response {response.Response.StatusCode} " +
-                                       $"when expected any of [{string.Join(",", call.AcceptableStatusCodes.Select(sc => sc))}]. " +
-                                       $"Additional information sent to the client: {response.Response.ReasonPhrase}. ");
-            }
-        }
-
-        private bool WasUnacceptableExceptionThrownInServer(CallRequirements call)
-        {
-            return _exceptionLogger.IsFaulted
-                   && (call.IgnoreExceptionTypes == null
-                        || !call.IgnoreExceptionTypes.Contains(_exceptionLogger.Exception.GetType()));
-        }
-
-        private bool WasExpectedControllerCreated(Type controllerType)
-        {
-            return controllerType == null || _dependencyResolver.WasServiceCreated(controllerType);
-        }
-
-        private IEnumerable<string> GetCreatedControllers()
+        private IEnumerable<Type> GetCreatedControllers()
         {
             return _dependencyResolver
                 .CreatedServiceTypes
-                .Where(t => typeof(ApiController).IsAssignableFrom(t))
-                .Select(t => t.Name);
-        }
-
-        private bool IsAcceptableStatusCode(CallResponse response, IEnumerable<HttpStatusCode> acceptableStatusCodes)
-        {
-            return acceptableStatusCodes == null || acceptableStatusCodes.Contains(response.Response.StatusCode);
+                .Where(t => typeof(ApiController).IsAssignableFrom(t));
         }
     }
 }
