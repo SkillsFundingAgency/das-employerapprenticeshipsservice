@@ -221,6 +221,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestUtils\ApiTester\CallResponseExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
@@ -235,7 +236,6 @@
     <Compile Include="ModelBuilders\UserModelBuilder.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
     <Compile Include="TestUtils\ApiTester\CallRequirements.cs" />
-    <Compile Include="TestUtils\ApiTester\CallRequirementsExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponse.cs" />
     <Compile Include="TestUtils\ApiTester\IntegrationTestExceptionLogger.cs" />
     <Compile Include="TestUtils\ApiTester\IntegrationTestDependencyResolver.cs" />

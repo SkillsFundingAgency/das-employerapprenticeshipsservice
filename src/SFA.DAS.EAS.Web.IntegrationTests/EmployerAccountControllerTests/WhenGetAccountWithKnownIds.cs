@@ -49,14 +49,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
         {
 
-            var callRequirements = new CallRequirements($"api/accounts/{_employerAccount.HashedAccountId}")
-                .ExpectControllerType(typeof(EmployerAccountsController))
-                .ExpectStatusCodes(HttpStatusCode.OK);
+            var callRequirements = new CallRequirements($"api/accounts/{_employerAccount.HashedAccountId}");
             
             // Act
             var account = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);
 
             // Assert
+            account.ExpectControllerType(typeof(EmployerAccountsController));
+            account.ExpectStatusCodes(HttpStatusCode.OK);
             Assert.IsNotNull(account.Data);
         }
 
@@ -64,14 +64,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [Test]
         public async Task ThenTheStatusShouldBeFound_ByAccountId()
         {
-            var callRequirements = new CallRequirements($"api/accounts/internal/{_employerAccount.AccountId}")
-                .ExpectControllerType(typeof(EmployerAccountsController))
-                .ExpectStatusCodes(HttpStatusCode.OK);
+            var callRequirements = new CallRequirements($"api/accounts/internal/{_employerAccount.AccountId}");
 
             // Act
             var account = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);
 
             // Assert
+            account.ExpectControllerType(typeof(EmployerAccountsController));
+            account.ExpectStatusCodes(HttpStatusCode.OK);
             Assert.IsNotNull(account.Data);
         }
     }

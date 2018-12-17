@@ -54,15 +54,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
                 userRef = data.CurrentUser.UserOutput.UserRef;
             });
 
-            var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users")
-                .ExpectControllerType(typeof(EmployerAccountsController))
-                .ExpectStatusCodes(HttpStatusCode.OK);
+            var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users");
             
             // Act
             var account = await _tester.InvokeGetAsync<ICollection<TeamMemberViewModel>>(callRequirements);
 
             // Assert
-            Assert.IsNotNull(account.Data);
+
+            account.ExpectControllerType(typeof(EmployerAccountsController));
+            account.ExpectStatusCodes(HttpStatusCode.OK);
+            NUnit.Framework.Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
             Assert.IsTrue(string.Equals(userRef, account.Data.Last().UserRef, StringComparison.InvariantCultureIgnoreCase));
         }

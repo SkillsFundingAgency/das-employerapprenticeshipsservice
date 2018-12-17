@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
@@ -40,6 +41,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
             _users.Add(userSetup);
 
             return this;
+        }
+
+        public TestModelBuilder WithNewAccount()
+        {
+            return WithNewAccount(Guid.NewGuid().ToString(), "" + Guid.NewGuid());
         }
 
         /// <summary>
