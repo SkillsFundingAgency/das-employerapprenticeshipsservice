@@ -26,10 +26,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
     sealed class ApiIntegrationTester : IDisposable
     {
         private IntegrationTestDependencyResolver _dependencyResolver;
-
         private IntegrationTestExceptionLogger _exceptionLogger;
-
         private readonly Func<IContainer> _testSetupContainerInitialiser;
+        private bool IsTestServerStarted => TestServer != null;
+        private TestServer TestServer { get; set; }
 
         /// <summary>
         ///     Use this constructor for simple tests which do not require any data set up. If your test requires 
@@ -47,10 +47,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
         {
             _testSetupContainerInitialiser = testSetupContainer;
         }
-
-        public bool IsTestServerStarted => TestServer != null;
-
-        public TestServer TestServer { get; private set; }
 
         /// <summary>
         ///     Send a GET to the specified URI using a test server and configuration created just for this call.
@@ -72,25 +68,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             }
         }
 
-        public void BeginTests()
-        {
-            TestServer = TestServer.Create(InitialiseHost);
-        }
-        
-        public void Dispose()
-        {
-            if (IsTestServerStarted)
-            {
-                EndTests();
-            }
-        }
-
-        public void EndTests()
-        {
-            TestServer?.Dispose();
-            TestServer = null;
-        }
-
         public Task<CallResponse> InvokeGetAsync(CallRequirements call)
         {
             return GetResponseAsync(call);
@@ -103,14 +80,14 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             return GetResponseAsync<TResult>(call);
         }
 
-        public T GetTransientInstance<T>()
-        {
-            EnsureStarted();
-
-            return _dependencyResolver.Container.GetNestedContainer().GetInstance<T>();
-        }
-
-        public void InitialiseData<TDbBuilder>(Action<TDbBuilder> initialiseAction) where TDbBuilder : IDbBuilder
+        /// <summary>
+        ///     Call this when you want to set up some data prior to running the actual test.
+        ///     A new container will be created and a new transaction will be started. 
+        /// </summary>
+        /// <typeparam name="TDbBuilder"></typeparam>
+        /// <param name="initialiseAction"></param>
+        /// <returns></returns>
+        public async Task InitialiseData<TDbBuilder>(Func<TDbBuilder, Task> initialiseAction) where TDbBuilder : IDbBuilder
         {
             Contract.Requires(_testSetupContainerInitialiser != null, "Cannot initialise data without an IoC container - please use the constructor that accepts a delegate that returns a test setup container");
             
@@ -121,7 +98,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             builder.BeginTransaction();
             try
             {
-                initialiseAction(builder);
+                await initialiseAction(builder);
                 builder.CommitTransaction();
             }
             catch (Exception)
@@ -129,6 +106,25 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
                 builder.RollbackTransaction();
                 throw;
             }
+        }
+
+        public void Dispose()
+        {
+            if (IsTestServerStarted)
+            {
+                EndTests();
+            }
+        }
+
+        private void BeginTests()
+        {
+            TestServer = TestServer.Create(InitialiseHost);
+        }
+
+        private void EndTests()
+        {
+            TestServer?.Dispose();
+            TestServer = null;
         }
 
         private async Task<CallResponse> GetResponseAsync(CallRequirements call)
@@ -155,7 +151,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             EnsureStarted();
             ClearDownForNewTest();
             await MakeCall(call, response);
-            CheckCallWasSuccessful(call, response);
+            SaveCallDetails(response);
         }
 
         private async Task MakeCall(CallRequirements call, CallResponse response)
@@ -241,75 +237,17 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             config.Services.Replace(typeof(IAssembliesResolver), assembliesResolver);
         }
 
-        private void CheckCallWasSuccessful(CallRequirements call, CallResponse response)
+        private void SaveCallDetails(CallResponse callResponse)
         {
-            StringBuilder failMessage = new StringBuilder();
-
-            CheckStatusCode(call, response, failMessage);
-
-            CheckUnhandledExceptions(call, failMessage);
-
-            CheckExpectedControllerCalled(call, failMessage);
-
-            if (failMessage.Length > 0)
-            {
-                response.Failed = true;
-                response.FailureMessage = failMessage.ToString();
-                Assert.Fail(response.FailureMessage);
-            }
+            callResponse.CreatedControllerTypes.AddRange(GetCreatedControllers());
+            callResponse.UnhandledException = _exceptionLogger.Exception;
         }
 
-        private void CheckExpectedControllerCalled(CallRequirements call, StringBuilder failMessage)
-        {
-            if (!WasExpectedControllerCreated(call.ExpectedControllerType))
-            {
-                failMessage.AppendLine($"The controller {call.ExpectedControllerType.Name} was not created by DI. " +
-                                       $"Controllers that were created are: {string.Join(",", GetCreatedControllers())}");
-            }
-        }
-
-        private void CheckUnhandledExceptions(CallRequirements call, StringBuilder failMessage)
-        {
-            if (WasUnacceptableExceptionThrownInServer(call))
-            {
-                failMessage.AppendLine(
-                    $"An unexpected unhandled exception occurred in the server during the call:{_exceptionLogger.Exception.GetType().Name} - {_exceptionLogger.Exception.Message}");
-            }
-        }
-
-        private void CheckStatusCode(CallRequirements call, CallResponse response, StringBuilder failMessage)
-        {
-            if (!IsAcceptableStatusCode(response, call.AcceptableStatusCodes))
-            {
-                failMessage.AppendLine($"Received response {response.Response.StatusCode} " +
-                                       $"when expected any of [{string.Join(",", call.AcceptableStatusCodes.Select(sc => sc))}]. " +
-                                       $"Additional information sent to the client: {response.Response.ReasonPhrase}. ");
-            }
-        }
-
-        private bool WasUnacceptableExceptionThrownInServer(CallRequirements call)
-        {
-            return _exceptionLogger.IsFaulted
-                   && (call.IgnoreExceptionTypes == null
-                        || !call.IgnoreExceptionTypes.Contains(_exceptionLogger.Exception.GetType()));
-        }
-
-        private bool WasExpectedControllerCreated(Type controllerType)
-        {
-            return controllerType == null || _dependencyResolver.WasServiceCreated(controllerType);
-        }
-
-        private IEnumerable<string> GetCreatedControllers()
+        private IEnumerable<Type> GetCreatedControllers()
         {
             return _dependencyResolver
                 .CreatedServiceTypes
-                .Where(t => typeof(ApiController).IsAssignableFrom(t))
-                .Select(t => t.Name);
-        }
-
-        private bool IsAcceptableStatusCode(CallResponse response, IEnumerable<HttpStatusCode> acceptableStatusCodes)
-        {
-            return acceptableStatusCodes == null || acceptableStatusCodes.Contains(response.Response.StatusCode);
+                .Where(t => typeof(ApiController).IsAssignableFrom(t));
         }
     }
 }

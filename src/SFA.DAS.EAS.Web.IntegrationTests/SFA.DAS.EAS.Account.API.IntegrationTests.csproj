@@ -201,6 +201,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestUtils\ApiTester\CallResponseExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
@@ -215,18 +216,19 @@
     <Compile Include="StatisitcsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
     <Compile Include="TestUtils\ApiTester\CallRequirements.cs" />
-    <Compile Include="TestUtils\ApiTester\CallRequirementsExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponse.cs" />
     <Compile Include="TestUtils\ApiTester\IntegrationTestExceptionLogger.cs" />
     <Compile Include="TestUtils\ApiTester\IntegrationTestDependencyResolver.cs" />
     <Compile Include="TestUtils\ApiTester\TestWebApiResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNonExistentKey.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountOutput.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountSetup.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\LegalEntityWithAgreementSetUp.cs" />
+    <Compile Include="TestUtils\DataHelper\Dtos\UserSetUp.cs" />
     <Compile Include="TestUtils\DataHelper\EmployerFinanceDbBuilder.cs" />
     <Compile Include="TestUtils\DataHelper\EmployerAccountsDbBuilder.cs" />
-    <Compile Include="TestUtils\DataHelper\DbBuilderContext.cs" />
     <Compile Include="TestUtils\DataHelper\DbBuilderDependentRepositories.cs" />
-    <Compile Include="TestUtils\DataHelper\DbDtoBuilderExtensions.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\EmployerAccountInput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEnityWithAgreementOutput.cs" />
     <Compile Include="TestUtils\DataHelper\Dtos\LegalEntityWithAgreementInput.cs" />

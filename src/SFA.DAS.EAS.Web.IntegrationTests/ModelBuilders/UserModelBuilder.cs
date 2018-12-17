@@ -12,16 +12,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
             return new UserInput
             {
                 UserRef = userRef,
-                Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
-            };
-        }
-
-        public UserInput CreateUserInput(string userRef)
-        {
-            return new UserInput
-            {
-                UserRef = userRef,
-                Email = userRef.Substring(0, 6) + ".madeupdomain.co.uk"
+                Email = userRef.Substring(0, Math.Min(6, userRef.Length)) + ".madeupdomain.co.uk"
             };
         }
     }

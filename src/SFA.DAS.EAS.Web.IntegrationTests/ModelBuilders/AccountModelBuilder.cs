@@ -1,10 +1,11 @@
-﻿using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
+﻿using System;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
 {
     public class AccountModelBuilder
     {
-        public EmployerAccountInput CreateAccountInput(string accountName, string payeReference, long userId)
+        public EmployerAccountInput CreateAccountInput(string accountName, string payeReference, Func<long> userId)
         {
             return new EmployerAccountInput
             {
@@ -12,6 +13,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
                 PayeReference = payeReference,
                 UserId = userId
             };
+        }
+
+        public EmployerAccountInput CreateAccountInput(string accountName, string payeReference, long userId)
+        {
+            return CreateAccountInput(accountName, payeReference, () => userId);
         }
     }
 }
