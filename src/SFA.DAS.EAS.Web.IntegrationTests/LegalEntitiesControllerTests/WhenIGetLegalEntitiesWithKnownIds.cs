@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
 {
@@ -13,23 +15,25 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
     public class WhenIGetLegalEntitiesWithKnownIds
     {
         private ApiIntegrationTester _tester;
+        private EmployerAccountOutput _employerAccount;
 
         [SetUp]
-        public void Setup()
+        public async Task Setup()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
 
             // Arrange
-            const string accountName = "ACME Fireworks";
-            const string legalEntityName = "RoadRunner Pest Control";
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
+            {
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount()
+                    .WithNewLegalEntity();
 
-            var builder = _tester.DbBuilder;
-            builder
-                .BeginTransaction()
-                .EnsureUserExists(builder.BuildUserInput())
-                .EnsureAccountExists(builder.BuildEmployerAccountInput(accountName))
-                .WithLegalEntity(builder.BuildEntityWithAgreementInput(legalEntityName))
-                .CommitTransaction();
+                await builder.SetupDataAsync(data);
+
+                _employerAccount = data.CurrentAccount.AccountOutput;
+            });
         }
 
         [TearDown]
@@ -41,19 +45,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
         [Test]
         public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
         {
-            var hashedAccountId = _tester.DbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
-
-            var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")
-                .ExpectControllerType(typeof(LegalEntitiesController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+            var callRequirements = new CallRequirements($"api/accounts/{_employerAccount.HashedAccountId}/legalentities");
 
             // Act
             var account = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
             Assert.IsNotNull(account.Data);
- //           account.Data[0];
-
         }
     }
 }

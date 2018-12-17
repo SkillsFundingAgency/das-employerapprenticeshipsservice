@@ -28,9 +28,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
         public async Task ThenTheStatusShouldBeNotFound_ByHashedId()
         {
             // Arrange
-            var callRequirements = new CallRequirements($"api/accounts/MADE*UP*ID/legalentities")
-                .ExpectControllerType(typeof(LegalEntitiesController))
-                .AllowStatusCodes(HttpStatusCode.NotFound);
+            var callRequirements = new CallRequirements($"api/accounts/MADE*UP*ID/legalentities");
 
             // Act
             await _tester.InvokeGetAsync<ResourceList>(callRequirements);
