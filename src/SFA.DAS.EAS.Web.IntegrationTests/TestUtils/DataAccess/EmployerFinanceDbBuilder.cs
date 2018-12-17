@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Infrastructure.Data;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper
+namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
 {
     class EmployerFinanceDbBuilder
     {
