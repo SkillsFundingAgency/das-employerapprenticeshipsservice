@@ -1,8 +1,9 @@
-﻿using Microsoft.Owin;
+﻿using Microsoft.Azure;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.ActiveDirectory;
 using Owin;
-using SFA.DAS.EmployerFinance.Api;
 
-[assembly: OwinStartup(typeof(Startup))]
+[assembly: OwinStartup(typeof(SFA.DAS.EmployerFinance.Api.Startup))]
 
 namespace SFA.DAS.EmployerFinance.Api
 {
@@ -10,6 +11,15 @@ namespace SFA.DAS.EmployerFinance.Api
     {
         public void Configuration(IAppBuilder app)
         {
+            app.UseWindowsAzureActiveDirectoryBearerAuthentication(new WindowsAzureActiveDirectoryBearerAuthenticationOptions
+            {
+                Tenant = CloudConfigurationManager.GetSetting("idaTenant"),
+                TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
+                    ValidAudience = CloudConfigurationManager.GetSetting("idaAudience")
+                }
+            });
         }
     }
 }

@@ -5,7 +5,6 @@ using NLog.Targets;
 using NServiceBus;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.EAS.Infrastructure.Logging;
 using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Web.Policy;
@@ -36,6 +35,7 @@ using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using Environment = SFA.DAS.Configuration.Environment;
+using LoggingConfig = SFA.DAS.EAS.Infrastructure.Logging.LoggingConfig;
 
 namespace SFA.DAS.EAS.Web
 {

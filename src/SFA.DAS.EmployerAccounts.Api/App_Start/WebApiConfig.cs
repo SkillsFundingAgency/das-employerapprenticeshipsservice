@@ -5,12 +5,7 @@ using System.Web.Http.ModelBinding;
 using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.EmployerAccounts.Api.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Api.ExceptionLoggers;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework;
-using SFA.DAS.UnitOfWork.NServiceBus;
-using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
-using SFA.DAS.UnitOfWork.WebApi;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
 
@@ -20,7 +15,6 @@ namespace SFA.DAS.EmployerAccounts.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Filters.AddUnitOfWorkFilter();
             config.Filters.Add(new ValidateModelStateFilter());
             config.Filters.Add(new HandleErrorFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
@@ -30,11 +24,12 @@ namespace SFA.DAS.EmployerAccounts.Api
 
             config.UseStructureMap(c =>
             {
+                c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
+                c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<DataRegistry>();
-                c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
+                c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
@@ -43,10 +38,12 @@ namespace SFA.DAS.EmployerAccounts.Api
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<MessagePublisherRegistry>();
                 c.AddRegistry<NotificationsRegistry>();
-                c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
-                c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
+                c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<ServicesRegistry>();
+                c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

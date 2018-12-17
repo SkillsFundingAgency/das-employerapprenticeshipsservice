@@ -34,6 +34,7 @@ using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
+using LoggingConfig = SFA.DAS.EmployerFinance.Web.Logging.LoggingConfig;
 
 namespace SFA.DAS.EmployerFinance.Web
 {

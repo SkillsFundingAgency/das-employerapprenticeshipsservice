@@ -24,5 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task UpdateLegalEntityDetailsForAccount(long accountLegalEntityId, string name, string address);
         Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId);
         Task<long[]> GetAccountLegalEntitiesWithoutPublicHashId(long firstId, int count);
+        Task<EmployerAccountOutput> GetAccountDetailsAsync(string accountName);
+
     }
 }
