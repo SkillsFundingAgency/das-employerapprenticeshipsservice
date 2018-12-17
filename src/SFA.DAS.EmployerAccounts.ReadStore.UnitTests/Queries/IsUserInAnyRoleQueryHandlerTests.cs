@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -19,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 {
     [TestFixture]
     [Parallelizable]
-    public class IsUserInRoleQueryHandlerTests : FluentTest<IsUserInRoleQueryHandlerTestsFixture>
+    public class IsUserInAnyRoleQueryHandlerTests : FluentTest<IsUserInAnyRoleQueryHandlerTestsFixture>
     {
         [Test]
         public Task Handle_WhenSingleMatchingUserFound_ShouldReturnTrue()
@@ -50,43 +49,27 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
         {
             return TestAsync(f => f.AddNonMatchingOnAccountId(), f => f.Handle(), (f, r) => r.Should().BeFalse());
         }
-
-        [Test]
-        public Task Handle_WhenNotMatchingBecauseOfRole_ShouldReturnFalse()
-        {
-            return TestAsync(f => f.AddNonMatchingOnRoleEnum(), f => f.Handle(), (f, r) => r.Should().BeFalse());
-        }
-
-        [Test]
-        public Task Handle_WhenNotMatchingBecauseThereIsNoRole_ShouldReturnFalse()
-        {
-            return TestAsync(f => f.AddNonMatchingUsers(), f => f.Handle(), (f, r) => r.Should().BeFalse());
-        }
-
-        [Test]
-        public Task Handle_WhenMultipleRolesArePassedAndOnlyOneMatches_ShouldReturnTrue()
-        {
-            return TestAsync(f => f.SetMultipleRolesInQuery().AddSingleMatchingUser(), f => f.Handle(), (f, r) => r.Should().BeTrue());
-        }
     }
 
-    public class IsUserInRoleQueryHandlerTestsFixture
+    public class IsUserInAnyRoleQueryHandlerTestsFixture
     {
-        internal IsUserInRoleQuery Query { get; set; }
+        internal IsUserInAnyRoleQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        internal IReadStoreRequestHandler<IsUserInRoleQuery,bool> Handler { get; set; }
+        internal IReadStoreRequestHandler<IsUserInAnyRoleQuery,bool> Handler { get; set; }
         internal Mock<IAccountUsersRepository> UserRolesRepository { get; set; }
         internal List<AccountUser> AccountUsers { get; set; }
 
-        public IsUserInRoleQueryHandlerTestsFixture()
+
+        public IsUserInAnyRoleQueryHandlerTestsFixture()
         {
-            Query = new IsUserInRoleQuery(Guid.NewGuid(), 112, new HashSet<UserRole>{ UserRole.Owner });
+            Query = new IsUserInAnyRoleQuery(Guid.NewGuid(), 112);
             CancellationToken = CancellationToken.None;
-            UserRolesRepository = new Mock<IAccountUsersRepository>();
+
             AccountUsers = new List<AccountUser>();
+            UserRolesRepository = new Mock<IAccountUsersRepository>();
             UserRolesRepository.SetupInMemoryCollection(AccountUsers);
 
-            Handler = new IsUserInRoleQueryHandler(UserRolesRepository.Object);
+            Handler = new IsUserInAnyRoleQueryHandler(UserRolesRepository.Object);
         }
 
         internal Task<bool> Handle()
@@ -94,21 +77,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             return Handler.Handle(Query, CancellationToken);
         }
 
-        public IsUserInRoleQueryHandlerTestsFixture SetMultipleRolesInQuery()
-        {
-            Query.UserRoles.ToList().Add(UserRole.Transactor);
-
-            return this;
-        }
-
-        public IsUserInRoleQueryHandlerTestsFixture AddSingleMatchingUser()
+        public IsUserInAnyRoleQueryHandlerTestsFixture AddSingleMatchingUser()
         {
             AccountUsers.Add(CreateBasicMatchingAccountUserWithOwnerRole());
 
             return this;
         }
 
-        public IsUserInRoleQueryHandlerTestsFixture AddMultipleMatchingUsers()
+        public IsUserInAnyRoleQueryHandlerTestsFixture AddMultipleMatchingUsers()
         {
             AccountUsers.Add(CreateBasicMatchingAccountUserWithOwnerRole());
             AccountUsers.Add(CreateBasicMatchingAccountUserWithOwnerRole());
@@ -116,30 +92,16 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
             return this;
         }
 
-        public IsUserInRoleQueryHandlerTestsFixture AddNonMatchingOnUserRef()
+        public IsUserInAnyRoleQueryHandlerTestsFixture AddNonMatchingOnUserRef()
         {
             AccountUsers.Add(CreateBasicMatchingAccountUserWithOwnerRole().Set(x => x.UserRef, Guid.NewGuid()));
 
             return this;
         }
 
-        public IsUserInRoleQueryHandlerTestsFixture AddNonMatchingOnAccountId()
+        public IsUserInAnyRoleQueryHandlerTestsFixture AddNonMatchingOnAccountId()
         {
             AccountUsers.Add(CreateBasicMatchingAccountUserWithOwnerRole().Set(x=>x.AccountId, 214));
-
-            return this;
-        }
-
-        public IsUserInRoleQueryHandlerTestsFixture AddNonMatchingOnRoleEnum()
-        {
-            AccountUsers.Add(CreateBasicMatchingAccountUserObject().Set(x=>x.Role, UserRole.Transactor)); //not matching on role
-
-            return this;
-        }
-
-        public IsUserInRoleQueryHandlerTestsFixture AddNonMatchingUsers()
-        {
-            AccountUsers.Add(CreateBasicMatchingAccountUserObject()); //not matching no roles
 
             return this;
         }
