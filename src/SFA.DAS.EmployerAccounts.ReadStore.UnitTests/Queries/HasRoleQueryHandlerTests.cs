@@ -72,21 +72,21 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Queries
 
     public class HasRoleQueryHandlerTestsFixture
     {
-        internal HasRoleQuery Query { get; set; }
+        internal IsUserInRoleQuery Query { get; set; }
         public CancellationToken CancellationToken { get; set; }
-        internal IReadStoreRequestHandler<HasRoleQuery,bool> Handler { get; set; }
+        internal IReadStoreRequestHandler<IsUserInRoleQuery,bool> Handler { get; set; }
         internal Mock<IAccountUsersRepository> UserRolesRepository { get; set; }
         internal List<AccountUser> Roles { get; set; }
 
         public HasRoleQueryHandlerTestsFixture()
         {
-            Query = new HasRoleQuery(Guid.NewGuid(), 112, new HashSet<UserRole>{ UserRole.Owner });
+            Query = new IsUserInRoleQuery(Guid.NewGuid(), 112, new HashSet<UserRole>{ UserRole.Owner });
             CancellationToken = CancellationToken.None;
             UserRolesRepository = new Mock<IAccountUsersRepository>();
             Roles = new List<AccountUser>();
             UserRolesRepository.SetupInMemoryCollection(Roles);
 
-            Handler = new HasRoleQueryHandler(UserRolesRepository.Object);
+            Handler = new IsUserInRoleQueryHandler(UserRolesRepository.Object);
         }
 
         internal Task<bool> Handle()

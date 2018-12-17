@@ -6,16 +6,16 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
 {
-    internal class HasRoleQueryHandler : IReadStoreRequestHandler<HasRoleQuery, bool>
+    internal class IsUserInRoleQueryHandler : IReadStoreRequestHandler<IsUserInRoleQuery, bool>
     {
         private readonly IAccountUsersRepository _accountUsersRepository;
 
-        public HasRoleQueryHandler(IAccountUsersRepository accountUsersRepository)
+        public IsUserInRoleQueryHandler(IAccountUsersRepository accountUsersRepository)
         {
             _accountUsersRepository = accountUsersRepository;
         }
 
-        public Task<bool> Handle(HasRoleQuery request, CancellationToken cancellationToken)
+        public Task<bool> Handle(IsUserInRoleQuery request, CancellationToken cancellationToken)
         {
             return _accountUsersRepository
                 .CreateQuery()
