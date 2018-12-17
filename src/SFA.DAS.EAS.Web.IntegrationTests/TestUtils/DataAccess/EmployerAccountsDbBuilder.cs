@@ -50,11 +50,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
         public async Task<UserOutput> CreateUserAsync(UserInput input)
         {
             await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
-            var user = await DependentRepositories.UserRepository.GetUserByRef(input.UserRef);
+            var user = await DependentRepositories.UserRepository.GetUserByRef(input.Ref);
 
             var output = new UserOutput
             {
-                UserRef = input.UserRef,
+                UserRef = input.Ref,
                 UserId = user.Id
             };
 
@@ -119,7 +119,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
         {
             foreach (var legalEntitySetup in accountSetup.LegalEntities)
             {
-                legalEntitySetup.LegalEntityWithAgreementInputOutput = await CreateLegalEntityAsync(legalEntitySetup.LegalEntityWithAgreementInputInput);
+                legalEntitySetup.LegalEntityWithAgreementInputOutput = await CreateLegalEntityAsync(legalEntitySetup.LegalEntityWithAgreementInput);
             }
         }
 

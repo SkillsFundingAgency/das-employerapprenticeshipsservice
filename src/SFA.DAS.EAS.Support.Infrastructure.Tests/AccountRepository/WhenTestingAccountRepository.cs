@@ -1,8 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EAS.Support.ApplicationServices;
-using SFA.DAS.EAS.Support.ApplicationServices.Services;
 using SFA.DAS.EAS.Support.Core.Services;
 using SFA.DAS.EAS.Support.Infrastructure.Services;
 using SFA.DAS.HashingService;
