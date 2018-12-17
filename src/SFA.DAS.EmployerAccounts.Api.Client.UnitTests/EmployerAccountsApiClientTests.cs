@@ -20,13 +20,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         [Test]
         public Task HasRole_ShouldCallTheMediatorCorrectly()
         {
-            return TestAsync(f => f.SetupHasRole(), f => f.HasRole(), f => f.VerifyMediatorCall());
+            return TestAsync(f => f.SetupHasRole(), f => f.IsUserInRole(), f => f.VerifyMediatorCall());
         }
 
         [Test]
         public Task HasRole_ShouldReturnTheExpectedValue()
         {
-            return TestAsync(f => f.SetupHasRole(), f => f.HasRole(), (f, r) => r.Should().BeTrue());
+            return TestAsync(f => f.SetupHasRole(), f => f.IsUserInRole(), (f, r) => r.Should().BeTrue());
         }
     }
 
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             return this;
         }
 
-        public Task<bool> HasRole()
+        public Task<bool> IsUserInRole()
         {
             return EmployerAccountsApiClient.IsUserInRole(IsUserInRoleRequest, CancellationToken);
         }
