@@ -100,7 +100,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             var response = await Mediator.SendAsync(new GetMemberRequest
             {
                 HashedAccountId = hashedId,
-                Email = email
+                Email = email,
+                OnlyIfMemberIsActive = true
             });
 
             if (response != null)
