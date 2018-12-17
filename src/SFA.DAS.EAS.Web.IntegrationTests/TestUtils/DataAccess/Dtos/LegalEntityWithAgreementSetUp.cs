@@ -2,7 +2,7 @@
 {
     public class LegalEntityWithAgreementSetup
     {
-        public LegalEntityWithAgreementInput LegalEntityWithAgreementInputInput { get; set; }
+        public LegalEntityWithAgreementInput LegalEntityWithAgreementInput { get; set; }
         public LegalEnityWithAgreementOutput LegalEntityWithAgreementInputOutput { get; set; }
     }
 }

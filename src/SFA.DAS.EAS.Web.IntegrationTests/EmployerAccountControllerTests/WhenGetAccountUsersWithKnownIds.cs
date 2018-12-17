@@ -34,19 +34,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         public async Task ThenTheStatusShouldBeFound_AndDataShouldContainOnlyTheExpectedUser()
         {
             // Arrange
-            const string accountName = "AccountWhenGetLegalEntitiesWithNonExistentKey";
-            const string legalEntityName = "LegalEntityWhenGetLegalEntitiesWithNonExistentKey";
-            const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
-
             string hashedAccountId = null;
-            string userRef = null;
+            var userRef = Guid.Empty;
 
             await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
                 var data = new TestModelBuilder()
                     .WithNewUser()
-                    .WithNewAccount(accountName, payeReference)
-                    .WithNewLegalEntity(legalEntityName);
+                    .WithNewAccount()
+                    .WithNewLegalEntity();
 
                 await builder.SetupDataAsync(data);
 
@@ -63,9 +59,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
 
             account.ExpectControllerType(typeof(EmployerAccountsController));
             account.ExpectStatusCodes(HttpStatusCode.OK);
-            NUnit.Framework.Assert.IsNotNull(account.Data);
+            Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
-            Assert.IsTrue(string.Equals(userRef, account.Data.Last().UserRef, StringComparison.InvariantCultureIgnoreCase));
+            Assert.AreEqual(userRef, Guid.Parse(account.Data.Last().UserRef));
         }
     }
 }
