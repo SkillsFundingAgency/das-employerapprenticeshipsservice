@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
         private readonly LegalEntityModelBuilder _legalEntity = new LegalEntityModelBuilder();
         private readonly List<UserSetup> _users = new List<UserSetup>();
 
-        private AutoFixture.Fixture _fixture;
+        private readonly Fixture _fixture;
 
         public ICollection<UserSetup> Users => _users;
 
@@ -49,18 +49,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
             return this;
         }
 
-        public TestModelBuilder WithNewAccount()
-        {
-            return WithNewAccount(Guid.NewGuid().ToString(), "" + Guid.NewGuid());
-        }
-
         /// <summary>
         ///     Add the information to create a new account. The account will be available in the <see cref="CurrentAccount"/>.
         ///     The account will be created for the user specified in <see cref="CurrentUser"/>. An exception
         ///     will be thrown if a user has not been created (via <see cref="WithNewUser"/>. The account will not 
         ///     be persisted to the database until <see cref="EmployerAccountsDbBuilder.SetupDataAsync"/> is called.
         /// </summary>
-        public TestModelBuilder WithNewAccount(string accountName, string payeRef)
+        public TestModelBuilder WithNewAccount()
         {
             Contract.Assert(HasCurrentUser, "Add a user before adding an account");
 
