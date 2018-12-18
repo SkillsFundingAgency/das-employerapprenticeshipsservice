@@ -100,7 +100,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         private void ProcessMessage(string messageId, DateTime messageCreated, Action action)
         {
             if (IsMessageProcessed(messageId))
+            {
                 return;
+            }
 
             action();
             AddOutboxMessage(messageId, messageCreated);
