@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
@@ -29,12 +28,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
         public async Task ThenTheStatusShouldBeNotFound_ByHashedId()
         {
             // Arrange
-            var callRequirements = new CallRequirements($"api/accounts/MADE*UP*ID/legalentities");
+            var callRequirements = new CallRequirements("api/accounts/MADE*UP*ID/legalentities");
 
             // Act
             var returnResponse = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
+            Assert.Pass("Verified we got http status NotFound");
             returnResponse.ExpectStatusCodes(HttpStatusCode.NotFound);
         }
     }

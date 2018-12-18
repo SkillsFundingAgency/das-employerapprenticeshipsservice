@@ -27,8 +27,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
             {
                 var data = new TestModelBuilder()
                     .WithNewUser()
-                    .WithNewAccount()
-                    .WithNewLegalEntity();
+                    .WithNewAccount();
 
                 await builder.SetupDataAsync(data);
 
@@ -52,7 +51,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
 
             // Assert
             Assert.IsNotNull(account.Data);
-            Assert.AreEqual(1, account.Data);
+            Assert.AreEqual(1, account.Data.Count);
         }
     }
 }
