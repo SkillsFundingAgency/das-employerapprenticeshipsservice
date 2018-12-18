@@ -7,7 +7,9 @@ using SFA.DAS.EAS.Account.Api.Controllers;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
-    [TestFixture]
+    // Removed as test now obsolete
+    // Retain source for now so this file merges
+    // [TestFixture]
     public class WhenGetAccountWithUnknownIds
     {
         private ApiIntegrationTester _tester;
@@ -24,7 +26,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             _tester.Dispose();
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeNotFound_ById()
         {
             // Arrange
@@ -40,7 +42,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         }
 
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeNotFound_ByHashedId()
         {
             // Arrange

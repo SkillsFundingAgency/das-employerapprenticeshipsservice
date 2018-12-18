@@ -8,7 +8,9 @@ using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
 {
-    [TestFixture]
+    // Removed as test now obsolete
+    // Retain source for now so this file merges
+    // [TestFixture]
     public class WhenIGetTheStatistics
     {
         private ApiIntegrationTester _apiTester;
@@ -54,42 +56,42 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
             return financialStatistics.TotalPayments == 0;
         }
 
-        [Test]
+        //[Test]
         public void ThenTheStatusShouldBeOk()
         {
             _actualResponse.Response.StatusCode
                 .Should().Be(HttpStatusCode.OK);
         }
 
-        [Test]
+        //[Test]
         public void ThenTotalAccountsIsCorrect()
         {
             _actualResponse.Data.TotalAccounts
                 .Should().Be(_expectedStatisticsViewModel.TotalAccounts);
         }
 
-        [Test]
+        //[Test]
         public void ThenTotalAgreementsIsCorrect()
         {
             _actualResponse.Data.TotalAgreements
                 .Should().Be(_expectedStatisticsViewModel.TotalAgreements);
         }
 
-        [Test]
+        //[Test]
         public void ThenTotalLegalEntitiesIsCorrect()
         {
             _actualResponse.Data.TotalLegalEntities
                 .Should().Be(_expectedStatisticsViewModel.TotalLegalEntities);
         }
 
-        [Test]
+        //[Test]
         public void ThenTotalPayeSchemesIsCorrect()
         {
             _actualResponse.Data.TotalPayeSchemes
                 .Should().Be(_expectedStatisticsViewModel.TotalPayeSchemes);
         }
 
-        [Test]
+        //[Test]
         public void ThenTotalPaymentsIsCorrect()
         {
             _actualResponse.Data.TotalPayments

@@ -8,14 +8,14 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/statistics")]
     public class StatisticsController : RedirectController
     {
-        public StatisticsController(EmployerApprenticeshipsServiceConfiguration cofiguration) : base(cofiguration)
+        public StatisticsController(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
         {
         }
 
         [Route("")]
         public IHttpActionResult GetStatistics()
         {
-            return RedirectToEmployerAccountsApi(Request.RequestUri.PathAndQuery);
+            return RedirectToEmployerAccountsApi();
         }
     }
 

@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
             _tester.Dispose();
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeNotFound_ById()
         {
             // Arrange
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
         }
 
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeNotFound_ByHashedId()
         {
             // Arrange

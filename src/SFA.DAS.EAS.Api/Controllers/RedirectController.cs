@@ -13,14 +13,20 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         }
 
-        public RedirectController(EmployerApprenticeshipsServiceConfiguration cofiguration)
+        public RedirectController(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _configuration = cofiguration;
+            _configuration = configuration;
         }
 
-        protected IHttpActionResult RedirectToEmployerAccountsApi(string requestUriPathAndQuery)
+        protected IHttpActionResult RedirectToEmployerAccountsApi()
         {
             return Redirect(Url.Action(_configuration.EmployerAccountsApiBaseUrl, Request.RequestUri.PathAndQuery));
         }
+
+        protected IHttpActionResult RedirectToEmployerFinanceApi()
+        {
+            return Redirect(Url.Action(_configuration.EmployerFinanceApiBaseUrl, Request.RequestUri.PathAndQuery));
+        }
+
     }
 }

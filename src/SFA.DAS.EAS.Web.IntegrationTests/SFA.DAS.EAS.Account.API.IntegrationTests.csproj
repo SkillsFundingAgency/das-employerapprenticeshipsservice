@@ -221,11 +221,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RedirectTests\GetTransferConnectionsApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetLegalEntityApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetLegalEntitiesApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\AccountsApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\AgreementByIdsApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetTransactionsApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetTransactionSummaryApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetPayeSchemeApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetPayeSchemesApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetLevyForPeriodApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetLevyApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetAccountByInternalIdApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetAccountUsersApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetAccountUsersByInternalAccountIdApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\AccountsIndexApiRedirectTest.cs" />
     <Compile Include="RedirectTests\AccountLegalEntitesApiRedirectTest.cs" />
     <Compile Include="RedirectTests\ApiRedirectTest.cs" />
-    <Compile Include="RedirectTests\AccountApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\GetAccountApiRedirectTest.cs" />
     <Compile Include="RedirectTests\StatisticsApiRedirectTest.cs" />
-    <Compile Include="TestUtils\ApiTester\ApiIntegrationTester - Copy.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponseExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />

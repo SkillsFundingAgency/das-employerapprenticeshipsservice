@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
             _tester.Dispose();
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeNotFound()
         {
             // Arrange
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
             Assert.IsNull(legalEntities.Data);
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeFound()
         {
             // Arrange

@@ -9,7 +9,9 @@ using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
-    [TestFixture]
+    // Removed as test now obsolete
+    // Retain source for now so this file merges
+    // [TestFixture]
     public class WhenGetLegalEntitiesWithNonExistentKey
     {
         private ApiIntegrationTester _tester;
@@ -26,7 +28,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             _tester.Dispose();
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeNotFound()
         {
             // Arrange
@@ -43,7 +45,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             Assert.IsNull(legalEntities.Data);
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeFound()
         {
             // Arrange

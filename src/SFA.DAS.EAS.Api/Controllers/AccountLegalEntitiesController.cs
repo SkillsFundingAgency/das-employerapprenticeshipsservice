@@ -9,14 +9,14 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/accountlegalentities")]
     public class AccountLegalEntitiesController : RedirectController
     {
-        public AccountLegalEntitiesController(EmployerApprenticeshipsServiceConfiguration cofiguration) : base(cofiguration)
+        public AccountLegalEntitiesController(EmployerApprenticeshipsServiceConfiguration configuration) : base(configuration)
         {
         }
 
         [Route]
         public IHttpActionResult Get([FromUri] GetAccountLegalEntitiesQuery query)
         {
-            return RedirectToEmployerAccountsApi(Request.RequestUri.PathAndQuery);
+            return RedirectToEmployerAccountsApi();
         }
     }
 }

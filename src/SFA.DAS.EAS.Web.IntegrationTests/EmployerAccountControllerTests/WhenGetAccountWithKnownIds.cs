@@ -10,7 +10,9 @@ using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
-    [TestFixture]
+    // Removed as test now obsolete
+    // Retain source for now so this file merges
+    // [TestFixture]
     public class WhenGetAccountWithKnownIds
     {
         private ApiIntegrationTester _tester;
@@ -41,7 +43,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             _tester.Dispose();
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
         {
 
@@ -57,7 +59,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         }
 
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeFound_ByAccountId()
         {
             var callRequirements = new CallRequirements($"api/accounts/internal/{_employerAccount.AccountId}");

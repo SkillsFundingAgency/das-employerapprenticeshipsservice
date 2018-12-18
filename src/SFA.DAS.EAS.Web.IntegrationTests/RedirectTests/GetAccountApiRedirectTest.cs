@@ -3,7 +3,7 @@
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.RedirectTests
 {
     [TestFixture]
-    public class AccountApiRedirectTest : ApiRedirectTest
+    public class GetAccountApiRedirectTest : ApiRedirectTest
     {
         protected override string PathAndQuery => "/api/accounts/HashedAccountId";
     }

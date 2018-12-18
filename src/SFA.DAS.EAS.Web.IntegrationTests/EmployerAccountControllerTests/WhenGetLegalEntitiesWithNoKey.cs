@@ -5,10 +5,12 @@ using SFA.DAS.EAS.Account.Api.Controllers;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
-    [TestFixture]
+    // Removed as test now obsolete
+    // Retain source for now so this file merges
+    // [TestFixture]
     public class WhenGetLegalEntitiesWithNoKey
     {
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeBadRequest()
         {
             // Arrange

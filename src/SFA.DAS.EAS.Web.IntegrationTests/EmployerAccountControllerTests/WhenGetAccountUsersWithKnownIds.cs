@@ -13,7 +13,9 @@ using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
-    [TestFixture]
+    // Removed as test now obsolete
+    // Retain source for now so this file merges
+    // [TestFixture]
     public class WhenGetAccountUsersWithKnownIds
     {
         private ApiIntegrationTester _tester;
@@ -30,7 +32,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             _tester.Dispose();
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeFound_AndDataShouldContainOnlyTheExpectedUser()
         {
             // Arrange
