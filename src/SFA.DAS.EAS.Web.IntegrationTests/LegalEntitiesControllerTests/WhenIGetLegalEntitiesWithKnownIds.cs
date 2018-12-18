@@ -52,6 +52,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
 
             // Assert
             Assert.IsNotNull(account.Data);
+            Assert.AreEqual(1, account.Data);
         }
     }
 }
