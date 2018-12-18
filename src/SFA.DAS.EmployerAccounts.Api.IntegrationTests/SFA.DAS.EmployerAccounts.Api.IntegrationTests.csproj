@@ -6,7 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="TestUtils\DataHelper\**" />
+    <EmbeddedResource Remove="TestUtils\DataHelper\**" />
+    <None Remove="TestUtils\DataHelper\**" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" version="4.5.1" />
     <PackageReference Include="FluentValidation" version="6.2.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.3" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />

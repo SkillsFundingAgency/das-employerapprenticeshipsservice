@@ -1,0 +1,81 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TargetFramework>net462</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="TestUtils\DataHelper\**" />
+    <EmbeddedResource Remove="TestUtils\DataHelper\**" />
+    <None Remove="TestUtils\DataHelper\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture" version="4.5.1" />
+    <PackageReference Include="FluentValidation" version="6.2.1.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Microsoft.Owin.Hosting" version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.Testing" Version="3.0.1" />
+    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" version="3.2.3" />
+    <PackageReference Include="Moq" Version="4.5.28" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Owin" version="1.0" />
+    <!--<PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />-->
+    <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
+    <!--<PackageReference Include="SFA.DAS.UnitOfWork" version="1.0.17"/>-->
+    <PackageReference Include="StructureMap" version="4.6.1" />
+
+    <!--
+
+    <PackageReference Include="FluentValidation" version="6.2.1.0" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Owin" Version="5.2.3" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
+    <PackageReference Include="Microsoft.Owin.Hosting" version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.Testing" Version="3.0.1" />
+    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" version="3.2.3" />
+    <PackageReference Include="Moq" Version="4.5.28" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Owin" version="1.0" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
+    <PackageReference Include="SFA.DAS.UnitOfWork" version="1.0.17"/>
+    <PackageReference Include="StructureMap" version="4.6.1" />
+
+
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="NLog.Schema" Version="4.5.3" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.UnitOfWork" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="1.0.17" />
+    <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
+
+    -->
+    
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api\SFA.DAS.EmployerFinance.Api.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
+    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin.Testing">
+      <HintPath>..\packages\Microsoft.Owin.Testing.3.0.1\lib\net45\Microsoft.Owin.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+
+</Project>

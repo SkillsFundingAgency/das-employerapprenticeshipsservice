@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Controllers;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.ApiTester;
-using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.ModelBuilders;
 using SFA.DAS.EmployerAccounts.Models;
 
@@ -31,14 +31,15 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
         {
             // Arrange
             var callRequirements =
-                new CallRequirements("api/accounts/ZZZZZZ/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.NotFound)
-                    .ExpectControllerType(typeof(LegalEntitiesController));
+                new CallRequirements("api/accounts/ZZZZZZ/legalentities");
 
             // Act
             var legalEntities = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
+
+            legalEntities.ExpectStatusCodes(HttpStatusCode.NotFound);
+            legalEntities.ExpectControllerType(typeof(LegalEntitiesController));
             Assert.IsNull(legalEntities.Data);
         }
 
@@ -46,31 +47,28 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
         public async Task ThenTheStatusShouldBeFound()
         {
             // Arrange
-            const string accountName = "ACME Fireworks";
-            const string legalEntityName = "RoadRunner Pest Control";
-            const string payeReference = "Acme PAYE";
-
             string hashedAccountId = null;
-            _tester.InitialiseData<EmployerAccountsDbBuilder>(builder =>
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
-                // TODO: the way ids are propagated is a bit clunky
-                builder
-                    .EnsureUserExists(TestModelBuilder.User.CreateUserInput())
-                    .EnsureAccountExists(TestModelBuilder.Account.CreateAccountInput(accountName, payeReference, builder.Context.ActiveUser.UserId))
-                    .WithLegalEntity(TestModelBuilder.LegalEntity.BuildEntityWithAgreementInput(legalEntityName, builder.Context.ActiveEmployerAccount.AccountId));
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount()
+                    .WithNewLegalEntity();
 
-                hashedAccountId = builder.Context.ActiveEmployerAccount.HashedAccountId;
+                await builder.SetupDataAsync(data);
+
+                hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
             });
 
             var callRequirements =
-                new CallRequirements($"api/accounts/{hashedAccountId}/legalentities")
-                    .AllowStatusCodes(HttpStatusCode.OK)
-                    .ExpectControllerType(typeof(LegalEntitiesController));
+                new CallRequirements($"api/accounts/{hashedAccountId}/legalentities");
 
             // Act
             var legalEntities = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
+            legalEntities.ExpectStatusCodes(HttpStatusCode.OK);
+            legalEntities.ExpectControllerType(typeof(LegalEntitiesController));
             Assert.IsNotNull(legalEntities.Data);
         }
     }

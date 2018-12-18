@@ -11,13 +11,16 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.ApiTester
 {
+    /// <summary>
+    ///     IoC setup for creating test data. 
+    /// </summary>
     static class TestSetupIoC
     {
         private static readonly Lazy<EmployerAccountsConfiguration> LazyAccountConfiguration = 
             new Lazy<EmployerAccountsConfiguration>(GetAccountConfiguration);
 
-        //private static readonly Lazy<LevyDeclarationProviderConfiguration> LazyFinanceConfiguration = 
-        //    new Lazy<LevyDeclarationProviderConfiguration>(GetFinanceConfiguration);
+        private static readonly Lazy<EmployerFinanceConfiguration> LazyFinanceConfiguration = 
+            new Lazy<EmployerFinanceConfiguration>(GetFinanceConfiguration);
 
         public static IContainer CreateIoC()
         {
@@ -27,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.ApiTester
                 config.For<ILog>().Use(new Mock<ILog>().Object).Singleton();
 
                 SetUpAccountIoC(config);
-                //SetUpFinanceIoC(config);
+                SetUpFinanceIoC(config);
             });
 
             return ioc;
@@ -48,21 +51,21 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.ApiTester
             config.For<Lazy<EmployerAccountsDbContext>>().Use(context => new Lazy<EmployerAccountsDbContext>(() => dbContext));
         }
 
-        //private static void SetUpFinanceIoC(ConfigurationExpression config)
-        //{
-        //    var financeConfiguration = LazyFinanceConfiguration.Value;
-        //    config.For<LevyDeclarationProviderConfiguration>().Use(financeConfiguration);
-        //    config.For<EmployerFinanceDbContext>().Use(context => new EmployerFinanceDbContext(financeConfiguration.DatabaseConnectionString));
-        //}
+        private static void SetUpFinanceIoC(ConfigurationExpression config)
+        {
+            var financeConfiguration = LazyFinanceConfiguration.Value;
+            config.For<EmployerFinanceConfiguration>().Use(financeConfiguration);
+            config.For<EmployerFinanceDbContext>().Use(context => new EmployerFinanceDbContext(financeConfiguration.DatabaseConnectionString));
+        }
 
         private static EmployerAccountsConfiguration GetAccountConfiguration()
         {
             return ConfigurationHelper.GetConfiguration<EmployerAccountsConfiguration>(Constants.ServiceName);
         }
 
-        //private static LevyDeclarationProviderConfiguration GetFinanceConfiguration()
-        //{
-        //    return ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider");
-        //}
+        private static EmployerFinanceConfiguration GetFinanceConfiguration()
+        {
+            return ConfigurationHelper.GetConfiguration<EmployerFinanceConfiguration>("SFA.DAS.LevyAggregationProvider");
+        }
     }
 }

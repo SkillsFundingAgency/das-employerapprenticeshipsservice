@@ -13,15 +13,14 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
         {
             // Arrange
             var callRequirements =
-                new CallRequirements("api/accounts/%20/legalentities")
-                    .ExpectControllerType(typeof(LegalEntitiesController))
-                    .ExpectValidationError();
+                new CallRequirements("api/accounts/%20/legalentities");
 
             // Act
-            await ApiIntegrationTester.InvokeIsolatedGetAsync(callRequirements);
+            var response = await ApiIntegrationTester.InvokeIsolatedGetAsync(callRequirements);
 
             // Assert
-            Assert.Pass("Verified we got a bad request type behaviour");
+            response.ExpectControllerType(typeof(LegalEntitiesController));
+            response.ExpectValidationError();
         }
     }
 }

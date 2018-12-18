@@ -29,18 +29,17 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.EmployerAccounts
         public async Task ThenTheStatusShouldBeOK_AndDataShouldContainZeroUsers()
         {
             // Arrange
-            var callRequirements = new CallRequirements($"api/accounts/MADE*UP*ID/users")
-                .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+            var callRequirements = new CallRequirements($"api/accounts/MADE*UP*ID/users");
 
             // Act
             var response = await _tester.InvokeGetAsync<ICollection<TeamMemberViewModel>>(callRequirements);
 
             // Assert
+            response.ExpectControllerType(typeof(EmployerAccountsController));
+            response.ExpectStatusCodes(HttpStatusCode.OK);
             Assert.AreEqual(0, response.Data.Count);
 
             Assert.Pass("Verified we got http status OK");
         }
-
     }
 }
