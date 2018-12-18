@@ -47,7 +47,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
                 await builder.SetupDataAsync(data);
 
                 hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
-                userRef = data.CurrentUser.UserOutput.UserRef;
+                userRef = data.CurrentUser.UserOutput.Ref;
             });
 
             var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users");

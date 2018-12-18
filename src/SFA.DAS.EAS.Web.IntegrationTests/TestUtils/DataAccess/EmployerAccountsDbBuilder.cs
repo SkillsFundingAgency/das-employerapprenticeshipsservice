@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
 
             var output = new UserOutput
             {
-                UserRef = input.Ref,
+                Ref = input.Ref,
                 UserId = user.Id
             };
 

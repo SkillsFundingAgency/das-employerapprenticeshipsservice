@@ -48,7 +48,7 @@ select (
   where a.StatusId = 2 -- signed
 ) as TotalAgreements;";
 
-        public async Task CreateAccountStatistics()
+        public async Task CreateAccountStatistics()//todo change this to use existing code
         {
             var fixture = new Fixture();
 

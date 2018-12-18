@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
 select count(0) as TotalPayments
 from employer_financial.Payment;";
 
-        public async Task CreateFinanceStatistics()
+        public async Task CreateFinanceStatistics()//todo change this to use existing code
         {
             var fixture = new Fixture();
 
