@@ -78,12 +78,5 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Service.StatisticsContro
             _actualResponse.Data.TotalPayeSchemes
                 .Should().Be(_expectedStatisticsViewModel.TotalPayeSchemes);
         }
-
-        [Test]
-        public void ThenTotalPaymentsIsCorrect()
-        {
-            _actualResponse.Data.TotalPayments
-                .Should().Be(_expectedStatisticsViewModel.TotalPayments);
-        }
     }
 }

@@ -26,6 +26,10 @@ namespace SFA.DAS.EAS.Account.Api.Extensions
 
             return Action(baseUrl, pathAndQuery);
         }
+        public static string Action(this UrlHelper helper, string baseUrl, string pathAndQuery)
+        {
+            return Action(baseUrl, pathAndQuery);
+        }
 
         private static string Action(string baseUrl, string path)
         {

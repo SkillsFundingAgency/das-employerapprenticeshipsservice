@@ -1,18 +1,22 @@
 ﻿using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Account.Api.Extensions;
 using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [ApiAuthorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/accountlegalentities")]
-    public class AccountLegalEntitiesController : ApiController
+    public class AccountLegalEntitiesController : RedirectController
     {
+        public AccountLegalEntitiesController(EmployerApprenticeshipsServiceConfiguration cofiguration) : base(cofiguration)
+        {
+        }
+
         [Route]
         public IHttpActionResult Get([FromUri] GetAccountLegalEntitiesQuery query)
         {
-            return Redirect(Url.EmployerAccountsApiAction(Request.RequestUri.PathAndQuery));
+            return RedirectToEmployerAccountsApi(Request.RequestUri.PathAndQuery);
         }
     }
 }

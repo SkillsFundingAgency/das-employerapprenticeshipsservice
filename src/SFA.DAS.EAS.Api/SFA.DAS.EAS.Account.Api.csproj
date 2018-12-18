@@ -338,6 +338,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
+    <Compile Include="Controllers\RedirectController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />

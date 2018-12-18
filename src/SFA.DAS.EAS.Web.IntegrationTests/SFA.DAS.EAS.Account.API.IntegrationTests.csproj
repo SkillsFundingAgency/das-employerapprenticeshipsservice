@@ -221,6 +221,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RedirectTests\AccountLegalEntitesApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\ApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\AccountApiRedirectTest.cs" />
+    <Compile Include="RedirectTests\StatisticsApiRedirectTest.cs" />
+    <Compile Include="TestUtils\ApiTester\ApiIntegrationTester - Copy.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponseExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />

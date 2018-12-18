@@ -1,12 +1,18 @@
-﻿using System.Web.Http;
+﻿using System.Security.Policy;
+using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Extensions;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/accounts")]
-    public class EmployerAccountsController : ApiController
+    public class EmployerAccountsController : RedirectController
     {
+        public EmployerAccountsController(EmployerApprenticeshipsServiceConfiguration cofiguration) : base(cofiguration)
+        {
+        }
+
         [Route("", Name = "AccountsIndex")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]   
@@ -20,7 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public IHttpActionResult GetAccount(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsApiAction(Request.RequestUri.PathAndQuery));
+            return RedirectToEmployerAccountsApi(Request.RequestUri.PathAndQuery);
         }
 
         [Route("internal/{accountId}", Name = "GetAccountByInternalId")]
