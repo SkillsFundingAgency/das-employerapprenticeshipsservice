@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
@@ -12,7 +9,7 @@ using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
 {
     [TestFixture]
-    public class WhenIGetLegalEntitiesWithKnownIds
+    public class WhenIGetMultipleLegalEntitiesWithKnownIds
     {
         private ApiIntegrationTester _tester;
         private EmployerAccountOutput _employerAccount;
@@ -27,7 +24,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
             {
                 var data = new TestModelBuilder()
                     .WithNewUser()
-                    .WithNewAccount();
+                    .WithNewAccount()
+                    .WithNewLegalEntity();
 
                 await builder.SetupDataAsync(data);
 
@@ -51,7 +49,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
 
             // Assert
             Assert.IsNotNull(account.Data);
-            Assert.AreEqual(1, account.Data.Count);
+            Assert.AreEqual(2, account.Data.Count);
         }
+
     }
 }
