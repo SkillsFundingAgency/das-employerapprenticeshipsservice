@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
         private CallResponse<StatisticsViewModel> _actualResponse;
         private StatisticsViewModel _expectedStatisticsViewModel;
 
-        [SetUp]
+        [OneTimeSetUp]
         public async Task Setup()
         {
             _apiTester = new ApiIntegrationTester();

@@ -1,16 +1,11 @@
-﻿using System;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using System.Threading.Tasks;
-using AutoFixture;
 using Dapper;
-using Moq;
 using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.Hashing;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
 {
@@ -32,6 +27,18 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
             }
         }
 
+        public async Task CreateAccountStatistics()
+        {
+            var tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
+            await tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
+            {
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount();
+                await builder.SetupDataAsync(data);
+            });
+        }
+
         private const string GetStatisticsSql = @"
 select (
   select count(0)
@@ -47,51 +54,5 @@ select (
   from employer_account.EmployerAgreement a
   where a.StatusId = 2 -- signed
 ) as TotalAgreements;";
-
-        public async Task CreateAccountStatistics()//todo change this to use existing code
-        {
-            var fixture = new Fixture();
-
-            var accountDbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
-            var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
-            var userRepo = new UserRepository(_configuration, Mock.Of<ILog>(), lazyDb);
-            var userToCreate = fixture
-                .Build<User>()
-                .Without(user => user.Id)
-                .Without(user => user.UserRef)
-                .Create();
-            var accountRepo = new AccountRepository(_configuration,
-                Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
-
-            accountDbContext.Database.BeginTransaction();
-
-            try
-            {
-                await userRepo.Create(userToCreate);
-                var createdUser = await userRepo.GetUserByRef(userToCreate.UserRef);
-                await accountRepo.CreateAccount(
-                    createdUser.Id,
-                    fixture.Create<string>(),
-                    fixture.Create<string>(),
-                    fixture.Create<string>(),
-                    DateTime.Today,
-                    $"ref-{DateTime.Now.Ticks.ToString().Substring(4, 10)}",
-                    fixture.Create<string>(),
-                    fixture.Create<string>(),
-                    fixture.Create<string>(),
-                    fixture.Create<string>(),
-                    2,
-                    1,
-                    fixture.Create<string>());
-
-                accountDbContext.Database.CurrentTransaction.Commit();
-            }
-            catch (Exception e)
-            {
-                accountDbContext.Database.CurrentTransaction.Rollback();
-                Console.WriteLine(e);
-                throw;
-            }
-        }
     }
 }
