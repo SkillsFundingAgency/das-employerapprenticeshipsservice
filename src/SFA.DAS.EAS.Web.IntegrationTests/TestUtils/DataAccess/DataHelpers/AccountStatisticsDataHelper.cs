@@ -4,7 +4,6 @@ using Dapper;
 using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
@@ -29,8 +28,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
 
         public async Task CreateAccountStatistics()
         {
-            var tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
-            await tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
+            var dbBuilderRuntime = new DbBuilderRuntime();
+            await dbBuilderRuntime.RunDbBuilder<EmployerAccountsDbBuilder>(async builder =>
             {
                 var data = new TestModelBuilder()
                     .WithNewUser()

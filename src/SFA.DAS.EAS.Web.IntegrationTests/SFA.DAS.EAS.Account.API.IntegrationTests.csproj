@@ -245,6 +245,7 @@
     <Compile Include="TestUtils\DataAccess\DataHelpers\AccountStatisticsDataHelper.cs" />
     <Compile Include="TestUtils\DataAccess\DataHelpers\FinanceStatisticsDataHelper.cs" />
     <Compile Include="TestUtils\DataAccess\DbBuilderDependentRepositories.cs" />
+    <Compile Include="TestUtils\DataAccess\DbBuilderRuntime.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountOutput.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountSetup.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\LegalEntityWithAgreementSetUp.cs" />
