@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("schemes/confirm")]
         public ActionResult ConfirmPayeScheme(string hashedAccountId)
         {
-            return Redirect(Url.EmployerAccountsAction($"/schemes/confirm?{Request.QueryString}"));
+            return Redirect(Url.EmployerAccountsAction($"/schemes/confirm{Request?.Url?.Query}"));
         }
         
         [HttpGet]
