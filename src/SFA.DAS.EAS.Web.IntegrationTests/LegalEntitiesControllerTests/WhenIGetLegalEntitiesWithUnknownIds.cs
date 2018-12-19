@@ -34,8 +34,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
             var returnResponse = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
 
             // Assert
-            Assert.Pass("Verified we got http status NotFound");
             returnResponse.ExpectStatusCodes(HttpStatusCode.NotFound);
+            Assert.Pass("Verified we got http status NotFound");
         }
     }
 }
