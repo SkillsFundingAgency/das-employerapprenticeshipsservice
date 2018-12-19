@@ -98,6 +98,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
                 membership.User = user;
                 membership.RoleId = (int)role;
                 membership.Role = role;
+                membership.CreatedDate = DateTime.Now;
 
                 db.Users.Add(user);
                 db.Memberships.Add(membership);
