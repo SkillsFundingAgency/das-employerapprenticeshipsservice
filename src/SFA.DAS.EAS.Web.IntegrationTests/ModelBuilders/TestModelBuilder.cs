@@ -28,11 +28,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
 
         public EmployerAccountSetup CurrentAccount => CurrentUser.Accounts.Last();
         public bool HasCurrentAccount => HasCurrentUser && _users.Last().Accounts.Count > 0;
-        public List<PaymentSetup> Payments { get; set; }
+        public List<PaymentSetup> Payments { get; } 
 
         public TestModelBuilder()
         {
             _fixture = new Fixture();
+            Payments = new List<PaymentSetup>();
         }
 
         /// <summary>

@@ -5,6 +5,7 @@ using Moq;
 using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
@@ -48,14 +49,16 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             config.For<DbConnection>().Use(context => new SqlConnection(accountConfiguration.DatabaseConnectionString));
             config.For<EmployerApprenticeshipsServiceConfiguration>().Use(accountConfiguration);
             config.For<EmployerAccountsDbContext>().Use(context => dbContext);
-            config.For<Lazy<EmployerAccountsDbContext>>().Use(context => new Lazy<EmployerAccountsDbContext>(() => dbContext));
         }
 
         private static void SetUpFinanceIoC(ConfigurationExpression config)
         {
             var financeConfiguration = LazyFinanceConfiguration.Value;
+            var dbContext = new EmployerFinanceDbContext(financeConfiguration.DatabaseConnectionString);
+
+            config.For<IDasLevyRepository>().Use<DasLevyRepository>();
             config.For<LevyDeclarationProviderConfiguration>().Use(financeConfiguration);
-            config.For<EmployerFinanceDbContext>().Use(context => new EmployerFinanceDbContext(financeConfiguration.DatabaseConnectionString));
+            config.For<EmployerFinanceDbContext>().Use(context => dbContext);
         }
 
         private static EmployerApprenticeshipsServiceConfiguration GetAccountConfiguration()

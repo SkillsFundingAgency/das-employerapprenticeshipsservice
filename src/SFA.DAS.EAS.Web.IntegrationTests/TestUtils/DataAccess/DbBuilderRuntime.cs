@@ -24,8 +24,9 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
                 await initialiseAction(builder);
                 builder.CommitTransaction();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 builder.RollbackTransaction();
                 throw;
             }
