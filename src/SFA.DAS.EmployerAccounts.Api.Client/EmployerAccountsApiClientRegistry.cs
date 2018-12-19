@@ -1,4 +1,6 @@
 ﻿using Microsoft.Azure.Documents;
+using SFA.DAS.AutoConfiguration;
+using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
@@ -10,7 +12,8 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
     {
         public EmployerAccountsApiClientRegistry()
         {
-            For<IEmployerAccountsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerAccountsApiClientConfiguration>("SFA.DAS.EmployerAccounts.Api.Client")).Singleton();
+            IncludeRegistry<AutoConfigurationRegistry>();
+            For<IEmployerAccountsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsApiClientConfiguration>("SFA.DAS.EmployerAccounts.Api.Client")).Singleton();
             For<ReadStoreServiceFactory>().Use<ReadStoreServiceFactory>(c => c.GetInstance);
             For<IReadStoreMediator>().Use<ReadStoreMediator>();
             For<IReadStoreRequestHandler<IsUserInRoleQuery, bool>>().Use<IsUserInRoleQueryHandler>();
