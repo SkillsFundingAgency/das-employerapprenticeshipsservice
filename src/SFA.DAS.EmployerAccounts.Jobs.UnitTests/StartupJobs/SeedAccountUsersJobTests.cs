@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 {
     [TestFixture]
     [Parallelizable]
-    public class PopulateAccountUsersInCollectionJobTests : FluentTest<PopulateAccountUsersInCollectionJobTestsFixture>
+    public class SeedAccountUsersJobTests : FluentTest<SeedAccountUsersJobTestsFixture>
     {
         [Test]
         public Task Run_WhenRunningAfterJobHasSuccessfullyCompleted_ThenShouldImmediatelyReturnAndDoNoUpdatesOrQueries()
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         }
     }
 
-    public class PopulateAccountUsersInCollectionJobTestsFixture
+    public class SeedAccountUsersJobTestsFixture
     {
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
         internal Mock<IMembershipRepository> MembershipRepository { get; set; }
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
-        public PopulateAccountUsersInCollectionJobTestsFixture()
+        public SeedAccountUsersJobTestsFixture()
         {
             AccountUsersRepository = new Mock<IAccountUsersRepository>();
             AccountUsersRepository.SetupInMemoryCollection(ReadStoreUsers);
@@ -94,14 +94,14 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             return SeedAccountUsersJob.Run();
         }
 
-        public PopulateAccountUsersInCollectionJobTestsFixture SetJobAsAlreadyRun()
+        public SeedAccountUsersJobTestsFixture SetJobAsAlreadyRun()
         {
             JobHistoryRepository.Setup(x => x.HasJobRun(_jobName)).ReturnsAsync(true);
 
             return this;
         }
 
-        public PopulateAccountUsersInCollectionJobTestsFixture CreateTwoNewUsers()
+        public SeedAccountUsersJobTestsFixture CreateTwoNewUsers()
         {
             Users.Add(NewUser1);
             Users.Add(NewUser2);
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             return this;
         }
 
-        public PopulateAccountUsersInCollectionJobTestsFixture AddFirstUserToReadStore()
+        public SeedAccountUsersJobTestsFixture AddFirstUserToReadStore()
         {
             ReadStoreUsers.Add(ObjectActivator.CreateInstance<AccountUser>()
                 .Set(x=>x.UserRef, NewUser1.UserRef)
@@ -118,21 +118,21 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             return this;
         }
 
-        public PopulateAccountUsersInCollectionJobTestsFixture VerifyUserQueryNotRun()
+        public SeedAccountUsersJobTestsFixture VerifyUserQueryNotRun()
         {
             MembershipRepository.Verify(x => x.GetAllAccountUsers(), Times.Never);
 
             return this;
         }
 
-        public PopulateAccountUsersInCollectionJobTestsFixture VerifyAddDocumentWasRun(short times)
+        public SeedAccountUsersJobTestsFixture VerifyAddDocumentWasRun(short times)
         {
             AccountUsersRepository.Verify(x => x.Add(It.IsAny<AccountUser>(), null, CancellationToken.None), Times.Exactly(times));
 
             return this;
         }
 
-        public PopulateAccountUsersInCollectionJobTestsFixture VerifyUserWasMappedCorrectly(MembershipUser user)
+        public SeedAccountUsersJobTestsFixture VerifyUserWasMappedCorrectly(MembershipUser user)
         {
             AccountUsersRepository.Verify(x => x.Add(It.Is<AccountUser>(p => p.AccountId == user.AccountId &&
                                                                              p.UserRef == user.UserRef &&
@@ -144,20 +144,20 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         }
 
 
-        public PopulateAccountUsersInCollectionJobTestsFixture VerifyUserQueryWasRun()
+        public SeedAccountUsersJobTestsFixture VerifyUserQueryWasRun()
         {
             MembershipRepository.Verify(x => x.GetAllAccountUsers(), Times.Once);
 
             return this;
         }
 
-        public PopulateAccountUsersInCollectionJobTestsFixture VerifyMarkAsPopulatedNotRun()
+        public SeedAccountUsersJobTestsFixture VerifyMarkAsPopulatedNotRun()
         {
             JobHistoryRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Never);
 
             return this;
         }
-        public PopulateAccountUsersInCollectionJobTestsFixture VerifyMarkAsPopulatedWasRun()
+        public SeedAccountUsersJobTestsFixture VerifyMarkAsPopulatedWasRun()
         {
             JobHistoryRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Once);
 

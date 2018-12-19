@@ -1,44 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
     [DbConfigurationType(typeof(EntityFramework.SqlAzureDbConfiguration))]
-    public class EmployerFinanceDbContext : DbContext
+    public class JobDbContext : DbContext
     {
-        static EmployerFinanceDbContext()
+        public virtual DbSet<Job> Jobs { get; set; }
+
+        static JobDbContext()
         {
-            Database.SetInitializer<EmployerFinanceDbContext>(null);
+            Database.SetInitializer<JobDbContext>(null);
         }
 
-        public EmployerFinanceDbContext(string nameOrConnectionString)
+        public JobDbContext(string nameOrConnectionString)
             : base(nameOrConnectionString)
         {
             Database.BeginTransaction();
         }
 
-        protected EmployerFinanceDbContext()
+        protected JobDbContext()
         {
-        }
-
-        public override int SaveChanges()
-        {
-            throw new Exception($"The {GetType().FullName} is for read only operations");
-        }
-
-        public override Task<int> SaveChangesAsync()
-        {
-
-            throw new Exception($"The {GetType().FullName} is for read only operations");
-        }
-
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken)
-        {
-            throw new Exception($"The {GetType().FullName} is for read only operations");
         }
 
         public virtual Task<List<T>> SqlQueryAsync<T>(string query, params object[] parameters)
@@ -49,7 +34,9 @@ namespace SFA.DAS.EmployerAccounts.Data
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-            modelBuilder.HasDefaultSchema("employer_financial");
+            modelBuilder.HasDefaultSchema("employer_account");
+            modelBuilder.Entity<Job>().Ignore(a => a.Id);
+            modelBuilder.Entity<Job>().HasRequired(j => j.Name);
         }
     }
 }
