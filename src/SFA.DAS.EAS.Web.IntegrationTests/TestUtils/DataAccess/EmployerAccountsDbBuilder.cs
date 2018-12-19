@@ -82,7 +82,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
             {
                 AccountId = createResult.AccountId,
                 HashedAccountId = _hashingService.HashValue(createResult.AccountId),
-                PublicHashedAccountId = _publicHashingService.HashValue(createResult.AccountId)
+                PublicHashedAccountId = _publicHashingService.HashValue(createResult.AccountId),
+                LegalEntityId =  createResult.LegalEntityId
             };
 
             await DependentRepositories.AccountRepository.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
