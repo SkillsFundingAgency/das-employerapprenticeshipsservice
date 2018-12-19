@@ -9,25 +9,25 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
     public class AccountUser : Document
     {
         [JsonProperty("userRef")]
-        public Guid UserRef { get; protected set; }
+        public Guid UserRef { get; private set; }
 
         [JsonProperty("accountId")]
-        public long AccountId { get; protected set; }
+        public long AccountId { get; private set; }
 
         [JsonProperty("role")]
-        public UserRole? Role { get; protected set; }
+        public UserRole? Role { get; private set; }
 
         [JsonProperty("outboxData")]
         public IEnumerable<OutboxMessage> OutboxData => _outboxData;
 
         [JsonProperty("Created")]
-        public DateTime Created { get; protected set; }
+        public DateTime Created { get; private set; }
 
         [JsonProperty("updated")]
-        public DateTime? Updated { get; protected set; }
+        public DateTime? Updated { get; private set; }
 
         [JsonProperty("removed")]
-        public DateTime? Removed { get; protected set; }
+        public DateTime? Removed { get; private set; }
 
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         }
 
         [JsonConstructor]
-        protected AccountUser()
+        private AccountUser()
         {
         }
 

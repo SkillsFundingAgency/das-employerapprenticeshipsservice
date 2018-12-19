@@ -68,9 +68,9 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         public MembershipUser NewUser1 = new MembershipUser { AccountId = 1100, Role = 1, UserId = 1111, UserRef = Guid.NewGuid() };
         public MembershipUser NewUser2 = new MembershipUser { AccountId = 2100, Role = 2, UserId = 2222, UserRef = Guid.NewGuid() };
-        internal PopulateAccountUsersInCollectionJob PopulateAccountUsersInCollectionJob { get; set; }
+        internal SeedAccountUsersJob SeedAccountUsersJob { get; set; }
 
-        private readonly string _jobName = typeof(PopulateAccountUsersInCollectionJob).Name;
+        private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
         public PopulateAccountUsersInCollectionJobTestsFixture()
         {
@@ -84,14 +84,14 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
             Logger = new Mock<ILogger>();
 
-            PopulateAccountUsersInCollectionJob =
-                new PopulateAccountUsersInCollectionJob(AccountUsersRepository.Object, MembershipRepository.Object, 
+            SeedAccountUsersJob =
+                new SeedAccountUsersJob(AccountUsersRepository.Object, MembershipRepository.Object, 
                     JobHistoryRepository.Object, Logger.Object);
         }
 
         public Task Run()
         {
-            return PopulateAccountUsersInCollectionJob.Run();
+            return SeedAccountUsersJob.Run();
         }
 
         public PopulateAccountUsersInCollectionJobTestsFixture SetJobAsAlreadyRun()

@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             return _mediator.Send(new IsUserInRoleQuery(
                 roleRequest.UserRef,
                 roleRequest.AccountId,
-                new HashSet<UserRole>(roleRequest.Roles)
+                roleRequest.Roles
             ), cancellationToken);
         }
 

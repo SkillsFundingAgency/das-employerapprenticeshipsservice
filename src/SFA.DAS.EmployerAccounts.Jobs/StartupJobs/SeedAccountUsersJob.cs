@@ -12,7 +12,7 @@ using IMembershipRepository = SFA.DAS.EmployerAccounts.Jobs.Data.IMembershipRepo
 
 namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
 {
-    public class PopulateAccountUsersInCollectionJob
+    public class SeedAccountUsersJob
     {
         private readonly IAccountUsersRepository _accountUsersRepository;
         private readonly IMembershipRepository _membershipRepository;
@@ -20,14 +20,14 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
         private readonly ILogger _logger;
         private readonly string _jobName;
 
-        public PopulateAccountUsersInCollectionJob(IAccountUsersRepository accountUsersRepository, IMembershipRepository membershipRepository, 
+        public SeedAccountUsersJob(IAccountUsersRepository accountUsersRepository, IMembershipRepository membershipRepository, 
             IJobHistoryRepository jobHistoryRepository, ILogger logger)
         {
             _accountUsersRepository = accountUsersRepository;
             _membershipRepository = membershipRepository;
             _jobHistoryRepository = jobHistoryRepository;
             _logger = logger;
-            _jobName = typeof(PopulateAccountUsersInCollectionJob).Name;
+            _jobName = typeof(SeedAccountUsersJob).Name;
         }
 
         [NoAutomaticTrigger]
@@ -49,9 +49,11 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
 
             foreach (var user in users)
             {
-                if (await _accountUsersRepository.CreateQuery().AnyAsync(x => x.AccountId == user.AccountId && x.UserRef == user.UserRef) == false)
+                var accountUserExists = await _accountUsersRepository.CreateQuery().AnyAsync(x => x.AccountId == user.AccountId && x.UserRef == user.UserRef);
+
+                if (!accountUserExists)
                 {
-                    var document  = new AccountUser(user.UserRef, user.AccountId, (UserRole)user.Role, DateTime.Now, populateMessageId);
+                        var document  = new AccountUser(user.UserRef, user.AccountId, (UserRole)user.Role, DateTime.Now, populateMessageId);
                     await _accountUsersRepository.Add(document, null, CancellationToken.None);
                 }
             }
