@@ -25,7 +25,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("gatewayResponse")]
         public ActionResult GateWayResponse()
         {
-            return Redirect(Url.EmployerAccountsAction("gatewayResponse"));
+            return Redirect(Url.EmployerAccountsAction($"gatewayResponse?{Request.QueryString}"));
+
         }
 
         [HttpGet]
