@@ -7,7 +7,10 @@ using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
 {
-    [TestFixture]
+    // Removed as test now obsolete
+    // Retain source for now so this file merges
+    // [TestFixture]
+
     public class WhenIGetLegalEntitiesWithUnknownIds
     {
         private ApiIntegrationTester _tester;
@@ -24,7 +27,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
             _tester.Dispose();
         }
 
-        [Test]
+        //[Test]
         public async Task ThenTheStatusShouldBeNotFound_ByHashedId()
         {
             // Arrange
