@@ -250,6 +250,8 @@
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="ModelBuilders\TestModelBuilder.cs" />
+    <Compile Include="LegalEntitiesControllerTests\WhenIGetASingleLegalEntityWithKnownIds.cs" />
+    <Compile Include="LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithUnknownIds.cs" />
     <Compile Include="TestUtils\ApiTester\ApiIntegrationTester.cs" />
     <Compile Include="TestUtils\ApiTester\CallRequirements.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponse.cs" />
