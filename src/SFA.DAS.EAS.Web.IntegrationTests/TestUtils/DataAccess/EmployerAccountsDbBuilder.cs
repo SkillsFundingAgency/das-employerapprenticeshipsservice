@@ -153,12 +153,5 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
 
             _dbContext.Database.CurrentTransaction.Rollback();
         }
-
-        public void Dispose()
-        {
-            if (!HasTransaction) return;
-
-            _dbContext.Database.CurrentTransaction.Dispose();
-        }
     }
 }

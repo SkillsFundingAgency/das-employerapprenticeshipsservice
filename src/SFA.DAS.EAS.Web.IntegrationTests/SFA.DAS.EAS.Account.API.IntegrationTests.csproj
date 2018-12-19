@@ -249,6 +249,7 @@
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountOutput.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountSetup.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\LegalEntityWithAgreementSetUp.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\PaymentSetup.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\UserSetUp.cs" />
     <Compile Include="TestUtils\DataAccess\IDbBuilder.cs" />
     <Compile Include="TestUtils\DataAccess\DbDtoBuilderExtensions.cs" />

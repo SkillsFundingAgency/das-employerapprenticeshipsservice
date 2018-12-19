@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using AutoFixture;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
+using SFA.DAS.EAS.Domain.Models.Payments;
 
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
@@ -26,6 +28,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
 
         public EmployerAccountSetup CurrentAccount => CurrentUser.Accounts.Last();
         public bool HasCurrentAccount => HasCurrentUser && _users.Last().Accounts.Count > 0;
+        public List<PaymentSetup> Payments { get; set; }
 
         public TestModelBuilder()
         {
@@ -99,6 +102,29 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
 
             currentAccount.LegalEntities.Add(legalEntitySetup);
 
+            return this;
+        }
+
+        internal TestModelBuilder WithNewPayment()
+        {
+            var paymentDetails = _fixture
+                .Build<PaymentDetails>()
+                .With(details => details.CollectionPeriodId, "R05")
+                // could put sanitised collection period and delivery period values in for mth and year
+                .With(details => details.PeriodEnd, "R12")
+                .With(details => details.EmployerAccountVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4, 10)}")
+                .With(details => details.ApprenticeshipVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4, 10)}")
+                .Without(details => details.FrameworkCode)
+                .Without(details => details.PathwayCode)
+                .Without(details => details.PathwayName)
+                .Create();
+
+            var paymentSetup = new PaymentSetup
+            {
+                PaymentInput = paymentDetails
+            };
+            Payments.Add(paymentSetup);
+            
             return this;
         }
     }
