@@ -156,20 +156,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId)
-        {
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@accountId", accountId, DbType.Int64);
-
-            var result = await _db.Value.Database.Connection.QueryAsync<RemoveEmployerAgreementView>(
-                sql: "[employer_account].[GetEmployerAgreementsToRemove_ByAccountId]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
-
-            return result.ToList();
-        }
 
         public Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId)
         {

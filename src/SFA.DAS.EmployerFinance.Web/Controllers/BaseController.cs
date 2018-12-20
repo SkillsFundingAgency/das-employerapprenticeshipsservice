@@ -1,8 +1,4 @@
 ﻿using SFA.DAS.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
@@ -11,14 +7,9 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     {
         public IAuthenticationService OwinWrapper;
         
-        //private readonly IMultiVariantTestingService _multiVariantTestingService;
-        //private readonly ICookieStorageService<FlashMessageViewModel> _flashMessage;
-
-        public BaseController(IAuthenticationService owinWrapper/*, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage*/)
+        public BaseController(IAuthenticationService owinWrapper)
         {
             OwinWrapper = owinWrapper;
-            //_multiVariantTestingService = multiVariantTestingService;
-            //_flashMessage = flashMessage;
         }
     }
 }

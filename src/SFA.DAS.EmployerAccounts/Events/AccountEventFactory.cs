@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types.Events.Account;
+﻿using SFA.DAS.EmployerAccounts.Events.Account;
 
 namespace SFA.DAS.EmployerAccounts.Events
 {
