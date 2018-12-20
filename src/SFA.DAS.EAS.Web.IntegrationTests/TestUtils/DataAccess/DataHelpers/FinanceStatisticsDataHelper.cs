@@ -11,6 +11,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
     public class FinanceStatisticsDataHelper
     {
         private const string ServiceName = "SFA.DAS.LevyAggregationProvider";
+        private const string GetStatisticsSql = @"select count(0) as TotalPayments from employer_financial.Payment;";
+
         private readonly LevyDeclarationProviderConfiguration _configuration;
 
         public FinanceStatisticsDataHelper()
@@ -22,11 +24,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
         {
             using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
             {
-                return await connection.QuerySingleAsync<StatisticsViewModel>(Sql);
+                return await connection.QuerySingleAsync<StatisticsViewModel>(GetStatisticsSql);
             }
         }
 
-        public async Task CreateFinanceStatistics()//todo change this to use existing code
+        public async Task CreateFinanceStatistics()
         {
             var dbBuilderRuntime = new DbBuilderRuntime();
             await dbBuilderRuntime.RunDbBuilder<EmployerFinanceDbBuilder>(async builder =>
@@ -36,9 +38,5 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
                 await builder.SetupDataAsync(data);
             });
         }
-
-        private const string Sql = @"
-select count(0) as TotalPayments
-from employer_financial.Payment;";
     }
 }

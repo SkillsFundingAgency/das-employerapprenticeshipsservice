@@ -11,6 +11,22 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
     internal class AccountStatisticsDataHelper
     {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
+        private const string GetStatisticsSql = @"
+select (
+  select count(0)
+  from employer_account.Account
+) as TotalAccounts, (
+  select count(0)
+  from employer_account.LegalEntity
+) as TotalLegalEntities, (
+  select count(0)
+  from employer_account.Paye
+) as TotalPayeSchemes, (
+  select count(0)
+  from employer_account.EmployerAgreement a
+  where a.StatusId = 2 -- signed
+) as TotalAgreements;";
+
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
         
         public AccountStatisticsDataHelper()
@@ -37,21 +53,5 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
                 await builder.SetupDataAsync(data);
             });
         }
-
-        private const string GetStatisticsSql = @"
-select (
-  select count(0)
-  from employer_account.Account
-) as TotalAccounts, (
-  select count(0)
-  from employer_account.LegalEntity
-) as TotalLegalEntities, (
-  select count(0)
-  from employer_account.Paye
-) as TotalPayeSchemes, (
-  select count(0)
-  from employer_account.EmployerAgreement a
-  where a.StatusId = 2 -- signed
-) as TotalAgreements;";
     }
 }

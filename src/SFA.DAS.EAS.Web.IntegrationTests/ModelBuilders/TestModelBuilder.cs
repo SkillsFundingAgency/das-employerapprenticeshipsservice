@@ -111,7 +111,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
             var paymentDetails = _fixture
                 .Build<PaymentDetails>()
                 .With(details => details.CollectionPeriodId, "R05")
-                // could put sanitised collection period and delivery period values in for mth and year
+                /* could put sanitised collection period and delivery period values in for mth and year.
+                   currently they are populated randomly by autofixture (which can be extended to have a month generator)
+                   which results in values for month such as 345.
+                 */
                 .With(details => details.PeriodEnd, "R12")
                 .With(details => details.EmployerAccountVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4, 10)}")
                 .With(details => details.ApprenticeshipVersion, $"ver-{DateTime.Now.Ticks.ToString().Substring(4, 10)}")
