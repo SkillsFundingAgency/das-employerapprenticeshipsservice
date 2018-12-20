@@ -42,6 +42,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
             headerBuilder.Append("Unique learner number,");
             headerBuilder.Append("Apprentice,");
             headerBuilder.Append("Apprenticeship training course,");
+            headerBuilder.Append("Course level,");
             headerBuilder.Append("Paid from levy,");
             headerBuilder.Append("Your contribution,");
             headerBuilder.Append("Government contribution,");
@@ -64,7 +65,8 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
                 builder.Append($"{transaction.TrainingProvider},");
                 builder.Append($"{transaction.Uln},");
                 builder.Append($"{transaction.Apprentice},");
-                builder.Append($"{transaction.ApprenticeTrainingCourse}{transaction.ApprenticeTrainingCourseLevel},");
+                builder.Append($"{transaction.ApprenticeTrainingCourse},");
+                builder.Append($"{transaction.ApprenticeTrainingCourseLevel},");
                 builder.Append($"{transaction.PaidFromLevyFormatted},");
                 builder.Append($"{transaction.EmployerContributionFormatted},");
                 builder.Append($"{transaction.GovermentContributionFormatted},");
