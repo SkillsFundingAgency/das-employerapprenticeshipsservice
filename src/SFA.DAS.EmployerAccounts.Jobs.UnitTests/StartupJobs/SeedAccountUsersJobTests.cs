@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -9,36 +10,37 @@ using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.Data;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
-using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
+using SFA.DAS.Testing.EntityFramework;
 using IMembershipRepository = SFA.DAS.EmployerAccounts.Jobs.Data.IMembershipRepository;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 {
     [TestFixture]
     [Parallelizable]
-    public class SeedAccountUsersJobTests : FluentTest<SeedAccountUsersJobTestsFixture>
+    public class SeedAccountUsersJobTests : Testing.FluentTest<SeedAccountUsersJobTestsFixture>
     {
         [Test]
         public Task Run_WhenRunningAfterJobHasSuccessfullyCompleted_ThenShouldImmediatelyReturnAndDoNoUpdatesOrQueries()
         {
             return TestAsync(f => f.SetJobAsAlreadyRun(),
-                f => f.Run(), f => f.VerifyUserQueryNotRun().VerifyMarkAsPopulatedNotRun());
+                f => f.Run(), f => f.VerifyUserQueryNotRun().VerifyJobWasNotAddedAgain());
         }
 
         [Test]
         public Task Run_WhenRunningJobFirstTime_ThenShouldQueryForUsers()
         {
-            return TestAsync(f => f.Run(), f => f.VerifyUserQueryWasRun());
+            return TestAsync(f => f.Run(), f => f.VerifyJobWasNotAdded());
         }
 
         [Test]
         public Task Run_WhenRunningJobFirstTime_ThenShouldMarkJobAsPopulated()
         {
-            return TestAsync(f => f.Run(), f => f.VerifyMarkAsPopulatedWasRun());
+            return TestAsync(f => f.Run(), f => f.VerifyJobWasAdded());
         }
 
         [Test]
@@ -60,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
     {
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
         internal Mock<IMembershipRepository> MembershipRepository { get; set; }
-        internal Mock<IJobHistoryRepository> JobHistoryRepository { get; set; }
+        internal Mock<JobDbContext> JobDbContext { get; set; }
         public Mock<ILogger> Logger { get; set; }
 
         public ICollection<MembershipUser> Users = new List<MembershipUser>();
@@ -72,6 +74,9 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
 
+        private readonly List<Job> _jobsList = new List<Job>();
+        private readonly DbSetStub<Job> _jobsDbSet;
+
         public SeedAccountUsersJobTestsFixture()
         {
             AccountUsersRepository = new Mock<IAccountUsersRepository>();
@@ -80,13 +85,15 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             MembershipRepository = new Mock<IMembershipRepository>();
             MembershipRepository.Setup(x => x.GetAllAccountUsers()).ReturnsAsync(Users);
 
-            JobHistoryRepository = new Mock<IJobHistoryRepository>();
+            _jobsDbSet = new DbSetStub<Job>(_jobsList);
+            JobDbContext = new Mock<JobDbContext>();
+            JobDbContext.Setup(x => x.Jobs).Returns(_jobsDbSet);
 
             Logger = new Mock<ILogger>();
 
             SeedAccountUsersJob =
-                new SeedAccountUsersJob(AccountUsersRepository.Object, MembershipRepository.Object, 
-                    JobHistoryRepository.Object, Logger.Object);
+                new SeedAccountUsersJob(AccountUsersRepository.Object, MembershipRepository.Object,
+                    new Lazy<JobDbContext>(() => JobDbContext.Object), Logger.Object);
         }
 
         public Task Run()
@@ -96,8 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
 
         public SeedAccountUsersJobTestsFixture SetJobAsAlreadyRun()
         {
-            JobHistoryRepository.Setup(x => x.HasJobRun(_jobName)).ReturnsAsync(true);
-
+            _jobsList.Add(new Job(_jobName, DateTime.UtcNow));
             return this;
         }
 
@@ -151,15 +157,35 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
             return this;
         }
 
-        public SeedAccountUsersJobTestsFixture VerifyMarkAsPopulatedNotRun()
+        public SeedAccountUsersJobTestsFixture VerifyJobWasAdded()
         {
-            JobHistoryRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Never);
+            var jobs = JobDbContext.Object.Jobs;
+            if (jobs.Count(x=>x.Name == _jobName) == 1)
+            {
+                throw new Exception($"Expecting '{_jobName}' to have been added");
+            }
 
             return this;
         }
-        public SeedAccountUsersJobTestsFixture VerifyMarkAsPopulatedWasRun()
+
+        public SeedAccountUsersJobTestsFixture VerifyJobWasNotAdded()
         {
-            JobHistoryRepository.Verify(x => x.MarkJobAsRan(_jobName), Times.Once);
+            var jobs = JobDbContext.Object.Jobs;
+            if (jobs.Count(x => x.Name == _jobName) != 0)
+            {
+                throw new Exception($"Not Expecting '{_jobName}' to have been added");
+            }
+
+            return this;
+        }
+
+        public SeedAccountUsersJobTestsFixture VerifyJobWasNotAddedAgain()
+        {
+            var jobs = JobDbContext.Object.Jobs;
+            if (jobs.Count(x => x.Name == _jobName) != 1)
+            {
+                throw new Exception($"Expecting '{_jobName}' to have been added again");
+            }
 
             return this;
         }

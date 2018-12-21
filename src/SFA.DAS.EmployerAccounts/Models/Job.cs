@@ -9,9 +9,8 @@ namespace SFA.DAS.EmployerAccounts.Models
         public string Name { get; private set; }
         public DateTime Completed { get; private set; }
 
-        public Job(int id, string name, DateTime completed)
+        public Job(string name, DateTime completed)
         {
-            Id = id;
             Name = name;
             Completed = completed;
         }
