@@ -18,6 +18,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
 
         protected const string ApprenticePrefix = "Apprentice";
         protected const string ApprenticeTrainingCoursePrefix = "ApprenticeTrainingCoursePrefix";
+        protected const string ApprenticeTrainingCourseLevel = "666";
         protected const string EmpRefPrefix = "EmpRef";
         protected const string PeriodEndPrefix = "PeriodEnd";
         protected const string TrainingProviderPrefix = "TrainingProvider";
@@ -33,6 +34,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
                 DateCreated = DateTime.Today.AddMonths(-1),
                 Apprentice = $"{ApprenticePrefix}1",
                 ApprenticeTrainingCourse = $"{ApprenticeTrainingCoursePrefix}1",
+                ApprenticeTrainingCourseLevel = $"{ApprenticeTrainingCourseLevel}1",
                 EmployerContribution = 1,
                 PayeScheme = $"{EmpRefPrefix}1",
                 PeriodEnd = $"{PeriodEndPrefix}1",
@@ -52,6 +54,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
                 DateCreated = DateTime.Today.AddMonths(-2),
                 Apprentice = $"{ApprenticePrefix}2",
                 ApprenticeTrainingCourse = $"{ApprenticeTrainingCoursePrefix}2",
+                ApprenticeTrainingCourseLevel = $"{ApprenticeTrainingCourseLevel}2",
                 EmployerContribution = 2,
                 PayeScheme = $"{EmpRefPrefix}2",
                 PeriodEnd = $"{PeriodEndPrefix}2",
@@ -71,6 +74,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
                 DateCreated = DateTime.Today.AddMonths(-3),
                 Apprentice = $"{ApprenticePrefix}3",
                 ApprenticeTrainingCourse = $"{ApprenticeTrainingCoursePrefix}3",
+                ApprenticeTrainingCourseLevel = $"{ApprenticeTrainingCourseLevel}3",
                 EmployerContribution = 3,
                 PayeScheme = $"{EmpRefPrefix}3",
                 PeriodEnd = $"{PeriodEndPrefix}3",

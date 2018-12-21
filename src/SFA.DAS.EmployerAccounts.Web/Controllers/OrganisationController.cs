@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.Authentication;
@@ -37,22 +37,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _logger = logger;
         }
 
+
+
         [HttpGet]
         [Route("nextStep")]
-        public ActionResult OrganisationAddedNextSteps(
-            string organisationName, string hashedAccountId)
+        public async Task<ActionResult> OrganisationAddedNextSteps(string organisationName, string hashedAccountId, string hashedAgreementId)
         {
-            return Redirect(Url.LegacyEasAccountAction($"organisations/nextStep?organisationName={organisationName}"));
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+
+            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
+
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+
+            return View(viewModel);
         }
 
         [HttpGet]
         [Route("nextStepSearch")]
-        public ActionResult OrganisationAddedNextStepsSearch(
-            string organisationName, string hashedAccountId, string hashedAgreementId)
+        public async Task<ActionResult> OrganisationAddedNextStepsSearch(string organisationName, string hashedAccountId, string hashedAgreementId)
         {
-            return Redirect(Url.LegacyEasAccountAction($"organisations/nextStepSearch?organisationName={organisationName}&hashedAgreementId={hashedAgreementId}"));
-        }
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
+            var viewModel = await _orchestrator.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, hashedAgreementId);
+
+            viewModel.FlashMessage = GetFlashMessageViewModelFromCookie();
+
+            return View(ControllerConstants.OrganisationAddedNextStepsViewName, viewModel);
+        }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -103,6 +114,115 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
                 });
 
+        }
+
+        [HttpPost]
+        [Route("nextStep")]
+        public async Task<ActionResult> GoToNextStep(string nextStep, string hashedAccountId, string organisationName, string hashedAgreementId)
+        {
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+
+            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
+
+            switch (nextStep)
+            {
+                case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreement, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
+
+                case "teamMembers": return RedirectToAction(ControllerConstants.ViewTeamActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
+
+                case "addOrganisation": return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName, new { hashedAccountId });
+
+                case "dashboard": return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
+
+                default:
+                    var errorMessage = "Please select one of the next steps below";
+                    return View(ControllerConstants.OrganisationAddedNextStepsViewName, new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+                    {
+                        Data = new OrganisationAddedNextStepsViewModel { ErrorMessage = errorMessage, OrganisationName = organisationName, ShowWizard = userShownWizard, HashedAgreementId = hashedAgreementId },
+                        FlashMessage = new FlashMessageViewModel
+                        {
+                            Headline = "Invalid next step chosen",
+                            Message = errorMessage,
+                            ErrorMessages = new Dictionary<string, string> { { "nextStep", errorMessage } },
+                            Severity = FlashMessageSeverityLevel.Error
+                        }
+                    });
+            }
+        }
+
+        [HttpGet]
+        [Route("review")]
+        public async Task<ActionResult> Review(string hashedAccountId, string accountLegalEntityPublicHashedId)
+        {
+            var viewModel = await _orchestrator.GetRefreshedOrganisationDetails(accountLegalEntityPublicHashedId);
+
+            if ((viewModel.Data.UpdatesAvailable & OrganisationUpdatesAvailable.Any) != 0)
+            {
+                return View(viewModel);
+            }
+
+            return View("ReviewNoChange", viewModel);
+        }
+
+        [HttpPost]
+        [Route("review")]
+        public async Task<ActionResult> ProcessReviewSelection(
+            string updateChoice,
+            string hashedAccountId,
+            string accountLegalEntityPublicHashedId,
+            string organisationName,
+            string organisationAddress,
+            string dataSourceFriendlyName)
+        {
+            switch (updateChoice)
+            {
+                case "update":
+
+                    var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+
+                    var response = await _orchestrator.UpdateOrganisation(
+                        accountLegalEntityPublicHashedId,
+                        organisationName,
+                        organisationAddress, hashedAccountId, userId);
+
+                    return View(ControllerConstants.OrganisationUpdatedNextStepsActionName, response);
+
+                case "incorrectDetails":
+                    return View("ReviewIncorrectDetails", new IncorrectOrganisationDetailsViewModel { DataSourceFriendlyName = dataSourceFriendlyName });
+
+            }
+
+            return RedirectToAction("Details", "EmployerAgreement");
+        }
+
+        [HttpPost]
+        [Route("PostUpdateSelection")]
+        public ActionResult GoToPostUpdateSelection(string nextStep, string hashedAccountId)
+        {
+            switch (nextStep)
+            {
+                case "dashboard":
+                    return RedirectToAction("Index", "EmployerAgreement");
+
+                case "homepage":
+                    return RedirectToAction("Index", "Home");
+
+                default:
+                    var errorMessage = "Please select one of the next steps below";
+
+                    return View(ControllerConstants.OrganisationUpdatedNextStepsActionName,
+                        new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
+                        {
+                            Data = new OrganisationUpdatedNextStepsViewModel { ErrorMessage = errorMessage, HashedAccountId = hashedAccountId },
+                            FlashMessage = new FlashMessageViewModel
+                            {
+                                Headline = "Invalid next step chosen",
+                                Message = errorMessage,
+                                ErrorMessages = new Dictionary<string, string> { { "nextStep", errorMessage } },
+                                Severity = FlashMessageSeverityLevel.Error
+                            }
+                        });
+            }
         }
     }
 }

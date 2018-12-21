@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
         private static readonly string [] HeaderRow = {
             "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Levy declared",
             "English %", "10% top up", "Training provider", "Unique learner number",
-            "Apprentice", "Apprenticeship training course", "Paid from levy", "Your contribution",
+            "Apprentice", "Apprenticeship training course", "Course level", "Paid from levy", "Your contribution",
             "Government contribution", "Total"
         };
         private readonly IExcelService _excelService;
@@ -42,6 +42,7 @@ namespace SFA.DAS.EAS.Application.Formatters.TransactionDowloads
                 transaction.Uln,
                 transaction.Apprentice,
                 transaction.ApprenticeTrainingCourse,
+                transaction.ApprenticeTrainingCourseLevel,
                 transaction.PaidFromLevyFormatted,
                 transaction.EmployerContributionFormatted,
                 transaction.GovermentContributionFormatted,

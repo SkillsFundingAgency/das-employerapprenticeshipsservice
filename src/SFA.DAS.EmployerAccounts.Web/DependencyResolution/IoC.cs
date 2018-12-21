@@ -38,8 +38,10 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
+                c.AddRegistry<ValidationRegistry>();
 
                 c.AddRegistry<DefaultRegistry>();
             });

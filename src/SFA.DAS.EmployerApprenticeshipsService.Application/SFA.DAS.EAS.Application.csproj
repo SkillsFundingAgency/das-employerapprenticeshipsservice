@@ -331,14 +331,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommand.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandHandler.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityCommandResponse.cs" />
-    <Compile Include="Commands\CreateLegalEntity\CreateLegalEntityValidator.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressHandler.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressRequest.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressResponse.cs" />
-    <Compile Include="Commands\CreateOrganisationAddress\CreateOrganisationAddressValidator.cs" />
     <Compile Include="Extensions\AddressExtensions.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
@@ -347,13 +339,7 @@
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
-    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommand.cs" />
-    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandHandler.cs" />
-    <Compile Include="Commands\CreateEmployerAgreement\CreateEmployerAgreementCommandValidator.cs" />
     <Compile Include="DependencyResolution\ApprenticeshipLevyRegistry.cs" />
-    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsCommandHandler.cs" />
-    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsCommand.cs" />
-    <Compile Include="Commands\UpdateOrganisationDetails\UpdateOrganisationDetailsCommandValidator.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
@@ -390,14 +376,6 @@
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
     <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsQuery.cs" />
     <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsResponse.cs" />
-    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdQueryHandler.cs" />
-    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdRequest.cs" />
-    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdResponse.cs" />
-    <Compile Include="Queries\GetOrganisationById\GetOrganisationByIdValidator.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefHandler.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefResponse.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefValidator.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQuery.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
@@ -439,9 +417,6 @@
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandValidator.cs" />
     <Compile Include="Commands\ResolveRequestedChanges\ResolveRequestedChangesCommand.cs" />
     <Compile Include="Commands\ResolveRequestedChanges\ResolveRequestedChangesHandler.cs" />
-    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommand.cs" />
-    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandHandler.cs" />
-    <Compile Include="Commands\RemoveLegalEntity\RemoveLegalEntityCommandValidator.cs" />
     <Compile Include="Commands\SendTransferConnectionInvitation\SendTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommand.cs" />
     <Compile Include="Commands\UpdateShowWizard\UpdateShowAccountWizardCommandHandler.cs" />
@@ -449,15 +424,9 @@
     <Compile Include="Commands\AuditCommand\CreateAuditCommand.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandHandler.cs" />
     <Compile Include="Commands\AuditCommand\CreateAuditCommandValidator.cs" />
-    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommand.cs" />
-    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandHandler.cs" />
-    <Compile Include="Commands\CreateEmployerAgreementTemplate\CreateEmployerAgreementTemplateCommandValidator.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommand.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandHandler.cs" />
     <Compile Include="Commands\PublishGenericEvent\PublishGenericEventCommandResponse.cs" />
-    <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommand.cs" />
-    <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandHandler.cs" />
-    <Compile Include="Commands\SignEmployerAgreement\SignEmployerAgreementCommandValidator.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
@@ -473,12 +442,8 @@
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
     <Compile Include="Factories\LevyEventFactory.cs" />
-    <Compile Include="Factories\AccountEventFactory.cs" />
-    <Compile Include="Factories\EmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\GenericEventFactory.cs" />
     <Compile Include="Factories\ILevyEventFactory.cs" />
-    <Compile Include="Factories\IAccountEventFactory.cs" />
-    <Compile Include="Factories\IEmployerAgreementEventFactory.cs" />
     <Compile Include="Factories\IGenericEventFactory.cs" />
     <Compile Include="Factories\ILegalEntityEventFactory.cs" />
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />
@@ -531,14 +496,6 @@
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQuery.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQueryHandler.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesResponse.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveRequest.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveResponse.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementRemove\GetAccountEmployerAgreementRemoveValidator.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveRequest.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveResponse.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementsRemove\GetAccountEmployerAgreementsRemoveValidator.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
     <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />
@@ -563,25 +520,20 @@
     <Compile Include="Formatters\TransactionDowloads\DownloadFormatType.cs" />
     <Compile Include="Formatters\TransactionDowloads\ExcelTransactionFormatter.cs" />
     <Compile Include="Formatters\TransactionDowloads\ITransactionFormatter.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfQueryHandler.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfResponse.cs" />
-    <Compile Include="Queries\GetEmployerAgreementPdf\GetEmployerAgreementPdfValidator.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestHandler.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestValidator.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdResponse.cs" />
-    <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementQueryValidator.cs" />
     <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitation\GetLatestPendingReceivedTransferConnectionInvitationQuery.cs" />
     <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitation\GetLatestPendingReceivedTransferConnectionInvitationQueryHandler.cs" />
     <Compile Include="Queries\GetLatestPendingReceivedTransferConnectionInvitation\GetLatestPendingReceivedTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodRequest.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodResponse.cs" />
-    <Compile Include="Queries\GetOrganisations\GetOrganisationsQueryHandler.cs" />
-    <Compile Include="Queries\GetOrganisations\GetOrganisationsRequest.cs" />
-    <Compile Include="Queries\GetOrganisations\GetOrganisationsResponse.cs" />
-    <Compile Include="Queries\GetOrganisations\GetOrganisationsValidator.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefHandler.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefResponse.cs" />
+    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefValidator.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdResponse.cs" />
@@ -604,9 +556,6 @@
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountValidator.cs" />
-    <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementQueryHandler.cs" />
-    <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreement\GetEmployerAgreementResponse.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationQueryHandler.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationRequest.cs" />
     <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />
@@ -649,10 +598,6 @@
     <Compile Include="Queries\GetReceivedTransferConnectionInvitation\GetReceivedTransferConnectionInvitationQuery.cs" />
     <Compile Include="Queries\GetReceivedTransferConnectionInvitation\GetReceivedTransferConnectionInvitationResponse.cs" />
     <Compile Include="Queries\GetSentTransferConnectionInvitation\GetSentTransferConnectionInvitationResponse.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfQueryHandler.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfRequest.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfResponse.cs" />
-    <Compile Include="Queries\GetSignedEmployerAgreementPdf\GetSignedEmployerAgreementPdfValidator.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamUserHandler.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamMemberQuery.cs" />
     <Compile Include="Queries\GetTeamUser\GetTeamMemberResponse.cs" />
@@ -712,6 +657,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
       <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
       <Name>SFA.DAS.EmployerAccounts.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
