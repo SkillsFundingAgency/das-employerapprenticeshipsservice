@@ -4,6 +4,7 @@ using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.Jobs.OneOffJobs;
 
 namespace SFA.DAS.EmployerAccounts.Jobs
 {

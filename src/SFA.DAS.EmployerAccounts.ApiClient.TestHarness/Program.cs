@@ -26,10 +26,15 @@ namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness
                 try
                 {
                     var apiClient = container.GetInstance<IEmployerAccountsApiClient>();
-                    var hasRoleRequest = new IsUserInRoleRequest { AccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f"), Roles = new HashSet<UserRole>{ UserRole.Owner }};
-                    var response = await apiClient.IsUserInRole(hasRoleRequest, CancellationToken.None);
+                    var userInRoleRequest = new IsUserInRoleRequest { AccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f"), Roles = new HashSet<UserRole>{ UserRole.Owner } } ;
+                    var inroleResponse = await apiClient.IsUserInRole(userInRoleRequest, CancellationToken.None);
 
-                    Console.WriteLine("IsUserInRole: " + response);
+                    Console.WriteLine("IsUserInRole: " + inroleResponse);
+
+                    var anyRoleRequest = new IsUserInAnyRoleRequest { AccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f") };
+                    var response = await apiClient.IsUserInAnyRole(anyRoleRequest, CancellationToken.None);
+
+                    Console.WriteLine("IsUserAnyRole: " + response);
                 }
                 catch (Exception exception)
                 {
