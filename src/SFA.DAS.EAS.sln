@@ -168,6 +168,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.AcceptanceTests", "SFA.DAS.EmployerFinance.AcceptanceTests\SFA.DAS.EmployerFinance.AcceptanceTests.csproj", "{BA502A04-A41F-418E-80A5-74F264CF0FBA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.TestCommon", "SFA.DAS.EmployerAccounts.TestCommon\SFA.DAS.EmployerAccounts.TestCommon.csproj", "{87D578C3-4624-4260-8B19-0BC248117358}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.ReadStore", "SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj", "{51F0BA52-DCCD-4E6A-9F84-3BDFD501A06B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Types", "SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj", "{D3AA1CAA-4367-48A2-B796-FC392B9BEC49}"
