@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
@@ -36,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
 
         public async Task MigrateUsers()
         {
-            var users = _db.Value.Memberships.Include("User").AsEnumerable().ToList();
+            var users = _db.Value.Memberships.Include("User").Where(x=>x.Role != Role.None).AsEnumerable().ToList();
 
             _logger.LogInformation("Migrating users into the read store"); 
 

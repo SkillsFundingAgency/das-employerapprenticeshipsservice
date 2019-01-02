@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
         {
             _logger.LogInformation($"RunOnceJob '{jobName}' started");
 
-            if (await _db.Value.RunOnceJobs.AnyAsync()) // j=>j.Name == _jobName))
+            if (await _db.Value.RunOnceJobs.AnyAsync(j=>j.Name == jobName))
             {
                 _logger.LogInformation($"Job '{jobName}' has already been run");
                 return;

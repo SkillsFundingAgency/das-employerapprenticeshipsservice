@@ -1,192 +1,127 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Threading;
-//using System.Threading.Tasks;
-//using Microsoft.Extensions.Logging;
-//using Moq;
-//using NUnit.Framework;
-//using SFA.DAS.CosmosDb.Testing;
-//using SFA.DAS.EmployerAccounts.Data;
-//using SFA.DAS.EmployerAccounts.Jobs.Data;
-//using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
-//using SFA.DAS.EmployerAccounts.Models;
-//using SFA.DAS.EmployerAccounts.ReadStore.Data;
-//using SFA.DAS.EmployerAccounts.ReadStore.Models;
-//using SFA.DAS.EmployerAccounts.Types.Models;
-//using SFA.DAS.Testing.Builders;
-//using SFA.DAS.Testing.EntityFramework;
-//using IMembershipRepository = SFA.DAS.EmployerAccounts.Jobs.Data.IMembershipRepository;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.Authorization;
+using SFA.DAS.CosmosDb.Testing;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.ReadStore.Data;
+using SFA.DAS.EmployerAccounts.ReadStore.Models;
+using SFA.DAS.EmployerAccounts.Types.Models;
+using SFA.DAS.Testing;
+using SFA.DAS.Testing.Builders;
+using SFA.DAS.Testing.EntityFramework;
 
-//namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
-//{
-//    [TestFixture]
-//    [Parallelizable]
-//    public class SeedAccountUsersJobTests : Testing.FluentTest<SeedAccountUsersJobTestsFixture>
-//    {
-//        [Test]
-//        public Task Run_WhenRunningAfterJobHasSuccessfullyCompleted_ThenShouldImmediatelyReturnAndDoNoUpdatesOrQueries()
-//        {
-//            return TestAsync(f => f.SetJobAsAlreadyRun(),
-//                f => f.Run(), f => f.VerifyUserQueryNotRun().VerifyJobWasNotAddedAgain());
-//        }
+namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
+{
+    [TestFixture]
+    [Parallelizable]
+    public class SeedAccountUsersJobTests : FluentTest<SeedAccountUsersJobTestsFixture>
+    {
+        [Test]
+        public Task Run_WhenRunningJob_ThenShouldAddUsersWhichHaveRealRolesAndIgnoreThoseSetToNone()
+        {
+            return TestAsync(f => f.Run(),
+                f => f.VerifyAddDocumentWasRun(2).VerifyUserWasMappedCorrectly(f.UserOwnerRole).VerifyUserWasMappedCorrectly(f.UserTranasactorRole));
+        }
 
-//        [Test]
-//        public Task Run_WhenRunningJobFirstTime_ThenShouldQueryForUsers()
-//        {
-//            return TestAsync(f => f.Run(), f => f.VerifyJobWasNotAdded());
-//        }
+        [Test]
+        public Task Run_WhenRunningJobFirstTimeAndWeFindTheFirstIsAlreadyInReadStore_ThenShouldAddTransactorUserOnly()
+        {
+            return TestAsync(f => f.AddUserOwnerRoleToReadStore(), f => f.Run(),
+                f => f.VerifyAddDocumentWasRun(1).VerifyUserWasMappedCorrectly(f.UserTranasactorRole));
+        }
 
-//        [Test]
-//        public Task Run_WhenRunningJobFirstTime_ThenShouldMarkJobAsPopulated()
-//        {
-//            return TestAsync(f => f.Run(), f => f.VerifyJobWasAdded());
-//        }
-
-//        [Test]
-//        public Task Run_WhenRunningJobFirstTimeAndWeFindTwoNewUsers_ThenShouldAddEachUser()
-//        {
-//            return TestAsync(f => f.CreateTwoNewUsers(), f => f.Run(), 
-//                f => f.VerifyAddDocumentWasRun(2).VerifyUserWasMappedCorrectly(f.NewUser1).VerifyUserWasMappedCorrectly(f.NewUser2));
-//        }
-
-//        [Test]
-//        public Task Run_WhenRunningJobFirstTimeAndWeFindTwoUsersButFirstIsAlreadyInReadStore_ThenShouldAddSecondUserOnly()
-//        {
-//            return TestAsync(f => f.CreateTwoNewUsers().AddFirstUserToReadStore(), f => f.Run(),
-//                f => f.VerifyAddDocumentWasRun(1).VerifyUserWasMappedCorrectly(f.NewUser2));
-//        }
-//    }
-
-//    public class SeedAccountUsersJobTestsFixture
-//    {
-//        internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
-//        internal Mock<IMembershipRepository> MembershipRepository { get; set; }
-//        internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
-//        public Mock<ILogger> Logger { get; set; }
-
-//        public ICollection<MembershipUser> Users = new List<MembershipUser>();
-//        internal ICollection<AccountUser> ReadStoreUsers = new List<AccountUser>();
-
-//        public MembershipUser NewUser1 = new MembershipUser { AccountId = 1100, Role = 1, UserId = 1111, UserRef = Guid.NewGuid() };
-//        public MembershipUser NewUser2 = new MembershipUser { AccountId = 2100, Role = 2, UserId = 2222, UserRef = Guid.NewGuid() };
-//        internal SeedAccountUsersJob SeedAccountUsersJob { get; set; }
-
-//        private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
-
-//        private readonly List<RunOnceJob> _jobsList = new List<RunOnceJob>();
-//        private readonly DbSetStub<RunOnceJob> _jobsDbSet;
-
-//        public SeedAccountUsersJobTestsFixture()
-//        {
-//            AccountUsersRepository = new Mock<IAccountUsersRepository>();
-//            AccountUsersRepository.SetupInMemoryCollection(ReadStoreUsers);
-
-//            MembershipRepository = new Mock<IMembershipRepository>();
-//            MembershipRepository.Setup(x => x.GetAllAccountUsers()).ReturnsAsync(Users);
-
-//            _jobsDbSet = new DbSetStub<RunOnceJob>(_jobsList);
-//            EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
-//            EmployerAccountsDbContext.Setup(x => x.RunOnceJobs).Returns(_jobsDbSet);
-
-//            Logger = new Mock<ILogger>();
-
-//            SeedAccountUsersJob =
-//                new SeedAccountUsersJob(AccountUsersRepository.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
-//        }
-
-//        public Task Run()
-//        {
-//            return SeedAccountUsersJob.Run();
-//        }
-
-//        public SeedAccountUsersJobTestsFixture SetJobAsAlreadyRun()
-//        {
-//            _jobsList.Add(new RunOnceJob(_jobName, DateTime.UtcNow));
-//            return this;
-//        }
-
-//        public SeedAccountUsersJobTestsFixture CreateTwoNewUsers()
-//        {
-//            Users.Add(NewUser1);
-//            Users.Add(NewUser2);
-
-//            return this;
-//        }
-
-//        public SeedAccountUsersJobTestsFixture AddFirstUserToReadStore()
-//        {
-//            ReadStoreUsers.Add(ObjectActivator.CreateInstance<AccountUser>()
-//                .Set(x=>x.UserRef, NewUser1.UserRef)
-//                .Set(x=>x.AccountId, NewUser1.AccountId));
-
-//            return this;
-//        }
-
-//        public SeedAccountUsersJobTestsFixture VerifyUserQueryNotRun()
-//        {
-//            MembershipRepository.Verify(x => x.GetAllAccountUsers(), Times.Never);
-
-//            return this;
-//        }
-
-//        public SeedAccountUsersJobTestsFixture VerifyAddDocumentWasRun(short times)
-//        {
-//            AccountUsersRepository.Verify(x => x.Add(It.IsAny<AccountUser>(), null, CancellationToken.None), Times.Exactly(times));
-
-//            return this;
-//        }
-
-//        public SeedAccountUsersJobTestsFixture VerifyUserWasMappedCorrectly(MembershipUser user)
-//        {
-//            AccountUsersRepository.Verify(x => x.Add(It.Is<AccountUser>(p => p.AccountId == user.AccountId &&
-//                                                                             p.UserRef == user.UserRef &&
-//                                                                             p.Role.Value == (UserRole) user.Role), 
-//                null, 
-//                CancellationToken.None), Times.Once);
-
-//            return this;
-//        }
+        [Test]
+        public Task Run_WhenRunningJob_ThenShouldPassInTheCorrectJobName()
+        {
+            return TestAsync(f => f.Run(),
+                f => f.RunOnceService.Verify(x=>x.RunOnce("SeedAccountUsersJob", It.IsAny<Func<Task>>())));
+        }
 
 
-//        public SeedAccountUsersJobTestsFixture VerifyUserQueryWasRun()
-//        {
-//            MembershipRepository.Verify(x => x.GetAllAccountUsers(), Times.Once);
+    }
 
-//            return this;
-//        }
+    public class SeedAccountUsersJobTestsFixture
+    {
+        internal Mock<IRunOnceService> RunOnceService { get; set; }
+        internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
+        internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
+        public Mock<ILogger> Logger { get; set; }
 
-//        public SeedAccountUsersJobTestsFixture VerifyJobWasAdded()
-//        {
-//            var jobs = EmployerAccountsDbContext.Object.RunOnceJobs;
-//            if (jobs.Count(x=>x.Name == _jobName) == 1)
-//            {
-//                throw new Exception($"Expecting '{_jobName}' to have been added");
-//            }
+        public ICollection<Membership> Users = new List<Membership>();
 
-//            return this;
-//        }
+        public ICollection<AccountUser> ReadStoreUsers = new List<AccountUser>();
 
-//        public SeedAccountUsersJobTestsFixture VerifyJobWasNotAdded()
-//        {
-//            var jobs = EmployerAccountsDbContext.Object.RunOnceJobs;
-//            if (jobs.Count(x => x.Name == _jobName) != 0)
-//            {
-//                throw new Exception($"Not Expecting '{_jobName}' to have been added");
-//            }
+        public Membership UserOwnerRole = new Membership { AccountId = 1100, Role = Role.Owner, UserId = 1111, User = new User { Ref = Guid.NewGuid() } };
+        public Membership UserTranasactorRole = new Membership { AccountId = 2100, Role = Role.Transactor, UserId = 1111, User = new User { Ref = Guid.NewGuid() } };
+        public Membership UserNoRole = new Membership { AccountId = 2100, Role = Role.None, UserId = 1111, User = new User { Ref = Guid.NewGuid() } };
 
-//            return this;
-//        }
+        internal SeedAccountUsersJob SeedAccountUsersJob { get; set; }
 
-//        public SeedAccountUsersJobTestsFixture VerifyJobWasNotAddedAgain()
-//        {
-//            var jobs = EmployerAccountsDbContext.Object.RunOnceJobs;
-//            if (jobs.Count(x => x.Name == _jobName) != 1)
-//            {
-//                throw new Exception($"Expecting '{_jobName}' to have been added again");
-//            }
+        public List<Membership> UsersToMigrate;
 
-//            return this;
-//        }
-//    }
-//}
+        private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
+
+        private readonly DbSetStub<Membership> _usersDbSet;
+
+        public SeedAccountUsersJobTestsFixture()
+        {
+            RunOnceService = new Mock<IRunOnceService>();
+            RunOnceService.Setup(x => x.RunOnce(It.IsAny<string>(), It.IsAny<Func<Task>>()))
+                .Returns((string jobName, Func<Task> function) => function());
+
+            AccountUsersRepository = new Mock<IAccountUsersRepository>();
+            AccountUsersRepository.SetupInMemoryCollection(ReadStoreUsers);
+
+            UsersToMigrate = new List<Membership> { UserOwnerRole, UserTranasactorRole, UserNoRole };
+            _usersDbSet = new DbSetStub<Membership>(UsersToMigrate);
+
+            EmployerAccountsDbContext = new Mock<EmployerAccountsDbContext>();
+            EmployerAccountsDbContext.Setup(x => x.Memberships).Returns(_usersDbSet);
+
+            Logger = new Mock<ILogger>();
+
+            SeedAccountUsersJob =
+                new SeedAccountUsersJob(RunOnceService.Object, AccountUsersRepository.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
+        }
+
+        public Task Run()
+        {
+            return SeedAccountUsersJob.Run();
+        }
+
+        public SeedAccountUsersJobTestsFixture AddUserOwnerRoleToReadStore()
+        {
+            ReadStoreUsers.Add(ObjectActivator.CreateInstance<AccountUser>()
+                .Set(x => x.UserRef, UserOwnerRole.User.Ref)
+                .Set(x => x.AccountId, UserOwnerRole.AccountId));
+
+            return this;
+        }
+
+        public SeedAccountUsersJobTestsFixture VerifyAddDocumentWasRun(short times)
+        {
+            AccountUsersRepository.Verify(x => x.Add(It.IsAny<AccountUser>(), null, CancellationToken.None), Times.Exactly(times));
+
+            return this;
+        }
+
+        public SeedAccountUsersJobTestsFixture VerifyUserWasMappedCorrectly(Membership user)
+        {
+            AccountUsersRepository.Verify(x => x.Add(It.Is<AccountUser>(p => p.AccountId == user.AccountId &&
+                                                                             p.UserRef == user.User.Ref &&
+                                                                             p.Role.Value == (UserRole)user.Role),
+                null,
+                CancellationToken.None), Times.Once);
+
+            return this;
+        }
+    }
+}
