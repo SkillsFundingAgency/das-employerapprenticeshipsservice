@@ -59,12 +59,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
-            //TODO: Place this redirect logic back in once HMRC have whitelisted the account websites url
-            //var url = await _employerAccountOrchestrator.GateWayUrlHelper(ControllerConstants.GateWayResponseActionName,
-            //    ControllerConstants.EmployerAccountControllerName, HttpContext.Request.Url.Scheme, Url);
-
-            //TODO: Remove this code once the above url logic has been added back into the site
-            var url = await _employerAccountOrchestrator.GateWayUrlHelper(Url.LegacyEasAction("accounts/gatewayResponse"));
+            var url = await _employerAccountOrchestrator.GateWayUrlHelper(ControllerConstants.GateWayResponseActionName,
+                ControllerConstants.EmployerAccountControllerName, HttpContext.Request.Url?.Scheme, Url);
 
             return Redirect(url);
         }
