@@ -145,7 +145,7 @@
     <None Include="Scripts\Manual\AML-2674-NullAccountLegalEntityPublicHashIds.sql" />
     <Build Include="Tables\HealthChecks.sql" />
     <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
-    <Build Include="Tables\JobHistory.sql" />
+    <Build Include="Tables\RunOnceJobs.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />

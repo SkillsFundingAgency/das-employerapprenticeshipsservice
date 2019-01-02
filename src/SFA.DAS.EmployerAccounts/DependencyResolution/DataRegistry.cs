@@ -5,6 +5,7 @@ using NServiceBus.Persistence;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
+using SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution;
 using SFA.DAS.NServiceBus.ClientOutbox;
 using SFA.DAS.NServiceBus.SqlServer.ClientOutbox;
 using SFA.DAS.UnitOfWork;

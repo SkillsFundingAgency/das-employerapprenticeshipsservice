@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         public virtual DbSet<TransferConnectionInvitation> TransferConnectionInvitations { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
+        public virtual DbSet<RunOnceJob> RunOnceJobs { get; set; }
 
         static EmployerAccountsDbContext()
         {
@@ -74,6 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.Account);
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.User);
             modelBuilder.Entity<UserAccountSetting>().ToTable("UserAccountSettings");
+            modelBuilder.Entity<RunOnceJob>().HasKey(j => j.Name);
         }
     }
 }
