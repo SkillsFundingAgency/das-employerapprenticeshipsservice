@@ -5,8 +5,6 @@ using Microsoft.Extensions.Logging;
 using System.Configuration;
 using NLog.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
-using IMembershipRepository = SFA.DAS.EmployerAccounts.Jobs.Data.IMembershipRepository;
-using MembershipRepository = SFA.DAS.EmployerAccounts.Jobs.Data.MembershipRepository;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
 {
