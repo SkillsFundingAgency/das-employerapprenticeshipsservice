@@ -2,8 +2,8 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
 {
-    public class GetAccountEmployerAgreementRemoveResponse
+    public class GetOrganisationRemoveResponse
     {
-        public RemoveEmployerAgreementView Agreement { get; set; }
+        public RemoveOrganisationView Organisation { get; set; }
     }
 }

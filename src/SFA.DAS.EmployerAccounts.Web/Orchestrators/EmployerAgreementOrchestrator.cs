@@ -387,25 +387,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
+        public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string accountLegalEntityPublicHashedId, string hashedAccountId, string userId)
         {
             var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
             try
             {
-                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
+                var result = await _mediator.SendAsync(new GetOrganisationRemoveRequest
                 {
                     HashedAccountId = hashedAccountId,
                     UserId = userId,
-                    HashedAgreementId = agreementId
+                    AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId
                 });
 
                 response.Data = new ConfirmOrganisationToRemoveViewModel
                 {
-                    HashedAccountId = result.Agreement.HashedAccountId,
-                    AccountLegalEntityPublicHashedId = result.Agreement.HashedAgreementId,
-                    Id = result.Agreement.Id,
-                    Name = result.Agreement.Name,
-                    AgreementStatus = result.Agreement.Status
+                    HashedAccountId = result.Organisation.HashedAccountId,
+                    AccountLegalEntityPublicHashedId = result.Organisation.AccountLegalEntityPublicHashedId,
+                    Name = result.Organisation.Name,
+                    HasSignedAgreement = result.Organisation.HasSignedAgreement
                 };
             }
             catch (InvalidRequestException ex)

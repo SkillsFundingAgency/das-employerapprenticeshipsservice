@@ -5,6 +5,7 @@ using SFA.DAS.Authorization;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
@@ -15,13 +16,20 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly IEmployerCommitmentApi _employerCommitmentApi;
 
-        public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService, IEmployerCommitmentApi employerCommitmentApi)
+        public RemoveLegalEntityCommandValidator(
+            IMembershipRepository membershipRepository, 
+            IEmployerAgreementRepository employerAgreementRepository, 
+            IHashingService hashingService,
+            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
+            IEmployerCommitmentApi employerCommitmentApi)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _employerCommitmentApi = employerCommitmentApi;
         }
 
@@ -61,6 +69,16 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             }
 
             var accountId = _hashingService.DecodeValue(item.HashedAccountId);
+
+            var accountLegalEntityId = _accountLegalEntityPublicHashingService.DecodeValue(item.AccountLegalEntityPublicHashedId);
+            var accountLegalEntity = await _employerAgreementRepository.GetAccountLegalEntity(accountLegalEntityId);
+
+            if (accountLegalEntity.AccountId != accountId)
+            {
+                validationResult.IsUnauthorized = true;
+                return validationResult;
+            }
+
             var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
 
             if (legalEntities != null && legalEntities.Count == 1)
@@ -69,30 +87,20 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                 return validationResult;
             }
 
-            var agreementId = _hashingService.DecodeValue(item.AccountLegalEntityPublicHashedId);
-            var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
-
-            if (agreement.Status == EmployerAgreementStatus.Signed)
+            if (accountLegalEntity.SignedAgreementId.HasValue)
             {
-                
                 var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
 
                 var returnValue = commitments.FirstOrDefault(c => 
                         !string.IsNullOrEmpty(c.LegalEntityIdentifier) 
-                        && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
-                        && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
+                        && c.LegalEntityIdentifier.Equals(accountLegalEntity.Identifier)
+                        && c.LegalEntityOrganisationType == accountLegalEntity.OrganisationType);
                 
                 if (returnValue != null && (returnValue.ActiveCount + returnValue.PausedCount + returnValue.PendingApprovalCount) != 0)
                 {
                     validationResult.AddError(nameof(item.AccountLegalEntityPublicHashedId), "Agreement has already been signed and has active commitments");
                     return validationResult;
                 }
-            }
-            
-            if (agreement.AccountId != accountId )
-            {
-                validationResult.IsUnauthorized = true;
-                return validationResult;
             }
 
             return validationResult;

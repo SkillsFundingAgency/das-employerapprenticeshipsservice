@@ -9,6 +9,7 @@ using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationsForAccount;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 using OrganisationType= SFA.DAS.Common.Domain.Types.OrganisationType;
@@ -156,6 +157,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries
             EmployerAgreementRepositoryMock = new Mock<IEmployerAgreementRepository>();
             EmployerCommitmentApiMock = new Mock<IEmployerCommitmentApi>();
             HashingServiceMock = new Mock<IHashingService>();
+            AccountLegalEntityPublicHashingServiceMock = new Mock<IAccountLegalEntityPublicHashingService>();
             ValidatorMock = new Mock<IValidator<GetOrganisationsForAccountRequest>>();
         }
 
@@ -168,12 +170,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries
         public Mock<IHashingService> HashingServiceMock { get; }
         public IHashingService HashingService => HashingServiceMock.Object;
 
+        public Mock<IAccountLegalEntityPublicHashingService> AccountLegalEntityPublicHashingServiceMock { get; set; }
+        public IAccountLegalEntityPublicHashingService AccountLegalEntityPublicHashingService => AccountLegalEntityPublicHashingServiceMock.Object;
+
         public Mock<IValidator<GetOrganisationsForAccountRequest>> ValidatorMock { get; }
         public IValidator<GetOrganisationsForAccountRequest> Validator => ValidatorMock.Object;
 
         public GetOrganisationsForAccountQueryHandler CreateHandler()
         {
-            return new GetOrganisationsForAccountQueryHandler(Validator, EmployerAgreementRepository, HashingService,
+            return new GetOrganisationsForAccountQueryHandler(Validator, EmployerAgreementRepository, HashingService, AccountLegalEntityPublicHashingService,
                 EmployerCommitmentApi);
         }
 

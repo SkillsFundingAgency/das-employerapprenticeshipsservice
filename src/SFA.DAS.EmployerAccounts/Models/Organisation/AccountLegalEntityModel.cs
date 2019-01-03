@@ -4,6 +4,7 @@ namespace SFA.DAS.EmployerAccounts.Models.Organisation
 {
     public class AccountLegalEntityModel
     {
+        public long AccountId { get; set; }
         public long AccountLegalEntityId { get; set; }
         public long LegalEntityId { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
@@ -11,5 +12,6 @@ namespace SFA.DAS.EmployerAccounts.Models.Organisation
         public string Address { get; set; }
         public string Identifier { get; set; }
         public OrganisationType OrganisationType { get; set; }
+        public long? SignedAgreementId { get; set; }
     }
 }

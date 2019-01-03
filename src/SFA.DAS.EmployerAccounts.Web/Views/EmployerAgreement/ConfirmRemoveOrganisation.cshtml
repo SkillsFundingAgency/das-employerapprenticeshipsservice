@@ -19,7 +19,7 @@
             Remove organisation
         </h1>
 
-        @if (Model.Data.AgreementStatus == EmployerAgreementStatus.Signed)
+        @if (Model.Data.HasSignedAgreement)
         {
             <p class="lede">@Model.Data.Name will end its agreement with the <abbr title="Education and Skills Funding Agency">ESFA</abbr>.</p>
         }
@@ -27,7 +27,7 @@
         <form method="post" action="@Url.Action("RemoveOrganisation","EmployerAgreement")">
             @Html.AntiForgeryToken()
             <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedAccountId" id="HashedAccountId"/>
-            <input type="hidden" value="@Model.Data.HashedAgreementId" name="HashedAgreementId" id="HashedAgreementId"/>
+            <input type="hidden" value="@Model.Data.AccountLegalEntityPublicHashedId" name="AccountLegalEntityPublicHashedId" id="AccountLegalEntityPublicHashedId"/>
             <input type="hidden" value="@Model.Data.Name" name="Name" id="Name"/>
             <div class="form-group @(!string.IsNullOrEmpty(Model.Data.RemoveOrganisationError) ? "error" : "")">
                 <fieldset id="confirm">

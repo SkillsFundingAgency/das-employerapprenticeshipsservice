@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             var sql = @"
                     SELECT	le.Id, le.Code, le.DateOfIncorporation, le.PublicSectorDataSource, le.Sector, le.Source, le.Status,
-	                        ale.Name, ale.Address, ale.SignedAgreementVersion, ale.SignedAgreementId, ale.PendingAgreementVersion, ale.PendingAgreementId, ale.PublicHashedId as AccountLegalEntityPublicHashedId
+	                        ale.Id as AccountLegalEntityId, ale.Name, ale.Address, ale.SignedAgreementVersion, ale.SignedAgreementId, ale.PendingAgreementVersion, ale.PendingAgreementId, ale.PublicHashedId as AccountLegalEntityPublicHashedId
                     FROM	[employer_account].[AccountLegalEntity] AS ale
 	                        JOIN [employer_account].[LegalEntity] AS le
 		                        ON le.Id = ale.LegalEntityId
@@ -213,14 +213,16 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             var result = await _db.Value.Database.Connection.QueryAsync<AccountLegalEntityModel>(
                 sql: @"
-                SELECT  ALE.Id as AccountLegalEntityId, 
+                SELECT  ALE.AccountId,
+                        ALE.Id as AccountLegalEntityId, 
                         LE.Id AS LegalEntityId, 
                         ALE.Name, 
                         ALE.PublicHashedId AS AccountLegalEntityPublicHashedId, 
                         ALE.Name, 
                         ALE.Address, 
                         LE.Source AS OrganisationType, 
-                        LE.Code AS Identifier 
+                        LE.Code AS Identifier,
+                        ALE.SignedAgreementId
                 FROM    [employer_account].[AccountLegalEntity] AS ALE 
                         JOIN [employer_account].[LegalEntity] AS LE
                             ON LE.Id = ALE.LegalEntityId

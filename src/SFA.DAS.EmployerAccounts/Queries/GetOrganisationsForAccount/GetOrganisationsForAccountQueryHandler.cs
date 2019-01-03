@@ -7,6 +7,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
@@ -17,13 +18,20 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsForAccount
         private readonly IValidator<GetOrganisationsForAccountRequest> _validator;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly IEmployerCommitmentApi _employerCommitmentApi;
 
-        public GetOrganisationsForAccountQueryHandler(IValidator<GetOrganisationsForAccountRequest> validator, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService, IEmployerCommitmentApi employerCommitmentApi)
+        public GetOrganisationsForAccountQueryHandler(
+            IValidator<GetOrganisationsForAccountRequest> validator, 
+            IEmployerAgreementRepository employerAgreementRepository, 
+            IHashingService hashingService,
+            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
+            IEmployerCommitmentApi employerCommitmentApi)
         {
             _validator = validator;
             _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
+            _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _employerCommitmentApi = employerCommitmentApi;
         }
 
@@ -46,6 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationsForAccount
             return organisations.Select(organisation => new RemoveOrganisationView
             {
                 AccountLegalEntityId = organisation.AccountLegalEntityId,
+                AccountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(organisation.AccountLegalEntityId),
                 CanBeRemoved = false,
                 HashedAccountId = hashedAccountId,
                 HasSignedAgreement = organisation.SignedAgreementId.HasValue,

@@ -263,7 +263,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("agreements/remove/{agreementId}")]
+        [Route("agreements/remove/{accountLegalEntityPublicHashedId}")]
         public async Task<ActionResult> ConfirmRemoveOrganisation(string accountLegalEntityPublicHashedId, string hashedAccountId)
         {
             var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(accountLegalEntityPublicHashedId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
@@ -282,7 +282,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
 
         [HttpPost]
-        [Route("agreements/remove/{agreementId}")]
+        [Route("agreements/remove/{accountLegalEntityPublicHashedId}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string accountLegalEntityPublicHashedId, ConfirmOrganisationToRemoveViewModel model)
 

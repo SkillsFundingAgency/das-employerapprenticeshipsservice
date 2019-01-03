@@ -2,10 +2,10 @@ using MediatR;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
 {
-    public class GetAccountEmployerAgreementRemoveRequest : IAsyncRequest<GetAccountEmployerAgreementRemoveResponse>
+    public class GetOrganisationRemoveRequest : IAsyncRequest<GetOrganisationRemoveResponse>
     {
         public string HashedAccountId { get; set; }
         public string UserId { get; set; }
-        public string HashedAgreementId { get; set; }
+        public string AccountLegalEntityPublicHashedId { get; set; }
     }
 }
