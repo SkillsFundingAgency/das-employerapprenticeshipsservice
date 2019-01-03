@@ -196,7 +196,6 @@
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
-    <Compile Include="ViewModels\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />

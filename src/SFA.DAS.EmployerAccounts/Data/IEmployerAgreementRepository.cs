@@ -22,8 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         /// </summary>
         /// <returns>An array of the agreements that have been logically removed.</returns>
         Task<EmployerAgreementRemoved[]> RemoveLegalEntityFromAccount(long accountLegalEntityId);
-
-        Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId);
         Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId);
         Task<AccountLegalEntityModel> GetAccountLegalEntity(long accountLegalEntityId);
     }

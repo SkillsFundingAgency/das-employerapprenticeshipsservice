@@ -10,7 +10,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationsForAccount;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;

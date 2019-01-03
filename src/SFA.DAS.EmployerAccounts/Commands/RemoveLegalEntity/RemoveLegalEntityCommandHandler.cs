@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
             await _agreementService.RemoveFromCacheAsync(accountId);
 
-            await ProcessRemovedAgreements(accountId, accountLegalEntityId, message.UserId, removedAgreements);
+            await ProcessRemovedAgreements(accountId, message.UserId, removedAgreements);
         }
 
         private async Task<string> GetCallerName(string userId, long accountId)
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             return createdByName;
         }
 
-        private async Task ProcessRemovedAgreements(long accountId, long accountLegalEntityId, string userId, EmployerAgreementRemoved[] removedAgreements)
+        private async Task ProcessRemovedAgreements(long accountId, string userId, EmployerAgreementRemoved[] removedAgreements)
         {
             var createdByName = await GetCallerName(userId, accountId);
 
