@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAgreementId, ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            Assert.AreEqual(ExpectedHashedAgreementId, actual.Data.HashedAgreementId);
+            Assert.AreEqual(ExpectedHashedAgreementId, actual.Data.AccountLegalEntityPublicHashedId);
             Assert.AreEqual(ExpectedHahsedAccountId, actual.Data.HashedAccountId);
             Assert.AreEqual(ExpectedName, actual.Data.Name);
         }

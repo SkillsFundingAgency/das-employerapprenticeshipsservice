@@ -167,6 +167,7 @@
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\GatewayInformViewModel.cs" />
+    <Compile Include="ViewModels\OrganisationsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\PayeSchemeDetailViewModel.cs" />
     <Compile Include="ViewModels\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />

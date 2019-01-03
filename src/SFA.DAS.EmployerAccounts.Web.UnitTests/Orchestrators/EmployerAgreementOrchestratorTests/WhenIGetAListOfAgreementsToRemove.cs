@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationsForAccount;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -33,12 +34,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountEmployerAgreementsRemoveRequest>()))
-                .ReturnsAsync(new GetAccountEmployerAgreementsRemoveResponse
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsForAccountRequest>()))
+                .ReturnsAsync(new GetOrganisationsForAccountResponse
                 {
-                    Agreements = new List<RemoveEmployerAgreementView>
+                    Organisation = new List<RemoveOrganisationView>
                     {
-                        new RemoveEmployerAgreementView { Name = "Test Name", CanBeRemoved = false}
+                        new RemoveOrganisationView { Name = "Test Name", CanBeRemoved = false}
                     }
                 });
 
@@ -56,10 +57,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         {
 
             //Act
-            await _orchestrator.GetLegalAgreementsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
+            await _orchestrator.GetOrganisationsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountEmployerAgreementsRemoveRequest>(
+            _mediator.Verify(x => x.SendAsync(It.Is<GetOrganisationsForAccountRequest>(
                                 c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
                                 && c.UserId.Equals(ExpectedUserId))), Times.Once);
         }
@@ -69,10 +70,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountEmployerAgreementsRemoveRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsForAccountRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var actual = await _orchestrator.GetLegalAgreementsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
+            var actual = await _orchestrator.GetOrganisationsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
@@ -82,10 +83,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAUnauthroizedAccessExceptionIsThrownThenTheOrchestratorResponseShowsAccessDenied()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountEmployerAgreementsRemoveRequest>())).ThrowsAsync(new UnauthorizedAccessException());
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationsForAccountRequest>())).ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.GetLegalAgreementsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
+            var actual = await _orchestrator.GetOrganisationsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
@@ -95,10 +96,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenTheValuesAreReturnedInTheResponseFromTheMediatorCall()
         {
             //Act
-            var actual = await _orchestrator.GetLegalAgreementsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
+            var actual = await _orchestrator.GetOrganisationsToRemove(ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            Assert.IsTrue(actual.Data.Agreements.Any());
+            Assert.IsTrue(actual.Data.Organisations.Any());
         }
 
     }

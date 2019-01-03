@@ -42,9 +42,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             {
                 validationResult.AddError(nameof(item.UserId));
             }
-            if (string.IsNullOrEmpty(item.HashedLegalAgreementId))
+            if (string.IsNullOrEmpty(item.AccountLegalEntityPublicHashedId))
             {
-                validationResult.AddError(nameof(item.HashedLegalAgreementId));
+                validationResult.AddError(nameof(item.AccountLegalEntityPublicHashedId));
             }
 
             if (!validationResult.IsValid())
@@ -65,11 +65,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
             if (legalEntities != null && legalEntities.Count == 1)
             {
-                validationResult.AddError(nameof(item.HashedLegalAgreementId), "There must be at least one legal entity on the account");
+                validationResult.AddError(nameof(item.AccountLegalEntityPublicHashedId), "There must be at least one legal entity on the account");
                 return validationResult;
             }
 
-            var agreementId = _hashingService.DecodeValue(item.HashedLegalAgreementId);
+            var agreementId = _hashingService.DecodeValue(item.AccountLegalEntityPublicHashedId);
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
             if (agreement.Status == EmployerAgreementStatus.Signed)
@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                 
                 if (returnValue != null && (returnValue.ActiveCount + returnValue.PausedCount + returnValue.PendingApprovalCount) != 0)
                 {
-                    validationResult.AddError(nameof(item.HashedLegalAgreementId), "Agreement has already been signed and has active commitments");
+                    validationResult.AddError(nameof(item.AccountLegalEntityPublicHashedId), "Agreement has already been signed and has active commitments");
                     return validationResult;
                 }
             }

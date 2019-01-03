@@ -14,6 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         ///     comprehensively for UserRef.
         /// </remarks>
         public string UserId { get; set; }
-        public string HashedLegalAgreementId { get; set; }
+        public string AccountLegalEntityPublicHashedId { get; set; }
     }
 }

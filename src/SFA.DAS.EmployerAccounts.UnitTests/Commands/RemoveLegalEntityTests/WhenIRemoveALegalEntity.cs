@@ -16,6 +16,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
+using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
@@ -32,6 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private RemoveLegalEntityCommand _command;
         private Mock<IMediator> _mediator;
         private Mock<IHashingService> _hashingService;
+        private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityHashingService;
         private Mock<IGenericEventFactory> _genericEventHandler;
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
         private Mock<IAgreementService> _agreementService;
@@ -45,7 +47,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private const long ExpectedAccountLegalEntityId = 2017;
         private readonly string _expectedUserId = Guid.NewGuid().ToString();
         private const long ExpectedEmployerAgreementId = 5533678;
-        private const string ExpectedHashedEmployerAgreementId = "FGDFH45645";
+        private const string ExpectedAccountLegalEntityPublicHashedId = "FGDFH45645";
+        private const string ExpectedEmployerAgreementPublicHashedId = "99FGH";
 
         [SetUp]
         public void Arrange()
@@ -58,6 +61,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _mediator = new Mock<IMediator>();
 
             _repository = new Mock<IEmployerAgreementRepository>();
+
+            _repository.Setup(r => r.RemoveLegalEntityFromAccount(ExpectedAccountLegalEntityId))
+                .ReturnsAsync(new EmployerAgreementRemoved[]
+                {
+                    new EmployerAgreementRemoved
+                    {
+                        LegalEntityId = ExpectedLegalEntityId,
+                        Signed = true,
+                        AccountLegalEntityId = ExpectedAccountLegalEntityId,
+                        LegalEntityName = ExpectedLegalEntityName,
+                        EmployerAgreementId = ExpectedEmployerAgreementId,
+                        PreviousStatus = EmployerAgreementStatus.Signed
+                    }
+                });
+
             _repository.Setup(r => r.GetEmployerAgreement(ExpectedEmployerAgreementId))
                 .ReturnsAsync(new EmployerAgreementView
                 {
@@ -71,12 +89,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedEmployerAgreementId)).Returns(ExpectedEmployerAgreementId);
+            _hashingService.Setup(x => x.DecodeValue(ExpectedEmployerAgreementPublicHashedId)).Returns(ExpectedEmployerAgreementId);
+            _hashingService.Setup(x => x.HashValue(ExpectedEmployerAgreementId)).Returns(ExpectedEmployerAgreementPublicHashedId);
+
+            _accountLegalEntityHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
+            _accountLegalEntityHashingService.Setup(x => x.DecodeValue(ExpectedAccountLegalEntityPublicHashedId)).Returns(ExpectedAccountLegalEntityId);
 
             _employerAgreementEventFactory = new Mock<IEmployerAgreementEventFactory>();
-            _employerAgreementEventFactory.Setup(x => x.RemoveAgreementEvent(ExpectedHashedEmployerAgreementId)).Returns(new AgreementRemovedEvent { HashedAgreementId = ExpectedHashedEmployerAgreementId });
+            _employerAgreementEventFactory.Setup(x => x.RemoveAgreementEvent(ExpectedEmployerAgreementPublicHashedId)).Returns(new AgreementRemovedEvent { HashedAgreementId = ExpectedEmployerAgreementPublicHashedId });
             _genericEventHandler = new Mock<IGenericEventFactory>();
-            _genericEventHandler.Setup(x => x.Create(It.Is<AgreementRemovedEvent>(c => c.HashedAgreementId.Equals(ExpectedHashedEmployerAgreementId)))).Returns(new GenericEvent { Payload = ExpectedHashedEmployerAgreementId });
+            _genericEventHandler.Setup(x => x.Create(It.Is<AgreementRemovedEvent>(c => c.HashedAgreementId.Equals(ExpectedEmployerAgreementPublicHashedId)))).Returns(new GenericEvent { Payload = ExpectedEmployerAgreementPublicHashedId });
 
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository
@@ -85,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             _eventPublisher = new Mock<IEventPublisher>();
 
-            _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = _expectedUserId, HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
+            _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = _expectedUserId, AccountLegalEntityPublicHashedId = ExpectedAccountLegalEntityPublicHashedId };
 
             _handler = new RemoveLegalEntityCommandHandler(
                 _validator.Object,
@@ -93,6 +115,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 _repository.Object,
                 _mediator.Object,
                 _hashingService.Object,
+                _accountLegalEntityHashingService.Object,
                 _genericEventHandler.Object,
                 _employerAgreementEventFactory.Object,
                 _agreementService.Object,
@@ -131,7 +154,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _validator.Verify(x => x.ValidateAsync(It.Is<RemoveLegalEntityCommand>(c =>
                                                                           c.HashedAccountId.Equals(ExpectedHashedAccountId)
                                                                           && c.UserId.Equals(_expectedUserId))));
-            _repository.Verify(x => x.RemoveLegalEntityFromAccount(ExpectedEmployerAgreementId));
+            _repository.Verify(x => x.RemoveLegalEntityFromAccount(ExpectedAccountLegalEntityId));
         }
 
         [Test]
@@ -145,12 +168,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Status") && y.NewValue.Equals(EmployerAgreementStatus.Removed.ToString())) != null
                     )));
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"EmployerAgreement {ExpectedHashedEmployerAgreementId} removed from account {ExpectedAccountId}"))));
+                      c.EasAuditMessage.Description.Equals($"EmployerAgreement {ExpectedEmployerAgreementId} removed from account {ExpectedAccountId}"))));
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
                     )));
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                    c.EasAuditMessage.AffectedEntity.Id.Equals(ExpectedHashedEmployerAgreementId.ToString()) &&
+                    c.EasAuditMessage.AffectedEntity.Id.Equals(ExpectedEmployerAgreementId.ToString()) &&
                     c.EasAuditMessage.AffectedEntity.Type.Equals("EmployerAgreement")
                     )));
         }
@@ -163,7 +186,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             //Assert
             _genericEventHandler.Verify(x => x.Create(It.IsAny<AgreementRemovedEvent>()), Times.Once);
-            _mediator.Verify(x => x.SendAsync(It.Is<PublishGenericEventCommand>(c => c.Event.Payload.Equals(ExpectedHashedEmployerAgreementId))));
+            _mediator.Verify(x => x.SendAsync(It.Is<PublishGenericEventCommand>(c => c.Event.Payload.Equals(ExpectedEmployerAgreementPublicHashedId))));
         }
 
         [Test]

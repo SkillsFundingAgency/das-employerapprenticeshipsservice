@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         {
             return RunAsync(
                 act: fixtures => fixtures.GetOrganisationsToRemove(),
-                assert: (fixtures, result) => fixtures.Orchestrator.Verify(x => x.GetLegalAgreementsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
+                assert: (fixtures, result) => fixtures.Orchestrator.Verify(x => x.GetOrganisationsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
         }
 
         [Test]
@@ -53,9 +53,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
                     fixtures.Orchestrator
                         .Setup(x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
-                        .ReturnsAsync(new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>
+                        .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
                         {
-                            Data = new ConfirmLegalAgreementToRemoveViewModel()
+                            Data = new ConfirmOrganisationToRemoveViewModel()
                         });
                 },
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     Assert.IsNotNull(actualResult);
                     var viewResult = actualResult as ViewResult;
                     Assert.IsNotNull(viewResult);
-                    var actualModel = viewResult.Model as OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>;
+                    var actualModel = viewResult.Model as OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>;
                     Assert.IsNotNull(actualModel);
                     Assert.IsNotNull(actualModel.FlashMessage);
                 });

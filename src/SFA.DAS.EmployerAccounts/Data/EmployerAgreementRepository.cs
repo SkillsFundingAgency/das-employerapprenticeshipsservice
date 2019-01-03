@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Data.Entity;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -142,17 +143,37 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.FirstOrDefault();
         }
 
-        public Task RemoveLegalEntityFromAccount(long agreementId)
+        public async Task<EmployerAgreementRemoved[]> RemoveLegalEntityFromAccount(long accountLegalEntityId)
         {
-            var parameters = new DynamicParameters();
+            var accountLegalEntity = await _db.Value.AccountLegalEntities
+                                                .Include(ale => ale.Agreements)
+                                                .SingleAsync(ale => ale.Id == accountLegalEntityId);
 
-            parameters.Add("@employerAgreementId", agreementId, DbType.Int64);
+            accountLegalEntity.Deleted = DateTime.UtcNow;
 
-            return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[RemoveLegalEntityFromAccount]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
+            var affectedAgreements = accountLegalEntity.Agreements
+                    .Where(agreement => agreement.StatusId != EmployerAgreementStatus.Removed) 
+                    .ToArray();
+
+            var result = affectedAgreements
+                .Select(agreement => new EmployerAgreementRemoved
+                {
+                    EmployerAgreementId = agreement.Id,
+                    LegalEntityId = accountLegalEntity.LegalEntityId,
+                    AccountLegalEntityId = accountLegalEntity.Id,
+                    PreviousStatus = agreement.StatusId,
+                    Signed = agreement.StatusId == EmployerAgreementStatus.Signed
+                })
+                .ToArray();
+            
+            foreach(var agreement in affectedAgreements)
+            {
+                agreement.StatusId = EmployerAgreementStatus.Removed;
+            }
+
+            await _db.Value.SaveChangesAsync();
+
+            return result;
         }
 
         public async Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId)

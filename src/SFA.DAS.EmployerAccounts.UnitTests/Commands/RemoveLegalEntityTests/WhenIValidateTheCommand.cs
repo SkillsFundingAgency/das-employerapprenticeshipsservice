@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private const string ExpectedUserId = "AFGF456";
         private const string ExpectedNonOwnerUserId = "AGVFF456";
         private const long ExpectedAgreementId = 4534590;
-        private const string ExpectedHashedAgreementId = "ABDSFS1234";
+        private const string ExpectedAccountLegalEntityPublicHashedId = "ABDSFS1234";
         private const string ExpectedHashedLegalEntityId = "HG567";
 
         [SetUp]
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
-            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAgreementId)).Returns(ExpectedAgreementId);
+            _hashingService.Setup(x => x.DecodeValue(ExpectedAccountLegalEntityPublicHashedId)).Returns(ExpectedAgreementId);
             _hashingService.Setup(x => x.HashValue(ExpectedLegalEntityId)).Returns(ExpectedHashedLegalEntityId);
 
             _commitmentsApi = new Mock<IEmployerCommitmentApi>();
@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("HashedLegalAgreementId", "HashedLegalAgreementId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("AccountLegalEntityPublicHashedId", "AccountLegalEntityPublicHashedId has not been supplied"), actual.ValidationDictionary);
             _membershipRepository.Verify(x=>x.GetCaller(It.IsAny<string>(),It.IsAny<string>()), Times.Never);
         }
 
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreConnectedToTheAccount()
         {
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand {HashedAccountId = ExpectedHashedAccountId, UserId = "TGB678", HashedLegalAgreementId = "ewr" });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand {HashedAccountId = ExpectedHashedAccountId, UserId = "TGB678", AccountLegalEntityPublicHashedId = "ewr" });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
@@ -89,7 +89,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreAnOwnerOnTheAccount()
         {
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedNonOwnerUserId, HashedLegalAgreementId = "fdgd" });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedNonOwnerUserId, AccountLegalEntityPublicHashedId = "fdgd" });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
@@ -120,12 +120,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             //Act
             var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
             {
-                HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId
+                HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedUserId, AccountLegalEntityPublicHashedId = ExpectedAccountLegalEntityPublicHashedId
             });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("HashedLegalAgreementId", "Agreement has already been signed and has active commitments"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("AccountLegalEntityPublicHashedId", "Agreement has already been signed and has active commitments"), actual.ValidationDictionary);
         }
 
         [Test]
@@ -139,7 +139,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 {
                     new ApprenticeshipStatusSummary
                     {
-                        ActiveCount = 1,PausedCount = 1,PendingApprovalCount = 1,LegalEntityIdentifier = expectedLegalEntityCode, LegalEntityOrganisationType = OrganisationType.Charities
+                        ActiveCount = 1,
+                        PausedCount = 1,
+                        PendingApprovalCount = 1,
+                        LegalEntityIdentifier = expectedLegalEntityCode,
+                        LegalEntityOrganisationType = OrganisationType.Charities
                     }
                 });
 
@@ -147,13 +151,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 .Setup(x => x.GetEmployerAgreement(ExpectedAgreementId))
                 .ReturnsAsync(new EmployerAgreementView
                 {
-                    Status = EmployerAgreementStatus.Signed, LegalEntityCode = expectedLegalEntityCode, LegalEntitySource = OrganisationType.Other
+                    Status = EmployerAgreementStatus.Signed,
+                    LegalEntityCode = expectedLegalEntityCode,
+                    LegalEntitySource = OrganisationType.Other
                 });
 
             //Act
             var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
             {
-                HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId
+                HashedAccountId = ExpectedHashedAccountId,
+                UserId = ExpectedUserId,
+                AccountLegalEntityPublicHashedId = ExpectedAccountLegalEntityPublicHashedId
             });
 
             //Assert
@@ -169,7 +177,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Signed, LegalEntityId = ExpectedLegalEntityId });
 
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
+            {
+                HashedAccountId = ExpectedHashedAccountId,
+                UserId = ExpectedUserId,
+                AccountLegalEntityPublicHashedId = ExpectedAccountLegalEntityPublicHashedId
+            });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -179,7 +192,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTrueIsReturnedIfTheFieldsArePopulatedAndTheUserIsAnAccountOwner()
         {
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId= ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
+            {
+                HashedAccountId = ExpectedHashedAccountId,
+                UserId = ExpectedUserId,
+                AccountLegalEntityPublicHashedId = ExpectedAccountLegalEntityPublicHashedId
+            });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -198,11 +216,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 });
 
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
+            {
+                HashedAccountId = ExpectedHashedAccountId,
+                UserId = ExpectedUserId,
+                AccountLegalEntityPublicHashedId = ExpectedAccountLegalEntityPublicHashedId
+            });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("HashedLegalAgreementId", "There must be at least one legal entity on the account"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("AccountLegalEntityPublicHashedId", "There must be at least one legal entity on the account"), actual.ValidationDictionary);
         }
 
         [Test]
@@ -213,7 +236,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Pending, AccountId = 12399 });
 
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId,  HashedLegalAgreementId = ExpectedHashedAgreementId });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand
+            {
+                HashedAccountId = ExpectedHashedAccountId,
+                UserId = ExpectedUserId,
+                AccountLegalEntityPublicHashedId = ExpectedAccountLegalEntityPublicHashedId
+            });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);

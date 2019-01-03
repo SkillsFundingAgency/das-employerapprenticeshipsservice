@@ -16,6 +16,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationsForAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -175,7 +176,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
-        public virtual async Task<OrchestratorResponse<bool>> RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
+        public virtual async Task<OrchestratorResponse<bool>> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model, string userId)
         {
             var response = new OrchestratorResponse<bool>();
             try
@@ -201,7 +202,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 {
                     HashedAccountId = model.HashedAccountId,
                     UserId = userId,
-                    HashedLegalAgreementId = model.HashedAgreementId
+                    AccountLegalEntityPublicHashedId = model.AccountLegalEntityPublicHashedId
                 });
 
                 response.FlashMessage = new FlashMessageViewModel
@@ -312,20 +313,57 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
 
 
-        public virtual async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        //public virtual async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        //{
+        //    var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
+        //    try
+        //    {
+        //        var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
+        //        {
+        //            HashedAccountId = hashedAccountId,
+        //            UserId = userId
+        //        });
+
+        //        response.Data = new LegalAgreementsToRemoveViewModel
+        //        {
+        //            Agreements = result.Agreements
+
+        //        };
+        //    }
+        //    catch (InvalidRequestException ex)
+        //    {
+        //        response.Status = HttpStatusCode.BadRequest;
+        //        response.FlashMessage = new FlashMessageViewModel
+        //        {
+        //            Headline = "Errors to fix",
+        //            Message = "Check the following details:",
+        //            ErrorMessages = ex.ErrorMessages,
+        //            Severity = FlashMessageSeverityLevel.Error
+        //        };
+        //        response.Exception = ex;
+        //    }
+        //    catch (UnauthorizedAccessException ex)
+        //    {
+        //        response.Status = HttpStatusCode.Unauthorized;
+        //        response.Exception = ex;
+        //    }
+        //    return response;
+        //}
+
+        public virtual async Task<OrchestratorResponse<OrganisationsToRemoveViewModel>> GetOrganisationsToRemove(string hashedAccountId, string userId)
         {
-            var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
+            var response = new OrchestratorResponse<OrganisationsToRemoveViewModel>();
             try
             {
-                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
+                var result = await _mediator.SendAsync(new GetOrganisationsForAccountRequest
                 {
                     HashedAccountId = hashedAccountId,
                     UserId = userId
                 });
 
-                response.Data = new LegalAgreementsToRemoveViewModel
+                response.Data = new OrganisationsToRemoveViewModel
                 {
-                    Agreements = result.Agreements
+                    Organisations = result.Organisation
 
                 };
             }
@@ -349,9 +387,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
+        public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
         {
-            var response = new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>();
+            var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
             try
             {
                 var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
@@ -360,10 +398,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     UserId = userId,
                     HashedAgreementId = agreementId
                 });
-                response.Data = new ConfirmLegalAgreementToRemoveViewModel
+
+                response.Data = new ConfirmOrganisationToRemoveViewModel
                 {
                     HashedAccountId = result.Agreement.HashedAccountId,
-                    HashedAgreementId = result.Agreement.HashedAgreementId,
+                    AccountLegalEntityPublicHashedId = result.Agreement.HashedAgreementId,
                     Id = result.Agreement.Id,
                     Name = result.Agreement.Name,
                     AgreementStatus = result.Agreement.Status

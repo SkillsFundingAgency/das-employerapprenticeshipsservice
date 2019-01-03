@@ -9,7 +9,6 @@ namespace SFA.DAS.EmployerAccounts.Data
 {
     public interface IEmployerAgreementRepository
     {
-        [Obsolete("This method has been replaced by the GetAccountEmployerAgreementsQueryHandler query")]
         Task<List<AccountSpecificLegalEntity>> GetLegalEntitiesLinkedToAccount(long accountId, bool signedOnly);
         Task<EmployerAgreementView> GetEmployerAgreement(long agreementId);
         Task SignAgreement(SignEmployerAgreement agreement);
@@ -17,7 +16,13 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<long> CreateEmployerAgreeement(int templateId, long accountId, long legalEntityId);
         Task<EmployerAgreementTemplate> GetEmployerAgreementTemplate(int templateId);
         Task<EmployerAgreementTemplate> GetLatestAgreementTemplate();
-        Task RemoveLegalEntityFromAccount(long agreementId);
+
+        /// <summary>
+        ///     Logically deletes the account legal entity.
+        /// </summary>
+        /// <returns>An array of the agreements that have been logically removed.</returns>
+        Task<EmployerAgreementRemoved[]> RemoveLegalEntityFromAccount(long accountLegalEntityId);
+
         Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId);
         Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId);
         Task<AccountLegalEntityModel> GetAccountLegalEntity(long accountLegalEntityId);

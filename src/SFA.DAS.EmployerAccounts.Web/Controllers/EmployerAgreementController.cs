@@ -257,16 +257,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements/remove")]
         public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
         {
-            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var model = await _orchestrator.GetOrganisationsToRemove(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             return View(model);
         }
 
         [HttpGet]
         [Route("agreements/remove/{agreementId}")]
-        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> ConfirmRemoveOrganisation(string accountLegalEntityPublicHashedId, string hashedAccountId)
         {
-            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(accountLegalEntityPublicHashedId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
@@ -284,11 +284,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("agreements/remove/{agreementId}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
+        public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string accountLegalEntityPublicHashedId, ConfirmOrganisationToRemoveViewModel model)
 
         {
-
-            var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var response = await _orchestrator.RemoveOrganisation(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -299,7 +298,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (response.Status == HttpStatusCode.BadRequest)
             {
                 AddFlashMessageToCookie(response.FlashMessage);
-                return RedirectToAction(ControllerConstants.ConfirmRemoveOrganisationActionName, new { hashedAccountId, agreementId });
+                return RedirectToAction(ControllerConstants.ConfirmRemoveOrganisationActionName, new { hashedAccountId, accountLegalEntityPublicHashedId });
             }
 
             return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
