@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
             For<ILoggerFactory>().Use(() => new LoggerFactory().AddApplicationInsights(ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"], null).AddNLog()).Singleton();
             For<ILogger>().Use(c => c.GetInstance<ILoggerFactory>().CreateLogger(c.ParentType));
             For<EmployerAccountsDbContext>().Use(c => new EmployerAccountsDbContext(c.GetInstance<EmployerAccountsConfiguration>().DatabaseConnectionString));
-            For<IRunOnceService>().Use<RunOnceService>();
+            For<IRunOnceJobsService>().Use<RunOnceJobsService>();
         }
     }
 }

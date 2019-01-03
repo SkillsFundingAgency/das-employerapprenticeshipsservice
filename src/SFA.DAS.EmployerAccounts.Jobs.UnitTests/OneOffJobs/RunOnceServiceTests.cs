@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
         public Mock<ILogger> Logger { get; set; }
 
-        internal RunOnceService RunOnceService { get; set; }
+        internal RunOnceJobsService RunOnceJobsService { get; set; }
 
         private bool _functionWasCalled = false;
         private readonly string _jobName = typeof(SeedAccountUsersJob).Name;
@@ -60,12 +60,12 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
             Logger = new Mock<ILogger>();
 
-            RunOnceService = new RunOnceService(new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
+            RunOnceJobsService = new RunOnceJobsService(new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
         }
 
         public Task Run()
         {
-            return RunOnceService.RunOnce(_jobName, () =>
+            return RunOnceJobsService.RunOnce(_jobName, () =>
             {
                 _functionWasCalled = true;
                 return Task.CompletedTask;

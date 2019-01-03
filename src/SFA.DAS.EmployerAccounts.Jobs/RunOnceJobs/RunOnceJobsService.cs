@@ -7,12 +7,12 @@ using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
 {
-    public class RunOnceService : IRunOnceService
+    public class RunOnceJobsService : IRunOnceJobsService
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly ILogger _logger;
 
-        public RunOnceService(Lazy<EmployerAccountsDbContext> db, ILogger logger)
+        public RunOnceJobsService(Lazy<EmployerAccountsDbContext> db, ILogger logger)
         {
             _db = db;
             _logger = logger;

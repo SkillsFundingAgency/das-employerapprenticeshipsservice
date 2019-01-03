@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
     public class SeedAccountUsersJobTestsFixture
     {
-        internal Mock<IRunOnceService> RunOnceService { get; set; }
+        internal Mock<IRunOnceJobsService> RunOnceService { get; set; }
         internal Mock<IAccountUsersRepository> AccountUsersRepository { get; set; }
         internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
         public Mock<ILogger> Logger { get; set; }
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
         public SeedAccountUsersJobTestsFixture()
         {
-            RunOnceService = new Mock<IRunOnceService>();
+            RunOnceService = new Mock<IRunOnceJobsService>();
             RunOnceService.Setup(x => x.RunOnce(It.IsAny<string>(), It.IsAny<Func<Task>>()))
                 .Returns((string jobName, Func<Task> function) => function());
 

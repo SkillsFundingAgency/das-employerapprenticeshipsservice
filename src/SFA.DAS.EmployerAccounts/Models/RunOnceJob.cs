@@ -1,5 +1,4 @@
 ﻿using System;
-using Newtonsoft.Json;
 
 namespace SFA.DAS.EmployerAccounts.Models
 {
@@ -12,11 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Models
         {
             Name = name;
             Completed = completed;
-        }
-
-        [JsonConstructor]
-        private RunOnceJob()
-        {
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,15 +15,15 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
 {
     public class SeedAccountUsersJob
     {
-        private readonly IRunOnceService _runOnceService;
+        private readonly IRunOnceJobsService _runOnceJobsService;
         private readonly IAccountUsersRepository _accountUsersRepository;
         private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly ILogger _logger;
         private readonly string _jobName;
 
-        public SeedAccountUsersJob(IRunOnceService runOnceService, IAccountUsersRepository accountUsersRepository, Lazy<EmployerAccountsDbContext> db, ILogger logger)
+        public SeedAccountUsersJob(IRunOnceJobsService runOnceJobsService, IAccountUsersRepository accountUsersRepository, Lazy<EmployerAccountsDbContext> db, ILogger logger)
         {
-            _runOnceService = runOnceService;
+            _runOnceJobsService = runOnceJobsService;
             _accountUsersRepository = accountUsersRepository;
             _db = db;
             _logger = logger;
@@ -32,12 +33,12 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
         [NoAutomaticTrigger]
         public Task Run()
         {
-            return _runOnceService.RunOnce(_jobName, MigrateUsers);
+            return _runOnceJobsService.RunOnce(_jobName, MigrateUsers);
         }
 
         public async Task MigrateUsers()
         {
-            var users = _db.Value.Memberships.Include("User").Where(x=>x.Role != Role.None).AsEnumerable().ToList();
+            var users = _db.Value.Memberships.Include(m=>m.User).Where(x=>x.Role != Role.None).AsEnumerable().ToList();
 
             _logger.LogInformation("Migrating users into the read store"); 
 
@@ -49,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
 
                 if (!accountUserExists)
                 {
-                    var document  = new AccountUser(user.User.Ref, user.AccountId, (UserRole)user.Role, DateTime.Now, populateMessageId);
+                    var document  = new AccountUser(user.User.Ref, user.AccountId, (UserRole)user.Role, DateTime.UtcNow, populateMessageId);
                     await _accountUsersRepository.Add(document, null, CancellationToken.None);
                 }
             }
