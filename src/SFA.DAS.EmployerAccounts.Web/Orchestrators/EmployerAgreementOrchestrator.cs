@@ -300,45 +300,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
         }
 
-
-
-        //public virtual async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
-        //{
-        //    var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
-        //    try
-        //    {
-        //        var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
-        //        {
-        //            HashedAccountId = hashedAccountId,
-        //            UserId = userId
-        //        });
-
-        //        response.Data = new LegalAgreementsToRemoveViewModel
-        //        {
-        //            Agreements = result.Agreements
-
-        //        };
-        //    }
-        //    catch (InvalidRequestException ex)
-        //    {
-        //        response.Status = HttpStatusCode.BadRequest;
-        //        response.FlashMessage = new FlashMessageViewModel
-        //        {
-        //            Headline = "Errors to fix",
-        //            Message = "Check the following details:",
-        //            ErrorMessages = ex.ErrorMessages,
-        //            Severity = FlashMessageSeverityLevel.Error
-        //        };
-        //        response.Exception = ex;
-        //    }
-        //    catch (UnauthorizedAccessException ex)
-        //    {
-        //        response.Status = HttpStatusCode.Unauthorized;
-        //        response.Exception = ex;
-        //    }
-        //    return response;
-        //}
-
         public virtual async Task<OrchestratorResponse<OrganisationsToRemoveViewModel>> GetOrganisationsToRemove(string hashedAccountId, string userId)
         {
             var response = new OrchestratorResponse<OrganisationsToRemoveViewModel>();
