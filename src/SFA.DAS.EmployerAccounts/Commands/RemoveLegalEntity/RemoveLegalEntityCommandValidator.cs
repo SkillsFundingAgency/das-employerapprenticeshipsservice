@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using SFA.DAS.Authorization;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;

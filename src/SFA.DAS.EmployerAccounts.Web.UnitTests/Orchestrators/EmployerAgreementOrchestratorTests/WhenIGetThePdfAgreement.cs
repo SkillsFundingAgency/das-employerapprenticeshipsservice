@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -8,12 +7,10 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
@@ -21,10 +18,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
     public class WhenIGetThePdfAgreement
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<IReferenceDataService> _referenceDataService;
         private EmployerAgreementOrchestrator _orchestrator;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
 
         [SetUp]
         public void Arrange()
@@ -35,11 +30,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetSignedEmployerAgreementPdfRequest>()))
                 .ReturnsAsync(new GetSignedEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
 
-            _logger = new Mock<ILog>();
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
             _referenceDataService = new Mock<IReferenceDataService>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration, _referenceDataService.Object);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
         }
 
         [Test]
@@ -83,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", "");
 
             //Assert
-            Assert.IsNotEmpty((IEnumerable) actual.FlashMessage.ErrorMessages);
+            Assert.IsNotEmpty(actual.FlashMessage.ErrorMessages);
             Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
         }
 

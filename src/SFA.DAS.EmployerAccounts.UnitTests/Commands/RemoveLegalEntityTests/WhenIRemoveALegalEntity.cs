@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _repository = new Mock<IEmployerAgreementRepository>();
 
             _repository.Setup(r => r.RemoveLegalEntityFromAccount(ExpectedAccountLegalEntityId))
-                .ReturnsAsync(new EmployerAgreementRemoved[]
+                .ReturnsAsync(new []
                 {
                     new EmployerAgreementRemoved
                     {

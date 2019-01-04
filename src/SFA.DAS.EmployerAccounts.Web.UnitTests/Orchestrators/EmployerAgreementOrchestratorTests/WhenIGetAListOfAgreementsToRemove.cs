@@ -20,10 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
     public class WhenIGetAListOfAgreementsToRemove
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<IReferenceDataService> _referenceDataService;
-
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private EmployerAgreementOrchestrator _orchestrator;
 
         private const string ExpectedHahsedAccountId = "RT456";
@@ -42,13 +39,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
                     }
                 });
 
-            _logger = new Mock<ILog>();
-
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
-
             _referenceDataService = new Mock<IReferenceDataService>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration, _referenceDataService.Object);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
         }
 
         [Test]

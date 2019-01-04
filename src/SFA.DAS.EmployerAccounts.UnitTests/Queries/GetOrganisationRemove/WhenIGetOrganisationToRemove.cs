@@ -3,11 +3,9 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.Hashing;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationRemove

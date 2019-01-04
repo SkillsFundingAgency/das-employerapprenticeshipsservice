@@ -6,12 +6,10 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
@@ -19,13 +17,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
     public class WhenIGetTheConfirmRemoveAgreementModel
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<IReferenceDataService> _referenceDataService;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private EmployerAgreementOrchestrator _orchestrator;
 
         private const string ExpectedHahsedAccountId = "RT456";
-        //private const string ExpectedHashedAgreementId = "RRTE56";
         private const string ExpectedAccountLegalEntityPublicHashedId = "AFG99";
         private const string ExpectedUserId = "TYG68UY";
         private const string ExpectedName = "Test Name";
@@ -47,12 +42,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
 
                 });
 
-            _logger = new Mock<ILog>();
-
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
             _referenceDataService = new Mock<IReferenceDataService>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration, _referenceDataService.Object);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
         }
 
         [Test]
@@ -69,7 +61,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
                      && c.AccountLegalEntityPublicHashedId.Equals(ExpectedAccountLegalEntityPublicHashedId)
                 )), Times.Once);
         }
-
 
         [Test]
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
@@ -108,6 +99,5 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             Assert.AreEqual(ExpectedHahsedAccountId, actual.Data.HashedAccountId);
             Assert.AreEqual(ExpectedName, actual.Data.Name);
         }
-
     }
 }

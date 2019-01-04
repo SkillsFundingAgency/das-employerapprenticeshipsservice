@@ -287,9 +287,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             public const string HashedAgreementId = "789UHY";
         }
 
-        public string HashedAccountId => EmployerAgreementControllerTestFixtures.Constants.HashedAccountId;
-        public string UserId => EmployerAgreementControllerTestFixtures.Constants.UserId;
-        public string HashedAgreementId => EmployerAgreementControllerTestFixtures.Constants.HashedAgreementId;
+        public string HashedAccountId => Constants.HashedAccountId;
+        public string UserId => Constants.UserId;
+        public string HashedAgreementId => Constants.HashedAgreementId;
 
         public GetEmployerAgreementRequest GetAgreementRequest { get; }
 

@@ -1,5 +1,3 @@
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class ConfirmOrganisationToRemoveViewModel : ViewModelBase
