@@ -345,7 +345,7 @@
         }
     ],
     "outputs": {
-        "CosmosPrimaryMasterKey": {
+        "CosmosDbPrimaryMasterKey": {
             "type": "string",
             "value": "[reference('cosmos-db-resources-deployment').outputs.PrimaryMasterKey.value]"
         }
