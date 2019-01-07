@@ -17,7 +17,7 @@
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="7.0.14" />
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.3" />

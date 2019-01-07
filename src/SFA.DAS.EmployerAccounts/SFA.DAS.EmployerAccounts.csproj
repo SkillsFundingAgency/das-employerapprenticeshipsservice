@@ -43,7 +43,7 @@
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.0.0.35919" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="7.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.12" />

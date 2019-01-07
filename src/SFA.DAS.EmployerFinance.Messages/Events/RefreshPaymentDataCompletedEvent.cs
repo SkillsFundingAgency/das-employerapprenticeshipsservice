@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerFinance.Messages.Events
+﻿using System;
+
+namespace SFA.DAS.EmployerFinance.Messages.Events
 {
     public class RefreshPaymentDataCompletedEvent 
     {
@@ -8,5 +10,6 @@
         /// true if we have processed some payments; otherwise false;
         /// </summary>
         public bool PaymentsProcessed { get; set; }
+        public DateTime Created { get; set; }
     }
 }

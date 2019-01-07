@@ -322,8 +322,8 @@
       <HintPath>..\packages\SFA.DAS.Notifications.Api.Types.2.0.0.35919\lib\net45\SFA.DAS.Notifications.Api.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SFA.DAS.NServiceBus, Version=2.0.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NServiceBus.2.0.12\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
+    <Reference Include="SFA.DAS.NServiceBus, Version=7.0.14.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NServiceBus.7.0.14\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.NServiceBus.SqlServer, Version=2.0.12.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NServiceBus.SqlServer.2.0.12\lib\netstandard2.0\SFA.DAS.NServiceBus.SqlServer.dll</HintPath>

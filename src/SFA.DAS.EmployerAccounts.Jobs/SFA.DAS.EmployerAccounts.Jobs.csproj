@@ -16,7 +16,7 @@
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="7.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
