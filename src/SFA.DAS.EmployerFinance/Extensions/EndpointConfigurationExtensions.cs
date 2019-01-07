@@ -9,6 +9,8 @@ namespace SFA.DAS.EmployerFinance.Extensions
 {
     public static class EndpointConfigurationExtensions
     {
+        private const string ApplicationNameSpace = "SFA.DAS.EmployerFinance";
+
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config,
             Func<string> connectionStringBuilder)
         {
@@ -29,43 +31,31 @@ namespace SFA.DAS.EmployerFinance.Extensions
         {
             return config
                     .UseDefaultLocationsForAllCommands(applicationNameSpace)
-                    .UseDefaultLocationsForAllMessages(applicationNameSpace);
+                    .UseDefaultLocationsForAllEvents(applicationNameSpace);
         }
 
         public static EndpointConfiguration UseDefaultLocationsForAllCommands(this EndpointConfiguration config, string applicationNameSpace)
         {
             var conventions = config.Conventions();
-
+            conventions.DefiningCommandsAs(IsCommand);
             return config;
         }
 
         public static EndpointConfiguration UseDefaultLocationsForAllEvents(this EndpointConfiguration config, string applicationNameSpace)
         {
             var conventions = config.Conventions();
-
+            conventions.DefiningEventsAs(IsEvent);
             return config;
         }
 
-        private static string GetApplicationMessageNameSpace(string applicationNameSpace)
+        private static bool IsCommand(Type type)
         {
-            // Our convention is for solutions to be named SFA.DAS.app-name and projects within that solution to be named SFA.DAS.app-name.project-name
-            // where project-name is something like Jobs, MessageHandlers, API and Web. Messages are stored in a project named SFA.DAS.app-name.Messages.
-            // So for application name space "SFA.DAS.EmployerFinance.xxxx" return "SFA.DAS.EmployerFinance.Messages"
+            return string.Equals(type.Namespace,  $"{ApplicationNameSpace}.MessageHandlers.Commands", StringComparison.OrdinalIgnoreCase);
+        }
 
-            // name-spaces are optional in .net
-            if (string.IsNullOrWhiteSpace(applicationNameSpace))
-            {
-                return string.Empty;
-            }
-
-            var indexOfThirdWord = applicationNameSpace. IndexOf('.');
-
-            if (indexOfThirdWord < 1)
-            {
-                return String.Empty;
-            }
-
-            return applicationNameSpace.Substring(0, indexOfThirdWord);
+        private static bool IsEvent(Type type)
+        {
+            return string.Equals(type.Namespace, $"{ApplicationNameSpace}.MessageHandlers.Events", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

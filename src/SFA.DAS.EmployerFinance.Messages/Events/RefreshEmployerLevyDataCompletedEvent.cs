@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerFinance.Messages.Events
+﻿using System;
+
+namespace SFA.DAS.EmployerFinance.Messages.Events
 {
     public class RefreshEmployerLevyDataCompletedEvent 
     {
@@ -10,5 +12,6 @@
         /// true if we have imported some levy; otherwise false;
         /// </summary>
         public bool LevyImported { get; set; }
+        public DateTime Created { get; set; }
     }
 }
