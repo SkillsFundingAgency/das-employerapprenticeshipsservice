@@ -20,7 +20,7 @@
         "workerAppServicePlanName": {
             "type": "string"
         },
-        "cosmosDbName": {
+        "accountsCosmosDbName": {
             "type": "string"
         },
         "aseHostingEnvironmentName": {
@@ -332,7 +332,7 @@
                 },
                 "parameters": {
                     "cosmosDbName": {
-                        "value": "[parameters('cosmosDbName')]"
+                        "value": "[parameters('accountsCosmosDbName')]"
                     },
                     "cosmosDbType": {
                         "value": "GlobalDocumentDB"
@@ -345,7 +345,7 @@
         }
     ],
     "outputs": {
-        "CosmosDbPrimaryMasterKey": {
+        "AccountsCosmosDbPrimaryMasterKey": {
             "type": "string",
             "value": "[reference('cosmos-db-resources-deployment').outputs.PrimaryMasterKey.value]"
         }
