@@ -1,5 +1,4 @@
 ﻿using System;
-
 namespace SFA.DAS.EmployerFinance.Messages.Events
 {
     public class HealthCheckEvent
