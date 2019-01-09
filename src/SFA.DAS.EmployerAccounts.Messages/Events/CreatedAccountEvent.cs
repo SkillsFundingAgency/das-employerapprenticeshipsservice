@@ -1,9 +1,8 @@
 ﻿using System;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class CreatedAccountEvent : Event
+    public class CreatedAccountEvent
     {
         public long AccountId { get; set; }
         public string HashedId { get; set; }
@@ -11,5 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public string Name { get; set; }
         public string UserName { get; set; }
         public Guid UserRef { get; set; }
+        public DateTime Created { get; set; }
     }
 }

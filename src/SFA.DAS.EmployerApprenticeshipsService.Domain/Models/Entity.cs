@@ -1,14 +1,13 @@
 ﻿using System;
-using SFA.DAS.NServiceBus;
 using SFA.DAS.UnitOfWork;
 
 namespace SFA.DAS.EAS.Domain.Models
 {
     public abstract class Entity
     {
-        protected void Publish<T>(Action<T> action) where T : Event, new()
+        protected void Publish<T>(Func<T> message) where T : class
         {
-            UnitOfWorkContext.AddEvent(action);
+            UnitOfWorkContext.AddEvent(message);
         }
     }
 }

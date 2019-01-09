@@ -12,10 +12,35 @@ using SFA.DAS.UnitOfWork;
 namespace SFA.DAS.EmployerAccounts.UnitTests.Models
 {
     [TestFixture]
+    public class Temp
+    {
+        [Test]
+        public void Test1()
+        {
+            var fixtures = new HealthCheckTestsFixture();
+
+            var healthCheck = fixtures.New();
+
+            Assert.AreEqual(fixtures.UserRef, healthCheck.UserRef);
+        }
+    }
+
+    [TestFixture]
+    public class HealthCheckTests2 : FluentTest<HealthCheckTestsFixture>
+    {
+        [Test]
+        public void TempTest()
+        {
+            Run(f => { }, (r) => Assert.Pass("What ever"));
+        }
+    }
+
+    [TestFixture]
     public class HealthCheckTests : FluentTest<HealthCheckTestsFixture>
     {
         [Test]
-        public void New_WhenCreatingAHealthCheck_ThenShouldCreateAHealthCheck()
+        public void 
+            New_WhenCreatingAHealthCheck_ThenShouldCreateAHealthCheck()
         {
             Run(f => f.New(), (f, r) => r.Should().NotBeNull().And.Match<HealthCheck>(h => h.UserRef == f.UserRef));
         }

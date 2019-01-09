@@ -18,8 +18,8 @@
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="7.0.14" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="4.1.1" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="4.1.1" />
     <PackageReference Include="SpecFlow" Version="2.4.0" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />

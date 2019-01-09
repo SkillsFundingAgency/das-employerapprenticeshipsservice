@@ -133,7 +133,8 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .UseNLogFactory()
                 .UseOutbox()
                 .UseStructureMapBuilder(container)
-                .UseUnitOfWork();
+                .UseUnitOfWork()
+                .UseMessageConventions(); 
 
             _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 

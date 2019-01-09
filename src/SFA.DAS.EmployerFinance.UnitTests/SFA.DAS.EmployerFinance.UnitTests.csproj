@@ -14,7 +14,7 @@
     <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="2.1.716" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.43" />
     <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
-    <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="7.0.14" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
   </ItemGroup>

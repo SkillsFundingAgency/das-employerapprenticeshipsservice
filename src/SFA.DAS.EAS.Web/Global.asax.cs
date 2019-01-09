@@ -141,7 +141,8 @@ namespace SFA.DAS.EAS.Web
                 .UseNLogFactory()
                 .UseOutbox()
                 .UseStructureMapBuilder(container)
-                .UseUnitOfWork();
+                .UseUnitOfWork()
+                .UseMessageConventions();
 
             _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 

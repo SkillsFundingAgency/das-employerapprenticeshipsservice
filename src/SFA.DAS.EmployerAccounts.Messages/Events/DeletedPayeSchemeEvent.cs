@@ -1,9 +1,8 @@
 ﻿using System;
-using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
 {
-    public class DeletedPayeSchemeEvent : Event
+    public class DeletedPayeSchemeEvent
     {
         public long AccountId { get; set; }
         public string UserName { get; set; }
