@@ -38,38 +38,27 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
 
         public async Task MigrateUsers()
         {
-            try
+            var users = _db.Value.Memberships.Include(m => m.User).Where(x => x.Role != Role.None).ToList();
+
+            _logger.LogInformation("Migrating users into the read store");
+
+            var populateMessageId = Guid.NewGuid().ToString();
+
+            foreach (var user in users)
             {
-                var users = _db.Value.Memberships.Include(m => m.User).Where(x => x.Role != Role.None).ToList();
+                var accountUserExists = await CosmosDb.QueryableExtensions.AnyAsync(
+                    _accountUsersRepository.CreateQuery(),
+                    x => x.AccountId == user.AccountId && x.UserRef == user.User.Ref);
 
-                _logger.LogInformation("Migrating users into the read store");
-
-                var populateMessageId = Guid.NewGuid().ToString();
-
-                foreach (var user in users)
+                if (!accountUserExists)
                 {
-                    var accountUserExists = await CosmosDb.QueryableExtensions.AnyAsync(
-                        _accountUsersRepository.CreateQuery(),
-                        x => x.AccountId == user.AccountId && x.UserRef == user.User.Ref);
-
-                    if (!accountUserExists)
-                    {
-                        var document = new AccountUser(user.User.Ref, user.AccountId, (UserRole) user.Role,
-                            DateTime.UtcNow, populateMessageId);
-                        await _accountUsersRepository.Add(document, null, CancellationToken.None);
-                    }
+                    var document = new AccountUser(user.User.Ref, user.AccountId, (UserRole) user.Role,
+                        DateTime.UtcNow, populateMessageId);
+                    await _accountUsersRepository.Add(document, null, CancellationToken.None);
                 }
+            }
 
-                _logger.LogInformation("Finished migrating users into the read store");
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.Message);
-                if(e.InnerException != null)
-                    _logger.LogError(e.InnerException.Message);
-                if (e.InnerException.InnerException != null)
-                    _logger.LogError(e.InnerException.InnerException.Message);
-            }
+            _logger.LogInformation("Finished migrating users into the read store");
         }
     }
 }
