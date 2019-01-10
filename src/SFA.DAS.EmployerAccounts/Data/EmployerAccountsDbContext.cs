@@ -75,6 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.Account);
             modelBuilder.Entity<UserAccountSetting>().HasRequired(u => u.User);
             modelBuilder.Entity<UserAccountSetting>().ToTable("UserAccountSettings");
+            modelBuilder.Entity<RunOnceJob>().ToTable("RunOnceJob", "dbo");
             modelBuilder.Entity<RunOnceJob>().HasKey(j => j.Name);
         }
     }
