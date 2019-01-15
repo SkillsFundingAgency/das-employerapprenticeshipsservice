@@ -8,6 +8,8 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
@@ -18,14 +20,16 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
         private readonly IMediator _mediator;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IValidator<RemoveTeamMemberCommand> _validator;
+        private readonly IEventPublisher _eventPublisher;
 
-        public RemoveTeamMemberCommandHandler(IMediator mediator, IMembershipRepository membershipRepository, IValidator<RemoveTeamMemberCommand> validator)
+        public RemoveTeamMemberCommandHandler(IMediator mediator, IMembershipRepository membershipRepository, IValidator<RemoveTeamMemberCommand> validator, IEventPublisher eventPublisher)
         {
             if (membershipRepository == null)
                 throw new ArgumentNullException(nameof(membershipRepository));
             _mediator = mediator;
             _membershipRepository = membershipRepository;
             _validator = validator;
+            _eventPublisher = eventPublisher;
         }
 
         protected override async Task HandleCore(RemoveTeamMemberCommand message)
@@ -53,6 +57,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
             await AddAuditEntry(owner, teamMember);
 
             await _membershipRepository.Remove(message.UserId, owner.AccountId);
+
+            await _eventPublisher.Publish(new AccountUserRemovedEvent(teamMember.AccountId, message.UserRef, DateTime.UtcNow));
         }
 
         private async Task AddAuditEntry(MembershipView owner, Membership teamMember)

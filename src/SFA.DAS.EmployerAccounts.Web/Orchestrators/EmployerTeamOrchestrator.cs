@@ -398,6 +398,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     await _mediator.SendAsync(new RemoveTeamMemberCommand
                     {
                         UserId = userId,
+                        UserRef = userResponse.User.Ref,
                         HashedAccountId = accountId,
                         ExternalUserId = externalUserId
                     });
