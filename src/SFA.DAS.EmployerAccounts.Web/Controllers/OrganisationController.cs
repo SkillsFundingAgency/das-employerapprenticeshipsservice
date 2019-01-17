@@ -205,7 +205,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return RedirectToAction("Index", "EmployerAgreement");
 
                 case "homepage":
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = hashedAccountId });   
 
                 default:
                     var errorMessage = "Please select one of the next steps below";

@@ -6,17 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="4.17.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
-    <PackageReference Include="Moq" Version="4.5.28" />
+    <PackageReference Include="Moq" Version="4.10.0" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
+    <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.UnitTests\SFA.DAS.EmployerAccounts.UnitTests.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 

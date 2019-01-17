@@ -9,8 +9,8 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.UnitTests.Builders;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.Builders;
 using SFA.DAS.Testing.EntityFramework;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
         [Test]
         public Task Handle_WhenHandlingAHealthCheckEvent_ThenShouldUpdateHealthCheck()
         {
-            return RunAsync(f => f.Handle(), f => f.HealthChecks[1].ReceivedEvent.Should().HaveValue());
+            return TestAsync(f => f.Handle(), f => f.HealthChecks[1].ReceivedEvent.Should().HaveValue());
         }
     }
 
@@ -37,8 +37,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers
 
             HealthChecks = new List<HealthCheck>
             {
-                new HealthCheckBuilder().WithId(1).Build(),
-                new HealthCheckBuilder().WithId(2).Build()
+                ObjectActivator.CreateInstance<HealthCheck>().Set(x=>x.Id, 1),
+                ObjectActivator.CreateInstance<HealthCheck>().Set(x=>x.Id, 2)
             };
 
             Db.Setup(d => d.HealthChecks).Returns(new DbSetStub<HealthCheck>(HealthChecks));

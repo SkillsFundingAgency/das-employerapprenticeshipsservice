@@ -10,5 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public string Address { get; set; }
         public string UserName { get; set; }
         public Guid UserRef { get; set; }
+
+        public string OrganisationName { get; set; }
     }
 }

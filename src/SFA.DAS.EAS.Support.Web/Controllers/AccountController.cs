@@ -9,6 +9,7 @@ using SFA.DAS.Support.Shared.Discovery;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
+    [Authorize(Roles = "das-support-portal")]
     public class AccountController : Controller
     {
         private readonly IAccountHandler _accountHandler;

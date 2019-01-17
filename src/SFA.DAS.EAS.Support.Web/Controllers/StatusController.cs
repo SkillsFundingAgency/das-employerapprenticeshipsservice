@@ -6,6 +6,7 @@ using SFA.DAS.Support.Shared;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
+    [Authorize(Roles = "das-support-portal")]
     [System.Web.Mvc.RoutePrefix("api/status")]
     public class StatusController : ApiController
     {

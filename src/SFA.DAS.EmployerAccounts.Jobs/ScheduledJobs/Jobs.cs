@@ -4,7 +4,7 @@ using Microsoft.Azure.WebJobs.Host;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.NServiceBus.ClientOutbox;
 
-namespace SFA.DAS.EmployerAccounts.Jobs
+namespace SFA.DAS.EmployerAccounts.Jobs.ScheduledJobs
 {
     public static class Jobs
     {

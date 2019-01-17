@@ -8,7 +8,10 @@ using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Types.Models;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
@@ -24,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         private MembershipView _callerMembership;
         private TeamMember _userMembership;
         private Mock<IMediator> _mediator;
+        private Mock<IEventPublisher> _eventPublisher;
 
         [SetUp]
         public void Setup()
@@ -42,6 +46,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _callerMembership = new MembershipView
             {
                 AccountId = ExpectedAccountId,
+                UserRef = Guid.NewGuid().ToString(),
                 UserId = 1,
                 RoleId = (int)Role.Owner
             };
@@ -49,6 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _userMembership = new TeamMember
             {
                 AccountId = _callerMembership.AccountId,
+                UserRef = Guid.NewGuid().ToString(),
                 Id = _callerMembership.UserId + 1,
                 Role = (Role)_command.RoleId
             };
@@ -58,8 +64,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _membershipRepository.Setup(x => x.Get(_callerMembership.AccountId, _command.Email)).ReturnsAsync(_userMembership);
 
             _mediator = new Mock<IMediator>();
+            _eventPublisher = new Mock<IEventPublisher>();
 
-            _handler = new ChangeTeamMemberRoleCommandHandler(_membershipRepository.Object, _mediator.Object);
+            _handler = new ChangeTeamMemberRoleCommandHandler(_membershipRepository.Object, _mediator.Object, _eventPublisher.Object);
             
         }
 
@@ -175,6 +182,18 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             await _handler.Handle(_command);
 
             _membershipRepository.Verify(x => x.ChangeRole(_userMembership.Id, _callerMembership.AccountId, _command.RoleId), Times.Once);
+        }
+
+        [Test]
+        public async Task WillPublishUserRoleUpdatedEvent()
+        {
+            await _handler.Handle(_command);
+
+            _eventPublisher.Verify(x => x.Publish(It.Is<AccountUserRolesUpdatedEvent>(
+                p => p.AccountId  == _userMembership.AccountId &&
+                     p.UserRef.ToString() == _userMembership.UserRef &&
+                     p.Role == (UserRole)_command.RoleId))
+                , Times.Once);
         }
 
         [Test]

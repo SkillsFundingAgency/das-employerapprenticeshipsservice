@@ -126,6 +126,10 @@
       <Project>{98714180-addf-4ff9-b928-3e9a557ca4d5}</Project>
       <Name>SFA.DAS.EmployerAccounts.Api.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj">
+      <Project>{51f0ba52-dccd-4e6a-9f84-3bdfd501a06b}</Project>
+      <Name>SFA.DAS.EmployerAccounts.ReadStore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{b520a3e4-8259-4309-94d4-4a99fd32d2f7}</Project>
       <Name>SFA.DAS.EmployerAccounts</Name>

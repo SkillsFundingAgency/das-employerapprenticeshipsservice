@@ -77,4 +77,17 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="PublicHashedId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="891ef2a2-2abb-45c4-8672-9aeb415ea0b8" ChangeDateTime="01/10/2019 08:47:38">
+    <Property Name="ElementName" Value="[employer_account].[RunOnceJobs]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[employer_account]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[RunOnceJob]" />
+  </Operation>
+  <Operation Name="Move Schema" Key="e35da5c2-f66e-44e2-b568-82660535100d" ChangeDateTime="01/10/2019 11:19:23">
+    <Property Name="ElementName" Value="[employer_account].[RunOnceJob]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="NewSchema" Value="dbo" />
+    <Property Name="IsNewSchemaExternal" Value="True" />
+  </Operation>
 </Operations>

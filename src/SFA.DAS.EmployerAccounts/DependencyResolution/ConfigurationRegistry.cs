@@ -1,5 +1,7 @@
-﻿using SFA.DAS.Configuration;
+﻿using SFA.DAS.AutoConfiguration;
+using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.ReadStore.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
@@ -8,8 +10,10 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public ConfigurationRegistry()
         {
-            For<EmployerAccountsConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts")).Singleton();
-            For<EmployerFinanceConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance")).Singleton();
+            IncludeRegistry<AutoConfigurationRegistry>();
+            For<EmployerAccountsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts")).Singleton();
+            For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance")).Singleton();
+            For<EmployerAccountsReadStoreConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsReadStoreConfiguration>("SFA.DAS.EmployerAccounts.ReadStore")).Singleton();
         }
     }
 }
