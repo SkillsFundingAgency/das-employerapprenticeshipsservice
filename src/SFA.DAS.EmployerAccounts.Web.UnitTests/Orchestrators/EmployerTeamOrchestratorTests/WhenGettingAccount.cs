@@ -86,7 +86,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                              new EmployerAgreementStatusDto
                              {
                                  Pending = new PendingEmployerAgreementDetailsDto { Id = 123 }
+                             },
+                                                          new EmployerAgreementStatusDto
+                             {
+                                 Signed = new SignedEmployerAgreementDetailsDto { Id = 123 }
                              }
+
                          }
                      });
 
@@ -112,6 +117,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrgainsationCount);
             Assert.AreEqual(_accountStats.PayeSchemeCount, actual.Data.PayeSchemeCount);
             Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
+            Assert.AreEqual(1, actual.Data.RequiresAgreementSigning);
+            Assert.AreEqual(1, actual.Data.AgreementSignedCount);
         }
 
         [Test]
