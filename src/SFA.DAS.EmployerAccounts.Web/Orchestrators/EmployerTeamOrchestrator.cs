@@ -246,7 +246,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             };
         }
 
-        public async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string hashedAccountId, string email, string externalUserId)
+        public Task<OrchestratorResponse<TeamMember>> GetActiveTeamMember(string hashedAccountId, string email, string externalUserId)
+        {
+            return GetTeamMember(hashedAccountId, email, externalUserId, true);
+        }
+
+        public Task<OrchestratorResponse<TeamMember>> GetTeamMemberWhetherActiveOrNot(string hashedAccountId, string email, string externalUserId)
+        {
+            return GetTeamMember(hashedAccountId, email, externalUserId, false);
+        }
+
+        private async Task<OrchestratorResponse<TeamMember>> GetTeamMember(string hashedAccountId, string email, string externalUserId, bool onlyIfMemberIsActive)
         {
             var userRoleResponse = await GetUserAccountRole(hashedAccountId, externalUserId);
 
@@ -261,7 +271,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             var response = await _mediator.SendAsync(new GetMemberRequest
             {
                 HashedAccountId = hashedAccountId,
-                Email = email
+                Email = email,
+                OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
 
             return new OrchestratorResponse<TeamMember>
@@ -387,6 +398,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     await _mediator.SendAsync(new RemoveTeamMemberCommand
                     {
                         UserId = userId,
+                        UserRef = userResponse.User.Ref,
                         HashedAccountId = accountId,
                         ExternalUserId = externalUserId
                     });

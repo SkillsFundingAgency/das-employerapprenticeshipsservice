@@ -35,37 +35,28 @@ else
         <div class="column-two-thirds">
             <div class="grid-row">
                 <div class="column-half">
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("ViewTeam")">Your team</a>
-                    </h2>
+                    <h2 class="heading-medium"><a href="@Url.Action("ViewTeam")">Your team</a></h2>
                     <p>Control what your team can do and invite new team members.</p>
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
-                    </h2>
+                    <h2 class="heading-medium"><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></h2>
                     <p>Add your organisations that will make contracts with training providers.</p>
-                    <h2 class="heading-medium">
-                        <a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a>
-                    </h2>
+                    <h2 class="heading-medium"><a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a></h2>
                     <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
+                    @if (Html.IsAuthorized(FeatureType.ProviderRelationships))
+                    {
+                        <h2 class="heading-medium"><a href="@Url.ProviderRelationshipsAction("providers")">Training provider permissions</a></h2>
+                        <p>Set training provider permissions and control what tasks they can do on your behalf.</p>
+                    }
                 </div>
                 <div class="column-half">
-                    <h2 class="heading-medium">
-                        <a href="@Url.EmployerFinanceAction("finance")">Finance</a>
-                    </h2>
+                    <h2 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Finance</a></h2>
                     <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
-                    <h2 class="heading-medium">
-                        <a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a>
-                    </h2>
+                    <h2 class="heading-medium"><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a></h2>
                     <p>Add or remove <abbr title="Pay as your earn">PAYE</abbr> schemes.</p>
-                    <h2 class="heading-medium">
-                        <a href="https://findapprenticeshiptraining.sfa.bis.gov.uk/" target="_blank" rel="external">Find apprenticeship training</a>
-                    </h2>
+                    <h2 class="heading-medium"><a href="https://findapprenticeshiptraining.sfa.bis.gov.uk/" target="_blank" rel="external">Find apprenticeship training</a></h2>
                     <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
                     @if (Html.IsAuthorized(FeatureType.Recruitments))
                     {
-                        <h2 class="heading-medium">
-                            <a href="@Url.EmployerRecruitAction()">Recruitment</a>
-                        </h2>
+                        <h2 class="heading-medium"><a href="@Url.EmployerRecruitAction()">Recruitment</a></h2>
                         <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprenticeship.</p>
                     }
                 </div>

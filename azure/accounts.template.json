@@ -20,6 +20,9 @@
         "workerAppServicePlanName": {
             "type": "string"
         },
+        "accountsCosmosDbName": {
+            "type": "string"
+        },
         "aseHostingEnvironmentName": {
             "type": "string",
             "defaultValue": ""
@@ -315,7 +318,36 @@
             "dependsOn": [
                 "WorkerAppServicePlan"
             ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "cosmos-db-resources-deployment",
+            "dependsOn": [],
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/cosmos-db.json",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "cosmosDbName": {
+                        "value": "[parameters('accountsCosmosDbName')]"
+                    },
+                    "cosmosDbType": {
+                        "value": "GlobalDocumentDB"
+                    },
+                    "defaultConsistencyLevel": {
+                        "value": "Strong"
+                    }
+                }
+            }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "AccountsCosmosDbPrimaryMasterKey": {
+            "type": "string",
+            "value": "[reference('cosmos-db-resources-deployment').outputs.PrimaryMasterKey.value]"
+        }
+    }
 }

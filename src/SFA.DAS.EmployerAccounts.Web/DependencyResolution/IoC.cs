@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<ActivitiesClientRegistry>();
+                c.AddRegistry<ApprenticeshipLevyRegistry>();
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
@@ -35,9 +36,12 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<NotificationsRegistry>();
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
+                c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
+                c.AddRegistry<ValidationRegistry>();
 
                 c.AddRegistry<DefaultRegistry>();
             });

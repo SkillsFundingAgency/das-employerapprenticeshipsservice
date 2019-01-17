@@ -43,6 +43,8 @@
         public const string HomeControllerName = "Home";
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";
+        public const string InvitationControllerName = "Invitation";
+        public const string InvitationIndexName = "All";
         public const string InviteActionName = "Invite";
         public const string LegacyEasBaseUrlKeyName = "LegacyEasBaseUrl";
         public const string LegalAgreementViewName = "LegalAgreement";
@@ -56,6 +58,7 @@
         public const string OrganisationAddedNextStepsSearchActionName = "OrganisationAddedNextStepsSearch";
         public const string OrganisationControllerName = "Organisation";
         public const string OrganisationSharedControllerName = "OrganisationShared";
+        public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
         public const string PdfContentTypeName = "application/pdf";
         public const string RegisterUserActionName = "RegisterUser";

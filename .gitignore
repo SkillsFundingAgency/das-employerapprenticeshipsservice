@@ -191,6 +191,7 @@ ClientBin/
 *.pfx
 *.publishsettings
 node_modules/
+*/package-lock.json
 orleans.codegen.cs
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components
@@ -241,6 +242,7 @@ FakesAssemblies/
 _Pvt_Extensions
 
 # Paket dependency manager
+**/package-lock.json
 .paket/paket.exe
 paket-files/
 
@@ -267,3 +269,4 @@ src/Tools/PhantomJS/tools/phantomjs/ChangeLog
 # Other
 .learningtransport/
 App_Data/
+src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj.DotSettings

@@ -7,8 +7,11 @@ using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
+using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
 {
@@ -16,14 +19,16 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
     {
         private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
+        private readonly IEventPublisher _eventPublisher;
         private readonly ChangeTeamMemberRoleCommandValidator _validator;
 
-        public ChangeTeamMemberRoleCommandHandler(IMembershipRepository membershipRepository, IMediator mediator)
+        public ChangeTeamMemberRoleCommandHandler(IMembershipRepository membershipRepository, IMediator mediator, IEventPublisher eventPublisher)
         {
             if (membershipRepository == null)
                 throw new ArgumentNullException(nameof(membershipRepository));
             _membershipRepository = membershipRepository;
             _mediator = mediator;
+            _eventPublisher = eventPublisher;
             _validator = new ChangeTeamMemberRoleCommandValidator();
         }
 
@@ -50,6 +55,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You cannot change your own role" } });
 
             await _membershipRepository.ChangeRole(existing.Id, caller.AccountId, message.RoleId);
+
+            await _eventPublisher.Publish(new AccountUserRolesUpdatedEvent(caller.AccountId, Guid.Parse(existing.UserRef),
+                (UserRole)message.RoleId, DateTime.UtcNow));
 
             await _mediator.SendAsync(new CreateAuditCommand
             {

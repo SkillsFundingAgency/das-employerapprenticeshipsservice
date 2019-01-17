@@ -49,6 +49,9 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
     <PackageReference Include="BrockAllen.CookieTempData.dll" Version="1.3.0" />
+    <PackageReference Include="FluentValidation">
+      <Version>6.2.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.8.1" />
     <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.8.1" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
@@ -61,7 +64,7 @@
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.3.0.44308" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.43" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
@@ -119,7 +122,12 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Exceptions\InvalidStateException.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\OrchestratorExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
@@ -128,60 +136,94 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
+    <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
+    <Compile Include="Mappings\OrganisationMappings.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
+    <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
+    <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
+    <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
+    <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
+    <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
+    <Compile Include="ViewModels\GatewayInformViewModel.cs" />
+    <Compile Include="ViewModels\PayeSchemeDetailViewModel.cs" />
+    <Compile Include="ViewModels\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
+    <Compile Include="ViewModels\AddLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\ConfirmLegalAgreementToRemoveViewModel.cs" />
+    <Compile Include="ViewModels\CreateAccountViewModel.cs" />
+    <Compile Include="ViewModels\CreateNewLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAccountPayeListViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementListViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementPdfViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\EmployerTeamMembersViewModel.cs" />
     <Compile Include="ViewModels\FindOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\FlashMessageViewModel.cs" />
     <Compile Include="ViewModels\HealthCheckViewModel.cs" />
     <Compile Include="ViewModels\IAccountViewModel.cs" />
+    <Compile Include="ViewModels\IncorrectOrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\InvitationViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberNextStepsViewModel.cs" />
     <Compile Include="ViewModels\InviteTeamMemberViewModel.cs" />
+    <Compile Include="ViewModels\LegalAgreementsToRemoveViewModel.cs" />
     <Compile Include="ViewModels\LegalEntitySignedAgreementViewModel.cs" />
     <Compile Include="ViewModels\NavigationViewModel.cs" />
     <Compile Include="ViewModels\NotificationSettingsViewModel.cs" />
     <Compile Include="ViewModels\OrgainsationViewModelBase.cs" />
+    <Compile Include="ViewModels\OrganisationAddedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
+    <Compile Include="ViewModels\OrganisationUpdatedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
+    <Compile Include="ViewModels\SearchOrganisationViewModel.cs" />
+    <Compile Include="ViewModels\SelectOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SignAgreementViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
+    <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
+    <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
+    <Compile Include="ViewModels\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
@@ -604,6 +646,42 @@
     <Content Include="Views\Transfers\TransferRequests.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\EmployerAccount\RenameAccount.cshtml" />
+    <Content Include="Views\SearchOrganisation\SearchForOrganisation.cshtml" />
+    <Content Include="Views\SearchOrganisation\SearchForOrganisationResults.cshtml" />
+    <Content Include="Views\OrganisationShared\AddOtherOrganisationDetails.cshtml" />
+    <Content Include="Views\OrganisationShared\SelectAddress.cshtml" />
+    <Content Include="Views\OrganisationShared\AddOrganisationAddress.cshtml" />
+    <Content Include="Views\OrganisationShared\ConfirmOrganisationDetails.cshtml" />
+    <Content Include="Views\OrganisationShared\FindAddress.cshtml" />
+    <Content Include="Views\Shared\GatewayInform.cshtml" />
+    <Content Include="Views\EmployerAccount\Summary.cshtml" />
+    <Content Include="Views\Shared\_PayeNotFound.cshtml" />
+    <Content Include="Views\Organisation\OrganisationAddedNextSteps.cshtml" />
+    <Content Include="Views\Organisation\Review.cshtml" />
+    <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
+    <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
+    <Content Include="Views\EmployerAgreement\Index.cshtml" />
+    <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
+    <Content Include="Views\EmployerAgreement\Details.cshtml" />
+    <Content Include="Views\EmployerAgreement\View.cshtml" />
+    <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
+    <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
+    <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
+    <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v1.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v2.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v2_changes.cshtml" />
+    <Content Include="Views\Organisation\OrganisationUpdatedNextSteps.cshtml" />
+    <Content Include="Views\Settings\NotificationSettings.cshtml" />
+    <Content Include="Views\Settings\NotificationUnsubscribe.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\ConfirmPayeScheme.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Details.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
+    <Content Include="Views\Shared\GatewayInform.cshtml" />
+    <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
+    <Content Include="Views\Shared\_PayeNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

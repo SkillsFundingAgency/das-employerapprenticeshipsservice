@@ -4,6 +4,7 @@ using SFA.DAS.EAS.Support.ApplicationServices.Services;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
+    [Authorize(Roles = "das-support-portal")]
     public class SearchController : ApiController
     {
         private readonly IAccountHandler _handler;

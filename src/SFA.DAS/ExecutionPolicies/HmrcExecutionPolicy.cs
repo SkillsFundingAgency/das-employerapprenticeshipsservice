@@ -1,8 +1,8 @@
-﻿using System;
-using HMRC.ESFA.Levy.Api.Types.Exceptions;
+﻿using HMRC.ESFA.Levy.Api.Types.Exceptions;
 using Polly;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
+using System;
 
 namespace SFA.DAS.ExecutionPolicies
 {
@@ -12,20 +12,22 @@ namespace SFA.DAS.ExecutionPolicies
         public const string Name = "HMRC Policy";
 
         private readonly ILog _logger;
-        private readonly Policy TooManyRequestsPolicy;
-        private readonly Policy ServiceUnavailablePolicy;
-        private readonly Policy InternalServerErrorPolicy;
-        private readonly Policy RequestTimeoutPolicy;
 
-        public HmrcExecutionPolicy(ILog logger)
+        public HmrcExecutionPolicy(ILog logger) : this(logger, new TimeSpan(0, 0, 10))
+        {
+
+        }
+
+        public HmrcExecutionPolicy(ILog logger, TimeSpan retryWaitTime)
         {
             _logger = logger;
 
-            TooManyRequestsPolicy = Policy.Handle<TooManyRequestsException>().WaitAndRetryForeverAsync((i) => new TimeSpan(0, 0, 10), (ex, ts) => OnRetryableFailure(ex));
-            RequestTimeoutPolicy = Policy.Handle<RequestTimeOutException>().WaitAndRetryForeverAsync((i) => new TimeSpan(0, 0, 10), (ex, ts) => OnRetryableFailure(ex));
-            ServiceUnavailablePolicy = CreateAsyncRetryPolicy<ServiceUnavailableException>(5, new TimeSpan(0, 0, 10), OnRetryableFailure);
-            InternalServerErrorPolicy = CreateAsyncRetryPolicy<InternalServerErrorException>(5, new TimeSpan(0, 0, 10), OnRetryableFailure);
-            RootPolicy = Policy.WrapAsync(TooManyRequestsPolicy, ServiceUnavailablePolicy, InternalServerErrorPolicy, RequestTimeoutPolicy);
+            Policy tooManyRequestsPolicy = Policy.Handle<ApiHttpException>(ex => ex.HttpCode.Equals(429)).WaitAndRetryForeverAsync((i) => retryWaitTime, (ex, ts) => OnRetryableFailure(ex));
+            Policy requestTimeoutPolicy = Policy.Handle<ApiHttpException>(ex => ex.HttpCode.Equals(408)).WaitAndRetryForeverAsync((i) => retryWaitTime, (ex, ts) => OnRetryableFailure(ex));
+            var serviceUnavailablePolicy = CreateAsyncRetryPolicy<ApiHttpException>(ex => ex.HttpCode.Equals(503), 5, retryWaitTime, OnRetryableFailure);
+            var internalServerErrorPolicy = CreateAsyncRetryPolicy<ApiHttpException>(ex => ex.HttpCode.Equals(500), 5, retryWaitTime, OnRetryableFailure);
+
+            RootPolicy = Policy.WrapAsync(tooManyRequestsPolicy, serviceUnavailablePolicy, internalServerErrorPolicy, requestTimeoutPolicy);
         }
 
         protected override T OnException<T>(Exception ex)

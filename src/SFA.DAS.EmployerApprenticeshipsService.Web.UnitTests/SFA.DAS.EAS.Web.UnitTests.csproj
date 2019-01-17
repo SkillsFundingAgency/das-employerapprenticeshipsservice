@@ -147,17 +147,17 @@
     <Reference Include="Polly, Version=5.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Polly.5.7.0\lib\net45\Polly.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities, Version=1.2.66.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.66\lib\net45\SFA.DAS.Activities.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities, Version=1.2.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.71\lib\net45\SFA.DAS.Activities.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Activities.Client, Version=1.2.66.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.66\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
+    <Reference Include="SFA.DAS.Activities.Client, Version=1.2.71.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Activities.Client.1.2.71\lib\net45\SFA.DAS.Activities.Client.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.151.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.151\lib\net45\SFA.DAS.Commitments.Api.Types.dll</HintPath>
+    <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Common.Domain, Version=1.3.0.44308, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Common.Domain.1.3.0.44308\lib\net45\SFA.DAS.Common.Domain.dll</HintPath>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.43.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.43\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.53229\lib\net45\SFA.DAS.Configuration.dll</HintPath>
@@ -278,57 +278,11 @@
     <Compile Include="Controllers\BaseControllerTests\WhenReturningView.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIManageMyNotificationSettings.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenICreateAnAccount.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIHaveSelectedAnEmployer.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenISearchForAnEmployer.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenIStartTheProcess.cs" />
-    <Compile Include="Controllers\EmployerAccountControllerTests\WhenISubmitMyDetails.cs" />
-    <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIAddAPayeScheme.cs" />
-    <Compile Include="Controllers\EmployerAccountPayeControllerTests\WhenIRemoveAPayeScheme.cs" />
-    <Compile Include="Controllers\EmployerAgreementControllerTests.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenIHandleNewRegistration.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIConfirmAddOfOrganisation.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\OrganisationSharedControllerTestBase.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationAddress.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\WhenIEnterAPostcodeForAnAddress.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\WhenIGoToAddAnOrganisationOfTypeOther.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\WhenIAddAnOrganisationOfTypeOther.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenILoginAUser.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenILogout.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenIModifyMyUserAccount.cs" />
-    <Compile Include="Controllers\HomeControllerTests\WhenIViewTheHomePage.cs" />
-    <Compile Include="Controllers\OrganisationControllerTests\WhenIViewNextSteps.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\WhenISearchForAnAddress.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\WhenISelectAnAddress.cs" />
-    <Compile Include="Controllers\OrganisationSharedTests\WhenIUpdateAnOrganisationsAddress.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenCreatingTheAccount.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenManagingUserSettings.cs" />
-    <Compile Include="Orchestrators\EmployerAccountOrchestratorTests\WhenSearchingForACompany.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenAddingAPayeScheme.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingPayeSchemeDetails.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenGettingTheNextStepsDetails.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenIGetPayeEnglishFractionHistory.cs" />
-    <Compile Include="Orchestrators\EmployerAccountPayeOrchestratorTests\WhenRemovingAPayeScheme.cs" />
-    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetTheConfirmRemoveAgreementModel.cs" />
-    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetThePdfAgreement.cs" />
-    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIGetAListOfAgreementsToRemove.cs" />
-    <Compile Include="Orchestrators\EmployerAgreementOrchestratorTests\WhenIRemoveTheLegalAgreement.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenIAddAnOrganisationAddress.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntity.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntityOfOtherType.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenICreateALegalEntityWhenNotOwner.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForACharity.cs" />
-    <Compile Include="Orchestrators\OrganisationOrchestratorTests\WhenISearchForALegalEntity.cs" />
-    <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenCallingHmrcService.cs" />
-    <Compile Include="Orchestrators\HmrcOrchestratorTests\WhenGettingTheTokenResponse.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingAllUsers.cs" />
     <Compile Include="Orchestrators\HomeOrchestratorTests\WhenGettingUserAccounts.cs" />
-    <Compile Include="Orchestrators\UserSettingsOrchestrator\WhenUnsubscribingFromNotification.cs" />
-    <Compile Include="Orchestrators\SearchOrganisationOrchestratorTests\WhenISearchForAnOrganisation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validation\WhenValidatingAddLegalEntityViewModel.cs" />
   </ItemGroup>
@@ -343,6 +297,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>
