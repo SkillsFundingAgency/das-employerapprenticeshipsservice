@@ -28,7 +28,7 @@ FROM (
 	FROM [employer_financial].[TransactionLine] t
 		JOIN [employer_financial].[Payment] p
 			ON t.AccountId = p.AccountId AND t.PeriodEnd = p.PeriodEnd AND t.Ukprn = p.Ukprn
-		JOIN [employer_financial].[PaymentMetaData] meta 
+		LEFT JOIN [employer_financial].[PaymentMetaData] meta 
 			ON	p.PaymentMetaDataId = meta.Id
 	WHERE 
 		p.AccountId = @AccountId
