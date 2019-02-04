@@ -207,7 +207,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
                     return new AprrenticeshipPaymentSummaryViewModel
                     {
-                        ApprenticeName = pg.Key.ApprenticeName ,//+ "-"+pg.Key.ApprenticeULN,
+                        ApprenticeName = pg.Key.ApprenticeName + "-"+pg.Key.ApprenticeULN,
                         LevyPaymentAmount = payments.Sum(t => t.LineAmount),
                         SFACoInvestmentAmount = payments.Sum(p => p.SfaCoInvestmentAmount),
                         EmployerCoInvestmentAmount = payments.Sum(p => p.EmployerCoInvestmentAmount)
