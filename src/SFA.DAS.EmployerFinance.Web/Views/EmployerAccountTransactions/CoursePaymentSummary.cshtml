@@ -54,40 +54,44 @@
         <table class="responsive">
             <thead>
                 <tr>
-                    <th colspan="2"></th>
+                    <th colspan="3"></th>
                     <th class="highlight colgroup" scope="colgroup" colspan="2">Co-investment</th>
                     <th colspan="2"></th>
                 </tr>
                 <tr>
                     <th scope="col" class="tw-20">Apprentice</th>
+                    <th scope="col" class="tw-20">Unique learner number (ULN)</th>
                     <th scope="col" class="numeric tw-20">Paid from levy</th>
                     <th scope="col" class="numeric tw-20 highlight">Government contribution</th>
                     <th scope="col" class="numeric tw-20 highlight no-wrap">Your contribution</th>
-                    <th scope="col" class="numeric tw-20">Amount</th>
+                    <th scope="col" class="numeric tw-30">Amount</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var coursePaymentSummary in Model.Data.ApprenticePayments)
                 {
-                    <tr class="responsive-tr">
-                        @if (string.IsNullOrEmpty(@coursePaymentSummary.ApprenticeName))
-                        {
-                            <td data-label="Apprentice"><em>Not available</em></td>
-                        }
-                        else
-                        {
-                            <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
-                        }
-                        <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
-                        <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C2", culture)</td>
-                        <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C2", culture)</td>
-                        <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C2", culture)</td>
-                    </tr>
+                <tr class="responsive-tr">
+                    @if (string.IsNullOrEmpty(@coursePaymentSummary.ApprenticeName))
+                    {
+                        <td data-label="Apprentice"><em>Not available</em></td>
+                        <td data-label="Unique learner number (ULN)"><em>Not available</em></td>
+                    }
+                    else
+                    {
+                        <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
+                        <td class="numeric" data-label="Unique learner number (ULN)">@coursePaymentSummary.ApprenticeULN</td>
+                    }
+                    <td class="numeric no-wrap" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
+                    <td class="numeric highlight no-wrap" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C2", culture)</td>
+                    <td class="numeric highlight no-wrap" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C2", culture)</td>
+                    <td class="numeric no-wrap" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C2", culture)</td>
+                </tr>
                 }
             </tbody>
             <tfoot>
                 <tr class="total">
                     <td data-label="Totals"> </td>
+                    <td data-label="Unique learner number (ULN)"> </td>@*This is needed to space out the total columns at the bottom*@
                     <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C2", culture)</td>
                     <td data-label="Government contribution" class="highlight total numeric no-wrap">@Model.Data.SFACoInvestmentTotal.ToString("C2", culture)</td>
                     <td data-label="Your contribution" class="highlight total numeric no-wrap">@Model.Data.EmployerCoInvestmentTotal.ToString("C2", culture)</td>
