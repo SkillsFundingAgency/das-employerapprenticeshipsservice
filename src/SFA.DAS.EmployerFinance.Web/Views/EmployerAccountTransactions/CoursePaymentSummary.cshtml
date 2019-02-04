@@ -74,11 +74,19 @@
                     @if (string.IsNullOrEmpty(@coursePaymentSummary.ApprenticeName))
                     {
                         <td data-label="Apprentice"><em>Not available</em></td>
-                        <td data-label="Unique learner number (ULN)"><em>Not available</em></td>
+
                     }
                     else
                     {
                         <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
+
+                    }
+                    @if (string.IsNullOrEmpty(@coursePaymentSummary.ApprenticeULN.ToString()))
+                    {
+                        <td data-label="Unique learner number (ULN)"><em>Not available</em></td>
+                    }
+                    else
+                    {
                         <td class="numeric" data-label="Unique learner number (ULN)">@coursePaymentSummary.ApprenticeULN</td>
                     }
                     <td class="numeric no-wrap" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
