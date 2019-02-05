@@ -21,7 +21,7 @@
       <Setting name="TokenCertificateThumbprint" value="6B7ACC520305BFDB4F7252DAEB2177CC091FAAE1" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="7E0C8989B70195C9AF040EBAD6F6E5012E07F050" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="C330ADC8A2164D684E5ED7F0140ADD22505CC9E7" thumbprintAlgorithm="sha1" />
       <Certificate name="TokenCertificate" thumbprint="6B7ACC520305BFDB4F7252DAEB2177CC091FAAE1" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
