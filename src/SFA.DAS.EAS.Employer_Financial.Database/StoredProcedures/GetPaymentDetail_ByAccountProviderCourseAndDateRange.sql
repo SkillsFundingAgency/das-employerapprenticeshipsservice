@@ -26,7 +26,7 @@ FROM (
 		SUM(CASE WHEN p.FundingSource = 2 THEN -p.Amount ELSE 0 END) as SfaCoInvestmentAmount,
 		SUM(CASE WHEN p.FundingSource = 3 THEN -p.Amount ELSE 0 END) as EmployerCoInvestmentAmount
 	FROM [employer_financial].[Payment] p
-		JOIN [employer_financial].[PaymentMetaData] meta 
+		LEFT JOIN [employer_financial].[PaymentMetaData] meta 
 			ON	p.PaymentMetaDataId = meta.Id
 	WHERE 
 		p.AccountId = @AccountId
