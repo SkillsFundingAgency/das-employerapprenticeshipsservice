@@ -19,15 +19,15 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
 
         public decimal LevyDeclared { get; set; }
 
-        public string LevyDeclaredFormatted => LevyDeclared.ToString("0.00", NumberFormatInfo.InvariantInfo);
+        public string LevyDeclaredFormatted => LevyDeclared.ToString("0.00000", NumberFormatInfo.InvariantInfo);
 
         public decimal EnglishFraction { get; set; }
 
-        public string EnglishFractionFormatted => (100 * EnglishFraction).ToString("0.000", NumberFormatInfo.InvariantInfo);
+        public string EnglishFractionFormatted => (100 * EnglishFraction).ToString("0.00000", NumberFormatInfo.InvariantInfo);
 
         public decimal TenPercentTopUp { get; set; }
 
-        public string TenPercentTopUpFormatted => TenPercentTopUp.ToString("0.00", NumberFormatInfo.InvariantInfo);
+        public string TenPercentTopUpFormatted => TenPercentTopUp.ToString("0.00000", NumberFormatInfo.InvariantInfo);
 
         public string TrainingProvider { get; set; }
 
@@ -43,18 +43,18 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
 
         public decimal PaidFromLevy { get; set; }
 
-        public string PaidFromLevyFormatted => PaidFromLevy.ToString("0.00", NumberFormatInfo.InvariantInfo);
+        public string PaidFromLevyFormatted => PaidFromLevy.ToString("0.00000", NumberFormatInfo.InvariantInfo);
 
         public decimal EmployerContribution { get; set; }
 
-        public string EmployerContributionFormatted => EmployerContribution.ToString("0.00", NumberFormatInfo.InvariantInfo);
+        public string EmployerContributionFormatted => EmployerContribution.ToString("0.00000", NumberFormatInfo.InvariantInfo);
 
         public decimal GovermentContribution { get; set; }
 
-        public string GovermentContributionFormatted => GovermentContribution.ToString("0.00", NumberFormatInfo.InvariantInfo);
+        public string GovermentContributionFormatted => GovermentContribution.ToString("0.00000", NumberFormatInfo.InvariantInfo);
 
         public decimal Total { get; set; }
 
-        public string TotalFormatted => Total.ToString("0.00", NumberFormatInfo.InvariantInfo);
+        public string TotalFormatted => Total.ToString("0.00000", NumberFormatInfo.InvariantInfo);
     }
 }
