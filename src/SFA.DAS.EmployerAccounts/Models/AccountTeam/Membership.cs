@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 
         public virtual Role Role
         {
-            get => _role ?? (Role)_roleId.Value;
+            get => _role ?? (Role?)_roleId.Value ?? Role.None;
             set => _role = value;
         }
 
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
         [Obsolete("Please use 'Role' instead.")]
         public int RoleId
         {
-            get => _roleId ?? (int)_role.Value;
+            get => _roleId ?? (int?)_role.Value ?? (int)Role.None;
             set => _roleId = value;
         }
 

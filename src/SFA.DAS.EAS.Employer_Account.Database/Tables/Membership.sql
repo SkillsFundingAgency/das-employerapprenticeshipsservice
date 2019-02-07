@@ -2,7 +2,7 @@
 (
     [AccountId] BIGINT NOT NULL, 
     [UserId] BIGINT NOT NULL, 
-    [RoleId] INT NOT NULL, 
+    [RoleId] INT NOT NULL DEFAULT 0, 
 	[CreatedDate] DATETIME NOT NULL DEFAULT GETDATE(),
     [ShowWizard] BIT NOT NULL DEFAULT 1, 
     CONSTRAINT [FK_Membership_Account] FOREIGN KEY (AccountId) REFERENCES [employer_account].[Account]([Id]), 

@@ -13,14 +13,15 @@ namespace SFA.DAS.EmployerFinance.Models.AccountTeam
 
         public virtual Role Role
         {
-            get => _role ?? (Role)_roleId.Value;
+            get => _role ?? (Role?)_roleId.Value ?? Role.None;
+
             set => _role = value;
         }
 
         [Obsolete("Please use 'Role' instead.")]
         public int RoleId
         {
-            get => _roleId ?? (int)_role.Value;
+            get => _roleId ?? (int?)_role.Value ?? (int)Role.None;
             set => _roleId = value;
         }
 
