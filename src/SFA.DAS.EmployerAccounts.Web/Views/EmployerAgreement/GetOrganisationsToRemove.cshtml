@@ -25,32 +25,28 @@
                     <th scope="col"><span class="vh">Status</span></th>
             </thead>
             <tbody>
+                @{
+                    int count = 0;
+                }
                 @foreach (var org in Model.Data.Agreements)
                 {
                     <tr>
-                        <td>@org.Name</td>
                         @if (org.CanBeRemoved)
                         {
+                            <td>@org.Name</td>
                             <td><a href="@Url.Action("ConfirmRemoveOrganisation","EmployerAgreement",new {agreementId = org.HashedAgreementId})">Remove <span class="vh">@org.Name</span></a></td>
+                            count = count + 1;
                         }
-                        else
-                        {
-                            if (Model.Data.Agreements.Count == 1)
-                            {
-                                <td>Can't be removed because it's the only organisation on your account.</td>
-                            }
-                            else
-                            {
-                                <td>Can't be removed because it has ongoing apprenticeships.</td>
-                            }
-                        }
-                        
                     </tr>
+
                 }
 
-            
+                @if (count == 0)
+                {
+                <td>No organisations can be removed</td>
+                }
             </tbody>
-        </table>
+            </table>
     </div>
 </div>
 
