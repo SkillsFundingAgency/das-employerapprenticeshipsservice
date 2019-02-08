@@ -101,6 +101,7 @@
     <Compile Include="Interfaces\IRuleEvaluationResult.cs" />
     <Compile Include="Interfaces\IRuleRepository.cs" />
     <Compile Include="IoC\FinanceRegistry.cs" />
+    <Compile Include="Repositories\AccountDbContext.cs" />
     <Compile Include="Rules\CalculatedYearEndAdjustment.cs" />
     <Compile Include="Rules\CalculatedLevyDeclation.cs" />
     <Compile Include="Rules\Infrastructure\AccountValidationResult.cs" />

@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
     {
         private readonly List<AccountValidationResult> _accountResults = new List<AccountValidationResult>();
 
-        public string AccountIds { get; set; }
+        public IEnumerable<long> AccountIds { get; set; }
         public bool IsValid => Accounts != null && Accounts.All(account => account.IsValid);
         public IReadOnlyCollection<AccountValidationResult> Accounts => _accountResults;
 

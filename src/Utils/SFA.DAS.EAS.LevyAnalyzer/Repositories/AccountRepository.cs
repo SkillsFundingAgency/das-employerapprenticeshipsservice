@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using SFA.DAS.EAS.LevyAnalyser.Interfaces;
 using SFA.DAS.EAS.LevyAnalyser.Models;
 
@@ -22,6 +23,16 @@ namespace SFA.DAS.EAS.LevyAnalyser.Repositories
                 var levyTask = await financeDb.GetLevyDeclarationsAsync(accountId);
 
                 return new Account(accountId, txnsTask, levyTask);
+            }
+        }
+
+        public async Task<long[]> GetAllAccountIds()
+        {
+            using (var accountDb = _dbContextFactory.GetAccountDbContext())
+            {
+                var accounts = await accountDb.GetAllAccountIdsAsync();
+
+                return accounts;
             }
         }
     }

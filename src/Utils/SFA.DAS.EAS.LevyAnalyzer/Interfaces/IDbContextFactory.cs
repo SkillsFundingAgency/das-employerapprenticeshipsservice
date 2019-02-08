@@ -8,5 +8,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Interfaces
     public interface IDbContextFactory
     {
         FinanceDbContext GetFinanceDbContext();
+
+        AccountDbContext GetAccountDbContext();
     }
 }

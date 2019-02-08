@@ -16,5 +16,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.Repositories
             var connection = _dbConnectionFactory.GetConnection("Finance");
             return new FinanceDbContext(connection);
         }
+
+        public AccountDbContext GetAccountDbContext()
+        {
+            var connection = _dbConnectionFactory.GetConnection("Account");
+            return new AccountDbContext(connection);
+        }
     }
 }

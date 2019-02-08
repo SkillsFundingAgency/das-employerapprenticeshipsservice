@@ -33,12 +33,14 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
         {
             var config = _configProvider.Get<AnalyzeCommandConfig>();
 
+            var accountIds = string.IsNullOrWhiteSpace(config.AccountIds) ? await _accountRepository.GetAllAccountIds() : NumberRange.ToLongs(config.AccountIds);
+
             var results = new AllAccountValidationResult
             {
-                AccountIds = config.AccountIds
+                AccountIds = accountIds
             };
 
-            foreach (var accountId in NumberRange.ToInts(config.AccountIds))
+            foreach (var accountId in accountIds)
             {
                 var account = await _accountRepository.GetAccountAsync(accountId);
                 if (TryValidateAccount(account, out var levyValidationResult))

@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             foreach (var declaration in submissionsThatHaveBeenSupersededButStillHaveATransaction)
             {
-                validationResult.AddRuleViolation($"Submission {declaration.SubmissionId} for period {declaration.PayrollYear}/{declaration.PayrollMonth} was superseded but there is a transaction for this.");
+                validationResult.AddRuleViolation($"{declaration.EmpRef}: Submission {declaration.SubmissionId} for period {declaration.PayrollYear}/{declaration.PayrollMonth} was superseded but there is a transaction for this.");
             }
         }
     }
