@@ -22,6 +22,7 @@ FROM (
 		MAX(meta.PathwayName) as PathwayName,
 		MAX(meta.ApprenticeshipCourseStartDate) as CourseStartDate,
 		MAX(meta.ApprenticeName) as ApprenticeName,
+		p.Uln AS ApprenticeULN,
 		MAX(meta.ApprenticeNINumber) as ApprenticeNINumber,
 		SUM(CASE WHEN p.FundingSource = 2 THEN -p.Amount ELSE 0 END) as SfaCoInvestmentAmount,
 		SUM(CASE WHEN p.FundingSource = 3 THEN -p.Amount ELSE 0 END) as EmployerCoInvestmentAmount
@@ -54,6 +55,7 @@ FROM (
 		meta.PathwayName, 
 		p.Uln,
 		meta.ApprenticeName) AS Payments
+
 
 OUTER APPLY (
 		SELECT	TOP 1	MAX(DateCreated) AS DateCreated, MAX(TransactionDate) AS TransactionDate
