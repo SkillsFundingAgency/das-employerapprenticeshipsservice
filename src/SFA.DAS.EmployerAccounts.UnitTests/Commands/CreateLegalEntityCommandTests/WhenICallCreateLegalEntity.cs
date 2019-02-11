@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 FirstName = "Bob",
                 LastName = "Green",
                 UserRef = Guid.NewGuid().ToString(),
-                RoleId = 1,
+                Role = 1,
             };
 
             _agreementView = new EmployerAgreementView

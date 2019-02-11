@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 
             var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
 
-            if (member == null || member.RoleId != (short)Role.Owner)
+            if (member == null || member.Role != (short)Role.Owner)
             {
                 validationResult.IsUnauthorized = true;
             }

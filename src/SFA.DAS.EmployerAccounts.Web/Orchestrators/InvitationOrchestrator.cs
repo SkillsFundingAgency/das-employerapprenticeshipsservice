@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId,
                     NameOfPersonBeingInvited = model.Name,
                     EmailOfPersonBeingInvited = model.Email,
-                    RoleIdOfPersonBeingInvited = model.Role
+                    RoleOfPersonBeingInvited = model.Role
                 });
             }
             catch (InvalidRequestException ex)

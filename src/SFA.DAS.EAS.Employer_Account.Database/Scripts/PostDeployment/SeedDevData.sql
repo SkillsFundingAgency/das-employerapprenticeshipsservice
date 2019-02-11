@@ -28,7 +28,7 @@
 			VALUES (@accountId, @accountHashedId, @accountPublicHashedId, @legalEntityName, GETDATE())
 			SET IDENTITY_INSERT [employer_account].[Account] OFF
 		
-			INSERT INTO [employer_account].[Membership] (AccountId, UserId, RoleId)
+			INSERT INTO [employer_account].[Membership] (AccountId, UserId, Role)
 			VALUES (@accountId, @userId, 1)
 
 			EXEC [employer_account].[CreateLegalEntityWithAgreement] 

@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
     {
         public string HashedAccountId { get; set; }
         public string Email { get; set; }
-        public short RoleId { get; set; }
+        public short Role { get; set; }
         public string ExternalUserId { get; set; }
     }
 }

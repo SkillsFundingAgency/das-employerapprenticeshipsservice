@@ -96,7 +96,6 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
                 var membership = db.Memberships.Create();
                 membership.Account = account;
                 membership.User = user;
-                membership.RoleId = (int)role;
                 membership.Role = role;
 
                 db.Users.Add(user);

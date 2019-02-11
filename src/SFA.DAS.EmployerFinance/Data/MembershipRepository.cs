@@ -68,16 +68,16 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public Task ChangeRole(long userId, long accountId, short roleId)
+        public Task ChangeRole(long userId, long accountId, short Role)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@userId", userId, DbType.Int64);
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@roleId", roleId, DbType.Int16);
+            parameters.Add("@Role", Role, DbType.Int16);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "UPDATE [employer_account].[Membership] SET RoleId = @roleId WHERE AccountId = @accountId AND UserId = @userId;",
+                sql: "UPDATE [employer_account].[Membership] SET Role = @Role WHERE AccountId = @accountId AND UserId = @userId;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -115,17 +115,17 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.SingleOrDefault();
         }
 
-        public Task Create(long userId, long accountId, short roleId)
+        public Task Create(long userId, long accountId, short Role)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@userId", userId, DbType.Int64);
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@roleId", roleId, DbType.Int16);
+            parameters.Add("@Role", Role, DbType.Int16);
             parameters.Add("@createdDate", DateTime.UtcNow, DbType.DateTime);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [RoleId], [CreatedDate]) VALUES(@accountId, @userId, @roleId, @createdDate); ",
+                sql: "INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [Role], [CreatedDate]) VALUES(@accountId, @userId, @Role, @createdDate); ",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
