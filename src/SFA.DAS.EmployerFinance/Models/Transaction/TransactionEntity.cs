@@ -35,6 +35,7 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
         public int? PathwayCode { get; set; }
         public DateTime? CourseStartDate { get; set; }
         public string ApprenticeName { get; set; }
+        public int ApprenticeULN { get; set; }
         public string ApprenticeNINumber { get; set; }
         public decimal SfaCoInvestmentAmount { get; set; }
         public decimal EmployerCoInvestmentAmount { get; set; }
