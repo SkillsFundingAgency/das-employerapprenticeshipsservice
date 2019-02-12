@@ -7,6 +7,6 @@ AS
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
 	x.EmpRef in (Select EmpRef from [employer_financial].LevyDeclaration where AccountId = @AccountId)
-	AND x.LastSubmission = 1
+	AND (x.LastSubmission = 1 OR x.EndOfYearAdjustment = 1)
 	order by SubmissionDate asc
 
