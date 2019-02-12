@@ -62,7 +62,7 @@
                 </li>
                 <li class="done">
                     <p>
-                        @Model.Data.OrgainsationCount organisation@(Model.Data.OrgainsationCount == 1 ? "": "s") added
+                        @Model.Data.OrgainsationCount organisation@(Model.Data.OrgainsationCount == 1 ? "" : "s") added
                     </p>
                     <div class="status">
                         Done
@@ -112,20 +112,39 @@
                         <legend class="heading-small">Are you going to sign the agreement?</legend>
                         <p>This allows you to spend funds.</p>
                         <label class="block-label selection-button-radio" for="add-agreements-1" data-target="guide-wizard-step-agreements">
-                            <input id="add-agreements-1" type="radio" name="agreements-group" value="1">
+                            @{int value = 1; if (Model.Data.RequiresAgreementSigning > 0) { value = 1; } else { value = 2; } }
+                            <input id="add-agreements-1" type="radio" name="agreements-group" value="@value">
                             Yes
                         </label>
-                        <label class="block-label selection-button-radio" for="add-agreements-2">
+                        <label class="block-label selection-button-radio" for="add-agreements-2" data-target="value-setup">
                             <input id="add-agreements-2" type="radio" name="agreements-group" value="2">
+
                             No, someone else will sign the agreement
                         </label>
-                        <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
-                          @Model.Data.RequiresAgreementSigning unsigned agreement(s). <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
-                        </div>
+                        @if (Model.Data.RequiresAgreementSigning > 0)
+                        {
+                            <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
+                                @Model.Data.RequiresAgreementSigning unsigned agreement(s). <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
+                                All agreement(s) signed.
+                            </div>
+                        }
+
                     </fieldset>
                 </li>
                 <li class="done">
-                    <p>Agreements signed</p>
+                    @if (value == 2 && Model.Data.RequiresAgreementSigning == 0)
+                    {
+                        <p> Agreements signed</p>
+                    }
+                    else
+                    {
+                        <p> No Agreements signed</p>
+                    }
                     <div class="status">
                         Done
                         <svg class="icon" focusable="false" aria-hidden="true">
@@ -146,13 +165,14 @@
             </h3>
             <p><a href="@Url.Action("HideWizard", "EmployerTeam")">I'm done - take me to my homepage</a></p>
         </div>
-        @*@if (Model.Data.RequiresAgreementSigning > 0)
-        {
+       @if (Model.Data.RequiresAgreementSigning > 0)
+       {
         <p class="notice">
             <svg class="icon" focusable="false" aria-hidden="true">
                 <use xlink:href="#icon-important" />
             </svg>
             Your agreement needs to be signed before you can spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
-        </p>*@
+        </p>
+       }
     </div>
 </section>
