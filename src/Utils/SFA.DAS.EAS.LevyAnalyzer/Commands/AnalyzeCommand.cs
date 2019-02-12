@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
                 }
             }
 
-            await _resultSaver.SaveAsync(results);
+            await _resultSaver.SaveAsync(results.Accounts.Where(a => !a.IsValid));
         }
 
         private bool TryValidateAccount(Account account, out AccountValidationResult validationResult)
