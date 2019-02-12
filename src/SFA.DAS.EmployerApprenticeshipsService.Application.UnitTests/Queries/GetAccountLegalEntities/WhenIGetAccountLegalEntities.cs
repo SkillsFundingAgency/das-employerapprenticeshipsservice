@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities
 
             _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, _expectedUserId)).ReturnsAsync(new MembershipView
             {
-                Role = (short)Role.Owner,
+                Role = Role.Owner,
                 AccountId = ExpectedAccountId
             });
             _employerAgreementRepository.Setup(x => x.GetLegalEntitiesLinkedToAccount(ExpectedAccountId, false)).ReturnsAsync(_legalEntities);

@@ -24,12 +24,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new MembershipView
                 {
-                    Role = (short)Role.Transactor
+                    Role = Role.Transactor
                 });
             _membershipRepository.Setup(x => x.GetCaller(ExpectedUserId, ExpectedHashedAccountId))
                 .ReturnsAsync(new MembershipView
                 {
-                    Role = (short)Role.Owner
+                    Role = Role.Owner
                 } );
 
             _validator = new GetSignedEmployerAgreementPdfValidator(_membershipRepository.Object);

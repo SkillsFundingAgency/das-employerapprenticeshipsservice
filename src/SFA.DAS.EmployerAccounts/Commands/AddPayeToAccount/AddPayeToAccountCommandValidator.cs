@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
                 }
                 else
                 {
-                    if (member.Role != (int)Role.Owner)
+                    if (member.Role != Role.Owner)
                     {
                         validationResult.IsUnauthorized = true;
                     }

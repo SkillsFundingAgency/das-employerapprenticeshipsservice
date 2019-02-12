@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -136,13 +137,13 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.Text);
         }
 
-        public Task Accept(string email, long accountId, short Role)
+        public Task Accept(string email, long accountId, Role role)
         { 
             var parameters = new DynamicParameters();
 
             parameters.Add("@email", email, DbType.String);
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@Role", Role, DbType.Int16);
+            parameters.Add("@Role", role, DbType.Int16);
                 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[AcceptInvitation]",

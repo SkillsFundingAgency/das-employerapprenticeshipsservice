@@ -39,7 +39,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate
             if (validationResult.IsValid())
             {
                 var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
-                if (member == null || member.Role != (short) Role.Owner)
+                if (member == null || member.Role != Role.Owner)
                 {
                     validationResult.IsUnauthorized = true;
                 }

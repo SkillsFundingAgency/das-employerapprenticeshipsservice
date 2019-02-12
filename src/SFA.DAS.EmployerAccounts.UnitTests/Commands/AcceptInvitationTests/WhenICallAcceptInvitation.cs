@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             await _handler.Handle(new AcceptInvitationCommand());
 
             //Assert
-            _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, (short)_invitation.Role), Times.Once);
+            _invitationRepository.Verify(x => x.Accept(_invitation.Email, _invitation.AccountId, _invitation.Role), Times.Once);
         }
 
         [Test]

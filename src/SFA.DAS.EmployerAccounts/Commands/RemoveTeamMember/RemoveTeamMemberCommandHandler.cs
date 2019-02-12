@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
             
             if (owner == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not a member of this Account" } });
-            if ((Role)owner.Role != Role.Owner)
+            if (owner.Role != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
             var teamMember = await _membershipRepository.Get(message.UserId, owner.AccountId);

@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = 1,
                 AccountId = ExpectedAccountId,
-                Role = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _command = new RemoveTeamMemberCommand
@@ -145,7 +145,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
-                Role = (int)Role.Viewer
+                Role = Role.Viewer
             };
 
             var command = new RemoveTeamMemberCommand
@@ -188,7 +188,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
-                Role = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var command = new RemoveTeamMemberCommand

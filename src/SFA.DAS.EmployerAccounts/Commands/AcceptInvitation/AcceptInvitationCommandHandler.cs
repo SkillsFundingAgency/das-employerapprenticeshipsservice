@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
             if (invitation.ExpiryDate < DateTimeProvider.Current.UtcNow)
                 throw new InvalidOperationException("Invitation has expired");
 
-            await _invitationRepository.Accept(invitation.Email, invitation.AccountId, (short)invitation.Role);
+            await _invitationRepository.Accept(invitation.Email, invitation.AccountId,invitation.Role);
 
             await CreateAuditEntry(message, user, invitation);
 

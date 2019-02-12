@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                Role = (short)Role.Owner,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString(),
 
             };
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
                 AccountId = ExpectedAccountId,
                 UserRef = Guid.NewGuid().ToString(),
                 UserId = 1,
-                Role = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _userMembership = new TeamMember
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
                 AccountId = _callerMembership.AccountId,
                 UserRef = Guid.NewGuid().ToString(),
                 Id = _callerMembership.UserId + 1,
-                Role = (Role)_command.Role
+                Role = _command.Role
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                Role = (short)Role.Owner,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                Role = (short)Role.Owner,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                Role = (int)Role.Viewer
+                Role = Role.Viewer
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
@@ -122,7 +122,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                Role = (short)Role.Owner,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                Role = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
@@ -149,7 +149,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                Role = (short)Role.Owner,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -157,14 +157,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                Role = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var userMembership = new TeamMember
             {
                 AccountId = callerMembership.AccountId,
                 Id = callerMembership.UserId,
-                Role = (Role)callerMembership.Role
+                Role = callerMembership.Role
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
