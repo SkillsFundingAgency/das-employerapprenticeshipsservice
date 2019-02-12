@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_account");
-            modelBuilder.Entity<Account>().Ignore(a => a.RoleName);
+            modelBuilder.Entity<Account>().Ignore(a => a.role).Ignore(a => a.RoleName);
             modelBuilder.Entity<Account>().HasMany(a => a.AccountLegalEntities);
             modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
