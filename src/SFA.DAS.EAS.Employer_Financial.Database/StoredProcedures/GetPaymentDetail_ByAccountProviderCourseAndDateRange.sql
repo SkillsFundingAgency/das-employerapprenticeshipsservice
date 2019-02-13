@@ -26,7 +26,9 @@ FROM (
 		MAX(meta.ApprenticeNINumber) as ApprenticeNINumber,
 		SUM(CASE WHEN p.FundingSource = 2 THEN -p.Amount ELSE 0 END) as SfaCoInvestmentAmount,
 		SUM(CASE WHEN p.FundingSource = 3 THEN -p.Amount ELSE 0 END) as EmployerCoInvestmentAmount
-	FROM [employer_financial].[Payment] p
+	FROM [employer_financial].[TransactionLine] t
+		JOIN [employer_financial].[Payment] p
+			ON t.AccountId = p.AccountId AND t.PeriodEnd = p.PeriodEnd AND t.Ukprn = p.Ukprn
 		LEFT JOIN [employer_financial].[PaymentMetaData] meta 
 			ON	p.PaymentMetaDataId = meta.Id
 	WHERE 
@@ -42,13 +44,18 @@ FROM (
 		) 
 		AND ISNULL(meta.PathwayCode, -1) = ISNULL(@pathwayCode, -1) 
 		AND	p.FundingSource IN (1, 2, 3, 5)
+		AND t.AccountId = @AccountId 
+						AND t.Ukprn = @Ukprn
+						AND t.DateCreated BETWEEN @fromDate AND @toDate
 	GROUP BY 
 		p.AccountId, 
 		p.Ukprn, 
 		meta.ApprenticeshipCourseName, 
 		meta.ApprenticeshipCourseLevel, 
 		meta.PathwayName, 
-		p.Uln)	 AS Payments
+		p.Uln,
+		meta.ApprenticeName) AS Payments
+
 
 OUTER APPLY (
 		SELECT	TOP 1	MAX(DateCreated) AS DateCreated, MAX(TransactionDate) AS TransactionDate
@@ -57,4 +64,3 @@ OUTER APPLY (
 						AND Ukprn = @Ukprn
 						AND DateCreated BETWEEN @fromDate AND @toDate
 			) AS TransactionDetails
-
