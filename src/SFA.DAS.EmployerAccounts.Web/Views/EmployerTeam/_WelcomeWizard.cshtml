@@ -112,8 +112,8 @@
                         <legend class="heading-small">Are you going to sign the agreement?</legend>
                         <p>This allows you to spend funds.</p>
                         <label class="block-label selection-button-radio" for="add-agreements-1" data-target="guide-wizard-step-agreements">
-                            @{int value = 1; if (Model.Data.RequiresAgreementSigning > 0) { value = 1; } else { value = 2; } }
-                            <input id="add-agreements-1" type="radio" name="agreements-group" value="@value">
+                            @{int value = 1;string check = ""; if (Model.Data.RequiresAgreementSigning > 0) { value = 1; } else { value = 2; check = "checked"; } }
+                            <input id="add-agreements-1" type="radio" name="agreements-group" value="@value" checked=@check>
                             Yes
                         </label>
                         <label class="block-label selection-button-radio" for="add-agreements-2" data-target="value-setup">
