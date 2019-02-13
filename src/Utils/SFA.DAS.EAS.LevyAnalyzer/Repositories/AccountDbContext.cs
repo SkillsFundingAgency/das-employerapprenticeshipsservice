@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Repositories
         public Task<long[]> GetAllAccountIdsAsync()
         {
             return Database.SqlQuery<long>(
-                    $"SELECT Id FROM [employer_account].Account")
+                    $"SELECT Id FROM [employer_account].Account ORDER BY Id")
                 .ToArrayAsync();
         }
         
