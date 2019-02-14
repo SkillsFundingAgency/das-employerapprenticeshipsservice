@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetMember
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetMember
 
         public async Task<GetMemberResponse> Handle(GetMemberRequest message)
         {
-            var member = await _accountTeamRepository.GetMember(message.HashedAccountId, message.Email, message.OnlyIfMemberIsActive) ?? new Models.AccountTeam.TeamMember();
+            var member = await _accountTeamRepository.GetMember(message.HashedAccountId, message.Email, message.OnlyIfMemberIsActive) ?? new TeamMember();
             member.HashedInvitationId = _hashingService.HashValue(member.Id);
 
             return new GetMemberResponse
