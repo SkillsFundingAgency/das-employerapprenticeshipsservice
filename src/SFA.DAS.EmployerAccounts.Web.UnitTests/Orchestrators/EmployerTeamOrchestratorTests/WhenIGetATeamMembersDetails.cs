@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         }
 
         [Test]
-        public async Task ThenItShouldReturnAnEmptyTeamMemberIfNoneAreFound()
+        public async Task ThenItShouldReturnANotFoundIfNoTeamMembersAreFound()
         {
             //Arrange
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
@@ -104,9 +104,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
                 .ReturnsAsync(new GetMemberResponse
                 {
-                    TeamMember = new TeamMember
-                    {
-                    }
+                    TeamMember = new TeamMember()
                 });
 
             //Act
