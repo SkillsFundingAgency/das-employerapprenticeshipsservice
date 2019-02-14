@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@email", invitation.Email, DbType.String);
             parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
             parameters.Add("@statusId", invitation.Status, DbType.Int16);
-            parameters.Add("@Role", invitation.Role, DbType.Int16);
+            parameters.Add("@role", invitation.Role, DbType.Int16);
             parameters.Add("@invitationId", invitationId, DbType.Int64, ParameterDirection.Output);
 
             await _db.Value.Database.Connection.ExecuteAsync(
@@ -125,12 +125,12 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             parameters.Add("@id", invitation.Id, DbType.Int64);
             parameters.Add("@name", invitation.Name, DbType.String);
-            parameters.Add("@Role", invitation.Role, DbType.Int16);
+            parameters.Add("@role", invitation.Role, DbType.Int16);
             parameters.Add("@statusId", invitation.Status, DbType.Int16);
             parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "UPDATE [employer_account].[Invitation] SET Name = @name, Role = @Role, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
+                sql: "UPDATE [employer_account].[Invitation] SET Name = @name, Role = @role, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -142,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             parameters.Add("@email", email, DbType.String);
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@Role", role, DbType.Int16);
+            parameters.Add("@role", role, DbType.Int16);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[AcceptInvitation]",

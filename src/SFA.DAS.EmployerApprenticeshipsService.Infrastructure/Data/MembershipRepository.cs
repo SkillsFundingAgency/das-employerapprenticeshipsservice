@@ -74,10 +74,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             parameters.Add("@userId", userId, DbType.Int64);
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@Role", role, DbType.Int16);
+            parameters.Add("@role", role, DbType.Int16);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "UPDATE [employer_account].[Membership] SET Role = @Role WHERE AccountId = @accountId AND UserId = @userId;",
+                sql: "UPDATE [employer_account].[Membership] SET Role = @role WHERE AccountId = @accountId AND UserId = @userId;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -121,11 +121,11 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             parameters.Add("@userId", userId, DbType.Int64);
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@Role", role, DbType.Int16);
+            parameters.Add("@role", role, DbType.Int16);
             parameters.Add("@createdDate",DateTime.UtcNow, DbType.DateTime);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [Role], [CreatedDate]) VALUES(@accountId, @userId, @Role, @createdDate); ",
+                sql: "INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [Role], [CreatedDate]) VALUES(@accountId, @userId, @role, @createdDate); ",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

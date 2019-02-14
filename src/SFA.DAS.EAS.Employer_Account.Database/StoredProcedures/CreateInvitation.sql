@@ -4,7 +4,7 @@ CREATE PROCEDURE [employer_account].[CreateInvitation]
 	@email nvarchar(255),
 	@expiryDate datetime,
 	@statusId tinyint,
-	@Role tinyint,
+	@role tinyint,
 	@invitationId bigint output
 AS
 
@@ -12,7 +12,7 @@ AS
 INSERT INTO [employer_account].[Invitation] 
 	([AccountId],[Name],[Email],[ExpiryDate],[Status],[Role]) 
 VALUES 
-	(@accountId, @name, @email, @expiryDate, @statusId, @Role)
+	(@accountId, @name, @email, @expiryDate, @statusId, @role)
 
 
 	SELECT @invitationId = SCOPE_IDENTITY();
