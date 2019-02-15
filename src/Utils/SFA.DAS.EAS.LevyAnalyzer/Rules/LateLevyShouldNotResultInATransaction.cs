@@ -37,7 +37,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
                     if (account.Transactions.Any(txn => txn.SubmissionId == declaration.Id))
                     {
-                        validationResult.AddRuleViolation($"{declaration.EmpRef}:The late submission {declaration.Id} has an associated transaction");
+                        var transaction = account.Transactions.First(txn => txn.SubmissionId == declaration.Id);
+                        validationResult.AddRuleViolation($"{declaration.EmpRef}:The late submission {declaration.Id} has an associated transaction", declaration.EmpRef, transaction.TransactionDate, null, null);
                     }
                 }
             }

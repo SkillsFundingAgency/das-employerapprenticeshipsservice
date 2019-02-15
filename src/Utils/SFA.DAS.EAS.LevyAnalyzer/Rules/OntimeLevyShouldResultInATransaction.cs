@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
             {
                 if (!account.TryGetMatchingTransaction(declaration, out _))
                 {
-                    validationResult.AddRuleViolation($"{declaration.EmpRef}: The on-time submission {declaration.Id} is missing an associated transaction");
+                    validationResult.AddRuleViolation($"{declaration.EmpRef}: The on-time submission {declaration.Id} is missing an associated transaction", declaration.EmpRef, declaration.CreatedDate, null, null);
                 }
             }
         }

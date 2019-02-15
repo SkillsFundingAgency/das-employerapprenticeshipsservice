@@ -43,24 +43,19 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules.Infrastructure
 
         public IReadOnlyCollection<RuleEvaluationMessage> Messages => _messages;
 
-        public void AddRuleViolation(string message)
+        public void AddRuleViolation(string message, string empRef, DateTime transactionDate, decimal? expectedValue, decimal? actualValue)
         {
-            AddEntry(RuleMessageLevel.Violation, message);
-        }
-
-        public void AddRuleWarning(string message)
-        {
-            AddEntry(RuleMessageLevel.Suspicous, message);
+            AddEntry(RuleMessageLevel.Violation, message, empRef, transactionDate, expectedValue, actualValue);
         }
 
         public void AddRuleInfo(string message)
         {
-            AddEntry(RuleMessageLevel.Info, message);
+            AddEntry(RuleMessageLevel.Info, message, null, null, null, null);
         }
 
-        private void AddEntry(RuleMessageLevel level, string message)
+        private void AddEntry(RuleMessageLevel level, string message, string empRef, DateTime? transactionDate, decimal? expectedAmount, decimal? actualAmount)
         {
-            var result = new RuleEvaluationMessage(level, message);
+            var result = new RuleEvaluationMessage(level, message, empRef, transactionDate, expectedAmount, actualAmount);
             _messages.Add(result);
             if (result.Level != RuleMessageLevel.Info)
             {

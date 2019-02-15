@@ -34,13 +34,13 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
             {
                 if (!employer.TryGetMatchingTransaction(declaration.CurrentDeclaration, out var matchingTransaction))
                 {
-                    validationResult.AddRuleViolation($"{declaration.CurrentDeclaration.EmpRef}: Levy {declaration.CurrentDeclaration.SubmissionId} for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} does not have a matching transaction.");
+                    validationResult.AddRuleViolation($"{declaration.CurrentDeclaration.EmpRef}: Levy {declaration.CurrentDeclaration.SubmissionId} for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} does not have a matching transaction.", declaration.CurrentDeclaration.EmpRef, declaration.CurrentDeclaration.CreatedDate, null, null);
                     continue;
                 }
 
                 if (matchingTransaction.LevyDeclared != declaration.CalculatedLevyAmountForMonth)
                 {
-                    validationResult.AddRuleViolation($"{declaration.CurrentDeclaration.EmpRef}: The levy {declaration.CurrentDeclaration.SubmissionId} declared for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} should be {declaration.CalculatedLevyAmountForMonth} but is actually {matchingTransaction.LevyDeclared}");
+                    validationResult.AddRuleViolation($"{declaration.CurrentDeclaration.EmpRef}: The levy {declaration.CurrentDeclaration.SubmissionId} declared for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} should be {declaration.CalculatedLevyAmountForMonth} but is actually {matchingTransaction.LevyDeclared}", declaration.CurrentDeclaration.EmpRef, matchingTransaction.TransactionDate, declaration.CalculatedLevyAmountForMonth, matchingTransaction.LevyDeclared);
                 }
             }
         }

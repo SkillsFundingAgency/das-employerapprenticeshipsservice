@@ -43,14 +43,14 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
                 if (!employer.TryGetMatchingTransaction(yearEndAdjustment.CurrentDeclaration,
                     out var matchingTransaction))
                 {
-                    validationResult.AddRuleViolation($"{yearEndAdjustment.CurrentDeclaration.EmpRef}: The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} does not have a corresponding transaction");
+                    validationResult.AddRuleViolation($"{yearEndAdjustment.CurrentDeclaration.EmpRef}: The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} does not have a corresponding transaction", yearEndAdjustment.CurrentDeclaration.EmpRef, yearEndAdjustment.CurrentDeclaration.CreatedDate, null, yearEndAdjustment.CalculatedAdjustment);
                     continue;
                 }
 
                 if (matchingTransaction.LevyDeclared != yearEndAdjustment.CalculatedAdjustment)
                 {
                     validationResult.AddRuleViolation(
-                        $"{yearEndAdjustment.CurrentDeclaration.EmpRef}: The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} declared for period {yearEndAdjustment.CurrentDeclaration.PayrollYear} / {yearEndAdjustment.CurrentDeclaration.PayrollMonth} should be {yearEndAdjustment.CalculatedAdjustment} but is actually {matchingTransaction.LevyDeclared}");
+                        $"{yearEndAdjustment.CurrentDeclaration.EmpRef}: The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} declared for period {yearEndAdjustment.CurrentDeclaration.PayrollYear} / {yearEndAdjustment.CurrentDeclaration.PayrollMonth} should be {yearEndAdjustment.CalculatedAdjustment} but is actually {matchingTransaction.LevyDeclared}", matchingTransaction.EmpRef, matchingTransaction.TransactionDate, yearEndAdjustment.CalculatedAdjustment, matchingTransaction.LevyDeclared);
                 }
             }
         }
