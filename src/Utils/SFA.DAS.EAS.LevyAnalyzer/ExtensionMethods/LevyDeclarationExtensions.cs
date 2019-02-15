@@ -16,8 +16,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
 
         public static bool IsOntime(this LevyDeclaration declaration, IHmrcDateService hmrcDateService)
         {
-            return hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value,
-                declaration.SubmissionDate.Value); ;
+            var periodEndDate = hmrcDateService.GetDateRangeForPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value).EndDate;
+            return declaration.SubmissionDate.Value <= periodEndDate;
         }
 
         public static bool IsValid(this LevyDeclaration declaration)
