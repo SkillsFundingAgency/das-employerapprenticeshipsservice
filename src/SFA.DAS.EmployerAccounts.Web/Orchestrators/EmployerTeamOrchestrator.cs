@@ -274,7 +274,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Email = email,
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
-            if (response.TeamMember.Role == Role.None)
+            if (response.TeamMember.AccountId == 0)
             {
                 return new OrchestratorResponse<TeamMember>
                 {
