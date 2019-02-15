@@ -29,6 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             {
                 TeamMember = new TeamMember
                 {
+                    AccountId = 1,
                     Email = TeamMemberEmail,
                     Role = Role.Owner
                 }
