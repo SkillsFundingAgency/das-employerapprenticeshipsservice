@@ -11,13 +11,14 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
 
         public static bool IsLate(this LevyDeclaration declaration, IHmrcDateService hmrcDateService)
         {
-            return !declaration.IsOntime(hmrcDateService);
+            var periodEndDate = hmrcDateService.GetDateRangeForPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value).EndDate;
+            return declaration.SubmissionDate.Value > periodEndDate;
         }
 
         public static bool IsOntime(this LevyDeclaration declaration, IHmrcDateService hmrcDateService)
         {
-            var periodEndDate = hmrcDateService.GetDateRangeForPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value).EndDate;
-            return declaration.SubmissionDate.Value <= periodEndDate;
+            return hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value,
+                declaration.SubmissionDate.Value); ;
         }
 
         public static bool IsValid(this LevyDeclaration declaration)

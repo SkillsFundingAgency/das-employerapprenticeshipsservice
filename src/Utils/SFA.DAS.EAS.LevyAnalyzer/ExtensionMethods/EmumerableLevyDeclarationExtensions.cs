@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
         {
             return declarations
                 .Where(declaration => declaration.IsValid() &&
-                                      (declaration.PayrollMonth.Value == 12 || declaration.IsOntime(hmrcDateService)));
+                                      (declaration.PayrollMonth.Value == 12 || !declaration.IsLate(hmrcDateService))).ToList();
         }
 
         /// <summary>

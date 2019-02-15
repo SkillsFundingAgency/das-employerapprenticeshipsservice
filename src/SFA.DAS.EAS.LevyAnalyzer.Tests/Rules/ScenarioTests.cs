@@ -93,6 +93,38 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
         }
 
         [Test]
+        public void Scenario19_P1toP11AllEarly()
+        {
+            var fixtures = new LevyAnalyzerTestFixtures()
+                .WithEmpRef("ABC/012345")
+                .WithOntimeLevy(121, "18-19", 1, new DateTime(2018, 03, 10), 100)
+                .WithOntimeLevy(122, "18-19", 2, new DateTime(2018, 04, 10), 200)
+                .WithOntimeLevy(123, "18-19", 3, new DateTime(2018, 05, 10), 300)
+                .WithOntimeLevy(124, "18-19", 4, new DateTime(2018, 06, 10), 400)
+                .WithOntimeLevy(125, "18-19", 5, new DateTime(2018, 07, 10), 500)
+                .WithOntimeLevy(126, "18-19", 6, new DateTime(2018, 08, 10), 600)
+                .WithOntimeLevy(127, "18-19", 7, new DateTime(2018, 09, 10), 700)
+                .WithOntimeLevy(128, "18-19", 8, new DateTime(2018, 10, 10), 800)
+                .WithOntimeLevy(129, "18-19", 9, new DateTime(2018, 11, 10), 900)
+                .WithOntimeLevy(130, "18-19", 10, new DateTime(2018, 12, 10), 1000)
+                .WithOntimeLevy(131, "18-19", 11, new DateTime(2019, 01, 10), 1100)
+
+                .WithTransaction(121, 100)
+                .WithTransaction(122, 100)
+                .WithTransaction(123, 100)
+                .WithTransaction(124, 100)
+                .WithTransaction(125, 100)
+                .WithTransaction(126, 100)
+                .WithTransaction(127, 100)
+                .WithTransaction(128, 100)
+                .WithTransaction(129, 100)
+                .WithTransaction(130, 100)
+                .WithTransaction(131, 100);
+
+            fixtures.AssertAllRulesAreValidAndThenCheckNegativeCase();
+        }
+
+        [Test]
         public void Scenario04_P1toP11SomeLate()
         {
             var fixtures = new LevyAnalyzerTestFixtures()
