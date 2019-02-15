@@ -320,8 +320,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
             var fixtures = new LevyAnalyzerTestFixtures()
                 .WithOntimeLevy(121, "18-19", 12, new DateTime(2019, 04, 10), 200)
                 .WithYearEndAdjustment(122, "18-19", new DateTime(2019, 05, 21), 500)
-                .WithYearEndAdjustment(123, "18-19", new DateTime(2019, 06, 22), 900)
-                .WithYearEndAdjustment(124, "18-19", new DateTime(2019, 07, 23), 1400)
+                .WithYearEndAdjustment(123, "18-19", new DateTime(2019, 05, 25), 900)
+                .WithYearEndAdjustment(124, "18-19", new DateTime(2019, 05, 27), 1400)
 
                 .WithTransaction(121, 200)
                 .WithTransaction(122, 300)
@@ -337,8 +337,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
             var fixtures = new LevyAnalyzerTestFixtures()
                 .WithLateLevy(121, "18-19", 2, new DateTime(2018, 05, 10), 200)
                 .WithYearEndAdjustment(122, "18-19", new DateTime(2019, 05, 21), 500)
-                .WithYearEndAdjustment(123, "18-19", new DateTime(2019, 06, 22), 900)
-                .WithYearEndAdjustment(124, "18-19", new DateTime(2019, 07, 23), 1200)
+                .WithYearEndAdjustment(123, "18-19", new DateTime(2019, 05, 26), 900)
+                .WithYearEndAdjustment(124, "18-19", new DateTime(2019, 05, 29), 1200)
 
                 .WithTransaction(122, 500)
                 .WithTransaction(123, 400)

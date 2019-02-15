@@ -297,7 +297,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
                 .Setup(ds => ds.IsDateInPayrollPeriod(payrollYear, payrollMonth, submissionDate))
                 .Returns(isOnTime);
 
-            var periodEndDate = isOnTime ? submissionDate.AddDays(1) : submissionDate.AddDays(-1);
+            var periodEndDate = isOnTime ? submissionDate.AddDays(1) : submissionDate.AddDays(-30);
 
             WithPeriodEndDate(payrollYear, payrollMonth, periodEndDate);
 
