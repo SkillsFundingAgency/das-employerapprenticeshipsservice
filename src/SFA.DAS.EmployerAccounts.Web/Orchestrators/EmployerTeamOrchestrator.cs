@@ -274,20 +274,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Email = email,
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
-            if (response.TeamMember.AccountId == 0)
+
+
+            return new OrchestratorResponse<TeamMember>
             {
-                return new OrchestratorResponse<TeamMember>
-                {
-                    Status = HttpStatusCode.NotFound
-                };
-            }
-            else
-            {
-                return new OrchestratorResponse<TeamMember>
-                {
-                    Data = response.TeamMember
-                };
-            }
+                Status = response.TeamMember.AccountId == 0 ? HttpStatusCode.NotFound : HttpStatusCode.OK,
+                Data = response.TeamMember
+            };
+
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId, string userId)
