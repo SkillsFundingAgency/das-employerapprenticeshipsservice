@@ -2,7 +2,7 @@
 (
 	@email NVARCHAR(255),
 	@accountId BIGINT,
-	@role TINYINT
+	@roleId TINYINT
 )
 AS
 BEGIN
@@ -20,7 +20,7 @@ BEGIN
 		AND [AccountId] = @accountId;
 
 	INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [Role])
-	VALUES (@accountId, @userId, @role);	
+	VALUES (@accountId, @userId, @roleId);	
 
 	INSERT INTO [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
 	VALUES (@userId, @accountId, 1)
