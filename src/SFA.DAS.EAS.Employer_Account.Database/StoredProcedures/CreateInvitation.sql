@@ -10,7 +10,7 @@ AS
 
 
 INSERT INTO [employer_account].[Invitation] 
-	([AccountId],[Name],[Email],[ExpiryDate],[Status],[RoleId]) 
+	([AccountId],[Name],[Email],[ExpiryDate],[Status],[Role]) 
 VALUES 
 	(@accountId, @name, @email, @expiryDate, @statusId, @roleId)
 

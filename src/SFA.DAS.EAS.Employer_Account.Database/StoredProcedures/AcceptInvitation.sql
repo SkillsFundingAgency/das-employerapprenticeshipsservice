@@ -19,7 +19,7 @@ BEGIN
 	WHERE [Email] = @email
 		AND [AccountId] = @accountId;
 
-	INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [RoleId])
+	INSERT INTO [employer_account].[Membership] ([AccountId], [UserId], [Role])
 	VALUES (@accountId, @userId, @roleId);	
 
 	INSERT INTO [employer_account].[UserAccountSettings] (UserId, AccountId, ReceiveNotifications)
