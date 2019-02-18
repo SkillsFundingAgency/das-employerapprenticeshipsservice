@@ -90,4 +90,18 @@
     <Property Name="NewSchema" Value="dbo" />
     <Property Name="IsNewSchemaExternal" Value="True" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="8e5f6ba0-ad23-4252-9dc6-c68c599d79f1" ChangeDateTime="02/18/2019 11:41:04">
+    <Property Name="ElementName" Value="[employer_account].[Invitation].[RoleId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[Invitation]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Role]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="a0a946e9-46e8-44e9-ad3f-647b7305ec48" ChangeDateTime="02/18/2019 11:41:35">
+    <Property Name="ElementName" Value="[employer_account].[Membership].[RoleId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[Membership]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[Role]" />
+  </Operation>
 </Operations>
