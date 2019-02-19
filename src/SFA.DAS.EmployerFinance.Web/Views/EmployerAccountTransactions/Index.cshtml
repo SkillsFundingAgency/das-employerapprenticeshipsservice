@@ -50,13 +50,13 @@
 </div>
 <div class="grid-row">
     <div class="column-half">
-        <h2 class="heading-medium"><a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId, year = now.Year, month = now.Month })">
+        <h2 class="heading-medium"><a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId, year = now.Year, month = now.Month })">
                 View transactions
             </a></h2>
         <p>View payments made into and out of your apprenticeship service account. </p>
     </div>
     <div class="column-half">
-        <h2 class="heading-medium"><a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.Account.HashedId })">
+        <h2 class="heading-medium"><a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId })">
                 Download transactions
             </a></h2>
         <p>Download your financial transactions within a specific date range. </p>

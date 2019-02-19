@@ -3,7 +3,7 @@ using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds
 {
-    public class GetExpiringAccountFundsQuery : MembershipMessage, IAsyncRequest<GetExpiringAccountFundsResponse>
+    public class GetAccountFinanceOverviewQuery : MembershipMessage, IAsyncRequest<GetAccountFinanceOverviewResponse>
     {
       
     }

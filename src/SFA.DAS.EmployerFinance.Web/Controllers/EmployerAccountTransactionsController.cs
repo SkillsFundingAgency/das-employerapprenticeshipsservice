@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
 
@@ -46,16 +47,20 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [Route("finance")]
         [Route("balance")]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(GetAccountFinanceOverviewQuery query)
         {
-            var transactionViewResult = await _accountTransactionsOrchestrator.GetFinanceDashboardViewModel(hashedAccountId, 0, 0, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var response = await _mediator.SendAsync(query);
 
-            if (transactionViewResult.Data.Account == null)
+            var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
             {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.AccessDeniedControllerName);
-            }
+                Data = new FinanceDashboardViewModel
+                {
+                    AccountHashedId = query.AccountHashedId,
+                    CurrentLevyFunds = response.CurrentFunds
+                }
+            };
 
-            return View(transactionViewResult);
+            return View(viewModel);
         }
 
         [ValidateMembership]
