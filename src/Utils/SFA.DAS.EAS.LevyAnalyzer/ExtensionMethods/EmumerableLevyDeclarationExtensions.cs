@@ -88,6 +88,14 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
             }
         }
 
+        public static IEnumerable<LevyDeclaration> ExcludeAllButLastEndOfYearAdjustment(this IEnumerable<LevyDeclaration> declarations, IHmrcDateService hmrcDateService)
+        {
+            return declarations
+                .Where(x => x.PayrollMonth != 12 || (x.PayrollMonth == 12 && x.IsOntime(hmrcDateService))).Union(
+                    declarations.Where(x => x.PayrollMonth == 12 && x.IsLate(hmrcDateService))
+                        .OrderByDescending(x => x.SubmissionDate).Take(1));
+        }
+
         private static IEnumerable<LevyDeclaration> HandlePeriod12Declarations(
             IHmrcDateService hmrcDateService, 
             PeriodDeclarations periodDeclaration)

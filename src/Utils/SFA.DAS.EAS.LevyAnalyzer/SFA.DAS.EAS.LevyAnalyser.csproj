@@ -91,6 +91,7 @@
     <Compile Include="ExtensionMethods\LevyDeclarationExtensions.cs" />
     <Compile Include="ExtensionMethods\PeriodDeclarations.cs" />
     <Compile Include="ExtensionMethods\YearDeclarations.cs" />
+    <Compile Include="Interfaces\ISummarySaver.cs" />
     <Compile Include="Interfaces\IRuleSetEvaluationResult.cs" />
     <Compile Include="Models\Employer.cs" />
     <Compile Include="Models\IValidateableObject.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Interfaces\IRuleRepository.cs" />
     <Compile Include="IoC\FinanceRegistry.cs" />
     <Compile Include="Repositories\AccountDbContext.cs" />
+    <Compile Include="ResultSavers\FileSummarySavers.cs" />
     <Compile Include="Rules\CalculatedYearEndAdjustment.cs" />
     <Compile Include="Rules\CalculatedLevyDeclation.cs" />
     <Compile Include="Rules\Infrastructure\AccountValidationResult.cs" />

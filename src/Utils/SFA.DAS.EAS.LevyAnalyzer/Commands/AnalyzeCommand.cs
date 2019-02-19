@@ -16,17 +16,20 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
         private readonly IConfigProvider _configProvider;
         private readonly IRuleRepository _ruleRepository;
         private readonly IResultSaver _resultSaver;
+        private readonly ISummarySaver _summarySaver;
 
         public AnalyzeCommand(
             IAccountRepository accountRepository,
             IConfigProvider configProvider,
             IRuleRepository ruleRepository,
-            IResultSaver resultSaver)
+            IResultSaver resultSaver,
+            ISummarySaver summarySaver)
         {
             _accountRepository = accountRepository;
             _configProvider = configProvider;
             _ruleRepository = ruleRepository;
             _resultSaver = resultSaver;
+            _summarySaver = summarySaver;
         }
 
         public async Task DoAsync(CancellationToken cancellationToken)
@@ -50,6 +53,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Commands
             }
 
             await _resultSaver.SaveAsync(results.Accounts.Where(a => !a.IsValid));
+            await _summarySaver.SaveAsync(results);
         }
 
         private bool TryValidateAccount(Account account, out AccountValidationResult validationResult)

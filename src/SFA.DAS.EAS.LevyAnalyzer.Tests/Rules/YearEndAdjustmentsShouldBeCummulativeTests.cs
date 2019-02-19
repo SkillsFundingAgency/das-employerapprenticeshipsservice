@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Rules
             var fixtures = new LevyAnalyzerTestFixtures()
                 .WithOntimeLevy(123, "18-19", 12, new DateTime(2018, 05, 10), 100)
                 .WithOntimeLevy(124, "18-19", 12, new DateTime(2018, 05, 11), 200)
-                .WithOntimeLevy(125, "18-19", 12, new DateTime(2018, 05, 12), 300)
+                .WithOntimeLevy(125, "18-19", 12, new DateTime(2018, 05, 11), 300)
                 .WithYearEndAdjustment(126, "18-19", new DateTime(2018, 06, 10), 200)
                 .WithTransaction(126, -100);
 

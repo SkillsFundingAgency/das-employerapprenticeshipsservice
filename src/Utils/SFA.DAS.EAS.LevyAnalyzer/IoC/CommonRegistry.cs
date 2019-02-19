@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.IoC
         {
             For<IConfigProvider>().Use(new ConfigProvider(configLocation)).Singleton();
             For<IResultSaver>().Use<FileResultSaver>();
+            For<ISummarySaver>().Use<FileSummarySaver>();
 
             Scan(scan =>
             {

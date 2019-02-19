@@ -30,6 +30,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             var nonSupercededOnTimeDeclarations = account.LevyDeclarations
                 .ActiveDeclarations(_hmrcDateService)
+                .ExcludeAllButLastEndOfYearAdjustment(_hmrcDateService)
                 .OrderBy(declaration => declaration.SubmissionDate);
 
             foreach (var declaration in nonSupercededOnTimeDeclarations)

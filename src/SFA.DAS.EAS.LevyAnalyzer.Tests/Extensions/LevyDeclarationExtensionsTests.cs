@@ -126,11 +126,10 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.Extensions
         {
             var fixtures = new LevyAnalyzerTestFixtures()
                 .WithOntimeLevy(123, "18-19", 3, new DateTime(2018, 05, 05))
-                .WithOntimeLevy(124, "18-19", 4, new DateTime(2018, 06, 05))
                 .WithLateLevy(125, "18-19", 4, new DateTime(2018, 06, 06))
                 .WithOntimeLevy(126, "18-19", 5, new DateTime(2018, 07, 05));
 
-            fixtures.AssertActiveDeclarations(123, 124, 126);
+            fixtures.AssertActiveDeclarations(123, 126);
         }
 
         [Test]
