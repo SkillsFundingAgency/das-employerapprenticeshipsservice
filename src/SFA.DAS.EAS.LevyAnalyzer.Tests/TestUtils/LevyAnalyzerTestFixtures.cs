@@ -72,7 +72,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
         {
             var transaction = new TransactionLine
             {
-                SubmissionId = submissionId
+                SubmissionId = submissionId,
+                EnglishFraction = 1
             };
 
             Transactions.Add(transaction);
@@ -84,6 +85,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
         {
             WithTransaction(submissionId);
             Transactions[Transactions.Count - 1].LevyDeclared = levyDeclaredForMonth;
+            Transactions[Transactions.Count - 1].Amount = levyDeclaredForMonth * 1.1m;
+
             return this;
         }
 

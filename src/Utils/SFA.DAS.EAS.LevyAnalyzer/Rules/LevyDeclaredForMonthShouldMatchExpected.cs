@@ -28,6 +28,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
         {
             var declarations = employer.LevyDeclarations
                                     .ActiveDeclarations(_hmrcDateService)
+                                    .ExcludeEndOfYearAdjustments(_hmrcDateService)
                                     .OrderBy(declaration => declaration.SubmissionDate);
 
             foreach (var declaration in declarations.CalculateMonthlyValues())

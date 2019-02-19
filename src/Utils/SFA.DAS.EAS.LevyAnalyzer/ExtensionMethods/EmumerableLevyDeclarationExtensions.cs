@@ -96,6 +96,12 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
                         .OrderByDescending(x => x.SubmissionDate).Take(1));
         }
 
+        public static IEnumerable<LevyDeclaration> ExcludeEndOfYearAdjustments(this IEnumerable<LevyDeclaration> declarations, IHmrcDateService hmrcDateService)
+        {
+            return declarations
+                .Where(x => x.PayrollMonth != 12 || (x.PayrollMonth == 12 && x.IsOntime(hmrcDateService)));
+        }
+
         private static IEnumerable<LevyDeclaration> HandlePeriod12Declarations(
             IHmrcDateService hmrcDateService, 
             PeriodDeclarations periodDeclaration)
@@ -159,7 +165,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
                 .Select(grp => new PeriodDeclarations
                 {
                     PayrollPeriod = grp.Key,
-                    Declarations = grp.OrderBy(declaration => declaration.SubmissionDate).ToArray()
+                    Declarations = grp.OrderBy(declaration => declaration.SubmissionDate).ThenBy(declaration => declaration.SubmissionId).ToArray()
                 });
         }
 
