@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds
 {
-    public class GetExpiringAccountFundsQuery : IAsyncRequest<GetExpiringAccountFundsResponse>
+    public class GetExpiringAccountFundsQuery : MembershipMessage, IAsyncRequest<GetExpiringAccountFundsResponse>
     {
-        public long AccountId { get; set; }
+      
     }
 }

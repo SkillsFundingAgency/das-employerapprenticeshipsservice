@@ -42,7 +42,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetExpiringAccountFundsTests
             };
 
             _handler = new GetExpiringAccountFundsQueryHandler(_forecastingService.Object, _logger.Object);
-
             _forecastingService.Setup(s => s.GetExpiringAccountFunds(AccountId)).ReturnsAsync(_expiringFunds);
         }
 
@@ -69,6 +68,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetExpiringAccountFundsTests
             var response = await _handler.Handle(_query);
           
             response.ExpiryDate.Should().BeSameDateAs(new DateTime(2019, 3, 6));
+        }
+
+        [Test]
+        public async Task ThenIfQueryHasNullAccountIdAnEmptyResponseIsReturned()
+        {
+            _query.AccountId = null;
+
+            var response = await _handler.Handle(_query);
+          
+            response.AccountId.Should().NotHaveValue();
+            response.ExpiryDate.Should().NotHaveValue();
+            response.Amount.Should().NotHaveValue();
         }
 
         [Test]

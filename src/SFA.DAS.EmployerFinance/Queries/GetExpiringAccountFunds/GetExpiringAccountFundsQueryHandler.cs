@@ -19,9 +19,15 @@ namespace SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds
 
         public async Task<GetExpiringAccountFundsResponse> Handle(GetExpiringAccountFundsQuery query)
         {
+            if (!query.AccountId.HasValue)
+            {
+                _logger.Warn("Request made to get expiring funds with null account ID");
+                return new GetExpiringAccountFundsResponse();
+            }
+
             _logger.Info($"Getting expiring funds for account ID: {query.AccountId}");
 
-            var expiringFunds = await _forecastingService.GetExpiringAccountFunds(query.AccountId);
+            var expiringFunds = await _forecastingService.GetExpiringAccountFunds(query.AccountId.Value);
            
             var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?.OrderBy(a => a.PayrollDate).FirstOrDefault();
 
