@@ -3,8 +3,11 @@
 AS
 	DECLARE @paymentMetaDataIds TABLE (PaymentId UNIQUEIDENTIFIER, PaymentMetaDataId BIGINT)
 
-	DECLARE @providerName NVARCHAR(MAX)
-	EXEC @providerName = [employer_financial].[CheckProviderName] (SELECT providerName,Ukprn FROM @payments)
+	DECLARE @providerNamePayments NVARCHAR(MAX)
+	DECLARE @providerNameOut NVARCHAR(MAX)
+	DECLARE @ukprnPayments BIGINT
+	SELECT @providerNamePayments = ProviderName,@ukprnPayments = Ukprn FROM @payments
+	EXEC [employer_financial].[CheckProviderName] @providerName = @providerNamePayments,@ukprn = @ukprnPayments, @output = @providerNameOut OUTPUT
 
 	MERGE [employer_financial].[PaymentMetaData]
 	USING @payments p
@@ -23,7 +26,7 @@ AS
 			ApprenticeshipCourseLevel,
 			ApprenticeshipCourseStartDate
 		) VALUES (
-			@providerName,
+			@providerNameOut,
 			p.StandardCode,
 			p.FrameworkCode,		
 			p.ProgrammeType,
