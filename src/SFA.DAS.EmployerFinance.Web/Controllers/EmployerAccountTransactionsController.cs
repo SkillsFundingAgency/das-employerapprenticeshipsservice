@@ -56,7 +56,9 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                 Data = new FinanceDashboardViewModel
                 {
                     AccountHashedId = query.AccountHashedId,
-                    CurrentLevyFunds = response.CurrentFunds
+                    CurrentLevyFunds = response.CurrentFunds,
+                    ExpiringFunds = response.ExpiringFundsAmount,
+                    ExpiryDate = response.ExpiringFundsExpiryDate
                 }
             };
 

@@ -47,6 +47,37 @@
             </div>
         </div>
     </div>
+    <div class="column-full">
+        <div class="data-wrap">
+            <div class="data">
+                <dl class="transfer-funds">
+                    @{
+                        var expiryDate = Model.Data.ExpiryDate?.ToString("MMMM yyyy");
+                    }
+                    
+                    <dt>
+                        Expiring Funds on @expiryDate
+                    </dt>
+                    @{
+                        var expiringFunds = Model.Data.ExpiringFunds?.ToString("C0", culture);
+
+
+                        var expiringFundsClass = string.Empty;
+
+                        if (balance.Length > 8)
+                        {
+                            expiringFundsClass = "long";
+                        }
+                        if (balance.Length > 10)
+                        {
+                            expiringFundsClass = "longer";
+                        }
+                    }
+                    <dd class="@expiringFundsClass">@expiringFunds</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="grid-row">
     <div class="column-half">
