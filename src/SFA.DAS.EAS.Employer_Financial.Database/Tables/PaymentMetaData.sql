@@ -11,5 +11,6 @@
 	[ApprenticeshipCourseStartDate] DATETIME NULL, 
 	[ApprenticeshipCourseLevel] INT NULL, 
     [ApprenticeName] VARCHAR(MAX) NULL, 
-    [ApprenticeNINumber] VARCHAR(MAX) NULL
+    [ApprenticeNINumber] VARCHAR(MAX) NULL, 
+    [ExtraDetails] VARCHAR(MAX) NULL
 )

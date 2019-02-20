@@ -5,9 +5,10 @@ AS
 
 	DECLARE @providerNamePayments NVARCHAR(MAX)
 	DECLARE @providerNameOut NVARCHAR(MAX)
+	DECLARE @paymentDetails NVARCHAR(MAX)
 	DECLARE @ukprnPayments BIGINT
 	SELECT @providerNamePayments = ProviderName,@ukprnPayments = Ukprn FROM @payments
-	EXEC [employer_financial].[CheckProviderName] @providerName = @providerNamePayments,@ukprn = @ukprnPayments, @output = @providerNameOut OUTPUT
+	EXEC [employer_financial].[CheckProviderName] @providerName = @providerNamePayments,@ukprn = @ukprnPayments, @output = @providerNameOut OUTPUT, @detailsOut = @paymentDetails OUTPUT
 
 	MERGE [employer_financial].[PaymentMetaData]
 	USING @payments p
@@ -24,7 +25,8 @@ AS
 			ApprenticeName,
 			ApprenticeNINumber,
 			ApprenticeshipCourseLevel,
-			ApprenticeshipCourseStartDate
+			ApprenticeshipCourseStartDate,
+			ExtraDetails
 		) VALUES (
 			@providerNameOut,
 			p.StandardCode,
@@ -36,7 +38,8 @@ AS
 			p.ApprenticeName,
 			p.ApprenticeNINumber,
 			p.ApprenticeshipCourseLevel,
-			p.ApprenticeshipCourseStartDate
+			p.ApprenticeshipCourseStartDate,
+			@paymentDetails
 		)
 		OUTPUT p.PaymentId, INSERTED.Id INTO @paymentMetaDataIds;		
 
