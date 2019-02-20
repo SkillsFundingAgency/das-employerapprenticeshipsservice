@@ -102,3 +102,25 @@ dl.inline {
         }
     }
 }
+
+.data--long {
+    dl {
+        dt {
+
+            @include core-19;
+        }
+    }
+
+    @include media(960px) {
+        width: auto;
+        min-width: 33.33%;
+    }
+}
+
+.data--current dl {
+    background: $purple
+}
+
+.data--expired dl {
+    background: $red
+}
