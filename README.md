@@ -49,6 +49,17 @@
     - SFA.DAS.EmployerFinance.Web ![SFA.DAS.EmployerFinance.Web](/docs/img/EmployerFinance_startup_project.PNG)
 - Running the solution will launch the site in your browser
 
+You will see two browser windows/tabs open: -
+
+`https://localhost:44344/`
+
+and
+
+`https://localhost:44344/service/index`
+
+the latter of these is the one you should use.
+
+
 ###### Known Issues
  If you get an error relating to missing `SFA.DAS.CloudService\csx` folder, try right mouse Debug to start. Subsequently you should be able to hit F5/Start.
 
