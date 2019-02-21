@@ -1,3 +1,5 @@
+using SFA.DAS.Common.Domain.Types;
+
 namespace SFA.DAS.EmployerAccounts.Models.EmployerAgreement
 {
     public class RemoveEmployerAgreementView
@@ -9,5 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Models.EmployerAgreement
         public string HashedAccountId { get; set; }
         public bool CanBeRemoved { get; set; }
         public string LegalEntityCode { get; set; }
+
+        public OrganisationType LegalEntitySource { get; set; }
     }
 }

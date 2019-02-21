@@ -59,7 +59,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
-            return Redirect(await _employerAccountOrchestrator.GateWayUrlHelper(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, HttpContext.Request.Url.Scheme, Url));
+            var url = await _employerAccountOrchestrator.GateWayUrlHelper(ControllerConstants.GateWayResponseActionName,
+                ControllerConstants.EmployerAccountControllerName, HttpContext.Request.Url?.Scheme, Url);
+
+            return Redirect(url);
         }
 
         [Route("gatewayResponse")]

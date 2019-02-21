@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions.ExcelTransac
                 {
                     "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Levy declared",
                     "English %", "10% top up", "Training provider", "Unique learner number",
-                    "Apprentice", "Apprenticeship training course", "Paid from levy", "Your contribution",
+                    "Apprentice", "Apprenticeship training course", "Course level", "Paid from levy", "Your contribution",
                     "Government contribution", "Total"
                 },
                 new[]
@@ -62,6 +62,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions.ExcelTransac
                     _transactionLine.EnglishFractionFormatted, _transactionLine.TenPercentTopUpFormatted,
                     _transactionLine.TrainingProvider, _transactionLine.Uln,
                     _transactionLine.Apprentice, _transactionLine.ApprenticeTrainingCourse,
+                    _transactionLine.ApprenticeTrainingCourseLevel,
                     _transactionLine.PaidFromLevyFormatted, _transactionLine.EmployerContributionFormatted,
                     _transactionLine.GovermentContributionFormatted, _transactionLine.TotalFormatted
                 }

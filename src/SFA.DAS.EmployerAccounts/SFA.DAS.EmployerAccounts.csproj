@@ -9,7 +9,6 @@
     <Compile Remove="Models\HmrcLevy\Employer.cs" />
     <Compile Remove="Models\HmrcLevy\EmployerLevyData.cs" />
     <Compile Remove="Models\HmrcLevy\EmpRefLevyInformation.cs" />
-    <Compile Remove="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
     <Compile Remove="Models\HmrcLevy\LevyDeclarations.cs" />
     <Compile Remove="Models\HmrcLevy\Link.cs" />
     <Compile Remove="Models\HmrcLevy\Links.cs" />
@@ -17,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.Pdf" Version="17.2.0" />
     <PackageReference Include="AutoMapper" Version="5.1.1" />
     <PackageReference Include="Dapper" Version="1.50.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
@@ -25,6 +25,7 @@
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client" Version="1.1.32" />
     <PackageReference Include="SFA.DAS.TimeProvider" version="1.0.0.3956" />
     <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71" />
@@ -57,14 +58,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="Aspose.Pdf">
+      <HintPath>..\packages\Aspose.Pdf.17.2.0\lib\net40-client\Aspose.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

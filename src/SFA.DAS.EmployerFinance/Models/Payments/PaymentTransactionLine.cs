@@ -1,9 +1,7 @@
-﻿using SFA.DAS.EmployerFinance.Models.Transaction;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 
 namespace SFA.DAS.EmployerFinance.Models.Payments
 {
@@ -20,6 +18,7 @@ namespace SFA.DAS.EmployerFinance.Models.Payments
         public int? PathwayCode { get; set; }
         public DateTime? CourseStartDate { get; set; }
         public string ApprenticeName { get; set; }
+        public long ApprenticeULN { get; set; }
         public string ApprenticeNINumber { get; set; }
         public decimal SfaCoInvestmentAmount { get; set; }
         public decimal EmployerCoInvestmentAmount { get; set; }

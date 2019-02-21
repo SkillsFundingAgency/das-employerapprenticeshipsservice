@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net462</TargetFramework>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.5.3" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
+    <PackageReference Include="StructureMap" Version="4.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

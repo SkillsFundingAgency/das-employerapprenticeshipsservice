@@ -1,5 +1,5 @@
 ﻿using System.Web;
-using SFA.DAS.EAS.Account.Api.Types.Events.PayeScheme;
+using SFA.DAS.EmployerAccounts.Events.PayeScheme;
 
 namespace SFA.DAS.EmployerAccounts.Factories
 {

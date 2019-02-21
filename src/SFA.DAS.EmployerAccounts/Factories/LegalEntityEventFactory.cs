@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types.Events.LegalEntity;
+﻿using SFA.DAS.EmployerAccounts.Events.LegalEntity;
 
 namespace SFA.DAS.EmployerAccounts.Factories
 {

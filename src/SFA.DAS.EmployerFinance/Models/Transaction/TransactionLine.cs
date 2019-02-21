@@ -15,5 +15,6 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
         public DateTime PayrollDate { get; set; }
         public string PayrollYear { get; set; }
         public int PayrollMonth { get; set; }
+        public decimal Balance { get; set; }
     }
 }

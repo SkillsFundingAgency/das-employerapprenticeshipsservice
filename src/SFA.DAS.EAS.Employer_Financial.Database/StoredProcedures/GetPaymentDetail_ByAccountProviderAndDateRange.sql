@@ -20,7 +20,7 @@ AS
 		SUM(CASE WHEN p.FundingSource = 2 THEN p.Amount END) * -1 AS SfaCoInvestmentAmount,
 		SUM(CASE WHEN p.FundingSource = 3 THEN p.Amount END) * -1 AS EmployerCoInvestmentAmount
 	FROM [employer_financial].[Payment] p
-	INNER JOIN [employer_financial].[PaymentMetaData] pm ON pm.Id = p.PaymentMetaDataId
+	LEFT JOIN [employer_financial].[PaymentMetaData] pm ON pm.Id = p.PaymentMetaDataId
 	INNER JOIN [employer_financial].[TransactionLine] t ON t.AccountId = p.AccountId AND t.PeriodEnd = p.PeriodEnd AND t.Ukprn = p.Ukprn
 	WHERE p.AccountId = @accountId
 	AND p.Ukprn = @ukprn

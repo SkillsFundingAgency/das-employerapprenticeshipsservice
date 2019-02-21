@@ -18,6 +18,7 @@ namespace SFA.DAS.EAS.Domain.Models.Payments
         public int? PathwayCode { get; set; }
         public DateTime? CourseStartDate { get; set; }   
         public string ApprenticeName { get; set; }
+        public long ApprenticeULN { get; set; }
         public string ApprenticeNINumber { get; set; }
         public decimal SfaCoInvestmentAmount { get; set; }
         public decimal EmployerCoInvestmentAmount { get; set; }

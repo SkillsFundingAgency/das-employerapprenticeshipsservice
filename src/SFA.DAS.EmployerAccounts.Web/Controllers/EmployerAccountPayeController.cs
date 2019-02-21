@@ -105,11 +105,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("schemes/gateway")]
         public async Task<ActionResult> GetGateway(string hashedAccountId)
         {
-            return Redirect(
-                await _employerAccountPayeOrchestrator.GateWayUrlHelper(
-                    ControllerConstants.ConfirmPayeSchemeActionName, 
-                    ControllerConstants.EmployerAccountPayeControllerName, 
-                    HttpContext.Request.Url?.Scheme, Url));
+            var url = await _employerAccountPayeOrchestrator.GateWayUrlHelper(
+                ControllerConstants.ConfirmPayeSchemeActionName,
+                ControllerConstants.EmployerAccountPayeControllerName,
+                HttpContext.Request.Url?.Scheme, Url);
+
+            return Redirect(url);
         }
 
         [HttpGet]

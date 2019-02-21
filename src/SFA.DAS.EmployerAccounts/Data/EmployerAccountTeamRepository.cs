@@ -42,15 +42,20 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.ToList();
         }
 
-        public async Task<TeamMember> GetMember(string hashedAccountId, string email)
+        public async Task<TeamMember> GetMember(string hashedAccountId, string email, bool onlyIfMemberIsActive)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
             parameters.Add("@email", email, DbType.String);
+            parameters.Add("@onlyIfMemberIsActive", onlyIfMemberIsActive, DbType.Boolean);
 
             var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
-                sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE IsUser = 1 AND HashedId = @hashedAccountId AND Email = @email;",
+                sql: @"SELECT TOP 1 * FROM [employer_account].[GetTeamMembers] "+
+                      "WHERE HashedId = @hashedAccountId "+
+                      "AND Email = @email "+
+                      "AND (@onlyIfMemberIsActive = 0 OR IsUser = 1) "+
+                      "ORDER BY IsUser DESC;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

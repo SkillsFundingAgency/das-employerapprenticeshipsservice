@@ -199,7 +199,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var apprenticePaymentGroups = data.Transactions.GroupBy(x => new { x.ApprenticeName, x.ApprenticeNINumber });
+                var apprenticePaymentGroups = data.Transactions.GroupBy(x => new { x.ApprenticeULN });
 
                 var paymentSummaries = apprenticePaymentGroups.Select(pg =>
                 {
@@ -207,7 +207,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
                     return new AprrenticeshipPaymentSummaryViewModel
                     {
-                        ApprenticeName = pg.Key.ApprenticeName,
+                        ApprenticeName = pg.First().ApprenticeName,
                         LevyPaymentAmount = payments.Sum(t => t.LineAmount),
                         SFACoInvestmentAmount = payments.Sum(p => p.SfaCoInvestmentAmount),
                         EmployerCoInvestmentAmount = payments.Sum(p => p.EmployerCoInvestmentAmount)

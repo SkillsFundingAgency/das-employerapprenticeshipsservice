@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -7,7 +8,8 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataHelper;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
+
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTests
 {
@@ -19,7 +21,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         [SetUp]
         public void SetUp()
         {
-            _tester = new ApiIntegrationTester();
+            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
         }
 
         [TearDown]
@@ -32,36 +34,34 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         public async Task ThenTheStatusShouldBeFound_AndDataShouldContainOnlyTheExpectedUser()
         {
             // Arrange
-            const string accountName = "AccountWhenGetLegalEntitiesWithNonExistentKey";
-            const string legalEntityName = "LegalEntityWhenGetLegalEntitiesWithNonExistentKey";
-            const string payeReference = "PayeWhenGetLegalEntitiesWithNonExistentKey";
-            const string userRef = "3256229B-6CA6-41C7-B1D0-A72A75078632";
+            string hashedAccountId = null;
+            var userRef = Guid.Empty;
 
-            var userInput = TestModelBuilder.User.CreateUserInput(userRef);
-
-            string hashedAccountId;
-            using (var testEmployerAccountsDbBuilder = _tester.GetTransientInstance<EmployerAccountsDbBuilder>())
+            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
             {
-                testEmployerAccountsDbBuilder
-                    .EnsureUserExists(userInput)
-                    .EnsureAccountExists(TestModelBuilder.Account.CreateAccountInput(accountName, payeReference, testEmployerAccountsDbBuilder.Context.ActiveUser.UserId))
-                    .WithLegalEntity(TestModelBuilder.LegalEntity.BuildEntityWithAgreementInput(legalEntityName, testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.AccountId));
+                var data = new TestModelBuilder()
+                    .WithNewUser()
+                    .WithNewAccount()
+                    .WithNewLegalEntity();
 
-                hashedAccountId = testEmployerAccountsDbBuilder.Context.ActiveEmployerAccount.HashedAccountId;
-            }
+                await builder.SetupDataAsync(data);
 
-            var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users")
-                .ExpectControllerType(typeof(EmployerAccountsController))
-                .AllowStatusCodes(HttpStatusCode.OK);
+                hashedAccountId = data.CurrentAccount.AccountOutput.HashedAccountId;
+                userRef = data.CurrentUser.UserOutput.UserRef;
+            });
+
+            var callRequirements = new CallRequirements($"api/accounts/{hashedAccountId}/users");
             
             // Act
             var account = await _tester.InvokeGetAsync<ICollection<TeamMemberViewModel>>(callRequirements);
 
             // Assert
+
+            account.ExpectControllerType(typeof(EmployerAccountsController));
+            account.ExpectStatusCodes(HttpStatusCode.OK);
             Assert.IsNotNull(account.Data);
             Assert.AreEqual(1, account.Data.Count);
-            Assert.AreEqual(userInput.UserRef.ToLower(),
-                account.Data.Last().UserRef.ToLower());
+            Assert.AreEqual(userRef, Guid.Parse(account.Data.Last().UserRef));
         }
     }
 }
