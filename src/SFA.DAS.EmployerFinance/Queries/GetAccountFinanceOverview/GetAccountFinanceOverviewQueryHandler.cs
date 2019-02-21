@@ -11,16 +11,16 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
 {
     public class GetAccountFinanceOverviewQueryHandler : IAsyncRequestHandler<GetAccountFinanceOverviewQuery, GetAccountFinanceOverviewResponse>
     {
-        private readonly IForecastingService _forecastingService;
+        private readonly IDasForecastingService _dasForecastingService;
         private readonly IDasLevyService _levyService;
         private readonly ILog _logger;
 
         public GetAccountFinanceOverviewQueryHandler(
-            IForecastingService forecastingService,
+            IDasForecastingService dasForecastingService,
             IDasLevyService levyService, 
             ILog logger)
         {
-            _forecastingService = forecastingService;
+            _dasForecastingService = dasForecastingService;
             _levyService = levyService;
             _logger = logger;
         }
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
         {
             _logger.Info($"Getting expiring funds for account ID: {accountId}");
 
-            var expiringFunds = await _forecastingService.GetExpiringAccountFunds(accountId);
+            var expiringFunds = await _dasForecastingService.GetExpiringAccountFunds(accountId);
             var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?.OrderBy(a => a.PayrollDate).FirstOrDefault();
             
             return earliestFundsToExpire;

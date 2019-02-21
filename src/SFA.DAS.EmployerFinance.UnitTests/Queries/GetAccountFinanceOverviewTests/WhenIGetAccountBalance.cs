@@ -12,14 +12,13 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTests
 {
-    [TestFixture]
     public class WhenIGetAccountBalance
     {
         private const long ExpectedAccountId = 20;
         private const decimal ExpectedCurrentFunds = 2345.67M;
 
         private GetAccountFinanceOverviewQueryHandler _handler;
-        private Mock<IForecastingService> _forecastingService;
+        private Mock<IDasForecastingService> _forecastingService;
         private Mock<ILog> _logger;
         private Mock<IDasLevyService> _levyService;
         private GetAccountFinanceOverviewQuery _query;
@@ -29,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         public void Setup()
         {
             _logger = new Mock<ILog>();
-            _forecastingService = new Mock<IForecastingService>();
+            _forecastingService = new Mock<IDasForecastingService>();
             _levyService = new Mock<IDasLevyService>();
 
             _query = new GetAccountFinanceOverviewQuery{AccountId = ExpectedAccountId};

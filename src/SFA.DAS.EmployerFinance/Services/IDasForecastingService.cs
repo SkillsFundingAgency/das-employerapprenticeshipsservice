@@ -3,7 +3,7 @@ using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
-    public interface IForecastingService
+    public interface IDasForecastingService
     {
         Task<ExpiringAccountFunds> GetExpiringAccountFunds(long accountId);
     }
