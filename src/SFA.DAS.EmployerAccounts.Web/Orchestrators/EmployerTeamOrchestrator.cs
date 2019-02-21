@@ -189,7 +189,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
                     HashedAccountId = accountId,
-                    RequiresAgreementSigning = requiresAgreementSigning
+                    RequiresAgreementSigning = requiresAgreementSigning,
+                    AgreementsToSign = requiresAgreementSigning > 0
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>

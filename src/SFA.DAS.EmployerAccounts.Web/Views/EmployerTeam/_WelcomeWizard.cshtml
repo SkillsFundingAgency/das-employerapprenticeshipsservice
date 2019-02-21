@@ -112,9 +112,8 @@
                         <legend class="heading-small">Are you going to sign the agreement?</legend>
                         <p>This allows you to spend funds.</p>
                         <label class="block-label selection-button-radio" for="add-agreements-1" data-target="guide-wizard-step-agreements">
-                            @{  bool agreementToSign = Model.Data.RequiresAgreementSigning > 0;
-                                int value = agreementToSign ? 1 : 2;
-                                string check = agreementToSign ? "" : "checked";}
+                            @{  int value = Model.Data.AgreementsToSign ? 1 : 2;
+                                string check = Model.Data.AgreementsToSign ? "" : "checked";}
                             <input id="add-agreements-1" type="radio" name="agreements-group" value="@value" checked=@check>
                             Yes
                         </label>
@@ -123,7 +122,7 @@
 
                             No, someone else will sign the agreement
                         </label>
-                        @if (agreementToSign)
+                        @if (Model.Data.AgreementsToSign)
                         {
                             <div class="panel panel-border-narrow js-hidden" id="guide-wizard-step-agreements">
                                 @Model.Data.RequiresAgreementSigning unsigned agreement(s). <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
@@ -139,7 +138,7 @@
                     </fieldset>
                 </li>
                 <li class="done">
-                    @if (!agreementToSign)
+                    @if (!Model.Data.AgreementsToSign)
                     {
                         <p> Agreements signed</p>
                     }
@@ -167,7 +166,7 @@
             </h3>
             <p><a href="@Url.Action("HideWizard", "EmployerTeam")">I'm done - take me to my homepage</a></p>
         </div>
-        @if (agreementToSign)
+        @if (Model.Data.AgreementsToSign)
         {
             <p class="notice">
                 <svg class="icon" focusable="false" aria-hidden="true">
