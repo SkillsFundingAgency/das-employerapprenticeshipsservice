@@ -43,8 +43,14 @@
 
 - Open Visual Studio as an administrator
 - Open the solution
-- Set SFA.DAS.CloudService as the startup project
+- Set multiple startup projects
+    - ![SFA.DAS.CloudService](/docs/img/CloudService_startup_project.PNG)
+    - ![SFA.DAS.EmployerAccounts.Web](/docs/img/EmployerAccounts_startup_project.PNG)
+    - ![SFA.DAS.EmployerFinance.Web](/docs/img/EmployerFinance_startup_project.PNG)
 - Running the solution will launch the site in your browser
+
+###### Known Issues
+ If you get an error relating to missing `SFA.DAS.CloudService\csx` folder, try right mouse Debug to start. Subsequently you should be able to hit F5/Start.
 
 ##### Publish the databases
 
