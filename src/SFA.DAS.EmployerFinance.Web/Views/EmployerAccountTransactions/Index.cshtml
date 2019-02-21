@@ -24,7 +24,7 @@
 <div class="grid-row">
     <div class="column-full">
         <div class="data-wrap">
-            <div class="data">
+            <div class="data data--current">
                 <dl class="transfer-funds">
                     <dt>
                         Current funds
@@ -45,18 +45,14 @@
                     <dd class="@balanceClass">@balance</dd>
                 </dl>
             </div>
-        </div>
-    </div>
-    <div class="column-full">
-        <div class="data-wrap">
-            <div class="data">
+            <div class="data data--long data--expired">
                 <dl class="transfer-funds">
                     @{
                         var expiryDate = Model.Data.ExpiryDate?.ToString("MMMM yyyy");
                     }
-                    
+
                     <dt>
-                        Expiring Funds on 18th @expiryDate
+                        Expiring funds on <strong> @expiryDate </strong>
                     </dt>
                     @{
                         var expiringFunds = Model.Data.ExpiringFunds?.ToString("C0", culture);
