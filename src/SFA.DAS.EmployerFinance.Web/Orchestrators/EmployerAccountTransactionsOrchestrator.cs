@@ -167,8 +167,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
                 {
-                    Status = HttpStatusCode.BadRequest,
-                    Exception = e
+                    Status = HttpStatusCode.NotFound,
+                    //Exception = e
                 };
             }
             catch (UnauthorizedAccessException e)
