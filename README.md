@@ -44,9 +44,9 @@
 - Open Visual Studio as an administrator
 - Open the solution
 - Set multiple startup projects
-    - ![SFA.DAS.CloudService](/docs/img/CloudService_startup_project.PNG)
-    - ![SFA.DAS.EmployerAccounts.Web](/docs/img/EmployerAccounts_startup_project.PNG)
-    - ![SFA.DAS.EmployerFinance.Web](/docs/img/EmployerFinance_startup_project.PNG)
+    - SFA.DAS.CloudService ![SFA.DAS.CloudService](/docs/img/CloudService_startup_project.PNG)
+    - SFA.DAS.EmployerAccounts.Web ![SFA.DAS.EmployerAccounts.Web](/docs/img/EmployerAccounts_startup_project.PNG)
+    - SFA.DAS.EmployerFinance.Web ![SFA.DAS.EmployerFinance.Web](/docs/img/EmployerFinance_startup_project.PNG)
 - Running the solution will launch the site in your browser
 
 ###### Known Issues
