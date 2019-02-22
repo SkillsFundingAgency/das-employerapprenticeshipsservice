@@ -11,30 +11,8 @@
 @{ViewBag.PageID = "page-transactions"; }
 @{ViewBag.Section = "finance"; }
 @{ViewBag.Title = "Your transactions";}
-@{ var errorMessage = string.Empty;}
 
-@if (!ViewContext.ViewData.ModelState.IsValid)
-{
-    foreach (var state in ViewContext.ViewData.ModelState.Values)
-    {
-        foreach (var error in state.Errors)
-        {
-            errorMessage = error.ErrorMessage;
-        }
-    }
-
-    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
-        <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
-            Errors to fix
-        </h1>
-        <ul class="error-summary-list">
-            <li><a href="#change-role-selection">@errorMessage</a></li>
-        </ul>
-    </div>
-
-}
-else
-{
+@{
     var displayingMonthDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
     var previousMonthDate = displayingMonthDate.AddMonths(-1);
     var nextMonthDate = displayingMonthDate.AddMonths(1);

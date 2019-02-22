@@ -85,7 +85,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email, short role, string externalUserId)
         {
-            hashedId = "";
             try
             {
                 await _mediator.SendAsync(new ChangeTeamMemberRoleCommand

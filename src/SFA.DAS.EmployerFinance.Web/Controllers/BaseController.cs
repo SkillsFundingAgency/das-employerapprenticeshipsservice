@@ -35,13 +35,16 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                 {
                     ModelState.AddModelError(errorMessageItem.Key, errorMessageItem.Value);
                 }
-
+                if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
+                {
+                    return ReturnViewResult(ControllerConstants.BadRequestViewName, masterName, orchestratorResponse);
+                }
                 return ReturnViewResult(viewName, masterName, orchestratorResponse);
             }
 
             if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
             {
-                return ReturnViewResult(viewName, masterName, orchestratorResponse);
+                return ReturnViewResult(ControllerConstants.BadRequestViewName, masterName, orchestratorResponse);
             }
 
             if (orchestratorResponse.Status == HttpStatusCode.NotFound)

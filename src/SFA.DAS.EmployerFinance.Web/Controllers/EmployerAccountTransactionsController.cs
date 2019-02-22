@@ -41,15 +41,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public async Task<ActionResult> ProviderPaymentSummary(string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate)
         {
             var viewModel = await _accountTransactionsOrchestrator.GetProviderPaymentSummary(hashedAccountId, ukprn, fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            if (viewModel.Status != HttpStatusCode.OK)
-            {
-                return (View(ControllerConstants.TransactionViewName, new OrchestratorResponse<TransactionViewResultViewModel>
-                {
-                    Status = viewModel.Status,
-                    Exception = viewModel.Exception,
 
-                }));
-            }
             return View(ControllerConstants.ProviderPaymentSummaryViewName, viewModel);
         }
 
