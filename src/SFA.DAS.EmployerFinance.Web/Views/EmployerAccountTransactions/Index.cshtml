@@ -45,33 +45,36 @@
                     <dd class="@balanceClass">@balance</dd>
                 </dl>
             </div>
-            <div class="data data--long data--expired">
-                <dl class="transfer-funds">
-                    @{
-                        var expiryDate = Model.Data.ExpiryDate?.ToString("MMMM yyyy");
-                    }
-
-                    <dt>
-                        of your funds could expire on <strong>18th @expiryDate </strong>
-                    </dt>
-                    @{
-                        var expiringFunds = Model.Data.ExpiringFunds?.ToString("C0", culture);
-
-
-                        var expiringFundsClass = string.Empty;
-
-                        if (balance.Length > 8)
-                        {
-                            expiringFundsClass = "long";
+            @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiryDate.HasValue)
+            {
+                <div class="data data--long data--expired">
+                    <dl class="transfer-funds">
+                        @{
+                            var expiryDate = Model.Data.ExpiryDate.Value.ToString("MMMM yyyy");
                         }
-                        if (balance.Length > 10)
-                        {
-                            expiringFundsClass = "longer";
+
+                        <dt>
+                            of your funds could expire on <strong>18th @expiryDate </strong>
+                        </dt>
+                        @{
+                            var expiringFunds = Model.Data.ExpiringFunds.Value.ToString("C0", culture);
+
+
+                            var expiringFundsClass = string.Empty;
+
+                            if (balance.Length > 8)
+                            {
+                                expiringFundsClass = "long";
+                            }
+                            if (balance.Length > 10)
+                            {
+                                expiringFundsClass = "longer";
+                            }
                         }
-                    }
-                    <dd class="@expiringFundsClass">@expiringFunds</dd>
-                </dl>
-            </div>
+                        <dd class="@expiringFundsClass">@expiringFunds</dd>
+                    </dl>
+                </div>
+            }
         </div>
     </div>
 </div>

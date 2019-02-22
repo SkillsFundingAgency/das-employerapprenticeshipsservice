@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
@@ -30,7 +31,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
         [SetUp]
         public void Setup()
         {
-            
             _httpClient = new Mock<IHttpClientWrapper>();
             _azureAdAuthService = new Mock<IAzureAdAuthenticationService>();
 
@@ -96,6 +96,91 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService
 
             result.ExpiryAmounts.Count.Should().Be(1);
             result.ExpiryAmounts.First().Should().Be(_expectedAccountExpiringFunds.ExpiryAmounts.First());
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnNullIfAccountCannotBeFoundOnForecastApi()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new ResourceNotFoundException(""));
+
+            var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
+
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnNullIfBadRequestSentToForecastApi()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new HttpException(400, "Bad request"));
+
+            var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
+
+            result.Should().BeNull();
+        }
+
+       
+        [Test]
+        public async Task ThenIShouldReturnNullIfRequestTimesOut()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new RequestTimeOutException());
+
+            var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
+
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnNullIfTooManyRequests()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new TooManyRequestsException());
+
+            var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
+
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnNullIfForecastApiHasInternalServerError()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new InternalServerErrorException());
+
+            var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
+
+            result.Should().BeNull();
+        }
+
+        [Test]
+        public async Task ThenIShouldReturnNullIfServiceUnavailableException()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new RequestTimeOutException());
+
+            var result = await _service.GetExpiringAccountFunds(ExpectedAccountId);
+
+            result.Should().BeNull();
+        }
+        
+        [Test]
+        public async Task ThenIShouldThrowExceptionIfUnexpectedHttpStatusCode()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new HttpException(501, "Service not implemented"));
+
+            Assert.ThrowsAsync<HttpException>(() => _service.GetExpiringAccountFunds(ExpectedAccountId));
+        }
+
+        [Test]
+        public async Task ThenIShouldThrowExceptionIfUnexpected()
+        {
+            _httpClient.Setup(c => c.Get<ExpiringAccountFunds>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new Exception());
+
+            Assert.ThrowsAsync<Exception>(() => _service.GetExpiringAccountFunds(ExpectedAccountId));
         }
     }
 }
