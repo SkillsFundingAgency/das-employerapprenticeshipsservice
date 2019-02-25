@@ -15,7 +15,7 @@
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="E0C02EDC8A6E704337FA80F33BB5B7B87F3B3623" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="AEB27BB1CA0ABAD33557A06B62289A9A4A198D14" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
 </ServiceConfiguration>
