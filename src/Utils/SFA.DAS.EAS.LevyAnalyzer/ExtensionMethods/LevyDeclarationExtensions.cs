@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
         {
             return declaration.PayrollMonth.HasValue &&
                    !string.IsNullOrWhiteSpace(declaration.PayrollYear) &&
-                   declaration.LevyDueYTD.HasValue &&
+                   //declaration.LevyDueYTD.HasValue &&
                    declaration.SubmissionDate.HasValue;
         }
     }

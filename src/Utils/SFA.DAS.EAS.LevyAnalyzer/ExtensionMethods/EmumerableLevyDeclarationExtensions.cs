@@ -102,6 +102,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
                 .Where(x => x.PayrollMonth != 12 || (x.PayrollMonth == 12 && x.IsOntime(hmrcDateService)));
         }
 
+        public static IEnumerable<LevyDeclaration> ExcludeNullYearToDateValues(this IEnumerable<LevyDeclaration> declarations)
+        {
+            return declarations.Where(x => x.LevyDueYTD.HasValue);
+        }
+
         private static IEnumerable<LevyDeclaration> HandlePeriod12Declarations(
             IHmrcDateService hmrcDateService, 
             PeriodDeclarations periodDeclaration)
