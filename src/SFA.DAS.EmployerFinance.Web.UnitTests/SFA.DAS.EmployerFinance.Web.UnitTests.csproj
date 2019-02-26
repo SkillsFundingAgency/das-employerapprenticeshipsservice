@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
+    <ProjectReference Include="..\SFA.DAS.StuctureMap.Extensions\SFA.DAS.StuctureMap.Extensions.csproj" />
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 

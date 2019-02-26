@@ -278,6 +278,7 @@
     <Compile Include="Controllers\BaseControllerTests\WhenReturningView.cs" />
     <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
+    <Compile Include="DependencyResolution\DefaultRegistryTests\WhenTheHttpContextBaseIsResolved.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
     <Compile Include="Models\DateTimeViewModelTests.cs" />
@@ -320,6 +321,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.StuctureMap.Extensions\SFA.DAS.StuctureMap.Extensions.csproj">
+      <Project>{cb42e6b7-05f0-4af7-858f-d819c220e386}</Project>
+      <Name>SFA.DAS.StuctureMap.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
       <Project>{8DD6E754-567C-46E3-A071-B1049380EA6C}</Project>

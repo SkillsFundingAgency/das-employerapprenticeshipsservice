@@ -4,6 +4,7 @@ using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerFinance.Web.Logging;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.StuctureMap.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
 {
@@ -18,8 +19,9 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 s.With(new ControllerConvention());
             });
 
-            For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
-            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For<HttpContextBase>().Use(() => HttpContext.Current.ToHttpContextBase());
+            For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(c.GetInstance<HttpContextBase>()));
+
             For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
             For<ICallerContextProvider>().Use<CallerContextProvider>();
         }
