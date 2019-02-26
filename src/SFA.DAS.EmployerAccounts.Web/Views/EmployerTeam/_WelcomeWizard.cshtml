@@ -113,7 +113,7 @@
                         <p>This allows you to spend funds.</p>
                         <label class="block-label selection-button-radio" for="add-agreements-1" data-target="guide-wizard-step-agreements">
                             
-                            <input id="add-agreements-1" type="radio" name="agreements-group" value="@{Model.Data.AgreementsToSign ? 1 : 2}" checked=@{Model.Data.AgreementsToSign ? "" : "checked"}>
+                            <input id="add-agreements-1" type="radio" name="agreements-group" value="@(Model.Data.AgreementsToSign ? 1 : 2)" checked="@(Model.Data.AgreementsToSign ? string.Empty : "checked")">
                             Yes
                         </label>
                         <label class="block-label selection-button-radio" for="add-agreements-2">
