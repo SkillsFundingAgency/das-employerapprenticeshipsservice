@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
         {
             CurrentDeclaration = current;
 
-            if (CurrentDeclaration.PayrollMonth.Value != 1)
+            if (CurrentDeclaration.PayrollMonth.Value != 1 && current.PayrollYear == previous?.PayrollYear)
             {
                 PreviousDeclaration = previous;
             }
