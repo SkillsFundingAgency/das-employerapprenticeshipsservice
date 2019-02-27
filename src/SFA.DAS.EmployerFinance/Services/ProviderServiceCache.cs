@@ -31,8 +31,7 @@ namespace SFA.DAS.EmployerFinance.Services
                 _inProcessCache.Set($"{nameof(Models.ApprenticeshipProvider.Provider)}_{ukPrn}", provider, new TimeSpan(1, 0, 0));
             }
 
-            return provider;
-           
+            return provider;           
         }
     }
 }
