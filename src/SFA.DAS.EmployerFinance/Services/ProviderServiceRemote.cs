@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Services
             {
                 _logger.Warn(ex, $"Unable to get provider details with UKPRN {ukPrn} from apprenticeship API.");
 
-                return null;
+                return Task.FromResult<Models.ApprenticeshipProvider.Provider>(null);
             }
         }
 
