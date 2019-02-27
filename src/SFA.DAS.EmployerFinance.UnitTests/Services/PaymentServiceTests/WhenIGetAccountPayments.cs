@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
 using SFA.DAS.EmployerFinance.Models.Payments;
@@ -33,6 +34,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
         private Mock<IInProcessCache> _cacheProvider;
+        private Mock<IDasLevyRepository> _dasLevyService;
 
         private PaymentService _paymentService;
         private Framework _framework;
@@ -60,7 +62,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 _apprenticeshipInfoService.Object,
                 _mapper.Object,
                 _logger.Object,
-                _cacheProvider.Object);
+                _cacheProvider.Object,
+                _dasLevyService.Object
+                );
         }
 
         private void SetupLoggerMock()
