@@ -293,8 +293,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             createdAccountEvent.UserRef.Should().Be(_user.Ref);
         }
 
-        [Test]
-        public async Task ThenAAddedLegalEntityEventIsPublished()
+        [TestCase(OrganisationType.Charities, Types.Models.OrganisationType.Charities)]
+        [TestCase(OrganisationType.CompaniesHouse, Types.Models.OrganisationType.CompaniesHouse)]
+        [TestCase(OrganisationType.PublicBodies, Types.Models.OrganisationType.PublicBodies)]
+        [TestCase(OrganisationType.Other, Types.Models.OrganisationType.Other)]
+        public async Task ThenAAddedLegalEntityEventIsPublished(OrganisationType inputOrganisationType, Types.Models.OrganisationType expectedOrganisationType)
         {
             const string organisationName = "Org";
 
@@ -303,7 +306,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             {
                 PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active",
                 OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString(),
-                OrganisationType = OrganisationType.Charities, OrganisationReferenceNumber = ExpectedOrganisationReferenceNumber,
+                OrganisationType = inputOrganisationType, OrganisationReferenceNumber = ExpectedOrganisationReferenceNumber,
                 OrganisationAddress = ExpectedOrganisationAddress
             };
 
@@ -323,7 +326,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             addedLegalEntityEvent.UserRef.Should().Be(_user.Ref);
             addedLegalEntityEvent.OrganisationReferenceNumber.Should().Be(ExpectedOrganisationReferenceNumber);
             addedLegalEntityEvent.OrganisationAddress.Should().Be(ExpectedOrganisationAddress);
-            addedLegalEntityEvent.OrganisationType.Should().Be(SFA.DAS.EmployerAccounts.Types.Models.OrganisationType.Charities);
+            addedLegalEntityEvent.OrganisationType.Should().Be(expectedOrganisationType);
             //addedLegalEntityEvent.Created.Should().Be(rightAboutNow);
         }
     }
