@@ -8,7 +8,8 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public ProvidersRegistry()
         {
-            For<IProviderApiClient>().Use<ProviderApiClient>();
+            // TODO: sort out the base uri
+            For<IProviderApiClient>().Use<ProviderApiClient>().Ctor<string>("baseUri").Is(@"http://das-prd-apprenticeshipinfoservice.cloudapp.net");
 
             For<IProviderService>().Use<ProviderServiceFromDb>();
             For<IProviderService>().DecorateAllWith<ProviderServiceRemote>();
