@@ -24,8 +24,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTr
         private long _ukprn;
         private string _hashedAccountId;
         private string _externalUserId;
-      
-        private Mock<IApprenticeshipInfoServiceWrapper> _apprenticeshipInfoService;
+
         public override FindAccountProviderPaymentsQuery Query { get; set; }
         public override FindAccountProviderPaymentsHandler RequestHandler { get; set; }
         public override Mock<IValidator<FindAccountProviderPaymentsQuery>> RequestValidator { get; set; }
@@ -61,16 +60,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.FindEmployerAccountPaymentTr
                 ToDate = _toDate,
                 ExternalUserId = _externalUserId
             };
-
-            _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-            _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<int>()))
-                .Returns(new ProvidersView
-                {
-                    Provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider
-                        {
-                            Name = ProviderName
-                        }
-                });
 
             RequestHandler = new FindAccountProviderPaymentsHandler(
                 RequestValidator.Object, 
