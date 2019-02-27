@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 LegalEntityName = "Test Corp",
                 LegalEntityCode = "3476782638",
                 LegalEntitySource = OrganisationType.CompaniesHouse,
-                LegalEntityAddress = "12, test street",
+                LegalEntityAddress = "123 test street",
                 LegalEntityInceptionDate = DateTime.Now,
                 AccountLegalEntityId = 830
             };
@@ -82,7 +82,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 SignAgreement = true,
                 SignedDate = DateTime.Now.AddDays(-10),
                 ExternalUserId = _owner.UserRef,
-                Name = "Org Ltd"
+                Name = "Org Ltd",
+                Code = "3476782638",
+                Source = OrganisationType.CompaniesHouse,
+                Address = "123 test street"
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
@@ -228,7 +231,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 e.AccountLegalEntityPublicHashedId.Equals(ExpectedAccountLegalEntityPublicHashString) &&
                 e.OrganisationName.Equals(_command.Name) &&
                 e.UserName.Equals(_owner.FullName()) &&
-                e.UserRef.Equals(Guid.Parse(_owner.UserRef)))));
+                e.UserRef.Equals(Guid.Parse(_owner.UserRef)) &&
+                e.OrganisationReferenceNumber.Equals(_agreementView.LegalEntityCode) &&
+                e.OrganisationAddress.Equals(_agreementView.LegalEntityAddress) &&
+                e.OrganisationType.ToString().Equals(_agreementView.LegalEntitySource.ToString())))); 
             //e.Created.)));
         }
     }
