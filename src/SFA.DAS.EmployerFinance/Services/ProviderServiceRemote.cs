@@ -15,19 +15,19 @@ namespace SFA.DAS.EmployerFinance.Services
             _logger = logger;
         }
      
-        public Task<Models.ApprenticeshipProvider.Provider> Get(long ukPrn)
+        public async Task<Models.ApprenticeshipProvider.Provider> Get(long ukPrn)
         {
             try
             {
                 var api = new Providers.Api.Client.ProviderApiClient();
-                var provider = api.Get(ukPrn);
-                return Task.FromResult(MapFrom(provider));
+                var provider = await api.GetAsync(ukPrn);
+                return MapFrom(provider);
             }
             catch (Exception ex)
             {
                 _logger.Warn(ex, $"Unable to get provider details with UKPRN {ukPrn} from apprenticeship API.");
 
-                return Task.FromResult<Models.ApprenticeshipProvider.Provider>(null);
+                return null;
             }
         }
 
