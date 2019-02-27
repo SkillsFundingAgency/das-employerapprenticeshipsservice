@@ -11,5 +11,6 @@ namespace SFA.DAS.EmployerFinance.Models.Payments
         public DateTime? CourseStartDate { get; set; }
         public string ApprenticeName { get; set; }
         public string ApprenticeNINumber { get; set; }
+        public string ExtraDetails { get; set; }
     }
 }

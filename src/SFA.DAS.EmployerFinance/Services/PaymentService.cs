@@ -27,10 +27,11 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly IMapper _mapper;
         private readonly ILog _logger;
         private readonly IInProcessCache _inProcessCache;
+        private readonly IDasLevyRepository _dasLevyRepository;
 
         public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
             IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
-            IMapper mapper, ILog logger, IInProcessCache inProcessCache)
+            IMapper mapper, ILog logger, IInProcessCache inProcessCache, IDasLevyRepository dasLevyRepository)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _commitmentsApiClient = commitmentsApiClient;
@@ -38,6 +39,7 @@ namespace SFA.DAS.EmployerFinance.Services
             _mapper = mapper;
             _logger = logger;
             _inProcessCache = inProcessCache;
+            _dasLevyRepository = dasLevyRepository;
         }
 
         public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
@@ -189,6 +191,20 @@ namespace SFA.DAS.EmployerFinance.Services
 
                         if (providerView != null)
                         {
+                            _inProcessCache.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView,
+                                new TimeSpan(1, 0, 0));
+                        }
+                        else if(providerView == null)
+                        {
+                            providerView = new ProvidersView
+                            {
+                                CreatedDate = DateTime.UtcNow,
+                                Provider = new Models.ApprenticeshipProvider.Provider()
+                                {
+                                    ProviderName = _dasLevyRepository.FindHistoricalProviderName(ukPrn).Result.FirstOrDefault(),
+                                    ExtraDetails = "Provider name taken from historical data"
+                                }
+                            };
                             _inProcessCache.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView,
                                 new TimeSpan(1, 0, 0));
                         }
