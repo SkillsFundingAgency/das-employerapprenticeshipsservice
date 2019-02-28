@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
-using SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 
@@ -22,7 +21,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private Mock<ILog> _logger;
         private GetAccountFinanceOverviewQuery _query;
         private ExpiringAccountFunds _expiringFunds;
-
 
         [SetUp]
         public void Setup()
@@ -47,7 +45,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
             _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(2000);
         }
-
 
         [Test]
         public async Task ThenTheExpiringFundsShouldHaveTheCorrectAccountId()

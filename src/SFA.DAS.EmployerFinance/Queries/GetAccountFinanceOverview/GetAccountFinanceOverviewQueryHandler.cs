@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
-using SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 
@@ -70,7 +69,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 _logger.Info($"Getting current funds balance for account ID: {accountId}");
                 
                 return await _levyService.GetAccountBalance(accountId);
-                
             }
             catch (Exception e)
             {

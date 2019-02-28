@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds
+namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
 {
     public class GetAccountFinanceOverviewResponse
     {

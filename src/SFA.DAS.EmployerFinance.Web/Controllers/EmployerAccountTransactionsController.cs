@@ -8,7 +8,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.Authorization.Mvc;
-using SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds;
+using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
 

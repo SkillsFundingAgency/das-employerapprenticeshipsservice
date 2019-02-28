@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
-using SFA.DAS.EmployerFinance.Queries.GetExpiringAccountFunds;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 
