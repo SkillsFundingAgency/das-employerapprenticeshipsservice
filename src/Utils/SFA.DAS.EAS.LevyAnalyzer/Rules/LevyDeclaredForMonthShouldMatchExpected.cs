@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
                                     .ExcludeLateSubmissions(_hmrcDateService)
                                     .ExcludeEndOfYearAdjustments(_hmrcDateService)
                                     .ExcludeNullYearToDateValues()
-                                    .OrderBy(declaration => declaration.SubmissionDate);
+                                    .OrderBy(declaration => declaration.PayrollYear).ThenBy(declaration => declaration.PayrollMonth).ThenBy(declaration => declaration.SubmissionDate);
 
             foreach (var declaration in declarations.CalculateMonthlyValues())
             {
