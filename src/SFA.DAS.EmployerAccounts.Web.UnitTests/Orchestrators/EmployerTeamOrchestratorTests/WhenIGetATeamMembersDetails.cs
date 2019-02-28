@@ -29,7 +29,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             {
                 TeamMember = new TeamMember
                 {
-                    Email = "test@test.com"
+                    AccountId = 1,
+                    Email = TeamMemberEmail,
+                    Role = Role.Owner
                 }
             };
 
@@ -92,6 +94,25 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.IsAny<GetMemberRequest>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenItShouldReturnANotFoundIfNoTeamMembersAreFound()
+        {
+            //Arrange
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
+                .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
+                .ReturnsAsync(new GetMemberResponse
+                {
+                    TeamMember = new TeamMember()
+                });
+
+            //Act
+            var result = await _orchestrator.GetActiveTeamMember(null, null, null);
+
+            //Asset
+            Assert.AreEqual(HttpStatusCode.NotFound,result.Status);
         }
     }
 }
