@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Repositories
         public Task<LevyDeclaration[]> GetLevyDeclarationsAsync(long accountId)
         {
             return Database.SqlQuery<LevyDeclaration>(
-                    $"SELECT * FROM [employer_financial].LevyDeclaration WHERE AccountId = {accountId} ORDER BY CreatedDate")
+                    $"SELECT * FROM [employer_financial].LevyDeclaration WHERE AccountId = {accountId} OR empRef IN (SELECT empRef FROM [employer_financial].LevyDeclaration ld2 WHERE ld2.AccountId = {accountId}) ORDER BY CreatedDate")
                 .ToArrayAsync();
         }
 
