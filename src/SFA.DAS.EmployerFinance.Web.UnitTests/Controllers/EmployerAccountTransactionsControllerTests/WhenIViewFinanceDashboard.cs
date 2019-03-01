@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
         }
 
         [Test]
-        public async Task ThenThAccountHashedIdIsReturned()
+        public async Task ThenTheAccountHashedIdIsReturned()
         {
             //Act
             var result = await _controller.Index(_query);

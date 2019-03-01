@@ -39,13 +39,13 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             {
                 return new GetAccountFinanceOverviewResponse
                 {
-                    AccountId = query.AccountId
+                    AccountId = query.AccountId.Value
                 };
             }
 
             return new GetAccountFinanceOverviewResponse
             {
-                AccountId = query.AccountId,
+                AccountId = query.AccountId.Value,
                 CurrentFunds = currentBalance,
                 ExpiringFundsExpiryDate = earliestFundsToExpire.PayrollDate,
                 ExpiringFundsAmount = earliestFundsToExpire.Amount
