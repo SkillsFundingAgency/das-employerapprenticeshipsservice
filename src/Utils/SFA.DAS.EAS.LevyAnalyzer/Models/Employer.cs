@@ -6,10 +6,12 @@ namespace SFA.DAS.EAS.LevyAnalyser.Models
     public class Employer : IValidateableObject
     {
         public Employer(
+            long accountId,
             string empRef, 
             IEnumerable<LevyDeclaration> declarations, 
             IEnumerable<TransactionLine> transactions)
         {
+            Id = accountId;
             EmpRef = empRef;
             LevyDeclarations = declarations.ToArray();
             Transactions = transactions.ToArray();
@@ -17,7 +19,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Models
 
         public string EmpRef { get; }
         public TransactionLine[] Transactions { get; }
-        public object Id => EmpRef;
+        public object Id { get; }
         public LevyDeclaration[] LevyDeclarations { get; }
     }
 }

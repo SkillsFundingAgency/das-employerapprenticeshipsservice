@@ -41,6 +41,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             foreach (var yearEndAdjustment in yearEndAdjustments)
             {
+                if (yearEndAdjustment.CurrentDeclaration.AccountId != (long)employer.Id)
+                {
+                    continue;
+                }
+
                 if (!employer.TryGetMatchingTransaction(yearEndAdjustment.CurrentDeclaration,
                     out var matchingTransaction))
                 {

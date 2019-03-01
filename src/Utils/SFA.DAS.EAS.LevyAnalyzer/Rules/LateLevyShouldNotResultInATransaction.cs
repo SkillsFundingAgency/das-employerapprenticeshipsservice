@@ -30,6 +30,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             foreach (var declaration in account.LevyDeclarations.ExcludeInvalidDeclarations().ExcludePeriod12())
             {
+                if (declaration.AccountId != (long)account.Id)
+                {
+                    continue;
+                }
+
                 if (!_hmrcDateService.IsDateInPayrollPeriod(declaration.PayrollYear, declaration.PayrollMonth.Value, declaration.SubmissionDate.Value))
                 {
                     foundLate = true;

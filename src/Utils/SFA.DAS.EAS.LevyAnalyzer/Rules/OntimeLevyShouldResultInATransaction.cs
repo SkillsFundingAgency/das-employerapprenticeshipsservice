@@ -36,6 +36,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             foreach (var declaration in nonSupercededOnTimeDeclarations)
             {
+                if (declaration.AccountId != (long)account.Id)
+                {
+                    continue;
+                }
+
                 if (!account.TryGetMatchingTransaction(declaration, out _))
                 {
                     validationResult.AddRuleViolation($"{declaration.EmpRef}: The on-time submission {declaration.Id} is missing an associated transaction", declaration.EmpRef, declaration.CreatedDate, null, null);

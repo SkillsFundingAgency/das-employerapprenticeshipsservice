@@ -17,6 +17,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
                 .Distinct()
                 .OrderBy(empRef => empRef)
                 .Select(empRef => new Employer(
+                    account.AccountId,
                     empRef,
                     account.LevyDeclarations.Where(declaration => declaration.EmpRef == empRef),
                     account.Transactions.Where(transaction => transaction.EmpRef == empRef)))

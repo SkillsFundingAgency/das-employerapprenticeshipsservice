@@ -17,7 +17,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
     {
 
         private readonly Lazy<IRuleRepository> _lazyRuleRepository;
-
+        private const long TestAccountId = 123;
+        
 
         public LevyAnalyzerTestFixtures()
         {
@@ -260,9 +261,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
 
         private Account CreateAccount()
         {
-            const long testAccountId = 123;
-
-            return new Account(testAccountId, Transactions.ToArray(), Declarations.ToArray());
+            return new Account(TestAccountId, Transactions.ToArray(), Declarations.ToArray());
         }
 
         private bool AddSubmissionIds(StringBuilder sb, string message, List<long> submissionIds)
@@ -293,7 +292,8 @@ namespace SFA.DAS.EAS.LevyAnalyser.Tests.TestUtils
                 PayrollYear = payrollYear,
                 PayrollMonth = payrollMonth,
                 SubmissionId = submissionId,
-                LevyDueYTD = levyDueYtd
+                LevyDueYTD = levyDueYtd,
+                AccountId = TestAccountId
             };
 
             HmrcDateServiceMock

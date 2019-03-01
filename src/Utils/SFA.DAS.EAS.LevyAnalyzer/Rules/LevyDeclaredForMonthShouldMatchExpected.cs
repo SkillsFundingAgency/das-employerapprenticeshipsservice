@@ -35,6 +35,11 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
 
             foreach (var declaration in declarations.CalculateMonthlyValues())
             {
+                if (declaration.CurrentDeclaration.AccountId != (long)employer.Id)
+                {
+                    continue;
+                }
+
                 if (!employer.TryGetMatchingTransaction(declaration.CurrentDeclaration, out var matchingTransaction))
                 {
                     validationResult.AddRuleViolation($"{declaration.CurrentDeclaration.EmpRef}: Levy {declaration.CurrentDeclaration.SubmissionId} for period {declaration.CurrentDeclaration.PayrollYear} / {declaration.CurrentDeclaration.PayrollMonth} does not have a matching transaction.", declaration.CurrentDeclaration.EmpRef, declaration.CurrentDeclaration.CreatedDate, null, null);
