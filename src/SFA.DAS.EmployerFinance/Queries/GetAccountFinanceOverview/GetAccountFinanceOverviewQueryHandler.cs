@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
 {
@@ -12,26 +13,29 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
     {
         private readonly IDasForecastingService _dasForecastingService;
         private readonly IDasLevyService _levyService;
+        private readonly IValidator<GetAccountFinanceOverviewQuery> _validator;
         private readonly ILog _logger;
 
-        public GetAccountFinanceOverviewQueryHandler(
-            IDasForecastingService dasForecastingService,
-            IDasLevyService levyService, 
+        public GetAccountFinanceOverviewQueryHandler(IDasForecastingService dasForecastingService,
+            IDasLevyService levyService,
+            IValidator<GetAccountFinanceOverviewQuery> validator,
             ILog logger)
         {
             _dasForecastingService = dasForecastingService;
             _levyService = levyService;
+            _validator = validator;
             _logger = logger;
         }
 
         public async Task<GetAccountFinanceOverviewResponse> Handle(GetAccountFinanceOverviewQuery query)
         {
-            if (!query.AccountId.HasValue)
-            {
-                _logger.Warn("Request made to get expiring funds with null account ID");
-                return new GetAccountFinanceOverviewResponse();
-            }
+            var validationResult = await _validator.ValidateAsync(query);
 
+            if (!validationResult.IsValid())
+            {
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+           
             var currentBalance = await GetAccountBalance(query.AccountId.Value);
             var earliestFundsToExpire = await GetExpiringFunds(query.AccountId.Value);
 

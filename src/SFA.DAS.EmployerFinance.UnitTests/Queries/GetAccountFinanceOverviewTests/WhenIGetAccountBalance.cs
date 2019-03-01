@@ -8,6 +8,7 @@ using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTests
 {
@@ -20,6 +21,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private Mock<IDasForecastingService> _forecastingService;
         private Mock<ILog> _logger;
         private Mock<IDasLevyService> _levyService;
+        private Mock<IValidator<GetAccountFinanceOverviewQuery>> _validator;
         private GetAccountFinanceOverviewQuery _query;
         private ExpiringAccountFunds _expiringFunds;
 
@@ -29,6 +31,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             _logger = new Mock<ILog>();
             _forecastingService = new Mock<IDasForecastingService>();
             _levyService = new Mock<IDasLevyService>();
+            _validator = new Mock<IValidator<GetAccountFinanceOverviewQuery>>();
 
             _query = new GetAccountFinanceOverviewQuery{AccountId = ExpectedAccountId};
             _expiringFunds = new ExpiringAccountFunds
@@ -42,9 +45,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
                 }
             };
 
-            _handler = new GetAccountFinanceOverviewQueryHandler(_forecastingService.Object, _levyService.Object, _logger.Object);
+            _handler = new GetAccountFinanceOverviewQueryHandler(
+                _forecastingService.Object, 
+                _levyService.Object, _validator.Object, 
+                _logger.Object);
             _forecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
             _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(ExpectedCurrentFunds);
+            _validator.Setup(v => v.ValidateAsync(_query))
+                .ReturnsAsync(new ValidationResult{ValidationDictionary = new Dictionary<string, string>()});
         }
 
         [Test]
