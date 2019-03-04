@@ -7,7 +7,7 @@ select 1 AS IsUser,
 	u.Id ,CONCAT(u.FirstName, ' ', u.LastName) as Name,  
 	u.Email,
 	CONVERT(varchar(64), u.UserRef) as 'UserRef', 
-	m.RoleId as 'Role', 
+	m.[Role] as 'Role', 
 	2 as 'Status',
 	NULL AS ExpiryDate
 from [employer_account].[User] u
@@ -23,7 +23,7 @@ SELECT
 	i.Name,
 	i.Email,
 	NULL,
-	i.RoleId,
+	i.[Role],
 	CASE WHEN i.Status = 1 AND i.ExpiryDate < GETDATE() THEN 3 ELSE i.Status END AS Status,
 	i.ExpiryDate
 FROM [employer_account].[Invitation] i

@@ -21,7 +21,7 @@ AS
 		SELECT TOP 1 u.Email
 		FROM [employer_account].[Membership] m
 		INNER JOIN [employer_account].[User] u ON u.Id = m.UserId
-		WHERE m.RoleId = 1 and m.AccountId = a.Id
+		WHERE m.[Role] = 1 and m.AccountId = a.Id
 		ORDER BY m.CreatedDate DESC
 	) u
 	WHERE a.HashedId = @hashedAccountId AND
