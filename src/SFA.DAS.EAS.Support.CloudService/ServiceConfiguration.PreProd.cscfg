@@ -11,7 +11,7 @@
       <Setting name="LevySubmissionLevySubmissionsApiConfigurationLevyTokenCertificatethumprint" value="__LevySubmissionLevySubmissionsApiConfigurationLevyTokenCertificatethumprint__" />       
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="WebSslCert" thumbprint="F7A65B914331AAAD4251123566E8715069736060" thumbprintAlgorithm="sha1" />
+      <Certificate name="WebSslCert" thumbprint="D4B7EBCE1013CBB10A6DD74D1A20E2C9A69107A2" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <NetworkConfiguration>
