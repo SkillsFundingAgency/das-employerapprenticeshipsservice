@@ -189,7 +189,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
                     HashedAccountId = accountId,
-                    RequiresAgreementSigning = requiresAgreementSigning
+                    RequiresAgreementSigning = requiresAgreementSigning,
+                    AgreementsToSign = requiresAgreementSigning > 0
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
@@ -275,10 +276,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
 
+
             return new OrchestratorResponse<TeamMember>
             {
+                Status = response.TeamMember.AccountId == 0 ? HttpStatusCode.NotFound : HttpStatusCode.OK,
                 Data = response.TeamMember
             };
+
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId, string userId)
