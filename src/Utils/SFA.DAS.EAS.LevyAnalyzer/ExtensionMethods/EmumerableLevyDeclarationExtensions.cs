@@ -205,7 +205,7 @@ namespace SFA.DAS.EAS.LevyAnalyser.ExtensionMethods
         public static IEnumerable<CalculatedYearEndAdjustment> CalculateYearEndAdjustments(
             this IEnumerable<LevyDeclaration> levyDeclarations, IHmrcDateService hmrcDateService)
         {
-            var yearDeclarations = levyDeclarations.ActiveDeclarations(hmrcDateService).GroupByYear();
+            var yearDeclarations = levyDeclarations.ActiveDeclarations(hmrcDateService).ExcludeNullYearToDateValues().GroupByYear();
 
             foreach (var yearDeclaration in yearDeclarations)
             {
