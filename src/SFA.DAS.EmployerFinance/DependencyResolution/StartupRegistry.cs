@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         {
             Scan(s =>
             {
-                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+                s.AssembliesAndExecutablesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.Convention<CompositeDecorator<DefaultStartup, IStartup>>();
             });
         }
