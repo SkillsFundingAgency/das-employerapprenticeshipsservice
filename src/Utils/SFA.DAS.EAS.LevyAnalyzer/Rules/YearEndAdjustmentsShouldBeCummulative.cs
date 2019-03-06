@@ -54,10 +54,10 @@ namespace SFA.DAS.EAS.LevyAnalyser.Rules
                 }
 
                 var calculatedAdjustment = (yearEndAdjustment.CalculatedAdjustment * matchingTransaction.EnglishFraction.Value) * 1.1m;
-                if (Math.Round(matchingTransaction.Amount , 4) != Math.Round(calculatedAdjustment, 4))
+                if (Math.Round(matchingTransaction.Amount , 2) != Math.Round(calculatedAdjustment, 2))
                 {
                     validationResult.AddRuleViolation(
-                        $"{yearEndAdjustment.CurrentDeclaration.EmpRef}: The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} declared for period {yearEndAdjustment.CurrentDeclaration.PayrollYear} / {yearEndAdjustment.CurrentDeclaration.PayrollMonth} should be {yearEndAdjustment.CalculatedAdjustment} but is actually {matchingTransaction.LevyDeclared}", matchingTransaction.EmpRef, matchingTransaction.TransactionDate, yearEndAdjustment.CalculatedAdjustment, matchingTransaction.LevyDeclared);
+                        $"{yearEndAdjustment.CurrentDeclaration.EmpRef}: The year end adjustment {yearEndAdjustment.CurrentDeclaration.SubmissionId} declared for period {yearEndAdjustment.CurrentDeclaration.PayrollYear} / {yearEndAdjustment.CurrentDeclaration.PayrollMonth} should be {calculatedAdjustment} but is actually {matchingTransaction.Amount}", matchingTransaction.EmpRef, matchingTransaction.TransactionDate, yearEndAdjustment.CalculatedAdjustment, matchingTransaction.LevyDeclared);
                 }
             }
         }
