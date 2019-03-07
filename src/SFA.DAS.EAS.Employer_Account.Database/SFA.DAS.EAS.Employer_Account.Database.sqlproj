@@ -155,6 +155,7 @@
     <None Include="Scripts\PostDeployment\CreateAgreementTemplates.sql" />
     <None Include="Scripts\PreDeployment\AML-2119-BackupAgreementDetails.sql" />
     <None Include="Scripts\PreDeployment\AML-2239-DeleteDuplicateAccountHistory.sql" />
+    <None Include="Scripts\Manual\CON-91-DeleteLegalEntitiesWithNoAgreements.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />
