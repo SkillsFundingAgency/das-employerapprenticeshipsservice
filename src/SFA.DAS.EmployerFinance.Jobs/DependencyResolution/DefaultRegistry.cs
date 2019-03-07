@@ -8,6 +8,12 @@ namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
     {
         public DefaultRegistry()
         {
+            Scan(s =>
+            {
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+                s.RegisterConcreteTypesAgainstTheFirstInterface();
+            });
+
             For<EmployerFinanceDbContext>().Use(c => new EmployerFinanceDbContext(c.GetInstance<EmployerFinanceConfiguration>().DatabaseConnectionString));
         }
     }
