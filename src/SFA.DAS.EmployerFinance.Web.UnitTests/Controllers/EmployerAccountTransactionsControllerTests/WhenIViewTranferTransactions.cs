@@ -11,6 +11,7 @@ using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EmployerFinance.Web.Controllers;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
@@ -39,7 +40,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
                 _owinWrapper.Object,
                 _orchestrator.Object,
                 _mapper.Object,
-                _mediator.Object);
+                _mediator.Object,
+                Mock.Of<ILog>());
 
             _query = new GetTransferTransactionDetailsQuery
             {

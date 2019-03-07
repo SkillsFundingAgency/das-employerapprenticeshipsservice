@@ -16,5 +16,8 @@
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
         public const string TransferDetailsViewName = "TransferDetails";
         public const string UserRefClaimKeyName = "sub";
+        public const string NotFoundViewName = "NotFound";
+        public const string TransactionViewName = "TransactionsView";
+        public const string BadRequestViewName = "BadRequest";
     }
 }

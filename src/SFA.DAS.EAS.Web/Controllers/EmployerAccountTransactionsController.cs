@@ -4,13 +4,20 @@ using System;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.Validation.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAccountTransactionsController: Controller
+    public class EmployerAccountTransactionsController: BaseController
     {
+        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+        }
+
         [Route("finance")]
         [Route("balance")]
         public ActionResult Index(string hashedAccountId)
