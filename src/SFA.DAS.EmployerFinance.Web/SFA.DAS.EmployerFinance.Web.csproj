@@ -160,6 +160,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.keep" />
+    <Content Include="Content\htm\403.html" />
+    <Content Include="Content\htm\404.html" />
+    <Content Include="Content\htm\Error.html" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
     <Content Include="dist\css\external-links\external-link-black-24x24.png" />
