@@ -1,6 +1,5 @@
 ﻿using Microsoft.ApplicationInsights;
 using NLog;
-using NServiceBus;
 using SFA.DAS.EmployerFinance.Web.Logging;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Logging;
@@ -30,8 +29,6 @@ namespace SFA.DAS.EmployerFinance.Web
     public class MvcApplication : HttpApplication
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
-        private IEndpointInstance _endpoint;
 
         protected void Application_Start()
         {

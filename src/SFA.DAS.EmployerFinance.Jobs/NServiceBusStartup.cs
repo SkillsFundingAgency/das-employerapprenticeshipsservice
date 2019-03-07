@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Data.Common;
 using System.Threading.Tasks;
-using Microsoft.Azure.WebJobs;
 using NServiceBus;
-using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
