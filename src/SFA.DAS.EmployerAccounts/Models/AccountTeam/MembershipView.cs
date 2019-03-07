@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFA.DAS.Authorization;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 {
@@ -12,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int RoleId { get; set; }
+        public Role Role { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool ShowWizard { get; set; }
         public string FullName() => $"{FirstName} {LastName}";

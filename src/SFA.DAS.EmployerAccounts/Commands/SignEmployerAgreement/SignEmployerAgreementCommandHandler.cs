@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
+            if (owner == null || owner.Role != Role.Owner)
                 throw new UnauthorizedAccessException();
 
             var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);

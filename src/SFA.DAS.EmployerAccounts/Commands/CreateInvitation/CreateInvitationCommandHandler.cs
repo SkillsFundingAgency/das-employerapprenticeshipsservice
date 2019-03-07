@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation
                     AccountId = caller.AccountId,
                     Email = message.EmailOfPersonBeingInvited,
                     Name = message.NameOfPersonBeingInvited,
-                    RoleId = message.RoleIdOfPersonBeingInvited,
+                    Role = message.RoleOfPersonBeingInvited,
                     Status = InvitationStatus.Pending,
                     ExpiryDate = expiryDate
                 });
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation
             else
             {
                 existingInvitation.Name = message.NameOfPersonBeingInvited;
-                existingInvitation.RoleId = message.RoleIdOfPersonBeingInvited;
+                existingInvitation.Role = message.RoleOfPersonBeingInvited;
                 existingInvitation.Status = InvitationStatus.Pending;
                 existingInvitation.ExpiryDate = expiryDate;
 
@@ -94,14 +94,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "CREATED",
-                    Description = $"Member {message.EmailOfPersonBeingInvited} added to account {caller.AccountId} as {message.RoleIdOfPersonBeingInvited}",
+                    Description = $"Member {message.EmailOfPersonBeingInvited} added to account {caller.AccountId} as {message.RoleOfPersonBeingInvited}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
 
                         PropertyUpdate.FromString("AccountId",caller.AccountId.ToString()),
                         PropertyUpdate.FromString("Email",message.EmailOfPersonBeingInvited),
                         PropertyUpdate.FromString("Name",message.NameOfPersonBeingInvited),
-                        PropertyUpdate.FromString("RoleId",message.RoleIdOfPersonBeingInvited.ToString()),
+                        PropertyUpdate.FromString("Role",message.RoleOfPersonBeingInvited.ToString()),
                         PropertyUpdate.FromString("Status",InvitationStatus.Pending.ToString()),
                         PropertyUpdate.FromDateTime("ExpiryDate",expiryDate)
                     },

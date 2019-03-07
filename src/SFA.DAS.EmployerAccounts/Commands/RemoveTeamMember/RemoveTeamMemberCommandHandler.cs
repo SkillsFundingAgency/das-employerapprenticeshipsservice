@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
             
             if (owner == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not a member of this Account" } });
-            if ((Role)owner.RoleId != Role.Owner)
+            if (owner.Role != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
             var teamMember = await _membershipRepository.Get(message.UserId, owner.AccountId);
@@ -68,12 +68,12 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "DELETED",
-                    Description = $"User {owner.Email} with role {owner.RoleId} has removed user {teamMember.UserId} with role {teamMember.RoleId} from account {owner.AccountId}",
+                    Description = $"User {owner.Email} with role {owner.Role} has removed user {teamMember.UserId} with role {teamMember.Role} from account {owner.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         new PropertyUpdate {PropertyName = "AccountId", NewValue = owner.AccountId.ToString()},
                         new PropertyUpdate {PropertyName = "UserId", NewValue = teamMember.UserId.ToString()},
-                        new PropertyUpdate {PropertyName = "RoleId", NewValue = teamMember.RoleId.ToString()}
+                        new PropertyUpdate {PropertyName = "Role", NewValue = teamMember.Role.ToString()}
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = owner.AccountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "Membership", Id = teamMember.UserId.ToString() }

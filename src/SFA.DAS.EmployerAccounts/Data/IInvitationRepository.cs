@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Data
@@ -13,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<Invitation> Get(long accountId, string email);
         Task ChangeStatus(Invitation invitation);
         Task Resend(Invitation invitation);
-        Task Accept(string email, long accountId, short roleId);
+        Task Accept(string email, long accountId, Role role);
         Task<int> GetNumberOfInvites(string userId);
     }
 }

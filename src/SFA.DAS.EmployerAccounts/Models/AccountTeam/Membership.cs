@@ -11,21 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
         public virtual User User { get; set; }
         public virtual long UserId { get; set; }
 
-        public virtual Role Role
-        {
-            get => _role ?? (Role)_roleId.Value;
-            set => _role = value;
-        }
-
-        // BUG: this is marked obsolete but the Role property relies on the RoleId property being set.
-        [Obsolete("Please use 'Role' instead.")]
-        public int RoleId
-        {
-            get => _roleId ?? (int)_role.Value;
-            set => _roleId = value;
-        }
-
-        private Role? _role;
-        private int? _roleId;
+        public virtual Role Role { get; set; }
     }
 }

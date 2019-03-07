@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_account");
-            modelBuilder.Entity<Account>().Ignore(a => a.RoleId).Ignore(a => a.RoleName);
+            modelBuilder.Entity<Account>().Ignore(a => a.Role).Ignore(a => a.RoleName);
             modelBuilder.Entity<Account>().HasMany(a => a.AccountLegalEntities);
             modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
-            modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId }).Ignore(m => m.RoleId).Property(m => m.Role).HasColumnName(nameof(Membership.RoleId));
+            modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId });
             modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);

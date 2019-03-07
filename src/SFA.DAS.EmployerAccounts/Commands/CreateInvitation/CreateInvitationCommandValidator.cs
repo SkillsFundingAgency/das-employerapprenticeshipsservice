@@ -42,8 +42,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation
             if (string.IsNullOrWhiteSpace(item.NameOfPersonBeingInvited))
                 validationResult.AddError(nameof(item.NameOfPersonBeingInvited), "Enter name");
 
-            if (item.RoleIdOfPersonBeingInvited == 0)
-                validationResult.AddError(nameof(item.RoleIdOfPersonBeingInvited), "Select team member role");
+            if (item.RoleOfPersonBeingInvited == Role.None)
+                validationResult.AddError(nameof(item.RoleOfPersonBeingInvited), "Select team member role");
 
 
             if (validationResult.IsValid())
@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation
                     validationResult.AddError("Membership", "User is not a member of this Account");
                     validationResult.IsUnauthorized = true;
                 }
-                else if ((Role) caller.RoleId != Role.Owner)
+                else if (caller.Role != Role.Owner)
                 {
                     validationResult.AddError("Membership", "User is not an Owner");
                     validationResult.IsUnauthorized = true;

@@ -2,6 +2,6 @@
 {
     public interface IMembershipContext
     {
-        Role Role { get; }
+        Role Role { get; set; }
     }
 }

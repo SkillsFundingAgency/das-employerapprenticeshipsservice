@@ -5,7 +5,7 @@
 	[Email] [nvarchar](255) NOT NULL,
 	[ExpiryDate] [datetime] NOT NULL,
 	[Status] [tinyint] NOT NULL,
- [RoleId] TINYINT NOT NULL, 
+ [Role] TINYINT NOT NULL, 
     CONSTRAINT [PK_Invitation] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -14,7 +14,7 @@
 ) ON [PRIMARY]
 
 GO
-CREATE INDEX [IX_Invitation] ON [employer_account].[Invitation] ([Email], [Status], [ExpiryDate]) INCLUDE ([AccountId], [Name], [RoleId])
+CREATE INDEX [IX_Invitation] ON [employer_account].[Invitation] ([Email], [Status], [ExpiryDate]) INCLUDE ([AccountId], [Name], [Role])
 
 GO
-CREATE INDEX [IX_Invitation_AccountId_Status] ON [employer_account].[Invitation]([AccountId], [Status]) INCLUDE ([Email], [ExpiryDate],	[Name],	[RoleId])
+CREATE INDEX [IX_Invitation_AccountId_Status] ON [employer_account].[Invitation]([AccountId], [Status]) INCLUDE ([Email], [ExpiryDate],	[Name],	[Role])

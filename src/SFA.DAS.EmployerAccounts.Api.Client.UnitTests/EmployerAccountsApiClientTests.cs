@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
                 q.UserRef == IsUserInRoleRequest.UserRef
                 && q.AccountId == IsUserInRoleRequest.AccountId
                 && q.UserRoles.Count == IsUserInRoleRequest.Roles.Count
-                && q.UserRoles.All(role => IsUserInRoleRequest.Roles.Any(requestRole => (short)requestRole == (short)role))
+                && q.UserRoles.All(role => IsUserInRoleRequest.Roles.Any(requestRole => requestRole == role))
             ), CancellationToken));
         }
     }

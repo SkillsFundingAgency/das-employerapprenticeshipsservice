@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
                 return validationResult;
             }
 
-            if (agreement.HashedAccountId != item.HashedAccountId || (agreement.Status != EmployerAgreementStatus.Signed && caller.RoleId != (int)Role.Owner))
+            if (agreement.HashedAccountId != item.HashedAccountId || (agreement.Status != EmployerAgreementStatus.Signed && caller.Role != Role.Owner))
             {
                 validationResult.IsUnauthorized = true;
             }    

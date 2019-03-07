@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserAccountRole
 
             return new GetUserAccountRoleResponse
             {
-                UserRole = (Role)(caller?.RoleId ?? (short)Role.None)
+                UserRole = (caller?.Role ?? Role.None)
             };
         }
     }
