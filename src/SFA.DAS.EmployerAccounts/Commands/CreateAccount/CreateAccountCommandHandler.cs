@@ -308,7 +308,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                     {
                         PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
                         PropertyUpdate.FromString("UserId", message.ExternalUserId),
-                        PropertyUpdate.FromString("RoleId", Role.Owner.ToString()),
+                        PropertyUpdate.FromString("Role", Role.Owner.ToString()),
                         PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow)
                     },
                     RelatedEntities = new List<Entity>

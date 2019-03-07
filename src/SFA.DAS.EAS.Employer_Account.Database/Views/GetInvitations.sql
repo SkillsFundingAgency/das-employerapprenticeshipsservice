@@ -7,7 +7,7 @@ SELECT i.Id,
 	i.Email,
 	i.ExpiryDate,
 	CASE WHEN i.Status = 1 AND i.ExpiryDate < GETDATE() THEN 3 ELSE i.Status END AS Status,
-	i.RoleId,
+	i.[Role],
 	u.Id AS InternalUserId,
 	u.UserRef AS ExternalUserId	 
 FROM [employer_account].[Invitation] i

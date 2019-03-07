@@ -20,6 +20,7 @@ using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.Hashing;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -58,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 FirstName = "Bob",
                 LastName = "Green",
                 UserRef = Guid.NewGuid().ToString(),
-                RoleId = 1,
+                Role = Role.Owner,
             };
 
             _agreementView = new EmployerAgreementView

@@ -10,6 +10,7 @@ using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Web.Controllers;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
@@ -55,7 +56,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
                 _owinWrapper.Object,
                 _orchestrator.Object,
                 Mock.Of<IMapper>(),
-                _mediator.Object);
+                _mediator.Object,
+                Mock.Of<ILog>());
         }
 
         [Test]

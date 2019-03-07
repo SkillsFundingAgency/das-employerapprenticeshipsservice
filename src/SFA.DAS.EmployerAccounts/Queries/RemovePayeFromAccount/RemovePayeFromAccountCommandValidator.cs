@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount
             if (validationResult.IsValid())
             {
                 var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
-                if (member== null || member.RoleId != (short) Role.Owner)
+                if (member== null || member.Role != Role.Owner)
                 {
                     validationResult.IsUnauthorized = true;
                 }

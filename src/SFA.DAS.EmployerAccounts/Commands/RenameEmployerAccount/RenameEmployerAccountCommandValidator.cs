@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount
                     validationResult.AddError("Membership", "User is not a member of this Account");
                     validationResult.IsUnauthorized = true;
                 }
-                else if ((Role)caller.RoleId != Role.Owner)
+                else if (caller.Role != Role.Owner)
                 {
                     validationResult.AddError("Membership", "User is not an Owner");
                     validationResult.IsUnauthorized = true;

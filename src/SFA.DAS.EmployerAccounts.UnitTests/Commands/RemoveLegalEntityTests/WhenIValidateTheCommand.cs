@@ -36,8 +36,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedUserId)).ReturnsAsync(new MembershipView {RoleId = (short) Role.Owner});
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView { RoleId = (short)Role.Transactor });
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedUserId)).ReturnsAsync(new MembershipView {Role = Role.Owner});
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedAccountId, ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView { Role = Role.Transactor });
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);

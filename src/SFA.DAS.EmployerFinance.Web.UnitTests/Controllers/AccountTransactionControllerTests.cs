@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
 {
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
                 });
 
             _controller = new Web.Controllers.EmployerAccountTransactionsController(
-                _owinWrapper.Object, _orchestrator.Object, Mock.Of<IMapper>(), Mock.Of<IMediator>());
+                _owinWrapper.Object, _orchestrator.Object, Mock.Of<IMapper>(), Mock.Of<IMediator>(), Mock.Of<ILog>());
         }
 
         [Test]

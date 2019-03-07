@@ -24,11 +24,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
                 ExternalUserId = "123",
                 HashedAccountId = "123dfg",
                 NameOfPersonBeingInvited = "Test",
-                RoleIdOfPersonBeingInvited = Role.Owner
+                RoleOfPersonBeingInvited = Role.Owner
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {Role = Role.Owner});
             _membershipRepository.Setup(x => x.Get(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(new TeamMember { IsUser = false });
 
             _validator = new CreateInvitationCommandValidator(_membershipRepository.Object);
@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
             Assert.Contains(new KeyValuePair<string,string>("EmailOfPersonBeingInvited", "Enter email address"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "No HashedAccountId supplied"),result.ValidationDictionary );
             Assert.Contains(new KeyValuePair<string,string>("NameOfPersonBeingInvited", "Enter name"),result.ValidationDictionary );
-            Assert.Contains(new KeyValuePair<string,string>("RoleIdOfPersonBeingInvited", "Select team member role"),result.ValidationDictionary );
+            Assert.Contains(new KeyValuePair<string,string>("RoleOfPersonBeingInvited", "Select team member role"),result.ValidationDictionary );
         }
 
         [TestCase("notvalid")]
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
                 ExternalUserId = "123",
                 HashedAccountId = "123dfg",
                 NameOfPersonBeingInvited = "Test",
-                RoleIdOfPersonBeingInvited = Role.Owner
+                RoleOfPersonBeingInvited = Role.Owner
             });
 
             //Assert
@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreAnOwnerAndFalseIsReturnedIfTheyArent()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {RoleId = (short)Role.Transactor});
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {Role = Role.Transactor});
 
             //Act
             var result = await _validator.ValidateAsync(_createInvitationCommand);

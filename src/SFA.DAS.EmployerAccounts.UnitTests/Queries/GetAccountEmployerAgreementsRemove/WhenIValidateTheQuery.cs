@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
+            _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(new MembershipView {Role = Role.Owner});
 
             _validator = new GetAccountEmployerAgreementsRemoveValidator(_membershipRepository.Object);
         }
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public async Task ThenTheUserIsCheckedToMakeSureThatTheyAreAnOwnerOnTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(new MembershipView { RoleId = (short)Role.Viewer });
+            _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(new MembershipView { Role = Role.Viewer });
 
             //Act
             var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementsRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987" });
