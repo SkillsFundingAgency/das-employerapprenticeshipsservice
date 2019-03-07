@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers
         }
 
         [Test]
-        public async Task ThenPreivousTransactionsStatusIsShown()
+        public async Task ThenPrevioussTransactionsStatusIsShown()
         {
             //Act
             var result = await _controller.TransactionsView("TEST", 2017, 1);

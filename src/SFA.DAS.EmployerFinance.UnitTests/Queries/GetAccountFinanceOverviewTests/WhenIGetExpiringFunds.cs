@@ -8,6 +8,7 @@ using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTests
 {
@@ -19,6 +20,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private Mock<IDasForecastingService> _dasForecastingService;
         private Mock<IDasLevyService> _levyService;
         private Mock<ILog> _logger;
+        private Mock<IValidator<GetAccountFinanceOverviewQuery>> _validator;
         private GetAccountFinanceOverviewQuery _query;
         private ExpiringAccountFunds _expiringFunds;
 
@@ -28,6 +30,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             _logger = new Mock<ILog>();
             _dasForecastingService = new Mock<IDasForecastingService>();
             _levyService = new Mock<IDasLevyService>();
+            _validator = new Mock<IValidator<GetAccountFinanceOverviewQuery>>();
 
             _query = new GetAccountFinanceOverviewQuery { AccountId = ExpectedAccountId };
             _expiringFunds = new ExpiringAccountFunds
@@ -41,9 +44,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
                 }
             };
 
-            _handler = new GetAccountFinanceOverviewQueryHandler(_dasForecastingService.Object,_levyService.Object, _logger.Object);
+            _handler = new GetAccountFinanceOverviewQueryHandler(_dasForecastingService.Object,_levyService.Object, _validator.Object, _logger.Object);
             _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
             _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(2000);
+            _validator.Setup(v => v.ValidateAsync(_query))
+                .ReturnsAsync(new ValidationResult{ValidationDictionary = new Dictionary<string, string>()});
         }
 
         [Test]
@@ -68,18 +73,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             var response = await _handler.Handle(_query);
 
             response.ExpiringFundsExpiryDate.Should().BeSameDateAs(new DateTime(2019, 3, 6));
-        }
-
-        [Test]
-        public async Task ThenIfQueryHasNullAccountIdAnEmptyResponseIsReturned()
-        {
-            _query.AccountId = null;
-
-            var response = await _handler.Handle(_query);
-
-            response.AccountId.Should().NotHaveValue();
-            response.ExpiringFundsExpiryDate.Should().NotHaveValue();
-            response.ExpiringFundsAmount.Should().NotHaveValue();
         }
 
         [Test]
@@ -140,6 +133,17 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             var response = await _handler.Handle(_query);
 
             response.ExpiringFundsAmount.Should().NotHaveValue();
+        }
+
+        [Test]
+        public async Task ThenIfValidationFailsAnExceptionIsThrown()
+        {
+            _validator.Setup(v => v.ValidateAsync(_query)).ReturnsAsync(new ValidationResult
+            {
+                ValidationDictionary = new Dictionary<string, string> {{"Test Error", "Error"}}
+            });
+
+           Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_query));
         }
     }
 }
