@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
@@ -13,5 +14,8 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public long LegalEntityId { get; set; }
         public long AccountLegalEntityId { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
+        public OrganisationType OrganisationType { get; set; }
+        public string OrganisationReferenceNumber { get; set; }
+        public string OrganisationAddress { get; set; }
     }
 }
