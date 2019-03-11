@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             // assert
             Assert.AreEqual(_providerName, result.Name);
             Assert.AreEqual(ukPrn, result.Ukprn);
-            Assert.AreEqual("Provider name taken from historical data", result.ExtraDetails);
+            Assert.AreEqual(true, result.HistoricProviderName);
         }
 
         private int RandomNumber(int min, int max)

@@ -228,7 +228,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@ukprn", ukprn, DbType.Int64);
 
             return _db.Value.Database.Connection.QueryAsync<string>(
-                sql: "[employer_financial].[CheckProviderName]",
+                sql: "[employer_financial].[GetLastKnownProviderNameForUkprn]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);

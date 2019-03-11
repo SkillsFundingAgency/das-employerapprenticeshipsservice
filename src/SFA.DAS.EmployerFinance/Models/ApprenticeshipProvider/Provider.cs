@@ -9,6 +9,6 @@
         public string Email { get; set; }
         public string Phone { get; set; }
         public bool NationalProvider { get; set; }
-        public string ExtraDetails { get; set; }
+        public bool HistoricProviderName { get; set; }
     }
 }

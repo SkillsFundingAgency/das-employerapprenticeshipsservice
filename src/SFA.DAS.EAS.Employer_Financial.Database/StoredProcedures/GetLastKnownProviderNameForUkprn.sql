@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [employer_financial].[CheckProviderName] @ukprn BIGINT
+﻿CREATE PROCEDURE [employer_financial].[GetLastKnownProviderNameForUkprn] @ukprn BIGINT
 AS
 		SELECT TOP 1 ProviderName
 		FROM [employer_financial].[PaymentMetaData] AS pmd

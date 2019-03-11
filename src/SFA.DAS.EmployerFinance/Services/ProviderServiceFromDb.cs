@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.Services
             return new Models.ApprenticeshipProvider.Provider {
                 Name = providerName.FirstOrDefault(),
                 Ukprn = ukPrn,
-                ExtraDetails = "Provider name taken from historical data"
+                HistoricProviderName = true
             };
         }
     }

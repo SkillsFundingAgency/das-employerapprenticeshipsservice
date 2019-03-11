@@ -49,4 +49,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[RequiredPaymentId]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="36f8f1a2-795d-4872-8be8-d5a0abc69aaa" ChangeDateTime="03/11/2019 10:19:12">
+    <Property Name="ElementName" Value="[employer_financial].[PaymentMetaData].[ExtraDetails]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_financial].[PaymentMetaData]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[HistoricProviderName]" />
+  </Operation>
 </Operations>

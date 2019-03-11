@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheProviderIsInTheCache_ThenTheCachedProviderIsReturned()
         {
             // arrange 
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             _mockInProcessCache
                 .Setup(m => m.Get<EmployerFinance.Models.ApprenticeshipProvider.Provider>($"{nameof(EmployerFinance.Models.ApprenticeshipProvider.Provider)}_{ukPrn}"))
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheProviderIsInTheCache_ThenTheCacheIsQueriedOnce()
         {
             // arrange 
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             _mockInProcessCache
                .Setup(m => m.Get<EmployerFinance.Models.ApprenticeshipProvider.Provider>(It.IsAny<string>()))
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheProviderIsNotInTheCache_ThenTheProviderServiceIsCalled()
         {
             // arrange
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             _mockInProcessCache
                 .Setup(m => m.Get<EmployerFinance.Models.ApprenticeshipProvider.Provider>(It.IsAny<string>()))
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheProviderServiceReturnsAProvider_ThenTheProviderIsStoredInTheCache()
         {
             // arrange
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             _mockProviderService
                 .Setup(m => m.Get(ukPrn))
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheProviderServiceReturnsANullProvider_ThenTheProviderIsNotStoredInTheCache()
         {
             // arrange
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             _mockProviderService
                 .Setup(m => m.Get(ukPrn))
@@ -114,14 +114,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             var result = await _sut.Get(ukPrn);
 
             // assert
-            _mockInProcessCache.Verify(m => m.Set($"{nameof(EmployerFinance.Models.ApprenticeshipProvider.Provider)}_{ukPrn}", _testProvider), Times.Never);
+            _mockInProcessCache.Verify(m => m.Set($"{nameof(EmployerFinance.Models.ApprenticeshipProvider.Provider)}_{ukPrn}", It.IsAny<EmployerFinance.Models.ApprenticeshipProvider.Provider>()), Times.Never);
         }
 
         [Test]
         public async Task AndTheProviderServiceReturnsANullProvider_ThenTheNullProviderisReturned()
         {
             // arrange
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             _mockProviderService
                 .Setup(m => m.Get(ukPrn))
@@ -132,12 +132,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
 
             // assert
             Assert.IsNull(result);
-        }
-
-        private int RandomNumber(int min, int max)
-        {
-            var random = new Random();
-            return random.Next(min, max);
         }
     }
 }
