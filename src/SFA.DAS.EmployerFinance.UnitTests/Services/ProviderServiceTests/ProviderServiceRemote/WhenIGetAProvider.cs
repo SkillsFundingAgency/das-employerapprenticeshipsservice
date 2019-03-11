@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task ThenTheProviderIsRetrievedFromTheRemoteRepository()
         {
             // arrange 
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             // act
             var result = await _sut.Get(ukPrn);
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheProviderExistsInTheRemoteRepository_ThenAValidProviderIsReturned()
         {
             // arrange 
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             // act
             var result = await _sut.Get(ukPrn);
@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheProviderIsNotInTheRemoteRepository_ThenTheProviderServiceIsCalled()
         {
             // arrange
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             _mockProviderApiClient
                 .Setup(m => m.GetAsync(It.IsAny<long>()))
@@ -86,7 +86,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheRemoteRepositoryThrowsAnError_ThenTheErrorIsLoggedAsAWarning()
         {
             // arrange
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
             var exception = new Exception();
 
             _mockProviderApiClient
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheRemoteRepositoryThrowsAnError_ThenTheProviderServiceIsCalled()
         {
             // arrange
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
             var exception = new Exception();
 
             _mockProviderApiClient
@@ -116,12 +116,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
 
             // assert
             _mockProviderService.Verify(m => m.Get(ukPrn), Times.Once);
-        }
-
-        private int RandomNumber(int min, int max)
-        {
-            var random = new Random();
-            return random.Next(min, max);
         }
     }
 }

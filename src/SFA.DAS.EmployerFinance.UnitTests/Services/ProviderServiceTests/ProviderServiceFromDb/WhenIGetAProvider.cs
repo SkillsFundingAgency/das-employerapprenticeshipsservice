@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task ThenTheHistoricalProviderNameIsRetrievedFromTheRepository()
         {
             // arrange 
-            long ukPrn = RandomNumber(1, 100);           
+            long ukPrn = 1234567890;           
 
             // act
             var result = await _sut.Get(ukPrn);
@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         public async Task AndTheHistoricalProviderNameExistsInTheDB_ThenAValidProviderIsReturned()
         {
             // arrange 
-            long ukPrn = RandomNumber(1, 100);
+            long ukPrn = 1234567890;
 
             // act
             var result = await _sut.Get(ukPrn);
@@ -54,12 +54,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             Assert.AreEqual(_providerName, result.Name);
             Assert.AreEqual(ukPrn, result.Ukprn);
             Assert.AreEqual(true, result.HistoricProviderName);
-        }
-
-        private int RandomNumber(int min, int max)
-        {
-            var random = new Random();
-            return random.Next(min, max);
         }
     }
 }
