@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { AccountId = 12345, RoleId = (short)Role.Owner });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { AccountId = 12345, Role = Role.Owner });
 
             _validator = new RemovePayeFromAccountCommandValidator(_membershipRepository.Object);
         }
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreAnOwnerAndUnauthroizedIsSetOnTheResult()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {AccountId = 12345, RoleId = (short)Role.Transactor});
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {AccountId = 12345, Role = Role.Transactor});
 
             //Act
             var result =

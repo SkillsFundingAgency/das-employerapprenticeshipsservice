@@ -45,6 +45,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         private const long ExpectedLegalEntityId = 2222;
         private const long ExpectedEmployerAgreementId = 864;
         private const long ExpectedAccountLegalEntityId = 333;
+        private const string ExpectedOrganisationReferenceNumber = "ORN";
+        private const string ExpectedOrganisationAddress = "123 Fake Street";
         private const string ExpectedHashString = "123ADF23";
         private const string ExpectedPublicHashString = "SCUFF";
         private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
@@ -291,13 +293,22 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             createdAccountEvent.UserRef.Should().Be(_user.Ref);
         }
 
-        [Test]
-        public async Task ThenAAddedLegalEntityEventIsPublished()
+        [TestCase(OrganisationType.Charities, Types.Models.OrganisationType.Charities)]
+        [TestCase(OrganisationType.CompaniesHouse, Types.Models.OrganisationType.CompaniesHouse)]
+        [TestCase(OrganisationType.PublicBodies, Types.Models.OrganisationType.PublicBodies)]
+        [TestCase(OrganisationType.Other, Types.Models.OrganisationType.Other)]
+        public async Task ThenAAddedLegalEntityEventIsPublished(OrganisationType inputOrganisationType, Types.Models.OrganisationType expectedOrganisationType)
         {
             const string organisationName = "Org";
 
             //Arrange
-            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString() };
+            var createAccountCommand = new CreateAccountCommand
+            {
+                PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active",
+                OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString(),
+                OrganisationType = inputOrganisationType, OrganisationReferenceNumber = ExpectedOrganisationReferenceNumber,
+                OrganisationAddress = ExpectedOrganisationAddress
+            };
 
             //Act
             await _handler.Handle(createAccountCommand);
@@ -313,6 +324,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             addedLegalEntityEvent.AccountLegalEntityPublicHashedId.Should().Be(ExpectedAccountLegalEntityPublicHashString);
             addedLegalEntityEvent.UserName.Should().Be(_user.FullName);
             addedLegalEntityEvent.UserRef.Should().Be(_user.Ref);
+            addedLegalEntityEvent.OrganisationReferenceNumber.Should().Be(ExpectedOrganisationReferenceNumber);
+            addedLegalEntityEvent.OrganisationAddress.Should().Be(ExpectedOrganisationAddress);
+            addedLegalEntityEvent.OrganisationType.Should().Be(expectedOrganisationType);
             //addedLegalEntityEvent.Created.Should().Be(rightAboutNow);
         }
     }

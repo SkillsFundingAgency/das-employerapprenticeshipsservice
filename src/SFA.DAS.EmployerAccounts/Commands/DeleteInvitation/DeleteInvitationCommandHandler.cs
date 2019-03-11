@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.DeleteInvitation
 
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
+            if (owner == null || owner.Role != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not an Owner on this Account" } });
 
             var existing = await _invitationRepository.Get(owner.AccountId, message.Email);

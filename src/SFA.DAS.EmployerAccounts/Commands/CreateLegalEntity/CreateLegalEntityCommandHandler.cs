@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -111,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             agreementView.AccountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(agreementView.AccountLegalEntityId);
 
             await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId,
-                agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, ownerExternalUserId);
+                agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, message.Code, message.Address, message.Source, ownerExternalUserId);
 
             await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
 
@@ -123,7 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             };
         }
 
-        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, long accountLegalEntityId, string accountLegalEntityPublicHashedId, Guid userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long agreementId, string organisationName, string createdByName, long legalEntityId, long accountLegalEntityId, string accountLegalEntityPublicHashedId, string organisationReferenceNumber, string organisationAddress, OrganisationType organisationType, Guid userRef)
         {
             return _eventPublisher.Publish(new AddedLegalEntityEvent
             {
@@ -135,7 +136,10 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 OrganisationName = organisationName,
                 UserName = createdByName,
                 UserRef = userRef,
-                Created = DateTime.UtcNow
+                Created = DateTime.UtcNow,
+                OrganisationReferenceNumber = organisationReferenceNumber,
+                OrganisationAddress = organisationAddress,
+                OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType)organisationType
             });
         }
 

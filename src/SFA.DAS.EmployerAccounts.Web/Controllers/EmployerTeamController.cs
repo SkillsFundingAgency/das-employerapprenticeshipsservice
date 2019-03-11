@@ -245,7 +245,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{email}/role/change")]
-        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, short role)
+        public async Task<ActionResult> ChangeRole(string hashedAccountId, string email, Role role)
         {
             var response = await _employerTeamOrchestrator.ChangeRole(hashedAccountId, email, role, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 

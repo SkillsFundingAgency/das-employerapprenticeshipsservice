@@ -255,7 +255,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             var response = new OrchestratorResponse<PayeSchemeNextStepsViewModel>();
             
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = accountId, TeamMemberId = userId });
-            var showWizard = userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+            var showWizard = userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
             response.Data = new PayeSchemeNextStepsViewModel
             {
                 ShowWizard = showWizard

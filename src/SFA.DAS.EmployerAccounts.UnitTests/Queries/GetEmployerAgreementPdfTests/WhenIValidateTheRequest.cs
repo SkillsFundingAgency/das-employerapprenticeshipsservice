@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
         {
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new MembershipView {RoleId = (short) Role.Owner});
+                .ReturnsAsync(new MembershipView {Role = Role.Owner});
 
             _validator = new GetEmployerAgreementPdfValidator(_membershipRepository.Object);
         }
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
         public async Task ThenIfIAmNotAnOwnerOfTheAccountThenTheUnauthorizedFlagIsSet(Role role)
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)role });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = role });
 
             //Act
             var actual = await _validator.ValidateAsync(new GetEmployerAgreementPdfRequest { HashedAccountId = "1234RFV", HashedLegalAgreementId = "1231FG", UserId = "User" });

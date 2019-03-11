@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = 12,
                 AccountId = ExpectedAccountId,
-                RoleId = (int)Role.Owner,
+                Role = Role.Owner,
                 User = _user
             };
 
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = 1,
                 AccountId = ExpectedAccountId,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _command = new RemoveTeamMemberCommand
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = 1,
                 AccountId = accountId,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var command = new RemoveTeamMemberCommand
@@ -138,14 +138,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = 1,
                 AccountId = accountId,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var nonOwnerMembership = new MembershipView
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
-                RoleId = (int)Role.Viewer
+                Role = Role.Viewer
             };
 
             var command = new RemoveTeamMemberCommand
@@ -181,14 +181,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var ownerMembership = new MembershipView
             {
                 UserId = ownerUser.Id,
                 AccountId = accountId,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var command = new RemoveTeamMemberCommand
@@ -219,10 +219,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
                       c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("UserId") && y.NewValue.Equals(_teamMember.UserId.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("RoleId") && y.NewValue.Equals(_teamMember.RoleId.ToString())) != null)));
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Role") && y.NewValue.Equals(_teamMember.Role.ToString())) != null)));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} with role {_owner.RoleId} has removed user {_teamMember.UserId} with role {_teamMember.RoleId} from account {_owner.AccountId}"))));
+                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} with role {_owner.Role} has removed user {_teamMember.UserId} with role {_teamMember.Role} from account {_owner.AccountId}"))));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_owner.AccountId.ToString()) && y.Type.Equals("Account")) != null)));

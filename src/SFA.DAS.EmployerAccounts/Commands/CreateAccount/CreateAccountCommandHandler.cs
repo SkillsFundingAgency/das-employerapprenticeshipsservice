@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -99,7 +100,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             await CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User);
 
             await PublishLegalEntityAddedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
-                createAccountResult.EmployerAgreementId, createAccountResult.AccountLegalEntityId, message.OrganisationName, createdByName, externalUserId);
+                createAccountResult.EmployerAgreementId, createAccountResult.AccountLegalEntityId, message.OrganisationName, 
+                message.OrganisationReferenceNumber, message.OrganisationAddress, message.OrganisationType, createdByName, externalUserId);
 
             await PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
                 createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, externalUserId);
@@ -129,7 +131,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             });
         }
 
-        private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string userName, Guid userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName,string organisationReferenceNumber, string organisationAddress, OrganisationType organisationType, string userName, Guid userRef)
         {
             var accountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(accountLegalEntityId);
 
@@ -143,7 +145,10 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 AccountLegalEntityPublicHashedId = accountLegalEntityPublicHashedId,
                 UserName = userName,
                 UserRef = userRef,
-                Created = DateTime.UtcNow
+                Created = DateTime.UtcNow,
+                OrganisationReferenceNumber = organisationReferenceNumber,
+                OrganisationAddress = organisationAddress,
+                OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType)organisationType
             });
         }
 
@@ -308,7 +313,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                     {
                         PropertyUpdate.FromLong("AccountId", returnValue.AccountId),
                         PropertyUpdate.FromString("UserId", message.ExternalUserId),
-                        PropertyUpdate.FromString("RoleId", Role.Owner.ToString()),
+                        PropertyUpdate.FromString("Role", Role.Owner.ToString()),
                         PropertyUpdate.FromDateTime("CreatedDate", DateTime.UtcNow)
                     },
                     RelatedEntities = new List<Entity>

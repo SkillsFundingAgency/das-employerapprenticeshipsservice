@@ -22,8 +22,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         {
             _membershiprepository = new Mock<IMembershipRepository>();
             _membershiprepository.Setup(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync(() => null);
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Owner});
-            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {RoleId = (short)Role.Viewer});
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedOwnerUserId)).ReturnsAsync(new MembershipView {Role = Role.Owner});
+            _membershiprepository.Setup(x => x.GetCaller(It.IsAny<string>(), ExpectedNonOwnerUserId)).ReturnsAsync(new MembershipView {Role = Role.Viewer});
 
             _validator = new AddPayeToAccountCommandValidator(_membershiprepository.Object);
         }

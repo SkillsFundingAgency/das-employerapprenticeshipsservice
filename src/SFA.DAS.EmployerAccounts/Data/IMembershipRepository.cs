@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Data
@@ -8,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<TeamMember> Get(long accountId, string email);
         Task<Membership> Get(long userId, long accountId);
         Task Remove(long userId, long accountId);
-        Task ChangeRole(long userId, long accountId, short roleId);
+        Task ChangeRole(long userId, long accountId, Role role);
         Task<MembershipView> GetCaller(string hashedAccountId, string externalUserId);
         Task<MembershipView> GetCaller(long accountId, string externalUserId);
         Task SetShowAccountWizard(string hashedAccountId, string externalUserId, bool showWizard);

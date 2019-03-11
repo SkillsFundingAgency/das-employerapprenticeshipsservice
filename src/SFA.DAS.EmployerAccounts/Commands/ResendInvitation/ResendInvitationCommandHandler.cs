@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.ResendInvitation
 
             var owner = await _membershipRepository.GetCaller(message.AccountId, message.ExternalUserId);
 
-            if (owner == null || (Role)owner.RoleId != Role.Owner)
+            if (owner == null || owner.Role != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "User is not an Owner" } });
 
             var existing = await _invitationRepository.Get(owner.AccountId, message.Email);

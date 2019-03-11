@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
         public async Task ThenTheRequestIsValidIfTheUserIsAMemberOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Viewer });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = Role.Viewer });
 
             //Act
             var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
