@@ -162,7 +162,7 @@
                     <use xlink:href="#icon-tick" />
                 </svg>
             </h3>
-            <p><a href="@Url.Action(" HideWizard", "EmployerTeam" )">I'm done - take me to my homepage</a></p>
+            <p><a href="@Url.Action("HideWizard", "EmployerTeam" )">I'm done - take me to my homepage</a></p>
         </div>
         @if (Model.Data.AgreementsToSign)
         {
@@ -170,7 +170,7 @@
             <svg class="icon" focusable="false" aria-hidden="true">
                 <use xlink:href="#icon-important" />
             </svg>
-            Your agreement needs to be signed before you can spend funds. <a href="@Url.Action(" Index", "EmployerAgreement" )">View agreements now</a>.
+            Your agreement needs to be signed before you can spend funds. <a href="@Url.Action("Index", "EmployerAgreement" )">View agreements now</a>.
         </p>
         }
     </div>
