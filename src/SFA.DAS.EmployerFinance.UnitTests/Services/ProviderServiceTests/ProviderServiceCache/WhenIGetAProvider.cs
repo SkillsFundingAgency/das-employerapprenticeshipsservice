@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             var result = await _sut.Get(ukPrn);
 
             // assert
-            _mockInProcessCache.Verify(m => m.Set($"{nameof(EmployerFinance.Models.ApprenticeshipProvider.Provider)}_{ukPrn}", _testProvider, It.IsAny<TimeSpan>()), Times.Once);
+            _mockInProcessCache.Verify(m => m.Set($"{nameof(EmployerFinance.Models.ApprenticeshipProvider.Provider)}_{ukPrn}", _testProvider, It.IsAny<DateTimeOffset>()), Times.Once);
         }
 
         [Test]

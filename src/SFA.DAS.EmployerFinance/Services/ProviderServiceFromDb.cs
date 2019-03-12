@@ -16,8 +16,6 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             var providerName = await _dasLevyRepository.FindHistoricalProviderName(ukPrn);
 
-            // TODO: if null name then what to return?
-
             return new Models.ApprenticeshipProvider.Provider {
                 Name = providerName.FirstOrDefault(),
                 Ukprn = ukPrn,
