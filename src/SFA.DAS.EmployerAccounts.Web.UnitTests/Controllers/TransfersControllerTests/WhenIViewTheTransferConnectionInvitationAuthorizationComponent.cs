@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthorizat
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Mappings;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersControllerTests
 {
@@ -20,6 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersController
         private IConfigurationProvider _mapperConfig;
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
+        private EmployerFinanceConfiguration _configuration = new EmployerFinanceConfiguration();
 
         [SetUp]
         public void Arrange()
@@ -31,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersController
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new TransfersController(null, _mapper, _mediator.Object);
+            _controller = new TransfersController(null, _mapper, _mediator.Object,_configuration);
         }
 
         [Test]

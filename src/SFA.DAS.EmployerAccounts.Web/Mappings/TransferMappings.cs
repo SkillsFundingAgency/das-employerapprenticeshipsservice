@@ -31,6 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(m => m.TransferConnectionInvitationId, o => o.MapFrom(r => r.TransferConnectionInvitation.Id));
 
             CreateMap<GetReceivedTransferConnectionInvitationResponse, RejectTransferConnectionInvitationCommand>();
+
             CreateMap<GetRejectedTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 
             CreateMap<GetRejectedTransferConnectionInvitationResponse, RejectedTransferConnectionInvitationViewModel>()
@@ -42,9 +43,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<GetTransferAllowanceResponse, TransferAllowanceViewModel>()
                 .ForMember(m => m.RemainingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.RemainingTransferAllowance))
-                .ForMember(m => m.StartingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.StartingTransferAllowance));
+                .ForMember(m => m.StartingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.StartingTransferAllowance))
+                .ForMember(m => m.PercentLevyTransferAllowance, o => o.Ignore());
 
-            CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>();
+            CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>()
+                .ForMember(m => m.PercentLevyTransferAllowance, o => o.Ignore());
+
             CreateMap<GetTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 
             CreateMap<GetTransferConnectionInvitationResponse, TransferConnectionInvitationViewModel>()
@@ -52,7 +56,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(m => m.TransferConnectionInvitationId, o => o.MapFrom(r => r.TransferConnectionInvitation.Id));
 
             CreateMap<GetTransferConnectionInvitationsResponse, TransferConnectionInvitationsViewModel>();
+
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
+
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationCommand>();
 
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()
