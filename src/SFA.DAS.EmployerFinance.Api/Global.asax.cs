@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using System.Web.Http;
 using SFA.DAS.EmployerFinance.Startup;
+using WebApi.StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api
 {
@@ -10,12 +11,12 @@ namespace SFA.DAS.EmployerFinance.Api
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
-            ((IStartup)GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IStartup))).StartAsync().GetAwaiter().GetResult();
+            GlobalConfiguration.Configuration.DependencyResolver.GetService<IStartup>().StartAsync().GetAwaiter().GetResult();
         }
 
         protected void Application_End()
         {
-            ((IStartup)GlobalConfiguration.Configuration.DependencyResolver.GetService(typeof(IStartup))).StopAsync().GetAwaiter().GetResult();
+            GlobalConfiguration.Configuration.DependencyResolver.GetService<IStartup>().StopAsync().GetAwaiter().GetResult();
         }
     }
 }
