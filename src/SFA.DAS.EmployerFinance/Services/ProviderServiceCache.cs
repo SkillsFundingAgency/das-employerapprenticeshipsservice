@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.Services
 
             if (provider != null)
             {
-                _inProcessCache.Set($"{nameof(Models.ApprenticeshipProvider.Provider)}_{ukPrn}", provider, new TimeSpan(1, 0, 0));
+                _inProcessCache.Set($"{nameof(Models.ApprenticeshipProvider.Provider)}_{ukPrn}", provider, new DateTimeOffset(DateTime.UtcNow.Add(new TimeSpan(1, 0, 0))));
             }
 
             return provider;           

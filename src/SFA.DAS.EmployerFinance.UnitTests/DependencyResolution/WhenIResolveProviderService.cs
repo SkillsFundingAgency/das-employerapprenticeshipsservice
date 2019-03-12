@@ -1,13 +1,14 @@
-﻿using Moq;
+﻿using System.Linq;
+using System.Reflection;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.Caches;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
-using System.Reflection;
-using System.Linq;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.DependencyResolution
 {
@@ -24,11 +25,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.DependencyResolution
             _mockDasLevyRepository = new Mock<IDasLevyRepository>();
             _mockLog = new Mock<ILog>();
             _mockInProcessCache = new Mock<IInProcessCache>();
+            var config = new EmployerFinanceConfiguration { ApprenticeshipInfoService = new ApprenticeshipInfoServiceConfiguration { BaseUrl = "http://BaseUrl.education.gov.uk" } };
 
             _container = new Container(c =>
             {
                 c.AddRegistry<ProvidersRegistry>();
                 c.For<IDasLevyRepository>().Use(_mockDasLevyRepository.Object);
+                c.For<EmployerFinanceConfiguration>().Use(config);
                 c.For<ILog>().Use(_mockLog.Object);
                 c.For<IInProcessCache>().Use(_mockInProcessCache.Object);
             });
