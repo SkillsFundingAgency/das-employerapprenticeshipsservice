@@ -5,6 +5,7 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitations;
@@ -22,12 +23,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly EmployerFinanceConfiguration _configuration;
 
-        public TransfersController(ILog logger, IMapper mapper, IMediator mediator)
+        public TransfersController(ILog logger, IMapper mapper, IMediator mediator,EmployerFinanceConfiguration configuration)
         {
             _logger = logger;
             _mapper = mapper;
             _mediator = mediator;
+            _configuration = configuration;
         }
 
         [Route]
@@ -41,6 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferAllowanceViewModel>(response);
+            model.PercentLevyTransferAllowance = _configuration.TransferAllowancePercentage;
 
             return PartialView(model);
         }
@@ -51,6 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferConnectionInvitationAuthorizationViewModel>(response);
+            model.PercentLevyTransferAllowance = _configuration.TransferAllowancePercentage;
 
             return PartialView(model);
         }
