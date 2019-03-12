@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool ShowWizard { get; set; }
         public ICollection<AccountTask> Tasks { get; set; }
         public int TeamMemberCount { get; set; }
+        public int TeamMembersInvited { get; set; }
         public string UserFirstName { get; set; }
         public Role UserRole { get; set; }
         public bool AgreementsToSign { get; set; }
