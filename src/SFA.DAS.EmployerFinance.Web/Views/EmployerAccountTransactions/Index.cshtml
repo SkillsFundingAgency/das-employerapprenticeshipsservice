@@ -53,7 +53,7 @@
                             var expiryDate = Model.Data.ExpiryDate.Value.ToString("MMMM yyyy");
                         }
                         <dt>
-                            of your funds could expire on <strong>18 @expiryDate </strong>
+                            of your funds could expire in <strong>@expiryDate </strong>
                         </dt>
                         @{
                             var expiringFunds = Model.Data.ExpiringFunds.Value.ToString("C0", culture);
