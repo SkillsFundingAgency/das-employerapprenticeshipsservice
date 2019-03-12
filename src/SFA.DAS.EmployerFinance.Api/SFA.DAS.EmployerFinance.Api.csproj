@@ -73,7 +73,7 @@
     <PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
-    <PackageReference Include="WebApi.StructureMap" Version="1.0.21" />
+    <PackageReference Include="WebApi.StructureMap" Version="1.0.23" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
   <ItemGroup>
