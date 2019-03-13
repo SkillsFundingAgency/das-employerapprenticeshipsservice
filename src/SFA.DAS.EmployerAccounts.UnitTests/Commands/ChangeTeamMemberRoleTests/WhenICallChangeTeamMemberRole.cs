@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                RoleId = 1,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString(),
 
             };
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
                 AccountId = ExpectedAccountId,
                 UserRef = Guid.NewGuid().ToString(),
                 UserId = 1,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _userMembership = new TeamMember
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
                 AccountId = _callerMembership.AccountId,
                 UserRef = Guid.NewGuid().ToString(),
                 Id = _callerMembership.UserId + 1,
-                Role = (Role)_command.RoleId
+                Role = _command.Role
             };
 
             _membershipRepository = new Mock<IMembershipRepository>();
@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                RoleId = 1,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                RoleId = 1,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                RoleId = (int)Role.Viewer
+                Role = Role.Viewer
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
@@ -122,7 +122,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                RoleId = 1,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
@@ -149,7 +149,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 HashedAccountId = "1",
                 Email = "test.user@test.local",
-                RoleId = 1,
+                Role = Role.Owner,
                 ExternalUserId = Guid.NewGuid().ToString()
             };
 
@@ -157,14 +157,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             {
                 AccountId = ExpectedAccountId,
                 UserId = 1,
-                RoleId = (int)Role.Owner
+                Role = Role.Owner
             };
 
             var userMembership = new TeamMember
             {
                 AccountId = callerMembership.AccountId,
                 Id = callerMembership.UserId,
-                Role = (Role)callerMembership.RoleId
+                Role = callerMembership.Role
             };
 
             _membershipRepository.Setup(x => x.GetCaller(callerMembership.AccountId, command.ExternalUserId)).ReturnsAsync(callerMembership);
@@ -181,7 +181,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
         {
             await _handler.Handle(_command);
 
-            _membershipRepository.Verify(x => x.ChangeRole(_userMembership.Id, _callerMembership.AccountId, _command.RoleId), Times.Once);
+            _membershipRepository.Verify(x => x.ChangeRole(_userMembership.Id, _callerMembership.AccountId, _command.Role), Times.Once);
         }
 
         [Test]
@@ -192,7 +192,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
             _eventPublisher.Verify(x => x.Publish(It.Is<AccountUserRolesUpdatedEvent>(
                 p => p.AccountId  == _userMembership.AccountId &&
                      p.UserRef.ToString() == _userMembership.UserRef &&
-                     p.Role == (UserRole)_command.RoleId))
+                     p.Role == (UserRole)_command.Role))
                 , Times.Once);
         }
 
@@ -207,7 +207,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
 
             Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "AccountId"), Is.Not.Null);
             Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "Email"), Is.Not.Null);
-            Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "RoleId"), Is.Not.Null);
+            Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "Role"), Is.Not.Null);
             Assert.That(exception.ErrorMessages.FirstOrDefault(x => x.Key == "ExternalUserId"), Is.Not.Null);
         }
 
@@ -219,10 +219,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("RoleId") && y.NewValue.Equals(_command.RoleId.ToString())) != null 
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Role") && y.NewValue.Equals(_command.Role.ToString())) != null 
                     )));
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"Member {_command.Email} on account {ExpectedAccountId} role has changed to {_command.RoleId.ToString()}"))));
+                      c.EasAuditMessage.Description.Equals($"Member {_command.Email} on account {ExpectedAccountId} role has changed to {_command.Role.ToString()}"))));
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
                       c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(ExpectedAccountId.ToString()) && y.Type.Equals("Account")) != null
                     )));

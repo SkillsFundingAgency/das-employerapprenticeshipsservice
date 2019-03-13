@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _invitation.Email)).ReturnsAsync(_invitation);
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
             {
-                RoleId = (int)Role.Owner,
+                Role = Role.Owner,
                 AccountId = _invitation.AccountId
             });
 
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _command.Email)).ReturnsAsync(_invitation);
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId)).ReturnsAsync(new MembershipView
             {
-                RoleId = (int)Role.Viewer
+                Role = Role.Viewer
             });
 
             var exception = Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.DeleteInvitationTests
             _invitationRepository.Setup(x => x.Get(_invitation.AccountId, _invitation.Email)).ReturnsAsync(_invitation);
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView
             {
-                RoleId = (int)Role.Owner,
+                Role = Role.Owner,
                 AccountId = _invitation.AccountId
             });
 

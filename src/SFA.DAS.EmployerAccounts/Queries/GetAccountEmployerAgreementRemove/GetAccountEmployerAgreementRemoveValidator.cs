@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
 
             var user = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
 
-            if (user == null || user.RoleId != (short) Role.Owner)
+            if (user == null || user.Role != Role.Owner)
             {
                 validationResult.IsUnauthorized = true;
             }

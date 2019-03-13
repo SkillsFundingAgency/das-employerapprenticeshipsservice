@@ -16,7 +16,7 @@
                     <fieldset class="inline">
                         <legend class="heading-small">Add more PAYE schemes now? </legend>
                         <p>This allows your schemes' levy funds to be paid into your account.</p>
-                        <label class="block-label selection-button-radio" for="add-paye-1" data-target="add-paye-schemes-guide">
+                        <label class="block-label selection-button-radio" for="add-paye-1"  data-target="add-paye-schemes-guide">
                             <input id="add-paye-1" type="radio" name="add-paye-group" value="1">
                             Yes
                         </label>
@@ -62,7 +62,7 @@
                 </li>
                 <li class="done">
                     <p>
-                        @Model.Data.OrgainsationCount organisation@(Model.Data.OrgainsationCount == 1 ? "" : "s") added
+                        @Model.Data.OrgainsationCount organisation@(Model.Data.OrgainsationCount == 1 ? "": "s") added
                     </p>
                     <div class="status">
                         Done
@@ -118,7 +118,6 @@
                         </label>
                         <label class="block-label selection-button-radio" for="add-agreements-2">
                             <input id="add-agreements-2" type="radio" name="agreements-group" value="2">
-
                             No, someone else will sign the agreement
                         </label>
                         @if (Model.Data.AgreementsToSign)
@@ -163,16 +162,16 @@
                     <use xlink:href="#icon-tick" />
                 </svg>
             </h3>
-            <p><a href="@Url.Action("HideWizard", "EmployerTeam")">I'm done - take me to my homepage</a></p>
+            <p><a href="@Url.Action("HideWizard", "EmployerTeam" )">I'm done - take me to my homepage</a></p>
         </div>
         @if (Model.Data.AgreementsToSign)
         {
-            <p class="notice">
-                <svg class="icon" focusable="false" aria-hidden="true">
-                    <use xlink:href="#icon-important" />
-                </svg>
-                Your agreement needs to be signed before you can spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View agreements now</a>.
-            </p>
+        <p class="notice">
+            <svg class="icon" focusable="false" aria-hidden="true">
+                <use xlink:href="#icon-important" />
+            </svg>
+            Your agreement needs to be signed before you can spend funds. <a href="@Url.Action("Index", "EmployerAgreement" )">View agreements now</a>.
+        </p>
         }
     </div>
 </section>

@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountStatsTests
         public async Task ThenTheRequestIsValidIfTheUserIsAnOwnerOfTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { RoleId = (short)Role.Owner });
+            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = Role.Owner });
 
             //Act
             var actual = await _validator.ValidateAsync(new GetAccountStatsQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });

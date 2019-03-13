@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             _logger = new Mock<ILog>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse {User = new MembershipView {ShowWizard = true, RoleId = (short)Role.Owner}});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse {User = new MembershipView {ShowWizard = true, Role = Role.Owner}});
 
             _orchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
         }
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         public async Task ThenTheShowWizardFlagIsOnlyTrueWhenTheUserIsAnOwner()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse { User = new MembershipView { ShowWizard = true, RoleId = (short)Role.Transactor } });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMemberQuery>())).ReturnsAsync(new GetTeamMemberResponse { User = new MembershipView { ShowWizard = true, Role = Role.Transactor } });
             var expectedUserId = "AFGV1234";
             var expectedAccountId = "789GBT";
 

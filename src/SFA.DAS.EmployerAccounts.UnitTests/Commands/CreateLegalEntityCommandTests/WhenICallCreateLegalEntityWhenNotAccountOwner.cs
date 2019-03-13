@@ -2,6 +2,7 @@
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Data;
@@ -50,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 FirstName = "Bob",
                 LastName = "Green",
                 UserRef = Guid.NewGuid().ToString(),
-                RoleId = 3
+                Role = Role.Viewer
             };
 
             _agreementView = new EmployerAgreementView

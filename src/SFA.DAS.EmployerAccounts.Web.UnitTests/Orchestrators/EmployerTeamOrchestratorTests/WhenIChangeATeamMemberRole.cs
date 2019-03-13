@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>())).ReturnsAsync(response);
 
             //Act
-            var result = await _orchestrator.ChangeRole("437675", email, (short)role, "37648");
+            var result = await _orchestrator.ChangeRole("437675", email, role, "37648");
 
             //Assert
             Assert.IsNotNull(result);
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                      .Throws(new InvalidRequestException(new Dictionary<string, string>()));
            
             //Act
-            var result = await _orchestrator.ChangeRole("437675", email, (short)role, "37648");
+            var result = await _orchestrator.ChangeRole("437675", email, role, "37648");
             
             
             //Assert
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                      .Throws(new UnauthorizedAccessException());
 
             //Act
-            var result = await _orchestrator.ChangeRole("437675", email, (short)role, "37648");
+            var result = await _orchestrator.ChangeRole("437675", email, role, "37648");
             
             //Assert
             Assert.IsNotNull(result);

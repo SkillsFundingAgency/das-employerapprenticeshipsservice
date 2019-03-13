@@ -36,7 +36,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
                 c.GetInstance<IAuthenticationService>(),
                 c.GetInstance<EmployerAccountTransactionsOrchestrator>(), 
                 c.GetInstance<IMapper>(), 
-                c.GetInstance<IMediator>()));
+                c.GetInstance<IMediator>(),
+                c.GetInstance<ILog>()));
         }
 
         private void RegisterEmployerAccountTransactionsOrchestrator()

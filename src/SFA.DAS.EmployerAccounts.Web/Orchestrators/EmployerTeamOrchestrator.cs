@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email, short role, string externalUserId)
+        public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> ChangeRole(string hashedId, string email, Role role, string externalUserId)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 {
                     HashedAccountId = hashedId,
                     Email = email,
-                    RoleId = role,
+                    Role = role,
                     ExternalUserId = externalUserId
                 });
 
@@ -344,7 +344,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = model.HashedAccountId,
                     NameOfPersonBeingInvited = model.Name,
                     EmailOfPersonBeingInvited = model.Email,
-                    RoleIdOfPersonBeingInvited = model.Role
+                    RoleOfPersonBeingInvited = model.Role
                 });
             }
             catch (InvalidRequestException e)
@@ -513,7 +513,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public virtual async Task<bool> UserShownWizard(string userId, string hashedAccountId)
         {
             var userResponse = await Mediator.SendAsync(new GetTeamMemberQuery { HashedAccountId = hashedAccountId, TeamMemberId = userId });
-            return userResponse.User.ShowWizard && userResponse.User.RoleId == (short)Role.Owner;
+            return userResponse.User.ShowWizard && userResponse.User.Role == Role.Owner;
         }
 
         private static InvitationViewModel MapFrom(TeamMember teamMember)

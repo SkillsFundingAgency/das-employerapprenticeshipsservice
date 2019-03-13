@@ -3,6 +3,7 @@ using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
 using SFA.DAS.EmployerFinance.Web.Helpers;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -10,6 +11,11 @@ using MediatR;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
+using System.Net;
+using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Web.Extensions;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
@@ -19,13 +25,14 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
+        private readonly ILog _logger;
 
         private readonly IAuthenticationService _owinWrapper;
         private readonly EmployerAccountTransactionsOrchestrator _accountTransactionsOrchestrator;
 
         public EmployerAccountTransactionsController(
             IAuthenticationService owinWrapper,
-            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMapper mapper, IMediator mediator)
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMapper mapper, IMediator mediator, ILog logger)
         : base(owinWrapper)
         {
             _owinWrapper = owinWrapper;
@@ -33,6 +40,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
             _mapper = mapper;
             _mediator = mediator;
+            _logger = logger;
         }
 
         [Route("finance/provider/summary")]
@@ -89,6 +97,24 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             }
 
             transactionViewResult.Data.Model.Data.HashedAccountId = hashedAccountId;
+
+            //TODO: Remove this code once we have finished investigations into CON-111
+            var payments = transactionViewResult.Data?.Model?.Data?.TransactionLines?.Where(t =>
+                t.TransactionType == TransactionItemType.Payment);
+
+            if (payments != null)
+            {
+                foreach (var payment in payments)
+                {
+                    if (!(payment is PaymentTransactionLine))
+                    {
+                        _logger.Warn(
+                            $"Invalid payment transaction detected. Account ID: {payment.AccountId}, Date created: {payment.DateCreated.ToLongTimeString()}, transaction date: {payment.TransactionDate}");
+                    }
+                }
+            }
+            // END OF CODE FOR CON-111
+
             return View(transactionViewResult);
         }
 
