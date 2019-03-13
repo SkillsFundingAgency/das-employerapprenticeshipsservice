@@ -113,7 +113,6 @@
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
@@ -481,9 +480,6 @@
     <Content Include="Views\Home\SignedIn.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\TransactionsView.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\ProviderPaymentSummary.cshtml" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
