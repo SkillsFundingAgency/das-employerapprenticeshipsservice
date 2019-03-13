@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
 
             if (caller == null)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You are not a member of this Account" } });
-            if (caller.RoleId != (int)Role.Owner)
+            if (caller.Role != Role.Owner)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You must be an owner of this Account" } });
 
             var existing = await _membershipRepository.Get(caller.AccountId, message.Email);
@@ -54,20 +54,20 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
             if (caller.UserId == existing.Id)
                 throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "You cannot change your own role" } });
 
-            await _membershipRepository.ChangeRole(existing.Id, caller.AccountId, message.RoleId);
+            await _membershipRepository.ChangeRole(existing.Id, caller.AccountId, message.Role);
 
             await _eventPublisher.Publish(new AccountUserRolesUpdatedEvent(caller.AccountId, Guid.Parse(existing.UserRef),
-                (UserRole)message.RoleId, DateTime.UtcNow));
+                (UserRole)message.Role, DateTime.UtcNow));
 
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "UPDATED",
-                    Description = $"Member {message.Email} on account {caller.AccountId} role has changed to {message.RoleId}",
+                    Description = $"Member {message.Email} on account {caller.AccountId} role has changed to {message.Role}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-                        new PropertyUpdate {PropertyName = "RoleId",NewValue = message.RoleId.ToString()}
+                        new PropertyUpdate {PropertyName = "Role",NewValue = message.Role.ToString()}
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = caller.AccountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "Membership", Id = existing.Id.ToString() }

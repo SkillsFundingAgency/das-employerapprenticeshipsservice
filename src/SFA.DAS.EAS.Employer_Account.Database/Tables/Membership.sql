@@ -2,7 +2,7 @@
 (
     [AccountId] BIGINT NOT NULL, 
     [UserId] BIGINT NOT NULL, 
-    [RoleId] INT NOT NULL, 
+    [Role] INT NOT NULL, 
 	[CreatedDate] DATETIME NOT NULL DEFAULT GETDATE(),
     [ShowWizard] BIT NOT NULL DEFAULT 1, 
     CONSTRAINT [FK_Membership_Account] FOREIGN KEY (AccountId) REFERENCES [employer_account].[Account]([Id]), 
@@ -12,4 +12,4 @@
 
 GO
 
-CREATE NONCLUSTERED INDEX [IX_Membership_AccountIdRoleId] ON [employer_account].[Membership] ([AccountId], [RoleId]) INCLUDE ([CreatedDate]) WITH (ONLINE = ON)
+CREATE NONCLUSTERED INDEX [IX_Membership_AccountIdRoleId] ON [employer_account].[Membership] ([AccountId], [Role]) INCLUDE ([CreatedDate]) WITH (ONLINE = ON)

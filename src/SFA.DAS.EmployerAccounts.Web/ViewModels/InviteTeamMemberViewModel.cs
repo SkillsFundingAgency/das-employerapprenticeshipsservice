@@ -12,6 +12,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public Role Role { get; set; }
         public string EmailError => GetErrorMessage(nameof(Email));
         public string NameError => GetErrorMessage(nameof(Name));
-        public string RoleError => GetErrorMessage("RoleId");
+        public string RoleError => GetErrorMessage("Role");
     }
 }

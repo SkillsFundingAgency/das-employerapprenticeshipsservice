@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.Validation;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
 {
@@ -15,8 +16,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
             if (string.IsNullOrWhiteSpace(item.Email))
                 validationResult.AddError("Email", "No Email supplied");
 
-            if (item.RoleId == 0)
-                validationResult.AddError("RoleId", "No RoleId supplied");
+            if (item.Role == Role.None)
+                validationResult.AddError("Role", "No Role supplied");
 
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError("ExternalUserId", "No ExternalUserId supplied");

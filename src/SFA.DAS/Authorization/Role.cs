@@ -12,7 +12,6 @@ namespace SFA.DAS.Authorization
 
     public static class RoleStrings {
         public static string GetRoleDescription(Role role) { return GetRoleDescription(role.ToString()); }
-        public static string GetRoleDescription(short roleId) { return GetRoleDescription((Role)roleId); }
         public static string GetRoleDescription(string role)
         {
             switch(role)
@@ -24,7 +23,6 @@ namespace SFA.DAS.Authorization
             }
         }
         
-        public static string GetRoleDescriptionToLower(short roleId) { return GetRoleDescriptionToLower((Role)roleId); }
         public static string GetRoleDescriptionToLower(Role role) { return GetRoleDescriptionToLower(role.ToString()); }
         public static string GetRoleDescriptionToLower(string role)
         {

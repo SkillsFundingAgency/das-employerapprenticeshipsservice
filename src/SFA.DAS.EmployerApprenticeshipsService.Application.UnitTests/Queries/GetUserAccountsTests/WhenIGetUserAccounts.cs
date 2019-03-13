@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -20,7 +21,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests
         public void Arrange()
         {
             _userAccountRepository = new Mock<IUserAccountRepository>();
-            _account = new Domain.Models.Account.Account {Name = "Test", RoleId = 1};
+            _account = new Domain.Models.Account.Account {Name = "Test", Role = Role.Owner};
             _accounts = new List<Domain.Models.Account.Account> {_account};
             _userAccountRepository.Setup(repository => repository.GetAccountsByUserRef("1")).ReturnsAsync(new Accounts<Domain.Models.Account.Account> { AccountList = _accounts});
             _getUserAccountsQueryHandler = new GetUserAccountsQueryHandler(_userAccountRepository.Object);

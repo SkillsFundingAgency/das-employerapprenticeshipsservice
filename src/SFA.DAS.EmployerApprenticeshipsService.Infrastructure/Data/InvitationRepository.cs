@@ -9,6 +9,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -62,7 +63,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@email", invitation.Email, DbType.String);
             parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
             parameters.Add("@statusId", invitation.Status, DbType.Int16);
-            parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
+            parameters.Add("@role", invitation.Role, DbType.Int16);
             parameters.Add("@invitationId", invitationId, DbType.Int64,ParameterDirection.Output);
 
             await _db.Value.Database.Connection.ExecuteAsync(
@@ -125,24 +126,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             parameters.Add("@id", invitation.Id, DbType.Int64);
             parameters.Add("@name", invitation.Name, DbType.String);
-            parameters.Add("@roleId", invitation.RoleId, DbType.Int16);
+            parameters.Add("@role", invitation.Role, DbType.Int16);
             parameters.Add("@statusId", invitation.Status, DbType.Int16);
             parameters.Add("@expiryDate", invitation.ExpiryDate, DbType.DateTime);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "UPDATE [employer_account].[Invitation] SET Name = @name, RoleId = @roleId, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
+                sql: "UPDATE [employer_account].[Invitation] SET Name = @name, Role = @role, Status = @statusId, ExpiryDate = @expiryDate WHERE Id = @id;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
         }
 
-        public Task Accept(string email, long accountId, short roleId)
+        public Task Accept(string email, long accountId, Role role)
         { 
             var parameters = new DynamicParameters();
 
             parameters.Add("@email", email, DbType.String);
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@roleId", roleId, DbType.Int16);
+            parameters.Add("@role", role, DbType.Int16);
                 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[AcceptInvitation]",
