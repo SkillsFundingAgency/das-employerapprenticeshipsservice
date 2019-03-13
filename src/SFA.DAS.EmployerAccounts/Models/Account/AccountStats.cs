@@ -7,5 +7,6 @@
         public int OrganisationCount { get; set; }
         public int TeamMemberCount { get; set; }
         public int TeamMembersInvited { get; set; }
+        public int SignedAgreementCount { get; set; }   
     }
 }

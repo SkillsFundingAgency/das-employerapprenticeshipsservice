@@ -21,5 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string UserFirstName { get; set; }
         public Role UserRole { get; set; }
         public bool AgreementsToSign { get; set; }
+        public int SignedAgreementCount { get; set; }
     }
 }   
