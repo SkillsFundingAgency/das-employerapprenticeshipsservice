@@ -29,8 +29,8 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
-                c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<StartupRegistry>();
+                c.AddRegistry<DefaultRegistry>();
             });
         }
     }
