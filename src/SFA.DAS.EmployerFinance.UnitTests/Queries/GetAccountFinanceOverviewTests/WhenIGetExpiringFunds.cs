@@ -15,6 +15,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
     public class WhenIGetExpiringFunds
     {
         private const long ExpectedAccountId = 20;
+        private const long ExpectedBalance = 2000;
 
         private GetAccountFinanceOverviewQueryHandler _handler;
         private Mock<IDasForecastingService> _dasForecastingService;
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
 
             _handler = new GetAccountFinanceOverviewQueryHandler(_dasForecastingService.Object,_levyService.Object, _validator.Object, _logger.Object);
             _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
-            _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(2000);
+            _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(ExpectedBalance);
             _validator.Setup(v => v.ValidateAsync(_query))
                 .ReturnsAsync(new ValidationResult{ValidationDictionary = new Dictionary<string, string>()});
         }
@@ -57,6 +58,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             var response = await _handler.Handle(_query);
 
             response.AccountId.Should().Be(ExpectedAccountId);
+            response.CurrentFunds.Should().Be(ExpectedBalance);
         }
 
         [Test]
@@ -64,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         {
             var response = await _handler.Handle(_query);
 
-            response.ExpiringFundsAmount.Should().Be(2000);
+            response.ExpiringFundsAmount.Should().Be(ExpectedBalance);
         }
 
         [Test]
@@ -76,7 +78,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         }
 
         [Test]
-        public async Task ThenIfNullIsReturnedTheAccountIdShouldStillBePopulated()
+        public async Task ThenIfNullIsReturnedTheAccountIdAndBalanceShouldStillBePopulated()
         {
             _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync((ExpiringAccountFunds)null);
 
