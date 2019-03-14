@@ -22,7 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersController
         private IMapper _mapper;
         private Mock<IMediator> _mediator;
         private TransferAllowance _transferAllowance;
-        private EmployerFinanceConfiguration _configuration = new EmployerFinanceConfiguration();
 
         [SetUp]
         public void Arrange()
@@ -38,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersController
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
-            _controller = new TransfersController(null, _mapper, _mediator.Object,_configuration);
+            _controller = new TransfersController(null, _mapper, _mediator.Object);
         }
 
         [Test]

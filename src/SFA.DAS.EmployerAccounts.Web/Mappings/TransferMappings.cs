@@ -43,11 +43,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<GetTransferAllowanceResponse, TransferAllowanceViewModel>()
                 .ForMember(m => m.RemainingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.RemainingTransferAllowance))
-                .ForMember(m => m.StartingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.StartingTransferAllowance))
-                .ForMember(m => m.PercentLevyTransferAllowance, o => o.Ignore());
+                .ForMember(m => m.StartingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.StartingTransferAllowance));
 
-            CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>()
-                .ForMember(m => m.PercentLevyTransferAllowance, o => o.Ignore());
+            CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>();
 
             CreateMap<GetTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 
