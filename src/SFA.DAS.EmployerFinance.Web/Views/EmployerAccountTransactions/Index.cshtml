@@ -45,7 +45,7 @@
                     <dd class="@balanceClass">@balance</dd>
                 </dl>
             </div>
-            @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiryDate.HasValue)
+            @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiringFunds > 0 && Model.Data.ExpiryDate.HasValue)
             {
                 <div class="data data--long data--expired">
                     <dl class="transfer-funds">
