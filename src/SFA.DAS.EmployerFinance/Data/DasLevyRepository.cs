@@ -160,6 +160,15 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<IEnumerable<PeriodEnd>> GetAllPeriodEnds()
+        {
+            return await _db.Value.Database.Connection.QueryAsync<PeriodEnd>(
+                sql: "[employer_financial].[GetAllPeriodEnds]",
+                param: null,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
         public async Task<DasDeclaration> GetSubmissionByEmprefPayrollYearAndMonth(string empRef, string payrollYear, short payrollMonth)
         {
             var parameters = new DynamicParameters();

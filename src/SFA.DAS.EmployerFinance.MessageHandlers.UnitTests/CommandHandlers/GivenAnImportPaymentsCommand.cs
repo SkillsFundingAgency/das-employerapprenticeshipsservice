@@ -13,10 +13,11 @@ using SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Queries.GetAllEmployerAccounts;
-using SFA.DAS.EmployerFinance.Queries.GetCurrentPeriodEnd;
+using SFA.DAS.EmployerFinance.Queries.GetPeriodEnds;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
 using SFA.DAS.Provider.Events.Api.Types;
+using DbPeriodEnd = SFA.DAS.EmployerFinance.Models.Payments.PeriodEnd;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
 {
@@ -45,8 +46,15 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             _messageHandlerContextMock = new Mock<IMessageHandlerContext>();
             _paymentsEventsApiClientMock = new Mock<IPaymentsEventsApiClient>();
             _mediatorMock = new Mock<IMediator>();
-            _mediatorMock.Setup(x => x.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>())).ReturnsAsync(new GetPeriodEndResponse());
             _loggerMock = new Mock<ILog>();
+
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetPeriodEndsRequest>()))
+                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = new List<DbPeriodEnd>() });
+
+            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
+                .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { Fixture.Create<Account>() } });
+
             _configuration = new PaymentsApiClientConfiguration { PaymentsDisabled = false };
 
             _sut = new ImportPaymentsCommandHandler(_paymentsEventsApiClientMock.Object, _mediatorMock.Object, _loggerMock.Object, _configuration);
@@ -98,24 +106,16 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         [Category("UnitTest")]
         [TestCase(1, Description = "Single new period end to process")]
         [TestCase(5, Description = "Multiple new period ends to process")]
-        public async Task WhenThereAreNewPeriodsThenCreateThem(int amountOfNewPeriodEnds)
+        public async Task WhenThereAreNoCurrentPeriodsAndThereAreNewPeriodsThenCreateThem(int amountOfNewPeriodEnds)
         {
             // Arrange
-            _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(GetPeriodEnds(amountOfNewPeriodEnds));
-
-            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
-                .ReturnsAsync(new GetAllEmployerAccountsResponse
-                {
-                    Accounts = new List<Account> { Fixture.Create<Account>() }
-                });
+            _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(GetApiPeriodEnds(amountOfNewPeriodEnds));
 
             // Act
             await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
 
             // Assert
-            _mediatorMock.Verify(
-                x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()),
-                Times.Exactly(amountOfNewPeriodEnds));
+            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Exactly(amountOfNewPeriodEnds));
         }
 
         [Test]
@@ -125,56 +125,70 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public async Task WhenAllCurrentPeriodsExistThenDoNotProcessAnyPeriods(int amountOfNewPeriodEnds)
         {
             // Arrange
-            var apiPeriodEnds = GetPeriodEnds(amountOfNewPeriodEnds).OrderBy(pe => pe.Id).ToArray();
+            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds).OrderBy(pe => pe.Id).ToArray();
+            var currentPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds);
             _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
-            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>()))
-                .ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new Models.Payments.PeriodEnd { PeriodEndId = apiPeriodEnds.Last().Id } });
-
-            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
-                .ReturnsAsync(new GetAllEmployerAccountsResponse
-                {
-                    Accounts = new List<Account> { Fixture.Create<Account>() }
-                });
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetPeriodEndsRequest>()))
+                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = currentPeriodEnds });
 
             // Act
             await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
 
             // Assert
-            _mediatorMock.Verify(
-                x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()),
-                Times.Never);
+            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Never);
         }
 
         [Test]
         [Category("UnitTest")]
-        [TestCase(1, Description = "Single new period end")]
-        [TestCase(5, Description = "Multiple new period ends")]
-        public async Task WhenNewerPeriodEndsExistThenProcessTheNewPeriods(int amountOfNewPeriodEnds)
+        [TestCase(1, Description = "Single new subsqeunt period end")]
+        [TestCase(5, Description = "Multiple new subsequent period ends")]
+        public async Task WhenCurrentPeriodsExistAndThereAreNewSubsequentPeriodsThenProcessThem(int amountOfNewPeriodEnds)
         {
             // Arrange
-            var apiPeriodEnds = GetPeriodEnds(amountOfNewPeriodEnds+1).OrderBy(pe => pe.Id).ToArray();
+            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds+1).OrderBy(pe => pe.Id).ToArray();
+            var currentPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds).Take(1).ToList();
             _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
-            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetCurrentPeriodEndRequest>()))
-                .ReturnsAsync(new GetPeriodEndResponse { CurrentPeriodEnd = new Models.Payments.PeriodEnd { PeriodEndId = apiPeriodEnds.First().Id } });
 
-            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
-                .ReturnsAsync(new GetAllEmployerAccountsResponse
-                {
-                    Accounts = new List<Account> { Fixture.Create<Account>() }
-                });
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetPeriodEndsRequest>()))
+                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = currentPeriodEnds });
 
             // Act
             await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
 
             // Assert
-            _mediatorMock.Verify(
-                x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()),
-                Times.Exactly(amountOfNewPeriodEnds));
+            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Exactly(amountOfNewPeriodEnds));
         }
 
-        private PeriodEnd[] GetPeriodEnds(int amountOfNewPeriodEnds)
+        [Test]
+        [Category("UnitTest")]
+        public async Task WhenCurrentPeriodsExistAndThereAreNewPeriodsPreviousThenProcessThem()
+        {
+            // Arrange
+            var apiPeriodEnds = GetApiPeriodEnds(5).OrderBy(pe => pe.Id).ToArray();
+            var existingPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds).Skip(2).Take(2).ToList();
+            _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
+
+            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetPeriodEndsRequest>()))
+                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = existingPeriodEnds });
+
+            // Act
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+
+            // Assert
+            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Exactly(3));
+        }
+
+        private PeriodEnd[] GetApiPeriodEnds(int amountOfNewPeriodEnds)
         {
             return Fixture.CreateMany<PeriodEnd>(amountOfNewPeriodEnds).ToArray();
         }
+
+        private List<DbPeriodEnd> GetDbMatchedPeriodEnds(PeriodEnd[] apiPeriodEnds)
+        {
+            return apiPeriodEnds.Select(pe => new DbPeriodEnd { PeriodEndId = pe.Id }).ToList();
+        }
+
     }
 }
