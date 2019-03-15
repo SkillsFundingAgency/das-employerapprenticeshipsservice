@@ -8,7 +8,7 @@ using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests
+namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers.UnitTests
 {
     [TestFixture]
     public class RefreshPaymentDataConpletedEventHandlerTests : FluentTest<RefreshPaymentDataConpletedEventHandlerTestsFixture>
