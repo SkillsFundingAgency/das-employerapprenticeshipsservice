@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Application.Services
         {
             try
             {
-                var api = new Providers.Api.Client.ProviderApiClient();
+                var api = new Providers.Api.Client.ProviderApiClient(_apprenticeshipInfoServiceApiBase);
                 var provider = api.Get(ukPrn);
                 return MapFrom(provider);
             }
