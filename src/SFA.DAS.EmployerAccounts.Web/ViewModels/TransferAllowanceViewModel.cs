@@ -5,7 +5,7 @@
 
         public decimal RemainingTransferAllowance { get; set; }
         public decimal StartingTransferAllowance { get; set; }
-        public decimal TransferAllowancePercentage { get => _TransferAllowancePercentage * 100; set => _TransferAllowancePercentage = value; }
-        private decimal _TransferAllowancePercentage;
+        public decimal TransferAllowancePercentage { get => _transferAllowancePercentage * 100; set => _transferAllowancePercentage = value; }
+        private decimal _transferAllowancePercentage;
     }
 }
