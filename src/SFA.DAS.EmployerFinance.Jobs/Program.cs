@@ -1,18 +1,8 @@
-﻿using System.Data.Common;
-using Microsoft.Azure.WebJobs;
-using NServiceBus;
-using System.Threading;
+﻿using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
 using SFA.DAS.Configuration;
-using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
-using SFA.DAS.Extensions;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.SqlServer;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.EmployerFinance.Startup;
 
 namespace SFA.DAS.EmployerFinance.Jobs
 {
@@ -20,44 +10,31 @@ namespace SFA.DAS.EmployerFinance.Jobs
     {
         public static void Main()
         {
-            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
-            var config = new JobHostConfiguration();
-
-            if (isDevelopment)
-            {
-                config.UseDevelopmentSettings();
-            }
-            
-            config.UseTimers();
-
-            var host = new JobHost(config);
-
-            host.Call(typeof(Program).GetMethod(nameof(AsyncMain)));
-            host.RunAndBlock();
+            MainAsync().GetAwaiter().GetResult();
         }
 
-        [NoAutomaticTrigger]
-        public static async Task AsyncMain(CancellationToken cancellationToken)
+        public static async Task MainAsync()
         {
-            var container = IoC.Initialize();
-
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.Jobs")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
-                .UseLicense(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
-                .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                .UseNewtonsoftJsonSerializer()
-                .UseNLogFactory()
-                .UseSendOnly()
-                .UseStructureMapBuilder(container);
-
-            var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
-
-            container.Configure(c =>
+            using (var container = IoC.Initialize())
             {
-                c.For<IMessageSession>().Use(endpoint);
-            });
+                var config = new JobHostConfiguration { JobActivator = new StructureMapJobActivator(container) };
+                var startup = container.GetInstance<IStartup>();
 
-            ServiceLocator.Initialize(container);
+                if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
+                {
+                    config.UseDevelopmentSettings();
+                }
+
+                config.UseTimers();
+
+                var jobHost = new JobHost(config);
+
+                await startup.StartAsync();
+
+                jobHost.RunAndBlock();
+
+                await startup.StopAsync();
+            }
         }
     }
 }

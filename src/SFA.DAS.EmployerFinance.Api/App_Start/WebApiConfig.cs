@@ -49,6 +49,7 @@ namespace SFA.DAS.EmployerFinance.Api
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

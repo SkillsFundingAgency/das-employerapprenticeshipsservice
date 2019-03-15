@@ -146,6 +146,7 @@
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
+    <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
