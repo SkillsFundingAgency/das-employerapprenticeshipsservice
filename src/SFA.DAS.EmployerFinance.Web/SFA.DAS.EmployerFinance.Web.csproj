@@ -122,7 +122,6 @@
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
-    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="Controllers\EmployerTeamController.cs" />
@@ -170,6 +169,30 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.keep" />
+    <Content Include="Content\css\application.css" />
+    <Content Include="Content\htm\403.html" />
+    <Content Include="Content\htm\404.html" />
+    <Content Include="Content\htm\Error.html" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\favicon.ico" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-apple-touch-icon-152x152.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-apple-touch-icon-167x167.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-apple-touch-icon-180x180.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-apple-touch-icon.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-crest-2x.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-crest.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-logotype-crown.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-mask-icon.svg" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\govuk-opengraph-image.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\icon-arrow-left.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\icon-important.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\icon-pointer-2x.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\images\icon-pointer.png" />
+    <Content Include="Content\lib\govuk-frontend\dist\govuk-frontend-2.0.0.min.css" />
+    <Content Include="Content\lib\govuk-frontend\dist\govuk-frontend-2.0.0.min.js" />
+    <Content Include="Content\lib\govuk-frontend\dist\govuk-frontend-ie8-2.0.0.min.css" />
+    <Content Include="Content\lib\govuk-frontend\dist\VERSION.txt" />
+    <Content Include="Content\lib\jquery\dist\jquery-3.3.1.js" />
+    <Content Include="Content\lib\jquery\dist\jquery-3.3.1.min.js" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
     <Content Include="dist\css\external-links\external-link-black-24x24.png" />
@@ -249,6 +272,19 @@
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\bold-a2452cb66f-v1.woff2" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\bold-f38c792ac2-v1.woff" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\bold-fb2676462a-v1.eot" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\bold-tabular-357fdfbcc3-v1.eot" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\bold-tabular-784c21afb8-v1.woff" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\bold-tabular-b89238d840-v1.woff2" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\light-2c037cf7e1-v1.eot" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\light-458f8ea81c-v1.woff" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\light-f38ad40456-v1.woff2" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\light-tabular-498ea8ffe2-v1.eot" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\light-tabular-62cc6f0a28-v1.woff" />
+    <Content Include="Content\lib\govuk-frontend\dist\assets\fonts\light-tabular-851b10ccdd-v1.woff2" />
+    <Content Include="Content\lib\jquery\dist\jquery-3.3.1.min.map" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -454,9 +490,6 @@
     <Content Include="Views\Home\SignedIn.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\AccessDenied.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\TransactionsView.cshtml" />
     <Content Include="Views\EmployerAccountTransactions\ProviderPaymentSummary.cshtml" />
     <Content Include="Views\Shared\_SVGSprite.cshtml" />
