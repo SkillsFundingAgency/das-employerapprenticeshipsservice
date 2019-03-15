@@ -192,7 +192,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = accountId,
                     RequiresAgreementSigning = requiresAgreementSigning,
                     AgreementsToSign = requiresAgreementSigning > 0,
-                    SignedAgreementCount = accountStatsResponse?.Stats?.SignedAgreementCount ?? 0
+                    SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement)
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
