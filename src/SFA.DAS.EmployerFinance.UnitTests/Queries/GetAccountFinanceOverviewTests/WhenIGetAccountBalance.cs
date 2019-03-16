@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Services;
@@ -17,7 +18,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private const long ExpectedAccountId = 20;
         private const decimal ExpectedCurrentFunds = 2345.67M;
 
+        private DateTime _now;
         private GetAccountFinanceOverviewQueryHandler _handler;
+        private Mock<ICurrentDateTime> _currentDateTime;
         private Mock<IDasForecastingService> _forecastingService;
         private Mock<ILog> _logger;
         private Mock<IDasLevyService> _levyService;
@@ -28,7 +31,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [SetUp]
         public void Setup()
         {
+            _now = DateTime.UtcNow;
             _logger = new Mock<ILog>();
+            _currentDateTime = new Mock<ICurrentDateTime>();
             _forecastingService = new Mock<IDasForecastingService>();
             _levyService = new Mock<IDasLevyService>();
             _validator = new Mock<IValidator<GetAccountFinanceOverviewQuery>>();
@@ -46,9 +51,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             };
 
             _handler = new GetAccountFinanceOverviewQueryHandler(
+                _currentDateTime.Object,
                 _forecastingService.Object, 
                 _levyService.Object, _validator.Object, 
                 _logger.Object);
+            _currentDateTime.Setup(d => d.Now).Returns(_now);
             _forecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
             _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(ExpectedCurrentFunds);
             _validator.Setup(v => v.ValidateAsync(_query))

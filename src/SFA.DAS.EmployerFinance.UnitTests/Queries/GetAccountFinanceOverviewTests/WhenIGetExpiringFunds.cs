@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Services;
@@ -17,8 +18,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private const long ExpectedAccountId = 20;
         private const long ExpectedBalance = 2000;
 
-        private DateTime _today;
+        private DateTime _now;
         private GetAccountFinanceOverviewQueryHandler _handler;
+        private Mock<ICurrentDateTime> _currentDateTime;
         private Mock<IDasForecastingService> _dasForecastingService;
         private Mock<IDasLevyService> _levyService;
         private Mock<ILog> _logger;
@@ -29,8 +31,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [SetUp]
         public void Setup()
         {
-            _today = DateTime.UtcNow.Date;
+            _now = DateTime.UtcNow;
             _logger = new Mock<ILog>();
+            _currentDateTime = new Mock<ICurrentDateTime>();
             _dasForecastingService = new Mock<IDasForecastingService>();
             _levyService = new Mock<IDasLevyService>();
             _validator = new Mock<IValidator<GetAccountFinanceOverviewQuery>>();
@@ -41,13 +44,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
                 AccountId = ExpectedAccountId,
                 ExpiryAmounts = new List<ExpiringFunds>
                 {
-                    new ExpiringFunds { PayrollDate = _today.AddMonths(1), Amount = 3000 },
-                    new ExpiringFunds { PayrollDate = _today.AddMonths(2), Amount = 4000 },
-                    new ExpiringFunds { PayrollDate = _today, Amount = 2000 }
+                    new ExpiringFunds { PayrollDate = _now.AddMonths(1), Amount = 3000 },
+                    new ExpiringFunds { PayrollDate = _now.AddMonths(2), Amount = 4000 },
+                    new ExpiringFunds { PayrollDate = _now, Amount = 2000 }
                 }
             };
 
-            _handler = new GetAccountFinanceOverviewQueryHandler(_dasForecastingService.Object,_levyService.Object, _validator.Object, _logger.Object);
+            _handler = new GetAccountFinanceOverviewQueryHandler(_currentDateTime.Object, _dasForecastingService.Object,_levyService.Object, _validator.Object, _logger.Object);
+            _currentDateTime.Setup(d => d.Now).Returns(_now);
             _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
             _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(ExpectedBalance);
             _validator.Setup(v => v.ValidateAsync(_query))
@@ -76,7 +80,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         {
             var response = await _handler.Handle(_query);
 
-            response.ExpiringFundsExpiryDate.Should().BeSameDateAs(_today);
+            response.ExpiringFundsExpiryDate.Should().BeSameDateAs(_now);
         }
 
         [Test]

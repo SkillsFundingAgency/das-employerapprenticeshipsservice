@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
@@ -11,16 +12,20 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
 {
     public class GetAccountFinanceOverviewQueryHandler : IAsyncRequestHandler<GetAccountFinanceOverviewQuery, GetAccountFinanceOverviewResponse>
     {
+        private readonly ICurrentDateTime _currentDateTime;
         private readonly IDasForecastingService _dasForecastingService;
         private readonly IDasLevyService _levyService;
         private readonly IValidator<GetAccountFinanceOverviewQuery> _validator;
         private readonly ILog _logger;
 
-        public GetAccountFinanceOverviewQueryHandler(IDasForecastingService dasForecastingService,
+        public GetAccountFinanceOverviewQueryHandler(
+            ICurrentDateTime currentDateTime,
+            IDasForecastingService dasForecastingService,
             IDasLevyService levyService,
             IValidator<GetAccountFinanceOverviewQuery> validator,
             ILog logger)
         {
+            _currentDateTime = currentDateTime;
             _dasForecastingService = dasForecastingService;
             _levyService = levyService;
             _validator = validator;
@@ -61,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
         {
             _logger.Info($"Getting expiring funds for account ID: {accountId}");
             
-            var today = DateTime.UtcNow.Date;
+            var today = _currentDateTime.Now.Date;
             var nextYear = today.AddDays(1 - today.Day).AddMonths(13);
             var expiringFunds = await _dasForecastingService.GetExpiringAccountFunds(accountId);
             var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?.Where(a => a.PayrollDate < nextYear).OrderBy(a => a.PayrollDate).FirstOrDefault();
