@@ -60,9 +60,11 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
         private async Task<ExpiringFunds> GetExpiringFunds(long accountId)
         {
             _logger.Info($"Getting expiring funds for account ID: {accountId}");
-
+            
+            var today = DateTime.UtcNow.Date;
+            var nextYear = today.AddDays(1 - today.Day).AddMonths(13);
             var expiringFunds = await _dasForecastingService.GetExpiringAccountFunds(accountId);
-            var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?.OrderBy(a => a.PayrollDate).FirstOrDefault();
+            var earliestFundsToExpire = expiringFunds?.ExpiryAmounts?.Where(a => a.PayrollDate < nextYear).OrderBy(a => a.PayrollDate).FirstOrDefault();
             
             return earliestFundsToExpire;
         }

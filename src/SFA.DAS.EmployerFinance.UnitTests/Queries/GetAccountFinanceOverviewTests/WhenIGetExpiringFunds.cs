@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private const long ExpectedAccountId = 20;
         private const long ExpectedBalance = 2000;
 
+        private DateTime _today;
         private GetAccountFinanceOverviewQueryHandler _handler;
         private Mock<IDasForecastingService> _dasForecastingService;
         private Mock<IDasLevyService> _levyService;
@@ -28,6 +29,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         [SetUp]
         public void Setup()
         {
+            _today = DateTime.UtcNow.Date;
             _logger = new Mock<ILog>();
             _dasForecastingService = new Mock<IDasForecastingService>();
             _levyService = new Mock<IDasLevyService>();
@@ -39,9 +41,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
                 AccountId = ExpectedAccountId,
                 ExpiryAmounts = new List<ExpiringFunds>
                 {
-                    new ExpiringFunds {PayrollDate = new DateTime(2019, 4, 6), Amount = 3000},
-                    new ExpiringFunds {PayrollDate = new DateTime(2019, 5, 6), Amount = 4000},
-                    new ExpiringFunds {PayrollDate = new DateTime(2019, 3, 6), Amount = 2000}
+                    new ExpiringFunds { PayrollDate = _today.AddMonths(1), Amount = 3000 },
+                    new ExpiringFunds { PayrollDate = _today.AddMonths(2), Amount = 4000 },
+                    new ExpiringFunds { PayrollDate = _today, Amount = 2000 }
                 }
             };
 
@@ -74,7 +76,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         {
             var response = await _handler.Handle(_query);
 
-            response.ExpiringFundsExpiryDate.Should().BeSameDateAs(new DateTime(2019, 3, 6));
+            response.ExpiringFundsExpiryDate.Should().BeSameDateAs(_today);
         }
 
         [Test]
@@ -131,6 +133,26 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         public async Task ThenIfNoFundsExpiringTheAmountShouldBeNull()
         {
             _expiringFunds.ExpiryAmounts = new List<ExpiringFunds>();
+
+            var response = await _handler.Handle(_query);
+
+            response.ExpiringFundsAmount.Should().NotHaveValue();
+        }
+
+        [Test]
+        public async Task ThenIfNoFundsExpiringInNext12MonthsTheExpiryDateShouldBeNull()
+        {
+            _expiringFunds.ExpiryAmounts.ForEach(a => a.PayrollDate = a.PayrollDate.AddMonths(13));
+
+            var response = await _handler.Handle(_query);
+
+            response.ExpiringFundsExpiryDate.Should().NotHaveValue();
+        }
+
+        [Test]
+        public async Task ThenIfNoFundsExpiringInNext12MonthsTheAmountShouldBeNull()
+        {
+            _expiringFunds.ExpiryAmounts.ForEach(a => a.PayrollDate = a.PayrollDate.AddMonths(13));
 
             var response = await _handler.Handle(_query);
 
