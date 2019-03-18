@@ -30,6 +30,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution
                 c.AddRegistry<PaymentsRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
+                c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }
