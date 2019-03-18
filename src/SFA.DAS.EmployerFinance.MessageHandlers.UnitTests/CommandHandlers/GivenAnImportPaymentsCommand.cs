@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using FluentAssertions;
 using MediatR;
 using Moq;
-using NServiceBus;
+using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EmployerFinance.Configuration;
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         private Mock<IPaymentsEventsApiClient> _paymentsEventsApiClientMock;
         private Mock<IMediator> _mediatorMock;
         private Mock<ILog> _loggerMock;
-        private Mock<IMessageHandlerContext> _messageHandlerContextMock;
+        private TestableMessageHandlerContext _messageHandlerContext;
         private PaymentsApiClientConfiguration _configuration;
         private IFixture Fixture = new Fixture();
         private ImportPaymentsCommand _importPaymentsCommand;
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         [SetUp]
         public void SetUp()
         {
-            _messageHandlerContextMock = new Mock<IMessageHandlerContext>();
+            _messageHandlerContext = new TestableMessageHandlerContext();
             _paymentsEventsApiClientMock = new Mock<IPaymentsEventsApiClient>();
             _mediatorMock = new Mock<IMediator>();
             _loggerMock = new Mock<ILog>();
@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             _configuration.PaymentsDisabled = true;
 
             // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
 
             // Assert
             _paymentsEventsApiClientMock.Verify(x => x.GetPeriodEnds(), Times.Never);
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             // Arrange
 
             // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
 
             // Assert
             _paymentsEventsApiClientMock.Verify(x => x.GetPeriodEnds(), Times.Once);
@@ -94,12 +94,10 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             // Arrange
 
             // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
 
             // Assert
-            _mediatorMock.Verify(x => x.SendAsync(
-                It.IsAny<ICancellableAsyncRequest<CreateNewPeriodEndCommand>>(),
-                It.IsAny<CancellationToken>()), Times.Never);
+            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Never);
         }
 
         [Test]
@@ -109,31 +107,52 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public async Task WhenThereAreNoCurrentPeriodsAndThereAreNewPeriodsThenCreateThem(int amountOfNewPeriodEnds)
         {
             // Arrange
-            _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(GetApiPeriodEnds(amountOfNewPeriodEnds));
+            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds);
+            _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
 
             // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
 
             // Assert
-            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Exactly(amountOfNewPeriodEnds));
+            VerifyCreateNewPeriodSentForEachMissingPeriod(apiPeriodEnds, new List<DbPeriodEnd>(), amountOfNewPeriodEnds);
+        }
+
+        [Test]
+        [Category("UnitTest")]
+        [TestCase(1, Description = "Single new period end to process")]
+        [TestCase(5, Description = "Multiple new period ends to process")]
+        public async Task WhenThereAreNewPeriodsAndMultipleAccountsExistProccesPaymentsForPeriodForEachAccount(int amountOfNewPeriodEnds)
+        {
+            // Arrange
+            var accounts = Fixture.CreateMany<Account>(3).ToList();
+            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
+                .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = accounts });
+            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds);
+            _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
+
+            // Act
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
+
+            // Assert
+            VerifyProcessAccountPaymentsCommandSentForEachAccountForEachNewPeriodEnd(accounts, apiPeriodEnds);
         }
 
         [Test]
         [Category("UnitTest")]
         [TestCase(1, Description = "Single existing period end")]
         [TestCase(5, Description = "Multiple existing period ends")]
-        public async Task WhenAllCurrentPeriodsExistThenDoNotProcessAnyPeriods(int amountOfNewPeriodEnds)
+        public async Task WhenAllCurrentPeriodsExistThenDoNotCreateAnyPeriodEnds(int amountOfNewPeriodEnds)
         {
             // Arrange
-            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds).OrderBy(pe => pe.Id).ToArray();
-            var currentPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds);
+            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds);
+            var existingPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds);
             _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
             _mediatorMock
                 .Setup(mock => mock.SendAsync(It.IsAny<GetPeriodEndsRequest>()))
-                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = currentPeriodEnds });
+                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = existingPeriodEnds });
 
             // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
 
             // Assert
             _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Never);
@@ -143,30 +162,30 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         [Category("UnitTest")]
         [TestCase(1, Description = "Single new subsqeunt period end")]
         [TestCase(5, Description = "Multiple new subsequent period ends")]
-        public async Task WhenCurrentPeriodsExistAndThereAreNewSubsequentPeriodsThenProcessThem(int amountOfNewPeriodEnds)
+        public async Task WhenCurrentPeriodsExistAndThereAreNewSubsequentPeriodsThenCreateMissingPeriods(int amountOfNewPeriodEnds)
         {
             // Arrange
-            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds+1).OrderBy(pe => pe.Id).ToArray();
-            var currentPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds).Take(1).ToList();
+            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds + 1);
+            var existingPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds).Take(1).ToList();
             _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
 
             _mediatorMock
                 .Setup(mock => mock.SendAsync(It.IsAny<GetPeriodEndsRequest>()))
-                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = currentPeriodEnds });
+                .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = existingPeriodEnds });
 
             // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
 
             // Assert
-            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Exactly(amountOfNewPeriodEnds));
+            VerifyCreateNewPeriodSentForEachMissingPeriod(apiPeriodEnds, existingPeriodEnds, amountOfNewPeriodEnds);
         }
 
         [Test]
         [Category("UnitTest")]
-        public async Task WhenCurrentPeriodsExistAndThereAreNewPeriodsPreviousThenProcessThem()
+        public async Task WhenCurrentPeriodsExistAndThereAreNewPeriodsPreviousCreateMissingPeriods()
         {
             // Arrange
-            var apiPeriodEnds = GetApiPeriodEnds(5).OrderBy(pe => pe.Id).ToArray();
+            var apiPeriodEnds = GetApiPeriodEnds(5);
             var existingPeriodEnds = GetDbMatchedPeriodEnds(apiPeriodEnds).Skip(2).Take(2).ToList();
             _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
 
@@ -174,15 +193,24 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = existingPeriodEnds });
 
             // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContextMock.Object);
+            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
 
             // Assert
-            _mediatorMock.Verify(x => x.SendAsync(It.IsAny<CreateNewPeriodEndCommand>()), Times.Exactly(3));
+            VerifyCreateNewPeriodSentForEachMissingPeriod(apiPeriodEnds, existingPeriodEnds, 3);
+        }
+
+        private void VerifyCreateNewPeriodSentForEachMissingPeriod(PeriodEnd[] apiPeriodEnds, List<DbPeriodEnd> existingPeriodEnds, int expectedNumberOfNewPeriodEnds)
+        {
+            var expectedNewPeriodIds = GetExpectedPeriodEndIds(apiPeriodEnds, existingPeriodEnds);
+            foreach (var expectedId in expectedNewPeriodIds)
+            {
+                _mediatorMock.Verify(x => x.SendAsync(It.Is<CreateNewPeriodEndCommand>(command => command.NewPeriodEnd.PeriodEndId == expectedId)), Times.Once);
+            }
         }
 
         private PeriodEnd[] GetApiPeriodEnds(int amountOfNewPeriodEnds)
         {
-            return Fixture.CreateMany<PeriodEnd>(amountOfNewPeriodEnds).ToArray();
+            return Fixture.CreateMany<PeriodEnd>(amountOfNewPeriodEnds).OrderBy(pe => pe.Id).ToArray();
         }
 
         private List<DbPeriodEnd> GetDbMatchedPeriodEnds(PeriodEnd[] apiPeriodEnds)
@@ -190,5 +218,25 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             return apiPeriodEnds.Select(pe => new DbPeriodEnd { PeriodEndId = pe.Id }).ToList();
         }
 
+        private IEnumerable<string> GetExpectedPeriodEndIds(PeriodEnd[] apiPeriodEnds, List<DbPeriodEnd> existingPeriodEnds)
+        {
+            return apiPeriodEnds.Where(pe => !existingPeriodEnds.Any(cpe => cpe.PeriodEndId == pe.Id)).Select(pe => pe.Id);
+        }
+
+        private void VerifyProcessAccountPaymentsCommandSentForEachAccountForEachNewPeriodEnd(List<Account> accounts, PeriodEnd[] apiPeriodEnds)
+        {
+            var commandsSent = _messageHandlerContext
+                .SentMessages
+                .Where(sm => sm.Message.GetType() ==typeof(ImportAccountPaymentsCommand))
+                .Select(sm => sm.Message as ImportAccountPaymentsCommand);
+
+            foreach (var apiPeriodEnd in apiPeriodEnds)
+            {
+                foreach (var account in accounts)
+                {
+                    commandsSent.Should().ContainSingle(x => x.PeriodEndRef == apiPeriodEnd.Id && x.AccountId == account.Id);
+                }
+            }
+        }
     }
 }
