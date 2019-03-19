@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetFundsIn]
+	@AccountId bigint
 AS
 
 SELECT CalendarPeriodYear, CalendarPeriodMonth, SUM([LevyDeclared]) AS FundsIn
@@ -8,6 +9,8 @@ FROM
 			(SELECT YEAR([TransactionDate])) AS CalendarPeriodYear,
 			[LevyDeclared]
 	FROM [employer_financial].[TransactionLine]
+	WHERE transactionLine.AccountId = @AccountId
 ) AS ungroupedQuery
+
 GROUP BY CalendarPeriodYear, CalendarPeriodMonth
 ORDER BY CalendarPeriodYear, CalendarPeriodMonth
