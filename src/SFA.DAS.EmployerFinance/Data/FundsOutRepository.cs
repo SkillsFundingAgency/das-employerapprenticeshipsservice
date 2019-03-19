@@ -18,10 +18,15 @@ namespace SFA.DAS.EmployerFinance.Data
             _db = db;
         }
 
-        public async Task<IEnumerable<PaymentFundsOut>> GetFundsOut()
+        public async Task<IEnumerable<PaymentFundsOut>> GetFundsOut(long accountId)
         {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@AccountId", accountId, DbType.Int64);
+
             return await _db.Value.Database.Connection.QueryAsync<PaymentFundsOut>(
                 "[employer_financial].[GetFundsOut]",
+                param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure
             );

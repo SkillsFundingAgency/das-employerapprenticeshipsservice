@@ -1,4 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[GetFundsOut]
+	@AccountId bigint
 AS
 SELECT	periodEnd.CalendarPeriodMonth AS CalendarPeriodMonth,
 			periodEnd.CalendarPeriodYear AS CalendarPeriodYear,
@@ -7,5 +8,7 @@ SELECT	periodEnd.CalendarPeriodMonth AS CalendarPeriodMonth,
 	INNER JOIN [employer_financial].[PeriodEnd] periodEnd
 	ON periodEnd.PeriodEndId = transactionLine.PeriodEnd
 	
+	WHERE transactionLine.AccountId = @AccountId
+
 	GROUP BY CalendarPeriodYear, CalendarPeriodMonth
 	ORDER BY CalendarPeriodYear, CalendarPeriodMonth

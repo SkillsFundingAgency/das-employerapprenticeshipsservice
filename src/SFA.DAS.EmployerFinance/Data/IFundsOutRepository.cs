@@ -6,6 +6,6 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public interface IFundsOutRepository
     {
-        Task<IEnumerable<PaymentFundsOut>> GetFundsOut();
+        Task<IEnumerable<PaymentFundsOut>> GetFundsOut(long accountId);
     }
 }
