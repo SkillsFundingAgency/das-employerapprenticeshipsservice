@@ -159,6 +159,7 @@
     <Build Include="StoredProcedures\DeleteSubmissions_ByEmpRef.sql" />
     <Build Include="StoredProcedures\GetEffectivePeriod12Declaration.sql" />
     <None Include="Scripts\Manual\GetAccountTransactionTotalsByMonth.sql" />
+    <Build Include="StoredProcedures\GetFundsIn.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
