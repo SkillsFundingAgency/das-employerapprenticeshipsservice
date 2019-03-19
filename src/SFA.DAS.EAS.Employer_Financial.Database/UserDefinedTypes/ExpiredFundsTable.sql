@@ -2,5 +2,5 @@
 (
 	[CalendarPeriodYear] INT NOT NULL,
 	[CalendarPeriodMonth] INT NOT NULL,
-	[Amount] MONEY NOT NULL
+	[Amount] DECIMAL(18,4) NOT NULL
 )

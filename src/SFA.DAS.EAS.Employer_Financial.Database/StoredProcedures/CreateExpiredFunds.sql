@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateExpiredFunds]
-	@param1 int = 0,
-	@param2 int
+	@accountId BIGINT NOT NULL,
+	@expiredFunds [employer_financial].[ExpiredFundsTable] READONLY
 AS
-	SELECT @param1, @param2
-RETURN 0
+	INSERT [employer_financial].[TransactionLine] (AccountId, DateCreated, TransactionDate, TransactionType, Amount)
+	SELECT @accountId, GETDATE(), datefromparts(CalendarPeriodYear,CalendarPeriodMonth,0), /*ExpiredFund*/ 5, Amount
+	FROM @expiredFunds
