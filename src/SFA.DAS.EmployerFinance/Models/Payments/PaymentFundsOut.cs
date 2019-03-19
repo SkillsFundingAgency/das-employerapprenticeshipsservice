@@ -2,8 +2,8 @@
 {
     public class PaymentFundsOut
     {
-        public string CalendarPeriodYear { get; set; }
-        public string CalendarPeriodMonth { get; set; }
+        public int CalendarPeriodYear { get; set; }
+        public int CalendarPeriodMonth { get; set; }
         public decimal FundsOut { get; set; }
     }
 }
