@@ -2,8 +2,8 @@
 {
     public class LevyFundsIn
     {
-        public string CalendarPeriodYear { get; set; }
-        public string CalendarPeriodMonth { get; set; }
+        public int CalendarPeriodYear { get; set; }
+        public int CalendarPeriodMonth { get; set; }
         public decimal FundsIn { get; set; }
     }
 }
