@@ -160,6 +160,8 @@
     <Build Include="StoredProcedures\GetEffectivePeriod12Declaration.sql" />
     <None Include="Scripts\Manual\GetAccountTransactionTotalsByMonth.sql" />
     <Build Include="StoredProcedures\GetFundsIn.sql" />
+    <Build Include="StoredProcedures\CreateExpiredFunds.sql" />
+    <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
