@@ -6,6 +6,6 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public interface IFundsInRepository
     {
-        Task<IEnumerable<LevyFundsIn>> GetFundsIn();
+        Task<IEnumerable<LevyFundsIn>> GetFundsIn(long accountId);
     }
 }
