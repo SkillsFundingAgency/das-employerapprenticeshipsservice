@@ -45,6 +45,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         public long ExpectedAccountId { get; set; }
         public List<LevyFundsIn> FundsIn { get; set; }
         public List<PaymentFundsOut> FundsOut { get; set; }
+        public List<PaymentFundsOut> ExpiredFunds { get; set; }
 
         public IHandleMessages<ExpireFundsCommand> Handler { get; set; }
 
@@ -72,7 +73,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
             MockFundsOutRepository.Setup(x => x.GetFundsOut(ExpectedAccountId)).ReturnsAsync(FundsOut);
             MockExpiredFunds.Setup(x => x.GetExpiringFunds(
                 fi => fi[new CalendarPeriod(2018, 07)] == 12000 && fi[new CalendarPeriod(2018, 08)] == 15000,
-                fo => fo[new CalendarPeriod(2018, 09)] == 10000 && fo[new CalendarPeriod(2018, 10)] == 10000));
+                fo => fo[new CalendarPeriod(2018, 09)] == 10000 && fo[new CalendarPeriod(2018, 10)] == 10000),
+                ex => ex[new CalendarPeriod(2018, )]);
 
             var periods = new Dictionary<CalendarPeriod, decimal>();
             var decimalPeriod = periods[new CalendarPeriod(1, 2)];
