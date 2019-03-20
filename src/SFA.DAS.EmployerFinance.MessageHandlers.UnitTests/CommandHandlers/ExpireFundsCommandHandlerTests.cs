@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 f => f.Handle(),
                 f => f.AccountIds.ForEach(i => f.Context.Verify(s => s.Send(
                     It.Is<ExpireAccountFundsCommand>(c => c.AccountId == i),
-                    It.Is<SendOptions>(o => o.RequiredImmediateDispatch() && o.IsRoutingToThisEndpoint() && o.GetMessageId() == $"{f.Command.Month}-{f.Command.Year}-{i}")), Times.Once)));
+                    It.Is<SendOptions>(o => o.RequiredImmediateDispatch() && o.IsRoutingToThisEndpoint() && o.GetMessageId() == $"{f.Command.Year}-{f.Command.Month}-{i}")), Times.Once)));
         }
     }
 
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         {
             AccountIds = new List<long> { 1, 2, 3 };
             MessageSession = new Mock<IMessageSession>();
-            Command = new ExpireFundsCommand { Month = 3, Year = 2019 };
+            Command = new ExpireFundsCommand { Year = 2019, Month = 3 };
             Context = new Mock<IMessageHandlerContext>();
             AccountRepository = new Mock<IEmployerAccountRepository>();
             Handler = new ExpireFundsCommandHandler(AccountRepository.Object);

@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         public async Task Handle(ExpireFundsCommand message, IMessageHandlerContext context)
         {
             var accounts = await _accountRepository.GetAllAccounts();
-            var commands = accounts.Select(a => new ExpireAccountFundsCommand { Month = message.Month, Year = message.Year, AccountId = a.Id });
+            var commands = accounts.Select(a => new ExpireAccountFundsCommand { Year = message.Year, Month = message.Month, AccountId = a.Id });
 
             var tasks = commands.Select(c =>
             {
@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
                 sendOptions.RequireImmediateDispatch();
                 sendOptions.RouteToThisEndpoint();
-                sendOptions.SetMessageId($"{c.Month}-{c.Year}-{c.AccountId}");
+                sendOptions.SetMessageId($"{c.Year}-{c.Month}-{c.AccountId}");
 
                 return context.Send(c, sendOptions);
             });
