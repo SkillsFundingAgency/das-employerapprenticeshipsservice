@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
 {
     public static class Jobs
     {
-        public static Task ImportLevyDeclarations([TimerTrigger("0 0 15 20 * *")] TimerInfo timer, TraceWriter logger)
+        public static Task ImportLevyDeclarations([TimerTrigger("0 0 15 21 * *")] TimerInfo timer, TraceWriter logger)
         {
             ILog nLogger = null;
 
