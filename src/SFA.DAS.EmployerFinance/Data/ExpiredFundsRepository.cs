@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@AccountId", accountId);
 
             return await _db.Value.Database.Connection.QueryAsync<ExpiredFund>(
-                "[employer_financial].[GetFundsIn]",
+                "[employer_financial].[GetExpiredFunds]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure
