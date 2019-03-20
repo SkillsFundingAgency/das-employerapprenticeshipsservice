@@ -6,6 +6,6 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public interface IExpiredFundsRepository
     {
-        Task Create(IEnumerable<ExpiredFund> expiredFunds);
+        Task Create(long accountId, IEnumerable<ExpiredFund> expiredFunds);
     }
 }

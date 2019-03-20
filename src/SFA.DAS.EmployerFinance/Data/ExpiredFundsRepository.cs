@@ -19,12 +19,13 @@ namespace SFA.DAS.EmployerFinance.Data
             _db = db;
         }
 
-        public async Task Create(IEnumerable<ExpiredFund> expiredFunds)
+        public async Task Create(long accountId, IEnumerable<ExpiredFund> expiredFunds)
         {
             var expiredFundsTable = expiredFunds.ToExpiredFundsDataTable();
 
             var parameters = new DynamicParameters();
 
+            parameters.Add("@accountId", accountId);
             parameters.Add("@expiredFunds", expiredFundsTable.AsTableValuedParameter("[employer_financial].[ExpiredFundsTable]"));
 
             await _db.Value.Database.Connection.ExecuteAsync(
