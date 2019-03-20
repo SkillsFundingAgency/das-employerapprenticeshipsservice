@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateExpiredFunds]
-	@accountId BIGINT NOT NULL,
+	@accountId BIGINT,
 	@expiredFunds [employer_financial].[ExpiredFundsTable] READONLY
 AS
 	INSERT [employer_financial].[TransactionLine] (AccountId, DateCreated, TransactionDate, TransactionType, Amount)
