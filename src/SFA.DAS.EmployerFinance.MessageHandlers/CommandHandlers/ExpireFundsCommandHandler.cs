@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.EmployerFinance.Types.Models;
+using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
@@ -13,19 +15,22 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
     {
         private readonly IFundsInRepository _fundsInRepository;
         private readonly IFundsOutRepository _fundsOutRepository;
+        private readonly IExpiredFunds _expiredFunds;
 
-        public ExpireFundsCommandHandler(IFundsInRepository fundsInRepository, IFundsOutRepository fundsOutRepository)
+        public ExpireFundsCommandHandler(IFundsInRepository fundsInRepository, IFundsOutRepository fundsOutRepository,
+            IExpiredFunds expiredFunds)
         {
             _fundsInRepository = fundsInRepository;
             _fundsOutRepository = fundsOutRepository;
+            _expiredFunds = expiredFunds;
         }
 
-        public Task Handle(ExpireFundsCommand message, IMessageHandlerContext context)
+        public async Task Handle(ExpireFundsCommand message, IMessageHandlerContext context)
         {
-            var fundsIn = _fundsInRepository.GetFundsIn(message.AccountId);
-            var fundsOut = _fundsOutRepository.GetFundsOut(message.AccountId);
-
-            return Task.CompletedTask;
+            var fundsIn = await _fundsInRepository.GetFundsIn(message.AccountId);
+            var fundsOut = await _fundsOutRepository.GetFundsOut(message.AccountId);
+            _expiredFunds.GetExpiringFunds(fundsIn.ToCalendarPeriodDictionary(), fundsOut.ToCalendarPeriodDictionary(),
+                null, 0);
         }
     }
 }
