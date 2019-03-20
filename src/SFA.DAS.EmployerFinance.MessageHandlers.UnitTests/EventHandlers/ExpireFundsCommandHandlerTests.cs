@@ -39,9 +39,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         public Task Handle_WhenHandlingExpireFundsCommand_ThenShouldCallTheExpiredFundsAlgorithm()
         {
             return RunAsync(f => f.Handle(), f => f.MockExpiredFunds.Verify(x => x.GetExpiringFunds(
-                It.Is<IDictionary<CalendarPeriod, decimal>>(fi => fi[new CalendarPeriod(2018, 07)] == 12000 && fi[new CalendarPeriod(2018, 08)] == 15000),
-                It.Is<IDictionary<CalendarPeriod, decimal>>(fo => fo[new CalendarPeriod(2018, 09)] == 10000 && fo[new CalendarPeriod(2018, 10)] == 10000),
-                It.Is<IDictionary<CalendarPeriod, decimal>>(ex => ex[new CalendarPeriod(2018, 01)] == 2000 && ex[new CalendarPeriod(2018, 02)] == 2000),
+                It.Is<IDictionary<CalendarPeriod, decimal>>(fi => fi.ContainsKey(new CalendarPeriod(2018, 07)) && fi[new CalendarPeriod(2018, 07)] == 12000 && fi[new CalendarPeriod(2018, 08)] == 15000),
+                It.Is<IDictionary<CalendarPeriod, decimal>>(fo => fo.ContainsKey(new CalendarPeriod(2018, 09)) && fo[new CalendarPeriod(2018, 09)] == 10000 && fo[new CalendarPeriod(2018, 10)] == 10000),
+                It.Is<IDictionary<CalendarPeriod, decimal>>(ex => ex.ContainsKey(new CalendarPeriod(2018, 01)) && ex[new CalendarPeriod(2018, 01)] == 2000 && ex[new CalendarPeriod(2018, 02)] == 2000),
                 f.ExpectedExpiryPeriod)));
         }
     }
@@ -52,6 +52,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         public Mock<IFundsInRepository> MockFundsInRepository { get; set; }
         public Mock<IFundsOutRepository> MockFundsOutRepository { get; set; }
         public Mock<IExpiredFunds> MockExpiredFunds { get; set; }
+        public Mock<IExpiredFundsRepository> MockExpiredFundsRepository { get; set; }
 
         public ExpireFundsCommand Command { get; set; }
         public long ExpectedAccountId { get; set; }
@@ -97,10 +98,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
             MockFundsInRepository.Setup(x => x.GetFundsIn(ExpectedAccountId)).ReturnsAsync(FundsIn);
             MockFundsOutRepository.Setup(x => x.GetFundsOut(ExpectedAccountId)).ReturnsAsync(FundsOut);
             MockExpiredFunds.Setup(x => x.GetExpiringFunds(
-                 It.Is<IDictionary<CalendarPeriod, decimal>>(fi => fi[new CalendarPeriod(2018, 07)] == 12000 && fi[new CalendarPeriod(2018, 08)] == 15000),
-                It.Is<IDictionary<CalendarPeriod, decimal>>(fo => fo[new CalendarPeriod(2018, 09)] == 10000 && fo[new CalendarPeriod(2018, 10)] == 10000),
-                 It.Is<IDictionary<CalendarPeriod, decimal>>(ex => ex[new CalendarPeriod(2018, 02)] == 2000),
-                 ExpectedExpiryPeriod)).Returns(new Dictionary<CalendarPeriod, decimal>{ { new CalendarPeriod(2018, 03), 1000 }, { new CalendarPeriod(2018, 04), 1000 } }); 
+                 It.Is<IDictionary<CalendarPeriod, decimal>>(fi => fi.ContainsKey(new CalendarPeriod(2018, 07)) && fi[new CalendarPeriod(2018, 07)] == 12000 && fi[new CalendarPeriod(2018, 08)] == 15000),
+                It.Is<IDictionary<CalendarPeriod, decimal>>(fo => fo.ContainsKey(new CalendarPeriod(2018, 09)) && fo[new CalendarPeriod(2018, 09)] == 10000 && fo[new CalendarPeriod(2018, 10)] == 10000),
+                 It.Is<IDictionary<CalendarPeriod, decimal>>(ex => ex.ContainsKey(new CalendarPeriod(2018, 01)) && ex[new CalendarPeriod(2018, 02)] == 2000),
+                 ExpectedExpiryPeriod)).Returns(new Dictionary<CalendarPeriod, decimal>{ { new CalendarPeriod(2018, 03), 1000 }, { new CalendarPeriod(2018, 04), 1000 } });
+            //MockExpiredFundsRepository.Setup(x => x)
 
             //var periods = new Dictionary<CalendarPeriod, decimal>();
             //var decimalPeriod = periods[new CalendarPeriod(1, 2)];
