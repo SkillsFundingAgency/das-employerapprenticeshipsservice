@@ -337,7 +337,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 Data = new FinanceDashboardViewModel
                 {
-                    Account = employerAccountResult.Account,
+                    AccountHashedId = hashedId,
                     CurrentLevyFunds = data.Data.Balance
                 }
             };
