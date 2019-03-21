@@ -11,14 +11,14 @@ using SFA.DAS.EmployerFinance.Extensions;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
-    public class ExpireFundsCommandHandler : IHandleMessages<ExpireFundsCommand>
+    public class ExpireAccountFundsCommandHandler : IHandleMessages<ExpireAccountFundsCommand>
     {
         private readonly IFundsInRepository _fundsInRepository;
         private readonly IFundsOutRepository _fundsOutRepository;
         private readonly IExpiredFunds _expiredFunds;
         private readonly IExpiredFundsRepository _expiredFundsRepository;
 
-        public ExpireFundsCommandHandler(IFundsInRepository fundsInRepository, IFundsOutRepository fundsOutRepository,
+        public ExpireAccountFundsCommandHandler(IFundsInRepository fundsInRepository, IFundsOutRepository fundsOutRepository,
             IExpiredFunds expiredFunds, IExpiredFundsRepository expiredFundsRepository)
         {
             _fundsInRepository = fundsInRepository;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             _expiredFundsRepository = expiredFundsRepository;
         }
 
-        public async Task Handle(ExpireFundsCommand message, IMessageHandlerContext context)
+        public async Task Handle(ExpireAccountFundsCommand message, IMessageHandlerContext context)
         {
             var fundsIn = await _fundsInRepository.GetFundsIn(message.AccountId);
             var cpdFundsIn = fundsIn.ToCalendarPeriodDictionary();

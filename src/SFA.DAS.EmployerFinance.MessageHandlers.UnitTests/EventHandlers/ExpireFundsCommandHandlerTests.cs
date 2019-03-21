@@ -19,30 +19,30 @@ using SFA.DAS.Testing;
 namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
 {
     [TestFixture]
-    public class ExpireFundsCommandHandlerTests : FluentTest<ExpireFundsCommandHandlerTestsFixture>
+    public class ExpireAccountFundsCommandHandlerTests : FluentTest<ExpireAccountFundsCommandHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_WhenHandlingExpireFundsCommand_ThenShouldGetTheFundsIn()
+        public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldGetTheFundsIn()
         {
             return RunAsync(f => f.Handle(),
                 f => f.MockFundsInRepository.Verify(r => r.GetFundsIn(f.ExpectedAccountId)));
         }
 
         [Test]
-        public Task Handle_WhenHandlingExpireFundsCommand_ThenShouldGetTheFundsOut()
+        public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldGetTheFundsOut()
         {
             return RunAsync(f => f.Handle(),
                 f => f.MockFundsOutRepository.Verify(r => r.GetFundsOut(f.ExpectedAccountId)));
         }
 
         [Test]
-        public Task Handle_WhenHandlingExpireFundsCommand_ThenShouldGetTheExistingExpiredFunds()
+        public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldGetTheExistingExpiredFunds()
         {
             return RunAsync(f => f.Handle(), f => f.MockExpiredFundsRepository.Verify(x => x.Get(f.ExpectedAccountId)));
         }
 
         [Test]
-        public Task Handle_WhenHandlingExpireFundsCommand_ThenShouldCallTheExpiredFundsAlgorithm()
+        public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldCallTheExpiredFundsAlgorithm()
         {
             //return RunAsync(f => f.Handle(), f => f.MockExpiredFunds.Verify(x => x.GetExpiringFunds(
             //    It.Is<Dictionary<CalendarPeriod, decimal>>(fi => fi.Any(x => x.Key.CompareTo()) && fi[new CalendarPeriod(2018, 08)] == 15000),
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         }
     }
 
-    public class ExpireFundsCommandHandlerTestsFixture
+    public class ExpireAccountFundsCommandHandlerTestsFixture
     {
         public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
         public Mock<IFundsInRepository> MockFundsInRepository { get; set; }
@@ -62,20 +62,20 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         public Mock<IExpiredFunds> MockExpiredFunds { get; set; }
         public Mock<IExpiredFundsRepository> MockExpiredFundsRepository { get; set; }
 
-        public ExpireFundsCommand Command { get; set; }
+        public ExpireAccountFundsCommand Command { get; set; }
         public long ExpectedAccountId { get; set; }
         public List<LevyFundsIn> FundsIn { get; set; }
         public List<PaymentFundsOut> FundsOut { get; set; }
         public List<ExpiredFund> ExistingExpiredFunds { get; set; }
         public List<ExpiredFund> ExpectedExpiredFunds { get; set; }
 
-        public IHandleMessages<ExpireFundsCommand> Handler { get; set; }
+        public IHandleMessages<ExpireAccountFundsCommand> Handler { get; set; }
 
-        public ExpireFundsCommandHandlerTestsFixture()
+        public ExpireAccountFundsCommandHandlerTestsFixture()
         {
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             ExpectedAccountId = 112;
-            Command = new ExpireFundsCommand{ AccountId = ExpectedAccountId };
+            Command = new ExpireAccountFundsCommand{ AccountId = ExpectedAccountId };
             FundsIn = new List<LevyFundsIn>
             {
                 new LevyFundsIn{ CalendarPeriodYear = 2018, CalendarPeriodMonth = 07, FundsIn = 12000 },
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
             //var periods = new Dictionary<CalendarPeriod, decimal>();
             //var decimalPeriod = periods[new CalendarPeriod(1, 2)];
 
-            Handler = new ExpireFundsCommandHandler(MockFundsInRepository.Object, MockFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object);
+            Handler = new ExpireAccountFundsCommandHandler(MockFundsInRepository.Object, MockFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object);
         }
 
         public Task Handle()
