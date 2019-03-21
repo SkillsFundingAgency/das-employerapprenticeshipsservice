@@ -16,21 +16,25 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         private readonly IFundsInRepository _fundsInRepository;
         private readonly IFundsOutRepository _fundsOutRepository;
         private readonly IExpiredFunds _expiredFunds;
+        private readonly IExpiredFundsRepository _expiredFundsRepository;
 
         public ExpireFundsCommandHandler(IFundsInRepository fundsInRepository, IFundsOutRepository fundsOutRepository,
-            IExpiredFunds expiredFunds)
+            IExpiredFunds expiredFunds, IExpiredFundsRepository expiredFundsRepository)
         {
             _fundsInRepository = fundsInRepository;
             _fundsOutRepository = fundsOutRepository;
             _expiredFunds = expiredFunds;
+            _expiredFundsRepository = expiredFundsRepository;
         }
 
         public async Task Handle(ExpireFundsCommand message, IMessageHandlerContext context)
         {
             var fundsIn = await _fundsInRepository.GetFundsIn(message.AccountId);
+            var cpdFundsIn = fundsIn.ToCalendarPeriodDictionary();
             var fundsOut = await _fundsOutRepository.GetFundsOut(message.AccountId);
+            var existingExpiredFunds = await _expiredFundsRepository.Get(message.AccountId);
             _expiredFunds.GetExpiringFunds(fundsIn.ToCalendarPeriodDictionary(), fundsOut.ToCalendarPeriodDictionary(),
-                null, 0);
+                existingExpiredFunds.ToCalendarPeriodDictionary(), 24);
         }
     }
 }
