@@ -165,6 +165,9 @@ namespace SFA.DAS.EmployerFinance.Data
                     case TransactionItemType.Transfer:
                         return _mapper.Map<TransferTransactionLine>(entity);
 
+                    case TransactionItemType.ExpiredFund:
+                        return _mapper.Map<ExpiredFundTransactionLine>(entity);
+
                     case TransactionItemType.Unknown:
                         return _mapper.Map<TransactionLine>(entity);
 
