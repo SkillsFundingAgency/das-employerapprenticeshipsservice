@@ -484,36 +484,5 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
 
             Assert.AreEqual(expectedPublicHashedId, actualTransaction?.ReceiverAccountPublicHashedId);
         }
-
-        //todo: these tests are for TransactionLine in SFA.DAS.EAS.Domain, not EmployerFinance Models - do we need new ExpiredFundTransactionLine in Domain also?
-        //[Test]
-        //public async Task ThenIShouldGetBackCorrectExpiredFundTransactions()
-        //{
-        //    //Arrange
-        //    var transaction = new ExpiredFundTransactionLine
-        //    {
-        //        ReceiverAccountName = "Test Corp",
-        //        TransactionType = TransactionItemType.Transfer,
-        //        Amount = 2035.20M
-        //    };
-
-        //    var expectedDescription = $"Transfer sent to {transaction.ReceiverAccountName}";
-
-        //    _dasLevyService.Setup(x =>
-        //            x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-        //        .ReturnsAsync(new List<TransactionLine>
-        //        {
-        //            transaction
-        //        });
-
-        //    //Act
-        //    var actual = await RequestHandler.Handle(Query);
-
-        //    //Assert
-        //    var actualTransaction = actual.Data.TransactionLines.First();
-
-        //    Assert.AreEqual(expectedDescription, actualTransaction.Description);
-        //    Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
-        //}
     }
 }
