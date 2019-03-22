@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [employer_financial].[GetFundsOut]
+﻿CREATE PROCEDURE [employer_financial].[GetPaymentFundsOut]
 	@AccountId bigint
 AS
 SELECT	periodEnd.CalendarPeriodMonth AS CalendarPeriodMonth,

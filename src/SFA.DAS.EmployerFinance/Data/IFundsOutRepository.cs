@@ -4,8 +4,8 @@ using SFA.DAS.EmployerFinance.Models.Payments;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
-    public interface IFundsOutRepository
+    public interface IPaymentFundsOutRepository
     {
-        Task<IEnumerable<PaymentFundsOut>> GetFundsOut(long accountId);
+        Task<IEnumerable<PaymentFundsOut>> GetPaymentFundsOut(long accountId);
     }
 }
