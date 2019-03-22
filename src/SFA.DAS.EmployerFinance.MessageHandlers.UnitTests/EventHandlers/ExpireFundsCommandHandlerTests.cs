@@ -112,10 +112,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
                 It.IsAny<Dictionary<CalendarPeriod, decimal>>(),
                 It.IsAny<Dictionary<CalendarPeriod, decimal>>(),
                 It.IsAny<int>())).Returns(ExpectedExpiredFunds);
-            
-
-            //var periods = new Dictionary<CalendarPeriod, decimal>();
-            //var decimalPeriod = periods[new CalendarPeriod(1, 2)];
 
             Handler = new ExpireAccountFundsCommandHandler(MockLevyFundsInRepository.Object, MockPaymentFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object);
         }
