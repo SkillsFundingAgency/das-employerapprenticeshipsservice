@@ -4,8 +4,8 @@ using SFA.DAS.EmployerFinance.Models.Levy;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
-    public interface IFundsInRepository
+    public interface ILevyFundsInRepository
     {
-        Task<IEnumerable<LevyFundsIn>> GetFundsIn(long accountId);
+        Task<IEnumerable<LevyFundsIn>> GetLevyFundsIn(long accountId);
     }
 }
