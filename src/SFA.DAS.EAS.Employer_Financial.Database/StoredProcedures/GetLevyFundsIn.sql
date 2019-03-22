@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [employer_financial].[GetFundsIn]
+﻿CREATE PROCEDURE [employer_financial].[GetLevyFundsIn]
 	@AccountId bigint
 AS
 
