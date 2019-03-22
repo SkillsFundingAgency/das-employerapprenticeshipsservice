@@ -550,5 +550,34 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
 
             Assert.AreEqual(expectedPublicHashedId, actualTransaction?.ReceiverAccountPublicHashedId);
         }
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectExpiredFundTransactions()
+        {
+            //Arrange
+            var transaction = new ExpiredFundTransactionLine
+            {
+                TransactionType = TransactionItemType.ExpiredFund,
+                Amount = 2035.20M
+            };
+
+            var expectedDescription = $"todo: Expired fund description";
+
+            _dasLevyService.Setup(x =>
+                    x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new TransactionLine[]
+                {
+                    transaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+
+            Assert.AreEqual(expectedDescription, actualTransaction.Description);
+            Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
+        }
     }
 }
