@@ -508,7 +508,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual("todo: Expired fund description", actualTransaction.Description);
+            Assert.AreEqual("Levy funds expired", actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
     }
