@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Infrastructure.Services;
 using StructureMap;
 using System.Web;
 using SFA.DAS.Authorization;
+using SFA.DAS.StuctureMap.Extensions;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -19,7 +20,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 s.With(new ControllerConvention());
             });
 
-            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
+            For<HttpContextBase>().Use(() => HttpContext.Current.ToHttpContextBase());
             For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
             For<ICallerContextProvider>().Use<CallerContextProvider>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
