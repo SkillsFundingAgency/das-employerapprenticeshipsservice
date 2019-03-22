@@ -163,6 +163,7 @@
     <Build Include="StoredProcedures\GetLevyFundsIn.sql" />
     <Build Include="StoredProcedures\CreateExpiredFunds.sql" />
     <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
+    <Build Include="StoredProcedures\GetExpiredFunds.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

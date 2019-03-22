@@ -34,5 +34,19 @@ namespace SFA.DAS.EmployerFinance.Data
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
+
+        public async Task<IEnumerable<ExpiredFund>> Get(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@AccountId", accountId);
+
+            return await _db.Value.Database.Connection.QueryAsync<ExpiredFund>(
+                "[employer_financial].[GetExpiredFunds]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure
+            );
+        }
     }
 }
