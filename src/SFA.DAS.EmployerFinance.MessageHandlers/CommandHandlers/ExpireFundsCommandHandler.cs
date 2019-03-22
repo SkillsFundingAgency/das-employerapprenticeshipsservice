@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
@@ -30,11 +26,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         public async Task Handle(ExpireAccountFundsCommand message, IMessageHandlerContext context)
         {
             var fundsIn = await _fundsInRepository.GetFundsIn(message.AccountId);
-            var cpdFundsIn = fundsIn.ToCalendarPeriodDictionary();
             var fundsOut = await _fundsOutRepository.GetFundsOut(message.AccountId);
             var existingExpiredFunds = await _expiredFundsRepository.Get(message.AccountId);
-            _expiredFunds.GetExpiringFunds(fundsIn.ToCalendarPeriodDictionary(), fundsOut.ToCalendarPeriodDictionary(),
+            var fundsToExpire = _expiredFunds.GetExpiringFunds(fundsIn.ToCalendarPeriodDictionary(), fundsOut.ToCalendarPeriodDictionary(),
                 existingExpiredFunds.ToCalendarPeriodDictionary(), 24);
+            await _expiredFundsRepository.Create(message.AccountId, fundsToExpire.ToExpiredFundsEntityList());
         }
     }
 }
