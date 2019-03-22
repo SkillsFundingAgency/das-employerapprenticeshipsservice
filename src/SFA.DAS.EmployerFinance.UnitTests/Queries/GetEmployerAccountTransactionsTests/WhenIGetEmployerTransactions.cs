@@ -561,7 +561,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 Amount = 2035.20M
             };
 
-            var expectedDescription = $"todo: Expired fund description";
+            var expectedDescription = "Levy funds expired";
 
             _dasLevyService.Setup(x =>
                     x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
