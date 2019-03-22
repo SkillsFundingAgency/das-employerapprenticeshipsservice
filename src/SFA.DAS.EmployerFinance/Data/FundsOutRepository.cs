@@ -9,23 +9,23 @@ using SFA.DAS.Sql.Client;
 
 namespace SFA.DAS.EmployerFinance.Data
 {
-    public class FundsOutRepository : BaseRepository, IFundsOutRepository
+    public class PaymentFundsOutRepository : BaseRepository, IPaymentFundsOutRepository
     {
         private readonly Lazy<EmployerFinanceDbContext> _db;
 
-        public FundsOutRepository(string connectionString, ILog logger, Lazy<EmployerFinanceDbContext> db) : base(connectionString, logger)
+        public PaymentFundsOutRepository(string connectionString, ILog logger, Lazy<EmployerFinanceDbContext> db) : base(connectionString, logger)
         {
             _db = db;
         }
 
-        public async Task<IEnumerable<PaymentFundsOut>> GetFundsOut(long accountId)
+        public async Task<IEnumerable<PaymentFundsOut>> GetPaymentFundsOut(long accountId)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@AccountId", accountId, DbType.Int64);
 
             return await _db.Value.Database.Connection.QueryAsync<PaymentFundsOut>(
-                "[employer_financial].[GetFundsOut]",
+                "[employer_financial].[GetPaymentFundsOut]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure
