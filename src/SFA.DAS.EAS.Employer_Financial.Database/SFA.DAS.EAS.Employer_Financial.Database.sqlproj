@@ -160,6 +160,7 @@
     <Build Include="StoredProcedures\GetEffectivePeriod12Declaration.sql" />
     <None Include="Scripts\Manual\GetAccountTransactionTotalsByMonth.sql" />
     <Build Include="StoredProcedures\GetPaymentFundsOut.sql" />
+    <Build Include="StoredProcedures\GetLevyFundsIn.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
