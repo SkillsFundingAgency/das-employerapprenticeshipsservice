@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
@@ -9,7 +8,6 @@ using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Queries.GetCurrentPeriodEnd;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
-using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
@@ -46,28 +44,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
             var result = await _mediator.SendAsync(new GetCurrentPeriodEndRequest());//order by completion date
             var periodFound = result.CurrentPeriodEnd?.PeriodEndId == null;
-
-            var periodsToProcess = new List<PeriodEnd>();
-            if (!periodFound)
-            {
-                var lastPeriodId = result.CurrentPeriodEnd.PeriodEndId;
-
-                foreach (var periodEnd in periodEnds)
-                {
-                    if (periodFound)
-                    {
-                        periodsToProcess.Add(periodEnd);
-                    }
-                    else if (periodEnd.Id.Equals(lastPeriodId))
-                    {
-                        periodFound = true;
-                    }
-                }
-            }
-            else
-            {
-                periodsToProcess.AddRange(periodEnds);
-            }
+            var periodsToProcess = result.CurrentPeriodEnd?.PeriodEndId == null 
+                ? periodEnds 
+                : periodEnds.TakeWhile(periodEnd => !periodEnd.Id.Equals(result.CurrentPeriodEnd.PeriodEndId));
 
             if (!periodsToProcess.Any())
             {
