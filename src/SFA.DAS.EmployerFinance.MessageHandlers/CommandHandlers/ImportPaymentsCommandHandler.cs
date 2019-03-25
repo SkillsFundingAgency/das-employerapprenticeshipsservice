@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var periodEnds = await _paymentsEventsApiClient.GetPeriodEnds();
 
             var result = await _mediator.SendAsync(new GetCurrentPeriodEndRequest());//order by completion date
-            var periodFound = result.CurrentPeriodEnd?.PeriodEndId == null;
+            
             var periodsToProcess = result.CurrentPeriodEnd?.PeriodEndId == null 
                 ? periodEnds 
                 : periodEnds.TakeWhile(periodEnd => !periodEnd.Id.Equals(result.CurrentPeriodEnd.PeriodEndId));
@@ -76,13 +76,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 }
 
                 _logger.Info($"Creating process period end queue message for period end ref: '{paymentsPeriodEnd.Id}'");
-                var options = new SendOptions();
-                options.RouteToThisEndpoint();
-                options.RequireImmediateDispatch();
-                await context.Send(new ProcessPeriodEndPaymentsCommand
+
+                await context.SendLocal(new ProcessPeriodEndPaymentsCommand
                 {
                     PeriodEndRef = paymentsPeriodEnd.Id
-                }, options);
+                });
             }
         }
     }
