@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
@@ -12,38 +13,18 @@ using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Types.Models;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
+namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
 {
-    [TestFixture]
+    [TestFixture, Parallelizable]
     public class ExpireAccountFundsCommandHandlerTests : FluentTest<ExpireAccountFundsCommandHandlerTestsFixture>
     {
-        [Test]
-        public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldGetTheFundsIn()
-        {
-            return RunAsync(f => f.Handle(),
-                f => f.MockLevyFundsInRepository.Verify(r => r.GetLevyFundsIn(f.ExpectedAccountId)));
-        }
-
-        [Test]
-        public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldGetTheFundsOut()
-        {
-            return RunAsync(f => f.Handle(),
-                f => f.MockPaymentFundsOutRepository.Verify(r => r.GetPaymentFundsOut(f.ExpectedAccountId)));
-        }
-
-        [Test]
-        public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldGetTheExistingExpiredFunds()
-        {
-            return RunAsync(f => f.Handle(), f => f.MockExpiredFundsRepository.Verify(x => x.Get(f.ExpectedAccountId)));
-        }
-
         [Test]
         public Task Handle_WhenHandlingExpireAccountFundsCommand_ThenShouldCallTheExpiredFundsAlgorithm()
         {
             return RunAsync(f => f.Handle(), f => f.MockExpiredFunds.Verify(x => x.GetExpiringFunds(
-                It.Is<Dictionary<CalendarPeriod, decimal>>(fi => ExpiredFundsComparisonHelper.AreFundsInEqual(f.FundsIn, fi)),
-                It.Is<Dictionary<CalendarPeriod, decimal>>(fo => ExpiredFundsComparisonHelper.AreFundsOutEqual(f.FundsOut, fo)),
-                It.Is<Dictionary<CalendarPeriod, decimal>>(ex => ExpiredFundsComparisonHelper.AreExpiredFundsEqual(f.ExistingExpiredFunds, ex)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fi => f.AreFundsInEqual(f.FundsIn, fi)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fo => f.AreFundsOutEqual(f.FundsOut, fo)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(ex => f.AreExpiredFundsEqual(f.ExistingExpiredFunds, ex)),
                 24)));
         }
 
@@ -52,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         {
             return RunAsync(f => f.Handle(),
                 f => f.MockExpiredFundsRepository.Verify(x =>
-                    x.Create(f.ExpectedAccountId, It.Is<IEnumerable<ExpiredFund>>(ex => ExpiredFundsComparisonHelper.AreExpiredFundsEqual(ex, f.ExpectedExpiredFunds)))));
+                    x.Create(f.ExpectedAccountId, It.Is<IEnumerable<ExpiredFund>>(ex => f.AreExpiredFundsEqual(ex, f.ExpectedExpiredFunds)))));
         }
     }
 
@@ -119,6 +100,69 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         public Task Handle()
         {
             return Handler.Handle(Command, MessageHandlerContext.Object);
+        }
+
+        public bool AreFundsInEqual(IEnumerable<LevyFundsIn> fundsInList, IDictionary<CalendarPeriod, decimal> expiredFundsDictionary)
+        {
+            if (fundsInList.Count() != expiredFundsDictionary.Count)
+            {
+                return false;
+            }
+
+            foreach (var fund in fundsInList)
+            {
+                if (!expiredFundsDictionary.Any(x =>
+                    x.Key.Year == fund.CalendarPeriodYear &&
+                    x.Key.Month == fund.CalendarPeriodMonth &&
+                    x.Value == fund.FundsIn))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool AreFundsOutEqual(IEnumerable<PaymentFundsOut> fundsOutList, IDictionary<CalendarPeriod, decimal> expiredFundsDictionary)
+        {
+            if (fundsOutList.Count() != expiredFundsDictionary.Count)
+            {
+                return false;
+            }
+
+            foreach (var fund in fundsOutList)
+            {
+                if (!expiredFundsDictionary.Any(x =>
+                    x.Key.Year == fund.CalendarPeriodYear &&
+                    x.Key.Month == fund.CalendarPeriodMonth &&
+                    x.Value == fund.FundsOut))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public bool AreExpiredFundsEqual(IEnumerable<ExpiredFund> expiredFundsEntityList, IDictionary<CalendarPeriod, decimal> expiredFundsDictionary)
+        {
+            if (expiredFundsEntityList.Count() != expiredFundsDictionary.Count)
+            {
+                return false;
+            }
+
+            foreach (var fund in expiredFundsEntityList)
+            {
+                if (!expiredFundsDictionary.Any(x =>
+                    x.Key.Year == fund.CalendarPeriodYear &&
+                    x.Key.Month == fund.CalendarPeriodMonth &&
+                    x.Value == fund.Amount))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }
