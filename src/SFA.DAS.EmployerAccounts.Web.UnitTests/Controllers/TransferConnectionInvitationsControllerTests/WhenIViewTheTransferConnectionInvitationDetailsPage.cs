@@ -52,5 +52,4 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransferConnectionI
             Assert.That(model, Is.Not.Null);
         }
     }
-
 }

@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthor
     {
         public AuthorizationResult AuthorizationResult { get; set; }
         public bool IsValidSender { get; set; }
+        public decimal TransferAllowancePercentage { get; set; }
     }
 }
