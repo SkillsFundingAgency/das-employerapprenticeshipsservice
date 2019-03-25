@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferAllowanceTests
                  f => f.FinanceDatabaseMock.Verify(d => d.SqlQueryAsync<TransferAllowance>(
                     It.Is<string>(q => q.StartsWith("[employer_financial].[GetAccountTransferAllowance]")),
                     f.SenderAccountId,
-                    f.LevyDeclarationProviderConfiguration.TransferAllowancePercentage), Times.Once));
+                    f.EmployerFinanceConfig.TransferAllowancePercentage), Times.Once));
         }
 
         [Test]
@@ -77,6 +77,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferAllowanceTests
                     It.IsAny<long>(),
                     It.IsAny<decimal>()), Times.Never));
         }
+
+        [Test]
+        public async Task Handle_WhenMakingAValidCall_ShouldReturnCorrectTransferAllowancePercentage()
+        {
+            await RunAsync(
+                     f => f.WithTransferAllowance(f.TransferAllowance)
+                           .WithNoTransferPayments(),
+                     f => f.Handle(f.SenderAccountId),
+                     f => Assert.That(f.Response.TransferAllowancePercentage, Is.EqualTo(25m)));
+        }
     }
 
     public class GetTransferAllowanceTestFixtures : FluentTestFixture
@@ -84,11 +94,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferAllowanceTests
         public long SenderAccountId => 111111;
         public long ReceiverAccountId => 222222;
         public decimal TransferAllowance => 1500.235m;
-        public decimal TransferAllowancePercentage => 10;
+        public decimal TransferAllowancePercentage => 25;
 
         public Mock<EmployerFinanceDbContext> FinanceDatabaseMock { get; }
         public EmployerFinanceDbContext FinanceDatabase => FinanceDatabaseMock.Object;
-        public EmployerFinanceConfiguration LevyDeclarationProviderConfiguration =>
+        public EmployerFinanceConfiguration EmployerFinanceConfig =>
                     new EmployerFinanceConfiguration
                     { TransferAllowancePercentage = TransferAllowancePercentage };
 
@@ -174,7 +184,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferAllowanceTests
 
         private GetTransferAllowanceQueryHandler CreateHandler()
         {
-            return new GetTransferAllowanceQueryHandler(FinanceDatabase, LevyDeclarationProviderConfiguration);
+            return new GetTransferAllowanceQueryHandler(FinanceDatabase, EmployerFinanceConfig);
         }
     }
 }

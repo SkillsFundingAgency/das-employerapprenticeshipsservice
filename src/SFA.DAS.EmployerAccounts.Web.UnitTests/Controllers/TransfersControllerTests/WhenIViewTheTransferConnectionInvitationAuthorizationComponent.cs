@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersController
         public void Arrange()
         {
             _query = new GetTransferConnectionInvitationAuthorizationQuery();
-            _response = new GetTransferConnectionInvitationAuthorizationResponse { AuthorizationResult = AuthorizationResult.FeatureAgreementNotSigned, IsValidSender = true };
+            _response = new GetTransferConnectionInvitationAuthorizationResponse { AuthorizationResult = AuthorizationResult.FeatureAgreementNotSigned, IsValidSender = true,TransferAllowancePercentage = .25m };
             _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferMappings>());
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();
@@ -53,6 +53,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersController
             Assert.That(model, Is.Not.Null);
             Assert.That(model.AuthorizationResult, Is.EqualTo(_response.AuthorizationResult));
             Assert.That(model.IsValidSender, Is.EqualTo(_response.IsValidSender));
+        }
+
+        [Test]
+        public void ThenIShouldBeShownTheCorrectTransferAllowancePercentage()
+        {
+            //Act
+            var result = _controller.TransferConnectionInvitationAuthorization(_query) as PartialViewResult;
+            var model = result?.Model as TransferConnectionInvitationAuthorizationViewModel;
+
+            //Assert
+            Assert.AreEqual(25m, model.TransferAllowancePercentage);
         }
     }
 }
