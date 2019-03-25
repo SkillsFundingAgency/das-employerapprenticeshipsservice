@@ -29,11 +29,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             {
                 _logger.Info($"Creating payment queue message for account ID: '{account.Id}' period end ref: '{message.PeriodEndRef}'");
 
-                tasks.Add(context.SendLocal<ImportAccountPaymentsCommand>(c =>
-                {
-                    c.AccountId = account.Id;
-                    c.PeriodEndRef = message.PeriodEndRef;
-                }));
+                var sendOptions = new SendOptions();
+
+                sendOptions.RouteToThisEndpoint();
+                sendOptions.RequireImmediateDispatch(); // Circumvent sender outbox
+                sendOptions.SetMessageId($"{message.PeriodEndRef}-{account.Id}"); // Allow receiver outbox to de-dupe
+
+                tasks.Add(context.Send(new ImportAccountPaymentsCommand { PeriodEndRef = message.PeriodEndRef, AccountId = account.Id }, sendOptions));
             }
 
             await Task.WhenAll(tasks);
