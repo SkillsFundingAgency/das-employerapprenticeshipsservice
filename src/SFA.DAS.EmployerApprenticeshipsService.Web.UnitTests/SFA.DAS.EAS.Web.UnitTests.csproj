@@ -267,8 +267,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WebApi.StructureMap, Version=1.0.21.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WebApi.StructureMap.1.0.21\lib\net462\WebApi.StructureMap.dll</HintPath>
+    <Reference Include="WebApi.StructureMap, Version=1.0.23.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebApi.StructureMap.1.0.23\lib\net462\WebApi.StructureMap.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

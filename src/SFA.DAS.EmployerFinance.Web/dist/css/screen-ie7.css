@@ -1675,6 +1675,24 @@ dl.inline.course-details {
     font-size: 42px;
     line-height: 50px; }
 
+.data--long {
+  width: auto;
+  min-width: 33.33%; }
+  .data--long dl dt {
+    font-family: "nta", Arial, sans-serif;
+    font-weight: 400;
+    text-transform: none;
+    font-size: 16px;
+    line-height: 1.25;
+    font-size: 19px;
+    line-height: 1.31579; }
+
+.data--current dl {
+  background: #2e358b; }
+
+.data--expired dl {
+  background: #b10e1e; }
+
 svg {
   fill: #000;
   width: 1em;

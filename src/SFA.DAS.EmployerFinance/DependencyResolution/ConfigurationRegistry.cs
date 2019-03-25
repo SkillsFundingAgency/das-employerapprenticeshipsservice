@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         {
             For<EmployerAccountsConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts")).Singleton();
             For<EmployerFinanceConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance")).Singleton();
+            For<ForecastingApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<ForecastingApiClientConfiguration>("SFA.DAS.Forecasting.Api.Client")).Singleton();
         }
     }
 }

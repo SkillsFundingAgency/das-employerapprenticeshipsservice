@@ -1,16 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
-using SFA.DAS.EmployerFinance.Queries.GetAllEmployerAccounts;
 using SFA.DAS.EmployerFinance.Queries.GetCurrentPeriodEnd;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
-using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
@@ -46,36 +43,16 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var periodEnds = await _paymentsEventsApiClient.GetPeriodEnds();
 
             var result = await _mediator.SendAsync(new GetCurrentPeriodEndRequest());//order by completion date
-            var periodFound = result.CurrentPeriodEnd?.PeriodEndId == null;
-            var periodsToProcess = new List<PeriodEnd>();
-            if (!periodFound)
-            {
-                var lastPeriodId = result.CurrentPeriodEnd.PeriodEndId;
-
-                foreach (var periodEnd in periodEnds)
-                {
-                    if (periodFound)
-                    {
-                        periodsToProcess.Add(periodEnd);
-                    }
-                    else if (periodEnd.Id.Equals(lastPeriodId))
-                    {
-                        periodFound = true;
-                    }
-                }
-            }
-            else
-            {
-                periodsToProcess.AddRange(periodEnds);
-            }
+            
+            var periodsToProcess = result.CurrentPeriodEnd?.PeriodEndId == null 
+                ? periodEnds 
+                : periodEnds.TakeWhile(periodEnd => !periodEnd.Id.Equals(result.CurrentPeriodEnd.PeriodEndId));
 
             if (!periodsToProcess.Any())
             {
                 _logger.Info("No Period Ends to Process");
                 return;
             }
-
-            var response = await _mediator.SendAsync(new GetAllEmployerAccountsRequest());
 
             foreach (var paymentsPeriodEnd in periodsToProcess)
             {
@@ -98,20 +75,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                     continue;
                 }
 
-                var tasks = new List<Task>();
+                _logger.Info($"Creating process period end queue message for period end ref: '{paymentsPeriodEnd.Id}'");
 
-                foreach (var account in response.Accounts)
+                await context.SendLocal(new ProcessPeriodEndPaymentsCommand
                 {
-                    _logger.Info($"Creating payment queue message for account ID: '{account.Id}' period end ref: '{periodEnd.PeriodEndId}'");
-
-                    tasks.Add(context.SendLocal<ImportAccountPaymentsCommand>(c =>
-                    {
-                        c.AccountId = account.Id;
-                        c.PeriodEndRef = periodEnd.PeriodEndId;
-                    }));
-                }
-
-                await Task.WhenAll(tasks);
+                    PeriodEndRef = paymentsPeriodEnd.Id
+                });
             }
         }
     }
