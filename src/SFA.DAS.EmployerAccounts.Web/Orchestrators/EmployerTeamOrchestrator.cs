@@ -185,12 +185,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
+                    TeamMembersInvited = accountStatsResponse?.Stats?.TeamMembersInvited ?? 0,
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
                     HashedAccountId = accountId,
                     RequiresAgreementSigning = requiresAgreementSigning,
-                    AgreementsToSign = requiresAgreementSigning > 0
+                    AgreementsToSign = requiresAgreementSigning > 0,
+                    SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement)
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
