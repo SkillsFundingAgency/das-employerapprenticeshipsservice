@@ -100,8 +100,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount
                 PayeRef = payeRef,
                 OrganisationName = organisationName,
                 UserName = userName,
-                UserRef = Guid.Parse(userRef),
-                Created = DateTime.UtcNow
+                UserRef = Guid.Parse(userRef)
             });
         }
 
