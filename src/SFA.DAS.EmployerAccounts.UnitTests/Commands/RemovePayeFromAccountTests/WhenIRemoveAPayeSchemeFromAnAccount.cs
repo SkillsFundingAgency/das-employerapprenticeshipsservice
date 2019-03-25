@@ -181,7 +181,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             message.PayeRef.Should().Be(PayeScheme);
             message.UserName.Should().Be(UserName);
             message.UserRef.Should().Be(UserRef);
-            Assert.IsTrue(DateTime.UtcNow - message.Created < TimeSpan.FromMinutes(1));
         }
     }
 }
