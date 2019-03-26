@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
@@ -483,6 +484,32 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             var actualTransaction = actual.Data.TransactionLines.First() as TransferTransactionLine;
 
             Assert.AreEqual(expectedPublicHashedId, actualTransaction?.ReceiverAccountPublicHashedId);
+        }
+
+        [Test]
+        public async Task ThenIShouldGetBackCorrectExpiredFundTransactions()
+        {
+            //Arrange
+            var transaction = new ExpiredFundTransactionLine
+            {
+                TransactionType = TransactionItemType.Declaration,
+                Amount = 123.45M
+            };
+
+            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
+                .ReturnsAsync(new List<TransactionLine>
+                {
+                    transaction
+                });
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+
+            //Assert
+            var actualTransaction = actual.Data.TransactionLines.First();
+
+            Assert.AreEqual("Levy funds expired", actualTransaction.Description);
+            Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
     }
 }
