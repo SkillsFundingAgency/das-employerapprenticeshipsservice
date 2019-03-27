@@ -3,6 +3,7 @@
 -- (or we could create a c sharp console app to set up the data <- probably better than this approach, and could reuse code in specflow tests!)
 -- add functions to db, so can have params at top?
 -- generate correct number of english fractions
+-- levydeclared in transactionline are wrong: why? need to reset ytd in payroll month 1
 
 CREATE FUNCTION PayrollMonth (@date datetime)  
 RETURNS int 
@@ -91,7 +92,10 @@ declare @baselinePayrollDate datetime = DATEADD(month, -1, @toDate)
 
 --todo use monthBeforeToDate, rather than row_number?
 INSERT INTO employer_financial.levydeclaration (AccountId,empref,levydueytd,levyallowanceforyear,submissiondate,submissionid,payrollyear,payrollmonth,createddate,hmrcsubmissionid)
-select @accountId, @payeScheme, amount, 1500.0000, 
+select @accountId, @payeScheme, 
+	--todo: better, but first year need to start first month using @monthlyLevy
+	@monthlyLevy * dbo.PayrollMonth(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)),
+	1500.0000, 
 	DATEADD(month, monthBeforeToDate, @baselineSubmissionDate), 
 	@maxSubmissionId + row_number() over (order by (select NULL)), 
 	dbo.PayrollYear(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)), 
