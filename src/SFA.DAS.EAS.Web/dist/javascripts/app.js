@@ -365,7 +365,7 @@ window.onunload = function () {
 sfa.forms.init();
 sfa.navigation.init();
 sfa.tabs.init();
-sfa.stickyNav.init();
+//sfa.stickyNav.init();
 
 $('ul#global-nav-links').collapsableNav();
 
