@@ -1,19 +1,32 @@
 BEGIN TRANSACTION
 
-DECLARE @accountId BIGINT
-DECLARE @payeScheme NVARCHAR(50)
-DECLARE @yearlyLevy DECIMAL(18, 4)
-DECLARE @currentYearLevy DECIMAL(18, 4)
-DECLARE @toDate DATETIME2 
---DECLARE @numberOfMonthsToCreate INT
+DECLARE @accountId BIGINT                = 1
+DECLARE @payeScheme NVARCHAR(50)         = '222/ZZ00002'
+--DECLARE @yearlyLevy DECIMAL(18, 4)
+DECLARE @monthlyLevy DECIMAL(18, 4)      = 1000 -- @yearlyLevy / 12
+DECLARE @currentYearLevy DECIMAL(18, 4)  = 10000
+DECLARE @toDate DATETIME2                = GETDATE()
+DECLARE @numberOfMonthsToCreate INT      = 25
 
-SET @accountId = 1
-SET @payeScheme = '222/ZZ00002'
-SET @yearlyLevy = 120000
-SET @currentYearLevy = 10000
-SET @toDate = GETDATE()
+DECLARE @levyDecByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4))
 
-DECLARE @monthlyLevy DECIMAL(18, 4) = @yearlyLevy / 12
+-- generate same levy per month
+insert into @levyDecByMonth
+--SELECT TOP (@numberOfMonthsToCreate) monthBeforeToDate = -1+ROW_NUMBER() OVER (ORDER BY [object_id]), 1000 FROM sys.all_objects ORDER BY monthBeforeToDate;
+SELECT TOP (@numberOfMonthsToCreate) monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 1000 FROM sys.all_objects ORDER BY monthBeforeToDate;
+
+-- to have different levy per month, set individual rows
+update @levyDecByMonth set amount = 10 where monthBeforeToDate = 0
+update @levyDecByMonth set amount = 10 where monthBeforeToDate = -1
+
+--select * from @levyDecByMonth
+
+--SET @accountId = 1
+--SET @payeScheme = '222/ZZ00002'
+--SET @yearlyLevy = 120000
+--SET @currentYearLevy = 10000
+--SET @toDate = GETDATE()
+
 DECLARE @currentYear INT = DATEPART(year, @toDate)
 DECLARE @currentMonth INT = DATEPART(month, @toDate)
 DECLARE @currentDay INT = DATEPART(day, @toDate)
