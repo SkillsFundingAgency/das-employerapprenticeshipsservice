@@ -162,7 +162,7 @@
     <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
     <Build Include="StoredProcedures\GetExpiredFunds.sql" />
     <None Include="Scripts\Manual\TestData\CreatePayments.sql" />
-    <None Include="Scripts\Manual\TestData\CreateTransferLevy.sql" />
+    <None Include="Scripts\Manual\TestData\CreateLevies.sql" />
     <None Include="Scripts\Manual\TestData\CreateTransferPayments.sql" />
     <None Include="Scripts\Manual\GetPaymentTotals.sql" />
   </ItemGroup>
@@ -172,7 +172,7 @@
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
     <None Include="Scripts\PreDeployment\AML-2505-PopulateNullProviderNames.sql" />
     <None Include="Scripts\PreDeployment\AML-2873_TransferPaymentDate.sql" />
-    <None Include="Scripts\Manual\TestData\DeleteLevy.sql" />
+    <None Include="Scripts\Manual\TestData\DeleteLevies.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />

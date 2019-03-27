@@ -1,5 +1,4 @@
 ﻿delete employer_financial.EnglishFraction
 delete employer_financial.LevyDeclaration
 delete employer_financial.LevyDeclarationTopup
-delete employer_financial.TopUpPercentage
 delete employer_financial.TransactionLine

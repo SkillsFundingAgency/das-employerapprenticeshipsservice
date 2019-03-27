@@ -1,6 +1,8 @@
 --todo: convert in sp, and have scripts to run sps to set up levy & payments for a certain scenario
 -- could possibly be reused by specflow
 -- (or we could create a c sharp console app to set up the data <- probably better than this approach, and could reuse code in specflow tests!)
+-- add functions to db, so can have params at top?
+-- generate correct number of english fractions
 
 CREATE FUNCTION PayrollMonth (@date datetime)  
 RETURNS int 
@@ -87,7 +89,6 @@ declare @baselineSubmissionDate datetime = datefromparts(year(@toDate), month(@t
 declare @baselineCreatedDate datetime = datefromparts(year(@toDate), month(@toDate), 20)
 declare @baselinePayrollDate datetime = DATEADD(month, -1, @toDate)
 
---todo payroll year and month
 --todo use monthBeforeToDate, rather than row_number?
 INSERT INTO employer_financial.levydeclaration (AccountId,empref,levydueytd,levyallowanceforyear,submissiondate,submissionid,payrollyear,payrollmonth,createddate,hmrcsubmissionid)
 select @accountId, @payeScheme, amount, 1500.0000, 
@@ -99,7 +100,7 @@ select @accountId, @payeScheme, amount, 1500.0000,
 	@maxSubmissionId + row_number() over (order by (select NULL))
 from @levyDecByMonth
 
---EXEC employer_financial.processdeclarationstransactions @accountId, @payeScheme
+EXEC employer_financial.processdeclarationstransactions @accountId, @payeScheme
 
 go
 
