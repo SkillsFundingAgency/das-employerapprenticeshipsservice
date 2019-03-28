@@ -17,19 +17,6 @@ BEGIN
 END
 GO
 
--- Add period end if its not already there
-IF NOT EXISTS
-(
-    select 1 FROM [employer_financial].[periodend] 
-    WHERE periodendid = '1819-R01'
-)
-BEGIN        
-    insert into employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
-    values
-    ('1819-R01',5,2018,'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
-END
-GO
-
 -- CREATE THE STORED PROCEDURES
 CREATE PROCEDURE #createPayment
 (     
@@ -110,6 +97,19 @@ BEGIN TRANSACTION
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     ------ END OF SCRIPT VARIABLES  --------------------------------------------------------------------------------------------------------------------------------------------
     ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+	-- Add period end if its not already there
+	IF NOT EXISTS
+	(
+		select 1 FROM [employer_financial].[periodend] 
+		WHERE periodendid = @periodEnd
+	)
+	BEGIN        
+		insert into employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
+		values
+		--todo: do month year etc. need to match @periodEnd? check real data
+		(@periodEnd,5,2018,'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
+	END
 
     EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
         
