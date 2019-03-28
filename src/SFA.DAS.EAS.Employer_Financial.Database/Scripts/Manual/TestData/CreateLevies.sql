@@ -1,3 +1,5 @@
+-- Instructions: Find clearly signposted 'Levy Gereration Knobs' section below to change generation variable defaults
+
 --todo: convert in sp, and have scripts to run sps to set up levy & payments for a certain scenario
 -- could possibly be reused by specflow
 -- (or we could create a c sharp console app to set up the data <- probably better than this approach, and could reuse code in specflow tests!)
@@ -40,13 +42,26 @@ GO
 BEGIN TRANSACTION CreateLevy
 go
 
+--  __                                   ____                                          __                            __  __                  __                
+-- /\ \                                 /\  _`\                                       /\ \__  __                    /\ \/\ \                /\ \               
+-- \ \ \         __   __  __   __  __   \ \ \L\_\     __    ___      __   _ __    __  \ \ ,_\/\_\    ___     ___    \ \ \/'/'    ___     ___\ \ \____    ____  
+--  \ \ \  __  /'__`\/\ \/\ \ /\ \/\ \   \ \ \L_L   /'__`\/' _ `\  /'__`\/\`'__\/'__`\ \ \ \/\/\ \  / __`\ /' _ `\   \ \ , <   /' _ `\  / __`\ \ '__`\  /',__\ 
+--   \ \ \L\ \/\  __/\ \ \_/ |\ \ \_\ \   \ \ \/, \/\  __//\ \/\ \/\  __/\ \ \//\ \L\.\_\ \ \_\ \ \/\ \L\ \/\ \/\ \   \ \ \\`\ /\ \/\ \/\ \L\ \ \ \L\ \/\__, `\
+--    \ \____/\ \____\\ \___/  \/`____ \   \ \____/\ \____\ \_\ \_\ \____\\ \_\\ \__/.\_\\ \__\\ \_\ \____/\ \_\ \_\   \ \_\ \_\ \_\ \_\ \____/\ \_,__/\/\____/
+--     \/___/  \/____/ \/__/    `/___/> \   \/___/  \/____/\/_/\/_/\/____/ \/_/ \/__/\/_/ \/__/ \/_/\/___/  \/_/\/_/    \/_/\/_/\/_/\/_/\/___/  \/___/  \/___/ 
+--                                 /\___/                                                                                                                      
+--                                 \/__/                                                                                                                       
+
 DECLARE @accountId BIGINT                = 1
 DECLARE @payeScheme NVARCHAR(50)         = '222/ZZ00002'
 DECLARE @monthlyLevy DECIMAL(18, 4)      = 1000
-DECLARE @currentYearLevy DECIMAL(18, 4)  = 10000
 -- last levy will be created in this month (last payroll month will be 1 month before)
-DECLARE @toDate DATETIME2                = GETDATE() -- DATEADD(month,2,GETDATE())
+DECLARE @toDate DATETIME2                = GETDATE()
 DECLARE @numberOfMonthsToCreate INT      = 25
+                                                                                                                                                                           
+--  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______ 
+-- /\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\
+-- \/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/
 
 DECLARE @levyDecByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), createMonth DATETIME, payrollMonth DATETIME, payrollYear VARCHAR(5))
 
@@ -56,9 +71,8 @@ select @firstPayrollMonth
 declare @firstPayrollYear VARCHAR(5) = dbo.PayrollYear(@firstPayrollMonth)
 select @firstPayrollYear
 
--- generate same levy per month
+-- generates same levy per month
 insert into @levyDecByMonth
---SELECT TOP (@numberOfMonthsToCreate) monthBeforeToDate = -1+ROW_NUMBER() OVER (ORDER BY [object_id]), 1000 FROM sys.all_objects ORDER BY monthBeforeToDate;
 SELECT TOP (@numberOfMonthsToCreate)
 			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
 			(case
@@ -72,10 +86,6 @@ SELECT TOP (@numberOfMonthsToCreate)
 			dbo.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
 FROM sys.all_objects
 ORDER BY monthBeforeToDate;
-
--- to have different levy per month, set individual rows
---update @levyDecByMonth set amount = 10 where monthBeforeToDate = 0
---update @levyDecByMonth set amount = 10 where monthBeforeToDate = -1
 
 select * from @levyDecByMonth
 
