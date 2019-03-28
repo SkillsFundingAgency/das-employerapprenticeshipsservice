@@ -4,6 +4,9 @@
 -- add functions to db, so can have params at top?
 -- generate correct number of english fractions
 -- levydeclared in transactionline are wrong: why? need to reset ytd in payroll month 1
+-- if exists functions
+-- use DATE, rather than datetime when we only care about year/month
+-- use dates generated into @levyDecByMonth table, rather than recalculatin
 
 CREATE FUNCTION PayrollMonth (@date datetime)  
 RETURNS int 
@@ -41,21 +44,40 @@ DECLARE @accountId BIGINT                = 1
 DECLARE @payeScheme NVARCHAR(50)         = '222/ZZ00002'
 DECLARE @monthlyLevy DECIMAL(18, 4)      = 1000
 DECLARE @currentYearLevy DECIMAL(18, 4)  = 10000
-DECLARE @toDate DATETIME2                = GETDATE()
+-- last levy will be created in this month (last payroll month will be 1 month before)
+DECLARE @toDate DATETIME2                = GETDATE() -- DATEADD(month,2,GETDATE())
 DECLARE @numberOfMonthsToCreate INT      = 25
 
-DECLARE @levyDecByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4))
+DECLARE @levyDecByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), createMonth DATETIME, payrollMonth DATETIME, payrollYear VARCHAR(5))
+
+declare @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
+select @firstPayrollMonth
+
+declare @firstPayrollYear VARCHAR(5) = dbo.PayrollYear(@firstPayrollMonth)
+select @firstPayrollYear
 
 -- generate same levy per month
 insert into @levyDecByMonth
 --SELECT TOP (@numberOfMonthsToCreate) monthBeforeToDate = -1+ROW_NUMBER() OVER (ORDER BY [object_id]), 1000 FROM sys.all_objects ORDER BY monthBeforeToDate;
-SELECT TOP (@numberOfMonthsToCreate) monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 1000*ROW_NUMBER() OVER (ORDER BY [object_id]) FROM sys.all_objects ORDER BY monthBeforeToDate;
+SELECT TOP (@numberOfMonthsToCreate)
+			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
+			(case
+			when dbo.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
+				THEN @monthlyLevy*row_number() over (order by (select NULL))
+			ELSE
+				@monthlyLevy*dbo.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
+			END),
+			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate),
+			DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate),
+			dbo.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
+FROM sys.all_objects
+ORDER BY monthBeforeToDate;
 
 -- to have different levy per month, set individual rows
 --update @levyDecByMonth set amount = 10 where monthBeforeToDate = 0
 --update @levyDecByMonth set amount = 10 where monthBeforeToDate = -1
 
---select * from @levyDecByMonth
+select * from @levyDecByMonth
 
 DECLARE @currentYear INT = DATEPART(year, @toDate)
 DECLARE @currentMonth INT = DATEPART(month, @toDate)
@@ -93,8 +115,7 @@ declare @baselinePayrollDate datetime = DATEADD(month, -1, @toDate)
 --todo use monthBeforeToDate, rather than row_number?
 INSERT INTO employer_financial.levydeclaration (AccountId,empref,levydueytd,levyallowanceforyear,submissiondate,submissionid,payrollyear,payrollmonth,createddate,hmrcsubmissionid)
 select @accountId, @payeScheme, 
-	--todo: better, but first year need to start first month using @monthlyLevy
-	@monthlyLevy * dbo.PayrollMonth(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)),
+	amount,
 	1500.0000, 
 	DATEADD(month, monthBeforeToDate, @baselineSubmissionDate), 
 	@maxSubmissionId + row_number() over (order by (select NULL)), 
