@@ -1,11 +1,8 @@
 -- Instructions: Find clearly signposted 'Levy Gereration Knobs' section below to change generation variable defaults
 
---todo: convert in sp, and have scripts to run sps to set up levy & payments for a certain scenario
--- could possibly be reused by specflow
--- (or we could create a c sharp console app to set up the data <- probably better than this approach, and could reuse code in specflow tests!)
+--todo: convert to sp, and have scripts to run sps to set up levy & payments for a certain scenario
 -- add functions to db, so can have params at top?
 -- generate correct number of english fractions
--- levydeclared in transactionline are wrong: why? need to reset ytd in payroll month 1
 -- if exists functions
 -- use DATE, rather than datetime when we only care about year/month
 -- use dates generated into @levyDecByMonth table, rather than recalculatin

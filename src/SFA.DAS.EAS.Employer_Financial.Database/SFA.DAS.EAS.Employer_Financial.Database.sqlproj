@@ -72,7 +72,7 @@
     <Folder Include="Scripts\PostDeployment" />
     <Folder Include="Scripts\PreDeployment" />
     <Folder Include="Scripts\Manual" />
-    <Folder Include="Scripts\Manual\TestData" />
+    <Folder Include="Scripts\Manual\GenerateTestData" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -162,9 +162,9 @@
     <Build Include="StoredProcedures\CreateExpiredFunds.sql" />
     <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
     <Build Include="StoredProcedures\GetExpiredFunds.sql" />
-    <None Include="Scripts\Manual\TestData\CreatePayments.sql" />
-    <None Include="Scripts\Manual\TestData\CreateLevies.sql" />
-    <None Include="Scripts\Manual\TestData\CreateTransferPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\CreatePayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\CreateLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\CreateTransferPayments.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -172,7 +172,7 @@
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
     <None Include="Scripts\PreDeployment\AML-2505-PopulateNullProviderNames.sql" />
     <None Include="Scripts\PreDeployment\AML-2873_TransferPaymentDate.sql" />
-    <None Include="Scripts\Manual\TestData\DeleteLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DeleteLevies.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
