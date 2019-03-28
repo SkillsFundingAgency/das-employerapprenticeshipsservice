@@ -148,6 +148,7 @@
     <Build Include="Types\SubmissionIds.sql" />
     <Build Include="Types\SubmissionIdsDate.sql" />
     <Build Include="StoredProcedures\UpdateTransactionLinesDateCreated_BySubmissionId.sql" />
+    <None Include="Scripts\Manual\GetPaymentTotals.sql" />
     <None Include="Scripts\PreDeployment\AML-2643-DeleteDuplicateTransactionLines.sql" />
     <None Include="Scripts\PreDeployment\AML-2616-DeleteDuplicateLevyDeclarationsWithoutEmpRef.sql" />
     <Build Include="Tables\HealthChecks.sql" />
@@ -164,7 +165,6 @@
     <None Include="Scripts\Manual\TestData\CreatePayments.sql" />
     <None Include="Scripts\Manual\TestData\CreateLevies.sql" />
     <None Include="Scripts\Manual\TestData\CreateTransferPayments.sql" />
-    <None Include="Scripts\Manual\GetPaymentTotals.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
