@@ -170,6 +170,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             parameters.Add("@AccountId", accountId, DbType.Int64);
             parameters.Add("@EmpRef", empRef, DbType.String);
+            parameters.Add("@currentDate", DateTime.UtcNow, DbType.DateTime);
+            parameters.Add("@expiryPeriod", 24, DbType.Int32);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_financial].[ProcessDeclarationsTransactions]",
