@@ -140,7 +140,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [Route("whatYoullNeed")]
-        public ActionResult WhatYoullNeed(int? choice)
+        public ActionResult WhatYoullNeedPost()
         {
             return RedirectToAction(ControllerConstants.RegisterUserActionName);
         }
