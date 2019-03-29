@@ -22,7 +22,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance
 
             return new GetTransferAllowanceResponse
             {
-                TransferAllowance = transferAllowance
+                TransferAllowance = transferAllowance,
+                TransferAllowancePercentage = _configuration.TransferAllowancePercentage
             };
         }
     }
