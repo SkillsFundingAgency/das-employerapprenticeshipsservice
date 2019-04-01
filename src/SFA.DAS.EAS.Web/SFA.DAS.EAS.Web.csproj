@@ -1008,11 +1008,9 @@
     <Content Include="Views\EmployerAccountTransactions\PaymentDetails.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
     <Content Include="src\sass\_custom.scss" />
-    <Content Include="Views\Home\WhatYoullNeed.cshtml" />
     <Content Include="Views\Home\UsedServiceBefore.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
     <Content Include="Views\Home\ServiceLandingPage.cshtml" />
-    <Content Include="Views\Home\ServiceStartPage.cshtml" />
     <Content Include="src\sass\_agreement.scss" />
     <Content Include="Views\Shared\_SetupAccount.cshtml" />
     <Content Include="Views\Home\SetupAccount.cshtml" />
