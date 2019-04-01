@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Types.Models;
@@ -13,14 +14,16 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         private readonly IPaymentFundsOutRepository _paymentFundsOutRepository;
         private readonly IExpiredFunds _expiredFunds;
         private readonly IExpiredFundsRepository _expiredFundsRepository;
+        private readonly EmployerFinanceConfiguration _configuration;
 
         public ExpireAccountFundsCommandHandler(ILevyFundsInRepository fundsInRepository, IPaymentFundsOutRepository fundsOutRepository,
-            IExpiredFunds expiredFunds, IExpiredFundsRepository expiredFundsRepository)
+            IExpiredFunds expiredFunds, IExpiredFundsRepository expiredFundsRepository, EmployerFinanceConfiguration configuration)
         {
             _levyFundsInRepository = fundsInRepository;
             _paymentFundsOutRepository = fundsOutRepository;
             _expiredFunds = expiredFunds;
             _expiredFundsRepository = expiredFundsRepository;
+            _configuration = configuration;
         }
 
         public async Task Handle(ExpireAccountFundsCommand message, IMessageHandlerContext context)
@@ -29,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var fundsOut = await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId);
             var existingExpiredFunds = await _expiredFundsRepository.Get(message.AccountId);
             var fundsToExpire = _expiredFunds.GetExpiringFunds(fundsIn.ToCalendarPeriodDictionary(), fundsOut.ToCalendarPeriodDictionary(),
-                existingExpiredFunds.ToCalendarPeriodDictionary(), 24);
+                existingExpiredFunds.ToCalendarPeriodDictionary(), _configuration.FundsExpiryPeriod);
             await _expiredFundsRepository.Create(message.AccountId, fundsToExpire.ToExpiredFundsEntityList());
         }
     }
