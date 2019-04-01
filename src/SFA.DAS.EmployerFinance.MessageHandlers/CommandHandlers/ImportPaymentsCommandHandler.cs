@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             
             var periodsToProcess = result.CurrentPeriodEnd?.PeriodEndId == null 
                 ? periodEnds 
-                : periodEnds.TakeWhile(periodEnd => !periodEnd.Id.Equals(result.CurrentPeriodEnd.PeriodEndId));
+                : periodEnds.SkipWhile(periodEnd => !periodEnd.Id.Equals(result.CurrentPeriodEnd.PeriodEndId));
 
             if (!periodsToProcess.Any())
             {
