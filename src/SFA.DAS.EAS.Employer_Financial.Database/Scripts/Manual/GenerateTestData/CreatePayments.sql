@@ -30,6 +30,24 @@ BEGIN
 END
 GO
 
+CREATE FUNCTION CalendarPeriodMonth (@date datetime)  
+RETURNS int 
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+  RETURN(@month);  
+END; 
+GO
+
+CREATE FUNCTION CalendarPeriodYear (@date datetime)  
+RETURNS int
+AS  
+BEGIN  
+  declare @year int = DATEPART(year,@date)
+  return @year
+END; 
+GO
+
 --todo R13, R14
 CREATE FUNCTION CollectionPeriodMonth (@date datetime)  
 RETURNS int 
@@ -47,13 +65,11 @@ GO
 
 --todo R13, R14
 CREATE FUNCTION CollectionPeriodYear (@date datetime)  
-RETURNS VARCHAR(5)
+RETURNS int
 AS  
 BEGIN  
   declare @year int = DATEPART(year,@date)
-	
-  DECLARE @collectionPeriodYear VARCHAR(4) = (SELECT CONVERT(VARCHAR(4), @year, 1))
-  return @collectionPeriodYear
+  return @year
 END; 
 GO
 
@@ -87,7 +103,7 @@ CREATE FUNCTION PeriodEnd (@date datetime)
 RETURNS VARCHAR(8)
 AS  
 BEGIN  
-  declare @periodEnd varchar(8) = (SELECT dbo.PeriodYear(@date) + '-R' + dbo.PeriodMonth(@date))
+  declare @periodEnd varchar(8) = (SELECT dbo.PeriodYear(@date) + '-R' + right('0' + dbo.PeriodMonth(@date),2))
   return @periodEnd
 END; 
 GO
@@ -217,39 +233,47 @@ BEGIN TRANSACTION
     DECLARE @payeScheme NVARCHAR(16)          = 'XXX'
     
     DECLARE @createDate DATETIME              = GETDATE()
-    DECLARE @periodEnd VARCHAR(20)            = '1920-R01'
+    DECLARE @periodEndDate DATETIME           = DATEADD(month, -1, @createDate)
     DECLARE @totalPaymentAmount DECIMAL(18,5) = 10000
     
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
-	--SELECT dbo.CollectionPeriodYear(@createDate)
-	--SELECT dbo.CollectionPeriodMonth(@createDate)
-	--SELECT dbo.PeriodYear(@createDate)
-	--SELECT dbo.PeriodMonth(@createDate)
-	--SELECT dbo.PeriodEnd(@createDate)
+	--SELECT dbo.CalendarPeriodYear(@periodEndDate)
+	--SELECT dbo.CalendarPeriodMonth(@periodEndDate)
+	--SELECT dbo.CollectionPeriodYear(@periodEndDate)
+	--SELECT dbo.CollectionPeriodMonth(@periodEndDate)
+	--SELECT dbo.PeriodYear(@periodEndDate)
+	--SELECT dbo.PeriodMonth(@periodEndDate)
+
+	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+	SELECT @periodEndId
 
 	-- Add period end if its not already there
 	IF NOT EXISTS
 	(
 		select 1 FROM [employer_financial].[periodend] 
-		WHERE periodendid = @periodEnd
+		WHERE periodendid = @periodEndId
 	)
 	BEGIN        
 		insert into employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
 		values
 		--todo: do month year etc. need to match @periodEnd? check real data
 		--looks like calendarperiod month|year aren't used, so no need to set correctly!?
-		(@periodEnd,5,2018,'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
+		(@periodEndId,dbo.CalendarPeriodMonth(@periodEndDate),dbo.CalendarPeriodYear(@periodEndDate),'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
 	END
 
-    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
+    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndId, @totalPaymentAmount	
         
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
 
 COMMIT TRANSACTION
 GO
 
+drop function CalendarPeriodYear
+go
+drop function CalendarPeriodMonth
+go
 drop function CollectionPeriodYear
 go
 drop function CollectionPeriodMonth
