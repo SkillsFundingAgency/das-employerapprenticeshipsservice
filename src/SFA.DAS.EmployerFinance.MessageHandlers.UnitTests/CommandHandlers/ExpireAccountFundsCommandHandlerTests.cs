@@ -11,6 +11,7 @@ using SFA.DAS.EmployerFinance.Models.ExpiredFunds;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Types.Models;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
@@ -44,6 +45,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public Mock<IPaymentFundsOutRepository> MockPaymentFundsOutRepository { get; set; }
         public Mock<IExpiredFunds> MockExpiredFunds { get; set; }
         public Mock<IExpiredFundsRepository> MockExpiredFundsRepository { get; set; }
+        public Mock<ILog> MockLogger { get; set; }
 
         public ExpireAccountFundsCommand Command { get; set; }
         public long ExpectedAccountId { get; set; }
@@ -84,6 +86,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             MockPaymentFundsOutRepository = new Mock<IPaymentFundsOutRepository>();
             MockExpiredFunds = new Mock<IExpiredFunds>();
             MockExpiredFundsRepository = new Mock<IExpiredFundsRepository>();
+            MockLogger = new Mock<ILog>();
 
             MockLevyFundsInRepository.Setup(x => x.GetLevyFundsIn(ExpectedAccountId)).ReturnsAsync(FundsIn);
             MockPaymentFundsOutRepository.Setup(x => x.GetPaymentFundsOut(ExpectedAccountId)).ReturnsAsync(FundsOut);
@@ -94,7 +97,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 It.IsAny<Dictionary<CalendarPeriod, decimal>>(),
                 It.IsAny<int>())).Returns(ExpectedExpiredFunds);
 
-            Handler = new ExpireAccountFundsCommandHandler(MockLevyFundsInRepository.Object, MockPaymentFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object);
+            Handler = new ExpireAccountFundsCommandHandler(MockLevyFundsInRepository.Object, MockPaymentFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object, MockLogger.Object);
         }
 
         public Task Handle()
