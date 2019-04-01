@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
-
+@model TransferAllowanceViewModel
 @{
     ViewBag.Title = "Transfers";
     ViewBag.Section = "finance";
@@ -28,7 +28,7 @@ else
     <div class="grid-row">
         <div class="column-two-thirds">
             <p><a href="@Url.EmployerProjectionsAction("forecasting/estimations/start-transfer")">Estimate</a> the number of apprentices you can fund with your transfer allowance.</p>
-            <p>Employers who pay the apprenticeship levy will soon be able to connect with other employers and transfer up to 10% of their previous year's annual funds.</p>
+            <p>Employers who pay the apprenticeship levy will soon be able to connect with other employers and transfer up to @Model.TransferAllowancePercentage.ToString("N0")% of their previous year's annual funds.</p>
             <p>Before connecting to another employer, both employers will need to:</p>
             <ul class="list list-bullet">
                 <li>read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">rules for sending and receiving transfers</a></li>

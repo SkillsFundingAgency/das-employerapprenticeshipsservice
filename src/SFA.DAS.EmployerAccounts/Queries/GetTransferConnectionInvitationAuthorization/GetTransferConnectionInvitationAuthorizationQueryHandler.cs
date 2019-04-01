@@ -43,7 +43,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthor
             return new GetTransferConnectionInvitationAuthorizationResponse
             {
                 AuthorizationResult = authorizationResult,
-                IsValidSender = isValidSender
+                IsValidSender = isValidSender,
+                TransferAllowancePercentage = _configuration.TransferAllowancePercentage
             };
         }
     }

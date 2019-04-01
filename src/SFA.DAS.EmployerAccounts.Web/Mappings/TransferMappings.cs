@@ -31,6 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(m => m.TransferConnectionInvitationId, o => o.MapFrom(r => r.TransferConnectionInvitation.Id));
 
             CreateMap<GetReceivedTransferConnectionInvitationResponse, RejectTransferConnectionInvitationCommand>();
+
             CreateMap<GetRejectedTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 
             CreateMap<GetRejectedTransferConnectionInvitationResponse, RejectedTransferConnectionInvitationViewModel>()
@@ -45,6 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(m => m.StartingTransferAllowance, opt => opt.MapFrom(src => src.TransferAllowance.StartingTransferAllowance));
 
             CreateMap<GetTransferConnectionInvitationAuthorizationResponse, TransferConnectionInvitationAuthorizationViewModel>();
+
             CreateMap<GetTransferConnectionInvitationResponse, DeleteTransferConnectionInvitationCommand>();
 
             CreateMap<GetTransferConnectionInvitationResponse, TransferConnectionInvitationViewModel>()
@@ -52,7 +54,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(m => m.TransferConnectionInvitationId, o => o.MapFrom(r => r.TransferConnectionInvitation.Id));
 
             CreateMap<GetTransferConnectionInvitationsResponse, TransferConnectionInvitationsViewModel>();
+
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
+
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationCommand>();
 
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerFinance.Web.Helpers;
@@ -35,21 +36,13 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                 {
                     ModelState.AddModelError(errorMessageItem.Key, errorMessageItem.Value);
                 }
+
                 if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
                 {
                     return ReturnViewResult(ControllerConstants.BadRequestViewName, masterName, orchestratorResponse);
                 }
+
                 return ReturnViewResult(viewName, masterName, orchestratorResponse);
-            }
-
-            if (orchestratorResponse.Status == HttpStatusCode.BadRequest)
-            {
-                return ReturnViewResult(ControllerConstants.BadRequestViewName, masterName, orchestratorResponse);
-            }
-
-            if (orchestratorResponse.Status == HttpStatusCode.NotFound)
-            {
-                return base.View(ControllerConstants.NotFoundViewName);
             }
 
             if (orchestratorResponse.Status == HttpStatusCode.OK)
@@ -57,16 +50,9 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                 return ReturnViewResult(viewName, masterName, orchestratorResponse);
             }
 
-            if (orchestratorResponse.Status == HttpStatusCode.Unauthorized)
+            if (orchestratorResponse.Status >= HttpStatusCode.BadRequest)
             {
-                var accountId = Request.Params[ControllerConstants.AccountHashedIdRouteKeyName];
-
-                if (accountId != null)
-                {
-                    ViewBag.AccountId = accountId;
-                }
-
-                return base.View(ControllerConstants.AccessDeniedViewName, masterName, orchestratorResponse);
+                throw new HttpException((int)orchestratorResponse.Status, orchestratorResponse.Status.ToString());
             }
 
             if (orchestratorResponse.Exception != null)
