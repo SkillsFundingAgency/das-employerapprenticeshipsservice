@@ -8,6 +8,7 @@ select mainUpdate.* from
     (
     select 
             x.AccountId as AccountId,
+			-- lol, is it me, or could this be just GETDATE? (with a bonus of no bug if it's run around midnight on the last day of the month or on new years eve!)
             DATEFROMPARTS(DatePart(yyyy,GETDATE()),DatePart(MM,GETDATE()),DATEPART(dd,GETDATE())) as DateAdded,
             null as SubmissionId,
             Max(pe.CompletionDateTime) as TransactionDate,

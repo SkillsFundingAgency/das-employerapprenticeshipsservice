@@ -70,7 +70,6 @@ AS
 BEGIN  	
 
     DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / 3
-    DECLARE @currentDate DATETIME = GETDATE()	
 
     -- Create transfer payments
     EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount, @periodEnd
@@ -80,7 +79,8 @@ END
 GO
 
 CREATE PROCEDURE #ProcessPaymentDataTransactionsGenerateDataEdition
-	@AccountId BIGINT
+	@AccountId BIGINT,
+	@DateCreated DATETIME
 AS
 
 --- Process Levy Payments ---
@@ -89,7 +89,7 @@ select mainUpdate.* from
     (
     select 
             x.AccountId as AccountId,
-            DATEFROMPARTS(DatePart(yyyy,GETDATE()),DatePart(MM,GETDATE()),DATEPART(dd,GETDATE())) as DateAdded,
+            @DateCreated as DateCreated,
             null as SubmissionId,
             Max(pe.CompletionDateTime) as TransactionDate,
             3 as TransactionType,			
@@ -127,29 +127,32 @@ select mainUpdate.* from
 GO
 
 BEGIN TRANSACTION
-    
-    DECLARE @accountId BIGINT
-    DECLARE @accountName NVARCHAR(100)	
-    DECLARE @payeScheme NVARCHAR(16)
-    DECLARE @currentDate DATETIME
-    DECLARE @periodEnd VARCHAR(20)
-    DECLARE @totalPaymentAmount DECIMAL(18,5)	
 
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    ------ EDIT THE VALUES BELOW TO AFFECT THE TRANSFER PAYMENTS ---------------------------------------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	-- ________                                                                         ____                                                                                  ___    __                    ___               
+	-- `MMMMMMMb.                                                                      6MMMMb/                                                   68b                          `MM    d'  @                   MM              
+	--  MM    `Mb                                                        /            8P    YM                                             /     Y89                           MM   d'                      MM               
+	--  MM     MM    ___  ____    ___ ___  __    __     ____  ___  __   /M           6M      Y   ____  ___  __     ____  ___  __    ___   /M     ___   _____  ___  __          MM  d'   ___  __     _____   MM____     ____  
+	--  MM     MM  6MMMMb `MM(    )M' `MM 6MMb  6MMb   6MMMMb `MM 6MMb /MMMMM        MM         6MMMMb `MM 6MMb   6MMMMb `MM 6MM  6MMMMb /MMMMM  `MM  6MMMMMb `MM 6MMb         MM d'    `MM 6MMb   6MMMMMb  MMMMMMb   6MMMMb\
+	--  MM    .M9 8M'  `Mb `Mb    d'   MM69 `MM69 `Mb 6M'  `Mb MMM9 `Mb MM           MM        6M'  `Mb MMM9 `Mb 6M'  `Mb MM69 " 8M'  `Mb MM      MM 6M'   `Mb MMM9 `Mb        MMd'      MMM9 `Mb 6M'   `Mb MM'  `Mb MM'    `
+	--  MMMMMMM9'     ,oMM  YM.  ,P    MM'   MM'   MM MM    MM MM'   MM MM           MM     ___MM    MM MM'   MM MM    MM MM'        ,oMM MM      MM MM     MM MM'   MM        MMYM.     MM'   MM MM     MM MM    MM YM.     
+	--  MM        ,6MM9'MM   MM  M     MM    MM    MM MMMMMMMM MM    MM MM           MM     `M'MMMMMMMM MM    MM MMMMMMMM MM     ,6MM9'MM MM      MM MM     MM MM    MM        MM YM.    MM    MM MM     MM MM    MM  YMMMMb 
+	--  MM        MM'   MM   `Mbd'     MM    MM    MM MM       MM    MM MM           YM      M MM       MM    MM MM       MM     MM'   MM MM      MM MM     MM MM    MM        MM  YM.   MM    MM MM     MM MM    MM      `Mb
+	--  MM        MM.  ,MM    YMP      MM    MM    MM YM    d9 MM    MM YM.  ,        8b    d9 YM    d9 MM    MM YM    d9 MM     MM.  ,MM YM.  ,  MM YM.   ,M9 MM    MM        MM   YM.  MM    MM YM.   ,M9 MM.  ,M9 L    ,MM
+	-- _MM_       `YMMM9'Yb.   M      _MM_  _MM_  _MM_ YMMMM9 _MM_  _MM_ YMMM9         YMMMM9   YMMMM9 _MM_  _MM_ YMMMM9 _MM_    `YMMM9'Yb.YMMM9 _MM_ YMMMMM9 _MM_  _MM_      _MM_   YM._MM_  _MM_ YMMMMM9 _MYMMMM9  MYMMMM9 
+	--                        d'                                                                                                                                                                                             
+	--                    (8),P                                                                                                                                                                                              
+	--                     YMM                                                                                                                                                                                               
+
+    DECLARE @accountId BIGINT                 = 0
+    DECLARE @accountName NVARCHAR(100)        = 'XXX'	
+    DECLARE @payeScheme NVARCHAR(16)          = 'XXX'
     
-    SET @accountId  = 0
-    SET @accountName  = 'XXX'	
-    SET @payeScheme = 'XXX'
+    DECLARE @createDate DATETIME              = GETDATE()
+    DECLARE @periodEnd VARCHAR(20)            = '1920-R01'
+    DECLARE @totalPaymentAmount DECIMAL(18,5) = 10000
     
-    SET @currentDate = GETDATE()
-    SET @periodEnd = '1819-R01'
-    SET @totalPaymentAmount = 10000
-    
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    ------ END OF SCRIPT VARIABLES  --------------------------------------------------------------------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
+	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
 	-- Add period end if its not already there
 	IF NOT EXISTS
@@ -167,7 +170,7 @@ BEGIN TRANSACTION
 
     EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
         
-    exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId
+    exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
 
 COMMIT TRANSACTION
 GO
