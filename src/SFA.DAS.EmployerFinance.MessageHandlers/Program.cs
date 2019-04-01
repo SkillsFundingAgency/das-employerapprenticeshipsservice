@@ -21,7 +21,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
             {
                 var config = new JobHostConfiguration();
                 var startup = container.GetInstance<IStartup>();
-                var configtest = container.GetInstance<EmployerFinanceConfiguration>();
 
                 if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
                 {
