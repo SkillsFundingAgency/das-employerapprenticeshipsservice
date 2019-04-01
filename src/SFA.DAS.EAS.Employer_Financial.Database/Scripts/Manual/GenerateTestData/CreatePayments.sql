@@ -2,7 +2,6 @@
 -- make period end/dates align for payment gen
 -- refunds
 -- number of months to generate
--- fix rounding
 -- transfers
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
@@ -54,14 +53,6 @@ AS
 BEGIN  
   declare @collectionPeriodMonth int = (select dbo.CalendarPeriodMonth(@date))
   return @collectionPeriodMonth
-
- -- declare @month int = DATEPART(month,@date)
-
- -- SET @month = @month - 7
- -- IF @month < 1
-	--SET @month = @month + 12
-
- -- RETURN(@month);  
 END; 
 GO
 
@@ -71,9 +62,6 @@ AS
 BEGIN  
   declare @collectionPeriodYear int = (select dbo.CalendarPeriodYear(@date))
   return @collectionPeriodYear
-
-  --declare @year int = DATEPART(year,@date)
-  --return @year
 END; 
 GO
 
@@ -147,7 +135,6 @@ BEGIN
 END; 
 GO
 
--- CREATE THE STORED PROCEDURES
 CREATE PROCEDURE #createPayment
 (     
     @accountId BIGINT,
@@ -196,7 +183,6 @@ CREATE PROCEDURE #createAccountPayments
     @providerName NVARCHAR(MAX),
     @ukprn BIGINT,
     @courseName NVARCHAR(MAX),
-    --@periodEnd NVARCHAR(25),
 	@periodEndDate DATETIME,
     @totalAmount DECIMAL(18,5)
 )  
