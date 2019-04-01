@@ -17,14 +17,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         private readonly ILog _logger;
 
         public ExpireAccountFundsCommandHandler(
-            ILevyFundsInRepository fundsInRepository,
-            IPaymentFundsOutRepository fundsOutRepository,
+            ILevyFundsInRepository levyFundsInRepository,
+            IPaymentFundsOutRepository paymentFundsOutRepository,
             IExpiredFunds expiredFunds,
             IExpiredFundsRepository expiredFundsRepository,
             ILog logger)
         {
-            _levyFundsInRepository = fundsInRepository;
-            _paymentFundsOutRepository = fundsOutRepository;
+            _levyFundsInRepository = levyFundsInRepository;
+            _paymentFundsOutRepository = paymentFundsOutRepository;
             _expiredFunds = expiredFunds;
             _expiredFundsRepository = expiredFundsRepository;
             _logger = logger;
