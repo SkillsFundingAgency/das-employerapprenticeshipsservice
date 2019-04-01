@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.Configuration;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 
@@ -20,6 +21,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
             {
                 var config = new JobHostConfiguration();
                 var startup = container.GetInstance<IStartup>();
+                var configtest = container.GetInstance<EmployerFinanceConfiguration>();
 
                 if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
                 {

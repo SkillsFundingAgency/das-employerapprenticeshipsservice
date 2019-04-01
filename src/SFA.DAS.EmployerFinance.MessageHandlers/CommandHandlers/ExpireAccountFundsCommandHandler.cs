@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Types.Models;
@@ -17,6 +18,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         private readonly IExpiredFunds _expiredFunds;
         private readonly IExpiredFundsRepository _expiredFundsRepository;
         private readonly ILog _logger;
+        private readonly EmployerFinanceConfiguration _configuration;
 
         public ExpireAccountFundsCommandHandler(
             ICurrentDateTime currentDateTime,
@@ -24,7 +26,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             IPaymentFundsOutRepository paymentFundsOutRepository,
             IExpiredFunds expiredFunds,
             IExpiredFundsRepository expiredFundsRepository,
-            ILog logger)
+            ILog logger,
+            EmployerFinanceConfiguration configuration)
         {
             _currentDateTime = currentDateTime;
             _levyFundsInRepository = levyFundsInRepository;
@@ -32,6 +35,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             _expiredFunds = expiredFunds;
             _expiredFundsRepository = expiredFundsRepository;
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task Handle(ExpireAccountFundsCommand message, IMessageHandlerContext context)
@@ -46,7 +50,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 fundsIn.ToCalendarPeriodDictionary(),
                 fundsOut.ToCalendarPeriodDictionary(),
                 existingExpiredFunds.ToCalendarPeriodDictionary(),
-                24,
+                _configuration.FundsExpiryPeriod,
                 _currentDateTime.Now);
 
             await _expiredFundsRepository.Create(message.AccountId, expiredFunds.ToExpiredFundsList());

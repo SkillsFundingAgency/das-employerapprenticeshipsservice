@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers;
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 It.Is<Dictionary<CalendarPeriod, decimal>>(fi => f.AreFundsInEqual(f.FundsIn, fi)),
                 It.Is<Dictionary<CalendarPeriod, decimal>>(fo => f.AreFundsOutEqual(f.FundsOut, fo)),
                 It.Is<Dictionary<CalendarPeriod, decimal>>(ex => f.AreExpiredFundsEqual(f.ExistingExpiredFunds, ex)),
-                24)));
+                f.FundsExpiryPeriod)));
         }
 
         [Test]
@@ -50,6 +51,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public Mock<IExpiredFunds> MockExpiredFunds { get; set; }
         public Mock<IExpiredFundsRepository> MockExpiredFundsRepository { get; set; }
         public Mock<ILog> MockLogger { get; set; }
+        public EmployerFinanceConfiguration EmployerFinanceConfiguration { get; set; }
 
         public ExpireAccountFundsCommand Command { get; set; }
         public long ExpectedAccountId { get; set; }
@@ -58,6 +60,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public List<ExpiredFund> ExistingExpiredFunds { get; set; }
         public Dictionary<CalendarPeriod, decimal> ExpiredFunds { get; set; }
         public Dictionary<CalendarPeriod, decimal> ExpectedExpiredFunds { get; set; }
+        public int FundsExpiryPeriod { get; set; }
 
         public IHandleMessages<ExpireAccountFundsCommand> Handler { get; set; }
 
@@ -95,11 +98,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             };
 
             MockCurrentDateTime = new Mock<ICurrentDateTime>();
+            FundsExpiryPeriod = 18;
+
             MockLevyFundsInRepository = new Mock<ILevyFundsInRepository>();
             MockPaymentFundsOutRepository = new Mock<IPaymentFundsOutRepository>();
             MockExpiredFunds = new Mock<IExpiredFunds>();
             MockExpiredFundsRepository = new Mock<IExpiredFundsRepository>();
             MockLogger = new Mock<ILog>();
+            EmployerFinanceConfiguration = new EmployerFinanceConfiguration{ FundsExpiryPeriod = FundsExpiryPeriod };
 
             MockCurrentDateTime.Setup(x => x.Now).Returns(Now);
             MockLevyFundsInRepository.Setup(x => x.GetLevyFundsIn(ExpectedAccountId)).ReturnsAsync(FundsIn);
@@ -111,7 +117,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 It.IsAny<Dictionary<CalendarPeriod, decimal>>(),
                 It.IsAny<int>())).Returns(ExpiredFunds);
 
-            Handler = new ExpireAccountFundsCommandHandler(MockCurrentDateTime.Object, MockLevyFundsInRepository.Object, MockPaymentFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object, MockLogger.Object);
+            Handler = new ExpireAccountFundsCommandHandler(MockCurrentDateTime.Object, MockLevyFundsInRepository.Object, MockPaymentFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object, MockLogger.Object, EmployerFinanceConfiguration);
         }
 
         public Task Handle()
