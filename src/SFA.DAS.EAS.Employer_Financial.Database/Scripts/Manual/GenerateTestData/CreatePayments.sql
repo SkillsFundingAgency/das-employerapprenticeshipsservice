@@ -48,9 +48,58 @@ BEGIN
 END; 
 GO
 
---todo R13, R14
 CREATE FUNCTION CollectionPeriodMonth (@date datetime)  
 RETURNS int 
+AS  
+BEGIN  
+  declare @collectionPeriodMonth int = (select dbo.CalendarPeriodMonth(@date))
+  return @collectionPeriodMonth
+
+ -- declare @month int = DATEPART(month,@date)
+
+ -- SET @month = @month - 7
+ -- IF @month < 1
+	--SET @month = @month + 12
+
+ -- RETURN(@month);  
+END; 
+GO
+
+CREATE FUNCTION CollectionPeriodYear (@date datetime)  
+RETURNS int
+AS  
+BEGIN  
+  declare @collectionPeriodYear int = (select dbo.CalendarPeriodYear(@date))
+  return @collectionPeriodYear
+
+  --declare @year int = DATEPART(year,@date)
+  --return @year
+END; 
+GO
+
+--todo: approx 0-6 months before collection period
+CREATE FUNCTION DeliveryPeriodMonth (@date datetime)  
+RETURNS int 
+AS  
+BEGIN  
+  declare @deliveryPeriodMonth int = (select dbo.CalendarPeriodMonth(@date))
+  return @deliveryPeriodMonth
+END; 
+GO
+
+CREATE FUNCTION DeliveryPeriodYear (@date datetime)  
+RETURNS int
+AS  
+BEGIN  
+  declare @deliveryPeriodYear int = (select dbo.CalendarPeriodYear(@date))
+  return @deliveryPeriodYear
+END; 
+GO
+
+
+--todo R13, R14
+CREATE FUNCTION PeriodEndMonth (@date datetime)  
+RETURNS VARCHAR(5)
 AS  
 BEGIN  
   declare @month int = DATEPART(month,@date)
@@ -59,32 +108,13 @@ BEGIN
   IF @month < 1
 	SET @month = @month + 12
 
-  RETURN(@month);  
+  declare @periodEndMonth VARCHAR(5) = CONVERT(varchar(5), @month)
+  RETURN @periodEndMonth; 
 END; 
 GO
 
 --todo R13, R14
-CREATE FUNCTION CollectionPeriodYear (@date datetime)  
-RETURNS int
-AS  
-BEGIN  
-  declare @year int = DATEPART(year,@date)
-  return @year
-END; 
-GO
-
---todo R13, R14
-CREATE FUNCTION PeriodMonth (@date datetime)  
-RETURNS VARCHAR(5)
-AS  
-BEGIN  
-  declare @periodMonth varchar(4) = (select dbo.CollectionPeriodMonth(@date))
-  return @periodMonth
-END; 
-GO
-
---todo R13, R14
-CREATE FUNCTION PeriodYear (@date datetime)  
+CREATE FUNCTION PeriodEndYear (@date datetime)  
 RETURNS VARCHAR(5)
 AS  
 BEGIN  
@@ -94,8 +124,8 @@ BEGIN
   if @month < 8
 	SET @year = @year - 1
 	
-  DECLARE @periodYear VARCHAR(4) = (SELECT RIGHT(CONVERT(VARCHAR(5), @year, 1), 2)) + (SELECT RIGHT(CONVERT(VARCHAR(4), @year+1, 1), 2))
-  return @periodYear
+  DECLARE @periodEndYear VARCHAR(4) = (SELECT RIGHT(CONVERT(VARCHAR(5), @year, 1), 2)) + (SELECT RIGHT(CONVERT(VARCHAR(4), @year+1, 1), 2))
+  return @periodEndYear
 END; 
 GO
 
@@ -103,7 +133,16 @@ CREATE FUNCTION PeriodEnd (@date datetime)
 RETURNS VARCHAR(8)
 AS  
 BEGIN  
-  declare @periodEnd varchar(8) = (SELECT dbo.PeriodYear(@date) + '-R' + right('0' + dbo.PeriodMonth(@date),2))
+  declare @periodEnd varchar(8) = (SELECT dbo.PeriodEndYear(@date) + '-R' + right('0' + dbo.PeriodEndMonth(@date),2))
+  return @periodEnd
+END; 
+GO
+
+CREATE FUNCTION CollectionPeriodId (@date datetime)  
+RETURNS VARCHAR(8)
+AS  
+BEGIN  
+  declare @periodEnd varchar(8) = (select dbo.PeriodEnd(@date))
   return @periodEnd
 END; 
 GO
@@ -120,8 +159,8 @@ CREATE PROCEDURE #createPayment
     @uln BIGINT,
     @apprenticeshipid BIGINT,
     @fundingSource INT,	
-    @Amount DECIMAL,
-    @periodEnd VARCHAR(25)  
+    @Amount DECIMAL(18,5),
+    @periodEndDate DATETIME  
 )  
 AS  
 BEGIN  
@@ -134,10 +173,19 @@ BEGIN
 
     SELECT @paymentMetadataId  = SCOPE_IDENTITY()
 
+	--todo: @deliveryPeriodDate approx 0-6 months before collection period
+	--declare @deliveryPeriodDate datetime = DATEADD(month, -2, @periodEndDate)
+	-- evidencesubmittedon >= devliveryperiod (can also be > collectionperiod)
+	--declare @evidenceSubmittedOn datetime = DATEADD(month, 1, @deliveryPeriodDate)
+
     INSERT INTO employer_financial.payment
-    (paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, collectionperiodid, collectionperiodmonth, collectionperiodyear, evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
+    (paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, 
+	collectionperiodid, collectionperiodmonth, collectionperiodyear, 
+	evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
     VALUES
-    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, 5, 2018, @periodend, 6, 2018, '2018-06-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, @periodEnd, @paymentMetadataId)
+    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, dbo.DeliveryPeriodMonth(@periodEndDate), dbo.DeliveryPeriodYear(@periodEndDate), 
+	dbo.PeriodEnd(@periodEndDate), dbo.CollectionPeriodMonth(@periodEndDate), dbo.CollectionPeriodYear(@periodEndDate), 
+	'2018-06-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, dbo.PeriodEnd(@periodEndDate), @paymentMetadataId)
 END;  
 GO  
 
@@ -148,7 +196,8 @@ CREATE PROCEDURE #createAccountPayments
     @providerName NVARCHAR(MAX),
     @ukprn BIGINT,
     @courseName NVARCHAR(MAX),
-    @periodEnd NVARCHAR(25),
+    --@periodEnd NVARCHAR(25),
+	@periodEndDate DATETIME,
     @totalAmount DECIMAL(18,5)
 )  
 AS  
@@ -157,9 +206,9 @@ BEGIN
     DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / 3
 
     -- Create transfer payments
-    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount, @periodEnd
-    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount, @periodEnd 
-    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount, @periodEnd 	
+    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount, @periodEndDate
+    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount, @periodEndDate
+    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount, @periodEndDate
 END
 GO
 
@@ -243,11 +292,11 @@ BEGIN TRANSACTION
 	--SELECT dbo.CalendarPeriodMonth(@periodEndDate)
 	--SELECT dbo.CollectionPeriodYear(@periodEndDate)
 	--SELECT dbo.CollectionPeriodMonth(@periodEndDate)
-	--SELECT dbo.PeriodYear(@periodEndDate)
-	--SELECT dbo.PeriodMonth(@periodEndDate)
+	--SELECT dbo.PeriodEndYear(@periodEndDate)
+	--SELECT dbo.PeriodEndMonth(@periodEndDate)
 
 	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
-	SELECT @periodEndId
+	--SELECT @periodEndId
 
 	-- Add period end if its not already there
 	IF NOT EXISTS
@@ -258,12 +307,10 @@ BEGIN TRANSACTION
 	BEGIN        
 		insert into employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
 		values
-		--todo: do month year etc. need to match @periodEnd? check real data
-		--looks like calendarperiod month|year aren't used, so no need to set correctly!?
 		(@periodEndId,dbo.CalendarPeriodMonth(@periodEndDate),dbo.CalendarPeriodYear(@periodEndDate),'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
 	END
 
-    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndId, @totalPaymentAmount	
+    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndDate, @totalPaymentAmount	
         
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
 
@@ -278,9 +325,15 @@ drop function CollectionPeriodYear
 go
 drop function CollectionPeriodMonth
 go
-drop function PeriodYear
+drop function CollectionPeriodId
 go
-drop function PeriodMonth
+drop function DeliveryPeriodYear
+go
+drop function DeliveryPeriodMonth
+go
+drop function PeriodEndYear
+go
+drop function PeriodEndMonth
 go
 drop function PeriodEnd
 go
