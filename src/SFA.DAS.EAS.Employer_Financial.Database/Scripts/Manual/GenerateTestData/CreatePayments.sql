@@ -1,3 +1,10 @@
+--todo: separate script/sproc to add period end (levy and payment scripts can add add as appropriate)
+-- make period end/dates align for payment gen
+-- refunds
+-- number of months to generate
+-- fix rounding
+-- transfers
+
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
 IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
 BEGIN
@@ -21,6 +28,68 @@ IF OBJECT_ID('tempdb..#ProcessPaymentDataTransactionsGenerateDataEdition') IS NO
 BEGIN
     DROP PROC #ProcessPaymentDataTransactionsGenerateDataEdition
 END
+GO
+
+--todo R13, R14
+CREATE FUNCTION CollectionPeriodMonth (@date datetime)  
+RETURNS int 
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+
+  SET @month = @month - 7
+  IF @month < 1
+	SET @month = @month + 12
+
+  RETURN(@month);  
+END; 
+GO
+
+--todo R13, R14
+CREATE FUNCTION CollectionPeriodYear (@date datetime)  
+RETURNS VARCHAR(5)
+AS  
+BEGIN  
+  declare @year int = DATEPART(year,@date)
+	
+  DECLARE @collectionPeriodYear VARCHAR(4) = (SELECT CONVERT(VARCHAR(4), @year, 1))
+  return @collectionPeriodYear
+END; 
+GO
+
+--todo R13, R14
+CREATE FUNCTION PeriodMonth (@date datetime)  
+RETURNS VARCHAR(5)
+AS  
+BEGIN  
+  declare @periodMonth varchar(4) = (select dbo.CollectionPeriodMonth(@date))
+  return @periodMonth
+END; 
+GO
+
+--todo R13, R14
+CREATE FUNCTION PeriodYear (@date datetime)  
+RETURNS VARCHAR(5)
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+  declare @year int = DATEPART(year,@date)
+
+  if @month < 8
+	SET @year = @year - 1
+	
+  DECLARE @periodYear VARCHAR(4) = (SELECT RIGHT(CONVERT(VARCHAR(5), @year, 1), 2)) + (SELECT RIGHT(CONVERT(VARCHAR(4), @year+1, 1), 2))
+  return @periodYear
+END; 
+GO
+
+CREATE FUNCTION PeriodEnd (@date datetime)  
+RETURNS VARCHAR(8)
+AS  
+BEGIN  
+  declare @periodEnd varchar(8) = (SELECT dbo.PeriodYear(@date) + '-R' + dbo.PeriodMonth(@date))
+  return @periodEnd
+END; 
 GO
 
 -- CREATE THE STORED PROCEDURES
@@ -154,6 +223,12 @@ BEGIN TRANSACTION
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
+	--SELECT dbo.CollectionPeriodYear(@createDate)
+	--SELECT dbo.CollectionPeriodMonth(@createDate)
+	--SELECT dbo.PeriodYear(@createDate)
+	--SELECT dbo.PeriodMonth(@createDate)
+	--SELECT dbo.PeriodEnd(@createDate)
+
 	-- Add period end if its not already there
 	IF NOT EXISTS
 	(
@@ -174,3 +249,14 @@ BEGIN TRANSACTION
 
 COMMIT TRANSACTION
 GO
+
+drop function CollectionPeriodYear
+go
+drop function CollectionPeriodMonth
+go
+drop function PeriodYear
+go
+drop function PeriodMonth
+go
+drop function PeriodEnd
+go
