@@ -30,7 +30,7 @@ AS
 			INNER JOIN [employer_financial].LevyDeclaration ld 
 				ON ld.SubmissionId = tl.SubmissionId
 	WHERE	tl.AccountId = @accountId 
-			AND tl.TransactionType IN (1, 2, 5) 
+			AND tl.TransactionType IN (1, 2) 
 			AND DateCreated >= @FromDate 
 			AND DateCreated < @ToDate
 
