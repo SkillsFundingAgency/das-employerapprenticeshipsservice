@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
@@ -39,21 +37,17 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         public async Task Handle(ExpireAccountFundsCommand message, IMessageHandlerContext context)
         {
             _logger.Info($"Expiring funds for account ID '{message.AccountId}'");
-
-            var now = _currentDateTime.Now;
+            
             var fundsIn = await _levyFundsInRepository.GetLevyFundsIn(message.AccountId);
             var fundsOut = await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId);
             var existingExpiredFunds = await _expiredFundsRepository.Get(message.AccountId);
 
-            var expiringFunds = _expiredFunds.GetExpiringFunds(
+            var expiredFunds = _expiredFunds.GetExpiredFunds(
                 fundsIn.ToCalendarPeriodDictionary(),
                 fundsOut.ToCalendarPeriodDictionary(),
                 existingExpiredFunds.ToCalendarPeriodDictionary(),
-                24);
-            
-            var expiredFunds = expiringFunds
-                .Where(e => e.Key.Year == now.Year && e.Key.Month <= now.Month || e.Key.Year < now.Year)
-                .ToDictionary(e => e.Key, e => e.Value);
+                24,
+                _currentDateTime.Now);
 
             await _expiredFundsRepository.Create(message.AccountId, expiredFunds.ToExpiredFundsList());
 
