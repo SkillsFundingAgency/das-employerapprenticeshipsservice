@@ -152,7 +152,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 if (!expiredFundsDictionary.Any(x =>
                     x.Key.Year == fund.CalendarPeriodYear &&
                     x.Key.Month == fund.CalendarPeriodMonth &&
-                    x.Value == fund.FundsOut))
+                    x.Value == -fund.FundsOut))
                 {
                     return false;
                 }
