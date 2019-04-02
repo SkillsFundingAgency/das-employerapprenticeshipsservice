@@ -45,8 +45,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var result = await _mediator.SendAsync(new GetCurrentPeriodEndRequest());//order by completion date
             
             var periodsToProcess = result.CurrentPeriodEnd?.PeriodEndId == null 
-                ? periodEnds 
-                : periodEnds.SkipWhile(periodEnd => !periodEnd.Id.Equals(result.CurrentPeriodEnd.PeriodEndId));
+                ? periodEnds
+                : periodEnds.SkipWhile(periodEnd => !periodEnd.Id.Equals(result.CurrentPeriodEnd.PeriodEndId)).Skip(1);
 
             if (!periodsToProcess.Any())
             {
