@@ -5,7 +5,6 @@
 
 AS
 
-
 	SELECT	tl.DateCreated									AS DateCreated,
 			tlt.[Description]								AS TransactionType,
 			tl.EmpRef										AS PayeScheme,
@@ -31,7 +30,7 @@ AS
 			INNER JOIN [employer_financial].LevyDeclaration ld 
 				ON ld.SubmissionId = tl.SubmissionId
 	WHERE	tl.AccountId = @accountId 
-			AND tl.TransactionType IN (1, 2) 
+			AND tl.TransactionType IN (1, 2, 5) 
 			AND DateCreated >= @FromDate 
 			AND DateCreated < @ToDate
 
@@ -91,4 +90,32 @@ UNION ALL
 				meta.ProviderName,
 				meta.ApprenticeName,
 				meta.ApprenticeshipCourseName,
-				meta.ApprenticeshipCourseLevel) AS funds;
+				meta.ApprenticeshipCourseLevel) AS funds
+
+UNION ALL
+
+SELECT	tl.DateCreated									AS DateCreated,
+			tlt.[Description]								AS TransactionType,
+			tl.EmpRef										AS PayeScheme,
+			NULL											AS PayrollYear,
+			NULL											AS PayrollMonth,
+			tl.LevyDeclared									AS LevyDeclared,
+			tl.EnglishFraction								AS EnglishFraction,
+			tl.Amount - (LevyDeclared * EnglishFraction)	AS TenPercentTopUp,
+			CONVERT(VARCHAR(MAX), NULL)						AS TrainingProvider,
+			CONVERT(BIGINT, NULL)							AS Uln,
+			CONVERT(VARCHAR(MAX), NULL)						AS Apprentice,
+			CONVERT(VARCHAR(MAX), NULL)						AS ApprenticeTrainingCourse,
+			CONVERT(INT, NULL)								AS ApprenticeTrainingCourseLevel,
+			CONVERT(DECIMAL(18,4), NULL)					AS PaidFromLevy,
+			CONVERT(DECIMAL(18,4), NULL)					AS EmployerContribution,
+			CONVERT(DECIMAL(18,4), NULL)					AS GovermentContribution,
+			tl.Amount										AS Total
+	FROM	[employer_financial].TransactionLine tl
+			LEFT JOIN [employer_financial].[TransactionLineTypes] tlt
+				ON tlt.TransactionType = 3
+	WHERE	tl.AccountId = @accountId 
+			AND tl.TransactionType IN (1, 2, 5) 
+			AND DateCreated >= @FromDate 
+			AND DateCreated < @ToDate
+			AND tl.TransactionType = 5
