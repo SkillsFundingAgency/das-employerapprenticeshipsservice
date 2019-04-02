@@ -30,12 +30,12 @@ namespace SFA.DAS.EmployerFinance.Extensions
 
         public static IDictionary<CalendarPeriod, decimal> ToCalendarPeriodDictionary(this IEnumerable<ExpiredFund> expiredFunds)
         {
-            return expiredFunds.ToDictionary(fund => new CalendarPeriod(fund.CalendarPeriodYear, fund.CalendarPeriodMonth), fund => fund.Amount);
+            return expiredFunds.ToDictionary(fund => new CalendarPeriod(fund.CalendarPeriodYear, fund.CalendarPeriodMonth), fund => -fund.Amount);
         }
 
         public static IEnumerable<ExpiredFund> ToExpiredFundsList(this IDictionary<CalendarPeriod, decimal> calendarPeriodDictionary)
         {
-            return calendarPeriodDictionary.Select(x => new ExpiredFund{ Amount = x.Value, CalendarPeriodYear = x.Key.Year, CalendarPeriodMonth = x.Key.Month });
+            return calendarPeriodDictionary.Select(x => new ExpiredFund{ Amount = -x.Value, CalendarPeriodYear = x.Key.Year, CalendarPeriodMonth = x.Key.Month });
         }
     }
 }
