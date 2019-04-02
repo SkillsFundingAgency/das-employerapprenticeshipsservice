@@ -2,14 +2,15 @@
 	@AccountId bigint
 AS
 
-SELECT CalendarPeriodYear, CalendarPeriodMonth, SUM([LevyDeclared]) AS FundsIn
+SELECT CalendarPeriodYear, CalendarPeriodMonth, SUM([Amount]) AS FundsIn
 FROM
 (
 	SELECT		(SELECT MONTH([TransactionDate])) AS CalendarPeriodMonth,
 			(SELECT YEAR([TransactionDate])) AS CalendarPeriodYear,
-			[LevyDeclared]
+			[Amount]
 	FROM [employer_financial].[TransactionLine]
-	WHERE transactionLine.AccountId = @AccountId
+	WHERE AccountId = @AccountId
+	AND TransactionType = /*Declaration*/ 1
 ) AS ungroupedQuery
 
 GROUP BY CalendarPeriodYear, CalendarPeriodMonth
