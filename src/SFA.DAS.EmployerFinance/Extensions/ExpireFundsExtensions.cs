@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.Extensions
             return expiredFunds.ToDictionary(fund => new CalendarPeriod(fund.CalendarPeriodYear, fund.CalendarPeriodMonth), fund => fund.Amount);
         }
 
-        public static IEnumerable<ExpiredFund> ToExpiredFundsEntityList(this IDictionary<CalendarPeriod, decimal> calendarPeriodDictionary)
+        public static IEnumerable<ExpiredFund> ToExpiredFundsList(this IDictionary<CalendarPeriod, decimal> calendarPeriodDictionary)
         {
             return calendarPeriodDictionary.Select(x => new ExpiredFund{ Amount = x.Value, CalendarPeriodYear = x.Key.Year, CalendarPeriodMonth = x.Key.Month });
         }
