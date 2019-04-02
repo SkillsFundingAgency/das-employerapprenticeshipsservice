@@ -106,7 +106,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             }
             else if (transaction.GetType() == typeof(ExpiredFundTransactionLine))
             {
-                transaction.Description = "Levy funds expired";
+                transaction.Description = "Expired levy";
             }
             else if (transaction.GetType() == typeof(TransferTransactionLine))
             {
