@@ -1,6 +1,5 @@
 --todo: separate script/sproc to add period end (levy and payment scripts can add add as appropriate)
 -- make period end/dates align for payment gen
--- number of payments in month
 -- transfers
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
@@ -189,17 +188,37 @@ CREATE PROCEDURE #createAccountPayments
     @ukprn BIGINT,
     @courseName NVARCHAR(MAX),
 	@periodEndDate DATETIME,
-    @totalAmount DECIMAL(18,5)
+    @totalAmount DECIMAL(18,5),
+	@numberOfPayments INT
 )  
 AS  
 BEGIN  	
 
-    DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / 3
+    DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / @numberOfPayments
 
-    -- Create transfer payments
-    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount, @periodEndDate
-    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount, @periodEndDate
-    EXEC #createPayment @accountId, @providerName, @courseName, 1, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount, @periodEndDate
+	declare @apprentices table (row int, name varchar(100), uln bigint, id bigint)
+	insert @apprentices values
+	(1, 'Connie Lingus', 1234567890, 1111),
+	(2, 'Martin du Bois', 2345678901, 2222),
+	(3, 'Annaleigh Probin', 3456789012, 3333),
+	(4, 'Jack Gough', 4567890123, 4444),
+	(5, 'Juan Kerr', 5678901234, 5555)
+
+	declare @name varchar(100)
+	declare @uln bigint
+	declare @id bigint
+
+	while (@numberOfPayments > 0)
+	BEGIN
+
+	  SELECT @name = name, @uln = uln, @id = id
+      FROM @apprentices
+	  WHERE row = @numberOfPayments
+
+      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, 1, @paymentAmount, @periodEndDate
+
+	  set @numberOfPayments = @numberOfPayments - 1
+	END
 END
 GO
 
@@ -263,8 +282,6 @@ AS
 BEGIN  
 BEGIN TRANSACTION
 
---todo: use numberOfPayments
-
     DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
 
 	--SELECT dbo.CalendarPeriodYear(@periodEndDate)
@@ -289,7 +306,7 @@ BEGIN TRANSACTION
 		(@periodEndId,dbo.CalendarPeriodMonth(@periodEndDate),dbo.CalendarPeriodYear(@periodEndDate),'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
 	END
 
-    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndDate, @totalPaymentAmount	
+    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndDate, @totalPaymentAmount, @numberOfPayments
         
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
 
@@ -331,15 +348,15 @@ DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), pa
 insert into @paymentsByMonth
 SELECT TOP (@numberOfMonthsToCreate)
 			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
-			1000,
-			1,
+			-1000,
+			3,
 			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
 FROM sys.all_objects
 ORDER BY monthBeforeToDate;
 
 -- override defaults here...
-UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -1
-UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -7
+UPDATE @paymentsByMonth SET amount = 500, paymentsToGenerate = 1 where monthBeforeToDate = -1
+UPDATE @paymentsByMonth SET amount = 500, paymentsToGenerate = 1 where monthBeforeToDate = -7
 
 select * from @paymentsByMonth
 
