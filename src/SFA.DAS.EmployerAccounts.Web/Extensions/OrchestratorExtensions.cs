@@ -15,12 +15,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return await orchestrator.GetGatewayUrl(urlHelper.Action(actionName, controllerName, null, urlScheme));
         }
 
-        public static async Task<string> GateWayUrlHelper(this EmployerVerificationOrchestratorBase orchestrator,
-            string redirectUrl)
-        {
-            return await orchestrator.GetGatewayUrl(redirectUrl);
-        }
-
         public static void CreateOrganisationCookie(this OrganisationDetailsViewModel viewModel, IOrchestratorCookie orchestrator,
             HttpContextBase httpContext)
         {
