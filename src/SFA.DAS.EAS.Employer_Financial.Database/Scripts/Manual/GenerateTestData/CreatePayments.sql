@@ -29,6 +29,12 @@ BEGIN
 END
 GO
 
+IF OBJECT_ID('tempdb..#createPaymentsForMonth') IS NOT NULL
+BEGIN
+    DROP PROC #createPaymentsForMonth
+END
+GO
+
 CREATE FUNCTION CalendarPeriodMonth (@date datetime)  
 RETURNS int 
 AS  
@@ -246,33 +252,21 @@ select mainUpdate.* from
     ) dervx on dervx.AccountId = mainUpdate.AccountId and dervx.PeriodEnd = mainUpdate.PeriodEnd and dervx.Ukprn = mainUpdate.Ukprn
 GO
 
+CREATE PROCEDURE #createPaymentsForMonth
+(    	
+    @accountId BIGINT,
+    @accountName NVARCHAR(100),
+	@createDate DATETIME,
+	@totalPaymentAmount DECIMAL(18,5),
+	@numberOfPayments INT
+)  
+AS  
+BEGIN  
 BEGIN TRANSACTION
 
-	-- ________                                                                         ____                                                                                  ___    __                    ___               
-	-- `MMMMMMMb.                                                                      6MMMMb/                                                   68b                          `MM    d'  @                   MM              
-	--  MM    `Mb                                                        /            8P    YM                                             /     Y89                           MM   d'                      MM               
-	--  MM     MM    ___  ____    ___ ___  __    __     ____  ___  __   /M           6M      Y   ____  ___  __     ____  ___  __    ___   /M     ___   _____  ___  __          MM  d'   ___  __     _____   MM____     ____  
-	--  MM     MM  6MMMMb `MM(    )M' `MM 6MMb  6MMb   6MMMMb `MM 6MMb /MMMMM        MM         6MMMMb `MM 6MMb   6MMMMb `MM 6MM  6MMMMb /MMMMM  `MM  6MMMMMb `MM 6MMb         MM d'    `MM 6MMb   6MMMMMb  MMMMMMb   6MMMMb\
-	--  MM    .M9 8M'  `Mb `Mb    d'   MM69 `MM69 `Mb 6M'  `Mb MMM9 `Mb MM           MM        6M'  `Mb MMM9 `Mb 6M'  `Mb MM69 " 8M'  `Mb MM      MM 6M'   `Mb MMM9 `Mb        MMd'      MMM9 `Mb 6M'   `Mb MM'  `Mb MM'    `
-	--  MMMMMMM9'     ,oMM  YM.  ,P    MM'   MM'   MM MM    MM MM'   MM MM           MM     ___MM    MM MM'   MM MM    MM MM'        ,oMM MM      MM MM     MM MM'   MM        MMYM.     MM'   MM MM     MM MM    MM YM.     
-	--  MM        ,6MM9'MM   MM  M     MM    MM    MM MMMMMMMM MM    MM MM           MM     `M'MMMMMMMM MM    MM MMMMMMMM MM     ,6MM9'MM MM      MM MM     MM MM    MM        MM YM.    MM    MM MM     MM MM    MM  YMMMMb 
-	--  MM        MM'   MM   `Mbd'     MM    MM    MM MM       MM    MM MM           YM      M MM       MM    MM MM       MM     MM'   MM MM      MM MM     MM MM    MM        MM  YM.   MM    MM MM     MM MM    MM      `Mb
-	--  MM        MM.  ,MM    YMP      MM    MM    MM YM    d9 MM    MM YM.  ,        8b    d9 YM    d9 MM    MM YM    d9 MM     MM.  ,MM YM.  ,  MM YM.   ,M9 MM    MM        MM   YM.  MM    MM YM.   ,M9 MM.  ,M9 L    ,MM
-	-- _MM_       `YMMM9'Yb.   M      _MM_  _MM_  _MM_ YMMMM9 _MM_  _MM_ YMMM9         YMMMM9   YMMMM9 _MM_  _MM_ YMMMM9 _MM_    `YMMM9'Yb.YMMM9 _MM_ YMMMMM9 _MM_  _MM_      _MM_   YM._MM_  _MM_ YMMMMM9 _MYMMMM9  MYMMMM9 
-	--                        d'                                                                                                                                                                                             
-	--                    (8),P                                                                                                                                                                                              
-	--                     YMM                                                                                                                                                                                               
+--todo: use numberOfPayments
 
-    DECLARE @accountId BIGINT                 = 0
-    DECLARE @accountName NVARCHAR(100)        = 'XXX'	
-    DECLARE @payeScheme NVARCHAR(16)          = 'XXX'
-    
-    DECLARE @createDate DATETIME              = GETDATE()
-    DECLARE @periodEndDate DATETIME           = DATEADD(month, -1, @createDate)
-    DECLARE @totalPaymentAmount DECIMAL(18,5) = 10000
-    
-	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
-	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
+    DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
 
 	--SELECT dbo.CalendarPeriodYear(@periodEndDate)
 	--SELECT dbo.CalendarPeriodMonth(@periodEndDate)
@@ -301,7 +295,44 @@ BEGIN TRANSACTION
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
 
 COMMIT TRANSACTION
+END
 GO
+
+	-- ________                                                                         ____                                                                                  ___    __                    ___               
+	-- `MMMMMMMb.                                                                      6MMMMb/                                                   68b                          `MM    d'  @                   MM              
+	--  MM    `Mb                                                        /            8P    YM                                             /     Y89                           MM   d'                      MM               
+	--  MM     MM    ___  ____    ___ ___  __    __     ____  ___  __   /M           6M      Y   ____  ___  __     ____  ___  __    ___   /M     ___   _____  ___  __          MM  d'   ___  __     _____   MM____     ____  
+	--  MM     MM  6MMMMb `MM(    )M' `MM 6MMb  6MMb   6MMMMb `MM 6MMb /MMMMM        MM         6MMMMb `MM 6MMb   6MMMMb `MM 6MM  6MMMMb /MMMMM  `MM  6MMMMMb `MM 6MMb         MM d'    `MM 6MMb   6MMMMMb  MMMMMMb   6MMMMb\
+	--  MM    .M9 8M'  `Mb `Mb    d'   MM69 `MM69 `Mb 6M'  `Mb MMM9 `Mb MM           MM        6M'  `Mb MMM9 `Mb 6M'  `Mb MM69 " 8M'  `Mb MM      MM 6M'   `Mb MMM9 `Mb        MMd'      MMM9 `Mb 6M'   `Mb MM'  `Mb MM'    `
+	--  MMMMMMM9'     ,oMM  YM.  ,P    MM'   MM'   MM MM    MM MM'   MM MM           MM     ___MM    MM MM'   MM MM    MM MM'        ,oMM MM      MM MM     MM MM'   MM        MMYM.     MM'   MM MM     MM MM    MM YM.     
+	--  MM        ,6MM9'MM   MM  M     MM    MM    MM MMMMMMMM MM    MM MM           MM     `M'MMMMMMMM MM    MM MMMMMMMM MM     ,6MM9'MM MM      MM MM     MM MM    MM        MM YM.    MM    MM MM     MM MM    MM  YMMMMb 
+	--  MM        MM'   MM   `Mbd'     MM    MM    MM MM       MM    MM MM           YM      M MM       MM    MM MM       MM     MM'   MM MM      MM MM     MM MM    MM        MM  YM.   MM    MM MM     MM MM    MM      `Mb
+	--  MM        MM.  ,MM    YMP      MM    MM    MM YM    d9 MM    MM YM.  ,        8b    d9 YM    d9 MM    MM YM    d9 MM     MM.  ,MM YM.  ,  MM YM.   ,M9 MM    MM        MM   YM.  MM    MM YM.   ,M9 MM.  ,M9 L    ,MM
+	-- _MM_       `YMMM9'Yb.   M      _MM_  _MM_  _MM_ YMMMM9 _MM_  _MM_ YMMM9         YMMMM9   YMMMM9 _MM_  _MM_ YMMMM9 _MM_    `YMMM9'Yb.YMMM9 _MM_ YMMMMM9 _MM_  _MM_      _MM_   YM._MM_  _MM_ YMMMMM9 _MYMMMM9  MYMMMM9 
+	--                        d'                                                                                                                                                                                             
+	--                    (8),P                                                                                                                                                                                              
+	--                     YMM                                                                                                                                                                                               
+
+	declare @accountId BIGINT          = 1
+    declare @accountName NVARCHAR(100) = 'Insert Name Here'
+
+	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
+	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
+
+-- scenarios
+
+-- todo drive scenarios from amount table?
+
+declare @toDate DATETIME = GETDATE()
+
+exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
+SET @toDate = DATEADD(month, -1, @toDate)
+exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
+exec #createPaymentsForMonth @accountId, @accountName, @toDate, -500, 1
+SET @toDate = DATEADD(month, -1, @toDate)
+exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
+
+-- scenarios end
 
 drop function CalendarPeriodYear
 go
