@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,
             EmployerAccountsConfiguration configuration)
-            : base(mediator, logger, cookieService, configuration)
+            : base(mediator, cookieService, configuration)
         {
             _mediator = mediator;
             _logger = logger;
@@ -155,7 +155,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                Logger.Info($"Create Account Validation Error: {ex.Message}");
+                _logger.Info($"Create Account Validation Error: {ex.Message}");
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel(),

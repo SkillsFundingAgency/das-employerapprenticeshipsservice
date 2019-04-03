@@ -6,7 +6,6 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
-using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.HmrcLevy;
@@ -21,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     public abstract class EmployerVerificationOrchestratorBase
     {
         protected readonly IMediator Mediator;
-        protected readonly ILog Logger;
         protected readonly ICookieStorageService<EmployerAccountData> CookieService;
         protected readonly EmployerAccountsConfiguration Configuration;
 
@@ -31,10 +29,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         }
 
-        protected EmployerVerificationOrchestratorBase(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService, EmployerAccountsConfiguration configuration)
+        protected EmployerVerificationOrchestratorBase(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService, EmployerAccountsConfiguration configuration)
         {
             Mediator = mediator;
-            Logger = logger;
             CookieService = cookieService;
             Configuration = configuration;
         }
