@@ -20,5 +20,6 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<DasDeclaration> GetEffectivePeriod12Declaration(string empRef, string payrollYear, DateTime yearEndAdjustmentCutOff);
         Task ProcessDeclarations(long accountId, string empRef);
         Task ProcessPaymentData(long accountId);
+        Task<IEnumerable<string>> FindHistoricalProviderName(long ukprn);
     }
 }

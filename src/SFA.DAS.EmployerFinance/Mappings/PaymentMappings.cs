@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerFinance.Mappings
                 .ForMember(dest =>dest.CourseName, opt => opt.Ignore())
                 .ForMember(dest =>dest.CourseLevel, opt => opt.Ignore())
                 .ForMember(dest =>dest.CourseStartDate, opt => opt.Ignore())
+                .ForMember(dest =>dest.IsHistoricProviderName, opt => opt.Ignore())
                 .ForMember(dest =>dest.ApprenticeName, opt => opt.Ignore())
                 .ForMember(dest =>dest.ApprenticeNINumber, opt => opt.Ignore())
                 .ForMember(dest =>dest.PathwayName, opt => opt.Ignore());

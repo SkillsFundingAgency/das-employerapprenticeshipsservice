@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Commands.CreateNewPeriodEnd;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
-using SFA.DAS.EmployerFinance.Queries.GetAllEmployerAccounts;
 using SFA.DAS.EmployerFinance.Queries.GetPeriodEnds;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
@@ -46,8 +44,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var periodEnds = await _paymentsEventsApiClient.GetPeriodEnds();
 
             var result = await _mediator.SendAsync(new GetPeriodEndsRequest());
-            var periodsToProcess = new List<PeriodEnd>();
-            periodsToProcess = periodEnds.Where(pe => !result.CurrentPeriodEnds.Any(existing => existing.PeriodEndId == pe.Id)).ToList();
+            var periodsToProcess = periodEnds.Where(pe => !result.CurrentPeriodEnds.Any(existing => existing.PeriodEndId == pe.Id));
 
             if (!periodsToProcess.Any())
             {
@@ -55,15 +52,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 return;
             }
 
-            var response = await _mediator.SendAsync(new GetAllEmployerAccountsRequest());
-
             foreach (var paymentsPeriodEnd in periodsToProcess)
             {
-                await ProcessPaymentPeriod(paymentsPeriodEnd, response.Accounts, context);
+                await ProcessPaymentPeriod(paymentsPeriodEnd, context);
             }
         }
 
-        private async Task ProcessPaymentPeriod(PeriodEnd paymentsPeriodEnd, List<Models.Account.Account> employerAccounts, IMessageHandlerContext context)
+        private async Task ProcessPaymentPeriod(PeriodEnd paymentsPeriodEnd, IMessageHandlerContext context)
         {
             Models.Payments.PeriodEnd periodEnd = MapToDbPaymentPeriod(paymentsPeriodEnd);
 
@@ -75,20 +70,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 return;
             }
 
-            var tasks = new List<Task>();
+            _logger.Info($"Creating process period end queue message for period end ref: '{paymentsPeriodEnd.Id}'");
 
-            foreach (var account in employerAccounts)
+            await context.SendLocal(new ProcessPeriodEndPaymentsCommand
             {
-                _logger.Info($"Creating payment queue message for account ID: '{account.Id}' period end ref: '{periodEnd.PeriodEndId}'");
-
-                tasks.Add(context.SendLocal<ImportAccountPaymentsCommand>(c =>
-                {
-                    c.AccountId = account.Id;
-                    c.PeriodEndRef = periodEnd.PeriodEndId;
-                }));
-            }
-
-            await Task.WhenAll(tasks);
+                PeriodEndRef = paymentsPeriodEnd.Id
+            });
         }
 
         private static Models.Payments.PeriodEnd MapToDbPaymentPeriod(PeriodEnd paymentsPeriodEnd)

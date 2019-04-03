@@ -119,26 +119,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
 
         [Test]
         [Category("UnitTest")]
-        [TestCase(1, Description = "Single new period end to process")]
-        [TestCase(5, Description = "Multiple new period ends to process")]
-        public async Task WhenThereAreNewPeriodsAndMultipleAccountsExistProccesPaymentsForPeriodForEachAccount(int amountOfNewPeriodEnds)
-        {
-            // Arrange
-            var accounts = Fixture.CreateMany<Account>(3).ToList();
-            _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
-                .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = accounts });
-            var apiPeriodEnds = GetApiPeriodEnds(amountOfNewPeriodEnds);
-            _paymentsEventsApiClientMock.Setup(mock => mock.GetPeriodEnds()).ReturnsAsync(apiPeriodEnds);
-
-            // Act
-            await _sut.Handle(_importPaymentsCommand, _messageHandlerContext);
-
-            // Assert
-            VerifyProcessAccountPaymentsCommandSentForEachAccountForEachNewPeriodEnd(accounts, apiPeriodEnds);
-        }
-
-        [Test]
-        [Category("UnitTest")]
         [TestCase(1, Description = "Single existing period end")]
         [TestCase(5, Description = "Multiple existing period ends")]
         public async Task WhenAllCurrentPeriodsExistThenDoNotCreateAnyPeriodEnds(int amountOfNewPeriodEnds)
@@ -221,22 +201,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         private IEnumerable<string> GetExpectedPeriodEndIds(PeriodEnd[] apiPeriodEnds, List<DbPeriodEnd> existingPeriodEnds)
         {
             return apiPeriodEnds.Where(pe => !existingPeriodEnds.Any(cpe => cpe.PeriodEndId == pe.Id)).Select(pe => pe.Id);
-        }
-
-        private void VerifyProcessAccountPaymentsCommandSentForEachAccountForEachNewPeriodEnd(List<Account> accounts, PeriodEnd[] apiPeriodEnds)
-        {
-            var commandsSent = _messageHandlerContext
-                .SentMessages
-                .Where(sm => sm.Message.GetType() ==typeof(ImportAccountPaymentsCommand))
-                .Select(sm => sm.Message as ImportAccountPaymentsCommand);
-
-            foreach (var apiPeriodEnd in apiPeriodEnds)
-            {
-                foreach (var account in accounts)
-                {
-                    commandsSent.Should().ContainSingle(x => x.PeriodEndRef == apiPeriodEnd.Id && x.AccountId == account.Id);
-                }
-            }
         }
     }
 }
