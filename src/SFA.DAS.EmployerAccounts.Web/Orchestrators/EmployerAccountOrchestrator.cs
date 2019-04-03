@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Web;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -21,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-        private readonly IHashingService _hashingService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         //Needed for tests
@@ -30,12 +28,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
         public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,
-            EmployerAccountsConfiguration configuration, IHashingService hashingService)
+            EmployerAccountsConfiguration configuration)
             : base(mediator, logger, cookieService, configuration)
         {
             _mediator = mediator;
             _logger = logger;
-            _hashingService = hashingService;
         }
 
 
