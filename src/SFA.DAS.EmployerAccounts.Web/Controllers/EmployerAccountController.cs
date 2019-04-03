@@ -90,14 +90,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
                 _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
-                var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+                var enteredData = _employerAccountOrchestrator.GetCookieData();
 
                 enteredData.EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "";
                 enteredData.PayeReference = empref.Empref;
                 enteredData.AccessToken = response.Data.AccessToken;
                 enteredData.RefreshToken = response.Data.RefreshToken;
                 enteredData.EmpRefNotFound = empref.EmprefNotFound;
-                _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
+                _employerAccountOrchestrator.UpdateCookieData(enteredData);
 
                 _logger.Info("Finished processing gateway response");
                 return RedirectToAction(ControllerConstants.SummaryActionName);
@@ -129,12 +129,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("create")]
         public async Task<ActionResult> CreateAccount()
         {
-            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+            var enteredData = _employerAccountOrchestrator.GetCookieData();
 
             if (enteredData == null)
             {
                 // N.B CHANGED THIS FROM SelectEmployer which went nowhere.
-                _employerAccountOrchestrator.DeleteCookieData(HttpContext);
+                _employerAccountOrchestrator.DeleteCookieData();
 
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }

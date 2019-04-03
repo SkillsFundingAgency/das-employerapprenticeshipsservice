@@ -173,7 +173,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public virtual OrchestratorResponse<SummaryViewModel> GetSummaryViewModel(HttpContextBase context)
         {
-            var enteredData = GetCookieData(context);
+            var enteredData = GetCookieData();
 
             var model = new SummaryViewModel
             {
@@ -199,23 +199,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
 
-        public virtual EmployerAccountData GetCookieData(HttpContextBase context)
+        public virtual EmployerAccountData GetCookieData()
         {
             return CookieService.Get(CookieName);
 
         }
 
-        public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
+        public virtual void CreateCookieData(EmployerAccountData data)
         {
             CookieService.Create(data, CookieName, 365);
         }
 
-        public void UpdateCookieData(HttpContextBase context, EmployerAccountData data)
+        public void UpdateCookieData(EmployerAccountData data)
         {
             CookieService.Update(CookieName, data);
         }
         
-        public virtual void DeleteCookieData(HttpContextBase context)
+        public virtual void DeleteCookieData()
         {
             CookieService.Delete(CookieName);
         }

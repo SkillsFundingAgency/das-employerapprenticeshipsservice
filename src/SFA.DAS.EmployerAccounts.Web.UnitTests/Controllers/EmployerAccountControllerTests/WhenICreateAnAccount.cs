@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Sector = "Public"
             };
 
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.GetCookieData())
                        .Returns(_accountData);
 
             _response = new OrchestratorResponse<EmployerAgreementViewModel>()
