@@ -1,6 +1,4 @@
---todo: separate script/sproc to add period end (levy and payment scripts can add add as appropriate)
--- make period end/dates align for payment gen
--- transfers
+--todo: transfers
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
 IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
@@ -68,26 +66,6 @@ BEGIN
   return @collectionPeriodYear
 END; 
 GO
-
---todo: approx 0-6 months before collection period
-CREATE FUNCTION DeliveryPeriodMonth (@date datetime)  
-RETURNS int 
-AS  
-BEGIN  
-  declare @deliveryPeriodMonth int = (select dbo.CalendarPeriodMonth(@date))
-  return @deliveryPeriodMonth
-END; 
-GO
-
-CREATE FUNCTION DeliveryPeriodYear (@date datetime)  
-RETURNS int
-AS  
-BEGIN  
-  declare @deliveryPeriodYear int = (select dbo.CalendarPeriodYear(@date))
-  return @deliveryPeriodYear
-END; 
-GO
-
 
 --todo R13, R14
 CREATE FUNCTION PeriodEndMonth (@date datetime)  
@@ -164,8 +142,9 @@ BEGIN
 
     SELECT @paymentMetadataId  = SCOPE_IDENTITY()
 
-	--todo: @deliveryPeriodDate approx 0-6 months before collection period
-	--declare @deliveryPeriodDate datetime = DATEADD(month, -2, @periodEndDate)
+	-- @deliveryPeriodDate approx 0-6 months before collection period
+	--todo: needs to be in same ay?
+	declare @deliveryPeriodDate datetime = DATEADD(month, -floor(rand()*6), @periodEndDate)
 	-- evidencesubmittedon >= devliveryperiod (can also be > collectionperiod)
 	--declare @evidenceSubmittedOn datetime = DATEADD(month, 1, @deliveryPeriodDate)
 
@@ -174,7 +153,7 @@ BEGIN
 	collectionperiodid, collectionperiodmonth, collectionperiodyear, 
 	evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
     VALUES
-    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, dbo.DeliveryPeriodMonth(@periodEndDate), dbo.DeliveryPeriodYear(@periodEndDate), 
+    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, dbo.CalendarPeriodMonth(@deliveryPeriodDate), dbo.CalendarPeriodYear(@deliveryPeriodDate),
 	dbo.PeriodEnd(@periodEndDate), dbo.CollectionPeriodMonth(@periodEndDate), dbo.CollectionPeriodYear(@periodEndDate), 
 	'2018-06-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, dbo.PeriodEnd(@periodEndDate), @paymentMetadataId)
 END;  
@@ -329,15 +308,14 @@ GO
 	--                    (8),P                                                                                                                                                                                              
 	--                     YMM                                                                                                                                                                                               
 
-	declare @accountId BIGINT          = 1
-    declare @accountName NVARCHAR(100) = 'Insert Name Here'
+	declare @accountId BIGINT                = 1
+    declare @accountName NVARCHAR(100)       = 'Insert Name Here'
+	declare @defaultMonthlyTotalPayments INT = -1000
 
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
 -- scenarios
-
--- todo drive scenarios from amount table?
 
 declare @toDate DATETIME = GETDATE()
 declare @numberOfMonthsToCreate INT = 25
@@ -348,7 +326,7 @@ DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), pa
 insert into @paymentsByMonth
 SELECT TOP (@numberOfMonthsToCreate)
 			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
-			-1000,
+			@defaultMonthlyTotalPayments,
 			3,
 			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
 FROM sys.all_objects
@@ -398,10 +376,6 @@ go
 drop function CollectionPeriodMonth
 go
 drop function CollectionPeriodId
-go
-drop function DeliveryPeriodYear
-go
-drop function DeliveryPeriodMonth
 go
 drop function PeriodEndYear
 go
