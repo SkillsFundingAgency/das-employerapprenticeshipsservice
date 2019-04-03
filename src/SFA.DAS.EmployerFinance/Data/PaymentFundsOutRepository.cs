@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
@@ -13,7 +14,8 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         private readonly Lazy<EmployerFinanceDbContext> _db;
 
-        public PaymentFundsOutRepository(string connectionString, ILog logger, Lazy<EmployerFinanceDbContext> db) : base(connectionString, logger)
+        public PaymentFundsOutRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
+            : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
         }
