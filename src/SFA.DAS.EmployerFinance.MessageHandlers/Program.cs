@@ -1,19 +1,9 @@
-﻿using System.Data.Common;
-using Microsoft.Azure.WebJobs;
-using NServiceBus;
+﻿using Microsoft.Azure.WebJobs;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.Configuration;
-using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
-using SFA.DAS.Extensions;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.SqlServer;
-using SFA.DAS.NServiceBus.StructureMap;
-using SFA.DAS.UnitOfWork.NServiceBus;
+using SFA.DAS.EmployerFinance.Startup;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
@@ -21,46 +11,39 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
     {
         public static void Main()
         {
-            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
-            var config = new JobHostConfiguration();
+            MainAsync().GetAwaiter().GetResult();
+        }
 
-            if (isDevelopment)
+        public static async Task MainAsync()
+        {
+            using (var container = IoC.Initialize())
             {
-                config.UseDevelopmentSettings();
+                var config = new JobHostConfiguration();
+                var startup = container.GetInstance<IStartup>();
+
+                if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
+                {
+                    config.UseDevelopmentSettings();
+                }
+
+                var jobHost = new JobHost(config);
+
+                await startup.StartAsync();
+                await jobHost.CallAsync(typeof(Program).GetMethod(nameof(Block)));
+
+                jobHost.RunAndBlock();
+
+                await startup.StopAsync();
             }
-
-            var host = new JobHost(config);
-
-            host.Call(typeof(Program).GetMethod(nameof(AsyncMain)), new { isDevelopment });
-            host.RunAndBlock();
         }
 
         [NoAutomaticTrigger]
-        public static async Task AsyncMain(CancellationToken cancellationToken, bool isDevelopment)
+        public static async Task Block(CancellationToken cancellationToken)
         {
-            var container = IoC.Initialize();
-
-            var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.MessageHandlers")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
-                .UseErrorQueue()
-                .UseInstallers()
-                .UseLicense(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
-                .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                .UseNewtonsoftJsonSerializer()
-                .UseNLogFactory()
-                .UseOutbox()
-                .UseStructureMapBuilder(container)
-                .UseUnitOfWork();
-
-            var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
-
             while (!cancellationToken.IsCancellationRequested)
             {
-                await Task.Delay(3000, cancellationToken).ConfigureAwait(false);
+                await Task.Delay(3000, cancellationToken);
             }
-
-            await endpoint.Stop().ConfigureAwait(false);
-            container.Dispose();
         }
     }
 }

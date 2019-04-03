@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 return new OrchestratorResponse<PaymentTransactionViewModel>
                 {
-                    Status = HttpStatusCode.Unauthorized,
+                    Status = HttpStatusCode.Forbidden,
                     Exception = e
                 };
             }
@@ -175,7 +175,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
                 {
-                    Status = HttpStatusCode.Unauthorized,
+                    Status = HttpStatusCode.Forbidden,
                     Exception = e
                 };
             }
@@ -254,7 +254,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 return new OrchestratorResponse<CoursePaymentDetailsViewModel>
                 {
-                    Status = HttpStatusCode.Unauthorized,
+                    Status = HttpStatusCode.Forbidden,
                     Exception = e
                 };
             }
@@ -337,7 +337,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 Data = new FinanceDashboardViewModel
                 {
-                    Account = employerAccountResult.Account,
+                    AccountHashedId = hashedId,
                     CurrentLevyFunds = data.Data.Balance
                 }
             };
