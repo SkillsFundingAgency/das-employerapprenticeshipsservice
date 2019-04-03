@@ -324,13 +324,52 @@ GO
 -- todo drive scenarios from amount table?
 
 declare @toDate DATETIME = GETDATE()
+declare @numberOfMonthsToCreate INT = 25
 
-exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
-SET @toDate = DATEADD(month, -1, @toDate)
-exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
-exec #createPaymentsForMonth @accountId, @accountName, @toDate, -500, 1
-SET @toDate = DATEADD(month, -1, @toDate)
-exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
+DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), paymentsToGenerate INT, createMonth DATETIME)
+
+-- generate defaults
+insert into @paymentsByMonth
+SELECT TOP (@numberOfMonthsToCreate)
+			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
+			1000,
+			1,
+			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
+FROM sys.all_objects
+ORDER BY monthBeforeToDate;
+
+-- override defaults here...
+UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -1
+UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -7
+
+select * from @paymentsByMonth
+
+DECLARE @monthBeforeToDate INT = 1
+DECLARE @createDate DATETIME
+DECLARE @amount DECIMAL(18, 4)
+DECLARE @paymentsToGenerate INT
+
+WHILE (1 = 1) 
+BEGIN  
+
+  SELECT TOP 1 @monthBeforeToDate = monthBeforeToDate, @createDate = createMonth, @amount = amount, @paymentsToGenerate = paymentsToGenerate
+  FROM @paymentsByMonth
+  WHERE monthBeforeToDate < @monthBeforeToDate
+  ORDER BY monthBeforeToDate DESC
+
+  IF @@ROWCOUNT = 0 BREAK;
+
+  exec #createPaymentsForMonth @accountId, @accountName, @createDate, @amount, @paymentsToGenerate
+
+END
+
+-- calling the sproc like this allows both payment and refund in same month (alternatively, could use generation code above, and add extra payments for a month like this)
+--exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
+--SET @toDate = DATEADD(month, -1, @toDate)
+--exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
+--exec #createPaymentsForMonth @accountId, @accountName, @toDate, -500, 1
+--SET @toDate = DATEADD(month, -1, @toDate)
+--exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
 
 -- scenarios end
 
