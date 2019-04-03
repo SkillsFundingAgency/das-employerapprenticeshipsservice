@@ -2,13 +2,13 @@
 (
 	@currentDate DATETIME = NULL,
 	@expiryPeriod INT = NULL,
-	@payrollYear nvarchar(5) = NULL,
-	@payrollMonth int = NULL
+	@payrollYear NVARCHAR(5) = NULL,
+	@payrollMonth INT = NULL
 )
-RETURNS bit
+RETURNS BIT
 AS
 BEGIN
-	DECLARE @monthAfterPayrollExpiry TABLE(monthPortion int, yearPotion int)
+	DECLARE @monthAfterPayrollExpiry TABLE(monthPortion INT, yearPotion INT)
 
 	INSERT INTO @monthAfterPayrollExpiry SELECT * FROM [employer_financial].[GetPayrollExpiryMonth](@currentDate, @expiryPeriod)
 
