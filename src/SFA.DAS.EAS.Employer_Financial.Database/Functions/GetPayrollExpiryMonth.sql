@@ -3,7 +3,7 @@
 	@currentDate DATETIME = NULL,
 	@expiryPeriod INT = NULL
 )
-RETURNS @monthAfterPayrollExpiry TABLE( monthPortion int, yearPortion int  )
+RETURNS @monthOfPayrollExpiry TABLE( monthPortion int, yearPortion int  )
 AS
 BEGIN
 	--conversion of inputs
@@ -32,6 +32,6 @@ BEGIN
 		SET @expiryPayrollMonth = @expiryPayrollMonth + 12
 		SET @expiryPayrollStartYear = @expiryPayrollStartYear - 1
 	END
-	INSERT INTO @monthAfterPayrollExpiry VALUES(@expiryPayrollMonth, @expiryPayrollStartYear)
+	INSERT INTO @monthOfPayrollExpiry VALUES(@expiryPayrollMonth, @expiryPayrollStartYear)
 	RETURN
 END

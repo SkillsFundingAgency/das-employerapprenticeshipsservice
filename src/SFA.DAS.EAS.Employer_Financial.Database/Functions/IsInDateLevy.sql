@@ -8,12 +8,12 @@
 RETURNS bit
 AS
 BEGIN
-	DECLARE @monthAfterPayrollExpiry TABLE(monthPortion int, yearPotion int)
+	DECLARE @monthOfPayrollExpiry TABLE(monthPortion int, yearPotion int)
 
-	INSERT INTO @monthAfterPayrollExpiry SELECT * FROM [employer_financial].[GetPayrollExpiryMonth](@currentDate, @expiryPeriod)
+	INSERT INTO @monthOfPayrollExpiry SELECT * FROM [employer_financial].[GetPayrollExpiryMonth](@currentDate, @expiryPeriod)
 
-	DECLARE @expiryPayrollMonth INT = (SELECT monthPortion FROM @monthAfterPayrollExpiry)
-	DECLARE @expiryPayrollStartYear INT = (SELECT yearPotion FROM @monthAfterPayrollExpiry)
+	DECLARE @expiryPayrollMonth INT = (SELECT monthPortion FROM @monthOfPayrollExpiry)
+	DECLARE @expiryPayrollStartYear INT = (SELECT yearPotion FROM @monthOfPayrollExpiry)
 
 	--actual checks
 	DECLARE @payrollStartYear AS INT = CAST(LEFT(@payrollYear, 2) AS INT)
