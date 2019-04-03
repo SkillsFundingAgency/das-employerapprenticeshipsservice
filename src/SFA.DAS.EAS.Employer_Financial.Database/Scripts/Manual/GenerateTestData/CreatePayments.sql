@@ -1,7 +1,6 @@
 --todo: separate script/sproc to add period end (levy and payment scripts can add add as appropriate)
 -- make period end/dates align for payment gen
--- refunds
--- number of months to generate
+-- number of payments in month
 -- transfers
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
