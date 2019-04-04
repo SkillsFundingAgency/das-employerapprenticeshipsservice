@@ -34,10 +34,12 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
 		x.LevyDueYTD is not null AND x.LastSubmission = 1 AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-	AND @EarliestPositiveLevyDecYear IS NOT NULL
+	AND 
+	(@EarliestPositiveLevyDecYear IS NOT NULL
 	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 	AND @EarliestPositiveLevyDecMonth IS NOT NULL
 	AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+	OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
 	union all
 	select
 		x.AccountId,
@@ -49,10 +51,12 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
 		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-	AND @EarliestPositiveLevyDecYear IS NOT NULL
+	AND 
+	(@EarliestPositiveLevyDecYear IS NOT NULL
 	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 	AND @EarliestPositiveLevyDecMonth IS NOT NULL
 	AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+	OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
@@ -88,10 +92,12 @@ select mainUpdate.* from
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
 			x.LevyDueYTD is not null AND x.LastSubmission = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-		AND @EarliestPositiveLevyDecYear IS NOT NULL
+		AND 
+		(@EarliestPositiveLevyDecYear IS NOT NULL
 		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 		AND @EarliestPositiveLevyDecMonth IS NOT NULL
 		AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+		OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
 	union all	
 		select 
 			x.AccountId,
@@ -116,10 +122,12 @@ select mainUpdate.* from
 		inner join
 			[employer_financial].[LevyDeclarationTopup] ldt on ldt.SubmissionId = x.SubmissionId
 		where x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-		AND @EarliestPositiveLevyDecYear IS NOT NULL
+		AND 
+		(@EarliestPositiveLevyDecYear IS NOT NULL
 		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 		AND @EarliestPositiveLevyDecMonth IS NOT NULL
 		AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+		OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
