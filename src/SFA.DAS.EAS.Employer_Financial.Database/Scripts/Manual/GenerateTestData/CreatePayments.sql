@@ -1,4 +1,4 @@
---todo: transfers
+--todo: transfers, coinvestment
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
 IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
@@ -143,7 +143,7 @@ BEGIN
     SELECT @paymentMetadataId  = SCOPE_IDENTITY()
 
 	-- @deliveryPeriodDate approx 0-6 months before collection period
-	--todo: needs to be in same ay?
+	--todo: needs to be in same ay? if so, get month, knock some off, don't go below 1, then convert back to date
 	declare @deliveryPeriodDate datetime = DATEADD(month, -floor(rand()*6), @periodEndDate)
 	-- evidencesubmittedon >= devliveryperiod (can also be > collectionperiod)
 	--declare @evidenceSubmittedOn datetime = DATEADD(month, 1, @deliveryPeriodDate)
@@ -310,15 +310,14 @@ GO
 
 	declare @accountId BIGINT                = 1
     declare @accountName NVARCHAR(100)       = 'Insert Name Here'
+	declare @toDate DATETIME                 = GETDATE()
+	declare @numberOfMonthsToCreate INT      = 25
 	declare @defaultMonthlyTotalPayments INT = -1000
 
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
 -- scenarios
-
-declare @toDate DATETIME = GETDATE()
-declare @numberOfMonthsToCreate INT = 25
 
 DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), paymentsToGenerate INT, createMonth DATETIME)
 
