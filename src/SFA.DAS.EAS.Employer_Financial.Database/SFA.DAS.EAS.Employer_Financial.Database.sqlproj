@@ -172,8 +172,10 @@
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
     <None Include="Scripts\PreDeployment\AML-2505-PopulateNullProviderNames.sql" />
     <None Include="Scripts\PreDeployment\AML-2873_TransferPaymentDate.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DeleteLevies.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DeletePayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DeleteAllLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DeleteAllPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DeleteAccountPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DeleteAccountLevies.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
