@@ -1,6 +1,9 @@
 -- Instructions: Find clearly signposted 'Levy Gereration Knobs' section below to change generation variable defaults
 
---todo: convert to sp, and have scripts to run sps to set up levy & payments for a certain scenario
+--todo: 
+-- generate enough english fractions
+-- levy adjustments
+-- convert to sp, and have scripts to run sps to set up levy & payments for a certain scenario
 -- add functions to db, so can have params at top?
 -- generate correct number of english fractions
 -- if exists functions

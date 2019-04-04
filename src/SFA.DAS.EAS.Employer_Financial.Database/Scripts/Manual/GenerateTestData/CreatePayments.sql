@@ -312,7 +312,7 @@ GO
     declare @accountName NVARCHAR(100)       = 'Insert Name Here'
 	declare @toDate DATETIME                 = GETDATE()
 	declare @numberOfMonthsToCreate INT      = 25
-	declare @defaultMonthlyTotalPayments INT = -1000
+	declare @defaultMonthlyTotalPayments INT = -100
 
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]

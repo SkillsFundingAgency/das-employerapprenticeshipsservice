@@ -212,8 +212,8 @@ BEGIN
 	SET @senderPayeScheme = 'XXX'
 
     SET @receiverAccountId  = 1
-	SET @receiverAccountName  = 'XXX'	
-	SET @receiverPayeScheme = 'XXX'
+	SET @receiverAccountName  = 'YYY'	
+	SET @receiverPayeScheme = 'YYY'
 	
     SET @currentDate = GETDATE()
     SET @periodEnd = '1819-R01'
@@ -225,6 +225,7 @@ BEGIN
 	DECLARE @negativePaymentAmount DECIMAL(18,4) = @totalPaymentAmount * -1
 
 	EXEC #createAccountTransfers @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
+	--todo: this manually inserts transactionline rows, rather than processpaymentdatatransactions creating them!?
 	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @negativePaymentAmount, 4, @currentDate
 	EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, 4, @currentDate
 
