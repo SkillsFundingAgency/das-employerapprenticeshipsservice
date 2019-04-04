@@ -174,18 +174,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             var model = new SummaryViewModel
             {
-                OrganisationType = enteredData.OrganisationType,
-                OrganisationName = enteredData.OrganisationName,
-                RegisteredAddress = enteredData.OrganisationRegisteredAddress,
-                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
-                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
-                PayeReference = enteredData.PayeReference,
-                EmployerRefName = enteredData.EmployerRefName,
-                EmpRefNotFound = enteredData.EmpRefNotFound,
-                OrganisationStatus = enteredData.OrganisationStatus,
-                PublicSectorDataSource = enteredData.PublicSectorDataSource,
-                Sector = enteredData.Sector,
-                NewSearch = enteredData.NewSearch
+                OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
+                OrganisationName = enteredData.EmployerAccountOrganisationData.OrganisationName,
+                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress,
+                OrganisationReferenceNumber = enteredData.EmployerAccountOrganisationData.OrganisationReferenceNumber,
+                OrganisationDateOfInception = enteredData.EmployerAccountOrganisationData.OrganisationDateOfInception,
+                PayeReference = enteredData.EmployerAccountPayeRefData.PayeReference,
+                EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
+                EmpRefNotFound = enteredData.EmployerAccountPayeRefData.EmpRefNotFound,
+                OrganisationStatus = enteredData.EmployerAccountOrganisationData.OrganisationStatus,
+                PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
+                Sector = enteredData.EmployerAccountOrganisationData.Sector,
+                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch
             };
 
             return new OrchestratorResponse<SummaryViewModel>

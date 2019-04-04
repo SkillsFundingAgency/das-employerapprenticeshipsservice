@@ -108,12 +108,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var model = _employerAccountOrchestrator.GetSummaryViewModel(context.Object);
 
             //Assert
-            Assert.AreEqual(employerAccountData.OrganisationName, model.Data.OrganisationName);
-            Assert.AreEqual(employerAccountData.OrganisationStatus, model.Data.OrganisationStatus);
-            Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.Data.OrganisationReferenceNumber);
-            Assert.AreEqual(employerAccountData.PayeReference, model.Data.PayeReference);
-            Assert.AreEqual(employerAccountData.EmployerRefName, model.Data.EmployerRefName);
-            Assert.AreEqual(employerAccountData.EmpRefNotFound, model.Data.EmpRefNotFound);
+            Assert.AreEqual(employerAccountData.EmployerAccountOrganisationData.OrganisationName, model.Data.OrganisationName);
+            Assert.AreEqual(employerAccountData.EmployerAccountOrganisationData.OrganisationStatus, model.Data.OrganisationStatus);
+            Assert.AreEqual(employerAccountData.EmployerAccountOrganisationData.OrganisationReferenceNumber, model.Data.OrganisationReferenceNumber);
+            Assert.AreEqual(employerAccountData.EmployerAccountPayeRefData.PayeReference, model.Data.PayeReference);
+            Assert.AreEqual(employerAccountData.EmployerAccountPayeRefData.EmployerRefName, model.Data.EmployerRefName);
+            Assert.AreEqual(employerAccountData.EmployerAccountPayeRefData.EmpRefNotFound, model.Data.EmpRefNotFound);
 
         }
 
