@@ -89,14 +89,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             //Arrange
             var employerAccountData = new EmployerAccountData
             {
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData
+                { 
                 OrganisationStatus = "Active",
                 OrganisationName = "Test Company",
                 OrganisationDateOfInception = DateTime.MaxValue,
                 OrganisationReferenceNumber = "ABC12345",
                 OrganisationRegisteredAddress = "My Address",
+                },
+                EmployerAccountPayeRefData = new EmployerAccountPayeRefData
+                { 
                 PayeReference = "123/abc",
                 EmployerRefName = "Test Scheme 1",
                 EmpRefNotFound = true
+                }
             };
 
             _cookieService.Setup(x => x.Get( It.IsAny<string>()))

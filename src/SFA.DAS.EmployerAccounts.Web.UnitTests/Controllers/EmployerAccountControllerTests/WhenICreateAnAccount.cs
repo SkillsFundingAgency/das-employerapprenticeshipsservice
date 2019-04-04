@@ -48,18 +48,24 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _accountData = new EmployerAccountData
             {
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData
+                { 
                 OrganisationName = "Test Corp",
-                EmployerRefName = "Scheme 1",
                 OrganisationReferenceNumber = "1244454",
                 OrganisationRegisteredAddress = "1, Test Street",
                 OrganisationDateOfInception = DateTime.Now.AddYears(-10),
                 OrganisationStatus = "active",
+                OrganisationType = OrganisationType.Charities,
+                Sector = "Public"
+                },
+                EmployerAccountPayeRefData = new EmployerAccountPayeRefData
+                { 
                 PayeReference = "123/ABC",
+                EmployerRefName = "Scheme 1",
                 RefreshToken = "123",
                 AccessToken = "456",
                 EmpRefNotFound = true,
-                OrganisationType = OrganisationType.Charities,
-                Sector = "Public"
+                }
             };
 
             _orchestrator.Setup(x => x.GetCookieData())

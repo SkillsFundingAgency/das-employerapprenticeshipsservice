@@ -53,10 +53,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _accountData = new EmployerAccountData
             {
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData
+                { 
                 OrganisationName = "Test Corp",
                 OrganisationReferenceNumber = "1244454",
                 OrganisationRegisteredAddress = "1, Test Street",
                 OrganisationDateOfInception = DateTime.Now.AddYears(-10)
+                }
             };
 
             _orchestrator.Setup(x => x.GetCookieData())

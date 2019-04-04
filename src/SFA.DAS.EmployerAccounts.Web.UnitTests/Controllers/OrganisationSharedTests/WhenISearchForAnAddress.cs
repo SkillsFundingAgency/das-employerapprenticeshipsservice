@@ -60,7 +60,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationSharedT
         private void SetupOrchestratorForCookie()
         {
             base.Orchestrator.Setup(o => o.GetCookieData(It.IsAny<HttpContextBase>()))
-                .Returns(new EmployerAccountData());
+                .Returns(
+                    new EmployerAccountData
+                    {
+                        EmployerAccountOrganisationData = new EmployerAccountOrganisationData(),
+                        EmployerAccountPayeRefData = new EmployerAccountPayeRefData()
+                    });
         }
 
         private static FindOrganisationAddressViewModel CreatePopulatedViewModel()

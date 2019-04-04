@@ -23,7 +23,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationSharedT
                 });
 
             base.Orchestrator.Setup(o => o.GetCookieData(It.IsAny<HttpContextBase>()))
-                .Returns(new EmployerAccountData());
+                .Returns(
+                    new EmployerAccountData
+                    {
+                        EmployerAccountOrganisationData = new EmployerAccountOrganisationData(),
+                        EmployerAccountPayeRefData = new EmployerAccountPayeRefData()
+                    });
         }
 
         [Test]
