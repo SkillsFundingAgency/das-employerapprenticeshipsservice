@@ -1,7 +1,6 @@
 -- Instructions: Find clearly signposted 'Levy Gereration Knobs' section below to change generation variable defaults
 
 --todo: 
--- generate enough english fractions
 -- levy adjustments
 -- convert to sp, and have scripts to run sps to set up levy & payments for a certain scenario
 -- add functions to db, so can have params at top?
@@ -95,6 +94,20 @@ DECLARE @currentDay INT = DATEPART(day, @toDate)
 
 DECLARE @previousLevyYearStart VARCHAR(4)
 DECLARE @previousLevyYearEnd VARCHAR(4)
+
+-- engligh fractions usually generated on 1, 4, 7, 10 (not 3, 6, 9, 12), but can be generated anytime
+declare @englishFractionMonths table (dateCalculated DATETIME)
+
+-- first quarter before (or on) first month
+insert @englishFractionMonths
+select top 1 dateadd(month,-datepart(month,createMonth)%3, createMonth) from @levyDecByMonth order by createMonth
+
+-- rest of the quarters
+insert @englishFractionMonths
+select createMonth from (select createMonth from @levyDecByMonth except select top 1 createMonth from @levyDecByMonth order by createMonth) x where datepart(month,createMonth)%3 = 0
+
+
+
 
 IF(@currentMonth = 4 AND @currentDay >= 20 OR @currentMonth > 4)
 	BEGIN
