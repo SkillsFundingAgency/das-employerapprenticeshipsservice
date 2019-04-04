@@ -88,12 +88,10 @@ ORDER BY monthBeforeToDate;
 
 select * from @levyDecByMonth
 
-DECLARE @currentYear INT = DATEPART(year, @toDate)
-DECLARE @currentMonth INT = DATEPART(month, @toDate)
-DECLARE @currentDay INT = DATEPART(day, @toDate)
+--DECLARE @currentYear INT = DATEPART(year, @toDate)
+--DECLARE @currentMonth INT = DATEPART(month, @toDate)
+--DECLARE @currentDay INT = DATEPART(day, @toDate)
 
-DECLARE @previousLevyYearStart VARCHAR(4)
-DECLARE @previousLevyYearEnd VARCHAR(4)
 
 -- engligh fractions usually generated on 1, 4, 7, 10 (not 3, 6, 9, 12), but can be generated anytime
 declare @englishFractionMonths table (dateCalculated DATETIME)
