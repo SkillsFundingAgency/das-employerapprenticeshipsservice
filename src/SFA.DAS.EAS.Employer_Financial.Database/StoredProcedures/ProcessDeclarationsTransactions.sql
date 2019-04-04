@@ -14,6 +14,8 @@ SELECT TOP 1 @EarliestPositiveLevyDecYear = PayrollYear, @EarliestPositiveLevyDe
 FROM [employer_financial].[GetLevyDeclarationAndTopUp]
 WHERE [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 AND LevyDeclaredInMonth > 0
+AND AccountId = @AccountId
+AND EmpRef = @EmpRef
 ORDER BY PayrollYear, PayrollMonth
 	
 
