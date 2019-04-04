@@ -106,28 +106,11 @@ select top 1 dateadd(month,-datepart(month,createMonth)%3, createMonth) from @le
 insert @englishFractionMonths
 select createMonth from (select createMonth from @levyDecByMonth except select top 1 createMonth from @levyDecByMonth order by createMonth) x where datepart(month,createMonth)%3 = 0
 
+--todo: need to pick a day, and only insert if not already in db
 
+INSERT employer_financial.EnglishFraction (DateCalculated, Amount, EmpRef, DateCreated)
+select dateCalculated, 1.0, @payeScheme, dateCalculated from @englishFractionMonths
 
-
-IF(@currentMonth = 4 AND @currentDay >= 20 OR @currentMonth > 4)
-	BEGIN
-    SET @previousLevyYearStart = @currentYear - 1
-    SET @previousLevyYearEnd = @currentYear
-	END	
-ELSE
-	BEGIN
-    SET @previousLevyYearStart = @currentYear - 2
-    SET @previousLevyYearEnd = @currentYear - 1
-	END
-
-DECLARE @payrollYear VARCHAR(5) = (SELECT RIGHT(CONVERT(VARCHAR(5), @previousLevyYearStart, 1), 2)) + '-' + (SELECT RIGHT(CONVERT(VARCHAR(4), @previousLevyYearEnd, 1), 2))
-
-INSERT INTO employer_financial.EnglishFraction (DateCalculated, Amount, EmpRef, DateCreated)
-VALUES
-(@previousLevyYearStart + '-06-10 07:12:28.060', 1.000, @payeScheme, @previousLevyYearStart + '-06-12 07:12:28.060'),
-(@previousLevyYearStart + '-09-10 07:12:28.060', 1.000, @payeScheme, @previousLevyYearStart + '-09-12 07:12:28.060'),
-(@previousLevyYearStart + '-12-10 07:12:28.060', 1.000, @payeScheme, @previousLevyYearStart + '-06-12 07:12:28.060'),
-(@previousLevyYearEnd + '-03-10 07:12:28.060', 1.000, @payeScheme, @previousLevyYearEnd + '-03-12 07:12:28.060')
 
 DECLARE @maxSubmissionId BIGINT = ISNULL((SELECT MAX(SubmissionId) FROM employer_financial.levydeclaration),0)
 
