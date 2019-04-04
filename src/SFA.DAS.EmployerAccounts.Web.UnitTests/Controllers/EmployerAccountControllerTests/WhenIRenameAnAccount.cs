@@ -44,8 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                     Data = new RenameEmployerAccountViewModel()
                 });
 
-            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object,
-                _featureToggle.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
+            _employerAccountController = new EmployerAccountController(_owinWrapper.Object, _orchestrator.Object, _userViewTestingService.Object, logger.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

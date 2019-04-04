@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 
+                _owinWrapper.Object, _orchestrator.Object, _userViewTestingService.Object, 
                 logger.Object, _flashMessage.Object)
                 
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -22,8 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
 
-        public EmployerAccountController(IAuthenticationService owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, ILog logger,
+        public EmployerAccountController(IAuthenticationService owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, IMultiVariantTestingService multiVariantTestingService, ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
