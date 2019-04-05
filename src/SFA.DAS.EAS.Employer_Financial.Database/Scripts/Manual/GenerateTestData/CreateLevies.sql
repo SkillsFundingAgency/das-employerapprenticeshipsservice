@@ -3,8 +3,8 @@
 --todo: 
 -- levy adjustments
 -- convert to sp, and have scripts to run sps to set up levy & payments for a certain scenario
+-- ^^^ have script to AddTestDataGeneration sprocs & functions, and RemoveTestDataGeneration, then call sprocs to generate and/or have scenarios that call sprocs
 -- add functions to db, so can have params at top?
--- generate correct number of english fractions
 -- if exists functions
 -- use DATE, rather than datetime when we only care about year/month
 -- use dates generated into @levyDecByMonth table, rather than recalculatin

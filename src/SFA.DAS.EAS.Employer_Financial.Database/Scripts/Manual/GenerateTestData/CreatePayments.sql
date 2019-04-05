@@ -212,7 +212,7 @@ select mainUpdate.* from
     (
     select 
             x.AccountId as AccountId,
-            @DateCreated as DateCreated,
+			DATEFROMPARTS(DatePart(yyyy,@DateCreated),DatePart(MM,@DateCreated),DATEPART(dd,@DateCreated)) as DateCreated,
             null as SubmissionId,
             Max(pe.CompletionDateTime) as TransactionDate,
             3 as TransactionType,			
@@ -312,7 +312,7 @@ GO
     declare @accountName NVARCHAR(100)       = 'Insert Name Here'
 	declare @toDate DATETIME                 = GETDATE()
 	declare @numberOfMonthsToCreate INT      = 25
-	declare @defaultMonthlyTotalPayments INT = -100
+	declare @defaultMonthlyTotalPayments INT = 100
 
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
@@ -332,8 +332,9 @@ FROM sys.all_objects
 ORDER BY monthBeforeToDate;
 
 -- override defaults here...
-UPDATE @paymentsByMonth SET amount = 500, paymentsToGenerate = 1 where monthBeforeToDate = -1
-UPDATE @paymentsByMonth SET amount = 500, paymentsToGenerate = 1 where monthBeforeToDate = -7
+-- e.g. to create refunds set the amount -ve
+--UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -1
+--UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -7
 
 select * from @paymentsByMonth
 

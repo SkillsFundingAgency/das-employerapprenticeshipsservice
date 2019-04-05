@@ -180,6 +180,8 @@ BEGIN
     DECLARE @paymentAmount DECIMAL(18,4) = @totalAmount / 3
 	DECLARE @currentDate DATETIME = GETDATE()	
 
+	--todo: this generate 1:1 payment:transfer. we should do 1:n
+
 	-- Create transfer payments
 	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount
 	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount 
@@ -229,6 +231,7 @@ BEGIN
 	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @negativePaymentAmount, 4, @currentDate
 	EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, 4, @currentDate
 
+	-- why process levy decs? this script isn't adding any!
 	exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
 	exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
 	exec employer_financial.processpaymentdatatransactions @receiverAccountId

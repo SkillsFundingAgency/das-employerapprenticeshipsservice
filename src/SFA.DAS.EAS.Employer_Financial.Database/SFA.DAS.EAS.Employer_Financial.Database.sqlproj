@@ -176,6 +176,7 @@
     <None Include="Scripts\Manual\GenerateTestData\DeleteAllPayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DeleteAccountPayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DeleteAccountLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Notes.txt" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
