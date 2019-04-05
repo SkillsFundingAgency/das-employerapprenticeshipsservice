@@ -13,7 +13,7 @@ AS
 
 	DELETE	
 	FROM	employer_financial.TransactionLine 
-	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef);
+	WHERE EmpRef = @empRef
 
 	DELETE 
 	FROM	employer_financial.LevyDeclarationTopup
@@ -21,6 +21,6 @@ AS
 
 	DELETE 
 	FROM	employer_financial.LevyDeclaration 
-	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef);
+	WHERE EmpRef = @empRef
 
 	
