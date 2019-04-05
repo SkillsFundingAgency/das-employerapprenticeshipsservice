@@ -10,7 +10,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests
@@ -32,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerAccountsConfiguration();
 
-            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration, Mock.Of<IHashingService>());
+            _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
             _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
                      .ReturnsAsync(new CreateAccountCommandResponse()
                      {
@@ -90,14 +89,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             //Arrange
             var employerAccountData = new EmployerAccountData
             {
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData
+                { 
                 OrganisationStatus = "Active",
                 OrganisationName = "Test Company",
                 OrganisationDateOfInception = DateTime.MaxValue,
                 OrganisationReferenceNumber = "ABC12345",
                 OrganisationRegisteredAddress = "My Address",
+                },
+                EmployerAccountPayeRefData = new EmployerAccountPayeRefData
+                { 
                 PayeReference = "123/abc",
                 EmployerRefName = "Test Scheme 1",
                 EmpRefNotFound = true
+                }
             };
 
             _cookieService.Setup(x => x.Get( It.IsAny<string>()))
@@ -109,12 +114,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var model = _employerAccountOrchestrator.GetSummaryViewModel(context.Object);
 
             //Assert
-            Assert.AreEqual(employerAccountData.OrganisationName, model.Data.OrganisationName);
-            Assert.AreEqual(employerAccountData.OrganisationStatus, model.Data.OrganisationStatus);
-            Assert.AreEqual(employerAccountData.OrganisationReferenceNumber, model.Data.OrganisationReferenceNumber);
-            Assert.AreEqual(employerAccountData.PayeReference, model.Data.PayeReference);
-            Assert.AreEqual(employerAccountData.EmployerRefName, model.Data.EmployerRefName);
-            Assert.AreEqual(employerAccountData.EmpRefNotFound, model.Data.EmpRefNotFound);
+            Assert.AreEqual(employerAccountData.EmployerAccountOrganisationData.OrganisationName, model.Data.OrganisationName);
+            Assert.AreEqual(employerAccountData.EmployerAccountOrganisationData.OrganisationStatus, model.Data.OrganisationStatus);
+            Assert.AreEqual(employerAccountData.EmployerAccountOrganisationData.OrganisationReferenceNumber, model.Data.OrganisationReferenceNumber);
+            Assert.AreEqual(employerAccountData.EmployerAccountPayeRefData.PayeReference, model.Data.PayeReference);
+            Assert.AreEqual(employerAccountData.EmployerAccountPayeRefData.EmployerRefName, model.Data.EmployerRefName);
+            Assert.AreEqual(employerAccountData.EmployerAccountPayeRefData.EmpRefNotFound, model.Data.EmpRefNotFound);
 
         }
 

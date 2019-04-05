@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -26,7 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         public SearchOrganisationController(IAuthenticationService owinWrapper,
             SearchOrganisationOrchestrator orchestrator,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMapper mapper)
