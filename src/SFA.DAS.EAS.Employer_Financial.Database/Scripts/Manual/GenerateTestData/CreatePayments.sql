@@ -1,6 +1,13 @@
 --todo: transfers, coinvestment
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
+
+IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
+BEGIN
+    DROP PROC #createPayment
+END
+GO
+
 IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
 BEGIN
     DROP PROC #createPayment
@@ -115,6 +122,27 @@ BEGIN
   declare @periodEnd varchar(8) = (select dbo.PeriodEnd(@date))
   return @periodEnd
 END; 
+GO
+
+-- Add period end if its not already there
+CREATE PROCEDURE #createPeriodEnd
+(
+	@periodEndDate DATETIME
+)
+AS
+BEGIN
+	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+
+	IF NOT EXISTS
+	(
+		select 1 FROM [employer_financial].[periodend] 
+		WHERE periodendid = @periodEndId
+	)
+	BEGIN        
+		insert employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
+		values (@periodEndId, dbo.CalendarPeriodMonth(@periodEndDate), dbo.CalendarPeriodYear(@periodEndDate), '2018-05-04 00:00:00.000', '2018-05-04 09:07:34.457', '2018-05-04 10:50:27.760', 'https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=' + @periodEndId)
+	END
+END
 GO
 
 CREATE PROCEDURE #createPayment
@@ -263,30 +291,12 @@ BEGIN TRANSACTION
 
     DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
 
-	--SELECT dbo.CalendarPeriodYear(@periodEndDate)
-	--SELECT dbo.CalendarPeriodMonth(@periodEndDate)
-	--SELECT dbo.CollectionPeriodYear(@periodEndDate)
-	--SELECT dbo.CollectionPeriodMonth(@periodEndDate)
-	--SELECT dbo.PeriodEndYear(@periodEndDate)
-	--SELECT dbo.PeriodEndMonth(@periodEndDate)
-
-	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
-	--SELECT @periodEndId
-
-	-- Add period end if its not already there
-	IF NOT EXISTS
-	(
-		select 1 FROM [employer_financial].[periodend] 
-		WHERE periodendid = @periodEndId
-	)
-	BEGIN        
-		insert into employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
-		values
-		(@periodEndId,dbo.CalendarPeriodMonth(@periodEndDate),dbo.CalendarPeriodYear(@periodEndDate),'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
-	END
+	--todo: use this in transfers gen
+	exec #createPeriodEnd @periodEndDate
 
     EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndDate, @totalPaymentAmount, @numberOfPayments
-        
+
+	--todo: use this version in transfers gen        
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
 
 COMMIT TRANSACTION
