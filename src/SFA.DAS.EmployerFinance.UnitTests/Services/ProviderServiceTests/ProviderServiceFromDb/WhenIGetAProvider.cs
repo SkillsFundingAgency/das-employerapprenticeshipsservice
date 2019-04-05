@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.ProviderServiceFromDb
 {
@@ -25,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
                 .Setup(m => m.FindHistoricalProviderName(It.IsAny<long>()))
                 .ReturnsAsync(new List<string>{_providerName});
 
-            _sut = new EmployerFinance.Services.ProviderServiceFromDb(_mockDasLevyRepository.Object);
+            _sut = new EmployerFinance.Services.ProviderServiceFromDb(_mockDasLevyRepository.Object, Mock.Of<ILog>());
         }
 
         [Test]
