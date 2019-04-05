@@ -1,6 +1,13 @@
 --todo: generate correct period end for payment
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
+
+IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
+BEGIN
+    DROP PROC #createPeriodEnd
+END
+GO
+
 IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
 BEGIN
     DROP PROC #createPayment
@@ -30,18 +37,69 @@ BEGIN
     DROP PROC #CreateAccountTransferTransaction
 END
 GO
+
+--todo R13, R14
+CREATE FUNCTION PeriodEndMonth (@date datetime)  
+RETURNS VARCHAR(5)
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+
+  SET @month = @month - 7
+  IF @month < 1
+	SET @month = @month + 12
+
+  declare @periodEndMonth VARCHAR(5) = CONVERT(varchar(5), @month)
+  RETURN @periodEndMonth; 
+END; 
+GO
+
+--todo R13, R14
+CREATE FUNCTION PeriodEndYear (@date datetime)  
+RETURNS VARCHAR(5)
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+  declare @year int = DATEPART(year,@date)
+
+  if @month < 8
+	SET @year = @year - 1
+	
+  DECLARE @periodEndYear VARCHAR(4) = (SELECT RIGHT(CONVERT(VARCHAR(5), @year, 1), 2)) + (SELECT RIGHT(CONVERT(VARCHAR(4), @year+1, 1), 2))
+  return @periodEndYear
+END; 
+GO
+
+CREATE FUNCTION PeriodEnd (@date datetime)  
+RETURNS VARCHAR(8)
+AS  
+BEGIN  
+  declare @periodEnd varchar(8) = (SELECT dbo.PeriodEndYear(@date) + '-R' + right('0' + dbo.PeriodEndMonth(@date),2))
+  return @periodEnd
+END; 
+GO
+
 -- Add period end if its not already there
-IF NOT EXISTS
+CREATE PROCEDURE #createPeriodEnd
 (
-	select 1 FROM [employer_financial].[periodend] 
-	WHERE periodendid = '1819-R01'
+	@periodEndDate DATETIME
 )
-BEGIN        
-	insert into employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
-	values
-	('1819-R01',5,2018,'2018-05-04 00:00:00.000','2018-05-04 09:07:34.457','2018-05-04 10:50:27.760','https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=1617-R10')
+AS
+BEGIN
+	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+
+	IF NOT EXISTS
+	(
+		select 1 FROM [employer_financial].[periodend] 
+		WHERE periodendid = @periodEndId
+	)
+	BEGIN        
+		insert employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
+		values (@periodEndId, dbo.CalendarPeriodMonth(@periodEndDate), dbo.CalendarPeriodYear(@periodEndDate), '2018-05-04 00:00:00.000', '2018-05-04 09:07:34.457', '2018-05-04 10:50:27.760', 'https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=' + @periodEndId)
+	END
 END
 GO
+
 
 -- CREATE THE STORED PROCEDURES
 CREATE PROCEDURE #createPayment
@@ -179,9 +237,17 @@ AS
 BEGIN  	
 
     DECLARE @paymentAmount DECIMAL(18,4) = @totalAmount / 3
+	--todo: needs to come in.
+	-- replace this proc with #createPaymentsForMonth, then add transfers to it?
+	-- call processing per month
+
 	DECLARE @currentDate DATETIME = GETDATE()	
 
+	DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @currentDate)
+
 	-- todo: bring over new stuff deom CreatePayments. merge with a is transfer flag on the source generation table??
+
+	exec #createPeriodEnd @periodEndDate
 
 	-- Create transfer payments
 	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount
@@ -235,3 +301,10 @@ BEGIN
 	exec employer_financial.processpaymentdatatransactions @receiverAccountId
 END
 GO
+
+drop function PeriodEndYear
+go
+drop function PeriodEndMonth
+go
+drop function PeriodEnd
+go

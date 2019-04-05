@@ -4,7 +4,7 @@
 
 IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
 BEGIN
-    DROP PROC #createPayment
+    DROP PROC #createPeriodEnd
 END
 GO
 
@@ -209,7 +209,8 @@ BEGIN
 	(2, 'Martin du Bois', 2345678901, 2222),
 	(3, 'Annaleigh Probin', 3456789012, 3333),
 	(4, 'Jack Gough', 4567890123, 4444),
-	(5, 'Juan Kerr', 5678901234, 5555)
+	(5, 'Juan Kerr', 5678901234, 5555),
+	(6, 'Isabelle Enderberry', 6789012345, 6666)
 
 	declare @name varchar(100)
 	declare @uln bigint
@@ -291,7 +292,6 @@ BEGIN TRANSACTION
 
     DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
 
-	--todo: use this in transfers gen
 	exec #createPeriodEnd @periodEndDate
 
     EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndDate, @totalPaymentAmount, @numberOfPayments
