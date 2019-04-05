@@ -1,3 +1,5 @@
+--todo: generate correct period end for payment
+
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
 IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
 BEGIN
@@ -127,7 +129,6 @@ CREATE PROCEDURE #CreateAccountTransferTransaction
 	@receiversAccountName nvarchar(100),
 	@periodEnd nvarchar(20),
 	@amount decimal(18,4),
-	@transactionType smallint,
 	@transactionDate datetime
 AS	
 BEGIN
@@ -150,7 +151,7 @@ BEGIN
 		@accountId,
 		GETDATE(),
 		@transactionDate,
-		@transactionType,
+		4,
 		@amount,
 		@periodEnd,
 		@senderAccountId,
@@ -180,60 +181,57 @@ BEGIN
     DECLARE @paymentAmount DECIMAL(18,4) = @totalAmount / 3
 	DECLARE @currentDate DATETIME = GETDATE()	
 
-	--todo: this generate 1:1 payment:transfer. we should do 1:n
+	-- todo: bring over new stuff deom CreatePayments. merge with a is transfer flag on the source generation table??
 
 	-- Create transfer payments
 	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount
-	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount 
-	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount 
+	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount 
+	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount 
 
 	-- Create transfers
 	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
-	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 7777, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
-	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 8888, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
+	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 7777, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
+	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 8888, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
 
 END
 GO
 
 BEGIN
-	DECLARE @senderAccountId BIGINT
-	DECLARE @SenderAccountName NVARCHAR(100)
-	DECLARE @receiverAccountId BIGINT
-	DECLARE @receiverAccountName NVARCHAR(100)
-	DECLARE @senderPayeScheme NVARCHAR(16)
-	DECLARE @receiverPayeScheme NVARCHAR(16)
-	DECLARE @currentDate DATETIME
-    DECLARE @periodEnd VARCHAR(20)
-    DECLARE @totalPaymentAmount DECIMAL(18,4)	
+	--  ,--.--------.              ,---.      .-._          ,-,--.     _,---.     ,----.                           _,---.      ,----.  .-._           ,----.                ,---.   ,--.--------.  .=-.-.  _,.---._    .-._                ,--.-.,-.  .-._          _,.---._                 ,-,--. 
+	-- /==/,  -   , -\.-.,.---.  .--.'  \    /==/ \  .-._ ,-.'-  _\ .-`.' ,  \ ,-.--` , \  .-.,.---.           _.='.'-,  \  ,-.--` , \/==/ \  .-._ ,-.--` , \  .-.,.---.  .--.'  \ /==/,  -   , -\/==/_ /,-.' , -  `. /==/ \  .-._        /==/- |\  \/==/ \  .-._ ,-.' , -  `.    _..---.  ,-.'-  _\
+	-- \==\.-.  - ,-./==/  `   \ \==\-/\ \   |==|, \/ /, /==/_ ,_.'/==/_  _.-'|==|-  _.-` /==/  `   \         /==.'-     / |==|-  _.-`|==|, \/ /, /==|-  _.-` /==/  `   \ \==\-/\ \\==\.-.  - ,-./==|, |/==/_,  ,  - \|==|, \/ /, /       |==|_ `/_ /|==|, \/ /, /==/_,  ,  - \ .' .'.-. \/==/_ ,_.'
+	--  `--`\==\- \ |==|-, .=., |/==/-|_\ |  |==|-  \|  |\==\  \  /==/-  '..-.|==|   `.-.|==|-, .=., |       /==/ -   .-'  |==|   `.-.|==|-  \|  ||==|   `.-.|==|-, .=., |/==/-|_\ |`--`\==\- \  |==|  |==|   .=.     |==|-  \|  |        |==| ,   / |==|-  \|  |==|   .=.     /==/- '=' /\==\  \   
+	--       \==\_ \|==|   '='  /\==\,   - \ |==| ,  | -| \==\ -\ |==|_ ,    /==/_ ,    /|==|   '='  /       |==|_   /_,-./==/_ ,    /|==| ,  | -/==/_ ,    /|==|   '='  /\==\,   - \    \==\_ \ |==|- |==|_ : ;=:  - |==| ,  | -|        |==|-  .|  |==| ,  | -|==|_ : ;=:  - |==|-,   '  \==\ -\  
+	--       |==|- ||==|- ,   .' /==/ -   ,| |==| -   _ | _\==\ ,\|==|   .--'|==|    .-' |==|- ,   .'        |==|  , \_.' )==|    .-' |==| -   _ |==|    .-' |==|- ,   .' /==/ -   ,|    |==|- | |==| ,|==| , '='     |==| -   _ |        |==| _ , \ |==| -   _ |==| , '='     |==|  .=. \ _\==\ ,\ 
+	--       |==|, ||==|_  . ,'./==/-  /\ - \|==|  /\ , |/==/\/ _ |==|-  |   |==|_  ,`-._|==|_  . ,'.        \==\-  ,    (|==|_  ,`-._|==|  /\ , |==|_  ,`-._|==|_  . ,'./==/-  /\ - \   |==|, | |==|- |\==\ -    ,_ /|==|  /\ , |        /==/  '\  ||==|  /\ , |\==\ -    ,_ //==/- '=' ,/==/\/ _ |
+	--       /==/ -//==/  /\ ,  )==\ _.\=\.-'/==/, | |- |\==\ - , /==/   \   /==/ ,     //==/  /\ ,  )        /==/ _  ,  //==/ ,     //==/, | |- /==/ ,     //==/  /\ ,  )==\ _.\=\.-'   /==/ -/ /==/. / '.='. -   .' /==/, | |- |        \==\ /\=\.'/==/, | |- | '.='. -   .'|==|   -   /\==\ - , /
+	--       `--`--``--`-`--`--' `--`        `--`./  `--` `--`---'`--`---'   `--`-----`` `--`-`--`--'         `--`------' `--`-----`` `--`./  `--`--`-----`` `--`-`--`--' `--`           `--`--` `--`-`    `--`--''   `--`./  `--`         `--`      `--`./  `--`   `--`--''  `-._`.___,'  `--`---' 
 
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    ------ EDIT THE VALUES BELOW TO AFFECT THE TRANSFER PAYMENTS ---------------------------------------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	SET @senderAccountId  = 0
-	SET @senderAccountName  = 'XXX'
-	SET @senderPayeScheme = 'XXX'
+	DECLARE @senderAccountId BIGINT            = 0
+	DECLARE @SenderAccountName NVARCHAR(100)   = 'XXX'
+	DECLARE @senderPayeScheme NVARCHAR(16)     = 'XXX'
 
-    SET @receiverAccountId  = 1
-	SET @receiverAccountName  = 'YYY'	
-	SET @receiverPayeScheme = 'YYY'
+    DECLARE @receiverAccountId BIGINT          = 1
+	DECLARE @receiverAccountName NVARCHAR(100) = 'YYY'	
+	DECLARE @receiverPayeScheme NVARCHAR(16)   = 'YYY'
 	
-    SET @currentDate = GETDATE()
-    SET @periodEnd = '1819-R01'
-    SET @totalPaymentAmount = 10000
+    DECLARE @currentDate DATETIME              = GETDATE()
+	-- todo: work out from current date (at least generate a sensible default)
+    DECLARE @periodEnd VARCHAR(20)             = '1819-R01'
+    DECLARE @totalPaymentAmount DECIMAL(18,4)  = 10000
 	
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    ------ END OF SCRIPT VARIABLES  --------------------------------------------------------------------------------------------------------------------------------------------
-    ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-	DECLARE @negativePaymentAmount DECIMAL(18,4) = @totalPaymentAmount * -1
+	--  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,
+	-- '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P' 
+
+	DECLARE @negativePaymentAmount DECIMAL(18,4) = -@totalPaymentAmount
 
 	EXEC #createAccountTransfers @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
-	--todo: this manually inserts transactionline rows, rather than processpaymentdatatransactions creating them!?
-	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @negativePaymentAmount, 4, @currentDate
-	EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, 4, @currentDate
+	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @negativePaymentAmount, @currentDate
+	EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, @currentDate
 
-	-- why process levy decs? this script isn't adding any!
-	exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
-	exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
+	--todo: why process levy decs? this script isn't adding any!
+	--exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
+	--exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
 	exec employer_financial.processpaymentdatatransactions @receiverAccountId
 END
 GO
