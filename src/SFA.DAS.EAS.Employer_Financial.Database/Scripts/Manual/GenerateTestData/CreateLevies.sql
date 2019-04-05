@@ -88,10 +88,9 @@ ORDER BY monthBeforeToDate;
 
 select * from @levyDecByMonth
 
---DECLARE @currentYear INT = DATEPART(year, @toDate)
---DECLARE @currentMonth INT = DATEPART(month, @toDate)
---DECLARE @currentDay INT = DATEPART(day, @toDate)
-
+---
+--- Generate english fraction rows to cover the levy decs we're about to generate
+---
 
 -- engligh fractions usually generated on 1, 4, 7, 10 (not 3, 6, 9, 12), but can be generated anytime
 declare @englishFractionMonths table (dateCalculated DATETIME)
@@ -104,11 +103,19 @@ select top 1 dateadd(month,-datepart(month,createMonth)%3, createMonth) from @le
 insert @englishFractionMonths
 select createMonth from (select createMonth from @levyDecByMonth except select top 1 createMonth from @levyDecByMonth order by createMonth) x where datepart(month,createMonth)%3 = 0
 
---todo: need to pick a day, and only insert if not already in db
+-- only insert english fraction rows that don't already exist (and add english fraction calcs on consistent day of the month)
+declare @newEnglishFractionMonths table (dateCalculated DATETIME)
+
+insert @newEnglishFractionMonths
+select datefromparts(datepart(year,dateCalculated), datepart(month,dateCalculated), 7) from @englishFractionMonths
+except select dateCalculated from employer_financial.EnglishFraction where EmpRef = @payeScheme
 
 INSERT employer_financial.EnglishFraction (DateCalculated, Amount, EmpRef, DateCreated)
-select dateCalculated, 1.0, @payeScheme, dateCalculated from @englishFractionMonths
+select dateCalculated, 1.0, @payeScheme, dateCalculated from @newEnglishFractionMonths
 
+---
+--- Generate levy decs
+---
 
 DECLARE @maxSubmissionId BIGINT = ISNULL((SELECT MAX(SubmissionId) FROM employer_financial.levydeclaration),0)
 
@@ -128,6 +135,10 @@ select @accountId, @payeScheme,
 	DATEADD(month, monthBeforeToDate, @baselineCreatedDate), 
 	@maxSubmissionId + row_number() over (order by (select NULL))
 from @levyDecByMonth
+
+---
+--- Process the levy decs into transaction lines
+---
 
 EXEC employer_financial.processdeclarationstransactions @accountId, @payeScheme
 
