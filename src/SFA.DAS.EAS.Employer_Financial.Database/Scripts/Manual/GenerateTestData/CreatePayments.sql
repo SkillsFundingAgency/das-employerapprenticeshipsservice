@@ -318,6 +318,8 @@ GO
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
+--todo: sproc to generate gen source table
+
 DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), paymentsToGenerate INT, createMonth DATETIME)
 
 -- generate defaults
@@ -336,6 +338,8 @@ ORDER BY monthBeforeToDate;
 --UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -7
 
 select * from @paymentsByMonth
+
+--todo: sproc that takes gen source table and generates payments
 
 DECLARE @monthBeforeToDate INT = 1
 DECLARE @createDate DATETIME
