@@ -163,7 +163,7 @@ CREATE PROCEDURE #createAccountPayments
 	@periodEndDate DATETIME,
     @totalAmount DECIMAL(18,5),
 	@numberOfPayments INT,
-	@apprenticeshipId bigint output
+	@firstApprenticeshipId bigint output
 )  
 AS  
 BEGIN  	
@@ -173,6 +173,9 @@ BEGIN
 
 	declare @name varchar(100)
 	declare @uln bigint
+	declare @apprenticeshipId bigint
+
+	set @firstApprenticeshipId = (ISNULL((SELECT MAX(ApprenticeshipId) FROM employer_financial.Payment),0) + 1)
 
 	while (@numberOfPayments > 0)
 	BEGIN
@@ -181,7 +184,7 @@ BEGIN
 
 	  SET @name = (CHAR(ASCII('A') + @numberOfPayments)) + ' Apprentice'
 	  SET @uln = 1000000000 + @numberOfPayments
-	  SET @apprenticeshipId = 1000 + @numberOfPayments
+	  SET @apprenticeshipId = @firstApprenticeshipId + @numberOfPayments
 
       EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @apprenticeshipId, @fundingSourceString, @paymentAmount, @periodEndDate
 	END
@@ -386,17 +389,21 @@ BEGIN TRANSACTION
 	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
 	declare @courseName nvarchar(max) = 'Plate Spinning'
 	declare @ukprn bigint = 10001378
-	declare @firstApprenticeshipId bigint
+	declare @apprenticeshipId bigint
 
 	exec #createPeriodEnd @periodEndDate
 
+	--todo: we currently make sure that we always use an unique apprenticeshipid, so we don't fall over the unique index [IX_PeriodEndAccountTransfer]
+	-- ^^ this might be good enough, but in reality, each month would have transfers for the same apprenticeshipid
+	-- so it would be better to generate the first one outside of this sproc and reuse it for each month (once we generate >1 transfer at a time)
+	-- or else have it as a user param (+ve can generate correct data, -ve requires manual work and greater understanding)
     EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', @ukprn, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments,
-								@apprenticeshipId = @firstApprenticeshipId output 
+								@firstApprenticeshipId = @apprenticeshipId output 
 
 	--todo: duplicates checked on apprenticeship id and periodend, so can't hardcore app id. ideally use real generated app id
 	-- might need to generate unique apprenticeship ids per run, else going to hit duplicates!
 	--note: employer finance inserts the first apprenticeshipId from the set of transfers (and the others are ignored for the accounttransfer row)
-	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @firstApprenticeshipId, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
+	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @apprenticeshipId, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
 
 	declare @negativeTotalPaymentAmount DECIMAL(18,5) = -@totalPaymentAmount
 	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEndId, @negativeTotalPaymentAmount, @createDate
