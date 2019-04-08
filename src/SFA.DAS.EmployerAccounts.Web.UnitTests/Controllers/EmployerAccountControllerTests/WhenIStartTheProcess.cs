@@ -113,7 +113,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         {
             //Arrange
             _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
-            _orchestrator.Setup(x => x.CreateCookieData(It.IsAny<EmployerAccountData>()));
 
             //Act
             var actual = await _employerAccountController.Gateway();

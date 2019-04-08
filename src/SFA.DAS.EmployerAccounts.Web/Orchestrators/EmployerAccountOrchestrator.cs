@@ -199,12 +199,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public virtual EmployerAccountData GetCookieData()
         {
             return CookieService.Get(CookieName);
-
-        }
-
-        public virtual void CreateCookieData(EmployerAccountData data)
-        {
-            CookieService.Create(data, CookieName, 365);
         }
 
         public virtual void DeleteCookieData()
