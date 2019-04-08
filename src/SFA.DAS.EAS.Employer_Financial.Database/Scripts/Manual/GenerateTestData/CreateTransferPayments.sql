@@ -385,10 +385,11 @@ BEGIN TRANSACTION
     DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
 	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
 	declare @courseName nvarchar(max) = 'Plate Spinning'
+	declare @ukprn bigint = 10001378
 
 	exec #createPeriodEnd @periodEndDate
 
-    EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments
+    EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', @ukprn, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments
 
 	--todo: duplicates checked on apprenticeship id and periodend, so can't hardcore app id. ideally use real generated app id
 	-- might need to generate unique apprenticeship ids per run, else going to hit duplicates!
@@ -401,6 +402,10 @@ BEGIN TRANSACTION
 	--todo: check what these are doing. are they required? if so will need datageneration edition that accepts date rather than using getdate
 	--exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
 	--exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
+
+	-- #ProcessPaymentDataTransactionsGenerateDataEdition doesn't create a new payment transactionline where one already exists
+	-- so we remove any current payment transactionline first, so that payments can be additively generated in a month
+	delete [employer_financial].[TransactionLine] where AccountId = @receiverAccountId and Ukprn = @ukprn and PeriodEnd = @periodEndId and TransactionType = 3
 
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @receiverAccountId, @createDate
 

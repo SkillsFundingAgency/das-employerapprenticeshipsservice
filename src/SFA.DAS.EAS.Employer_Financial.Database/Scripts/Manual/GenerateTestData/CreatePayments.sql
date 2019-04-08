@@ -291,7 +291,6 @@ BEGIN TRANSACTION
 
 	-- #ProcessPaymentDataTransactionsGenerateDataEdition doesn't create a new payment transactionline where one already exists
 	-- so we remove any current payment transactionline first, so that payments can be additively generated in a month
-	--todo: need to do the same in transfers (unless have common sprocs, and transfer 1 calls this one)
 	delete [employer_financial].[TransactionLine] where AccountId = @accountId and Ukprn = @ukprn and PeriodEnd = @periodEndId and TransactionType = 3
 
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
