@@ -318,8 +318,6 @@ GO
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
--- scenarios
-
 DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), paymentsToGenerate INT, createMonth DATETIME)
 
 -- generate defaults
@@ -357,16 +355,6 @@ BEGIN
   exec #createPaymentsForMonth @accountId, @accountName, @createDate, @amount, @paymentsToGenerate
 
 END
-
--- calling the sproc like this allows both payment and refund in same month (alternatively, could use generation code above, and add extra payments for a month like this)
---exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
---SET @toDate = DATEADD(month, -1, @toDate)
---exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
---exec #createPaymentsForMonth @accountId, @accountName, @toDate, -500, 1
---SET @toDate = DATEADD(month, -1, @toDate)
---exec #createPaymentsForMonth @accountId, @accountName, @toDate, 1000, 3
-
--- scenarios end
 
 drop function CalendarPeriodYear
 go
