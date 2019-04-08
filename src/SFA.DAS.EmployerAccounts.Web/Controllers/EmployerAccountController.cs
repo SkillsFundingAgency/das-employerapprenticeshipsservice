@@ -9,7 +9,9 @@ using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -20,13 +22,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
+        private readonly IMediator _mediatr;
 
-        public EmployerAccountController(IAuthenticationService owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator, IMultiVariantTestingService multiVariantTestingService, ILog logger,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+        public EmployerAccountController(
+            IAuthenticationService owinWrapper, 
+            EmployerAccountOrchestrator employerAccountOrchestrator, 
+            IMultiVariantTestingService multiVariantTestingService, 
+            ILog logger,
+            ICookieStorageService<FlashMessageViewModel> flashMessage, 
+            IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
+            _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
         }
 
         [HttpGet]
@@ -90,18 +99,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Info(
                     $"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
-                var enteredData = _employerAccountOrchestrator.GetCookieData();
-
-                enteredData.EmployerAccountPayeRefData = new EmployerAccountPayeRefData
+                await 
+                _mediatr
+                    .SendAsync(new SavePayeRefData(
+                new EmployerAccountPayeRefData
                 {
                     EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "",
                     PayeReference = empref.Empref,
                     AccessToken = response.Data.AccessToken,
                     RefreshToken = response.Data.RefreshToken,
                     EmpRefNotFound = empref.EmprefNotFound,
-                };
-
-                _employerAccountOrchestrator.UpdateCookieData(enteredData);
+                }));
 
                 _logger.Info("Finished processing gateway response");
                 return RedirectToAction(ControllerConstants.SummaryActionName);

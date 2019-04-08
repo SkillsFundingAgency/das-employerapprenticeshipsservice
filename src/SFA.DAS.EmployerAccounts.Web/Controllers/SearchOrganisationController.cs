@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
+using MediatR;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.ReferenceData;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -21,17 +24,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly SearchOrganisationOrchestrator _orchestrator;
         //This is temporary until the existing add org function is replaced, at which point the method used can be moved to the org search orchestrator
         private readonly IMapper _mapper;
+        private IMediator _mediatr;
 
 
-        public SearchOrganisationController(IAuthenticationService owinWrapper,
+        public SearchOrganisationController(
+            IAuthenticationService owinWrapper,
             SearchOrganisationOrchestrator orchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMapper mapper)
+            IMapper mapper, 
+            IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _orchestrator = orchestrator;
             _mapper = mapper;
+            _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
         }
 
         [HttpGet]
@@ -87,13 +94,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 return FindAddress(hashedAccountId, viewModel);
             }
-            viewModel.CreateOrganisationCookie(_orchestrator, HttpContext);
+
+            saveOrganisationData(viewModel);
 
             if (string.IsNullOrEmpty(hashedAccountId))
             {
                 return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
             }
-
 
             var response = new OrchestratorResponse<OrganisationDetailsViewModel> { Data = viewModel };
 
@@ -106,6 +113,29 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult AddOtherOrganisationDetails(string hashedAccountId)
         {
             return RedirectToAction(ControllerConstants.AddOtherOrganisationDetailsViewName, ControllerConstants.OrganisationSharedControllerName);
+        }
+
+        private void saveOrganisationData(OrganisationDetailsViewModel viewModel)
+        {
+            if (viewModel?.Name != null)
+            {
+                _mediatr
+                    .SendAsync(new SaveOrganisationData
+                    (
+                        new EmployerAccountOrganisationData
+                        {
+                            OrganisationType = viewModel.Type,
+                            OrganisationReferenceNumber = viewModel.ReferenceNumber,
+                            OrganisationName = viewModel.Name,
+                            OrganisationDateOfInception = viewModel.DateOfInception,
+                            OrganisationRegisteredAddress = viewModel.Address,
+                            OrganisationStatus = viewModel.Status ?? string.Empty,
+                            PublicSectorDataSource = viewModel.PublicSectorDataSource,
+                            Sector = viewModel.Sector,
+                            NewSearch = viewModel.NewSearch
+                        }
+                    ));
+            }
         }
 
         private ActionResult FindAddress(string hashedAccountId, OrganisationDetailsViewModel organisation)

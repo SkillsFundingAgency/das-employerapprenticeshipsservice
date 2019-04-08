@@ -1,5 +1,6 @@
 ﻿using System.Web.Mvc;
 using System.Web.Routing;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -39,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _employerAccountController = new EmployerAccountController(
                _owinWrapper.Object, _orchestrator.Object, _userViewTestingService.Object, 
-               logger.Object, _flashMessage.Object)
+               logger.Object, _flashMessage.Object, Mock.Of<IMediator>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
