@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }));
 
                 _logger.Info("Finished processing gateway response");
-                return RedirectToAction(ControllerConstants.SummaryActionName);
+                return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
             catch (Exception ex)
             {
