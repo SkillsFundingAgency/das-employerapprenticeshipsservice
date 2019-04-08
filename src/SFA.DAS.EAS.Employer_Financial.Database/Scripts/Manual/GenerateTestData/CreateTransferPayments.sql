@@ -482,8 +482,6 @@ BEGIN
 	--DECLARE @receiverPayeScheme NVARCHAR(16)   = '123/RE12345'
 	
     DECLARE @currentDate DATETIME              = GETDATE()
-	-- todo: work out from current date (at least generate a sensible default)
-    DECLARE @periodEnd VARCHAR(20)             = '1819-R01'
     DECLARE @totalPaymentAmount DECIMAL(18,4)  = 10000
 	declare @numberOfPayments INT              = 1
 	
