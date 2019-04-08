@@ -14,6 +14,18 @@ BEGIN
 END
 GO
 
+IF OBJECT_ID('tempdb..#ProcessPaymentDataTransactionsGenerateDataEdition') IS NOT NULL
+BEGIN
+    DROP PROC #ProcessPaymentDataTransactionsGenerateDataEdition
+END
+GO
+
+IF OBJECT_ID('tempdb..#createAccountPayments') IS NOT NULL
+BEGIN
+    DROP PROC #createAccountPayments
+END
+GO
+
 IF OBJECT_ID('tempdb..#createCoursePaymentsForAccount') IS NOT NULL
 BEGIN
     DROP PROC #createCoursePaymentsForAccount
@@ -26,17 +38,36 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID('tempdb..#createAccountTransfers') IS NOT NULL
-BEGIN
-    DROP PROC #createAccountTransfers
-END
-GO
+--IF OBJECT_ID('tempdb..#createAccountTransfers') IS NOT NULL
+--BEGIN
+--    DROP PROC #createAccountTransfers
+--END
+--GO
 
 IF OBJECT_ID('tempdb..#CreateAccountTransferTransaction') IS NOT NULL
 BEGIN
     DROP PROC #CreateAccountTransferTransaction
 END
 GO
+
+CREATE FUNCTION CalendarPeriodMonth (@date datetime)  
+RETURNS int 
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+  RETURN(@month);  
+END; 
+GO
+
+CREATE FUNCTION CalendarPeriodYear (@date datetime)  
+RETURNS int
+AS  
+BEGIN  
+  declare @year int = DATEPART(year,@date)
+  return @year
+END; 
+GO
+
 
 --todo R13, R14
 CREATE FUNCTION PeriodEndMonth (@date datetime)  
@@ -100,38 +131,113 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE #createAccountPayments
+(    	
+    @accountId BIGINT,
+    @accountName NVARCHAR(100),
+    @providerName NVARCHAR(MAX),
+    @ukprn BIGINT,
+    @courseName NVARCHAR(MAX),
+	@periodEndDate DATETIME,
+    @totalAmount DECIMAL(18,5),
+	@numberOfPayments INT
+)  
+AS  
+BEGIN  	
 
--- CREATE THE STORED PROCEDURES
+    DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / @numberOfPayments
+
+	declare @name varchar(100)
+	declare @uln bigint
+	declare @id bigint
+
+	while (@numberOfPayments > 0)
+	BEGIN
+
+	  set @numberOfPayments = @numberOfPayments - 1
+
+	  SET @name = (CHAR(ASCII('A') + @numberOfPayments)) + ' Apprentice'
+	  SET @uln = 1000000000 + @numberOfPayments
+	  SET @id = 1000 + @numberOfPayments
+
+      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, /*Levy*/1, @paymentAmount, @periodEndDate
+	END
+END
+GO
+
+
 CREATE PROCEDURE #createPayment
 (     
-	@accountId BIGINT,
+    @accountId BIGINT,
     @providerName NVARCHAR(MAX),
     @apprenticeshipCourseName NVARCHAR(MAX),   
-	@apprenticeshipCourseLevel INT,
-	@apprenticeName VARCHAR(MAX), 	
-	@ukprn BIGINT,
-	@uln BIGINT,
-	@apprenticeshipid BIGINT,
-	@fundingSource INT,	
-	@Amount DECIMAL  
+    @apprenticeshipCourseLevel INT,
+    @apprenticeName VARCHAR(MAX), 	
+    @ukprn BIGINT,
+    @uln BIGINT,
+    @apprenticeshipid BIGINT,
+    @fundingSource INT,	
+    @Amount DECIMAL(18,5),
+    @periodEndDate DATETIME  
 )  
 AS  
 BEGIN  
-	DECLARE @paymentMetadataId bigint
+    DECLARE @paymentMetadataId bigint
 
-	INSERT INTO employer_financial.paymentmetadata 
-	(ProviderName, StandardCode, FrameworkCode, ProgrammeType, PathwayCode, ApprenticeshipCourseName, ApprenticeshipCourseStartDate, ApprenticeshipCourseLevel, ApprenticeName, ApprenticeNINumber)
-	VALUES
-	(@providerName,4,null,null,null, @apprenticeshipCourseName,'01/06/2018', @apprenticeshipCourseLevel, @apprenticeName, null)
+    INSERT INTO employer_financial.paymentmetadata 
+    (ProviderName, StandardCode, FrameworkCode, ProgrammeType, PathwayCode, ApprenticeshipCourseName, ApprenticeshipCourseStartDate, ApprenticeshipCourseLevel, ApprenticeName, ApprenticeNINumber)
+    VALUES
+    (@providerName,4,null,null,null, @apprenticeshipCourseName,'01/06/2018', @apprenticeshipCourseLevel, @apprenticeName, null)
 
-	SELECT @paymentMetadataId  = SCOPE_IDENTITY()
+    SELECT @paymentMetadataId  = SCOPE_IDENTITY()
 
-	INSERT INTO employer_financial.payment
-	(paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, collectionperiodid, collectionperiodmonth, collectionperiodyear, evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
-	VALUES
-	(newid(), @ukprn, @uln, @accountid, @apprenticeshipid, 5, 2018,'1819-R01', 6, 2018, '2018-05-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount,'1819-R01',@paymentMetadataId)
+	-- @deliveryPeriodDate approx 0-6 months before collection period
+	--todo: needs to be in same ay? if so, get month, knock some off, don't go below 1, then convert back to date
+	declare @deliveryPeriodDate datetime = DATEADD(month, -floor(rand()*6), @periodEndDate)
+	-- evidencesubmittedon >= devliveryperiod (can also be > collectionperiod)
+	--declare @evidenceSubmittedOn datetime = DATEADD(month, 1, @deliveryPeriodDate)
+
+    INSERT INTO employer_financial.payment
+    (paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, 
+	collectionperiodid, collectionperiodmonth, collectionperiodyear, 
+	evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
+    VALUES
+    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, dbo.CalendarPeriodMonth(@deliveryPeriodDate), dbo.CalendarPeriodYear(@deliveryPeriodDate),
+	dbo.PeriodEnd(@periodEndDate), dbo.CollectionPeriodMonth(@periodEndDate), dbo.CollectionPeriodYear(@periodEndDate), 
+	'2018-06-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, dbo.PeriodEnd(@periodEndDate), @paymentMetadataId)
 END;  
-GO  
+GO 
+
+--CREATE PROCEDURE #createPayment
+--(     
+--	@accountId BIGINT,
+--    @providerName NVARCHAR(MAX),
+--    @apprenticeshipCourseName NVARCHAR(MAX),   
+--	@apprenticeshipCourseLevel INT,
+--	@apprenticeName VARCHAR(MAX), 	
+--	@ukprn BIGINT,
+--	@uln BIGINT,
+--	@apprenticeshipid BIGINT,
+--	@fundingSource INT,	
+--	@Amount DECIMAL  
+--)  
+--AS  
+--BEGIN  
+--	DECLARE @paymentMetadataId bigint
+
+--	INSERT INTO employer_financial.paymentmetadata 
+--	(ProviderName, StandardCode, FrameworkCode, ProgrammeType, PathwayCode, ApprenticeshipCourseName, ApprenticeshipCourseStartDate, ApprenticeshipCourseLevel, ApprenticeName, ApprenticeNINumber)
+--	VALUES
+--	(@providerName,4,null,null,null, @apprenticeshipCourseName,'01/06/2018', @apprenticeshipCourseLevel, @apprenticeName, null)
+
+--	SELECT @paymentMetadataId  = SCOPE_IDENTITY()
+
+--	INSERT INTO employer_financial.payment
+--	(paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, collectionperiodid, collectionperiodmonth, collectionperiodyear, evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
+--	VALUES
+--	(newid(), @ukprn, @uln, @accountid, @apprenticeshipid, 5, 2018,'1819-R01', 6, 2018, '2018-05-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount,'1819-R01',@paymentMetadataId)
+--END;  
+--GO  
 
 CREATE PROCEDURE #createTransfer
 (
@@ -221,44 +327,132 @@ END
 GO
 
 
-CREATE PROCEDURE #createAccountTransfers
-(     
+--CREATE PROCEDURE #createAccountTransfers
+--(     
+--	@senderAccountId BIGINT,
+--	@senderAccountName NVARCHAR(100),
+--	@receiverAccountId BIGINT,
+--	@receiverAccountName NVARCHAR(100),
+--	@providerName NVARCHAR(MAX),
+--	@ukprn BIGINT,
+--	@courseName NVARCHAR(MAX),
+--	@periodEnd NVARCHAR(20),
+--	@totalAmount DECIMAL(18,4)
+--)  
+--AS  
+--BEGIN  	
+
+--    DECLARE @paymentAmount DECIMAL(18,4) = @totalAmount / 3
+--	--todo: needs to come in.
+--	-- replace this proc with #createPaymentsForMonth, then add transfers to it?
+--	-- call processing per month
+
+--	DECLARE @currentDate DATETIME = GETDATE()	
+
+--	DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @currentDate)
+
+--	-- todo: bring over new stuff deom CreatePayments. merge with a is transfer flag on the source generation table??
+
+--	exec #createPeriodEnd @periodEndDate
+
+--	-- Create transfer payments
+--	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount
+--	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount 
+--	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount 
+
+--	-- Create transfers
+--	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
+--	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 7777, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
+--	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 8888, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
+
+--END
+--GO
+
+CREATE PROCEDURE #ProcessPaymentDataTransactionsGenerateDataEdition
+	@AccountId BIGINT,
+	@DateCreated DATETIME
+AS
+
+--- Process Levy Payments ---
+INSERT INTO [employer_financial].[TransactionLine]
+select mainUpdate.* from
+    (
+    select 
+            x.AccountId as AccountId,
+			DATEFROMPARTS(DatePart(yyyy,@DateCreated),DatePart(MM,@DateCreated),DATEPART(dd,@DateCreated)) as DateCreated,
+            null as SubmissionId,
+            Max(pe.CompletionDateTime) as TransactionDate,
+            3 as TransactionType,			
+            null as LevyDeclared,
+            Sum(ISNULL(p.Amount, 0)) * -1 Amount,
+            null as EmpRef,
+            x.PeriodEnd,
+            x.Ukprn,
+            Sum(ISNULL(pco.Amount, 0)) * -1 as SfaCoInvestmentAmount,
+            Sum(ISNULL(pci.Amount, 0)) * -1 as EmployerCoInvestmentAmount,
+			0 as EnglishFraction,
+			null as TransferSenderAccountId,
+			null as TransferSenderAccountName,
+			null as TransferReceiverAccountId,
+			null as TransferReceiverAccountName		
+        FROM 
+            employer_financial.[Payment] x
+		inner join [employer_financial].[PeriodEnd] pe 
+				on pe.PeriodEndId = x.PeriodEnd
+        left join [employer_financial].[Payment] p 
+				on p.PeriodEnd = pe.PeriodEndId and p.PaymentId = x.PaymentId and p.FundingSource IN (1, 5)
+        left join [employer_financial].[Payment] pco 
+				on pco.PeriodEnd = pe.PeriodEndId and pco.PaymentId = x.PaymentId and pco.FundingSource = x.FundingSource and pco.FundingSource = 2 
+        left join [employer_financial].[Payment] pci 
+				on pci.PeriodEnd = pe.PeriodEndId and pci.PaymentId = x.PaymentId  and pci.FundingSource = x.FundingSource and pci.FundingSource = 3 
+		WHERE x.AccountId = @AccountId
+        Group by
+            x.Ukprn,x.PeriodEnd,x.AccountId
+    ) mainUpdate
+    inner join (
+        select AccountId,Ukprn,PeriodEnd from [employer_financial].Payment where FundingSource IN (1,2,3,5)      
+    EXCEPT
+        select AccountId,Ukprn,PeriodEnd from [employer_financial].[TransactionLine] where TransactionType = 3
+    ) dervx on dervx.AccountId = mainUpdate.AccountId and dervx.PeriodEnd = mainUpdate.PeriodEnd and dervx.Ukprn = mainUpdate.Ukprn
+GO
+
+CREATE PROCEDURE #createPaymentAndTransferForMonth
+(    	
 	@senderAccountId BIGINT,
 	@senderAccountName NVARCHAR(100),
+	@senderPayeScheme NVARCHAR(16),
 	@receiverAccountId BIGINT,
 	@receiverAccountName NVARCHAR(100),
-	@providerName NVARCHAR(MAX),
-	@ukprn BIGINT,
-	@courseName NVARCHAR(MAX),
-	@periodEnd NVARCHAR(20),
-	@totalAmount DECIMAL(18,4)
+	@receiverPayeScheme NVARCHAR(16),
+	@createDate DATETIME,
+	@totalPaymentAmount DECIMAL(18,5),
+	@numberOfPayments INT
 )  
 AS  
-BEGIN  	
+BEGIN  
+BEGIN TRANSACTION
 
-    DECLARE @paymentAmount DECIMAL(18,4) = @totalAmount / 3
-	--todo: needs to come in.
-	-- replace this proc with #createPaymentsForMonth, then add transfers to it?
-	-- call processing per month
-
-	DECLARE @currentDate DATETIME = GETDATE()	
-
-	DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @currentDate)
-
-	-- todo: bring over new stuff deom CreatePayments. merge with a is transfer flag on the source generation table??
+    DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
+	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+	declare @courseName nvarchar(max) = 'Plate Spinning'
 
 	exec #createPeriodEnd @periodEndDate
 
-	-- Create transfer payments
-	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount
-	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount 
-	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount 
+    EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, @courseName, @periodEndDate, @totalPaymentAmount, @numberOfPayments
 
-	-- Create transfers
-	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
-	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 7777, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
-	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 8888, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
+	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @totalPaymentAmount, @periodEndId, 0, @createDate
 
+	declare @negativeTotalPaymentAmount DECIMAL(18,5) = -@totalPaymentAmount
+	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEndId, @negativeTotalPaymentAmount, @createDate
+	EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEndId, @totalPaymentAmount, @createDate
+
+	--todo: check what these are doing. are they required? if so will need datageneration edition that accepts date rather than using getdate
+	--exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
+	--exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
+
+    exec #ProcessPaymentDataTransactionsGenerateDataEdition @receiverAccountId, @createDate
+
+COMMIT TRANSACTION
 END
 GO
 
@@ -285,23 +479,32 @@ BEGIN
 	-- todo: work out from current date (at least generate a sensible default)
     DECLARE @periodEnd VARCHAR(20)             = '1819-R01'
     DECLARE @totalPaymentAmount DECIMAL(18,4)  = 10000
+	declare @numberOfPayments INT              = 1
 	
 	--  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,
 	-- '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P' 
 
-	DECLARE @negativePaymentAmount DECIMAL(18,4) = -@totalPaymentAmount
+	exec #createPaymentAndTransferForMonth	@senderAccountId,   @senderAccountName,   @senderPayeScheme,
+											@receiverAccountId, @receiverAccountName, @receiverPayeScheme,
+											@currentDate, @totalPaymentAmount, @numberOfPayments
 
-	EXEC #createAccountTransfers @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
-	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @negativePaymentAmount, @currentDate
-	EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, @currentDate
+	--DECLARE @negativePaymentAmount DECIMAL(18,4) = -@totalPaymentAmount
+
+	--EXEC #createAccountTransfers @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
+	--EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, @currentDate
+	--EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, @currentDate
 
 	--todo: why process levy decs? this script isn't adding any!
 	--exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
 	--exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
-	exec employer_financial.processpaymentdatatransactions @receiverAccountId
+	--exec employer_financial.processpaymentdatatransactions @receiverAccountId
 END
 GO
 
+drop function CalendarPeriodYear
+go
+drop function CalendarPeriodMonth
+go
 drop function PeriodEndYear
 go
 drop function PeriodEndMonth

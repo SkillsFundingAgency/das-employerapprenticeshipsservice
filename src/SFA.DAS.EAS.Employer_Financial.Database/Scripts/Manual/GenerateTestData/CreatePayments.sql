@@ -203,15 +203,6 @@ BEGIN
 
     DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / @numberOfPayments
 
-	declare @apprentices table (row int, name varchar(100), uln bigint, id bigint)
-	insert @apprentices values
-	(1, 'Connie Lingus', 1234567890, 1111),
-	(2, 'Martin du Bois', 2345678901, 2222),
-	(3, 'Annaleigh Probin', 3456789012, 3333),
-	(4, 'Jack Gough', 4567890123, 4444),
-	(5, 'Juan Kerr', 5678901234, 5555),
-	(6, 'Isabelle Enderberry', 6789012345, 6666)
-
 	declare @name varchar(100)
 	declare @uln bigint
 	declare @id bigint
@@ -219,13 +210,13 @@ BEGIN
 	while (@numberOfPayments > 0)
 	BEGIN
 
-	  SELECT @name = name, @uln = uln, @id = id
-      FROM @apprentices
-	  WHERE row = @numberOfPayments
-
-      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, 1, @paymentAmount, @periodEndDate
-
 	  set @numberOfPayments = @numberOfPayments - 1
+
+	  SET @name = (CHAR(ASCII('A') + @numberOfPayments)) + ' Apprentice'
+	  SET @uln = 1000000000 + @numberOfPayments
+	  SET @id = 1000 + @numberOfPayments
+
+      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, /*Levy*/1, @paymentAmount, @periodEndDate
 	END
 END
 GO
