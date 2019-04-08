@@ -162,7 +162,8 @@ CREATE PROCEDURE #createAccountPayments
 	@fundingSource int,
 	@periodEndDate DATETIME,
     @totalAmount DECIMAL(18,5),
-	@numberOfPayments INT
+	@numberOfPayments INT,
+	@apprenticeshipId bigint output
 )  
 AS  
 BEGIN  	
@@ -172,7 +173,6 @@ BEGIN
 
 	declare @name varchar(100)
 	declare @uln bigint
-	declare @id bigint
 
 	while (@numberOfPayments > 0)
 	BEGIN
@@ -181,9 +181,9 @@ BEGIN
 
 	  SET @name = (CHAR(ASCII('A') + @numberOfPayments)) + ' Apprentice'
 	  SET @uln = 1000000000 + @numberOfPayments
-	  SET @id = 1000 + @numberOfPayments
+	  SET @apprenticeshipId = 1000 + @numberOfPayments
 
-      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, @fundingSourceString, @paymentAmount, @periodEndDate
+      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @apprenticeshipId, @fundingSourceString, @paymentAmount, @periodEndDate
 	END
 END
 GO
@@ -386,14 +386,17 @@ BEGIN TRANSACTION
 	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
 	declare @courseName nvarchar(max) = 'Plate Spinning'
 	declare @ukprn bigint = 10001378
+	declare @firstApprenticeshipId bigint
 
 	exec #createPeriodEnd @periodEndDate
 
-    EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', @ukprn, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments
+    EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', @ukprn, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments,
+								@apprenticeshipId = @firstApprenticeshipId output 
 
 	--todo: duplicates checked on apprenticeship id and periodend, so can't hardcore app id. ideally use real generated app id
 	-- might need to generate unique apprenticeship ids per run, else going to hit duplicates!
-	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
+	--note: employer finance inserts the first apprenticeshipId from the set of transfers (and the others are ignored for the accounttransfer row)
+	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @firstApprenticeshipId, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
 
 	declare @negativeTotalPaymentAmount DECIMAL(18,5) = -@totalPaymentAmount
 	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEndId, @negativeTotalPaymentAmount, @createDate
