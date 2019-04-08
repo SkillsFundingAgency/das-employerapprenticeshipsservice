@@ -14,6 +14,12 @@ BEGIN
 END
 GO
 
+IF OBJECT_ID('tempdb..#createPaymentAndTransferForMonth') IS NOT NULL
+BEGIN
+    DROP PROC #createPaymentAndTransferForMonth
+END
+GO
+
 IF OBJECT_ID('tempdb..#ProcessPaymentDataTransactionsGenerateDataEdition') IS NOT NULL
 BEGIN
     DROP PROC #ProcessPaymentDataTransactionsGenerateDataEdition
@@ -420,10 +426,10 @@ CREATE PROCEDURE #createPaymentAndTransferForMonth
 (    	
 	@senderAccountId BIGINT,
 	@senderAccountName NVARCHAR(100),
-	@senderPayeScheme NVARCHAR(16),
+	--@senderPayeScheme NVARCHAR(16),
 	@receiverAccountId BIGINT,
 	@receiverAccountName NVARCHAR(100),
-	@receiverPayeScheme NVARCHAR(16),
+	--@receiverPayeScheme NVARCHAR(16),
 	@createDate DATETIME,
 	@totalPaymentAmount DECIMAL(18,5),
 	@numberOfPayments INT
@@ -469,11 +475,11 @@ BEGIN
 
 	DECLARE @senderAccountId BIGINT            = 0
 	DECLARE @SenderAccountName NVARCHAR(100)   = 'Sender Name'
-	DECLARE @senderPayeScheme NVARCHAR(16)     = '123/SE12345'
+	--DECLARE @senderPayeScheme NVARCHAR(16)     = '123/SE12345'
 
     DECLARE @receiverAccountId BIGINT          = 1
 	DECLARE @receiverAccountName NVARCHAR(100) = 'Receiver Name'
-	DECLARE @receiverPayeScheme NVARCHAR(16)   = '123/RE12345'
+	--DECLARE @receiverPayeScheme NVARCHAR(16)   = '123/RE12345'
 	
     DECLARE @currentDate DATETIME              = GETDATE()
 	-- todo: work out from current date (at least generate a sensible default)
@@ -484,8 +490,8 @@ BEGIN
 	--  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,
 	-- '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P' 
 
-	exec #createPaymentAndTransferForMonth	@senderAccountId,   @senderAccountName,   @senderPayeScheme,
-											@receiverAccountId, @receiverAccountName, @receiverPayeScheme,
+	exec #createPaymentAndTransferForMonth	@senderAccountId,   @senderAccountName,   -- @senderPayeScheme,
+											@receiverAccountId, @receiverAccountName, -- @receiverPayeScheme,
 											@currentDate, @totalPaymentAmount, @numberOfPayments
 
 	--DECLARE @negativePaymentAmount DECIMAL(18,4) = -@totalPaymentAmount
