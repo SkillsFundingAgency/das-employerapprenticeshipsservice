@@ -249,7 +249,7 @@ CREATE PROCEDURE #createTransfer
 	@courseName varchar(max),	
 	@amount decimal(18,5),
 	@periodEnd nvarchar(20),
-	@type smallint,
+	@type varchar(50),
 	@transferDate datetime
 )
 AS
@@ -440,7 +440,7 @@ BEGIN TRANSACTION
 
     EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, @courseName, @periodEndDate, @totalPaymentAmount, @numberOfPayments
 
-	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @totalPaymentAmount, @periodEndId, 0, @createDate
+	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
 
 	declare @negativeTotalPaymentAmount DECIMAL(18,5) = -@totalPaymentAmount
 	EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEndId, @negativeTotalPaymentAmount, @createDate
@@ -468,12 +468,12 @@ BEGIN
 	--       `--`--``--`-`--`--' `--`        `--`./  `--` `--`---'`--`---'   `--`-----`` `--`-`--`--'         `--`------' `--`-----`` `--`./  `--`--`-----`` `--`-`--`--' `--`           `--`--` `--`-`    `--`--''   `--`./  `--`         `--`      `--`./  `--`   `--`--''  `-._`.___,'  `--`---' 
 
 	DECLARE @senderAccountId BIGINT            = 0
-	DECLARE @SenderAccountName NVARCHAR(100)   = 'XXX'
-	DECLARE @senderPayeScheme NVARCHAR(16)     = 'XXX'
+	DECLARE @SenderAccountName NVARCHAR(100)   = 'Sender Name'
+	DECLARE @senderPayeScheme NVARCHAR(16)     = '123/SE12345'
 
     DECLARE @receiverAccountId BIGINT          = 1
-	DECLARE @receiverAccountName NVARCHAR(100) = 'YYY'	
-	DECLARE @receiverPayeScheme NVARCHAR(16)   = 'YYY'
+	DECLARE @receiverAccountName NVARCHAR(100) = 'Receiver Name'
+	DECLARE @receiverPayeScheme NVARCHAR(16)   = '123/RE12345'
 	
     DECLARE @currentDate DATETIME              = GETDATE()
 	-- todo: work out from current date (at least generate a sensible default)
