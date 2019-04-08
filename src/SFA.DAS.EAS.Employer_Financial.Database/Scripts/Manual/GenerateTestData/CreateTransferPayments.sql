@@ -144,6 +144,7 @@ CREATE PROCEDURE #createAccountPayments
     @providerName NVARCHAR(MAX),
     @ukprn BIGINT,
     @courseName NVARCHAR(MAX),
+	@fundingSource int,
 	@periodEndDate DATETIME,
     @totalAmount DECIMAL(18,5),
 	@numberOfPayments INT
@@ -152,6 +153,7 @@ AS
 BEGIN  	
 
     DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / @numberOfPayments
+	declare @fundingSourceString varchar(25) = cast(@fundingSource as VARCHAR(25))
 
 	declare @name varchar(100)
 	declare @uln bigint
@@ -166,7 +168,7 @@ BEGIN
 	  SET @uln = 1000000000 + @numberOfPayments
 	  SET @id = 1000 + @numberOfPayments
 
-      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, /*Levy*/1, @paymentAmount, @periodEndDate
+      EXEC #createPayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, @fundingSourceString, @paymentAmount, @periodEndDate
 	END
 END
 GO
@@ -444,7 +446,7 @@ BEGIN TRANSACTION
 
 	exec #createPeriodEnd @periodEndDate
 
-    EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, @courseName, @periodEndDate, @totalPaymentAmount, @numberOfPayments
+    EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments
 
 	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
 
