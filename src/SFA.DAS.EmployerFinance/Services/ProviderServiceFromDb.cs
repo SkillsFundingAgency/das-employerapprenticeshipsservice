@@ -1,7 +1,6 @@
-﻿using SFA.DAS.EmployerFinance.Data;
+﻿using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.NLog.Logger;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -26,8 +25,11 @@ namespace SFA.DAS.EmployerFinance.Services
                 _logger.Warn($"No provider name found for Ukprn:{providerName} in previous payments");
             }
 
-            return new Models.ApprenticeshipProvider.Provider {
-                Name = providerName.FirstOrDefault(),
+            _logger.Info($"Provider Name found {providerName}");
+
+            return new Models.ApprenticeshipProvider.Provider
+            {
+                Name = providerName,
                 Ukprn = ukPrn,
                 IsHistoricProviderName = true
             };

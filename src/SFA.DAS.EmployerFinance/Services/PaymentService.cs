@@ -131,6 +131,7 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             var provider = await _providerService.Get(payment.Ukprn);
             payment.ProviderName = provider?.ProviderName;
+            payment.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
         }
 
         private async Task GetApprenticeshipDetails(long employerAccountId, PaymentDetails payment)

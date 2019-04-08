@@ -230,17 +230,19 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public Task<IEnumerable<string>> FindHistoricalProviderName(long ukprn)
+        public async Task<string> FindHistoricalProviderName(long ukprn)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@ukprn", ukprn, DbType.Int64);
 
-            return _db.Value.Database.Connection.QueryAsync<string>(
+            var result = await _db.Value.Database.Connection.QueryAsync<string>(
                 sql: "[employer_financial].[GetLastKnownProviderNameForUkprn]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
+
+            return result.FirstOrDefault();
         }
     }
 }

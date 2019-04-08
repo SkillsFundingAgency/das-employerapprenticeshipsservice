@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -24,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
 
             _mockDasLevyRepository
                 .Setup(m => m.FindHistoricalProviderName(It.IsAny<long>()))
-                .ReturnsAsync(new List<string>{_providerName});
+                .ReturnsAsync(_providerName);
 
             _sut = new EmployerFinance.Services.ProviderServiceFromDb(_mockDasLevyRepository.Object, Mock.Of<ILog>());
         }
