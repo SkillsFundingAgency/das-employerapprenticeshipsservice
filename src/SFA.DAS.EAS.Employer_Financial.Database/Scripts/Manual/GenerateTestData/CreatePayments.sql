@@ -282,12 +282,18 @@ BEGIN
 BEGIN TRANSACTION
 
     DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
+	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+	declare @ukprn bigint = 10001378
 
 	exec #createPeriodEnd @periodEndDate
 
-    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting', @periodEndDate, @totalPaymentAmount, @numberOfPayments
+    EXEC #createAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', @ukprn, 'Accounting', @periodEndDate, @totalPaymentAmount, @numberOfPayments
 
-	--todo: use this version in transfers gen        
+	-- #ProcessPaymentDataTransactionsGenerateDataEdition doesn't create a new payment transactionline where one already exists
+	-- so we remove any current payment transactionline first, so that payments can be additively generated in a month
+	--todo: need to do the same in transfers (unless have common sprocs, and transfer 1 calls this one)
+	delete [employer_financial].[TransactionLine] where AccountId = @accountId and Ukprn = @ukprn and PeriodEnd = @periodEndId and TransactionType = 3
+
     exec #ProcessPaymentDataTransactionsGenerateDataEdition @accountId, @createDate
 
 COMMIT TRANSACTION
@@ -327,6 +333,7 @@ insert into @paymentsByMonth
 SELECT TOP (@numberOfMonthsToCreate)
 			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
 			@defaultMonthlyTotalPayments,
+			--todo: have as param
 			3,
 			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
 FROM sys.all_objects

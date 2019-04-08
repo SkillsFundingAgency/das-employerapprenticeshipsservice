@@ -390,6 +390,8 @@ BEGIN TRANSACTION
 
     EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments
 
+	--todo: duplicates checked on apprenticeship id and periodend, so can't hardcore app id. ideally use real generated app id
+	-- might need to generate unique apprenticeship ids per run, else going to hit duplicates!
 	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
 
 	declare @negativeTotalPaymentAmount DECIMAL(18,5) = -@totalPaymentAmount
