@@ -1,6 +1,4 @@
---todo: generate correct period end for payment
-
--- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
+-- See 'Transfer Generation Knobs' section towards the end of this file for the control knobs
 
 IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
 BEGIN
@@ -233,37 +231,6 @@ BEGIN
 END;  
 GO 
 
---CREATE PROCEDURE #createPayment
---(     
---	@accountId BIGINT,
---    @providerName NVARCHAR(MAX),
---    @apprenticeshipCourseName NVARCHAR(MAX),   
---	@apprenticeshipCourseLevel INT,
---	@apprenticeName VARCHAR(MAX), 	
---	@ukprn BIGINT,
---	@uln BIGINT,
---	@apprenticeshipid BIGINT,
---	@fundingSource INT,	
---	@Amount DECIMAL  
---)  
---AS  
---BEGIN  
---	DECLARE @paymentMetadataId bigint
-
---	INSERT INTO employer_financial.paymentmetadata 
---	(ProviderName, StandardCode, FrameworkCode, ProgrammeType, PathwayCode, ApprenticeshipCourseName, ApprenticeshipCourseStartDate, ApprenticeshipCourseLevel, ApprenticeName, ApprenticeNINumber)
---	VALUES
---	(@providerName,4,null,null,null, @apprenticeshipCourseName,'01/06/2018', @apprenticeshipCourseLevel, @apprenticeName, null)
-
---	SELECT @paymentMetadataId  = SCOPE_IDENTITY()
-
---	INSERT INTO employer_financial.payment
---	(paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, collectionperiodid, collectionperiodmonth, collectionperiodyear, evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
---	VALUES
---	(newid(), @ukprn, @uln, @accountid, @apprenticeshipid, 5, 2018,'1819-R01', 6, 2018, '2018-05-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount,'1819-R01',@paymentMetadataId)
---END;  
---GO  
-
 CREATE PROCEDURE #createTransfer
 (
 	@senderAccountId bigint,
@@ -350,48 +317,6 @@ BEGIN
 	)
 END
 GO
-
-
---CREATE PROCEDURE #createAccountTransfers
---(     
---	@senderAccountId BIGINT,
---	@senderAccountName NVARCHAR(100),
---	@receiverAccountId BIGINT,
---	@receiverAccountName NVARCHAR(100),
---	@providerName NVARCHAR(MAX),
---	@ukprn BIGINT,
---	@courseName NVARCHAR(MAX),
---	@periodEnd NVARCHAR(20),
---	@totalAmount DECIMAL(18,4)
---)  
---AS  
---BEGIN  	
-
---    DECLARE @paymentAmount DECIMAL(18,4) = @totalAmount / 3
---	--todo: needs to come in.
---	-- replace this proc with #createPaymentsForMonth, then add transfers to it?
---	-- call processing per month
-
---	DECLARE @currentDate DATETIME = GETDATE()	
-
---	DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @currentDate)
-
---	-- todo: bring over new stuff deom CreatePayments. merge with a is transfer flag on the source generation table??
-
---	exec #createPeriodEnd @periodEndDate
-
---	-- Create transfer payments
---	EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Mark Redwood', @ukprn, 1003, 3333, 1, @paymentAmount
---	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Sarah Redwood', @ukprn, 2003, 7777, 1, @paymentAmount 
---	--EXEC #createPayment @receiverAccountId, @providerName, @courseName, 4, 'Tim Woods', @ukprn, 2004, 8888, 1, @paymentAmount 
-
---	-- Create transfers
---	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 3333, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
---	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 7777, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
---	--EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 8888, @courseName, @paymentAmount, @periodEnd, 0, @currentDate
-
---END
---GO
 
 CREATE PROCEDURE #ProcessPaymentDataTransactionsGenerateDataEdition
 	@AccountId BIGINT,
@@ -510,17 +435,6 @@ BEGIN
 	exec #createPaymentAndTransferForMonth	@senderAccountId,   @senderAccountName,   -- @senderPayeScheme,
 											@receiverAccountId, @receiverAccountName, -- @receiverPayeScheme,
 											@currentDate, @totalPaymentAmount, @numberOfPayments
-
-	--DECLARE @negativePaymentAmount DECIMAL(18,4) = -@totalPaymentAmount
-
-	--EXEC #createAccountTransfers @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', 10001378, 'Accounting',  @periodEnd, @totalPaymentAmount	
-	--EXEC #CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, @currentDate
-	--EXEC #CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEnd, @totalPaymentAmount, @currentDate
-
-	--todo: why process levy decs? this script isn't adding any!
-	--exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
-	--exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
-	--exec employer_financial.processpaymentdatatransactions @receiverAccountId
 END
 GO
 
