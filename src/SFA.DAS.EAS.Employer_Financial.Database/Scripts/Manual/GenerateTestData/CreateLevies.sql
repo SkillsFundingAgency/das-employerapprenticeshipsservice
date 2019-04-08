@@ -65,10 +65,7 @@ DECLARE @numberOfMonthsToCreate INT      = 25
 DECLARE @levyDecByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), createMonth DATETIME, payrollMonth DATETIME, payrollYear VARCHAR(5))
 
 declare @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
-select @firstPayrollMonth
-
 declare @firstPayrollYear VARCHAR(5) = dbo.PayrollYear(@firstPayrollMonth)
-select @firstPayrollYear
 
 -- generates same levy per month
 insert into @levyDecByMonth
