@@ -115,14 +115,14 @@ BEGIN
 END; 
 GO
 
-CREATE FUNCTION CollectionPeriodId (@date datetime)  
-RETURNS VARCHAR(8)
-AS  
-BEGIN  
-  declare @periodEnd varchar(8) = (select dbo.PeriodEnd(@date))
-  return @periodEnd
-END; 
-GO
+--CREATE FUNCTION CollectionPeriodId (@date datetime)  
+--RETURNS VARCHAR(8)
+--AS  
+--BEGIN  
+--  declare @periodEnd varchar(8) = (select dbo.PeriodEnd(@date))
+--  return @periodEnd
+--END; 
+--GO
 
 -- Add period end if its not already there
 CREATE PROCEDURE #createPeriodEnd
@@ -376,8 +376,8 @@ drop function CollectionPeriodYear
 go
 drop function CollectionPeriodMonth
 go
-drop function CollectionPeriodId
-go
+--drop function CollectionPeriodId
+--go
 drop function PeriodEndYear
 go
 drop function PeriodEndMonth

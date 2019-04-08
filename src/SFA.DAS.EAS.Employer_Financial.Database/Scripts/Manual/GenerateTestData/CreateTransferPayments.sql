@@ -74,6 +74,23 @@ BEGIN
 END; 
 GO
 
+CREATE FUNCTION CollectionPeriodMonth (@date datetime)
+RETURNS int 
+AS  
+BEGIN  
+  declare @collectionPeriodMonth int = (select dbo.CalendarPeriodMonth(@date))
+  return @collectionPeriodMonth
+END;
+GO
+
+CREATE FUNCTION CollectionPeriodYear (@date datetime)  
+RETURNS int
+AS  
+BEGIN  
+  declare @collectionPeriodYear int = (select dbo.CalendarPeriodYear(@date))
+  return @collectionPeriodYear
+END; 
+GO
 
 --todo R13, R14
 CREATE FUNCTION PeriodEndMonth (@date datetime)  
@@ -510,6 +527,10 @@ GO
 drop function CalendarPeriodYear
 go
 drop function CalendarPeriodMonth
+go
+drop function CollectionPeriodYear
+go
+drop function CollectionPeriodMonth
 go
 drop function PeriodEndYear
 go
