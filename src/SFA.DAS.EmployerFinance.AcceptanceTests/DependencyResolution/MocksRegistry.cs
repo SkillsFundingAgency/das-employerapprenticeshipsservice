@@ -5,6 +5,8 @@ using SFA.DAS.Authorization;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.Events.Api.Client;
+using SFA.DAS.TokenService.Api.Client;
+using SFA.DAS.TokenService.Api.Types;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
@@ -21,6 +23,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             AddMock<IEventsApi>();
             AddMock<IMembershipRepository>();
             AddMock<IPayeRepository>();
+            For<ITokenServiceApiClient>().Use(c => SetupTokenServiceApiClientMock().Object);
         }
 
         private void AddMock<T>() where T : class
@@ -30,6 +33,13 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             For<IMock<T>>().Use(mock);
             For<Mock<T>>().Use(mock);
             For<T>().Use(mock.Object);
+        }
+
+        private Mock<ITokenServiceApiClient> SetupTokenServiceApiClientMock()
+        {
+            var client = new Mock<ITokenServiceApiClient>();
+            client.Setup(c => c.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken());
+            return client;
         }
     }
 }
