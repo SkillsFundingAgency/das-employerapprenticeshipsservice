@@ -5,6 +5,7 @@ using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.NLog.Logger;
@@ -33,6 +34,23 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [Given(@"We have an account with a paye scheme")]
         public Task GivenWeHaveAnAccountWithPayeScheme()
         {
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                await _objectContext.CreateAccount(c);
+                await InitialisePayeSchemeRef(c, "123/ACT");
+            });
+        }
+
+        [Given(@"An employer is adding a PAYE which has submissions older than the (.*) month expiry rule limit")]
+        public Task GivenPAYEAccountAndExpiryLimit(int expiryLimit)
+        {
+            //_configurationManager.Get("todo"); change this to use scenario context and static config manager
+            //ConfigurationManager.Get("todo");
+            var employerFinanceConfiguration = _objectContainer.Resolve<EmployerFinanceConfiguration>();
+            employerFinanceConfiguration.FundsExpiryPeriod = expiryLimit;
+            //var config2 = _objectContainer.Resolve<EmployerFinanceConfiguration>();
+            //var result = config2.FundsExpiryPeriod;
+
             return _objectContainer.ScopeAsync(async c =>
             {
                 await _objectContext.CreateAccount(c);

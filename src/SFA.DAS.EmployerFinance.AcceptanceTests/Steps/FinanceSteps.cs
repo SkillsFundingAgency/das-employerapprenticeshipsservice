@@ -111,6 +111,18 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             });
         }
 
+        [Then(@"we should see a level 1 screen with a levy declared of (.*) on the (.*)/(.*)")]
+        public Task ThenLevel1HasRowWithCorrectLevyTransaction(int levyDeclared, int month, int year)
+        {
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                var account = _objectContext.Get<Account>();
+                var actual = await c.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
+
+                Assert.AreEqual(levyDeclared, actual.Data.Model.Data.TransactionLines.Sum(t => t.Amount));
+            });
+        }
+
         [Then(@"we should see a level 2 screen with a levy declared of ([^ ]*) on the (.*)/(.*)")]
         public Task ThenUserDaveFromAccountAShouldSeeALevelScreenWithALevyDeclaredOfOnThe(int levyDeclared, int month, int year)
         {
