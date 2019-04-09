@@ -81,12 +81,3 @@ BEGIN
   return @periodEnd
 END; 
 GO
-
-CREATE OR ALTER FUNCTION DataGen.CollectionPeriodId (@date datetime)  
-RETURNS VARCHAR(8)
-AS  
-BEGIN  
-  declare @periodEnd varchar(8) = (select dbo.PeriodEnd(@date))
-  return @periodEnd
-END; 
-GO

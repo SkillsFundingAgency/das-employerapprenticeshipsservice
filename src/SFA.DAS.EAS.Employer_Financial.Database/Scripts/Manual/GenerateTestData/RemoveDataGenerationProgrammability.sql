@@ -27,10 +27,6 @@ IF object_id(N'DataGen.PeriodEnd', N'FN') IS NOT NULL
     DROP FUNCTION DataGen.PeriodEnd
 GO
 
-IF object_id(N'DataGen.CollectionPeriodId', N'FN') IS NOT NULL
-    DROP FUNCTION DataGen.CollectionPeriodId
-GO
-
 IF EXISTS (SELECT * FROM sys.schemas WHERE name = 'DataGen')
 BEGIN
 	EXEC('DROP SCHEMA DataGen')
