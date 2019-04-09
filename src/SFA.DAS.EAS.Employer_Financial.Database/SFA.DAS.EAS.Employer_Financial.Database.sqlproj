@@ -73,6 +73,7 @@
     <Folder Include="Scripts\PreDeployment" />
     <Folder Include="Scripts\Manual" />
     <Folder Include="Scripts\Manual\GenerateTestData" />
+    <Folder Include="Scripts\Manual\GenerateTestData\DataGenFramework" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -165,6 +166,9 @@
     <None Include="Scripts\Manual\GenerateTestData\CreatePayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\CreateLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\CreateTransferPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationProgrammability.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationProgrammability.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\CreatePayments_use_sp.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -177,10 +181,7 @@
     <None Include="Scripts\Manual\GenerateTestData\DeleteAccountPayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DeleteAccountLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\Notes.txt" />
-    <None Include="Scripts\Manual\GenerateTestData\AddDataGenerationProgrammability.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\RemoveDataGenerationProgrammability.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DeleteAccountTransfers.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\CreatePayments_use_sp.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
