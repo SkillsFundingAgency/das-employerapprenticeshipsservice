@@ -306,7 +306,7 @@ COMMIT TRANSACTION
 END
 GO
 
---better name if works
+--better name?
 CREATE OR ALTER FUNCTION GenerateSourceTable(
     @accountId BIGINT,
     @accountName NVARCHAR(100),
@@ -420,6 +420,8 @@ go
 drop function PeriodEndMonth
 go
 drop function PeriodEnd
+go
+drop function GenerateSourceTable
 go
 
 IF (OBJECT_ID('DataGen.createPaymentsForMonths', 'P') IS NOT NULL)

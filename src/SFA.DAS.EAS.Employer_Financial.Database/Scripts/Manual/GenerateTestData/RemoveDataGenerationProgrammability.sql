@@ -1,4 +1,32 @@
 ﻿
+-- Stored Procedures
+
+IF (OBJECT_ID('DataGen.CreatePeriodEnd', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreatePeriodEnd
+GO
+
+IF (OBJECT_ID('DataGen.CreatePayment', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreatePayment
+GO
+
+IF (OBJECT_ID('DataGen.CreateAccountPayments', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreateAccountPayments
+GO
+
+IF (OBJECT_ID('DataGen.ProcessPaymentDataTransactionsGenerateDataEdition', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.ProcessPaymentDataTransactionsGenerateDataEdition
+GO
+
+IF (OBJECT_ID('DataGen.CreatePaymentsForMonth', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreatePaymentsForMonth
+GO
+
+IF (OBJECT_ID('DataGen.CreatePaymentsForMonths', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreatePaymentsForMonths
+GO
+
+-- Functions
+
 IF object_id(N'DataGen.CalendarPeriodMonth', N'FN') IS NOT NULL
     DROP FUNCTION DataGen.CalendarPeriodMonth
 GO
@@ -26,6 +54,17 @@ GO
 IF object_id(N'DataGen.PeriodEnd', N'FN') IS NOT NULL
     DROP FUNCTION DataGen.PeriodEnd
 GO
+
+IF object_id(N'DataGen.GenerateSourceTable', N'TF') IS NOT NULL
+    DROP FUNCTION DataGen.GenerateSourceTable
+GO
+
+-- Types
+
+drop type if exists DataGen.PaymentGenerationSourceTable
+go
+
+-- Schema
 
 IF EXISTS (SELECT * FROM sys.schemas WHERE name = 'DataGen')
 BEGIN
