@@ -50,6 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Features\LateAccounts\Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature</DependentUpon>
+    </Compile>
     <Compile Update="Features\Expired-funds.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -105,6 +110,10 @@
     <None Update="App.Release.config">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="Features\LateAccounts\Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature.cs</LastGenOutput>
     </None>
     <None Update="Features\Expired-funds.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
