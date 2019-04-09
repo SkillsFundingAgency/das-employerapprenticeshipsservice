@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.Common.Domain.Types
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<SummaryViewModel>
 
 @{ViewBag.PageID = "page-onboard-paye-check-details"; }
@@ -90,7 +91,7 @@
                 @Html.AntiForgeryToken()
                 <div class="form-group">
                     <button type="submit" class="button" id="continue">These details are correct</button>
-                    <a class="button-link" href="@Url.Action("SearchForOrganisation", "SearchOrganisation")">Change details</a>                
+                    <a class="button-link" href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Change details</a>                
                 </div>
             </form>
         }
