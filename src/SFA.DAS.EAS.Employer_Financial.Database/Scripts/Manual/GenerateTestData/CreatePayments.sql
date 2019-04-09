@@ -1,4 +1,4 @@
---todo: transfers, coinvestment
+--todo: coinvestment
 
 -- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
 
@@ -314,12 +314,12 @@ GO
 	--                    (8),P                                                                                                                                                                                              
 	--                     YMM                                                                                                                                                                                               
 
-	declare @accountId BIGINT                = 1
-    declare @accountName NVARCHAR(100)       = 'Insert Name Here'
-	declare @toDate DATETIME                 = GETDATE()
-	declare @numberOfMonthsToCreate INT      = 25
-	--todo: decimal
-	declare @defaultMonthlyTotalPayments INT = 100
+	declare @accountId BIGINT                          = 1
+    declare @accountName NVARCHAR(100)                 = 'Insert Name Here'
+	declare @toDate DATETIME                           = GETDATE()
+	declare @numberOfMonthsToCreate INT                = 25
+	declare @defaultMonthlyTotalPayments DECIMAL(18,5) = 100
+	declare @defaultPaymentsPerMonth int               = 3
 
 	--  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
@@ -333,8 +333,7 @@ insert into @paymentsByMonth
 SELECT TOP (@numberOfMonthsToCreate)
 			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
 			@defaultMonthlyTotalPayments,
-			--todo: have as param
-			3,
+			@defaultPaymentsPerMonth,
 			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
 FROM sys.all_objects
 ORDER BY monthBeforeToDate;
