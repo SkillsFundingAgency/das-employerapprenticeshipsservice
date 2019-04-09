@@ -32,8 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             try
             {
-                _cookieService.Delete(CookieName);
-
                 var result = await Mediator.SendAsync(new GetOrganisationsRequest { SearchTerm = searchTerm, PageNumber = pageNumber, OrganisationType = organisationType });
                 response.Data = new SearchOrganisationResultsViewModel
                 {
