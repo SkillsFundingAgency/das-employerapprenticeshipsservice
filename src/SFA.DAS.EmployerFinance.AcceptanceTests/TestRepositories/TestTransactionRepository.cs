@@ -8,6 +8,7 @@ using Dapper;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 
@@ -31,8 +32,24 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
         public Task<int> GetMaxAccountId()
         {
             return _employerFinanceDbContext.Value.Database.Connection.QueryFirstAsync<int>(
-                sql: "SELECT COALESCE(MAX(AccountId), 0) FROM [employer_financial].LevyDeclaration",
+                sql: @"
+                    SELECT COALESCE(MAX(a.AccountId), 0)
+                    FROM
+                    (
+	                    SELECT AccountId FROM [employer_financial].LevyDeclaration
+                        UNION
+	                    SELECT AccountId FROM [employer_financial].Payment
+                        UNION
+	                    SELECT AccountId FROM [employer_financial].TransactionLine
+                    ) a",
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction);
+        }
+
+        public Task CreateTransactionLines(IEnumerable<TransactionLineEntity> transactionLines)
+        {
+            _employerFinanceDbContext.Value.Transactions.AddRange(transactionLines);
+
+            return _employerFinanceDbContext.Value.SaveChangesAsync();
         }
 
         public Task RemovePayeRef(string empRef)
