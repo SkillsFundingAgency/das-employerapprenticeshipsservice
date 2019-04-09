@@ -104,6 +104,10 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 
                 transaction.Description = await GetPaymentTransactionDescription(paymentTransaction);
             }
+            else if (transaction.GetType() == typeof(ExpiredFundTransactionLine))
+            {
+                transaction.Description = "Expired levy";
+            }
             else if (transaction.GetType() == typeof(TransferTransactionLine))
             {
                 var transferTransaction = (TransferTransactionLine)transaction;
