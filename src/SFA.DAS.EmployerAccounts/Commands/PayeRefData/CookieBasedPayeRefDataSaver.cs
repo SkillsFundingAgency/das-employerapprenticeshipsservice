@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.PayeRefData
         {
             var existingCookie = _cookieRepository.Get(CookieName);
 
-            if (existingCookie == null)
+                if (existingCookie == null)
             {
                 createNewCookieWithData(message.PayeRefData);
             }

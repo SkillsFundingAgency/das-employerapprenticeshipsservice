@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (string.IsNullOrEmpty(hashedAccountId))
             {
-                return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
+                return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
             }
 
             var response = new OrchestratorResponse<OrganisationDetailsViewModel> { Data = viewModel };
