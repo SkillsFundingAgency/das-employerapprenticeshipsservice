@@ -180,6 +180,7 @@
     <None Include="Scripts\Manual\GenerateTestData\AddDataGenerationProgrammability.sql" />
     <None Include="Scripts\Manual\GenerateTestData\RemoveDataGenerationProgrammability.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DeleteAccountTransfers.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\CreatePayments_use_sp.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
