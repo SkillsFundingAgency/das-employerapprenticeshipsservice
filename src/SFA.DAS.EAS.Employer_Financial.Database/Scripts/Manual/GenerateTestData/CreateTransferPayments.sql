@@ -400,8 +400,6 @@ BEGIN TRANSACTION
     EXEC #createAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', @ukprn, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments,
 								@firstApprenticeshipId = @apprenticeshipId output 
 
-	--todo: duplicates checked on apprenticeship id and periodend, so can't hardcore app id. ideally use real generated app id
-	-- might need to generate unique apprenticeship ids per run, else going to hit duplicates!
 	--note: employer finance inserts the first apprenticeshipId from the set of transfers (and the others are ignored for the accounttransfer row)
 	EXEC #createTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @apprenticeshipId, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
 
@@ -433,16 +431,16 @@ GO
 	--       /==/ -//==/  /\ ,  )==\ _.\=\.-'/==/, | |- |\==\ - , /==/   \   /==/ ,     //==/  /\ ,  )        /==/ _  ,  //==/ ,     //==/, | |- /==/ ,     //==/  /\ ,  )==\ _.\=\.-'   /==/ -/ /==/. / '.='. -   .' /==/, | |- |        \==\ /\=\.'/==/, | |- | '.='. -   .'|==|   -   /\==\ - , /
 	--       `--`--``--`-`--`--' `--`        `--`./  `--` `--`---'`--`---'   `--`-----`` `--`-`--`--'         `--`------' `--`-----`` `--`./  `--`--`-----`` `--`-`--`--' `--`           `--`--` `--`-`    `--`--''   `--`./  `--`         `--`      `--`./  `--`   `--`--''  `-._`.___,'  `--`---' 
 
-	DECLARE @senderAccountId BIGINT            = 0
-	DECLARE @SenderAccountName NVARCHAR(100)   = 'Sender Name'
-	--DECLARE @senderPayeScheme NVARCHAR(16)     = '123/SE12345'
+	DECLARE @senderAccountId BIGINT               = 0
+	DECLARE @SenderAccountName NVARCHAR(100)      = 'Sender Name'
+	--DECLARE @senderPayeScheme NVARCHAR(16)      = '123/SE12345'
 
-    DECLARE @receiverAccountId BIGINT          = 1
-	DECLARE @receiverAccountName NVARCHAR(100) = 'Receiver Name'
-	--DECLARE @receiverPayeScheme NVARCHAR(16)   = '123/RE12345'
+    DECLARE @receiverAccountId BIGINT             = 1
+	DECLARE @receiverAccountName NVARCHAR(100)    = 'Receiver Name'
+	--DECLARE @receiverPayeScheme NVARCHAR(16)    = '123/RE12345'
 	
-    DECLARE @toDate DATETIME                   = GETDATE()
-	declare @numberOfMonthsToCreate INT        = 25
+    DECLARE @toDate DATETIME                      = GETDATE()
+	declare @numberOfMonthsToCreate INT           = 25
 	declare @defaultMonthlyTransfer DECIMAL(18,4) = 100
 
 	declare @defaultNumberOfPaymentsPerMonth INT              = 1
@@ -457,7 +455,6 @@ insert into @paymentsByMonth
 SELECT TOP (@numberOfMonthsToCreate)
 			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
 			@defaultMonthlyTransfer,
-			--todo: have as param
 			@defaultNumberOfPaymentsPerMonth,
 			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
 FROM sys.all_objects
