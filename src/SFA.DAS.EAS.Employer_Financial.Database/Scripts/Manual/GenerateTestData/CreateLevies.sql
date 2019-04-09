@@ -1,6 +1,7 @@
 -- Instructions: Find clearly signposted 'Levy Gereration Knobs' section below to change generation variable defaults
 
 --todo: 
+-- end of year adjustments?
 -- convert to sp, and have scripts to run sps to set up levy & payments for a certain scenario
 -- ^^^ have script to AddTestDataGeneration sprocs & functions, and RemoveTestDataGeneration, then call sprocs to generate and/or have scenarios that call sprocs
 -- add functions to db, so can have params at top?
