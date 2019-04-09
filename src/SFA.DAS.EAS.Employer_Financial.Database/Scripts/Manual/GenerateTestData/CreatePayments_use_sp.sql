@@ -391,26 +391,10 @@ GO
 	-- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
 
---todo: sproc to generate gen source table
-
---DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), paymentsToGenerate INT, createMonth DATETIME)
-
 declare @paymentsByMonth PaymentGenerationSourceTable
-
---select * into @paymentsByMonth from dbo.dbo.GenerateSourceTable(@accountId, @accountName, @toDate, @numberOfMonthsToCreate, @defaultMonthlyTotalPayments, @defaultPaymentsPerMonth)
 
 insert @paymentsByMonth
 select * from dbo.GenerateSourceTable(@accountId, @accountName, @toDate, @numberOfMonthsToCreate, @defaultMonthlyTotalPayments, @defaultPaymentsPerMonth)
-
--- generate defaults
---insert into @paymentsByMonth
---SELECT TOP (@numberOfMonthsToCreate)
---			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
---			@defaultMonthlyTotalPayments,
---			@defaultPaymentsPerMonth,
---			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
---FROM sys.all_objects
---ORDER BY monthBeforeToDate;
 
 -- override defaults here...
 -- e.g. to create refunds set the amount -ve
@@ -419,28 +403,7 @@ select * from dbo.GenerateSourceTable(@accountId, @accountName, @toDate, @number
 
 select * from @paymentsByMonth
 
---todo: sproc that takes gen source table and generates payments
-
 exec DataGen.createPaymentsForMonths @accountId, @accountName, @paymentsByMonth
-
---DECLARE @monthBeforeToDate INT = 1
---DECLARE @createDate DATETIME
---DECLARE @amount DECIMAL(18, 4)
---DECLARE @paymentsToGenerate INT
-
---WHILE (1 = 1) 
---BEGIN  
-
---  SELECT TOP 1 @monthBeforeToDate = monthBeforeToDate, @createDate = createMonth, @amount = amount, @paymentsToGenerate = paymentsToGenerate
---  FROM @paymentsByMonth
---  WHERE monthBeforeToDate < @monthBeforeToDate
---  ORDER BY monthBeforeToDate DESC
-
---  IF @@ROWCOUNT = 0 BREAK;
-
---  exec #createPaymentsForMonth @accountId, @accountName, @createDate, @amount, @paymentsToGenerate
-
---END
 
 drop function CalendarPeriodYear
 go
