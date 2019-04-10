@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
 using AutoMapper;
@@ -81,29 +80,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             };
 
             return View(ControllerConstants.FindAddressViewName, addressModel);
-        }
-
-        [HttpPost]
-        [Route("accounts/{HashedAccountId}/organisations/address/find", Order = 0)]
-        [Route("accounts/organisations/address/find", Order = 1)]
-        public ActionResult FindAddress(FindOrganisationAddressViewModel request)
-        {
-            var response = new OrchestratorResponse<FindOrganisationAddressViewModel>
-            {
-                Data = request,
-                Status = HttpStatusCode.OK
-            };
-
-            if (RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] == null && !string.IsNullOrEmpty(request.OrganisationAddress))
-            {
-                var organisationDetailsViewModel = _orchestrator.StartConfirmOrganisationDetails(request);
-
-                organisationDetailsViewModel.Data.CreateOrganisationCookie(_orchestrator, HttpContext);
-
-                return RedirectToAction(ControllerConstants.GatewayInformViewName, ControllerConstants.EmployerAccountControllerName);
-            }
-
-            return View(response);
         }
 
         [HttpPost]

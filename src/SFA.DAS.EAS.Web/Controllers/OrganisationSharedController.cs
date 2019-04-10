@@ -35,14 +35,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpPost]
-        [Route("accounts/{HashedAccountId}/organisations/address/find", Order = 0)]
-        [Route("accounts/organisations/address/find", Order = 1)]
-        public ActionResult FindAddress()
-        {
-            return Redirect(Url.EmployerAccountsAction("accounts/{HashedAccountId}/organisations/address/find"));
-        }
-
-        [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("accounts/{HashedAccountId}/organisations/address/select", Order = 0)]
         [Route("accounts/organisations/address/select", Order = 1)]
