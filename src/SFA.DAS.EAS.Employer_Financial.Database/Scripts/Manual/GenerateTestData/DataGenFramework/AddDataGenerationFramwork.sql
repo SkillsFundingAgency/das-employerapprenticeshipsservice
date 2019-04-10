@@ -261,7 +261,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE DataGen.CreateAccountTransferTransaction
+CREATE OR ALTER PROCEDURE DataGen.CreateAccountTransferTransaction
 	@accountId bigint,
 	@senderAccountId bigint,
 	@senderAccountName nvarchar(100),
@@ -376,7 +376,7 @@ GO
 
 --todo: eith merge CreatePaymentForMonth & createPaymentAndTransferForMonth
 -- or get transfer version to call just payment version
-CREATE PROCEDURE DataGen.CreatePaymentAndTransferForMonth
+CREATE OR ALTER PROCEDURE DataGen.CreatePaymentAndTransferForMonth
 (    	
 	@senderAccountId BIGINT,
 	@senderAccountName NVARCHAR(100),
@@ -393,7 +393,7 @@ BEGIN
 BEGIN TRANSACTION
 
     DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
-	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+	DECLARE @periodEndId VARCHAR(8) = DataGen.PeriodEnd(@periodEndDate)
 	declare @courseName nvarchar(max) = 'Plate Spinning'
 	declare @ukprn bigint = 10001378
 	declare @apprenticeshipId bigint
