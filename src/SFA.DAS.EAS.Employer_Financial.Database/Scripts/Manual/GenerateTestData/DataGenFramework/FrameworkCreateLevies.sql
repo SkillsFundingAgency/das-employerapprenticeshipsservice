@@ -24,33 +24,6 @@ select * from @levyDecByMonth
 --- Generate english fraction rows to cover the levy decs we're about to generate
 exec DataGen.CreateEnglishFractions @payeScheme, @levyDecByMonth
 
----
---- Generate levy decs
----
-
-DECLARE @maxSubmissionId BIGINT = ISNULL((SELECT MAX(SubmissionId) FROM employer_financial.levydeclaration),0)
-
-declare @baselineSubmissionDate datetime = datefromparts(year(@toDate), month(@toDate), 18)
-declare @baselineCreatedDate datetime = datefromparts(year(@toDate), month(@toDate), 20)
-declare @baselinePayrollDate datetime = DATEADD(month, -1, @toDate)
-
---todo use monthBeforeToDate, rather than row_number?
-INSERT INTO employer_financial.levydeclaration (AccountId,empref,levydueytd,levyallowanceforyear,submissiondate,submissionid,payrollyear,payrollmonth,createddate,hmrcsubmissionid)
-select @accountId, @payeScheme, 
-	amount,
-	1500.0000, 
-	DATEADD(month, monthBeforeToDate, @baselineSubmissionDate), 
-	@maxSubmissionId + row_number() over (order by (select NULL)), 
-	DataGen.PayrollYear(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)), 
-	DataGen.PayrollMonth(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)), 
-	DATEADD(month, monthBeforeToDate, @baselineCreatedDate), 
-	@maxSubmissionId + row_number() over (order by (select NULL))
-from @levyDecByMonth
-
----
---- Process the levy decs into transaction lines
----
-
-EXEC employer_financial.processdeclarationstransactions @accountId, @payeScheme
+exec DataGen.CreateLevyDecs @accountId, @payeScheme, @toDate, @levyDecByMonth
 
 COMMIT TRANSACTION CreateLevy

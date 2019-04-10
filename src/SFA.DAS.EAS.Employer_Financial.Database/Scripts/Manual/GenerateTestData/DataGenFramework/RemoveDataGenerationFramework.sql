@@ -9,6 +9,10 @@ IF (OBJECT_ID('DataGen.CreateEnglishFractions', 'P') IS NOT NULL)
   DROP PROCEDURE DataGen.CreateEnglishFractions
 GO
 
+IF (OBJECT_ID('DataGen.CreateLevyDecs', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreateLevyDecs
+GO
+
 IF (OBJECT_ID('DataGen.CreatePayment', 'P') IS NOT NULL)
   DROP PROCEDURE DataGen.CreatePayment
 GO
