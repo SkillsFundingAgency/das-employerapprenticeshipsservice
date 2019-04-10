@@ -88,6 +88,9 @@ GO
 drop type if exists DataGen.PaymentGenerationSourceTable
 go
 
+drop type if exists DataGen.LevyGenerationSourceTable
+go
+
 -- Schema
 
 IF EXISTS (SELECT * FROM sys.schemas WHERE name = 'DataGen')

@@ -16,6 +16,13 @@ BEGIN
 END
 go
 
+IF TYPE_ID(N'DataGen.LevyGenerationSourceTable') IS NULL
+BEGIN
+	CREATE TYPE DataGen.LevyGenerationSourceTable AS TABLE   
+	(monthBeforeToDate INT, amount DECIMAL(18, 4), createMonth DATETIME, payrollYear VARCHAR(5), payrollMonth int)
+END
+go
+
 -- Functions
 
 CREATE OR ALTER FUNCTION DataGen.CalendarPeriodMonth (@date datetime)  
