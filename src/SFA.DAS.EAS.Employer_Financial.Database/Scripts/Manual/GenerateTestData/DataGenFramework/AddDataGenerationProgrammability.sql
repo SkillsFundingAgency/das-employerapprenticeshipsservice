@@ -40,7 +40,7 @@ CREATE OR ALTER FUNCTION DataGen.CollectionPeriodMonth (@date datetime)
 RETURNS int 
 AS  
 BEGIN  
-  declare @collectionPeriodMonth int = (select dbo.CalendarPeriodMonth(@date))
+  declare @collectionPeriodMonth int = (select DataGen.CalendarPeriodMonth(@date))
   return @collectionPeriodMonth
 END; 
 GO
@@ -49,7 +49,7 @@ CREATE OR ALTER FUNCTION DataGen.CollectionPeriodYear (@date datetime)
 RETURNS int
 AS  
 BEGIN  
-  declare @collectionPeriodYear int = (select dbo.CalendarPeriodYear(@date))
+  declare @collectionPeriodYear int = (select DataGen.CalendarPeriodYear(@date))
   return @collectionPeriodYear
 END; 
 GO
@@ -90,7 +90,7 @@ CREATE OR ALTER FUNCTION DataGen.PeriodEnd (@date datetime)
 RETURNS VARCHAR(8)
 AS  
 BEGIN  
-  declare @periodEnd varchar(8) = (SELECT dbo.PeriodEndYear(@date) + '-R' + right('0' + dbo.PeriodEndMonth(@date),2))
+  declare @periodEnd varchar(8) = (SELECT DataGen.PeriodEndYear(@date) + '-R' + right('0' + DataGen.PeriodEndMonth(@date),2))
   return @periodEnd
 END; 
 GO
@@ -128,7 +128,7 @@ CREATE OR ALTER PROCEDURE DataGen.CreatePeriodEnd
 )
 AS
 BEGIN
-	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+	DECLARE @periodEndId VARCHAR(8) = DataGen.PeriodEnd(@periodEndDate)
 
 	IF NOT EXISTS
 	(
@@ -137,7 +137,7 @@ BEGIN
 	)
 	BEGIN        
 		insert employer_financial.periodend (periodendid, calendarperiodmonth, calendarperiodyear, accountdatavalidat, commitmentdatavalidat, completiondatetime, paymentsforperiod)
-		values (@periodEndId, dbo.CalendarPeriodMonth(@periodEndDate), dbo.CalendarPeriodYear(@periodEndDate), '2018-05-04 00:00:00.000', '2018-05-04 09:07:34.457', '2018-05-04 10:50:27.760', 'https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=' + @periodEndId)
+		values (@periodEndId, DataGen.CalendarPeriodMonth(@periodEndDate), DataGen.CalendarPeriodYear(@periodEndDate), '2018-05-04 00:00:00.000', '2018-05-04 09:07:34.457', '2018-05-04 10:50:27.760', 'https://pp-payments.apprenticeships.sfa.bis.gov.uk/api/payments?periodId=' + @periodEndId)
 	END
 END
 GO
@@ -178,9 +178,9 @@ BEGIN
 	collectionperiodid, collectionperiodmonth, collectionperiodyear, 
 	evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
     VALUES
-    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, dbo.CalendarPeriodMonth(@deliveryPeriodDate), dbo.CalendarPeriodYear(@deliveryPeriodDate),
-	dbo.PeriodEnd(@periodEndDate), dbo.CollectionPeriodMonth(@periodEndDate), dbo.CollectionPeriodYear(@periodEndDate), 
-	'2018-06-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, dbo.PeriodEnd(@periodEndDate), @paymentMetadataId)
+    (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, DataGen.CalendarPeriodMonth(@deliveryPeriodDate), DataGen.CalendarPeriodYear(@deliveryPeriodDate),
+	DataGen.PeriodEnd(@periodEndDate), DataGen.CollectionPeriodMonth(@periodEndDate), DataGen.CollectionPeriodYear(@periodEndDate), 
+	'2018-06-03 16:24:22.340', 20170504, 69985, @fundingsource, 1, @Amount, DataGen.PeriodEnd(@periodEndDate), @paymentMetadataId)
 END;  
 GO  
 
@@ -191,18 +191,23 @@ CREATE OR ALTER PROCEDURE DataGen.CreateAccountPayments
     @providerName NVARCHAR(MAX),
     @ukprn BIGINT,
     @courseName NVARCHAR(MAX),
+	@fundingSource int,
 	@periodEndDate DATETIME,
     @totalAmount DECIMAL(18,5),
-	@numberOfPayments INT
+	@numberOfPayments INT,
+	@firstApprenticeshipId bigint output
 )  
 AS  
 BEGIN  	
 
     DECLARE @paymentAmount DECIMAL(18,5) = @totalAmount / @numberOfPayments
+	declare @fundingSourceString varchar(25) = cast(@fundingSource as VARCHAR(25))
 
 	declare @name varchar(100)
 	declare @uln bigint
-	declare @id bigint
+	declare @apprenticeshipId bigint
+
+	set @firstApprenticeshipId = (ISNULL((SELECT MAX(ApprenticeshipId) FROM employer_financial.Payment),0) + 1)
 
 	while (@numberOfPayments > 0)
 	BEGIN
@@ -211,9 +216,9 @@ BEGIN
 
 	  SET @name = (CHAR(ASCII('A') + @numberOfPayments)) + ' Apprentice'
 	  SET @uln = 1000000000 + @numberOfPayments
-	  SET @id = 1000 + @numberOfPayments
+	  SET @apprenticeshipId = @firstApprenticeshipId + @numberOfPayments
 
-      EXEC DataGen.CreatePayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @id, /*Levy*/1, @paymentAmount, @periodEndDate
+      EXEC DataGen.CreatePayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @apprenticeshipId, @fundingSourceString, @paymentAmount, @periodEndDate
 	END
 END
 GO
@@ -279,12 +284,14 @@ BEGIN
 BEGIN TRANSACTION
 
     DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
-	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+	DECLARE @periodEndId VARCHAR(8) = DataGen.PeriodEnd(@periodEndDate)
 	declare @ukprn bigint = 10001378
+	declare @apprenticeshipId bigint
 
 	exec DataGen.CreatePeriodEnd @periodEndDate
 
-    EXEC DataGen.CreateAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', @ukprn, 'Accounting', @periodEndDate, @totalPaymentAmount, @numberOfPayments
+    EXEC DataGen.CreateAccountPayments @accountId, @accountName, 'CHESTERFIELD COLLEGE', @ukprn, 'Accounting', /*Levy*/1, @periodEndDate, @totalPaymentAmount, @numberOfPayments,
+										@firstApprenticeshipId = @apprenticeshipId output
 
 	-- #ProcessPaymentDataTransactionsGenerateDataEdition doesn't create a new payment transactionline where one already exists
 	-- so we remove any current payment transactionline first, so that payments can be additively generated in a month

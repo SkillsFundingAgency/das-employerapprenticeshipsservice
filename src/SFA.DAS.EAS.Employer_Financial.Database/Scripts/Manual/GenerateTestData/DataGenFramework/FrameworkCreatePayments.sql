@@ -24,6 +24,8 @@
 --  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____  _____ 
 -- [_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____][_____]
 
+--todo: wrap this in a stored proc with a dynamic sql 'callback' for altering the defaults?
+
 declare @paymentsByMonth DataGen.PaymentGenerationSourceTable
 
 insert @paymentsByMonth
