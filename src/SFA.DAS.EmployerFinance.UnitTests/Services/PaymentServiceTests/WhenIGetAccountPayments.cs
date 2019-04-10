@@ -10,8 +10,8 @@ using NUnit.Framework;
 using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
+using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
-using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
@@ -33,6 +33,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
         private Mock<IInProcessCache> _cacheProvider;
+        private Mock<IProviderService> _providerService;
 
         private PaymentService _paymentService;
         private Framework _framework;
@@ -51,6 +52,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
             SetupApprenticeshipServiceMock();
             SetupMapperMock();
             SetupLoggerMock();
+            SetupProviderServiceMock();
 
             _cacheProvider = new Mock<IInProcessCache>();
 
@@ -60,21 +62,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
                 _apprenticeshipInfoService.Object,
                 _mapper.Object,
                 _logger.Object,
-                _cacheProvider.Object);
-        }
-
-        private void SetupLoggerMock()
-        {
-            _logger = new Mock<ILog>();
-            _logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()));
-            _logger.Setup(x => x.Warn(It.IsAny<Exception>(), It.IsAny<string>()));
-        }
-
-        private void SetupMapperMock()
-        {
-            _mapper = new Mock<IMapper>();
-            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
-                .Returns(() => _standardPayment);
+                _cacheProvider.Object,
+                _providerService.Object);
         }
 
         [Test]
@@ -99,33 +88,15 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
 
 
         [Test]
-        public async Task ThenTheAppreticeshipsApiIsCalledToGetProviderDetails()
+        public async Task ThenTheProviderServiceIsCalledToGetTheProvider()
         {
 
             //Act
             await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            _apprenticeshipInfoService.Verify(x => x.GetProvider(_provider.Ukprn), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenSubsequentCallsToTheApprenticeshipApiAreReadFromTheCache()
-        {
-            //Arrange
-            _cacheProvider.SetupSequence(
-                x => x.Get<ProvidersView>($"{nameof(ProvidersView)}_{_provider.Ukprn.ToString()}"))
-                .Returns(null)
-                .Returns(new ProvidersView { Provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider() });
-
-            //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
-
-            //Assert
-            _apprenticeshipInfoService.Verify(x => x.GetProvider(_provider.Ukprn), Times.Once);
-            _cacheProvider.Verify(x => x.Get<ProvidersView>($"{nameof(ProvidersView)}_{_provider.Ukprn.ToString()}"), Times.Exactly(2));
-        }
+            _providerService.Verify(x => x.Get(_provider.Ukprn), Times.Once);
+        }        
 
         [Test]
         public async Task ThenTheAppreticeshipsApiIsCalledToGetStandardDetails()
@@ -305,21 +276,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         }
 
         [Test]
-        public async Task ThenShouldLogWarningIfApprenticeshipsApiCallFailsWhenGettingProviderDetails()
-        {
-            //Arrange
-            _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                                      .Throws<WebException>();
-
-            //Act
-            await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
-
-            //Assert
-            _logger.Verify(x => x.Warn(It.IsAny<Exception>(),
-                $"Unable to get provider details with UKPRN {_provider.Ukprn} from apprenticeship API."), Times.Once);
-        }
-
-        [Test]
         public async Task ThenShouldLogWarningIfApprenticeshipsApiCallFailsWhenGettingStandards()
         {
             //Arrange
@@ -373,6 +329,27 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
 
             Assert.AreEqual(2 * numberOfPages, result.Count);
 
+        }
+
+        private void SetupLoggerMock()
+        {
+            _logger = new Mock<ILog>();
+            _logger.Setup(x => x.Error(It.IsAny<Exception>(), It.IsAny<string>()));
+            _logger.Setup(x => x.Warn(It.IsAny<Exception>(), It.IsAny<string>()));
+        }
+
+        private void SetupMapperMock()
+        {
+            _mapper = new Mock<IMapper>();
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                .Returns(() => _standardPayment);
+        }
+
+        private void SetupProviderServiceMock()
+        {
+            _providerService = new Mock<IProviderService>();
+            _providerService.Setup(x => x.Get(It.IsAny<long>()))
+                .ReturnsAsync(_provider);
         }
 
         private void SetupTestModels()
@@ -450,11 +427,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         private void SetupApprenticeshipServiceMock()
         {
             _apprenticeshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-            _apprenticeshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                .Returns(new ProvidersView
-                {
-                    Provider = _provider
-                });
 
             _apprenticeshipInfoService.Setup(x => x.GetFrameworksAsync(false))
                 .ReturnsAsync(new FrameworksView

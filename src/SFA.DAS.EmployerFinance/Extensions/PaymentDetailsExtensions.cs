@@ -93,6 +93,7 @@ namespace SFA.DAS.EmployerFinance.Extensions
             paymentsDataTable.Columns.Add("ApprenticeNINumber", typeof(string));
             paymentsDataTable.Columns.Add("ApprenticeshipCourseLevel", typeof(int));
             paymentsDataTable.Columns.Add("ApprenticeshipCourseStartDate", typeof(DateTime));
+            paymentsDataTable.Columns.Add("IsHistoricProviderName", typeof(bool));
 
             foreach (var payment in payments)
             {
@@ -126,7 +127,8 @@ namespace SFA.DAS.EmployerFinance.Extensions
                     payment.ApprenticeName,
                     payment.ApprenticeNINumber,
                     payment.CourseLevel,
-                    payment.CourseStartDate);
+                    payment.CourseStartDate,
+                    payment.IsHistoricProviderName);
             }
 
             return paymentsDataTable;
