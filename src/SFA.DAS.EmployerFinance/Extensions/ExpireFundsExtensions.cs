@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Extensions
             var expiringFunds = expiredFundsService.GetExpiringFunds(fundsIn, fundsOut, expired, expiryPeriod);
 
             var expiredFunds = expiringFunds
-                .Where(ef => ef.Key <= currentCalendarPeriod && !expired.Any(e => e.Key.Year == ef.Key.Year && e.Key.Month == ef.Key.Month && e.Value == ef.Value))
+                .Where(ef => ef.Key <= currentCalendarPeriod && ef.Value > 0 && !expired.Any(e => e.Key.Year == ef.Key.Year && e.Key.Month == ef.Key.Month && e.Value == ef.Value))
                 .ToDictionary(e => e.Key, e => e.Value);
 
             return expiredFunds;

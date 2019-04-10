@@ -81,6 +81,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             {
                 { new CalendarPeriod(2018, 03), 1000 },
                 { new CalendarPeriod(2018, 04), 1000 },
+                { new CalendarPeriod(2018, 05), 0 },
                 { new CalendarPeriod(NextMonth.Year, NextMonth.Month), 1000 }
             };
             ExpiredFunds = new Dictionary<CalendarPeriod, decimal>
