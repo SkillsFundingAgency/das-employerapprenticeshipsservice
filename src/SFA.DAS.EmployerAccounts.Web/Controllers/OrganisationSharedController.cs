@@ -192,7 +192,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return viewResult;
             }
 
-            if (RouteData.Values.ContainsKey(ControllerConstants.AccountHashedIdRouteKeyName))
+            if (RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null)
             {
                 return View(ControllerConstants.ConfirmOrganisationDetailsViewName, response);
             }
