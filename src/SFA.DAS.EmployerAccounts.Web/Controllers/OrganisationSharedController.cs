@@ -8,14 +8,12 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -27,10 +25,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         public OrganisationSharedController(IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
-            ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage, 
             IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)

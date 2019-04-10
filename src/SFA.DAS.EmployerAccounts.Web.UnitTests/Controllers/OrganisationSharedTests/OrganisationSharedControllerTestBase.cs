@@ -45,10 +45,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationSharedT
             Controller = new OrganisationSharedController(
                 _owinWrapper.Object,
                 Orchestrator.Object,
-                _featureToggle.Object,
                 _userViewTestingService.Object,
                 Mapper.Object,
-                _logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>());
         }
