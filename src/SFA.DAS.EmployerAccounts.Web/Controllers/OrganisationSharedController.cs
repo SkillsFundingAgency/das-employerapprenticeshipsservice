@@ -1,14 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
 using AutoMapper;
+using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
@@ -19,6 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly OrganisationOrchestrator _orchestrator;
         private readonly IMapper _mapper;
+        private readonly IMediator _mediatr;
 
         public OrganisationSharedController(IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
@@ -26,12 +31,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage, 
+            IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
 
         {
             _orchestrator = orchestrator;
             _mapper = mapper;
+            _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
         }
 
         [HttpGet]
@@ -185,10 +192,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return viewResult;
             }
 
-            ActionResult redirectToAction =
-                RedirectToGatewayInformWhenHashedAccountIdIsNotPresentInTheRoute(response);
+            if (RouteData.Values.ContainsKey(ControllerConstants.AccountHashedIdRouteKeyName))
+            {
+                return View(ControllerConstants.ConfirmOrganisationDetailsViewName, response);
+            }
 
-            return redirectToAction ?? View(ControllerConstants.ConfirmOrganisationDetailsViewName, response);
+            if (response.Data?.Name != null)
+            {
+                _mediatr
+                    .SendAsync(new SaveOrganisationData
+                    (
+                        new EmployerAccountOrganisationData
+                        {
+                            OrganisationType = response.Data.Type,
+                            OrganisationReferenceNumber = response.Data.ReferenceNumber,
+                            OrganisationName = response.Data.Name,
+                            OrganisationDateOfInception = response.Data.DateOfInception,
+                            OrganisationRegisteredAddress = response.Data.Address,
+                            OrganisationStatus = response.Data.Status ?? string.Empty,
+                            PublicSectorDataSource = response.Data.PublicSectorDataSource,
+                            Sector = response.Data.Sector,
+                            NewSearch = response.Data.NewSearch
+                        }
+                    ));
+            }
+
+            return RedirectToAction(ControllerConstants.SummaryActionName,
+                ControllerConstants.EmployerAccountControllerName, response.Data);
         }
 
         private ActionResult ReturnAddOrganisationAddressViewIfBadRequest(AddOrganisationAddressViewModel request, OrchestratorResponse<OrganisationDetailsViewModel> response)
@@ -211,19 +241,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return View(ControllerConstants.AddOrganisationAddressViewName, errorResponse);
         }
-
-        private RedirectToRouteResult RedirectToGatewayInformWhenHashedAccountIdIsNotPresentInTheRoute(OrchestratorResponse<OrganisationDetailsViewModel> response)
-        {
-            if (RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null)
-            {
-                return null;
-            }
-
-            response.Data.CreateOrganisationCookie(_orchestrator, HttpContext);
-
-            return RedirectToAction(ControllerConstants.GatewayInformViewName,
-                    ControllerConstants.EmployerAccountControllerName, response.Data);
-        }
-
     }
 }
