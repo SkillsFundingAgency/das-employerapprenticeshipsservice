@@ -28,5 +28,6 @@
 	ApprenticeNINumber VARCHAR(MAX) NULL,
 	ApprenticeshipCourseLevel INT NULL,
 	ApprenticeshipCourseStartDate DATETIME NULL,
+	IsHistoricProviderName BIT NOT NULL DEFAULT 0,
 	PRIMARY KEY (PaymentId ASC)
 )
