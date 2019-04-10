@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -44,11 +45,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationSharedT
             Controller = new OrganisationSharedController(
                 _owinWrapper.Object,
                 Orchestrator.Object,
-                _featureToggle.Object,
                 _userViewTestingService.Object,
                 Mapper.Object,
-                _logger.Object,
-                _flashMessage.Object);
+                _flashMessage.Object,
+                Mock.Of<IMediator>());
         }
 
         public virtual void SetupOrchestrator()
