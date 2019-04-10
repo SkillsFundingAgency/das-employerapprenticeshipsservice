@@ -131,7 +131,7 @@ BEGIN
 END; 
 GO
 
---better name?
+--better name? GeneratePaymentSourceTable
 CREATE OR ALTER FUNCTION DataGen.GenerateSourceTable(
 	@toDate DATETIME,
 	@numberOfMonthsToCreate INT,
@@ -146,6 +146,37 @@ BEGIN
 				@defaultMonthlyTotalPayments,
 				@defaultPaymentsPerMonth,
 				DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
+	FROM sys.all_objects
+	ORDER BY monthBeforeToDate;
+
+    RETURN
+END
+GO
+
+CREATE OR ALTER FUNCTION DataGen.GenerateLevySourceTable(
+	@toDate DATETIME,
+	@numberOfMonthsToCreate INT,
+	@monthlyLevy DECIMAL(18, 4))
+RETURNS @source TABLE
+    (monthBeforeToDate INT, amount DECIMAL(18, 4), createMonth DATETIME, payrollYear VARCHAR(5), payrollMonth int)
+BEGIN
+
+	declare @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
+	declare @firstPayrollYear VARCHAR(5) = DataGen.PayrollYear(@firstPayrollMonth)
+
+	-- generates same levy per month
+	insert into @source
+	SELECT TOP (@numberOfMonthsToCreate)
+				monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
+				(case
+				when DataGen.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
+					THEN @monthlyLevy*row_number() over (order by (select NULL))
+				ELSE
+					@monthlyLevy*DataGen.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
+				END),
+				DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate),
+				DataGen.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)),
+				DataGen.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
 	FROM sys.all_objects
 	ORDER BY monthBeforeToDate;
 

@@ -7,27 +7,11 @@ DECLARE @toDate DATETIME2                = GETDATE()
 DECLARE @numberOfMonthsToCreate INT      = 25
 
 BEGIN TRANSACTION CreateLevy
-                                                                                                                                                                           
-DECLARE @levyDecByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), createMonth DATETIME, payrollYear VARCHAR(5), payrollMonth int)
 
-declare @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
-declare @firstPayrollYear VARCHAR(5) = DataGen.PayrollYear(@firstPayrollMonth)
+DECLARE @levyDecByMonth DataGen.LevyGenerationSourceTable
 
--- generates same levy per month
-insert into @levyDecByMonth
-SELECT TOP (@numberOfMonthsToCreate)
-			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
-			(case
-			when DataGen.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
-				THEN @monthlyLevy*row_number() over (order by (select NULL))
-			ELSE
-				@monthlyLevy*DataGen.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
-			END),
-			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate),
-			DataGen.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)),
-			DataGen.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
-FROM sys.all_objects
-ORDER BY monthBeforeToDate;
+insert @levyDecByMonth
+select * from DataGen.GenerateLevySourceTable(@toDate, @numberOfMonthsToCreate, @monthlyLevy)
 
 --** Levy Adjustments ***
 -- reduce levy declared by this amount for the given payroll year and month.

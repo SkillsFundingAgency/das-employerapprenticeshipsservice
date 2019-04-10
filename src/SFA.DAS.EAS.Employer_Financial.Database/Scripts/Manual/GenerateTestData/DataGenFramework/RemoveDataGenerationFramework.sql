@@ -83,6 +83,10 @@ IF object_id(N'DataGen.GenerateSourceTable', N'TF') IS NOT NULL
     DROP FUNCTION DataGen.GenerateSourceTable
 GO
 
+IF object_id(N'DataGen.GenerateLevySourceTable', N'TF') IS NOT NULL
+    DROP FUNCTION DataGen.GenerateLevySourceTable
+GO
+
 -- Types
 
 drop type if exists DataGen.PaymentGenerationSourceTable
