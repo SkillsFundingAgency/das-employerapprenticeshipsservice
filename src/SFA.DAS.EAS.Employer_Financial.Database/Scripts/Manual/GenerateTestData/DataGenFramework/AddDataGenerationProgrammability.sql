@@ -261,6 +261,39 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE DataGen.CreateAccountTransferTransaction
+	@accountId bigint,
+	@senderAccountId bigint,
+	@senderAccountName nvarchar(100),
+	@receiverAccountId bigint,
+	@receiversAccountName nvarchar(100),
+	@periodEnd nvarchar(20),
+	@amount decimal(18,4),
+	@createDate datetime
+AS	
+BEGIN
+	--Create transfer sender transaction
+	INSERT INTO [employer_financial].[TransactionLine]
+	(
+		AccountId
+		,DateCreated 		
+		,TransactionDate, TransactionType 
+		,Amount 		
+		,PeriodEnd 		
+		,TransferSenderAccountId, TransferReceiverAccountId, TransferReceiverAccountName, TransferSenderAccountName
+	)
+	VALUES
+	(
+		@accountId,
+		@createDate,
+		@createDate, 4,
+		@amount,
+		@periodEnd,
+		@senderAccountId, @receiverAccountId, @receiversAccountName, @senderAccountName
+	)
+END
+GO
+
 CREATE OR ALTER PROCEDURE DataGen.ProcessPaymentDataTransactionsGenerateDataEdition
 	@AccountId BIGINT,
 	@DateCreated DATETIME

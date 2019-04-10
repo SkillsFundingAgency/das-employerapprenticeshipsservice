@@ -17,6 +17,10 @@ IF (OBJECT_ID('DataGen.CreateTransfer', 'P') IS NOT NULL)
   DROP PROCEDURE DataGen.CreateTransfer
 GO
 
+IF (OBJECT_ID('DataGen.CreateAccountTransferTransaction', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreateAccountTransferTransaction
+GO
+
 IF (OBJECT_ID('DataGen.ProcessPaymentDataTransactionsGenerateDataEdition', 'P') IS NOT NULL)
   DROP PROCEDURE DataGen.ProcessPaymentDataTransactionsGenerateDataEdition
 GO
