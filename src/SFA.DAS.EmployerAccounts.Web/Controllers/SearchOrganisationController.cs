@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return FindAddress(hashedAccountId, viewModel);
             }
 
-            saveOrganisationData(viewModel);
+            saveOrganisationDataIfItHasAValidName(viewModel);
 
             if (string.IsNullOrEmpty(hashedAccountId))
             {
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.AddOtherOrganisationDetailsViewName, ControllerConstants.OrganisationSharedControllerName);
         }
 
-        private void saveOrganisationData(OrganisationDetailsViewModel viewModel)
+        private void saveOrganisationDataIfItHasAValidName(OrganisationDetailsViewModel viewModel)
         {
             if (viewModel?.Name != null)
             {
