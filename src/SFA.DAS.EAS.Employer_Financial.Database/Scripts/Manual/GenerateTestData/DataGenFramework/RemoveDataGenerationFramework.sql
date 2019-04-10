@@ -51,6 +51,14 @@ IF object_id(N'DataGen.CalendarPeriodYear', N'FN') IS NOT NULL
     DROP FUNCTION DataGen.CalendarPeriodYear
 GO
 
+IF object_id(N'DataGen.PayrollMonth', N'FN') IS NOT NULL
+    DROP FUNCTION DataGen.PayrollMonth
+GO
+
+IF object_id(N'DataGen.PayrollYear', N'FN') IS NOT NULL
+    DROP FUNCTION DataGen.PayrollYear
+GO
+
 IF object_id(N'DataGen.CollectionPeriodMonth', N'FN') IS NOT NULL
     DROP FUNCTION DataGen.CollectionPeriodMonth
 GO

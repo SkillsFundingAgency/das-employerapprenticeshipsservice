@@ -36,6 +36,35 @@ BEGIN
 END; 
 GO
 
+CREATE OR ALTER FUNCTION DataGen.PayrollMonth (@date datetime)  
+RETURNS int 
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+
+  SET @month = @month - 3
+  IF @month < 1
+	SET @month = @month + 12
+
+  RETURN(@month);  
+END; 
+GO
+
+CREATE OR ALTER FUNCTION DataGen.PayrollYear (@date datetime)  
+RETURNS VARCHAR(5)
+AS  
+BEGIN  
+  declare @month int = DATEPART(month,@date)
+  declare @year int = DATEPART(year,@date)
+
+  if @month < 4
+	SET @year = @year - 1
+	
+  DECLARE @payrollYear VARCHAR(5) = (SELECT RIGHT(CONVERT(VARCHAR(5), @year, 1), 2)) + '-' + (SELECT RIGHT(CONVERT(VARCHAR(4), @year+1, 1), 2))
+  return @payrollYear
+END; 
+GO
+
 CREATE OR ALTER FUNCTION DataGen.CollectionPeriodMonth (@date datetime)  
 RETURNS int 
 AS  
