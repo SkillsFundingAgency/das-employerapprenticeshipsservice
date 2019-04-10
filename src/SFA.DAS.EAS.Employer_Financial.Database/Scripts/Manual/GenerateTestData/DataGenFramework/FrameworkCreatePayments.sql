@@ -29,7 +29,7 @@
 declare @paymentsByMonth DataGen.PaymentGenerationSourceTable
 
 insert @paymentsByMonth
-select * from DataGen.GenerateSourceTable(@accountId, @accountName, @toDate, @numberOfMonthsToCreate, @defaultMonthlyTotalPayments, @defaultPaymentsPerMonth)
+select * from DataGen.GenerateSourceTable(@toDate, @numberOfMonthsToCreate, @defaultMonthlyTotalPayments, @defaultPaymentsPerMonth)
 
 -- override defaults here...
 -- e.g. to create refunds set the amount -ve

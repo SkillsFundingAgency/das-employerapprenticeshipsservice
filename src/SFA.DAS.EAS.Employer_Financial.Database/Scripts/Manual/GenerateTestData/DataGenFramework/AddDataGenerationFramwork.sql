@@ -97,8 +97,6 @@ GO
 
 --better name?
 CREATE OR ALTER FUNCTION DataGen.GenerateSourceTable(
-    @accountId BIGINT,
-    @accountName NVARCHAR(100),
 	@toDate DATETIME,
 	@numberOfMonthsToCreate INT,
 	@defaultMonthlyTotalPayments DECIMAL(18,5),

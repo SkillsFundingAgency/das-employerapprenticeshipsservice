@@ -20,27 +20,15 @@
 	declare @numberOfMonthsToCreate INT           = 25
 	declare @defaultMonthlyTransfer DECIMAL(18,4) = 100
 
-	declare @defaultNumberOfPaymentsPerMonth INT              = 1
+	declare @defaultNumberOfPaymentsPerMonth INT  = 1
 	
 	--  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,  ,d88b.    ,
 	-- '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P'  '    `Y88P' 
 
-	DECLARE @paymentsByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), paymentsToGenerate INT, createMonth DATETIME)
+declare @paymentsByMonth DataGen.PaymentGenerationSourceTable
 
--- generate defaults
-insert into @paymentsByMonth
-SELECT TOP (@numberOfMonthsToCreate)
-			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
-			@defaultMonthlyTransfer,
-			@defaultNumberOfPaymentsPerMonth,
-			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)
-FROM sys.all_objects
-ORDER BY monthBeforeToDate;
-
--- override defaults here...
--- e.g. to create refunds set the amount -ve
---UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -1
---UPDATE @paymentsByMonth SET amount = -500, paymentsToGenerate = 1 where monthBeforeToDate = -7
+insert @paymentsByMonth
+select * from DataGen.GenerateSourceTable(@toDate, @numberOfMonthsToCreate, @defaultNumberOfPaymentsPerMonth, @defaultMonthlyTransfer)
 
 select * from @paymentsByMonth
 
