@@ -29,6 +29,10 @@ IF (OBJECT_ID('DataGen.CreatePaymentsForMonth', 'P') IS NOT NULL)
   DROP PROCEDURE DataGen.CreatePaymentsForMonth
 GO
 
+IF (OBJECT_ID('DataGen.CreatePaymentAndTransferForMonth', 'P') IS NOT NULL)
+  DROP PROCEDURE DataGen.CreatePaymentAndTransferForMonth
+GO
+
 IF (OBJECT_ID('DataGen.CreatePaymentsForMonths', 'P') IS NOT NULL)
   DROP PROCEDURE DataGen.CreatePaymentsForMonths
 GO

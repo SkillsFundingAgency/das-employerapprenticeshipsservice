@@ -166,8 +166,8 @@
     <None Include="Scripts\Manual\GenerateTestData\CreatePayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\CreateLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\CreateTransferPayments.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationProgrammability.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationProgrammability.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationFramework.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramwork.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\CreatePayments_use_sp.sql" />
   </ItemGroup>
   <ItemGroup>

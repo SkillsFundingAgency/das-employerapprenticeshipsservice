@@ -374,6 +374,60 @@ COMMIT TRANSACTION
 END
 GO
 
+--todo: eith merge CreatePaymentForMonth & createPaymentAndTransferForMonth
+-- or get transfer version to call just payment version
+CREATE PROCEDURE DataGen.CreatePaymentAndTransferForMonth
+(    	
+	@senderAccountId BIGINT,
+	@senderAccountName NVARCHAR(100),
+	--@senderPayeScheme NVARCHAR(16),
+	@receiverAccountId BIGINT,
+	@receiverAccountName NVARCHAR(100),
+	--@receiverPayeScheme NVARCHAR(16),
+	@createDate DATETIME,
+	@totalPaymentAmount DECIMAL(18,5),
+	@numberOfPayments INT
+)  
+AS  
+BEGIN  
+BEGIN TRANSACTION
+
+    DECLARE @periodEndDate DATETIME = DATEADD(month, -1, @createDate)
+	DECLARE @periodEndId VARCHAR(8) = dbo.PeriodEnd(@periodEndDate)
+	declare @courseName nvarchar(max) = 'Plate Spinning'
+	declare @ukprn bigint = 10001378
+	declare @apprenticeshipId bigint
+
+	exec DataGen.CreatePeriodEnd @periodEndDate
+
+	--todo: we currently make sure that we always use an unique apprenticeshipid, so we don't fall over the unique index [IX_PeriodEndAccountTransfer]
+	-- ^^ this might be good enough, but in reality, each month would have transfers for the same apprenticeshipid
+	-- so it would be better to generate the first one outside of this sproc and reuse it for each month (once we generate >1 transfer at a time)
+	-- or else have it as a user param (+ve can generate correct data, -ve requires manual work and greater understanding)
+    EXEC DataGen.CreateAccountPayments @receiverAccountId, @receiverAccountName, 'CHESTERFIELD COLLEGE', @ukprn, @courseName, /*LevyTransfer*/5, @periodEndDate, @totalPaymentAmount, @numberOfPayments,
+									   @firstApprenticeshipId = @apprenticeshipId output 
+
+	--note: employer finance inserts the first apprenticeshipId from the set of transfers (and the others are ignored for the accounttransfer row)
+	EXEC DataGen.CreateTransfer @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @apprenticeshipId, @courseName, @totalPaymentAmount, @periodEndId, 'Levy', @createDate
+
+	declare @negativeTotalPaymentAmount DECIMAL(18,5) = -@totalPaymentAmount
+	EXEC DataGen.CreateAccountTransferTransaction @senderAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEndId, @negativeTotalPaymentAmount, @createDate
+	EXEC DataGen.CreateAccountTransferTransaction @receiverAccountId, @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @periodEndId, @totalPaymentAmount, @createDate
+
+	--todo: check what these are doing. are they required? if so will need datageneration edition that accepts date rather than using getdate
+	--exec employer_financial.processdeclarationstransactions @senderAccountId, @senderPayeScheme
+	--exec employer_financial.processdeclarationstransactions @receiverAccountId, @receiverPayeScheme
+
+	-- #ProcessPaymentDataTransactionsGenerateDataEdition doesn't create a new payment transactionline where one already exists
+	-- so we remove any current payment transactionline first, so that payments can be additively generated in a month
+	delete [employer_financial].[TransactionLine] where AccountId = @receiverAccountId and Ukprn = @ukprn and PeriodEnd = @periodEndId and TransactionType = 3
+
+    exec DataGen.ProcessPaymentDataTransactionsGenerateDataEdition @receiverAccountId, @createDate
+
+COMMIT TRANSACTION
+END
+GO
+
 CREATE OR ALTER PROCEDURE DataGen.CreatePaymentsForMonths
 (
 	@accountId BIGINT,
