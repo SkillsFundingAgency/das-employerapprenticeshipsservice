@@ -378,10 +378,8 @@ CREATE OR ALTER PROCEDURE DataGen.CreatePaymentAndTransferForMonth
 (    	
 	@senderAccountId BIGINT,
 	@senderAccountName NVARCHAR(100),
-	--@senderPayeScheme NVARCHAR(16),
 	@receiverAccountId BIGINT,
 	@receiverAccountName NVARCHAR(100),
-	--@receiverPayeScheme NVARCHAR(16),
 	@createDate DATETIME,
 	@totalPaymentAmount DECIMAL(18,5),
 	@numberOfPayments INT
@@ -483,8 +481,8 @@ BEGIN
 
 	  IF @@ROWCOUNT = 0 BREAK;
 
-	  exec DataGen.CreatePaymentAndTransferForMonth	@senderAccountId,   @senderAccountName,   -- @senderPayeScheme,
-													@receiverAccountId, @receiverAccountName, -- @receiverPayeScheme,
+	  exec DataGen.CreatePaymentAndTransferForMonth	@senderAccountId,   @senderAccountName,
+													@receiverAccountId, @receiverAccountName,
 													@createDate, @amount, @paymentsToGenerate
 	END
 

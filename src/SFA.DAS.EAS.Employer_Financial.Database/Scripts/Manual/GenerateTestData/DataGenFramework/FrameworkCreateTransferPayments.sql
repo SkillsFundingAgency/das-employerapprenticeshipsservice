@@ -25,7 +25,7 @@
 declare @paymentsByMonth DataGen.PaymentGenerationSourceTable
 
 insert @paymentsByMonth
-select * from DataGen.GenerateSourceTable(@toDate, @numberOfMonthsToCreate, @defaultNumberOfPaymentsPerMonth, @defaultMonthlyTransfer)
+select * from DataGen.GenerateSourceTable(@toDate, @numberOfMonthsToCreate, @defaultMonthlyTransfer, @defaultNumberOfPaymentsPerMonth)
 
 select * from @paymentsByMonth
 
