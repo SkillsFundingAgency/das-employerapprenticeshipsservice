@@ -456,3 +456,37 @@ BEGIN
 
 END
 GO
+
+CREATE OR ALTER PROCEDURE DataGen.CreateTransfersForMonths
+(
+	@senderAccountId BIGINT,
+    @senderAccountName NVARCHAR(100),
+	@receiverAccountId BIGINT,
+    @receiverAccountName NVARCHAR(100),
+	@source as PaymentGenerationSourceTable readonly
+)
+AS
+BEGIN
+
+	DECLARE @monthBeforeToDate INT = 1
+	DECLARE @createDate DATETIME
+	DECLARE @amount DECIMAL(18, 4)
+	DECLARE @paymentsToGenerate INT
+
+	WHILE (1 = 1) 
+	BEGIN  
+
+	  SELECT TOP 1 @monthBeforeToDate = monthBeforeToDate, @createDate = createMonth, @amount = amount, @paymentsToGenerate = paymentsToGenerate
+	  FROM @source
+	  WHERE monthBeforeToDate < @monthBeforeToDate
+	  ORDER BY monthBeforeToDate DESC
+
+	  IF @@ROWCOUNT = 0 BREAK;
+
+	  exec DataGen.CreatePaymentAndTransferForMonth	@senderAccountId,   @senderAccountName,   -- @senderPayeScheme,
+													@receiverAccountId, @receiverAccountName, -- @receiverPayeScheme,
+													@createDate, @amount, @paymentsToGenerate
+	END
+
+END
+GO
