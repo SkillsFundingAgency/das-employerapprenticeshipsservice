@@ -174,9 +174,9 @@ BEGIN
 	--declare @evidenceSubmittedOn datetime = DATEADD(month, 1, @deliveryPeriodDate)
 
     INSERT INTO employer_financial.payment
-    (paymentid, ukprn,uln,accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, 
+    (paymentid, ukprn, uln, accountid, apprenticeshipid, deliveryperiodmonth, deliveryperiodyear, 
 	collectionperiodid, collectionperiodmonth, collectionperiodyear, 
-	evidencesubmittedon, employeraccountversion,apprenticeshipversion, fundingsource, transactiontype,amount,periodend,paymentmetadataid)
+	evidencesubmittedon, employeraccountversion, apprenticeshipversion, fundingsource, transactiontype, amount, periodend, paymentmetadataid)
     VALUES
     (newid(), @ukprn, @uln, @accountid, @apprenticeshipid, DataGen.CalendarPeriodMonth(@deliveryPeriodDate), DataGen.CalendarPeriodYear(@deliveryPeriodDate),
 	DataGen.PeriodEnd(@periodEndDate), DataGen.CollectionPeriodMonth(@periodEndDate), DataGen.CollectionPeriodYear(@periodEndDate), 
@@ -221,6 +221,44 @@ BEGIN
       EXEC DataGen.CreatePayment @accountId, @providerName, @courseName, 1, @name, @ukprn, @uln, @apprenticeshipId, @fundingSourceString, @paymentAmount, @periodEndDate
 	END
 END
+GO
+
+CREATE OR ALTER PROCEDURE DataGen.CreateTransfer
+(
+	@senderAccountId bigint,
+	@senderAccountName NVARCHAR(100),
+	@receiverAccountId bigint,
+	@receiverAccountName NVARCHAR(100),
+	@apprenticeshipId bigint,
+	@courseName varchar(max),	
+	@amount decimal(18,5),
+	@periodEnd nvarchar(20),
+	@type varchar(50),
+	@transferDate datetime
+)
+AS
+BEGIN
+	INSERT INTO [employer_financial].[AccountTransfers] 
+	(
+		SenderAccountId, SenderAccountName, ReceiverAccountId, ReceiverAccountName,
+		ApprenticeshipId, CourseName,	
+		PeriodEnd,
+		Amount, 
+		Type, 		
+		CreatedDate,
+		RequiredPaymentId
+	)
+	VALUES
+	(
+		@senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName,
+		@apprenticeshipId, @courseName,		
+		@periodEnd,
+		@amount,
+		@type,		
+		@transferDate,
+		NEWID()
+	)
+END;
 GO
 
 CREATE OR ALTER PROCEDURE DataGen.ProcessPaymentDataTransactionsGenerateDataEdition
