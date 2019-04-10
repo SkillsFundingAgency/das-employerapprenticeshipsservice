@@ -20,7 +20,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
     {
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
-        private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
         private readonly ILog _logger;
@@ -28,14 +27,12 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
         public GetEmployerAccountTransactionsHandler(
             IDasLevyService dasLevyService,
             IValidator<GetEmployerAccountTransactionsQuery> validator,
-            IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper,
             ILog logger,
             IHashingService hashingService,
             Hashing.IPublicHashingService publicHashingService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
-            _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
             _logger = logger;
             _hashingService = hashingService;
             _publicHashingService = publicHashingService;
