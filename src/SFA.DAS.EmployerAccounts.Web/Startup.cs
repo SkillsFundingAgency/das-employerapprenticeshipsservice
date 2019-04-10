@@ -20,8 +20,8 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Services;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         {
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>();
-            var cookie = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<CookieStorageService<EmployerAccountData>>();
+            var cookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
 
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
                 AuthenticatedCallback = identity =>
                 {
-                    PostAuthentiationAction(identity, authenticationOrchestrator, constants, cookie);
+                    PostAuthentiationAction(identity, authenticationOrchestrator, constants, cookieStorageService);
                 }
             });
 
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             };
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants, CookieStorageService<EmployerAccountData> cookieStorageService)
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants, ICookieStorageService<EmployerAccountData> cookieStorageService)
         {
             Logger.Info("Retrieving claims from OIDC server.");
 
