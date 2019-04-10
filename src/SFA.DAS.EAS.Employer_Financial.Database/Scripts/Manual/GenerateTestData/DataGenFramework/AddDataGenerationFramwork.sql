@@ -207,6 +207,37 @@ BEGIN
 END
 GO
 
+CREATE OR ALTER PROCEDURE DataGen.CreateEnglishFractions(
+	@payeScheme NVARCHAR(50),
+	@levyDecByMonth LevyGenerationSourceTable readonly
+)
+AS
+BEGIN
+
+	-- engligh fractions usually generated on 1, 4, 7, 10 (not 3, 6, 9, 12), but can be generated anytime
+	declare @englishFractionMonths table (dateCalculated DATETIME)
+
+	-- first quarter before (or on) first month
+	insert @englishFractionMonths
+	select top 1 dateadd(month,-datepart(month,createMonth)%3, createMonth) from @levyDecByMonth order by createMonth
+
+	-- rest of the quarters
+	insert @englishFractionMonths
+	select createMonth from (select createMonth from @levyDecByMonth except select top 1 createMonth from @levyDecByMonth order by createMonth) x where datepart(month,createMonth)%3 = 0
+
+	-- only insert english fraction rows that don't already exist (and add english fraction calcs on consistent day of the month)
+	declare @newEnglishFractionMonths table (dateCalculated DATETIME)
+
+	insert @newEnglishFractionMonths
+	select datefromparts(datepart(year,dateCalculated), datepart(month,dateCalculated), 7) from @englishFractionMonths
+	except select dateCalculated from employer_financial.EnglishFraction where EmpRef = @payeScheme
+
+	INSERT employer_financial.EnglishFraction (DateCalculated, Amount, EmpRef, DateCreated)
+	select dateCalculated, 1.0, @payeScheme, dateCalculated from @newEnglishFractionMonths
+
+END;
+GO
+
 CREATE OR ALTER PROCEDURE DataGen.CreatePayment
 (     
     @accountId BIGINT,

@@ -168,7 +168,6 @@
     <None Include="Scripts\Manual\GenerateTestData\CreateTransferPayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationFramework.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramwork.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\CreatePayments_use_sp.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
