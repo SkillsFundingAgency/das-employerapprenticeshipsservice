@@ -135,8 +135,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var priority1RegEx = $"^({searchTerm})$";
             AddResultsMatchingRegEx(result, priority1RegEx, outputList);
 
-            //2. Bob Ltd etc (full word match at the start of the name has company suffix)
-            
+            //2. Bob Ltd etc (full word match at the start of the name has company suffix)        
             var priority1ARegEx = $"^({searchTerm}\\W)({string.Join("|", _termsToRemove)})";
             AddResultsMatchingRegEx(result, priority1ARegEx, outputList);
 
@@ -252,35 +251,16 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             var result = _inProcessCache.Get<List<OrganisationName>>(cacheKey);
             if (result != null) return result;
 
-            var processedSearchTerm = CleanSearchTerm(searchTerm);
-            var orgs = await _client.SearchOrganisations(processedSearchTerm);
+            var orgs = await _client.SearchOrganisations(searchTerm);
 
             if (orgs == null) return new List<OrganisationName>();
 
             var convertedOrgs = orgs.Select(ConvertToOrganisation).ToList();
 
-            result = SortOrganisations(convertedOrgs, processedSearchTerm);
+            result = SortOrganisations(convertedOrgs, searchTerm);
 
             _inProcessCache.Set(cacheKey, result, new TimeSpan(0, 15, 0));
             return result;
-        }
-
-        private string CleanSearchTerm(string searchTerm)
-        {
-            if (string.IsNullOrWhiteSpace(searchTerm))
-                return searchTerm;
-
-            foreach (var termToRemove in _termsToRemove)
-            {
-                if (!searchTerm.EndsWith(termToRemove, StringComparison.CurrentCultureIgnoreCase))
-                    continue;
-
-                var index = searchTerm.LastIndexOf(termToRemove, StringComparison.CurrentCultureIgnoreCase);
-
-                searchTerm = searchTerm.Substring(0, index).TrimEnd();
-            }
-
-            return searchTerm;
         }
 
         private static PagedResponse<OrganisationName> CreatePagedOrganisationResponse(int pageNumber, int pageSize, List<OrganisationName> result)
