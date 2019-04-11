@@ -1,5 +1,6 @@
 ﻿-- danger: here be dragons!
--- deletes *all* payments, periodends adn AccountTransfers!
+-- deletes *all* AccountTransfers, Payments, PaymentMetaDatas, PeriodEnds and TransactionLines of type payment and tranfer
+
 delete employer_financial.AccountTransfers
 delete employer_financial.Payment
 delete employer_financial.PaymentMetaData

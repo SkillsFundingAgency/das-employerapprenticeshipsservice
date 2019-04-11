@@ -1,4 +1,4 @@
--- See 'Transfer Generation Knobs' section towards the end of this file for the control knobs
+-- Instructions: See 'Transfer Generation Knobs' section towards the end of this file for the control knobs
 
 IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
 BEGIN

@@ -1,6 +1,4 @@
---todo: coinvestment
-
--- DELETE THE TEMP STORED PROCEDURES IF THEY EXIST
+-- Instructions: Find clearly signposted 'Payment Generation Knobs' section below to change generation variable defaults
 
 IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
 BEGIN
