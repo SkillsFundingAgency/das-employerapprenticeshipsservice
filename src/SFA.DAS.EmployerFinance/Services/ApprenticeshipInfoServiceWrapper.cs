@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.Apprenticeships.Api.Client;
 using SFA.DAS.Apprenticeships.Api.Types;
-using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.Caches;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
@@ -57,25 +55,7 @@ namespace SFA.DAS.EmployerFinance.Services
             }
 
             return Task.FromResult(_cache.Get<FrameworksView>(FrameworksKey));
-        }
-
-        public ProvidersView GetProvider(long ukPrn)
-        {
-            try
-            {
-                var api = new Providers.Api.Client.ProviderApiClient();
-                var provider = api.Get(ukPrn);
-                return MapFrom(provider);
-            }
-            catch (HttpRequestException)
-            {
-                throw;
-            }
-            catch (EntityNotFoundException)
-            {
-                return null;
-            }
-        }
+        }       
 
         private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
         {
