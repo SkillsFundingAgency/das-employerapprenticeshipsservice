@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
     {
         private Mock<IDasLevyService> _dasLevyService;
         private GetEmployerAccountTransactionsQuery _request;
-        private Mock<IApprenticeshipInfoServiceWrapper> _apprenticshipInfoService;
         private Mock<ILog> _logger;
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
         public override GetEmployerAccountTransactionsHandler RequestHandler { get; set; }
@@ -55,14 +54,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(2);
 
-            _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
-
-            _logger = new Mock<ILog>();
+             _logger = new Mock<ILog>();
 
             RequestHandler = new GetEmployerAccountTransactionsHandler(
                 _dasLevyService.Object,
                 RequestValidator.Object,
-                _apprenticshipInfoService.Object,
                 _logger.Object,
                 _hashingService.Object,
                 _publicHashingService.Object);
@@ -179,8 +175,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                            .ReturnsAsync(transactions);
 
-            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView { Provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { ProviderName = "test" } });
-            _dasLevyService.Setup(x => x.GetProviderName(expectedUkprn, It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync("test");
+             _dasLevyService.Setup(x => x.GetProviderName(expectedUkprn, It.IsAny<long>(), It.IsAny<string>())).ReturnsAsync("test");
             //Act
             var actual = await RequestHandler.Handle(_request);
 
@@ -337,10 +332,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 TransactionType = TransactionItemType.Payment,
                 Amount = 123.45M
             };
-
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                .Returns(new ProvidersView { Provider = provider });
-
+      
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new TransactionLine[]
                 {
@@ -371,9 +363,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 TransactionType = TransactionItemType.Payment,
                 SfaCoInvestmentAmount = 123.45M
             };
-
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                .Returns(new ProvidersView { Provider = provider });
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new TransactionLine[]
@@ -406,11 +395,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 Amount = 123.45M,
                 EmployerCoInvestmentAmount = 50
             };
-
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                .Returns(new ProvidersView { Provider = provider });
-
-            var p = _apprenticshipInfoService.Object.GetProvider(100);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new TransactionLine[]
@@ -561,7 +545,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 Amount = 2035.20M
             };
 
-            var expectedDescription = "Levy funds expired";
+            var expectedDescription = "Expired levy";
 
             _dasLevyService.Setup(x =>
                     x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))

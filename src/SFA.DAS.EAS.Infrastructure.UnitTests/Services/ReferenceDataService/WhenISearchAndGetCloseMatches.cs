@@ -47,17 +47,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.ReferenceDataService
             await ArrangeAndAssertSortOrder(SearchTerm);
         }
 
-        [Test]
-        public async Task ThenCheckSortPriorityIsAppliedCorrectlyWhenWeHaveAKnownSuffix()
-        {
-            //Arrange - The search Term WITHOUT the suffix as it is stripped before the external call
-            _apiClient.Setup(x => x.SearchOrganisations(SearchTerm, 500))
-                .ReturnsAsync(
-                    ConstructOrganisationSearchResults());
-
-            await ArrangeAndAssertSortOrder(SearchTermWithPrefix);
-        }
-
         private async Task ArrangeAndAssertSortOrder(string searchTerm)
         {
 

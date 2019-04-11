@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
                 sendOptions.RequireImmediateDispatch();
                 sendOptions.RouteToThisEndpoint();
-                sendOptions.SetMessageId($"{now.Year}-{now.Month}-{c.AccountId}");
+                sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{c.AccountId}");
 
                 return context.Send(c, sendOptions);
             });

@@ -4,6 +4,8 @@
 
 @{
     ViewBag.GaData.Vpv = "/service/whatYoullNeed/page-what-youll-need";
+    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "hidden";
+    var errorClass = Model?.GetType().GetProperty("InError") != null ? "error" : "";
 }
 
 <div class="grid-row">
@@ -19,12 +21,12 @@
         <p><a rel="external" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in">Can't find your Government Gateway details?</a></p>
         <form method="POST" action="@Url.Action("WhatYoullNeed", "Home")" >
             @Html.AntiForgeryToken()
-            <div class="form-group" id="what-you-need-form">
+            <div class="form-group @errorClass" id="what-you-need-form">
                 <fieldset>
                     <legend class="form-label-bold">
                         <span>Do you have everything you need?</span>
-                        <span class="error-message js-hidden" aria-hidden="true" id="have-not-got-everything">
-                            You need your Government Gateway login details to create an account
+                        <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                            You need your Government Gateway login details to access your levy funds
                         </span>
                     </legend>
                     <label for="have-everything" class="block-label">
@@ -39,7 +41,7 @@
                 </fieldset>
             </div>
             <div class="form-group">
-                <button class="button" type="submit" id="submit-button">Continue</button>
+                <button class="button" type="submit" id="submit-what-youll-need-button">Continue</button>
             </div>
         </form>
     </div>

@@ -127,6 +127,38 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
+        [Route("confirmWhoYouAre")]
+        public ActionResult ConfirmWhoYouAre()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [Route("confirmWhoYouAre")]
+        public ActionResult ConfirmWhoYouAre(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1: return RedirectToAction(ControllerConstants.ConfirmWhoYouAre); 
+                case 2: return RedirectToAction(ControllerConstants.ConfirmWhoYouAre); 
+                default:
+
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
+
+                    return View(model);
+            }
+        }
+
+        [HttpGet]
         [Route("whatYoullNeed")]
         public ActionResult WhatYoullNeed()
         {
@@ -142,7 +174,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("whatYoullNeed")]
         public ActionResult WhatYoullNeed(int? choice)
         {
-            return RedirectToAction(ControllerConstants.RegisterUserActionName);
+            switch (choice ?? 0)
+            {
+                case 2: return RedirectToAction(ControllerConstants.RegisterUserActionName);
+                default:
+
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
+
+                    return View(model);
+            }
         }
 
         [HttpGet]
