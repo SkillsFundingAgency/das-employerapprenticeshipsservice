@@ -74,6 +74,10 @@
     <Folder Include="Scripts\Manual" />
     <Folder Include="Scripts\Manual\GenerateTestData" />
     <Folder Include="Scripts\Manual\GenerateTestData\DataGenFramework" />
+    <Folder Include="Scripts\Manual\GenerateTestData\AdHoc" />
+    <Folder Include="Scripts\Manual\GenerateTestData\Cleardown" />
+    <Folder Include="Scripts\Manual\GenerateTestData\Cleardown\All" />
+    <Folder Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -163,11 +167,16 @@
     <Build Include="StoredProcedures\CreateExpiredFunds.sql" />
     <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
     <Build Include="StoredProcedures\GetExpiredFunds.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\CreatePayments.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\CreateLevies.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\CreateTransferPayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationFramework.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramwork.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreateLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreatePayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreateTransferPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount\DeleteAccountLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount\DeleteAccountPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount\DeleteAccountTransfers.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllPayments.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -175,12 +184,7 @@
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
     <None Include="Scripts\PreDeployment\AML-2505-PopulateNullProviderNames.sql" />
     <None Include="Scripts\PreDeployment\AML-2873_TransferPaymentDate.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DeleteAllLevies.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DeleteAllPayments.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DeleteAccountPayments.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DeleteAccountLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\Notes.txt" />
-    <None Include="Scripts\Manual\GenerateTestData\DeleteAccountTransfers.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreatePayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateTransferPayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateLevies.sql" />
