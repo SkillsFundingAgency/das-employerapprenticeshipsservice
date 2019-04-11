@@ -86,6 +86,30 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                              new EmployerAgreementStatusDto
                              {
                                  Pending = new PendingEmployerAgreementDetailsDto { Id = 123 }
+                             },
+                             new EmployerAgreementStatusDto
+                             {
+                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 124 }
+                             },
+                             new EmployerAgreementStatusDto
+                             {
+                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 125 }
+                             },
+                             new EmployerAgreementStatusDto
+                             {
+                                 Pending = new PendingEmployerAgreementDetailsDto { Id = 126 }
+                             },
+                             new EmployerAgreementStatusDto
+                             {
+                                 Signed = new SignedEmployerAgreementDetailsDto { Id = 111 }
+                             },
+                             new EmployerAgreementStatusDto
+                             {
+                                 Signed = new SignedEmployerAgreementDetailsDto { Id = 112 }
+                             },
+                             new EmployerAgreementStatusDto
+                             {
+                                 Signed = new SignedEmployerAgreementDetailsDto { Id = 113 }
                              }
                          }
                      });
@@ -188,6 +212,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             Assert.AreEqual(expectShowBanner, model.Data.ShowAcademicYearBanner);
+        }
+
+        [Test]
+        public async Task ThenAgreementsAreRetrievedCorrectly()
+        {
+            //Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(3, actual.Data.SignedAgreementCount);
+            Assert.AreEqual(4, actual.Data.RequiresAgreementSigning);
         }
     }
 }

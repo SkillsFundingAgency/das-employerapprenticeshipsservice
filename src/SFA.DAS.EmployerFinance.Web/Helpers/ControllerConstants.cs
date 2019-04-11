@@ -2,7 +2,6 @@
 {
     public static class ControllerConstants
     {
-        public const string AccessDeniedViewName = "AccessDenied";
         public const string AccessDeniedControllerName = "AccessDenied";
         public const string AccountHashedIdRouteKeyName = "HashedAccountId";
         public const string CoursePaymentSummaryViewName = "CoursePaymentSummary";
@@ -16,7 +15,6 @@
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
         public const string TransferDetailsViewName = "TransferDetails";
         public const string UserRefClaimKeyName = "sub";
-        public const string NotFoundViewName = "NotFound";
         public const string TransactionViewName = "TransactionsView";
         public const string BadRequestViewName = "BadRequest";
     }
