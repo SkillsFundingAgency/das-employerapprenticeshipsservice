@@ -83,9 +83,7 @@ SELECT TOP (@numberOfMonthsToCreate)
 FROM sys.all_objects
 ORDER BY monthBeforeToDate;
 
---** Levy Adjustments ***
--- reduce levy declared by this amount for the given payroll year and month.
--- if the month reduction > the levy declared in that month (unless explicitely changed, @monthlyLevy), then it will generate a levy adjustment
+--*** Levy Adjustments ***
 --declare @adjustmentAmount DECIMAL(18, 4) = 1000
 --update @levyDecByMonth set amount = amount-@monthlyLevy-@adjustmentAmount where payrollYear = '18-19' and payrollMonth >= 6
 
