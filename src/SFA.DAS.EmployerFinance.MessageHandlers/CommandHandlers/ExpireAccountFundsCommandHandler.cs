@@ -41,7 +41,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         public async Task Handle(ExpireAccountFundsCommand message, IMessageHandlerContext context)
         {
             _logger.Info($"Expiring funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
-            
+
+            var now = _currentDateTime.Now;
             var fundsIn = await _levyFundsInRepository.GetLevyFundsIn(message.AccountId);
             var fundsOut = await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId);
             var existingExpiredFunds = await _expiredFundsRepository.Get(message.AccountId);
@@ -51,9 +52,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 fundsOut.ToCalendarPeriodDictionary(),
                 existingExpiredFunds.ToCalendarPeriodDictionary(),
                 _configuration.FundsExpiryPeriod,
-                _currentDateTime.Now);
+                now);
 
-            await _expiredFundsRepository.Create(message.AccountId, expiredFunds.ToExpiredFundsList());
+            await _expiredFundsRepository.Create(message.AccountId, expiredFunds.ToExpiredFundsList(), now);
 
             _logger.Info($"Expired '{expiredFunds.Count}' month(s) of funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
         }
