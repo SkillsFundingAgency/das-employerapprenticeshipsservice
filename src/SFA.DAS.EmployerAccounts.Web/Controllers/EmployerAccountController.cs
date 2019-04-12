@@ -114,7 +114,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (string.IsNullOrEmpty(empref.Empref) || empref.EmprefNotFound)
                 {
-                    return RedirectToAction(ControllerConstants.SummaryActionName);
+                    return RedirectToAction(ControllerConstants.PayeErrorActionName,
+                        new
+                        {
+                            NotFound = empref.EmprefNotFound
+                        });
                 }
 
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
@@ -124,6 +128,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Error(ex, $"Error processing Gateway response - {ex.Message}");
                 throw;
             }
+        }
+
+        [HttpGet]
+        [Route("payeerror")]
+        public ViewResult PayeError(bool? NotFound)
+        {
+            ViewBag.NotFound = NotFound ?? false;
+            return View();
         }
 
         [HttpGet]
