@@ -1,3 +1,4 @@
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 ﻿<div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge" id="Levy-accounts">Set up your account</h1>
@@ -7,7 +8,7 @@
             <li>the Government Gateway login details for your PAYE scheme.</li>
         </ul>
         <p>
-            <a href="@Url.Action("SearchForOrganisation", "SearchOrganisation")" class="button" id="add_new_account" aria-label="Add new account">Continue</a>
+            <a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)" class="button" id="add_new_account" aria-label="Add new account">Continue</a>
         </p>
         <h2 class="heading-medium">If your organisation already has an account</h2>
         <p>If someone in your organisation has already created an account, you will need to ask them to invite you to the account.</p>

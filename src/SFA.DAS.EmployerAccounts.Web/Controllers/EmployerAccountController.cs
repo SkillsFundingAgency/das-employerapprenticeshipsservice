@@ -1,8 +1,6 @@
 ﻿using System;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -11,7 +9,10 @@ using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -21,14 +22,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
+        private readonly IMediator _mediatr;
 
-        public EmployerAccountController(IAuthenticationService owinWrapper, EmployerAccountOrchestrator employerAccountOrchestrator,
-            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService, ILog logger,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+        public EmployerAccountController(
+            IAuthenticationService owinWrapper, 
+            EmployerAccountOrchestrator employerAccountOrchestrator, 
+            IMultiVariantTestingService multiVariantTestingService, 
+            ILog logger,
+            ICookieStorageService<FlashMessageViewModel> flashMessage, 
+            IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
+            _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
         }
 
         [HttpGet]
@@ -59,8 +66,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
-            var url = await _employerAccountOrchestrator.GateWayUrlHelper(ControllerConstants.GateWayResponseActionName,
-                ControllerConstants.EmployerAccountControllerName, HttpContext.Request.Url?.Scheme, Url);
+            var url = await _employerAccountOrchestrator.GetGatewayUrl(Url.Action(ControllerConstants.GateWayResponseActionName,
+                ControllerConstants.EmployerAccountControllerName, null,HttpContext.Request.Url?.Scheme));
 
             return Redirect(url);
         }
@@ -87,20 +94,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Info($"Gateway response is for user identity ID {externalUserId}");
 
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-                var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
-                _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
+                var empref =
+                    await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
+                _logger.Info(
+                    $"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
-                var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
-
-                enteredData.EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "";
-                enteredData.PayeReference = empref.Empref;
-                enteredData.AccessToken = response.Data.AccessToken;
-                enteredData.RefreshToken = response.Data.RefreshToken;
-                enteredData.EmpRefNotFound = empref.EmprefNotFound;
-                _employerAccountOrchestrator.UpdateCookieData(HttpContext, enteredData);
+                await 
+                _mediatr
+                    .SendAsync(new SavePayeRefData(
+                new EmployerAccountPayeRefData
+                {
+                    EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "",
+                    PayeReference = empref.Empref,
+                    AccessToken = response.Data.AccessToken,
+                    RefreshToken = response.Data.RefreshToken,
+                    EmpRefNotFound = empref.EmprefNotFound,
+                }));
 
                 _logger.Info("Finished processing gateway response");
-                return RedirectToAction(ControllerConstants.SummaryActionName);
+                return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
             catch (Exception ex)
             {
@@ -129,12 +141,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("create")]
         public async Task<ActionResult> CreateAccount()
         {
-            var enteredData = _employerAccountOrchestrator.GetCookieData(HttpContext);
+            var enteredData = _employerAccountOrchestrator.GetCookieData();
 
             if (enteredData == null)
             {
                 // N.B CHANGED THIS FROM SelectEmployer which went nowhere.
-                _employerAccountOrchestrator.DeleteCookieData(HttpContext);
+                _employerAccountOrchestrator.DeleteCookieData();
 
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
@@ -142,18 +154,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var request = new CreateAccountViewModel
             {
                 UserId = GetUserId(),
-                OrganisationType = enteredData.OrganisationType,
-                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
-                OrganisationName = enteredData.OrganisationName,
-                OrganisationAddress = enteredData.OrganisationRegisteredAddress,
-                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
-                PayeReference = enteredData.PayeReference,
-                AccessToken = enteredData.AccessToken,
-                RefreshToken = enteredData.RefreshToken,
-                OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.OrganisationStatus) ? null : enteredData.OrganisationStatus,
-                EmployerRefName = enteredData.EmployerRefName,
-                PublicSectorDataSource = enteredData.PublicSectorDataSource,
-                Sector = enteredData.Sector
+                OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
+                OrganisationReferenceNumber = enteredData.EmployerAccountOrganisationData.OrganisationReferenceNumber,
+                OrganisationName = enteredData.EmployerAccountOrganisationData.OrganisationName,
+                OrganisationAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress,
+                OrganisationDateOfInception = enteredData.EmployerAccountOrganisationData.OrganisationDateOfInception,
+                PayeReference = enteredData.EmployerAccountPayeRefData.PayeReference,
+                AccessToken = enteredData.EmployerAccountPayeRefData.AccessToken,
+                RefreshToken = enteredData.EmployerAccountPayeRefData.RefreshToken,
+                OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.EmployerAccountOrganisationData.OrganisationStatus) ? null : enteredData.EmployerAccountOrganisationData.OrganisationStatus,
+                EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
+                PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
+                Sector = enteredData.EmployerAccountOrganisationData.Sector
             };
 
             var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);

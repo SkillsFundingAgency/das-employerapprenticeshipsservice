@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         }
 
-        public EmployerAccountPayeOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService, EmployerAccountsConfiguration configuration) : base(mediator, logger, cookieService, configuration)
+        public EmployerAccountPayeOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService, EmployerAccountsConfiguration configuration) : base(mediator, cookieService, configuration)
         {
         }
 
