@@ -97,11 +97,11 @@ GO
 
 -- Types
 
-drop type if exists DataGen.PaymentGenerationSourceTable
-go
+DROP TYPE IF EXISTS DataGen.PaymentGenerationSourceTable
+GO
 
-drop type if exists DataGen.LevyGenerationSourceTable
-go
+DROP TYPE IF EXISTS DataGen.LevyGenerationSourceTable
+GO
 
 -- Schema
 
