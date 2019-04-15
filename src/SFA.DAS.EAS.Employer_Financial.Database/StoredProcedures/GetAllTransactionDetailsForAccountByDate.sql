@@ -94,23 +94,23 @@ UNION ALL
 
 UNION ALL
 
-SELECT		tl.DateCreated									AS DateCreated,
-			tlt.[Description]								AS TransactionType,
-			tl.EmpRef										AS PayeScheme,
-			NULL											AS PayrollYear,
-			NULL											AS PayrollMonth,
-			NULL											AS LevyDeclared,
-			NULL											AS EnglishFraction,
-			NULL											AS TenPercentTopUp,
-			NULL											AS TrainingProvider,
-			NULL											AS Uln,
-			NULL											AS Apprentice,
-			NULL											AS ApprenticeTrainingCourse,
-			NULL											AS ApprenticeTrainingCourseLevel,
-			NULL											AS PaidFromLevy,
-			NULL											AS EmployerContribution,
-			NULL											AS GovermentContribution,
-			tl.Amount										AS Total
+SELECT		DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)		AS DateCreated,
+			tlt.[Description]									AS TransactionType,
+			tl.EmpRef											AS PayeScheme,
+			NULL												AS PayrollYear,
+			NULL												AS PayrollMonth,
+			NULL												AS LevyDeclared,
+			NULL												AS EnglishFraction,
+			NULL												AS TenPercentTopUp,
+			NULL												AS TrainingProvider,
+			NULL												AS Uln,
+			NULL												AS Apprentice,
+			NULL												AS ApprenticeTrainingCourse,
+			NULL												AS ApprenticeTrainingCourseLevel,
+			NULL												AS PaidFromLevy,
+			NULL												AS EmployerContribution,
+			NULL												AS GovermentContribution,
+			tl.Amount											AS Total
 	FROM	[employer_financial].TransactionLine tl
 			LEFT JOIN [employer_financial].[TransactionLineTypes] tlt
 				ON tlt.TransactionType = 3
