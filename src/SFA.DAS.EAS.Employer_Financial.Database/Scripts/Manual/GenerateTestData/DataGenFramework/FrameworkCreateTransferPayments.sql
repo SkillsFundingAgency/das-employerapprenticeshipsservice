@@ -1,19 +1,19 @@
 ﻿
-DECLARE @senderAccountId BIGINT               = 0
-DECLARE @senderAccountName NVARCHAR(100)      = 'Sender Name'
-DECLARE @receiverAccountId BIGINT             = 1
-DECLARE @receiverAccountName NVARCHAR(100)    = 'Receiver Name'
+DECLARE @senderAccountId bigint               = 0
+DECLARE @senderAccountName nvarchar(100)      = 'Sender Name'
+DECLARE @receiverAccountId bigint             = 1
+DECLARE @receiverAccountName nvarchar(100)    = 'Receiver Name'
 	
-DECLARE @toDate DATETIME                      = GETDATE()
-declare @numberOfMonthsToCreate INT           = 25
-declare @defaultMonthlyTransfer DECIMAL(18,4) = 100
-declare @defaultNumberOfPaymentsPerMonth INT  = 1
+DECLARE @toDate datetime                      = GETDATE()
+DECLARE @numberOfMonthsToCreate int           = 25
+DECLARE @defaultMonthlyTransfer decimal(18,4) = 100
+DECLARE @defaultNumberOfPaymentsPerMonth int  = 1
 
-declare @paymentsByMonth DataGen.PaymentGenerationSourceTable
+DECLARE @paymentsByMonth DataGen.PaymentGenerationSourceTable
 
-insert @paymentsByMonth
-select * from DataGen.GenerateSourceTable(@toDate, @numberOfMonthsToCreate, @defaultMonthlyTransfer, @defaultNumberOfPaymentsPerMonth)
+INSERT @paymentsByMonth
+SELECT * FROM DataGen.GenerateSourceTable(@toDate, @numberOfMonthsToCreate, @defaultMonthlyTransfer, @defaultNumberOfPaymentsPerMonth)
 
-select * from @paymentsByMonth
+SELECT * FROM @paymentsByMonth
 
-exec DataGen.CreateTransfersForMonths @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @paymentsByMonth
+EXEC DataGen.CreateTransfersForMonths @senderAccountId, @senderAccountName, @receiverAccountId, @receiverAccountName, @paymentsByMonth
