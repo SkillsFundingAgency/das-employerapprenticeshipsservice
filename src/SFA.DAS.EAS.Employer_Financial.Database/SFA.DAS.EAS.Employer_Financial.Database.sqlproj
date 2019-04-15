@@ -169,7 +169,7 @@
     <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
     <Build Include="StoredProcedures\GetExpiredFunds.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationFramework.sql" />
-    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramwork.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql" />
     <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreateLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreatePayments.sql" />
     <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreateTransferPayments.sql" />
