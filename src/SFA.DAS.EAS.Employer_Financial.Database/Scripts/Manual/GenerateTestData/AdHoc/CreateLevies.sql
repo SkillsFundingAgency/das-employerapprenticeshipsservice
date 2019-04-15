@@ -4,7 +4,7 @@ CREATE FUNCTION PayrollMonth (@date datetime)
 RETURNS int 
 AS  
 BEGIN  
-  declare @month int = DATEPART(month,@date)
+  DECLARE @month int = DATEPART(month,@date)
 
   SET @month = @month - 3
   IF @month < 1
@@ -18,19 +18,19 @@ CREATE FUNCTION PayrollYear (@date datetime)
 RETURNS VARCHAR(5)
 AS  
 BEGIN  
-  declare @month int = DATEPART(month,@date)
-  declare @year int = DATEPART(year,@date)
+  DECLARE @month int = DATEPART(month,@date)
+  DECLARE @year int = DATEPART(year,@date)
 
-  if @month < 4
+  IF @month < 4
 	SET @year = @year - 1
 	
   DECLARE @payrollYear VARCHAR(5) = (SELECT RIGHT(CONVERT(VARCHAR(5), @year, 1), 2)) + '-' + (SELECT RIGHT(CONVERT(VARCHAR(4), @year+1, 1), 2))
-  return @payrollYear
+  RETURN @payrollYear
 END; 
 GO
 
 BEGIN TRANSACTION CreateLevy
-go
+GO
 
 --  __                                   ____                                          __                            __  __                  __                
 -- /\ \                                 /\  _`\                                       /\ \__  __                    /\ \/\ \                /\ \               
@@ -42,29 +42,29 @@ go
 --                                 /\___/                                                                                                                      
 --                                 \/__/                                                                                                                       
 
-DECLARE @accountId BIGINT                = 1
-DECLARE @payeScheme NVARCHAR(50)         = '222/ZZ00002'
-DECLARE @monthlyLevy DECIMAL(18, 4)      = 1000
+DECLARE @accountId bigint                = 1
+DECLARE @payeScheme nvarchar(50)         = '222/ZZ00002'
+DECLARE @monthlyLevy decimal(18, 4)      = 1000
 -- last levy will be created in this month (last payroll month will be 1 month before)
-DECLARE @toDate DATETIME2                = GETDATE()
-DECLARE @numberOfMonthsToCreate INT      = 25
+DECLARE @toDate datetime2                = GETDATE()
+DECLARE @numberOfMonthsToCreate int      = 25
                                                                                                                                                                            
 --  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______  _______ 
 -- /\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\/\______\
 -- \/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/\/______/
 
-DECLARE @levyDecByMonth TABLE (monthBeforeToDate INT, amount DECIMAL(18, 4), createMonth DATETIME, payrollYear VARCHAR(5), payrollMonth int)
+DECLARE @levyDecByMonth TABLE (monthBeforeToDate int, amount decimal(18, 4), createMonth datetime, payrollYear varchar(5), payrollMonth int)
 
-declare @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
-declare @firstPayrollYear VARCHAR(5) = dbo.PayrollYear(@firstPayrollMonth)
+DECLARE @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
+DECLARE @firstPayrollYear VARCHAR(5) = dbo.PayrollYear(@firstPayrollMonth)
 
 -- generates same levy per month
-insert into @levyDecByMonth
+INSERT INTO @levyDecByMonth
 SELECT TOP (@numberOfMonthsToCreate)
 			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
-			(case
-			when dbo.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
-				THEN @monthlyLevy*row_number() over (order by (select NULL))
+			(CASE
+			WHEN dbo.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
+				THEN @monthlyLevy*row_number() OVER (ORDER BY (SELECT NULL))
 			ELSE
 				@monthlyLevy*dbo.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
 			END),
@@ -78,69 +78,68 @@ ORDER BY monthBeforeToDate;
 --declare @adjustmentAmount DECIMAL(18, 4) = 1000
 --update @levyDecByMonth set amount = amount-@monthlyLevy-@adjustmentAmount where payrollYear = '18-19' and payrollMonth >= 6
 
-select * from @levyDecByMonth
+SELECT * FROM @levyDecByMonth
 
 ---
 --- Generate english fraction rows to cover the levy decs we're about to generate
 ---
 
 -- engligh fractions usually generated on 1, 4, 7, 10 (not 3, 6, 9, 12), but can be generated anytime
-declare @englishFractionMonths table (dateCalculated DATETIME)
+DECLARE @englishFractionMonths TABLE (dateCalculated datetime)
 
 -- first quarter before (or on) first month
-insert @englishFractionMonths
-select top 1 dateadd(month,-datepart(month,createMonth)%3, createMonth) from @levyDecByMonth order by createMonth
+INSERT @englishFractionMonths
+SELECT TOP 1 DATEADD(month,-DATEPART(month,createMonth)%3, createMonth) FROM @levyDecByMonth ORDER BY createMonth
 
 -- rest of the quarters
-insert @englishFractionMonths
-select createMonth from (select createMonth from @levyDecByMonth except select top 1 createMonth from @levyDecByMonth order by createMonth) x where datepart(month,createMonth)%3 = 0
+INSERT @englishFractionMonths
+SELECT createMonth FROM (SELECT createMonth FROM @levyDecByMonth EXCEPT SELECT TOP 1 createMonth FROM @levyDecByMonth ORDER BY createMonth) x WHERE DATEPART(month,createMonth)%3 = 0
 
 -- only insert english fraction rows that don't already exist (and add english fraction calcs on consistent day of the month)
-declare @newEnglishFractionMonths table (dateCalculated DATETIME)
+DECLARE @newEnglishFractionMonths TABLE (dateCalculated datetime)
 
-insert @newEnglishFractionMonths
-select datefromparts(datepart(year,dateCalculated), datepart(month,dateCalculated), 7) from @englishFractionMonths
-except select dateCalculated from employer_financial.EnglishFraction where EmpRef = @payeScheme
+INSERT @newEnglishFractionMonths
+SELECT DATEFROMPARTS(DATEPART(year,dateCalculated), DATEPART(month,dateCalculated), 7) FROM @englishFractionMonths
+EXCEPT SELECT dateCalculated FROM employer_financial.EnglishFraction WHERE EmpRef = @payeScheme
 
 INSERT employer_financial.EnglishFraction (DateCalculated, Amount, EmpRef, DateCreated)
-select dateCalculated, 1.0, @payeScheme, dateCalculated from @newEnglishFractionMonths
+SELECT dateCalculated, 1.0, @payeScheme, dateCalculated FROM @newEnglishFractionMonths
 
 ---
 --- Generate levy decs
 ---
 
-DECLARE @maxSubmissionId BIGINT = ISNULL((SELECT MAX(SubmissionId) FROM employer_financial.levydeclaration),0)
+DECLARE @maxSubmissionId bigint = ISNULL((SELECT MAX(SubmissionId) FROM employer_financial.levydeclaration),0)
 
-declare @baselineSubmissionDate datetime = datefromparts(year(@toDate), month(@toDate), 18)
-declare @baselineCreatedDate datetime = datefromparts(year(@toDate), month(@toDate), 20)
-declare @baselinePayrollDate datetime = DATEADD(month, -1, @toDate)
+DECLARE @baselineSubmissionDate datetime = DATEFROMPARTS(year(@toDate), month(@toDate), 18)
+DECLARE @baselineCreatedDate datetime = DATEFROMPARTS(year(@toDate), month(@toDate), 20)
+DECLARE @baselinePayrollDate datetime = DATEADD(month, -1, @toDate)
 
 --todo use monthBeforeToDate, rather than row_number?
 INSERT INTO employer_financial.levydeclaration (AccountId,empref,levydueytd,levyallowanceforyear,submissiondate,submissionid,payrollyear,payrollmonth,createddate,hmrcsubmissionid)
-select @accountId, @payeScheme, 
+SELECT @accountId, @payeScheme, 
 	amount,
 	1500.0000, 
 	DATEADD(month, monthBeforeToDate, @baselineSubmissionDate), 
-	@maxSubmissionId + row_number() over (order by (select NULL)), 
+	@maxSubmissionId + ROW_NUMBER() OVER (ORDER BY (SELECT NULL)), 
 	dbo.PayrollYear(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)), 
 	dbo.PayrollMonth(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)), 
 	DATEADD(month, monthBeforeToDate, @baselineCreatedDate), 
-	@maxSubmissionId + row_number() over (order by (select NULL))
-from @levyDecByMonth
+	@maxSubmissionId + ROW_NUMBER() OVER (ORDER BY (SELECT NULL))
+FROM @levyDecByMonth
 
 ---
 --- Process the levy decs into transaction lines
 ---
 
 EXEC employer_financial.processdeclarationstransactions @accountId, @payeScheme
-
-go
+GO
 
 COMMIT TRANSACTION CreateLevy
 
-drop FUNCTION PayrollYear
-go
+DROP FUNCTION PayrollYear
+GO
 
-drop FUNCTION PayrollMonth
-go
+DROP FUNCTION PayrollMonth
+GO
 
