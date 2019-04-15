@@ -16,8 +16,7 @@ WHERE [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYe
 AND LevyDeclaredInMonth > 0
 AND AccountId = @AccountId
 AND EmpRef = @EmpRef
-ORDER BY PayrollYear, PayrollMonth
-	
+ORDER BY PayrollYear, PayrollMonth	
 
 --Add the topup from the declaration
 INSERT INTO [employer_financial].LevyDeclarationTopup
@@ -39,7 +38,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 	AND @EarliestPositiveLevyDecMonth IS NOT NULL
 	AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
-	OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
+	OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	union all
 	select
 		x.AccountId,
@@ -56,7 +55,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 	AND @EarliestPositiveLevyDecMonth IS NOT NULL
 	AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
-	OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
+	OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
@@ -97,7 +96,7 @@ select mainUpdate.* from
 		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 		AND @EarliestPositiveLevyDecMonth IS NOT NULL
 		AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
-		OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
+		OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	union all	
 		select 
 			x.AccountId,
@@ -127,7 +126,7 @@ select mainUpdate.* from
 		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 		AND @EarliestPositiveLevyDecMonth IS NOT NULL
 		AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
-		OR (SELECT COUNT(*) FROM [employer_financial].[GetLevyDeclarationAndTopUp] WHERE LastSubmission = 0) > 0)
+		OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration

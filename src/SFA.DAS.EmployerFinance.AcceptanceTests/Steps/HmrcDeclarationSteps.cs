@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using BoDi;
 using HMRC.ESFA.Levy.Api.Client;
 using HMRC.ESFA.Levy.Api.Types;
+using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
@@ -16,6 +17,10 @@ using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.NLog.Logger;
 using TechTalk.SpecFlow;
+using SFA.DAS.Configuration;
+using SFA.DAS.EmployerFinance.AcceptanceTests.Helpers;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Interfaces;
 
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
@@ -28,6 +33,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
 
+        //scenario context
+
         public HmrcDeclarationSteps(IObjectContainer objectContainer, ObjectContext objectContext)
         {
             _objectContainer = objectContainer;
@@ -38,9 +45,18 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         public void GivenIHaveTheFollowingSubmissionsForEmpRef(Table table)
         {
             var empRef = _objectContext.Get<string>(Extensions.Constants.ObjectContextKeys.EmpRef);
-            SetupLastEnglishFractionUpdateDate();  
+            SetupLastEnglishFractionUpdateDate();
             SetupEnglishFractions(empRef, table);
             SetupLevyDeclarations(empRef, table);
+        }
+
+        [When(@"we refresh levy data for paye scheme on the (.*)/(.*)")]
+        public Task WhenWeRefreshLevyDataOnGivenDate(int month, int year)
+        {
+            var currentDateTime = _objectContainer.Resolve<Mock<ICurrentDateTime>>();
+            currentDateTime.Setup(x => x.Now).Returns(new DateTime(year, month, 23));
+
+            return WhenWeRefreshLevyData();
         }
 
         [When(@"we refresh levy data for paye scheme")]
@@ -72,6 +88,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                     async c => 
                     {
                         _objectContainer.Resolve<ILog>().Info("About to start polling for levy decalaration.");
+                        var repo = c.Resolve<ITransactionRepository>();
 
                         var allLevyDeclarationsLoaded = await c.Resolve<ITransactionRepository>()
                             .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);

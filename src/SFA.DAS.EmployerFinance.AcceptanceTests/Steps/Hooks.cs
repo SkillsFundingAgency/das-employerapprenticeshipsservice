@@ -26,10 +26,12 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private static IContainer _container;
         private static IEndpointInstance _endpoint;
         private readonly IObjectContainer _objectContainer;
+        private readonly ScenarioContext _scenarioContext;
 
-        public Hooks(IObjectContainer objectContainer)
+        public Hooks(IObjectContainer objectContainer, ScenarioContext scenarioContext)
         {
             _objectContainer = objectContainer;
+            _scenarioContext = scenarioContext;
         }
 
         [BeforeTestRun]
@@ -45,6 +47,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             _container.GetInstance<ILog>().Info("Starting Scenario.");
 
+            _container.WhatDoIHave();
             _objectContainer.RegisterInstances(_container);
             _objectContainer.RegisterMocks(_container);
         }
