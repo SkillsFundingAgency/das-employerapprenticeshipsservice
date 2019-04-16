@@ -19,7 +19,7 @@ GO
 IF TYPE_ID(N'DataGen.LevyGenerationSourceTable') IS NULL
 BEGIN
 	CREATE TYPE DataGen.LevyGenerationSourceTable AS TABLE   
-	(monthBeforeToDate int, amount decimal(18, 4), createMonth datetime, payrollYear varchar(5), payrollMonth int)
+	(/*rowNumber int IDENTITY, */monthBeforeToDate int, amount decimal(18, 4), createMonth datetime, payrollYear varchar(5), payrollMonth int)
 END
 GO
 
@@ -138,7 +138,7 @@ CREATE OR ALTER FUNCTION DataGen.GenerateSourceTable(
 	@defaultMonthlyTotalPayments decimal(18,5),
 	@defaultPaymentsPerMonth int)
 RETURNS @source TABLE (
-    monthBeforeToDate int, amount decimal(18, 4), paymentsToGenerate int, createMonth datetime)
+    /*rowNumber int IDENTITY,*/ monthBeforeToDate int, amount decimal(18, 4), paymentsToGenerate int, createMonth datetime)
 BEGIN
 	INSERT INTO @source
 	SELECT TOP (@numberOfMonthsToCreate)
@@ -170,7 +170,7 @@ BEGIN
 				monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
 				(CASE
 				WHEN DataGen.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
-					THEN @monthlyLevy*row_number() OVER (ORDER BY (SELECT NULL))
+					THEN @monthlyLevy*ROW_NUMBER() OVER (ORDER BY (SELECT NULL))
 				ELSE
 					@monthlyLevy*DataGen.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
 				END),
@@ -229,7 +229,7 @@ BEGIN
 	DECLARe @newEnglishFractionMonths TABLE (dateCalculated datetime)
 
 	INSERT @newEnglishFractionMonths
-	SELECT datefromparts(datepart(year,dateCalculated), datepart(month,dateCalculated), 7) FROM @englishFractionMonths
+	SELECT DATEFROMPARTS(DATEPART(year,dateCalculated), DATEPART(month,dateCalculated), 7) FROM @englishFractionMonths
 	EXCEPT SELECT dateCalculated FROM employer_financial.EnglishFraction WHERE EmpRef = @payeScheme
 
 	INSERT employer_financial.EnglishFraction (DateCalculated, Amount, EmpRef, DateCreated)
@@ -248,22 +248,33 @@ AS
 BEGIN
 
 	DECLARE @maxSubmissionId BIGINT = ISNULL((SELECT MAX(SubmissionId) FROM employer_financial.levydeclaration),0)
+	DECLARE @numberOfMonths int
+	
+	SELECT @numberOfMonths = count(1) FROM @levyDecByMonth
 
 	DECLARE @baselineSubmissionDate datetime = DATEFROMPARTS(year(@toDate), month(@toDate), 18)
 	DECLARE @baselineCreatedDate datetime = DATEFROMPARTS(year(@toDate), month(@toDate), 20)
 	DECLARE @baselinePayrollDate datetime = DATEADD(month, -1, @toDate)
 
-	--todo use monthBeforeToDate, rather than row_number?
-	INSERT INTO employer_financial.levydeclaration (AccountId,empref,levydueytd,levyallowanceforyear,submissiondate,submissionid,payrollyear,payrollmonth,createddate,hmrcsubmissionid)
-	SELECT @accountId, @payeScheme, 
+	INSERT INTO employer_financial.levydeclaration (
+		AccountId, empref,
+		levydueytd,
+		levyallowanceforyear,
+		submissiondate,
+		submissionid,
+		payrollyear,
+		payrollmonth,
+		createddate,
+		hmrcsubmissionid)
+	SELECT @accountId, @payeScheme,
 		amount,
-		1500.0000, 
-		DATEADD(month, monthBeforeToDate, @baselineSubmissionDate), 
-		@maxSubmissionId + ROW_NUMBER() OVER (ORDER BY (SELECT NULL)), 
-		DataGen.PayrollYear(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)), 
-		DataGen.PayrollMonth(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)), 
-		DATEADD(month, monthBeforeToDate, @baselineCreatedDate), 
-		@maxSubmissionId + ROW_NUMBER() OVER (ORDER BY (SELECT NULL))
+		1500.0000,
+		DATEADD(month, monthBeforeToDate, @baselineSubmissionDate),
+		@maxSubmissionId + monthBeforeToDate + @numberOfMonths,
+		DataGen.PayrollYear(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)),
+		DataGen.PayrollMonth(DATEADD(month, monthBeforeToDate, @baselinePayrollDate)),
+		DATEADD(month, monthBeforeToDate, @baselineCreatedDate),
+		@maxSubmissionId + monthBeforeToDate + @numberOfMonths
 	FROM @levyDecByMonth
 
 	--- Process the levy decs into transaction lines
