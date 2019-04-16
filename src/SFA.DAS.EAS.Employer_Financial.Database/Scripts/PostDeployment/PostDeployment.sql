@@ -17,4 +17,5 @@ Post-Deployment Script Template
 IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
 BEGIN
 	:r .\SeedDevData.sql
+	:r ..\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql
 END
