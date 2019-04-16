@@ -15,7 +15,7 @@ Post-Deployment Script Template
 :r .\CreatePaymentTransactionTypes.sql
 
 IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
-BEGIN
 	:r .\SeedDevData.sql
+
+IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
 	:r ..\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql
-END
