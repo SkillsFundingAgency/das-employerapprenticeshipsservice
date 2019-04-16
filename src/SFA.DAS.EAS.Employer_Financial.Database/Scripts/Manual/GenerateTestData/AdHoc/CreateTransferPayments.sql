@@ -1,59 +1,5 @@
 -- Instructions: See 'Transfer Generation Knobs' section towards the end of this file for the control knobs
 
-IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
-BEGIN
-    DROP PROC #createPeriodEnd
-END
-GO
-
-IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
-BEGIN
-    DROP PROC #createPayment
-END
-GO
-
-IF OBJECT_ID('tempdb..#createPaymentAndTransferForMonth') IS NOT NULL
-BEGIN
-    DROP PROC #createPaymentAndTransferForMonth
-END
-GO
-
-IF OBJECT_ID('tempdb..#ProcessPaymentDataTransactionsGenerateDataEdition') IS NOT NULL
-BEGIN
-    DROP PROC #ProcessPaymentDataTransactionsGenerateDataEdition
-END
-GO
-
-IF OBJECT_ID('tempdb..#createAccountPayments') IS NOT NULL
-BEGIN
-    DROP PROC #createAccountPayments
-END
-GO
-
-IF OBJECT_ID('tempdb..#createCoursePaymentsForAccount') IS NOT NULL
-BEGIN
-    DROP PROC #createCoursePaymentsForAccount
-END
-GO
-
-IF OBJECT_ID('tempdb..#createTransfer') IS NOT NULL
-BEGIN
-    DROP PROC #createTransfer
-END
-GO
-
---IF OBJECT_ID('tempdb..#createAccountTransfers') IS NOT NULL
---BEGIN
---    DROP PROC #createAccountTransfers
---END
---GO
-
-IF OBJECT_ID('tempdb..#CreateAccountTransferTransaction') IS NOT NULL
-BEGIN
-    DROP PROC #CreateAccountTransferTransaction
-END
-GO
-
 CREATE FUNCTION CalendarPeriodMonth (@date datetime)  
 RETURNS int 
 AS  
@@ -132,7 +78,7 @@ END;
 GO
 
 -- Add period end if its not already there
-CREATE PROCEDURE #createPeriodEnd
+CREATE OR ALTER PROCEDURE #createPeriodEnd
 (
 	@periodEndDate datetime
 )
@@ -152,7 +98,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE #createAccountPayments
+CREATE OR ALTER PROCEDURE #createAccountPayments
 (    	
     @accountId bigint,
     @accountName nvarchar(100),
@@ -192,7 +138,7 @@ END
 GO
 
 
-CREATE PROCEDURE #createPayment
+CREATE OR ALTER PROCEDURE #createPayment
 (     
     @accountId bigint,
     @providerName nvarchar(max),
@@ -234,7 +180,7 @@ BEGIN
 END;  
 GO 
 
-CREATE PROCEDURE #createTransfer
+CREATE OR ALTER PROCEDURE #createTransfer
 (
 	@senderAccountId bigint,
 	@senderAccountName nvarchar(100),
@@ -280,7 +226,7 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE #CreateAccountTransferTransaction
+CREATE OR ALTER PROCEDURE #CreateAccountTransferTransaction
 	@accountId bigint,
 	@senderAccountId bigint,
 	@senderAccountName nvarchar(100),
@@ -321,7 +267,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE #ProcessPaymentDataTransactionsGenerateDataEdition
+CREATE OR ALTER PROCEDURE #ProcessPaymentDataTransactionsGenerateDataEdition
 	@AccountId bigint,
 	@DateCreated datetime
 AS
@@ -369,7 +315,7 @@ SELECT mainUpdate.* FROM
     ) dervx ON dervx.AccountId = mainUpdate.AccountId AND dervx.PeriodEnd = mainUpdate.PeriodEnd AND dervx.Ukprn = mainUpdate.Ukprn
 GO
 
-CREATE PROCEDURE #createPaymentAndTransferForMonth
+CREATE OR ALTER PROCEDURE #createPaymentAndTransferForMonth
 (    	
 	@senderAccountId bigint,
 	@senderAccountName nvarchar(100),

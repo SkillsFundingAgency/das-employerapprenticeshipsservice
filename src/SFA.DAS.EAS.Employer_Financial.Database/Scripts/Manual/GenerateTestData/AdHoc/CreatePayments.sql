@@ -1,41 +1,5 @@
 -- Instructions: Find clearly signposted 'Payment Generation Knobs' section below to change generation variable defaults
 
-IF OBJECT_ID('tempdb..#createPeriodEnd') IS NOT NULL
-BEGIN
-    DROP PROC #createPeriodEnd
-END
-GO
-
-IF OBJECT_ID('tempdb..#createPayment') IS NOT NULL
-BEGIN
-    DROP PROC #createPayment
-END
-GO
-
-IF OBJECT_ID('tempdb..#createCoursePaymentsForAccount') IS NOT NULL
-BEGIN
-    DROP PROC #createCoursePaymentsForAccount
-END
-GO
-
-IF OBJECT_ID('tempdb..#createAccountPayments') IS NOT NULL
-BEGIN
-    DROP PROC #createAccountPayments
-END
-GO
-
-IF OBJECT_ID('tempdb..#ProcessPaymentDataTransactionsGenerateDataEdition') IS NOT NULL
-BEGIN
-    DROP PROC #ProcessPaymentDataTransactionsGenerateDataEdition
-END
-GO
-
-IF OBJECT_ID('tempdb..#createPaymentsForMonth') IS NOT NULL
-BEGIN
-    DROP PROC #createPaymentsForMonth
-END
-GO
-
 CREATE FUNCTION CalendarPeriodMonth (@date datetime)  
 RETURNS int 
 AS  
@@ -123,7 +87,7 @@ GO
 --GO
 
 -- Add period end if its not already there
-CREATE PROCEDURE #createPeriodEnd
+CREATE OR ALTER PROCEDURE #createPeriodEnd
 (
 	@periodEndDate datetime
 )
@@ -143,7 +107,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE #createPayment
+CREATE OR ALTER PROCEDURE #createPayment
 (     
     @accountId bigint,
     @providerName nvarchar(max),
@@ -185,7 +149,7 @@ BEGIN
 END;  
 GO  
 
-CREATE PROCEDURE #createAccountPayments
+CREATE OR ALTER PROCEDURE #createAccountPayments
 (    	
     @accountId bigint,
     @accountName nvarchar(100),
@@ -219,7 +183,7 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE #ProcessPaymentDataTransactionsGenerateDataEdition
+CREATE OR ALTER PROCEDURE #ProcessPaymentDataTransactionsGenerateDataEdition
 	@AccountId bigint,
 	@DateCreated datetime
 AS
@@ -267,7 +231,7 @@ SELECT mainUpdate.* FROM
     ) dervx ON dervx.AccountId = mainUpdate.AccountId AND dervx.PeriodEnd = mainUpdate.PeriodEnd AND dervx.Ukprn = mainUpdate.Ukprn
 GO
 
-CREATE PROCEDURE #createPaymentsForMonth
+CREATE OR ALTER PROCEDURE #createPaymentsForMonth
 (    	
     @accountId bigint,
     @accountName nvarchar(100),
