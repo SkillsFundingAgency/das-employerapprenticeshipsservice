@@ -37,7 +37,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	(@EarliestPositiveLevyDecYear IS NOT NULL
 	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 	AND @EarliestPositiveLevyDecMonth IS NOT NULL
-	AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+	AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
 	OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	union all
 	select
@@ -54,7 +54,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 	(@EarliestPositiveLevyDecYear IS NOT NULL
 	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 	AND @EarliestPositiveLevyDecMonth IS NOT NULL
-	AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+	AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
 	OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	) mainUpdate
 	inner join (
@@ -95,7 +95,7 @@ select mainUpdate.* from
 		(@EarliestPositiveLevyDecYear IS NOT NULL
 		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 		AND @EarliestPositiveLevyDecMonth IS NOT NULL
-		AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+		AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
 		OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	union all	
 		select 
@@ -125,7 +125,7 @@ select mainUpdate.* from
 		(@EarliestPositiveLevyDecYear IS NOT NULL
 		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
 		AND @EarliestPositiveLevyDecMonth IS NOT NULL
-		AND x.PayrollMonth >= @EarliestPositiveLevyDecMonth
+		AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
 		OR (SELECT COUNT(*) FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, CURRENT_TIMESTAMP)) > 0)
 	) mainUpdate
 	inner join (
