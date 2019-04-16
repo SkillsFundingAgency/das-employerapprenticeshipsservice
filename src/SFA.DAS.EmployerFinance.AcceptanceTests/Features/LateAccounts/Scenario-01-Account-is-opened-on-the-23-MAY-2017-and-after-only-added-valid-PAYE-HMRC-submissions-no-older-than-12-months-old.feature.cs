@@ -72,12 +72,12 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features.LateAccounts
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submiss" +
-            "ions no older than 12 months old")]
-        public virtual void AccountIsOpenedOnThe23MAY2017AndAfterOnlyAddedValidPAYEHMRCSubmissionsNoOlderThan12MonthsOld()
+        [NUnit.Framework.DescriptionAttribute("1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC sub" +
+            "missions no older than 12 months old")]
+        public virtual void _1_AccountIsOpenedOnThe23MAY2017AndAfterOnlyAddedValidPAYEHMRCSubmissionsNoOlderThan12MonthsOld()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submiss" +
-                    "ions no older than 12 months old", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC sub" +
+                    "missions no older than 12 months old", null, ((string[])(null)));
 #line 3
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -191,7 +191,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "2018-04-20"});
             table1.AddRow(new string[] {
                         "999000113",
-                        "13000",
+                        "1000",
                         "18-19",
                         "1",
                         "1",
@@ -205,9 +205,363 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 22
- testRunner.Then("we should see a level 1 screen with a levy declared of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 23
  testRunner.And("we should see a level 1 screen with a balance of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("2 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
+            "o older than 12 months old")]
+        public virtual void _2_AccountIsOpenedOnThe22MAY2017AndAfterOnlyAddedValidSubmissionsNoOlderThan12MonthsOld()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("2 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
+                    "o older than 12 months old", null, ((string[])(null)));
+#line 36
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 37
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "LevyDueYtd",
+                        "Payroll_Year",
+                        "Payroll_Month",
+                        "English_Fraction",
+                        "SubmissionDate",
+                        "CreatedDate"});
+            table2.AddRow(new string[] {
+                        "999000101",
+                        "1000",
+                        "17-18",
+                        "1",
+                        "1",
+                        "2017-05-19",
+                        "2017-05-20"});
+            table2.AddRow(new string[] {
+                        "999000102",
+                        "2000",
+                        "17-18",
+                        "2",
+                        "1",
+                        "2017-06-19",
+                        "2017-06-20"});
+            table2.AddRow(new string[] {
+                        "999000103",
+                        "0",
+                        "17-18",
+                        "3",
+                        "1",
+                        "2017-07-19",
+                        "2017-07-20"});
+            table2.AddRow(new string[] {
+                        "999000104",
+                        "0",
+                        "17-18",
+                        "4",
+                        "1",
+                        "2017-08-19",
+                        "2017-08-20"});
+            table2.AddRow(new string[] {
+                        "999000105",
+                        "0",
+                        "17-18",
+                        "5",
+                        "1",
+                        "2017-09-19",
+                        "2017-09-20"});
+            table2.AddRow(new string[] {
+                        "999000106",
+                        "0",
+                        "17-18",
+                        "6",
+                        "1",
+                        "2017-10-19",
+                        "2017-10-20"});
+            table2.AddRow(new string[] {
+                        "999000107",
+                        "7000",
+                        "17-18",
+                        "7",
+                        "1",
+                        "2017-11-19",
+                        "2017-11-20"});
+            table2.AddRow(new string[] {
+                        "999000108",
+                        "8000",
+                        "17-18",
+                        "8",
+                        "1",
+                        "2017-12-19",
+                        "2017-12-20"});
+            table2.AddRow(new string[] {
+                        "999000109",
+                        "9000",
+                        "17-18",
+                        "9",
+                        "1",
+                        "2018-01-19",
+                        "2018-01-20"});
+            table2.AddRow(new string[] {
+                        "999000110",
+                        "10000",
+                        "17-18",
+                        "10",
+                        "1",
+                        "2018-02-19",
+                        "2018-02-20"});
+            table2.AddRow(new string[] {
+                        "999000111",
+                        "11000",
+                        "17-18",
+                        "11",
+                        "1",
+                        "2018-03-19",
+                        "2018-03-20"});
+            table2.AddRow(new string[] {
+                        "999000112",
+                        "12000",
+                        "17-18",
+                        "12",
+                        "1",
+                        "2018-04-19",
+                        "2018-04-20"});
+            table2.AddRow(new string[] {
+                        "999000113",
+                        "13000",
+                        "18-19",
+                        "1",
+                        "1",
+                        "2018-05-19",
+                        "2018-05-20"});
+            table2.AddRow(new string[] {
+                        "999000114",
+                        "14000",
+                        "18-19",
+                        "2",
+                        "1",
+                        "2018-06-19",
+                        "2018-06-20"});
+            table2.AddRow(new string[] {
+                        "999000115",
+                        "15000",
+                        "18-19",
+                        "3",
+                        "1",
+                        "2018-07-19",
+                        "2018-07-20"});
+            table2.AddRow(new string[] {
+                        "999000116",
+                        "16000",
+                        "18-19",
+                        "4",
+                        "1",
+                        "2018-08-19",
+                        "2018-08-20"});
+            table2.AddRow(new string[] {
+                        "999000117",
+                        "17000",
+                        "18-19",
+                        "5",
+                        "1",
+                        "2018-09-19",
+                        "2018-09-20"});
+            table2.AddRow(new string[] {
+                        "999000118",
+                        "18000",
+                        "18-19",
+                        "6",
+                        "1",
+                        "2018-10-19",
+                        "2018-10-20"});
+#line 38
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table2, "And ");
+#line 58
+ testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 59
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 61
+ testRunner.And("we should see a level 1 screen with a balance of 14850 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
+            "o older than 12 months old")]
+        public virtual void _3_AccountIsOpenedOnThe22MAY2017AndAfterOnlyAddedValidSubmissionsNoOlderThan12MonthsOld()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
+                    "o older than 12 months old", null, ((string[])(null)));
+#line 65
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 66
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "Id",
+                        "LevyDueYtd",
+                        "Payroll_Year",
+                        "Payroll_Month",
+                        "English_Fraction",
+                        "SubmissionDate",
+                        "CreatedDate"});
+            table3.AddRow(new string[] {
+                        "999000101",
+                        "0",
+                        "17-18",
+                        "1",
+                        "1",
+                        "2017-05-19",
+                        "2017-05-20"});
+            table3.AddRow(new string[] {
+                        "999000102",
+                        "0",
+                        "17-18",
+                        "2",
+                        "1",
+                        "2017-06-19",
+                        "2017-06-20"});
+            table3.AddRow(new string[] {
+                        "999000103",
+                        "0",
+                        "17-18",
+                        "3",
+                        "1",
+                        "2017-07-19",
+                        "2017-07-20"});
+            table3.AddRow(new string[] {
+                        "999000104",
+                        "0",
+                        "17-18",
+                        "4",
+                        "1",
+                        "2017-08-19",
+                        "2017-08-20"});
+            table3.AddRow(new string[] {
+                        "999000105",
+                        "0",
+                        "17-18",
+                        "5",
+                        "1",
+                        "2017-09-19",
+                        "2017-09-20"});
+            table3.AddRow(new string[] {
+                        "999000106",
+                        "0",
+                        "17-18",
+                        "6",
+                        "1",
+                        "2017-10-19",
+                        "2017-10-20"});
+            table3.AddRow(new string[] {
+                        "999000107",
+                        "7000",
+                        "17-18",
+                        "7",
+                        "1",
+                        "2017-11-19",
+                        "2017-11-20"});
+            table3.AddRow(new string[] {
+                        "999000108",
+                        "8000",
+                        "17-18",
+                        "8",
+                        "1",
+                        "2017-12-19",
+                        "2017-12-20"});
+            table3.AddRow(new string[] {
+                        "999000109",
+                        "9000",
+                        "17-18",
+                        "9",
+                        "1",
+                        "2018-01-19",
+                        "2018-01-20"});
+            table3.AddRow(new string[] {
+                        "999000110",
+                        "10000",
+                        "17-18",
+                        "10",
+                        "1",
+                        "2018-02-19",
+                        "2018-02-20"});
+            table3.AddRow(new string[] {
+                        "999000111",
+                        "11000",
+                        "17-18",
+                        "11",
+                        "1",
+                        "2018-03-19",
+                        "2018-03-20"});
+            table3.AddRow(new string[] {
+                        "999000112",
+                        "12000",
+                        "17-18",
+                        "12",
+                        "1",
+                        "2018-04-19",
+                        "2018-04-20"});
+            table3.AddRow(new string[] {
+                        "999000113",
+                        "13000",
+                        "18-19",
+                        "1",
+                        "1",
+                        "2018-05-19",
+                        "2018-05-20"});
+            table3.AddRow(new string[] {
+                        "999000114",
+                        "14000",
+                        "18-19",
+                        "2",
+                        "1",
+                        "2018-06-21",
+                        "2018-06-20"});
+            table3.AddRow(new string[] {
+                        "999000115",
+                        "15000",
+                        "18-19",
+                        "3",
+                        "1",
+                        "2018-07-19",
+                        "2018-07-20"});
+            table3.AddRow(new string[] {
+                        "999000116",
+                        "16000",
+                        "18-19",
+                        "4",
+                        "1",
+                        "2018-08-19",
+                        "2018-08-20"});
+            table3.AddRow(new string[] {
+                        "999000117",
+                        "17000",
+                        "18-19",
+                        "5",
+                        "1",
+                        "2018-09-19",
+                        "2018-09-20"});
+            table3.AddRow(new string[] {
+                        "999000118",
+                        "18000",
+                        "18-19",
+                        "6",
+                        "1",
+                        "2018-10-19",
+                        "2018-10-20"});
+#line 67
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table3, "And ");
+#line 87
+ testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 90
+ testRunner.Then("we should see a level 1 screen with a balance of 19800 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             this.ScenarioCleanup();
         }
