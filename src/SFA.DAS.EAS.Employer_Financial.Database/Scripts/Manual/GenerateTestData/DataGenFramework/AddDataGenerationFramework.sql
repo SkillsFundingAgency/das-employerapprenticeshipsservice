@@ -14,7 +14,7 @@ BEGIN
 	CREATE TYPE DataGen.PaymentGenerationSourceTable AS TABLE   
 	(monthBeforeToDate int, amount decimal(18, 4), paymentsToGenerate int, createMonth datetime)
 END
-go
+GO
 
 IF TYPE_ID(N'DataGen.LevyGenerationSourceTable') IS NULL
 BEGIN
