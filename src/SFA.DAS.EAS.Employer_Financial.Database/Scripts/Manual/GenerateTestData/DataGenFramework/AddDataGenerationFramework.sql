@@ -164,21 +164,25 @@ BEGIN
 	DECLARE @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
 	DECLARE @firstPayrollYear varchar(5) = DataGen.PayrollYear(@firstPayrollMonth)
 
+	DECLARE @monthNumber INT = 1
+
 	-- generates same levy per month
-	INSERT INTO @source
-	SELECT TOP (@numberOfMonthsToCreate)
-				monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
+	WHILE @monthNumber <= @numberOfMonthsToCreate
+	BEGIN
+		INSERT INTO @source (monthBeforeToDate, amount, createMonth, payrollYear, payrollMonth)
+		VALUES (
+				-@numberOfMonthsToCreate+@monthNumber, 
 				(CASE
-				WHEN DataGen.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
-					THEN @monthlyLevy*ROW_NUMBER() OVER (ORDER BY (SELECT NULL))
-				ELSE
-					@monthlyLevy*DataGen.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
+				WHEN DataGen.PayrollYear(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate)) = @firstPayrollYear 
+					THEN @monthlyLevy*@monthNumber
+					ELSE @monthlyLevy*DataGen.PayrollMonth(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate))
 				END),
-				DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate),
-				DataGen.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)),
-				DataGen.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
-	FROM sys.all_objects
-	ORDER BY monthBeforeToDate;
+				DATEADD(month, -@numberOfMonthsToCreate+@monthNumber, @toDate),
+				DataGen.PayrollYear(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate)),
+				DataGen.PayrollMonth(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate)))
+
+		SET @monthNumber = @monthNumber + 1
+	END
 
     RETURN
 END
