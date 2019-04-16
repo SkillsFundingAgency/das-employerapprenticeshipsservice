@@ -58,21 +58,25 @@ DECLARE @levyDecByMonth TABLE (monthBeforeToDate int, amount decimal(18, 4), cre
 DECLARE @firstPayrollMonth datetime = DATEADD(month,-@numberOfMonthsToCreate+1-1,@toDate)
 DECLARE @firstPayrollYear VARCHAR(5) = dbo.PayrollYear(@firstPayrollMonth)
 
+DECLARE @monthNumber INT = 1
+
 -- generates same levy per month
-INSERT INTO @levyDecByMonth
-SELECT TOP (@numberOfMonthsToCreate)
-			monthBeforeToDate = -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]), 
+WHILE @monthNumber <= @numberOfMonthsToCreate
+BEGIN
+	INSERT INTO @levyDecByMonth (monthBeforeToDate, amount, createMonth, payrollYear, payrollMonth)
+	VALUES (
+			-@numberOfMonthsToCreate+@monthNumber, 
 			(CASE
-			WHEN dbo.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)) = @firstPayrollYear 
-				THEN @monthlyLevy*row_number() OVER (ORDER BY (SELECT NULL))
-			ELSE
-				@monthlyLevy*dbo.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
+			WHEN dbo.PayrollYear(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate)) = @firstPayrollYear 
+				THEN @monthlyLevy*@monthNumber
+				ELSE @monthlyLevy*dbo.PayrollMonth(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate))
 			END),
-			DATEADD(month,/*monthBeforeToDate*/ -@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate),
-			dbo.PayrollYear(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate)),
-			dbo.PayrollMonth(DATEADD(month,/*monthBeforeToDate*/ -1-@numberOfMonthsToCreate+ROW_NUMBER() OVER (ORDER BY [object_id]),@toDate))
-FROM sys.all_objects
-ORDER BY monthBeforeToDate;
+			DATEADD(month, -@numberOfMonthsToCreate+@monthNumber, @toDate),
+			dbo.PayrollYear(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate)),
+			dbo.PayrollMonth(DATEADD(month, -1-@numberOfMonthsToCreate+@monthNumber, @toDate)))
+
+    SET @monthNumber = @monthNumber + 1
+END
 
 --*** Levy Adjustments ***
 --declare @adjustmentAmount DECIMAL(18, 4) = 1000
