@@ -300,60 +300,23 @@ this.ScenarioInitialize(scenarioInfo);
                         "2018-04-20"});
             table2.AddRow(new string[] {
                         "999000113",
-                        "13000",
+                        "1000",
                         "18-19",
                         "1",
                         "1",
                         "2018-05-19",
                         "2018-05-20"});
-            table2.AddRow(new string[] {
-                        "999000114",
-                        "14000",
-                        "18-19",
-                        "2",
-                        "1",
-                        "2018-06-19",
-                        "2018-06-20"});
-            table2.AddRow(new string[] {
-                        "999000115",
-                        "15000",
-                        "18-19",
-                        "3",
-                        "1",
-                        "2018-07-19",
-                        "2018-07-20"});
-            table2.AddRow(new string[] {
-                        "999000116",
-                        "16000",
-                        "18-19",
-                        "4",
-                        "1",
-                        "2018-08-19",
-                        "2018-08-20"});
-            table2.AddRow(new string[] {
-                        "999000117",
-                        "17000",
-                        "18-19",
-                        "5",
-                        "1",
-                        "2018-09-19",
-                        "2018-09-20"});
-            table2.AddRow(new string[] {
-                        "999000118",
-                        "18000",
-                        "18-19",
-                        "6",
-                        "1",
-                        "2018-10-19",
-                        "2018-10-20"});
 #line 38
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table2, "And ");
-#line 58
+#line 49
  testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 59
+#line 50
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 51
  testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 61
- testRunner.And("we should see a level 1 screen with a balance of 14850 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 52
+ testRunner.And("we should see a level 1 screen with a balance of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
@@ -365,10 +328,10 @@ this.ScenarioInitialize(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
                     "o older than 12 months old", null, ((string[])(null)));
-#line 65
+#line 55
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 66
+#line 56
  testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
                     " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
@@ -478,58 +441,23 @@ this.ScenarioInitialize(scenarioInfo);
                         "2018-04-20"});
             table3.AddRow(new string[] {
                         "999000113",
-                        "13000",
+                        "1000",
                         "18-19",
                         "1",
                         "1",
                         "2018-05-19",
                         "2018-05-20"});
-            table3.AddRow(new string[] {
-                        "999000114",
-                        "14000",
-                        "18-19",
-                        "2",
-                        "1",
-                        "2018-06-21",
-                        "2018-06-20"});
-            table3.AddRow(new string[] {
-                        "999000115",
-                        "15000",
-                        "18-19",
-                        "3",
-                        "1",
-                        "2018-07-19",
-                        "2018-07-20"});
-            table3.AddRow(new string[] {
-                        "999000116",
-                        "16000",
-                        "18-19",
-                        "4",
-                        "1",
-                        "2018-08-19",
-                        "2018-08-20"});
-            table3.AddRow(new string[] {
-                        "999000117",
-                        "17000",
-                        "18-19",
-                        "5",
-                        "1",
-                        "2018-09-19",
-                        "2018-09-20"});
-            table3.AddRow(new string[] {
-                        "999000118",
-                        "18000",
-                        "18-19",
-                        "6",
-                        "1",
-                        "2018-10-19",
-                        "2018-10-20"});
-#line 67
+#line 57
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table3, "And ");
-#line 87
+#line 72
  testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 90
- testRunner.Then("we should see a level 1 screen with a balance of 19800 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 73
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 74
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 75
+ testRunner.And("we should see a level 1 screen with a balance of 14300 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }

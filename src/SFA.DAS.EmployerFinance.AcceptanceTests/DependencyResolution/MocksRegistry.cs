@@ -1,4 +1,5 @@
-﻿using HMRC.ESFA.Levy.Api.Client;
+﻿using System;
+using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
@@ -18,28 +19,32 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             AddMock<IApprenticeshipLevyApiClient>();
             AddMock<IAuthenticationService>();
             AddMock<IAuthorizationService>();
-            AddMock<ICurrentDateTime>();
             AddMock<IEmployerAccountRepository>();
             AddMock<IEventsApi>();
             AddMock<IMembershipRepository>();
             AddMock<IPayeRepository>();
-            For<ITokenServiceApiClient>().Use(c => SetupTokenServiceApiClientMock().Object);
+            SetupCurrentDateTimeMock(AddMock<ICurrentDateTime>());
+            SetupTokenServiceApiClientMock(AddMock<ITokenServiceApiClient>());
         }
 
-        private void AddMock<T>() where T : class
+        private Mock<T> AddMock<T>() where T : class
         {
             var mock = new Mock<T>();
 
             For<IMock<T>>().Use(mock);
             For<Mock<T>>().Use(mock);
             For<T>().Use(mock.Object);
+            return mock;
         }
 
-        private Mock<ITokenServiceApiClient> SetupTokenServiceApiClientMock()
+        private void SetupTokenServiceApiClientMock(Mock<ITokenServiceApiClient> mock)
         {
-            var client = new Mock<ITokenServiceApiClient>();
-            client.Setup(c => c.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken());
-            return client;
+            mock.Setup(c => c.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken());
+        }
+
+        private void SetupCurrentDateTimeMock(Mock<ICurrentDateTime> mock)
+        {
+            mock.Setup(x => x.Now).Returns(() => DateTime.Now);
         }
     }
 }
