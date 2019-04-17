@@ -237,11 +237,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task CreatePayments(IEnumerable<PaymentDetails> payments)
         {
             var batches = payments.Batch(1000).Select(b => b.ToPaymentsDataTable());
-
+            
             foreach (var batch in batches)
             {
                 var parameters = new DynamicParameters();
-
                 parameters.Add("@payments", batch.AsTableValuedParameter("[employer_financial].[PaymentsTable]"));
 
                 await _db.Value.Database.Connection.ExecuteAsync(
@@ -318,6 +317,19 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return _db.Value.Database.Connection.QueryAsync<DasEnglishFraction>(
                 sql: "[employer_financial].[GetEnglishFraction_ByEmpRef]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public Task<IEnumerable<string>> FindHistoricalProviderName(long ukprn)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@ukprn", ukprn, DbType.Int64);
+
+            return _db.Value.Database.Connection.QueryAsync<string>(
+                sql: "[employer_financial].[GetLastKnownProviderNameForUkprn]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);

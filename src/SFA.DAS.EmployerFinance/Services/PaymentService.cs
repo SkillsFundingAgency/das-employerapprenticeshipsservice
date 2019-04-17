@@ -7,9 +7,7 @@ using AutoMapper;
 using SFA.DAS.Caches;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Apprenticeship;
-using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
-using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Provider.Events.Api.Client;
@@ -27,17 +25,19 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly IMapper _mapper;
         private readonly ILog _logger;
         private readonly IInProcessCache _inProcessCache;
+        private readonly IProviderService _providerService;
 
         public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
             IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
-            IMapper mapper, ILog logger, IInProcessCache inProcessCache)
+            IMapper mapper, ILog logger, IInProcessCache inProcessCache, IProviderService providerService)
         {
             _paymentsEventsApiClient = paymentsEventsApiClient;
             _commitmentsApiClient = commitmentsApiClient;
             _apprenticeshipInfoService = apprenticeshipInfoService;
             _mapper = mapper;
             _logger = logger;
-            _inProcessCache = inProcessCache;
+            _inProcessCache = inProcessCache;            
+            _providerService = providerService;
         }
 
         public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
@@ -129,9 +129,9 @@ namespace SFA.DAS.EmployerFinance.Services
 
         private async Task GetProviderDetails(PaymentDetails payment)
         {
-            var provider = await GetProvider(Convert.ToInt32(payment.Ukprn));
-
+            var provider = await _providerService.Get(payment.Ukprn);
             payment.ProviderName = provider?.ProviderName;
+            payment.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
         }
 
         private async Task GetApprenticeshipDetails(long employerAccountId, PaymentDetails payment)
@@ -173,37 +173,7 @@ namespace SFA.DAS.EmployerFinance.Services
             }
 
             return null;
-        }
-
-        public virtual Task<Models.ApprenticeshipProvider.Provider> GetProvider(int ukPrn)
-        {
-            return Task.Run(() =>
-            {
-                try
-                {
-                    var providerView = _inProcessCache.Get<ProvidersView>($"{nameof(ProvidersView)}_{ukPrn}");
-
-                    if (providerView == null)
-                    {
-                        providerView = _apprenticeshipInfoService.GetProvider(ukPrn);
-
-                        if (providerView != null)
-                        {
-                            _inProcessCache.Set($"{nameof(ProvidersView)}_{ukPrn}", providerView,
-                                new TimeSpan(1, 0, 0));
-                        }
-                    }
-
-                    return providerView?.Provider;
-                }
-                catch (Exception e)
-                {
-                    _logger.Warn(e, $"Unable to get provider details with UKPRN {ukPrn} from apprenticeship API.");
-                }
-
-                return null;
-            });
-        }
+        }        
 
         private async Task<Standard> GetStandard(long standardCode)
         {

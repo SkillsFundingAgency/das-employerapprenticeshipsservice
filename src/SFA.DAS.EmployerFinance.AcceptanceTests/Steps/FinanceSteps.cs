@@ -59,6 +59,38 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 return testTransactionRepository.CreateTransactionLines(transactionLines);
             });
         }
+        
+        [Given("the account has transactions")]
+        public Task GivenTheAccountHasTransactions(Table table)
+        {
+            return _objectContainer.ScopeAsync(c =>
+            {
+                var account = _objectContext.Get<Account>();
+                var empRef = _objectContext.GetEmpRef();
+                var submissionId = 999000101;
+
+                var transactionLines = (
+                    from r in table.Rows
+                    let t = (TransactionItemType)Enum.Parse(typeof(TransactionItemType), r["TransactionType"])
+                    let d = DateTime.Parse(r["DateCreated"])
+                    select new TransactionLineEntity
+                    {
+                        AccountId = account.Id,
+                        TransactionType = t,
+                        DateCreated = d,
+                        TransactionDate = d,
+                        Amount = decimal.Parse(r["Amount"]),
+                        EmpRef = t == TransactionItemType.Declaration ? empRef : null,
+                        SubmissionId = t == TransactionItemType.Declaration ? submissionId++ : (int?)null,
+                        PeriodEnd = r.ContainsKey("PeriodEnd") ? r["PeriodEnd"] : null
+                    })
+                    .ToList();
+
+                var testTransactionRepository = c.Resolve<ITestTransactionRepository>();
+
+                return testTransactionRepository.CreateTransactionLines(transactionLines);
+            });
+        }
 
         [When("the expire funds process runs on (.*) with a (.*) month expiry period")]
         public async Task WhenTheExpireFundsProcessRuns(DateTime date, int expiryPeriod)
@@ -87,6 +119,23 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             });
         }
 
+
+            await messageSession.Send(new ExpireAccountFundsCommand { AccountId = account.Id });
+
+            await _objectContainer.ScopeAsync(async c =>
+            {
+                var transactionRepository = c.Resolve<ITransactionRepository>();
+                var timeout = Debugger.IsAttached ? 10 * 60 * 1000 : StepTimeout;
+                var cancellationTokenSource = new CancellationTokenSource(timeout);
+                var isComplete = await transactionRepository.WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
+
+                if (!isComplete)
+                {
+                    Assert.Fail($"The transactions have not been completely loaded within the allowed time ({timeout} msecs). Either they are still loading or something has failed.");
+                }
+            });
+        }
+
         [Then(@"we should see a level 1 screen with a balance of (.*) on the (.*)/(.*)")]
         public Task ThenLevel1HasRowWithCorrectBalance(int balance, int month, int year)
         {
@@ -107,7 +156,31 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 var account = _objectContext.Get<Account>();
                 var actual = await c.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
 
-                Assert.AreEqual(totalLevy, actual.Data.Model.Data.TransactionLines.Sum(t => t.Amount));
+                Assert.AreEqual(totalLevy, actual.Data.Model.Data.TransactionLines.Where(t => t.TransactionType == TransactionItemType.Declaration).Sum(t => t.Amount));
+            });
+        }
+
+        [Then(@"we should see a level 1 screen with a total payment of (.*) on the (.*)/(.*)")]
+        public Task ThenLevel1HasRowWithCorrectTotalPayment(int totalPayment, int month, int year)
+        {
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                var account = _objectContext.Get<Account>();
+                var actual = await c.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
+
+                Assert.AreEqual(totalPayment, actual.Data.Model.Data.TransactionLines.Where(t => t.TransactionType == TransactionItemType.Payment).Sum(t => t.Amount));
+            });
+        }
+
+        [Then(@"we should see a level 1 screen with a total transfer of (.*) on the (.*)/(.*)")]
+        public Task ThenLevel1HasRowWithCorrectTotalTransfer(int totalTransfer, int month, int year)
+        {
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                var account = _objectContext.Get<Account>();
+                var actual = await c.Resolve<EmployerAccountTransactionsOrchestrator>().GetAccountTransactions(account.HashedId, year, month, "userRef");
+
+                Assert.AreEqual(totalTransfer, actual.Data.Model.Data.TransactionLines.Where(t => t.TransactionType == TransactionItemType.Transfer).Sum(t => t.Amount));
             });
         }
 

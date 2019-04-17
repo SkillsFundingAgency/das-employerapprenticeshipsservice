@@ -10,12 +10,16 @@ namespace SFA.DAS.EmployerFinance.Extensions
 {
     public static class ExpireFundsExtensions
     {
-        public static IDictionary<CalendarPeriod, decimal> GetExpiredFunds(this IExpiredFunds expiredFunds, IDictionary<CalendarPeriod, decimal> fundsIn, IDictionary<CalendarPeriod, decimal> fundsOut, IDictionary<CalendarPeriod, decimal> fundsExpired, int expiryPeriod, DateTime date)
+        public static IDictionary<CalendarPeriod, decimal> GetExpiredFunds(this IExpiredFunds expiredFundsService, IDictionary<CalendarPeriod, decimal> fundsIn, IDictionary<CalendarPeriod, decimal> fundsOut, IDictionary<CalendarPeriod, decimal> expired, int expiryPeriod, DateTime today)
         {
-            var expiring = expiredFunds.GetExpiringFunds(fundsIn, fundsOut, fundsExpired, expiryPeriod);
-            var expired = expiring.Where(e => e.Key.Year == date.Year && e.Key.Month <= date.Month || e.Key.Year < date.Year).ToDictionary(e => e.Key, e => e.Value);
+            var currentCalendarPeriod = new CalendarPeriod(today.Year, today.Month);
+            var expiringFunds = expiredFundsService.GetExpiringFunds(fundsIn, fundsOut, expired, expiryPeriod);
 
-            return expired;
+            var expiredFunds = expiringFunds
+                .Where(ef => ef.Key <= currentCalendarPeriod && ef.Value > 0 && !expired.Any(e => e.Key == ef.Key && e.Value == ef.Value))
+                .ToDictionary(e => e.Key, e => e.Value);
+
+            return expiredFunds;
         }
 
         public static IDictionary<CalendarPeriod, decimal> ToCalendarPeriodDictionary(this IEnumerable<LevyFundsIn> levyFundsIn)

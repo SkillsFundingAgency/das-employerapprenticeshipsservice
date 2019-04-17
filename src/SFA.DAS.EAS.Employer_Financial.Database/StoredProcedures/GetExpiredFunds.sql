@@ -2,8 +2,8 @@
 	@AccountId bigint
 AS
 
-SELECT	YEAR(DateCreated) AS CalendarPeriodYear,
-		MONTH(DateCreated) AS CalendarPeriodMonth,
+SELECT	YEAR(TransactionDate) AS CalendarPeriodYear,
+		MONTH(TransactionDate) AS CalendarPeriodMonth,
 		Amount
 FROM	[employer_financial].[TransactionLine]
 WHERE	AccountId = @AccountId

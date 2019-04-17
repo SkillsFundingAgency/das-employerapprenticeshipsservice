@@ -7,6 +7,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
 {
     public interface ITestTransactionRepository
     {
+        Task CreatePeriodEnds();
+
         Task CreateTransactionLines(IEnumerable<TransactionLineEntity> transactionLines);
 
         Task RemovePayeRef(string empRef);

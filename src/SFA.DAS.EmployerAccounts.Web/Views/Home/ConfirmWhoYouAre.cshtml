@@ -1,0 +1,63 @@
+﻿@{ViewBag.PageID = "confirm-who-you-are"; }
+@{ViewBag.Title = "Confirm Who You Are"; }
+@{ViewBag.HideNav = "true"; }
+
+@{
+    ViewBag.GaData.Vpv = "/service/confirmWhoYouAre/confirm-who-you-are";
+    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "hidden";
+    var errorClass = Model?.GetType().GetProperty("InError") != null ? "error" : "";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Confirm who you are
+        </h1>
+        <p>To pay for your apprenticeships using government funding you will need to confirm who you are using your organisation’s PAYE scheme.</p>
+        <p>If you do not need to get government funding yet, you can still register an account to:</p>
+        <ul class="list list-bullet">
+            <li>search and save apprenticeships</li>
+            <li>save your chosen training providers</li>
+        </ul>
+        <p>You can add your organisation's PAYE scheme using the Government Gateway login for your PAYE scheme.</p>
+        <p><a rel="external" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in">Can't find your Government Gateway details?</a></p>
+        <form method="POST" action="@Url.Action("ConfirmWhoYouAre", "Home")" >
+            @Html.AntiForgeryToken()
+            <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
+                <fieldset>
+                    <legend class="form-label-bold">
+                        <span>Do you want to add a PAYE scheme to confirm who you are?</span>
+                        <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                            Tell us if you want to add a PAYE scheme
+                        </span>
+                    </legend>
+                    <label for="want-to-add-paye-scheme" class="block-label">
+                        <input type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
+                        Yes, I want to add my PAYE scheme details now
+                    </label>
+                    <label for="do-not-want-to-add-paye-scheme" class="block-label">
+                        <input type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
+                        No, I’ll add my PAYE scheme details later
+                    </label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button class="button" type="submit" id="submit-confirm-who-you-are-button">Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("ConfirmWhoYouAre", "Home")" class="link-back">Back</a>
+    </div>
+}
+
+@section pageSpecificJS {
+    <script type="text/javascript">
+        $(function () {
+            sfa.homePage.init();
+        });
+    </script>
+}
+

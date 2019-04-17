@@ -14,7 +14,7 @@
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
-    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.24" />
+    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.31" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />

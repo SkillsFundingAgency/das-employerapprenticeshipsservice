@@ -70,12 +70,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Levy declarations, no expired levy declarations, no adjustment levy declarations," +
-            " no payments, no refund payments, no transfer payments")]
-        public virtual void LevyDeclarationsNoExpiredLevyDeclarationsNoAdjustmentLevyDeclarationsNoPaymentsNoRefundPaymentsNoTransferPayments()
+        [NUnit.Framework.DescriptionAttribute("Expired funds")]
+        public virtual void ExpiredFunds()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Levy declarations, no expired levy declarations, no adjustment levy declarations," +
-                    " no payments, no refund payments, no transfer payments", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expired funds", null, ((string[])(null)));
 #line 3
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -151,174 +149,991 @@ this.ScenarioInitialize(scenarioInfo);
         }
         
         [NUnit.Framework.TestAttribute()]
-        [NUnit.Framework.DescriptionAttribute("Levy declarations, expired levy declarations, adjustment levy declarations, payme" +
-            "nts, refund payments, transfer payments")]
-        public virtual void LevyDeclarationsExpiredLevyDeclarationsAdjustmentLevyDeclarationsPaymentsRefundPaymentsTransferPayments()
+        [NUnit.Framework.DescriptionAttribute("Expired funds after levy adjustments, payments and transfers")]
+        public virtual void ExpiredFundsAfterLevyAdjustmentsPaymentsAndTransfers()
         {
-            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Levy declarations, expired levy declarations, adjustment levy declarations, payme" +
-                    "nts, refund payments, transfer payments", null, ((string[])(null)));
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expired funds after levy adjustments, payments and transfers", null, ((string[])(null)));
 #line 24
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 25
- testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+    testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 26
+ testRunner.And("we have period ends from 1718-R09 to 1920-R04", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
                         "TransactionType",
                         "Amount",
-                        "DateCreated"});
+                        "DateCreated",
+                        "PeriodEnd"});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-04-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-05-05"});
+                        "2018-04-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
-                        "-100",
-                        "2018-05-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-06-05"});
+                        "-200",
+                        "2018-05-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-06-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-07-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2018-07-05"});
+                        "2018-06-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-07-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-08-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2018-08-05"});
+                        "2018-07-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-08-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-09-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2018-09-05"});
+                        "2018-08-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-09-23"});
+                        "2018-09-23",
+                        ""});
             table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-10-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2018-10-05"});
+                        "Declaration",
+                        "-4500",
+                        "2018-10-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-10-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-11-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2018-11-05"});
+                        "2018-11-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-11-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2018-12-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2018-12-05"});
+                        "2018-12-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2018-12-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2019-01-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2019-01-05"});
+                        "2019-01-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2019-01-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2019-02-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2019-02-05"});
+                        "2019-02-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
-                        "-100",
-                        "2019-02-23"});
-            table2.AddRow(new string[] {
-                        "Payment",
-                        "-10",
-                        "2019-03-05"});
-            table2.AddRow(new string[] {
-                        "Transfer",
-                        "-2",
-                        "2019-03-05"});
+                        "-400",
+                        "2019-03-23",
+                        ""});
             table2.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2019-03-23"});
+                        "2019-04-23",
+                        ""});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-05-05",
+                        "1718-R09"});
             table2.AddRow(new string[] {
                         "Payment",
                         "10",
-                        "2019-04-05"});
+                        "2018-06-05",
+                        "1718-R10"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-07-05",
+                        "1718-R11"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-08-05",
+                        "1718-R12"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-09-05",
+                        "1819-R01"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-10-05",
+                        "1819-R02"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-11-05",
+                        "1819-R03"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-12-05",
+                        "1819-R04"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-01-05",
+                        "1819-R05"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-02-05",
+                        "1819-R06"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-03-05",
+                        "1819-R07"});
+            table2.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-04-05",
+                        "1819-R08"});
             table2.AddRow(new string[] {
                         "Transfer",
-                        "-2",
-                        "2019-04-05"});
+                        "-5",
+                        "2019-01-05",
+                        "1819-R05"});
             table2.AddRow(new string[] {
-                        "ExpiredFund",
-                        "-880",
-                        "2019-03-28"});
+                        "Transfer",
+                        "-5",
+                        "2019-02-05",
+                        "1819-R06"});
             table2.AddRow(new string[] {
+                        "Transfer",
+                        "5",
+                        "2019-03-05",
+                        "1819-R07"});
+            table2.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-04-05",
+                        "1819-R08"});
+#line 27
+    testRunner.And("the account has transactions", ((string)(null)), table2, "And ");
+#line 58
+ testRunner.When("the expire funds process runs on 2019-04-28 with a 12 month expiry period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 59
+ testRunner.Then("we should see a level 1 screen with a balance of 4600 on the 04/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 60
+ testRunner.And("we should see a level 1 screen with a total levy of 1000 on the 04/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 61
+ testRunner.And("we should see a level 1 screen with a total payment of -10 on the 04/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 62
+ testRunner.And("we should see a level 1 screen with a total transfer of -5 on the 04/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 63
+ testRunner.And("we should see a level 1 screen with expired levy of -190 on the 04/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("No expired funds after levy adjustments, payments, transfers and one month of pre" +
+            "viously expired funds")]
+        public virtual void NoExpiredFundsAfterLevyAdjustmentsPaymentsTransfersAndOneMonthOfPreviouslyExpiredFunds()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("No expired funds after levy adjustments, payments, transfers and one month of pre" +
+                    "viously expired funds", null, ((string[])(null)));
+#line 65
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 66
+ testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 67
+ testRunner.And("we have period ends from 1718-R09 to 1920-R04", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table3 = new TechTalk.SpecFlow.Table(new string[] {
+                        "TransactionType",
+                        "Amount",
+                        "DateCreated",
+                        "PeriodEnd"});
+            table3.AddRow(new string[] {
                         "Declaration",
                         "1000",
-                        "2019-04-23"});
-#line 26
- testRunner.And("the account has transactions", ((string)(null)), table2, "And ");
-#line 64
- testRunner.When("the expire funds process runs on 2019-04-28 with a 12 month expiry period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 65
- testRunner.Then("we should see a level 1 screen with a balance of 8900 on the 04/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 66
- testRunner.And("we should see a level 1 screen with expired levy of -888 on the 04/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+                        "2018-04-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "-200",
+                        "2018-05-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-06-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-07-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-08-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-09-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "-4500",
+                        "2018-10-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-11-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-12-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-01-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-02-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "-400",
+                        "2019-03-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-04-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-05-23",
+                        ""});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-05-05",
+                        "1718-R09"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "10",
+                        "2018-06-05",
+                        "1718-R10"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-07-05",
+                        "1718-R11"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-08-05",
+                        "1718-R12"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-09-05",
+                        "1819-R01"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-10-05",
+                        "1819-R02"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-11-05",
+                        "1819-R03"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-12-05",
+                        "1819-R04"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-01-05",
+                        "1819-R05"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-02-05",
+                        "1819-R06"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-03-05",
+                        "1819-R07"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-04-05",
+                        "1819-R08"});
+            table3.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-05-05",
+                        "1819-R09"});
+            table3.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-01-05",
+                        "1819-R05"});
+            table3.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-02-05",
+                        "1819-R06"});
+            table3.AddRow(new string[] {
+                        "Transfer",
+                        "5",
+                        "2019-03-05",
+                        "1819-R07"});
+            table3.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-04-05",
+                        "1819-R08"});
+            table3.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-05-05",
+                        "1819-R09"});
+            table3.AddRow(new string[] {
+                        "ExpiredFund",
+                        "-190",
+                        "2019-04-28",
+                        ""});
+#line 68
+ testRunner.And("the account has transactions", ((string)(null)), table3, "And ");
+#line 103
+ testRunner.When("the expire funds process runs on 2019-05-28 with a 12 month expiry period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 104
+ testRunner.Then("we should see a level 1 screen with a balance of 5585 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 105
+ testRunner.And("we should see a level 1 screen with a total levy of 1000 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 106
+ testRunner.And("we should see a level 1 screen with a total payment of -10 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 107
+ testRunner.And("we should see a level 1 screen with a total transfer of -5 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 108
+ testRunner.And("we should see a level 1 screen with expired levy of 0 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Expired funds after levy adjustments, payments, transfers and one month of previo" +
+            "usly expired funds")]
+        public virtual void ExpiredFundsAfterLevyAdjustmentsPaymentsTransfersAndOneMonthOfPreviouslyExpiredFunds()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expired funds after levy adjustments, payments, transfers and one month of previo" +
+                    "usly expired funds", null, ((string[])(null)));
+#line 110
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 111
+ testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 112
+ testRunner.And("we have period ends from 1718-R09 to 1920-R04", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table4 = new TechTalk.SpecFlow.Table(new string[] {
+                        "TransactionType",
+                        "Amount",
+                        "DateCreated",
+                        "PeriodEnd"});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-04-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "-200",
+                        "2018-05-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-06-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-07-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-08-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-09-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "-4500",
+                        "2018-10-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-11-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-12-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-01-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-02-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "-400",
+                        "2019-03-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-04-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-05-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-06-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-07-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-08-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-09-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-10-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-11-23",
+                        ""});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-05-05",
+                        "1718-R09"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "10",
+                        "2018-06-05",
+                        "1718-R10"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-07-05",
+                        "1718-R11"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-08-05",
+                        "1718-R12"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-09-05",
+                        "1819-R01"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-10-05",
+                        "1819-R02"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-11-05",
+                        "1819-R03"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-12-05",
+                        "1819-R04"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-01-05",
+                        "1819-R05"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-02-05",
+                        "1819-R06"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-03-05",
+                        "1819-R07"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-04-05",
+                        "1819-R08"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-05-05",
+                        "1819-R09"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-06-05",
+                        "1819-R10"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-07-05",
+                        "1819-R11"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-08-05",
+                        "1819-R12"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-09-05",
+                        "1920-R01"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-10-05",
+                        "1920-R02"});
+            table4.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-11-05",
+                        "1920-R03"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-01-05",
+                        "1819-R05"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-02-05",
+                        "1819-R06"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "5",
+                        "2019-03-05",
+                        "1819-R07"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-04-05",
+                        "1819-R08"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-05-05",
+                        "1819-R09"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-06-05",
+                        "1819-R10"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-07-05",
+                        "1819-R11"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "5",
+                        "2019-08-05",
+                        "1819-R12"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-09-05",
+                        "1920-R01"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-10-05",
+                        "1920-R02"});
+            table4.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-11-05",
+                        "1920-R03"});
+            table4.AddRow(new string[] {
+                        "ExpiredFund",
+                        "-190",
+                        "2019-04-28",
+                        ""});
+#line 113
+ testRunner.And("the account has transactions", ((string)(null)), table4, "And ");
+#line 166
+ testRunner.When("the expire funds process runs on 2019-11-28 with a 12 month expiry period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 167
+ testRunner.Then("we should see a level 1 screen with a balance of 10600 on the 11/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 168
+ testRunner.And("we should see a level 1 screen with a total levy of 1000 on the 11/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 169
+ testRunner.And("we should see a level 1 screen with a total payment of -10 on the 11/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 170
+ testRunner.And("we should see a level 1 screen with a total transfer of -5 on the 11/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 171
+ testRunner.And("we should see a level 1 screen with expired levy of -905 on the 11/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            this.ScenarioCleanup();
+        }
+        
+        [NUnit.Framework.TestAttribute()]
+        [NUnit.Framework.DescriptionAttribute("Expired funds after levy adjustments, payments, transfers and multiple months of " +
+            "previously expired funds")]
+        public virtual void ExpiredFundsAfterLevyAdjustmentsPaymentsTransfersAndMultipleMonthsOfPreviouslyExpiredFunds()
+        {
+            TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Expired funds after levy adjustments, payments, transfers and multiple months of " +
+                    "previously expired funds", null, ((string[])(null)));
+#line 173
+this.ScenarioInitialize(scenarioInfo);
+            this.ScenarioStart();
+#line 174
+ testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+#line 175
+ testRunner.And("we have period ends from 1718-R09 to 1920-R04", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line hidden
+            TechTalk.SpecFlow.Table table5 = new TechTalk.SpecFlow.Table(new string[] {
+                        "TransactionType",
+                        "Amount",
+                        "DateCreated",
+                        "PeriodEnd"});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-04-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "-200",
+                        "2018-05-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-06-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-07-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-08-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-09-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "-4500",
+                        "2018-10-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-11-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2018-12-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-01-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-02-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "-400",
+                        "2019-03-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-04-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-05-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-06-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-07-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-08-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-09-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-10-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-11-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Declaration",
+                        "1000",
+                        "2019-12-23",
+                        ""});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-05-05",
+                        "1718-R09"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "10",
+                        "2018-06-05",
+                        "1718-R10"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-07-05",
+                        "1718-R11"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-08-05",
+                        "1718-R12"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-09-05",
+                        "1819-R01"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-10-05",
+                        "1819-R02"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-11-05",
+                        "1819-R03"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2018-12-05",
+                        "1819-R04"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-01-05",
+                        "1819-R05"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-02-05",
+                        "1819-R06"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-03-05",
+                        "1819-R07"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-04-05",
+                        "1819-R08"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-05-05",
+                        "1819-R09"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-06-05",
+                        "1819-R10"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-07-05",
+                        "1819-R11"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-08-05",
+                        "1819-R12"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-09-05",
+                        "1920-R01"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-10-05",
+                        "1920-R02"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-11-05",
+                        "1920-R03"});
+            table5.AddRow(new string[] {
+                        "Payment",
+                        "-10",
+                        "2019-12-05",
+                        "1920-R04"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-01-05",
+                        "1819-R05"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-02-05",
+                        "1819-R06"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "5",
+                        "2019-03-05",
+                        "1819-R07"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-04-05",
+                        "1819-R08"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-05-05",
+                        "1819-R09"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-06-05",
+                        "1819-R10"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-07-05",
+                        "1819-R11"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "5",
+                        "2019-08-05",
+                        "1819-R12"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-09-05",
+                        "1920-R01"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-10-05",
+                        "1920-R02"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-11-05",
+                        "1920-R03"});
+            table5.AddRow(new string[] {
+                        "Transfer",
+                        "-5",
+                        "2019-12-05",
+                        "1920-R04"});
+            table5.AddRow(new string[] {
+                        "ExpiredFund",
+                        "-190",
+                        "2019-04-28",
+                        ""});
+            table5.AddRow(new string[] {
+                        "ExpiredFund",
+                        "-905",
+                        "2019-11-28",
+                        ""});
+#line 176
+ testRunner.And("the account has transactions", ((string)(null)), table5, "And ");
+#line 233
+ testRunner.When("the expire funds process runs on 2019-12-28 with a 12 month expiry period", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 234
+ testRunner.Then("we should see a level 1 screen with a balance of 10600 on the 12/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 235
+ testRunner.And("we should see a level 1 screen with a total levy of 1000 on the 12/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 236
+ testRunner.And("we should see a level 1 screen with a total payment of -10 on the 12/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 237
+ testRunner.And("we should see a level 1 screen with a total transfer of -5 on the 12/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 238
+ testRunner.And("we should see a level 1 screen with expired levy of -985 on the 12/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
