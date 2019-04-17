@@ -54,6 +54,17 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             });
         }
 
+        [Given(@"Another account is opened and associated with the paye scheme")]
+        public Task GivenAnotherAccountIsOpenedAndAssociatedWithThePayeScheme()
+        {
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                await _objectContext.CreateAccount(c);
+            });
+        }
+
+
+
         private Task InitialisePayeSchemeRef(IObjectContainer objectContainer, string empRef)
         {
             return ClearDownPayeRefsFromDbAsync(objectContainer, empRef)

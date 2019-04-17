@@ -58,6 +58,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
             return WhenWeRefreshLevyData();
         }
+        [Given(@"we refresh levy data for paye scheme on the (.*)/(.*)")]
+        public Task WhenWeRefreshLevyDataOnGivenDateGiven(int month, int year)
+        {
+            var currentDateTime = _objectContainer.Resolve<Mock<ICurrentDateTime>>();
+            currentDateTime.Setup(x => x.Now).Returns(new DateTime(year, month, 23));
+
+            return WhenWeRefreshLevyData();
+        }
 
         [When(@"we refresh levy data for paye scheme")]
         public Task WhenWeRefreshLevyData()
