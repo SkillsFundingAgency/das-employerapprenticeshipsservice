@@ -55,10 +55,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Expired-funds.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\LateAccounts\Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature.cs">
+    <Compile Update="Features\LateAccounts\Late-Accounts.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature</DependentUpon>
+      <DependentUpon>Late-accounts.feature</DependentUpon>
     </Compile>
     <Compile Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature.cs">
       <DesignTime>True</DesignTime>
@@ -115,9 +115,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Expired-funds.feature.cs</LastGenOutput>
     </None>
-    <None Update="Features\LateAccounts\Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature">
+    <None Update="Features\LateAccounts\Late-accounts.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature.cs</LastGenOutput>
+      <LastGenOutput>Late-accounts.feature.cs</LastGenOutput>
     </None>
     <None Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature">
       <LastGenOutput>Scenario-01-Single-PAYE-no-adjustments.feature.cs</LastGenOutput>
