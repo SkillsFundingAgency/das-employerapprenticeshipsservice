@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features.LateAccounts
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
         
-#line 1 "Scenario-01-Account-is-opened-on-the-23-MAY-2017-and-after-only-added-valid-PAYE-HMRC-submissions-no-older-than-12-months-old.feature"
+#line 1 "Late-accounts.feature"
 #line hidden
         
         [NUnit.Framework.OneTimeSetUpAttribute()]

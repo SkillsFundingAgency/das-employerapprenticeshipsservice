@@ -5,7 +5,7 @@ Scenario: Month-01-submission
 	And Hmrc return the following submissions for paye scheme
 		| Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | CreatedDate |
 		| 999000101 | 10000      | 17-18        | 1             | 1                | 2017-05-15     | 2017-05-15  | 
-	When we refresh levy data for paye scheme on the 05/2017
+	When we refresh levy data for paye scheme
 	And all the transaction lines in this scenario have had their transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 11000 on the 05/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 05/2017

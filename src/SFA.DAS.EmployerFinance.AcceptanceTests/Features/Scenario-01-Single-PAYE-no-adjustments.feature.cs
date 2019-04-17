@@ -99,7 +99,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 5
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table1, "And ");
 #line 8
- testRunner.When("we refresh levy data for paye scheme on the 05/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 9
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
