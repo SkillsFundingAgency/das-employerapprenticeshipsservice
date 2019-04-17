@@ -18,9 +18,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features.LateAccounts
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
-    [NUnit.Framework.DescriptionAttribute("Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submiss" +
-        "ions no older than 12 months old")]
-    public partial class AccountIsOpenedOnThe23MAY2017AndAfterOnlyAddedValidPAYEHMRCSubmissionsNoOlderThan12MonthsOldFeature
+    [NUnit.Framework.DescriptionAttribute("Late Accounts Feature")]
+    public partial class LateAccountsFeatureFeature
     {
         
         private TechTalk.SpecFlow.ITestRunner testRunner;
@@ -32,8 +31,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features.LateAccounts
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submiss" +
-                    "ions no older than 12 months old", null, ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Late Accounts Feature", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         

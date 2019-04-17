@@ -1,4 +1,4 @@
-﻿Feature: Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submissions no older than 12 months old
+﻿Feature: Late Accounts Feature
 
 Scenario: 1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submissions no older than 12 months old
 	Given An employer is adding a PAYE which has submissions older than the 12 month expiry rule limit
