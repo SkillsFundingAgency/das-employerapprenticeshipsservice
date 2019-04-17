@@ -20,6 +20,8 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -28,12 +30,13 @@ namespace SFA.DAS.EmployerAccounts.Web
     public class Startup
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-
+        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         public void Configuration(IAppBuilder app)
         {
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>();
+            var cookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
 
@@ -63,13 +66,12 @@ namespace SFA.DAS.EmployerAccounts.Web
                 TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
                 AuthenticatedCallback = identity =>
                 {
-                    PostAuthentiationAction(identity, authenticationOrchestrator, constants);
+                    PostAuthentiationAction(identity, authenticationOrchestrator, constants, cookieStorageService);
                 }
             });
 
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-
 
             UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
             UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
@@ -107,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             };
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants)
+        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants, ICookieStorageService<EmployerAccountData> cookieStorageService)
         {
             Logger.Info("Retrieving claims from OIDC server.");
 
@@ -123,6 +125,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
 
+            Task.Run(() => cookieStorageService.Delete(CookieName)).Wait();
             Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
         }
     }

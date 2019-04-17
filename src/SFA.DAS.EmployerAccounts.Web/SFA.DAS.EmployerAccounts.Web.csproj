@@ -126,7 +126,6 @@
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
-    <Compile Include="Extensions\OrchestratorExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
@@ -683,6 +682,7 @@
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
     <Content Include="Views\Home\ConfirmWhoYouAre.cshtml" />
+    <Content Include="Views\EmployerAccount\PayeError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

@@ -23,7 +23,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationSharedT
                 });
 
             base.Orchestrator.Setup(o => o.GetCookieData(It.IsAny<HttpContextBase>()))
-                .Returns(new EmployerAccountData());
+                .Returns(
+                    new EmployerAccountData
+                    {
+                        EmployerAccountOrganisationData = new EmployerAccountOrganisationData(),
+                        EmployerAccountPayeRefData = new EmployerAccountPayeRefData()
+                    });
         }
 
         [Test]
@@ -67,13 +72,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationSharedT
         }
 
         [Test]
-        public void ThenIfAHashedAccountIdIsNotPresentInTheRouteARedirectToGatewayInformActionIsReturned()
+        public void ThenIfAHashedAccountIdIsNotPresentInTheRouteARedirectToSummaryActionIsReturned()
         {
             base.SetupEmptyRouteData();
             var result = CallUpdateOrganisationAddressOnControllerAndReturnResult(new AddOrganisationAddressViewModel()) as RedirectToRouteResult;
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(ControllerConstants.GatewayInformViewName, result.RouteValues[ControllerConstants.ActionKeyName]);
+            Assert.AreEqual(ControllerConstants.SummaryActionName, result.RouteValues[ControllerConstants.ActionKeyName]);
             Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, result.RouteValues[ControllerConstants.ControllerKeyName]);
         }
 

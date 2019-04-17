@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
         public string RedisConnectionString { get; set; }
-
+        public bool CanSkipRegistrationSteps { get; set; }
 
     }
 }

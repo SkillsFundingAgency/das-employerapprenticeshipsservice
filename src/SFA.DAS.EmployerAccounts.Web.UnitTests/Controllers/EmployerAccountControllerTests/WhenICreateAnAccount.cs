@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -48,21 +49,27 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _accountData = new EmployerAccountData
             {
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData
+                { 
                 OrganisationName = "Test Corp",
-                EmployerRefName = "Scheme 1",
                 OrganisationReferenceNumber = "1244454",
                 OrganisationRegisteredAddress = "1, Test Street",
                 OrganisationDateOfInception = DateTime.Now.AddYears(-10),
                 OrganisationStatus = "active",
+                OrganisationType = OrganisationType.Charities,
+                Sector = "Public"
+                },
+                EmployerAccountPayeRefData = new EmployerAccountPayeRefData
+                { 
                 PayeReference = "123/ABC",
+                EmployerRefName = "Scheme 1",
                 RefreshToken = "123",
                 AccessToken = "456",
                 EmpRefNotFound = true,
-                OrganisationType = OrganisationType.Charities,
-                Sector = "Public"
+                }
             };
 
-            _orchestrator.Setup(x => x.GetCookieData(It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.GetCookieData())
                        .Returns(_accountData);
 
             _response = new OrchestratorResponse<EmployerAgreementViewModel>()
@@ -81,8 +88,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 .ReturnsAsync(_response);
 
             _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 
-                logger.Object, _flashMessage.Object)
+                _owinWrapper.Object, _orchestrator.Object, _userViewTestingService.Object, 
+                logger.Object, _flashMessage.Object, Mock.Of<IMediator>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
@@ -120,16 +127,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             //Assert
             _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountViewModel>(
                 c =>
-                    c.OrganisationStatus.Equals(_accountData.OrganisationStatus) &&
-                    c.OrganisationName.Equals(_accountData.OrganisationName) &&
-                    c.RefreshToken.Equals(_accountData.RefreshToken) &&
-                    c.OrganisationDateOfInception.Equals(_accountData.OrganisationDateOfInception) &&
-                    c.OrganisationAddress.Equals(_accountData.OrganisationRegisteredAddress) &&
-                    c.AccessToken.Equals(_accountData.AccessToken) &&
-                    c.PayeReference.Equals(_accountData.PayeReference) &&
-                    c.EmployerRefName.Equals(_accountData.EmployerRefName) &&
-                    c.Sector.Equals(_accountData.Sector) &&
-                    c.OrganisationReferenceNumber.Equals(_accountData.OrganisationReferenceNumber)
+                    c.OrganisationStatus.Equals(_accountData.EmployerAccountOrganisationData.OrganisationStatus) &&
+                    c.OrganisationName.Equals(_accountData.EmployerAccountOrganisationData.OrganisationName) &&
+                    c.RefreshToken.Equals(_accountData.EmployerAccountPayeRefData.RefreshToken) &&
+                    c.OrganisationDateOfInception.Equals(_accountData.EmployerAccountOrganisationData.OrganisationDateOfInception) &&
+                    c.OrganisationAddress.Equals(_accountData.EmployerAccountOrganisationData.OrganisationRegisteredAddress) &&
+                    c.AccessToken.Equals(_accountData.EmployerAccountPayeRefData.AccessToken) &&
+                    c.PayeReference.Equals(_accountData.EmployerAccountPayeRefData.PayeReference) &&
+                    c.EmployerRefName.Equals(_accountData.EmployerAccountPayeRefData.EmployerRefName) &&
+                    c.Sector.Equals(_accountData.EmployerAccountOrganisationData.Sector) &&
+                    c.OrganisationReferenceNumber.Equals(_accountData.EmployerAccountOrganisationData.OrganisationReferenceNumber)
                 ), It.IsAny<HttpContextBase>()));
         }
     }

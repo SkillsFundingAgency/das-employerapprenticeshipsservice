@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -41,8 +41,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, _userViewTestingService.Object, 
-                logger.Object, _flashMessage.Object)
+                _owinWrapper.Object, _orchestrator.Object, _userViewTestingService.Object, 
+                logger.Object, _flashMessage.Object, Mock.Of<IMediator>())
                 
             {
                 ControllerContext = _controllerContext.Object,
@@ -113,7 +113,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         {
             //Arrange
             _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
-            _orchestrator.Setup(x => x.CreateCookieData(It.IsAny<HttpContextBase>(), It.IsAny<EmployerAccountData>()));
 
             //Act
             var actual = await _employerAccountController.Gateway();
