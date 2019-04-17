@@ -931,8 +931,11 @@ this.ScenarioInitialize(scenarioInfo);
 #line 143
  testRunner.When("we refresh levy data for paye scheme on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 144
- testRunner.Then("we should see a level 1 screen with a levy declared of 12650 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 145
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 146
  testRunner.And("we should see a level 1 screen with a balance of 12650 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

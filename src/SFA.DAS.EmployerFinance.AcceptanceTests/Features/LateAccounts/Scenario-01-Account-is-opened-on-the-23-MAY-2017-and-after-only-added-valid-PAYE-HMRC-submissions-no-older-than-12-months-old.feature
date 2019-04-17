@@ -141,7 +141,8 @@ Scenario: 5 - A PAYE being used to create a new account has been in a different 
 	| 999000122 | 9000       | 18-19        | 9             | 1                | 2019-01-19     | 2019-01-20  | 0                    |
 	| 999000123 | 10000      | 18-19        | 10            | 1                | 2019-02-19     | 2019-02-20  | 0                    |
 	When we refresh levy data for paye scheme on the 02/2019
-	Then we should see a level 1 screen with a levy declared of 12650 on the 02/2019
+	And all the transaction lines in this scenario have had their transaction date updated to their created date
+	Then we should see a level 1 screen with a levy declared of 1100 on the 02/2019
 	And we should see a level 1 screen with a balance of 12650 on the 02/2019
 
 
