@@ -15,7 +15,40 @@ Post-Deployment Script Template
 :r .\CreatePaymentTransactionTypes.sql
 
 IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
-	:r .\SeedDevData.sql
+BEGIN
+:r .\SeedDevData.sql
+END
+GO
 
-IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
-	:r ..\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql
+-- the following is a dirty hack to basically achieve the following...
+-- IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
+-- BEGIN
+-- :r ..\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql
+--END
+
+IF (@@servername LIKE '%pp%' OR @@servername LIKE '%prd%' OR @@servername LIKE '%mo%')
+BEGIN
+	EXEC('CREATE SCHEMA DataGen')
+
+	CREATE TYPE DataGen.PaymentGenerationSourceTable AS TABLE   
+	(monthBeforeToDate int, amount decimal(18, 4), paymentsToGenerate int, createMonth datetime)
+
+	CREATE TYPE DataGen.LevyGenerationSourceTable AS TABLE   
+	(monthBeforeToDate int, amount decimal(18, 4), createMonth datetime, payrollYear varchar(5), payrollMonth int)
+
+	SET NOEXEC ON;
+END
+GO
+
+:r ..\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql
+
+SET NOEXEC OFF;
+GO
+
+IF (@@servername LIKE '%pp%' OR @@servername LIKE '%prd%' OR @@servername LIKE '%mo%')
+BEGIN
+	DROP TYPE DataGen.PaymentGenerationSourceTable
+	DROP TYPE DataGen.LevyGenerationSourceTable
+	EXEC('DROP SCHEMA DataGen')
+END
+GO
