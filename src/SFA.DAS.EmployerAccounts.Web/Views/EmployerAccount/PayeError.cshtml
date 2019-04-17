@@ -1,0 +1,34 @@
+﻿@using SFA.DAS.Common.Domain.Types
+@using SFA.DAS.EmployerAccounts.Web.Helpers
+
+@{ViewBag.PageID = "page-onboard-paye-scheme-in-use";}
+@{ViewBag.Title = "PAYE scheme already in use";}
+@{ViewBag.HideNav = "true"; }
+@{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-paye-error";}
+
+@if (ViewBag.NotFound)
+{
+    ViewBag.PageID = "page-onboard-paye-scheme-not-linked-to-credentials";
+    ViewBag.Title = "PAYE scheme not linked to credentials";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        @if (!ViewBag.NotFound)
+        {
+            <h1 class="heading-xlarge">PAYE scheme already in use</h1>
+            <p>The PAYE scheme for the Government Gateway details you entered is already added to an account.</p>
+            <p><a class="button" id="search_again" href="@Url.Action("Gateway","EmployerAccount")">Use different details</a></p>
+        }
+        else 
+        {
+            @Html.Partial("_PayeNotFound", @Url.Action("Gateway", "EmployerAccount"))
+        }
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action("GatewayInform", "EmployerAccount")" class="back-link">Back</a>
+    </div>
+}

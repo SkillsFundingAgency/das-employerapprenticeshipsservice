@@ -79,7 +79,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 _logger.Info("Starting processing gateway response");
 
-                var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(Request.Params[ControllerConstants.CodeKeyName], Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Url.Scheme), System.Web.HttpContext.Current?.Request.QueryString);
+                var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
+                    Request.Params[ControllerConstants.CodeKeyName],
+                    Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Url.Scheme),
+                    System.Web.HttpContext.Current?.Request.QueryString);
+
                 if (response.Status != HttpStatusCode.OK)
                 {
                     _logger.Warn($"Gateway response does not indicate success. Status = {response.Status}.");
@@ -94,15 +98,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Info($"Gateway response is for user identity ID {externalUserId}");
 
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-                var empref =
-                    await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
-                _logger.Info(
-                    $"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
+                var empref = await _employerAccountOrchestrator.GetHmrcEmployerInformation(response.Data.AccessToken, email);
+                _logger.Info($"Gateway response is for empref {empref.Empref} \n {JsonConvert.SerializeObject(empref)}");
 
-                await 
-                _mediatr
-                    .SendAsync(new SavePayeRefData(
-                new EmployerAccountPayeRefData
+                await _mediatr.SendAsync(new SavePayeRefData(new EmployerAccountPayeRefData
                 {
                     EmployerRefName = empref.EmployerLevyInformation?.Employer?.Name?.EmprefAssociatedName ?? "",
                     PayeReference = empref.Empref,
@@ -110,8 +109,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     RefreshToken = response.Data.RefreshToken,
                     EmpRefNotFound = empref.EmprefNotFound,
                 }));
-
+                
                 _logger.Info("Finished processing gateway response");
+
+                if (string.IsNullOrEmpty(empref.Empref) || empref.EmprefNotFound)
+                {
+                    return RedirectToAction(ControllerConstants.PayeErrorActionName,
+                        new
+                        {
+                            NotFound = empref.EmprefNotFound
+                        });
+                }
+
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
             catch (Exception ex)
@@ -119,6 +128,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Error(ex, $"Error processing Gateway response - {ex.Message}");
                 throw;
             }
+        }
+
+        [HttpGet]
+        [Route("payeerror")]
+        public ViewResult PayeError(bool? NotFound)
+        {
+            ViewBag.NotFound = NotFound ?? false;
+            return View();
         }
 
         [HttpGet]
