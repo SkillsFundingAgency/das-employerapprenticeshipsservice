@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using BoDi;
 using HMRC.ESFA.Levy.Api.Client;
 using HMRC.ESFA.Levy.Api.Types;
-using Microsoft.WindowsAzure.Storage.Table;
 using Moq;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
@@ -14,12 +13,8 @@ using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.Account;
-using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.NLog.Logger;
 using TechTalk.SpecFlow;
-using SFA.DAS.Configuration;
-using SFA.DAS.EmployerFinance.AcceptanceTests.Helpers;
-using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 
 
