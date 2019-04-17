@@ -28,8 +28,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         private readonly IObjectContainer _objectContainer;
         private readonly ObjectContext _objectContext;
 
-        //scenario context
-
         public HmrcDeclarationSteps(IObjectContainer objectContainer, ObjectContext objectContext)
         {
             _objectContainer = objectContainer;
@@ -91,7 +89,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                     async c => 
                     {
                         _objectContainer.Resolve<ILog>().Info("About to start polling for levy decalaration.");
-                        var repo = c.Resolve<ITransactionRepository>();
 
                         var allLevyDeclarationsLoaded = await c.Resolve<ITransactionRepository>()
                             .WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
