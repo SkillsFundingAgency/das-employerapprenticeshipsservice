@@ -9,6 +9,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Factories;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models.HmrcLevy;
 using SFA.DAS.EmployerFinance.Models.Levy;
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         private readonly Mock<IDasLevyRepository> _dasLevyRepository;
         private readonly Mock<IHmrcDateService> _hmrcDateService;
         private readonly RefreshEmployerLevyDataCommandHandler _handler;
-
+        private readonly Mock<ICurrentDateTime> _currentDateTime;
 
         private long _accountId = 999;
         private ICollection<EmployerLevyData> _employerLevyData;
@@ -71,13 +72,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             var logger = new Mock<ILog>();
             var mediator = new Mock<IMediator>();
             _eventPublisher = new TestableEventPublisher();
-
+            _currentDateTime = new Mock<ICurrentDateTime>();
+            _currentDateTime.Setup(cdt => cdt.Now).Returns(() => DateTime.UtcNow);
             var validator = new Mock<IValidator<RefreshEmployerLevyDataCommand>>();
             validator.Setup(x => x.Validate(It.IsAny<RefreshEmployerLevyDataCommand>())).Returns(new ValidationResult());
 
             _hmrcDateService = new Mock<IHmrcDateService>();
 
-            var levyImportCleanerStrategy = new LevyImportCleanerStrategy(_dasLevyRepository.Object, _hmrcDateService.Object, logger.Object);
+            var levyImportCleanerStrategy = new LevyImportCleanerStrategy(_dasLevyRepository.Object, _hmrcDateService.Object, logger.Object, _currentDateTime.Object);
 
             _handler = new RefreshEmployerLevyDataCommandHandler(validator.Object, _dasLevyRepository.Object, mediator.Object,
                 levyEventFactory.Object, genericEventFactory.Object, hashingService.Object, levyImportCleanerStrategy, _eventPublisher);

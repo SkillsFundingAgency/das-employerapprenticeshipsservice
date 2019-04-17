@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -7,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
@@ -195,6 +197,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             DasLevyRepositoryMock = new Mock<IDasLevyRepository>();
             LogMock = new Mock<ILog>();
             Declarations = new List<DasDeclaration>();
+            CurrentDateTimeMock = new Mock<ICurrentDateTime>();
+            CurrentDateTimeMock.Setup(cdt => cdt.Now).Returns(() => DateTime.UtcNow);
             InfoLog = new List<string>();
             LogMock.Setup(l => l.Info(It.IsAny<string>())).Callback<string>(s => InfoLog.Add(s));
         }
@@ -213,12 +217,15 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
 
         public List<DasDeclaration> Declarations { get; }
 
+        public Mock<ICurrentDateTime> CurrentDateTimeMock { get; }
+
         public LevyImportCleanerStrategy CreateStrategy()
         {
             return new LevyImportCleanerStrategy(
                 DasLevyRepository,
                 HmrcDateService,
-                Log
+                Log,
+                CurrentDateTimeMock.Object
                 );
         }
 

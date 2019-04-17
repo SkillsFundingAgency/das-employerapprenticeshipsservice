@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NServiceBus.Testing;
 
@@ -37,6 +38,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         private Mock<IHashingService> _hashingService;
         private ILevyImportCleanerStrategy _levyImportCleanerStrategy;
         private Mock<ILog> _logger;
+        private Mock<ICurrentDateTime> _currentDateTime;
         private TestableEventPublisher _eventPublisher;
         private const string ExpectedEmpRef = "123456";
         private const long ExpectedAccountId = 44321;
@@ -55,12 +57,15 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             _hmrcDateService = new Mock<IHmrcDateService>();
             _hmrcDateService.Setup(x => x.IsSubmissionForFuturePeriod(It.IsAny<string>(), It.IsAny<short>(), It.IsAny<DateTime>())).Returns(false);
 
+            _currentDateTime = new Mock<ICurrentDateTime>();
+            _currentDateTime.Setup(cdt => cdt.Now).Returns(() => DateTime.UtcNow);
+
             _levyEventFactory = new Mock<ILevyEventFactory>();
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _hashingService = new Mock<IHashingService>();
             _logger = new Mock<ILog>();
             _eventPublisher = new TestableEventPublisher();
-            _levyImportCleanerStrategy = new LevyImportCleanerStrategy(_levyRepository.Object, _hmrcDateService.Object, _logger.Object);
+            _levyImportCleanerStrategy = new LevyImportCleanerStrategy(_levyRepository.Object, _hmrcDateService.Object, _logger.Object, _currentDateTime.Object);
 
             _refreshEmployerLevyDataCommandHandler = new RefreshEmployerLevyDataCommandHandler(_validator.Object, _levyRepository.Object, _mediator.Object,
                 _levyEventFactory.Object, _genericEventFactory.Object, _hashingService.Object, _levyImportCleanerStrategy, _eventPublisher);

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Types;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
@@ -16,14 +17,18 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         private readonly IDasLevyRepository _dasLevyRepository;
         private readonly IHmrcDateService _hmrcDateService;
         private readonly ILog _logger;
+        private readonly ICurrentDateTime _currentDateTime;
+
         public LevyImportCleanerStrategy(
             IDasLevyRepository dasLevyRepository,
             IHmrcDateService hmrcDateService,
-            ILog logger)
+            ILog logger,
+            ICurrentDateTime currentDateTime)
         {
             _dasLevyRepository = dasLevyRepository;
             _hmrcDateService = hmrcDateService;
             _logger = logger;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task<DasDeclaration[]> Cleanup(string empRef, IEnumerable<DasDeclaration> declarations)
@@ -111,7 +116,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 
         private bool IsSubmissionForFuturePeriod(DasDeclaration dasDeclaration)
         {
-            return dasDeclaration.PayrollMonth.HasValue && _hmrcDateService.IsSubmissionForFuturePeriod(dasDeclaration.PayrollYear, dasDeclaration.PayrollMonth.Value, DateTime.UtcNow);
+            return dasDeclaration.PayrollMonth.HasValue && _hmrcDateService.IsSubmissionForFuturePeriod(dasDeclaration.PayrollYear, dasDeclaration.PayrollMonth.Value, _currentDateTime.Now);
         }
 
         private bool IsEndOfYearAdjustment(DasDeclaration dasDeclaration)
