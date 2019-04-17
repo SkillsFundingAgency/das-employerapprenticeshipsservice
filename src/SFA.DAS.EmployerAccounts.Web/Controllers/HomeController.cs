@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction(ControllerConstants.WhatYoullNeedActionName); //No I have not used the service before
+                case 1: return RedirectToAction(_configuration.CanSkipRegistrationSteps ? ControllerConstants.ConfirmWhoYouAre : ControllerConstants.WhatYoullNeedActionName); // No not used before
                 case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
                 default:
 
