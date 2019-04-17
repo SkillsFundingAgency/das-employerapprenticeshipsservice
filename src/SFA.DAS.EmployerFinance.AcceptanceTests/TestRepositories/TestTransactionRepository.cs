@@ -81,13 +81,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories
                 transaction: _employerFinanceDbContext.Value.Database.CurrentTransaction.UnderlyingTransaction);
         }
 
-        public Task CreateTransactionLines(IEnumerable<TransactionLineEntity> transactionLines)
-        {
-            _employerFinanceDbContext.Value.Transactions.AddRange(transactionLines);
-
-            return _employerFinanceDbContext.Value.SaveChangesAsync();
-        }
-
         public Task RemovePayeRef(string empRef)
         {
             var parameters = new DynamicParameters();

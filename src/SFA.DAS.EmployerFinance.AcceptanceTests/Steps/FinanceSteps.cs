@@ -34,32 +34,17 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             _objectContext = objectContext;
         }
 
-        [Given("the account has transactions")]
-        public Task GivenTheAccountHasTransactions(Table table)
+        [Given("we have period ends from 1718-R09 to 1920-R04")]
+        public Task GivenWeHavePeriodEnds()
         {
             return _objectContainer.ScopeAsync(c =>
             {
-                var account = _objectContext.Get<Account>();
-                var empRef = _objectContext.GetEmpRef();
-                var submissionId = 999000101;
-
-                var transactionLines = table.Rows.Select(r => new TransactionLineEntity
-                {
-                    AccountId = account.Id,
-                    TransactionType = (TransactionItemType)Enum.Parse(typeof(TransactionItemType), r["TransactionType"]),
-                    TransactionDate = DateTime.UtcNow.Date,
-                    DateCreated = DateTime.Parse(r["DateCreated"]),
-                    Amount = decimal.Parse(r["Amount"]),
-                    EmpRef = empRef,
-                    SubmissionId = submissionId++
-                });
-
                 var testTransactionRepository = c.Resolve<ITestTransactionRepository>();
 
-                return testTransactionRepository.CreateTransactionLines(transactionLines);
+                return testTransactionRepository.CreatePeriodEnds();
             });
         }
-        
+
         [Given("the account has transactions")]
         public Task GivenTheAccountHasTransactions(Table table)
         {
@@ -97,28 +82,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             var configuration = _objectContainer.Resolve<EmployerFinanceConfiguration>();
             var currentDateTime = _objectContainer.Resolve<Mock<ICurrentDateTime>>();
-            var account = _objectContext.Get<Account>();
             var messageSession = _objectContainer.Resolve<IMessageSession>();
+            var account = _objectContext.Get<Account>();
 
             currentDateTime.Setup(c => c.Now).Returns(date);
             configuration.FundsExpiryPeriod = expiryPeriod;
-
-            await messageSession.Send(new ExpireAccountFundsCommand { AccountId = account.Id });
-
-            await _objectContainer.ScopeAsync(async c =>
-            {
-                var transactionRepository = c.Resolve<ITransactionRepository>();
-                var timeout = Debugger.IsAttached ? 10 * 60 * 1000 : StepTimeout;
-                var cancellationTokenSource = new CancellationTokenSource(timeout);
-                var isComplete = await transactionRepository.WaitForAllTransactionLinesInDatabase(account, cancellationTokenSource.Token);
-
-                if (!isComplete)
-                {
-                    throw new Exception($"The transactions have not been completely loaded within the allowed time ({timeout} msecs). Either they are still loading or something has failed.");
-                }
-            });
-        }
-
 
             await messageSession.Send(new ExpireAccountFundsCommand { AccountId = account.Id });
 

@@ -44,12 +44,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [Given(@"An employer is adding a PAYE which has submissions older than the (.*) month expiry rule limit")]
         public Task GivenPAYEAccountAndExpiryLimit(int expiryLimit)
         {
-            //_configurationManager.Get("todo"); change this to use scenario context and static config manager
-            //ConfigurationManager.Get("todo");
             var employerFinanceConfiguration = _objectContainer.Resolve<EmployerFinanceConfiguration>();
             employerFinanceConfiguration.FundsExpiryPeriod = expiryLimit;
-            //var config2 = _objectContainer.Resolve<EmployerFinanceConfiguration>();
-            //var result = config2.FundsExpiryPeriod;
 
             return _objectContainer.ScopeAsync(async c =>
             {
