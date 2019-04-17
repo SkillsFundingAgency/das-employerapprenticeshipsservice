@@ -33,6 +33,8 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
+using FeatureToggle;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -56,6 +58,10 @@ namespace SFA.DAS.EmployerAccounts.Web
             WebMessageBuilders.Register();
             WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
             WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
+
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+            ViewEngines.Engines.Clear();
+            ViewEngines.Engines.Add(new FeatureToggleViewEngine(container.GetInstance<IBooleanToggleValueProvider>()));
 
             AuditMessageFactory.RegisterBuilder(m =>
             {

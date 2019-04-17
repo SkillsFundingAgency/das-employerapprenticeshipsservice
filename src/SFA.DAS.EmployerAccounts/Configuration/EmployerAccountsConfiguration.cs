@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
@@ -30,6 +31,12 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ServiceBusConnectionString { get; set; }
         public string RedisConnectionString { get; set; }
 
+        public List<Toggle> FeatureToggles { get; set; }
+    }
 
+    public class Toggle
+    {
+        public string Name { get; set; }
+        public bool Value { get; set; }
     }
 }

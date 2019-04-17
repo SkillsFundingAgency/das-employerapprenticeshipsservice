@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Authentication;
+﻿using FeatureToggle;
+using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -34,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         [Route("Index")]
         public async Task<ActionResult> Index()
-        {
+        {           
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {

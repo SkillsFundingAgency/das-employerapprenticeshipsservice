@@ -283,5 +283,69 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
+        [ChildActionOnly]
+        public ActionResult Row1Panel1(AccountDashboardViewModel model)
+        {
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
+            if (model.AgreementsToSign)
+            {
+                viewModel.ViewName = "SignAgreement";
+            }
+
+            return PartialView(viewModel);
+        }       
+
+        [ChildActionOnly]
+        public ActionResult Row1Panel2(AccountDashboardViewModel model)
+        {
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
+            if (model.AgreementsToSign)
+            {
+                viewModel.ViewName = "ProviderPermissionsDenied";
+            }
+
+            return PartialView(viewModel);
+        }
+        [ChildActionOnly]
+        public ActionResult Row2Panel1(AccountDashboardViewModel model)
+        {
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
+        }
+        [ChildActionOnly]
+        public ActionResult Row2Panel2(AccountDashboardViewModel model)
+        {
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "AccountSettings", Data = model });
+        }
+
+        [ChildActionOnly]
+        public ActionResult SignAgreement(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [ChildActionOnly]
+        public ActionResult ProviderPermissions(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [ChildActionOnly]
+        public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }        
+        [ChildActionOnly]
+        public ActionResult SavedProviders(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [ChildActionOnly]
+        public ActionResult AccountSettings(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [ChildActionOnly]
+        public ActionResult CheckFunding(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
     }
 }

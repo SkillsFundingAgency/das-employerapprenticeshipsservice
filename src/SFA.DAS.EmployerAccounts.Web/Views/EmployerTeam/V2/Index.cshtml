@@ -1,0 +1,29 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
+
+@{
+    ViewBag.Title = "Home";
+    ViewBag.PageID = "page-company-homepage";
+}
+
+<div class="das-dashboard-header">
+    <div class="govuk-width-container das-dashboard-header__border">
+        <h1 class="das-dashboard-header__title">Your employer account</h1>
+        <h2 class="das-dashboard-header__account-name">@Model.Data.Account.Name</h2>
+    </div>
+</div>
+
+<main class="govuk-main-wrapper dashboard" id="main-content" role="main">
+    <div class="govuk-width-container">
+        <div class="das-panels">
+            <div class="das-panels__row">
+                @Html.Action("Row1Panel1", new { model = Model.Data })
+                @Html.Action("Row1Panel2", new { model = Model.Data })
+            </div>
+            <div class="das-panels__row das-panels__row--secondary">
+                @Html.Action("Row2Panel1", new { model = Model.Data })
+                @Html.Action("Row2Panel2", new { model = Model.Data })
+            </div>
+        </div>
+    </div>
+</main>
+
