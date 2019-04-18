@@ -11,7 +11,9 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using Newtonsoft.Json;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -23,19 +25,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
         private readonly IMediator _mediatr;
+        private IAuthorizationService _authorizationService;
 
-        public EmployerAccountController(
-            IAuthenticationService owinWrapper, 
-            EmployerAccountOrchestrator employerAccountOrchestrator, 
-            IMultiVariantTestingService multiVariantTestingService, 
+        public EmployerAccountController(IAuthenticationService owinWrapper,
+            EmployerAccountOrchestrator employerAccountOrchestrator,
+            IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
-            ICookieStorageService<FlashMessageViewModel> flashMessage, 
-            IMediator mediatr)
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IMediator mediatr,
+            IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+            _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
         }
 
         [HttpGet]
@@ -205,7 +209,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
 
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
+            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
+            {
+                return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
+            }
+            else
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
+            }
         }
 
         [HttpGet]

@@ -23,6 +23,7 @@
         public const string EmployerAccountOrganisationControllerName = "EmployerAccountOrganisation";
         public const string EmployerAccountViewName = "EmployerAccount";
         public const string EmployerAccountControllerName = "EmployerAccount";
+        public const string EmployerAccountAccountegisteredActionName = "AccountRegistered";
         public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
         public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";
         public const string EmployerAgreementControllerName = "EmployerAgreement";

@@ -9,11 +9,7 @@
         Recruitments,
         TransferConnectionRequests,
         Transfers,
-
-        /// <summary>
-        /// Enables the New Registration journey
-        /// </summary>
-        NewRegistration,
+        EnableNewRegistrationJourney,
 
         // These enums are only used in unit tests - the numbers can be changed 
         Test1 = 100,
