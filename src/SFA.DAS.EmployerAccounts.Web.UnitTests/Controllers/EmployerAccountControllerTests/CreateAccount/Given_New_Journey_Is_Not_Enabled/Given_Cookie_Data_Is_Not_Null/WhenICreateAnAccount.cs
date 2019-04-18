@@ -87,10 +87,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
 
-            var stubConfiguration = new EmployerAccountsConfiguration
-            {
-                CanSkipRegistrationSteps = false
-            };
+            var mockAuthorization = new Mock<IAuthorizationService>();
+
+            mockAuthorization
+                .Setup(
+                    m =>
+                        m.IsAuthorized(FeatureType.NewRegistration))
+                .Returns(false);
 
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
@@ -99,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
-                stubConfiguration)
+                mockAuthorization.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

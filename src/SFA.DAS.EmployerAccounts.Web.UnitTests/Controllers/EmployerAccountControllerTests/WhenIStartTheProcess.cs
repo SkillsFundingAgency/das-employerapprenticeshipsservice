@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
-                new EmployerAccountsConfiguration())
+                Mock.Of<IAuthorizationService>())
                 
             {
                 ControllerContext = _controllerContext.Object,
