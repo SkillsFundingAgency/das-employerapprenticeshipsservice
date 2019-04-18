@@ -7,6 +7,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
     public class EmployerAccountsConfiguration : ITopicMessagePublisherConfiguration
     {
         public string AllowedHashstringCharacters { get; set; }
+        public string CdnBaseUrl { get; set; }
         public string DashboardUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
