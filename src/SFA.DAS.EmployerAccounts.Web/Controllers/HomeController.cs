@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerAccountsConfiguration _configuration;
-        private IAuthorizationService _authorizationService;
+        private readonly IAuthorizationService _authorizationService;
 
         public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
             EmployerAccountsConfiguration configuration, IAuthorizationService authorization,
