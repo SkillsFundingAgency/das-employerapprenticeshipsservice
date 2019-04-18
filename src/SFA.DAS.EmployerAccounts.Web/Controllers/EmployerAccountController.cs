@@ -198,7 +198,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
 
-            if (_authorizationService.IsAuthorized(FeatureType.NewRegistration))
+            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
             {
                 return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
             }
