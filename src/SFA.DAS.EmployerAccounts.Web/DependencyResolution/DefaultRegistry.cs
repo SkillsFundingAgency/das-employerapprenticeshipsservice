@@ -7,7 +7,6 @@ using StructureMap;
 using System.Web;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
-using FeatureToggle;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
@@ -31,7 +30,6 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
             For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();
-            
         }
     }
 }

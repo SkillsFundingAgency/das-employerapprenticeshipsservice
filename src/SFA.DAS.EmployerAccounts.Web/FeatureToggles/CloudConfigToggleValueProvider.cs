@@ -1,20 +1,20 @@
-﻿using FeatureToggle;
-using Microsoft.Azure;
-using SFA.DAS.EmployerAccounts.Configuration;
+﻿using Microsoft.Azure;
+using SFA.DAS.Authorization;
+using System;
 using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.Web.FeatureToggles
 {
     public class CloudConfigToggleValueProvider : IBooleanToggleValueProvider
     {
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
-        public CloudConfigToggleValueProvider(EmployerAccountsConfiguration employerAccountsConfiguration)
+        private readonly FeaturesConfiguration _featuresConfiguration;
+        public CloudConfigToggleValueProvider(FeaturesConfiguration featuresConfiguration)
         {
-            _employerAccountsConfiguration = employerAccountsConfiguration;
+            _featuresConfiguration = featuresConfiguration;
         }
         public bool EvaluateBooleanToggleValue(IFeatureToggle toggle)
         {
-            var featureToggle = _employerAccountsConfiguration.FeatureToggles.FirstOrDefault(i => i.Name.Equals(toggle.GetType().Name));
+            var featureToggle = _featuresConfiguration.Data?.FirstOrDefault(f => Enum.GetName(typeof(FeatureType), f.FeatureType).Equals(toggle.GetType().Name));
 
             if (featureToggle == null)
             {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.FeatureToggles
                 return !string.IsNullOrEmpty(setting) && bool.Parse(setting);
             }
 
-            return featureToggle.Value;
+            return featureToggle.Enabled;
         }
     }
 }

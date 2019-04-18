@@ -1,14 +1,14 @@
-﻿using FeatureToggle;
-
+﻿
 namespace SFA.DAS.EmployerAccounts.Web.FeatureToggles
 {
-    public class CloudConfigFeatureToggle : SimpleFeatureToggle
+    public abstract class CloudConfigFeatureToggle : IFeatureToggle
     {
-        public CloudConfigFeatureToggle(IBooleanToggleValueProvider booleanToggleValueProvider )
-        {
-            base.ToggleValueProvider = booleanToggleValueProvider;
-        }
-        public sealed override IBooleanToggleValueProvider ToggleValueProvider { get => base.ToggleValueProvider;}
-    }
+        private readonly IBooleanToggleValueProvider _booleanToggleValueProvider;
+        public bool Enabled => _booleanToggleValueProvider.EvaluateBooleanToggleValue(this);
 
+        protected CloudConfigFeatureToggle(IBooleanToggleValueProvider booleanToggleValueProvider)
+        {
+            _booleanToggleValueProvider = booleanToggleValueProvider;
+        }
+    }
 }

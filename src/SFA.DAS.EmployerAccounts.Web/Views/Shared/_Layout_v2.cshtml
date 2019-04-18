@@ -53,13 +53,13 @@
                     Manage apprenticeships
                 </a>
             </div>
-            <nav class="das-user-navigation" id="das-user-navigation">
-                <ul class="das-user-navigation__list" role="menu">
-                    <li role="menuitem" class="das-user-navigation__list-item">
-                        <a href="@Url.Action("Help", "Home")" class="das-user-navigation__link">Help</a>
-                    </li>
-                    @if (HttpContext.Current.User.Identity.IsAuthenticated)
-                    {
+            @if (HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                <nav class="das-user-navigation" id="das-user-navigation">
+                    <ul class="das-user-navigation__list" role="menu">
+                        <li role="menuitem" class="das-user-navigation__list-item">
+                            <a href="@Url.Action("Help", "Home")" class="das-user-navigation__link">Help</a>
+                        </li>
                         <li role="menuitem" class="das-user-navigation__list-item das-user-navigation__list-item--has-sub-menu">
                             <a href="/" class="das-user-navigation__link">Settings</a>
                             <ul role="menu" class="das-user-navigation__sub-menu js-hidden">
@@ -80,15 +80,12 @@
                                 </li>
                             </ul>
                         </li>
-                    }
-                    else
-                    {
                         <li role="menuitem" class="das-user-navigation__list-item">
                             <a href="@Url.Action("SignOut", "Home")" class="das-user-navigation__link">Sign out</a>
                         </li>
-                    }
-                    </ul>                    
-            </nav>
+                    </ul>
+                </nav>
+            }
         </div>
     </header>
 

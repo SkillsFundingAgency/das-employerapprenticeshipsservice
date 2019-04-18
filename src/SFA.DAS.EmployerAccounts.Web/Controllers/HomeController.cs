@@ -1,5 +1,4 @@
-﻿using FeatureToggle;
-using SFA.DAS.Authentication;
+﻿using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;

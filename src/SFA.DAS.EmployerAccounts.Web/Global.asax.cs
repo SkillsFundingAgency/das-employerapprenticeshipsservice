@@ -34,7 +34,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
-using FeatureToggle;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -61,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new FeatureToggleViewEngine(container.GetInstance<IBooleanToggleValueProvider>()));
+            ViewEngines.Engines.Add(new FeatureToggleViewEngine());
 
             AuditMessageFactory.RegisterBuilder(m =>
             {
