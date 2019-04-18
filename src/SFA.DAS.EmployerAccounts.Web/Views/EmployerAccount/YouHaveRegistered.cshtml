@@ -1,0 +1,30 @@
+﻿@using SFA.DAS.Common.Domain.Types
+@using SFA.DAS.EmployerAccounts.Web.Helpers
+
+@{ViewBag.PageID = "you-have-registered-an-account";}
+@{ViewBag.Title = "You have registered an account";}
+@{ViewBag.HideNav = "true"; }
+@{ViewBag.GaData.Vpv = "/you-have-registered-an-account";}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <div class="govuk-box-highlight">
+            <h1 class="heading-large">
+                You have registered an account
+            </h1>
+        </div>
+        <br />
+        <p>You can now use your account to search and save apprenticeships and training providers.</p>
+        <p>To get government funding to spend on your chosen apprenticeships you will need to:</p>
+        <ul class="list list-bullet">
+            @if (ViewBag.RequiresPayeScheme)
+            {
+                <li>add your PAYE scheme</li>
+            }
+            <li>sign the agreement between you and the Education and Skills Funding Agency (ESFA)</li>
+        </ul>
+        <p>
+            <a href="">Continue to your account</a>
+        </p>
+    </div>
+</div>

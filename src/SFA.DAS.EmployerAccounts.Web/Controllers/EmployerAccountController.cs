@@ -48,8 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     BreadcrumbDescription = "Back to Your User Profile",
                     ConfirmUrl = Url.Action(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
-                },
-
+                }
             };
 
             var flashMessageViewModel = GetFlashMessageViewModelFromCookie();
@@ -128,6 +127,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Error(ex, $"Error processing Gateway response - {ex.Message}");
                 throw;
             }
+        }
+
+        [HttpGet]
+        [Route("YouHaveRegistered")]
+        public ViewResult YouHaveRegistered()
+        {
+            var cookie = _employerAccountOrchestrator.GetCookieData();
+
+            ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
+                                         cookie.EmployerAccountPayeRefData.EmpRefNotFound;
+           
+            return View();
         }
 
         [HttpGet]
