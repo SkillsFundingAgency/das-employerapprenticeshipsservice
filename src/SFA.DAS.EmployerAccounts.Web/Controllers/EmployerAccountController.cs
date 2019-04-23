@@ -134,7 +134,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("YouHaveRegistered")]
+        [Route("youhaveregistered")]
         public ViewResult YouHaveRegistered()
         {
             var cookie = _employerAccountOrchestrator.GetCookieData();
