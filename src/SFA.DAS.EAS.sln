@@ -90,6 +90,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SFA.DAS.EmployerAccounts", "SFA.DAS.EmployerAccounts", "{A177AC61-DF6E-4A04-8EFE-1E7004277669}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SFA.DAS.EmployerFinance", "SFA.DAS.EmployerFinance", "{8D013ACF-E88D-4941-AE77-765F19C6F4B2}"
+	ProjectSection(SolutionItems) = preProject
+		SFA.DAS.EmployerAccounts.Web\Web.config = SFA.DAS.EmployerAccounts.Web\Web.config
+		SFA.DAS.EmployerAccounts.Web\Web.Debug.config = SFA.DAS.EmployerAccounts.Web\Web.Debug.config
+		SFA.DAS.EmployerAccounts.Web\Web.Release.config = SFA.DAS.EmployerAccounts.Web\Web.Release.config
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{19BA54F2-A356-49AF-8062-9D492E8D03D5}"
 EndProject
