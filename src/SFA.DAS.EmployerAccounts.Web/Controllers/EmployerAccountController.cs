@@ -13,7 +13,6 @@ using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -82,6 +81,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 _logger.Info("Starting processing gateway response");
 
+                if (Request.Url == null)
+                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
                     Request.Params[ControllerConstants.CodeKeyName],
                     Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Url.Scheme),
@@ -139,17 +141,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var cookie = _employerAccountOrchestrator.GetCookieData();
 
-            ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
-                                         cookie.EmployerAccountPayeRefData.EmpRefNotFound;
-           
+            if (cookie == null)
+            {
+                ViewBag.RequiresPayeScheme = true;
+            }
+            else
+            {
+                ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
+                                             cookie.EmployerAccountPayeRefData.EmpRefNotFound;
+            }
+
+            _employerAccountOrchestrator.DeleteCookieData();
+
             return View();
         }
 
         [HttpGet]
         [Route("payeerror")]
-        public ViewResult PayeError(bool? NotFound)
+        public ViewResult PayeError(bool? notFound)
         {
-            ViewBag.NotFound = NotFound ?? false;
+            ViewBag.NotFound = notFound ?? false;
             return View();
         }
 
