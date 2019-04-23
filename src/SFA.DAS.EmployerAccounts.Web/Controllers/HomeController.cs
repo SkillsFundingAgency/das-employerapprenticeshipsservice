@@ -205,7 +205,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Authorize]
         [HttpGet]
         [Route("register/{option}")]
-        public async Task<ActionResult> HandleNewRegistration(string option)
+        public async Task<ActionResult> HandleNewRegistration(string option = null)
         {
             await OwinWrapper.UpdateClaims();
 
