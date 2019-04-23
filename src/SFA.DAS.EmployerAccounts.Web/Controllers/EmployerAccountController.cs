@@ -137,7 +137,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("youhaveregistered")]
-        public ViewResult YouHaveRegistered()
+        public ViewResult YouHaveRegistered(string hashedAccountId = null)
         {
             var cookie = _employerAccountOrchestrator.GetCookieData();
 
@@ -153,6 +153,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             _employerAccountOrchestrator.DeleteCookieData();
 
+            ViewBag.AccountUrl = this.Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
             return View();
         }
 
@@ -226,6 +227,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else
             {
+                _employerAccountOrchestrator.DeleteCookieData();
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
             }
         }
