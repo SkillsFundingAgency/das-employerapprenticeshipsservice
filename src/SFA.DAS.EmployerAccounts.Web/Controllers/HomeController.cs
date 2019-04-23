@@ -147,8 +147,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction(ControllerConstants.ConfirmWhoYouAre); 
-                case 2: return RedirectToAction(ControllerConstants.ConfirmWhoYouAre); 
+                case 1: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {Option = "later"});
+                case 2: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {option = "now"});
                 default:
 
                     var model = new
@@ -194,21 +194,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("register")]
-        public ActionResult RegisterUser()
+        public ActionResult RegisterUser(string option)
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
+            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/{option}");
         }
 
         [Authorize]
         [HttpGet]
-        [Route("register/new")]
-        public async Task<ActionResult> HandleNewRegistration()
+        [Route("register/{option}")]
+        public async Task<ActionResult> HandleNewRegistration(string option)
         {
             await OwinWrapper.UpdateClaims();
-            return RedirectToAction(ControllerConstants.IndexActionName);
+
+            switch (option)
+            {
+                case "later": return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName);
+                default: return RedirectToAction(ControllerConstants.IndexActionName);
+            }
         }
 
         [Authorize]
