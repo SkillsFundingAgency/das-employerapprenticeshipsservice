@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication
                         identity.RemoveClaim(requiresValidationClaim);
                     }
                     identity.AddClaim(new Claim(DasClaimTypes.RequiresVerification, claim.Item2));
-                }
+                }                
             }
         }
     }
