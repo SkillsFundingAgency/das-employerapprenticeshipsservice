@@ -194,7 +194,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("register")]
-        public ActionResult RegisterUser(string option)
+        public ActionResult RegisterUser(string option = "new")
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
