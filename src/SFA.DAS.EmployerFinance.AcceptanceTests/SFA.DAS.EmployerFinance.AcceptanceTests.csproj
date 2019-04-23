@@ -55,7 +55,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Expired-funds.feature</DependentUpon>
     </Compile>
-    <Compile Update="Features\LateAccounts\Late-Accounts.feature.cs">
+    <Compile Update="Features\Late-Accounts.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Late-accounts.feature</DependentUpon>
@@ -115,7 +115,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Expired-funds.feature.cs</LastGenOutput>
     </None>
-    <None Update="Features\LateAccounts\Late-accounts.feature">
+    <None Update="Features\Late-accounts.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Late-accounts.feature.cs</LastGenOutput>
     </None>

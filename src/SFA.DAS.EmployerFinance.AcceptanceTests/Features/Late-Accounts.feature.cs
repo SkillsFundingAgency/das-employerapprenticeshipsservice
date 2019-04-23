@@ -10,7 +10,7 @@
 // ------------------------------------------------------------------------------
 #region Designer generated code
 #pragma warning disable
-namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features.LateAccounts
+namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
 {
     using TechTalk.SpecFlow;
     
@@ -89,112 +89,98 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Year",
                         "Payroll_Month",
                         "English_Fraction",
-                        "SubmissionDate",
-                        "CreatedDate"});
+                        "SubmissionDate"});
             table1.AddRow(new string[] {
                         "999000101",
                         "1000",
                         "17-18",
                         "1",
                         "1",
-                        "2017-05-19",
-                        "2017-05-20"});
+                        "2017-05-19"});
             table1.AddRow(new string[] {
                         "999000102",
                         "2000",
                         "17-18",
                         "2",
                         "1",
-                        "2017-06-19",
-                        "2017-06-20"});
+                        "2017-06-19"});
             table1.AddRow(new string[] {
                         "999000103",
                         "3000",
                         "17-18",
                         "3",
                         "1",
-                        "2017-07-19",
-                        "2017-07-20"});
+                        "2017-07-19"});
             table1.AddRow(new string[] {
                         "999000104",
                         "4000",
                         "17-18",
                         "4",
                         "1",
-                        "2017-08-19",
-                        "2017-08-20"});
+                        "2017-08-19"});
             table1.AddRow(new string[] {
                         "999000105",
                         "5000",
                         "17-18",
                         "5",
                         "1",
-                        "2017-09-19",
-                        "2017-09-20"});
+                        "2017-09-19"});
             table1.AddRow(new string[] {
                         "999000106",
                         "6000",
                         "17-18",
                         "6",
                         "1",
-                        "2017-10-19",
-                        "2017-10-20"});
+                        "2017-10-19"});
             table1.AddRow(new string[] {
                         "999000107",
                         "7000",
                         "17-18",
                         "7",
                         "1",
-                        "2017-11-19",
-                        "2017-11-20"});
+                        "2017-11-19"});
             table1.AddRow(new string[] {
                         "999000108",
                         "8000",
                         "17-18",
                         "8",
                         "1",
-                        "2017-12-19",
-                        "2017-12-20"});
+                        "2017-12-19"});
             table1.AddRow(new string[] {
                         "999000109",
                         "9000",
                         "17-18",
                         "9",
                         "1",
-                        "2018-01-19",
-                        "2018-01-20"});
+                        "2018-01-19"});
             table1.AddRow(new string[] {
                         "999000110",
                         "10000",
                         "17-18",
                         "10",
                         "1",
-                        "2018-02-19",
-                        "2018-02-20"});
+                        "2018-02-19"});
             table1.AddRow(new string[] {
                         "999000111",
                         "11000",
                         "17-18",
                         "11",
                         "1",
-                        "2018-03-19",
-                        "2018-03-20"});
+                        "2018-03-19"});
             table1.AddRow(new string[] {
                         "999000112",
                         "12000",
                         "17-18",
                         "12",
                         "1",
-                        "2018-04-19",
-                        "2018-04-20"});
+                        "2018-04-19"});
             table1.AddRow(new string[] {
                         "999000113",
                         "1000",
                         "18-19",
                         "1",
                         "1",
-                        "2018-05-19",
-                        "2018-05-20"});
+                        "2018-05-19"});
 #line 5
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table1, "And ");
 #line 20
@@ -217,10 +203,10 @@ this.ScenarioInitialize(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("2 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
                     "o older than 12 months old", null, ((string[])(null)));
-#line 36
+#line 25
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 37
+#line 26
  testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
                     " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
@@ -230,90 +216,80 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Year",
                         "Payroll_Month",
                         "English_Fraction",
-                        "SubmissionDate",
-                        "CreatedDate"});
+                        "SubmissionDate"});
             table2.AddRow(new string[] {
                         "999000101",
                         "1000",
                         "17-18",
                         "1",
                         "1",
-                        "2017-05-19",
-                        "2017-05-20"});
+                        "2017-05-19"});
             table2.AddRow(new string[] {
                         "999000102",
                         "2000",
                         "17-18",
                         "2",
                         "1",
-                        "2017-06-19",
-                        "2017-06-20"});
+                        "2017-06-19"});
             table2.AddRow(new string[] {
                         "999000107",
                         "7000",
                         "17-18",
                         "7",
                         "1",
-                        "2017-11-19",
-                        "2017-11-20"});
+                        "2017-11-19"});
             table2.AddRow(new string[] {
                         "999000108",
                         "8000",
                         "17-18",
                         "8",
                         "1",
-                        "2017-12-19",
-                        "2017-12-20"});
+                        "2017-12-19"});
             table2.AddRow(new string[] {
                         "999000109",
                         "9000",
                         "17-18",
                         "9",
                         "1",
-                        "2018-01-19",
-                        "2018-01-20"});
+                        "2018-01-19"});
             table2.AddRow(new string[] {
                         "999000110",
                         "10000",
                         "17-18",
                         "10",
                         "1",
-                        "2018-02-19",
-                        "2018-02-20"});
+                        "2018-02-19"});
             table2.AddRow(new string[] {
                         "999000111",
                         "11000",
                         "17-18",
                         "11",
                         "1",
-                        "2018-03-19",
-                        "2018-03-20"});
+                        "2018-03-19"});
             table2.AddRow(new string[] {
                         "999000112",
                         "12000",
                         "17-18",
                         "12",
                         "1",
-                        "2018-04-19",
-                        "2018-04-20"});
+                        "2018-04-19"});
             table2.AddRow(new string[] {
                         "999000113",
                         "1000",
                         "18-19",
                         "1",
                         "1",
-                        "2018-05-19",
-                        "2018-05-20"});
-#line 38
+                        "2018-05-19"});
+#line 27
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table2, "And ");
-#line 49
+#line 38
  testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 50
+#line 39
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 51
+#line 40
  testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 52
+#line 41
  testRunner.And("we should see a level 1 screen with a balance of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -326,10 +302,10 @@ this.ScenarioInitialize(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
                     "o older than 12 months old", null, ((string[])(null)));
-#line 55
+#line 44
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 56
+#line 45
  testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
                     " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
@@ -339,122 +315,108 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Year",
                         "Payroll_Month",
                         "English_Fraction",
-                        "SubmissionDate",
-                        "CreatedDate"});
+                        "SubmissionDate"});
             table3.AddRow(new string[] {
                         "999000101",
                         "0",
                         "17-18",
                         "1",
                         "1",
-                        "2017-05-19",
-                        "2017-05-20"});
+                        "2017-05-19"});
             table3.AddRow(new string[] {
                         "999000102",
                         "0",
                         "17-18",
                         "2",
                         "1",
-                        "2017-06-19",
-                        "2017-06-20"});
+                        "2017-06-19"});
             table3.AddRow(new string[] {
                         "999000103",
                         "0",
                         "17-18",
                         "3",
                         "1",
-                        "2017-07-19",
-                        "2017-07-20"});
+                        "2017-07-19"});
             table3.AddRow(new string[] {
                         "999000104",
                         "0",
                         "17-18",
                         "4",
                         "1",
-                        "2017-08-19",
-                        "2017-08-20"});
+                        "2017-08-19"});
             table3.AddRow(new string[] {
                         "999000105",
                         "0",
                         "17-18",
                         "5",
                         "1",
-                        "2017-09-19",
-                        "2017-09-20"});
+                        "2017-09-19"});
             table3.AddRow(new string[] {
                         "999000106",
                         "0",
                         "17-18",
                         "6",
                         "1",
-                        "2017-10-19",
-                        "2017-10-20"});
+                        "2017-10-19"});
             table3.AddRow(new string[] {
                         "999000107",
                         "7000",
                         "17-18",
                         "7",
                         "1",
-                        "2017-11-19",
-                        "2017-11-20"});
+                        "2017-11-19"});
             table3.AddRow(new string[] {
                         "999000108",
                         "8000",
                         "17-18",
                         "8",
                         "1",
-                        "2017-12-19",
-                        "2017-12-20"});
+                        "2017-12-19"});
             table3.AddRow(new string[] {
                         "999000109",
                         "9000",
                         "17-18",
                         "9",
                         "1",
-                        "2018-01-19",
-                        "2018-01-20"});
+                        "2018-01-19"});
             table3.AddRow(new string[] {
                         "999000110",
                         "10000",
                         "17-18",
                         "10",
                         "1",
-                        "2018-02-19",
-                        "2018-02-20"});
+                        "2018-02-19"});
             table3.AddRow(new string[] {
                         "999000111",
                         "11000",
                         "17-18",
                         "11",
                         "1",
-                        "2018-03-19",
-                        "2018-03-20"});
+                        "2018-03-19"});
             table3.AddRow(new string[] {
                         "999000112",
                         "12000",
                         "17-18",
                         "12",
                         "1",
-                        "2018-04-19",
-                        "2018-04-20"});
+                        "2018-04-19"});
             table3.AddRow(new string[] {
                         "999000113",
                         "1000",
                         "18-19",
                         "1",
                         "1",
-                        "2018-05-19",
-                        "2018-05-20"});
-#line 57
+                        "2018-05-19"});
+#line 46
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table3, "And ");
-#line 72
+#line 61
  testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 73
+#line 62
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 74
+#line 63
  testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 75
+#line 64
  testRunner.And("we should see a level 1 screen with a balance of 14300 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -467,10 +429,10 @@ this.ScenarioInitialize(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("4 - An End-of-year-adjustment is for a period older than 12 months and one younge" +
                     "r than 12 months is in submissions of a newly added PAYE scheme", null, ((string[])(null)));
-#line 82
+#line 66
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 83
+#line 67
  testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
                     " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
@@ -481,7 +443,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction",
                         "SubmissionDate",
-                        "CreatedDate",
                         "EndofYear Adjustment"});
             table4.AddRow(new string[] {
                         "999000101",
@@ -490,7 +451,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "1",
                         "2017-05-19",
-                        "2017-05-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000102",
@@ -499,7 +459,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "2",
                         "1",
                         "2017-06-19",
-                        "2017-06-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000103",
@@ -508,7 +467,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "3",
                         "1",
                         "2017-07-19",
-                        "2017-07-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000104",
@@ -517,7 +475,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "4",
                         "1",
                         "2017-08-19",
-                        "2017-08-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000105",
@@ -526,7 +483,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "5",
                         "1",
                         "2017-09-19",
-                        "2017-09-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000106",
@@ -535,7 +491,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "6",
                         "1",
                         "2017-10-19",
-                        "2017-10-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000107",
@@ -544,7 +499,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "7",
                         "1",
                         "2017-11-19",
-                        "2017-11-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000108",
@@ -553,7 +507,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "8",
                         "1",
                         "2017-12-19",
-                        "2017-12-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000109",
@@ -562,7 +515,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "9",
                         "1",
                         "2018-01-19",
-                        "2018-01-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000110",
@@ -571,7 +523,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "10",
                         "1",
                         "2018-02-19",
-                        "2018-02-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000111",
@@ -580,7 +531,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "11",
                         "1",
                         "2018-03-19",
-                        "2018-03-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000112",
@@ -589,7 +539,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2018-04-19",
-                        "2018-04-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000113",
@@ -598,7 +547,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "1",
                         "2018-05-19",
-                        "2018-05-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000114",
@@ -607,7 +555,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "2",
                         "1",
                         "2018-06-19",
-                        "2018-06-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000115",
@@ -616,7 +563,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "3",
                         "1",
                         "2018-07-19",
-                        "2018-07-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000116",
@@ -625,7 +571,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "4",
                         "1",
                         "2018-08-19",
-                        "2018-08-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000117",
@@ -634,7 +579,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "5",
                         "1",
                         "2018-09-19",
-                        "2018-09-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000118",
@@ -643,7 +587,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "6",
                         "1",
                         "2018-10-19",
-                        "2018-10-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000119",
@@ -652,7 +595,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2018-10-19",
-                        "2018-10-20",
                         "1"});
             table4.AddRow(new string[] {
                         "999000120",
@@ -661,7 +603,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "7",
                         "1",
                         "2018-11-19",
-                        "2018-11-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000121",
@@ -670,7 +611,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "8",
                         "1",
                         "2018-12-19",
-                        "2018-12-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000122",
@@ -679,7 +619,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "9",
                         "1",
                         "2019-01-19",
-                        "2019-01-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000123",
@@ -688,7 +627,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "10",
                         "1",
                         "2019-02-19",
-                        "2019-02-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000124",
@@ -697,7 +635,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "11",
                         "1",
                         "2019-03-19",
-                        "2019-03-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000125",
@@ -706,7 +643,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2019-04-19",
-                        "2019-04-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000126",
@@ -715,7 +651,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "1",
                         "2019-05-19",
-                        "2019-05-20",
                         "0"});
             table4.AddRow(new string[] {
                         "999000127",
@@ -724,18 +659,17 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2019-05-19",
-                        "2019-05-20",
                         "1"});
-#line 84
+#line 68
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table4, "And ");
-#line 113
+#line 97
  testRunner.When("we refresh levy data for paye scheme on the 5/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 114
+#line 98
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 115
+#line 99
  testRunner.Then("we should see a level 1 screen with a levy declared of 550 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 116
+#line 100
  testRunner.And("we should see a level 1 screen with a balance of 12650 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -748,10 +682,10 @@ this.ScenarioInitialize(scenarioInfo);
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("5 - A PAYE being used to create a new account has been in a different account wit" +
                     "hin the 12 month limit", null, ((string[])(null)));
-#line 119
+#line 103
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 120
+#line 104
  testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
                     " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
@@ -762,7 +696,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction",
                         "SubmissionDate",
-                        "CreatedDate",
                         "EndofYear Adjustment"});
             table5.AddRow(new string[] {
                         "999000108",
@@ -771,7 +704,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "8",
                         "1",
                         "2017-12-19",
-                        "2017-12-20",
                         "0"});
             table5.AddRow(new string[] {
                         "999000109",
@@ -780,7 +712,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "9",
                         "1",
                         "2018-01-19",
-                        "2018-01-20",
                         "0"});
             table5.AddRow(new string[] {
                         "999000110",
@@ -789,7 +720,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "10",
                         "1",
                         "2018-02-19",
-                        "2018-02-20",
                         "0"});
             table5.AddRow(new string[] {
                         "999000111",
@@ -798,13 +728,12 @@ this.ScenarioInitialize(scenarioInfo);
                         "11",
                         "1",
                         "2018-03-19",
-                        "2018-03-20",
                         "0"});
-#line 121
+#line 105
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table5, "And ");
-#line 127
+#line 111
  testRunner.And("we refresh levy data for paye scheme on the 03/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 128
+#line 112
  testRunner.And("Another account is opened and associated with the paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
@@ -814,7 +743,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction",
                         "SubmissionDate",
-                        "CreatedDate",
                         "EndofYear Adjustment"});
             table6.AddRow(new string[] {
                         "999000112",
@@ -823,7 +751,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2018-04-19",
-                        "2018-04-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000113",
@@ -832,7 +759,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "1",
                         "2018-05-19",
-                        "2018-05-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000114",
@@ -841,7 +767,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "2",
                         "1",
                         "2018-06-19",
-                        "2018-06-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000115",
@@ -850,7 +775,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "3",
                         "1",
                         "2018-07-19",
-                        "2018-07-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000116",
@@ -859,7 +783,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "4",
                         "1",
                         "2018-08-19",
-                        "2018-08-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000117",
@@ -868,7 +791,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "5",
                         "1",
                         "2018-09-19",
-                        "2018-09-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000118",
@@ -877,7 +799,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "6",
                         "1",
                         "2018-10-19",
-                        "2018-10-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000119",
@@ -886,7 +807,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2018-10-19",
-                        "2018-10-20",
                         "1"});
             table6.AddRow(new string[] {
                         "999000120",
@@ -895,7 +815,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "7",
                         "1",
                         "2018-11-19",
-                        "2018-11-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000121",
@@ -904,7 +823,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "8",
                         "1",
                         "2018-12-19",
-                        "2018-12-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000122",
@@ -913,7 +831,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "9",
                         "1",
                         "2019-01-19",
-                        "2019-01-20",
                         "0"});
             table6.AddRow(new string[] {
                         "999000123",
@@ -922,18 +839,17 @@ this.ScenarioInitialize(scenarioInfo);
                         "10",
                         "1",
                         "2019-02-19",
-                        "2019-02-20",
                         "0"});
-#line 129
+#line 113
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table6, "And ");
-#line 143
+#line 127
  testRunner.When("we refresh levy data for paye scheme on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 144
+#line 128
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 145
+#line 129
  testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 146
+#line 130
  testRunner.And("we should see a level 1 screen with a balance of 12650 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
@@ -948,10 +864,10 @@ this.ScenarioInitialize(scenarioInfo);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("6 - A PAYE being used to create a new account has been in a different account lon" +
                     "ger ago than the 12 month limit and the new account includes end of year adjustm" +
                     "ents within that time limit and ignores one outside the limit.", null, ((string[])(null)));
-#line 148
+#line 132
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 149
+#line 133
  testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
                     " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
@@ -962,7 +878,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction",
                         "SubmissionDate",
-                        "CreatedDate",
                         "EndofYear Adjustment"});
             table7.AddRow(new string[] {
                         "999000100",
@@ -971,7 +886,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2017-04-19",
-                        "2017-04-20",
                         "0"});
             table7.AddRow(new string[] {
                         "999000101",
@@ -980,7 +894,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "1",
                         "2017-05-19",
-                        "2017-05-20",
                         "0"});
             table7.AddRow(new string[] {
                         "999000102",
@@ -989,7 +902,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "2",
                         "1",
                         "2017-06-19",
-                        "2017-06-20",
                         "0"});
             table7.AddRow(new string[] {
                         "999000103",
@@ -998,7 +910,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "3",
                         "1",
                         "2017-07-19",
-                        "2017-07-20",
                         "0"});
             table7.AddRow(new string[] {
                         "999000104",
@@ -1007,7 +918,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "4",
                         "1",
                         "2017-08-19",
-                        "2017-08-20",
                         "0"});
             table7.AddRow(new string[] {
                         "999000105",
@@ -1016,13 +926,12 @@ this.ScenarioInitialize(scenarioInfo);
                         "5",
                         "1",
                         "2017-09-19",
-                        "2017-09-20",
                         "0"});
-#line 150
+#line 134
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table7, "And ");
-#line 158
+#line 142
  testRunner.And("we refresh levy data for paye scheme on the 09/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 159
+#line 143
     testRunner.And("Another account is opened and associated with the paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -1032,7 +941,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "Payroll_Month",
                         "English_Fraction",
                         "SubmissionDate",
-                        "CreatedDate",
                         "EndofYear Adjustment"});
             table8.AddRow(new string[] {
                         "999000106",
@@ -1041,7 +949,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "6",
                         "1",
                         "2017-10-19",
-                        "2017-10-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000107",
@@ -1050,7 +957,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "7",
                         "1",
                         "2017-11-19",
-                        "2017-11-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000108",
@@ -1059,7 +965,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "8",
                         "1",
                         "2017-12-19",
-                        "2017-12-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000109",
@@ -1068,7 +973,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "9",
                         "1",
                         "2018-01-19",
-                        "2018-01-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000110",
@@ -1077,7 +981,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "10",
                         "1",
                         "2018-02-19",
-                        "2018-02-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000111",
@@ -1086,7 +989,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "11",
                         "1",
                         "2018-03-19",
-                        "2018-03-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000112",
@@ -1095,7 +997,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2018-04-19",
-                        "2018-04-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000113",
@@ -1104,7 +1005,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "1",
                         "2018-05-19",
-                        "2018-05-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000114",
@@ -1113,7 +1013,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "2",
                         "1",
                         "2018-06-19",
-                        "2018-06-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000115",
@@ -1122,7 +1021,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "3",
                         "1",
                         "2018-07-19",
-                        "2018-07-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000116",
@@ -1131,7 +1029,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "4",
                         "1",
                         "2018-08-19",
-                        "2018-08-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000117",
@@ -1140,7 +1037,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "5",
                         "1",
                         "2018-09-19",
-                        "2018-09-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000118",
@@ -1149,7 +1045,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "6",
                         "1",
                         "2018-10-19",
-                        "2018-10-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000119",
@@ -1158,7 +1053,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2018-10-19",
-                        "2018-10-20",
                         "1"});
             table8.AddRow(new string[] {
                         "999000120",
@@ -1167,7 +1061,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "7",
                         "1",
                         "2018-11-19",
-                        "2018-11-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000121",
@@ -1176,7 +1069,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "8",
                         "1",
                         "2018-12-19",
-                        "2018-12-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000122",
@@ -1185,7 +1077,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "9",
                         "1",
                         "2019-01-19",
-                        "2019-01-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000123",
@@ -1194,7 +1085,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "10",
                         "1",
                         "2019-02-19",
-                        "2019-02-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000124",
@@ -1203,7 +1093,6 @@ this.ScenarioInitialize(scenarioInfo);
                         "11",
                         "1",
                         "2019-03-19",
-                        "2019-03-20",
                         "0"});
             table8.AddRow(new string[] {
                         "999000125",
@@ -1212,18 +1101,17 @@ this.ScenarioInitialize(scenarioInfo);
                         "12",
                         "1",
                         "2019-03-19",
-                        "2019-03-20",
                         "1"});
-#line 160
+#line 144
     testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table8, "And ");
-#line 182
+#line 166
  testRunner.When("we refresh levy data for paye scheme on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
-#line 183
+#line 167
     testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 184
+#line 168
  testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
-#line 185
+#line 169
  testRunner.And("we should see a level 1 screen with a balance of 13750 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
