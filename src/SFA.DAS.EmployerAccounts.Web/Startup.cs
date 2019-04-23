@@ -22,6 +22,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -75,6 +76,8 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
             UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
+
+            FeatureToggles.Features.BooleanToggleValueProvider = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IBooleanToggleValueProvider>();
         }
 
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)

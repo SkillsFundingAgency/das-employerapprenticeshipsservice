@@ -2,7 +2,6 @@
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -20,6 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerAccountsConfiguration _configuration;
+        private readonly IAuthorizationService _authorizationService;
 
         public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
             EmployerAccountsConfiguration configuration, IAuthorizationService authorization,
@@ -28,13 +28,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;
+            _authorizationService = authorization;
         }
 
         [Route("~/")]
         [Route]
         [Route("Index")]
         public async Task<ActionResult> Index()
-        {
+        {           
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (!string.IsNullOrWhiteSpace(userId))
             {
@@ -112,7 +113,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction(ControllerConstants.WhatYoullNeedActionName); //No I have not used the service before
+                case 1: return RedirectToAction(_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney) ? 
+                    ControllerConstants.ConfirmWhoYouAre : 
+                    ControllerConstants.WhatYoullNeedActionName); // No not used before
                 case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
                 default:
 
