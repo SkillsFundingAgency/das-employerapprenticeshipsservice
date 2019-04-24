@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace SFA.DAS.EAS.Jobs
 {
@@ -6,7 +6,16 @@ namespace SFA.DAS.EAS.Jobs
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var builder = new HostBuilder();
+            builder.ConfigureWebJobs(b =>
+            {
+                b.AddAzureStorageCoreServices();
+            });
+            var host = builder.Build();
+            using (host)
+            {
+                host.Run();
+            }
         }
     }
 }
