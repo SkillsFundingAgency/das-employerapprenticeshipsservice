@@ -13,7 +13,6 @@ using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -82,6 +81,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 _logger.Info("Starting processing gateway response");
 
+                if (Request.Url == null)
+                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
                     Request.Params[ControllerConstants.CodeKeyName],
                     Url.Action(ControllerConstants.GateWayResponseActionName, ControllerConstants.EmployerAccountControllerName, null, Request.Url.Scheme),
@@ -135,21 +137,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("youhaveregistered")]
-        public ViewResult YouHaveRegistered()
+        public ViewResult YouHaveRegistered(string hashedAccountId = null)
         {
             var cookie = _employerAccountOrchestrator.GetCookieData();
 
-            ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
-                                         cookie.EmployerAccountPayeRefData.EmpRefNotFound;
-           
+            if (cookie == null)
+            {
+                ViewBag.RequiresPayeScheme = true;
+            }
+            else
+            {
+                ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
+                                             cookie.EmployerAccountPayeRefData.EmpRefNotFound;
+            }
+
+            _employerAccountOrchestrator.DeleteCookieData();
+
+            ViewBag.AccountUrl = this.Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
             return View();
         }
 
         [HttpGet]
         [Route("payeerror")]
-        public ViewResult PayeError(bool? NotFound)
+        public ViewResult PayeError(bool? notFound)
         {
-            ViewBag.NotFound = NotFound ?? false;
+            ViewBag.NotFound = notFound ?? false;
             return View();
         }
 
@@ -215,6 +227,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else
             {
+                _employerAccountOrchestrator.DeleteCookieData();
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
             }
         }
