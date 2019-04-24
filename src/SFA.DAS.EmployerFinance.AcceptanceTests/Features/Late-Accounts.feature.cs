@@ -71,11 +71,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC sub" +
-            "missions no older than 12 months old")]
-        public virtual void _1_AccountIsOpenedOnThe23MAY2017AndAfterOnlyAddedValidPAYEHMRCSubmissionsNoOlderThan12MonthsOld()
+            "missions no older than 12 months old - excludes 1 HMRC submission")]
+        public virtual void _1_AccountIsOpenedOnThe23MAY2017AndAfterOnlyAddedValidPAYEHMRCSubmissionsNoOlderThan12MonthsOld_Excludes1HMRCSubmission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC sub" +
-                    "missions no older than 12 months old", null, ((string[])(null)));
+                    "missions no older than 12 months old - excludes 1 HMRC submission", null, ((string[])(null)));
 #line 3
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -198,11 +198,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("2 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
-            "o older than 12 months old")]
-        public virtual void _2_AccountIsOpenedOnThe22MAY2017AndAfterOnlyAddedValidSubmissionsNoOlderThan12MonthsOld()
+            "o older than 12 months old - excludes 2 HMRC submissions")]
+        public virtual void _2_AccountIsOpenedOnThe22MAY2017AndAfterOnlyAddedValidSubmissionsNoOlderThan12MonthsOld_Excludes2HMRCSubmissions()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("2 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
-                    "o older than 12 months old", null, ((string[])(null)));
+                    "o older than 12 months old - excludes 2 HMRC submissions", null, ((string[])(null)));
 #line 25
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -297,11 +297,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
-            "o older than 12 months old")]
-        public virtual void _3_AccountIsOpenedOnThe22MAY2017AndAfterOnlyAddedValidSubmissionsNoOlderThan12MonthsOld()
+            "o older than 12 months old - no HMRC submissions older than 12 months")]
+        public virtual void _3_AccountIsOpenedOnThe22MAY2017AndAfterOnlyAddedValidSubmissionsNoOlderThan12MonthsOld_NoHMRCSubmissionsOlderThan12Months()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
-                    "o older than 12 months old", null, ((string[])(null)));
+                    "o older than 12 months old - no HMRC submissions older than 12 months", null, ((string[])(null)));
 #line 44
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -424,11 +424,13 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("4 - An End-of-year-adjustment is for a period older than 12 months and one younge" +
-            "r than 12 months is in submissions of a newly added PAYE scheme")]
-        public virtual void _4_AnEnd_Of_Year_AdjustmentIsForAPeriodOlderThan12MonthsAndOneYoungerThan12MonthsIsInSubmissionsOfANewlyAddedPAYEScheme()
+            "r than 12 months is in submissions of a newly added PAYE scheme - excludes 1 HMR" +
+            "C submission")]
+        public virtual void _4_AnEnd_Of_Year_AdjustmentIsForAPeriodOlderThan12MonthsAndOneYoungerThan12MonthsIsInSubmissionsOfANewlyAddedPAYEScheme_Excludes1HMRCSubmission()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("4 - An End-of-year-adjustment is for a period older than 12 months and one younge" +
-                    "r than 12 months is in submissions of a newly added PAYE scheme", null, ((string[])(null)));
+                    "r than 12 months is in submissions of a newly added PAYE scheme - excludes 1 HMR" +
+                    "C submission", null, ((string[])(null)));
 #line 66
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -677,11 +679,11 @@ this.ScenarioInitialize(scenarioInfo);
         
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("5 - A PAYE being used to create a new account has been in a different account wit" +
-            "hin the 12 month limit")]
-        public virtual void _5_APAYEBeingUsedToCreateANewAccountHasBeenInADifferentAccountWithinThe12MonthLimit()
+            "hin the 12 month limit - excludes 4 HMRC submissions from a previous account")]
+        public virtual void _5_APAYEBeingUsedToCreateANewAccountHasBeenInADifferentAccountWithinThe12MonthLimit_Excludes4HMRCSubmissionsFromAPreviousAccount()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("5 - A PAYE being used to create a new account has been in a different account wit" +
-                    "hin the 12 month limit", null, ((string[])(null)));
+                    "hin the 12 month limit - excludes 4 HMRC submissions from a previous account", null, ((string[])(null)));
 #line 103
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
@@ -858,16 +860,17 @@ this.ScenarioInitialize(scenarioInfo);
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("6 - A PAYE being used to create a new account has been in a different account lon" +
             "ger ago than the 12 month limit and the new account includes end of year adjustm" +
-            "ents within that time limit and ignores one outside the limit.")]
+            "ents within that time limit and ignores one outside the limit -")]
         public virtual void _6_APAYEBeingUsedToCreateANewAccountHasBeenInADifferentAccountLongerAgoThanThe12MonthLimitAndTheNewAccountIncludesEndOfYearAdjustmentsWithinThatTimeLimitAndIgnoresOneOutsideTheLimit_()
         {
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("6 - A PAYE being used to create a new account has been in a different account lon" +
                     "ger ago than the 12 month limit and the new account includes end of year adjustm" +
-                    "ents within that time limit and ignores one outside the limit.", null, ((string[])(null)));
+                    "ents within that time limit and ignores one outside the limit -", "\t\texcludes 13 HMRC submissions including an end of year adjustment relating to a " +
+                    "period older than 12 months. ", ((string[])(null)));
 #line 132
 this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
-#line 133
+#line 134
  testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
                     " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
@@ -927,11 +930,11 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-09-19",
                         "0"});
-#line 134
+#line 135
  testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table7, "And ");
-#line 142
- testRunner.And("we refresh levy data for paye scheme on the 09/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 143
+ testRunner.And("we refresh levy data for paye scheme on the 09/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+#line 144
     testRunner.And("Another account is opened and associated with the paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
@@ -1102,16 +1105,16 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2019-03-19",
                         "1"});
-#line 144
+#line 145
     testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table8, "And ");
-#line 166
- testRunner.When("we refresh levy data for paye scheme on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 167
+ testRunner.When("we refresh levy data for paye scheme on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+#line 168
     testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
-#line 168
- testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 169
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+#line 170
  testRunner.And("we should see a level 1 screen with a balance of 13750 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();

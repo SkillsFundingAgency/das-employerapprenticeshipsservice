@@ -1,6 +1,6 @@
 ﻿Feature: Late Accounts Feature
 
-Scenario: 1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submissions no older than 12 months old
+Scenario: 1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC submissions no older than 12 months old - excludes 1 HMRC submission
 	Given An employer is adding a PAYE which has submissions older than the 12 month expiry rule limit
 	And Hmrc return the following submissions for paye scheme
 	| Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate |
@@ -22,7 +22,7 @@ Scenario: 1 - Account is opened on the 23 MAY 2017 and after only added valid PA
 	Then we should see a level 1 screen with a levy declared of 1100 on the 5/2018
 	And we should see a level 1 screen with a balance of 13200 on the 5/2018
 
-Scenario: 2 - Account is opened on the 22 MAY 2017 and after only added valid submissions no older than 12 months old
+Scenario: 2 - Account is opened on the 22 MAY 2017 and after only added valid submissions no older than 12 months old - excludes 2 HMRC submissions
 	Given An employer is adding a PAYE which has submissions older than the 12 month expiry rule limit    
 	And Hmrc return the following submissions for paye scheme
     | Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate |
@@ -41,7 +41,7 @@ Scenario: 2 - Account is opened on the 22 MAY 2017 and after only added valid su
 	And we should see a level 1 screen with a balance of 13200 on the 5/2018
 
 
-Scenario: 3 - Account is opened on the 22 MAY 2017 and after only added valid submissions no older than 12 months old 
+Scenario: 3 - Account is opened on the 22 MAY 2017 and after only added valid submissions no older than 12 months old - no HMRC submissions older than 12 months
 	Given An employer is adding a PAYE which has submissions older than the 12 month expiry rule limit     
 	And Hmrc return the following submissions for paye scheme    
 	| Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate |
@@ -63,7 +63,7 @@ Scenario: 3 - Account is opened on the 22 MAY 2017 and after only added valid su
 	Then we should see a level 1 screen with a levy declared of 1100 on the 5/2018
 	And we should see a level 1 screen with a balance of 14300 on the 5/2018
 
-Scenario: 4 - An End-of-year-adjustment is for a period older than 12 months and one younger than 12 months is in submissions of a newly added PAYE scheme
+Scenario: 4 - An End-of-year-adjustment is for a period older than 12 months and one younger than 12 months is in submissions of a newly added PAYE scheme - excludes 1 HMRC submission
 	Given An employer is adding a PAYE which has submissions older than the 12 month expiry rule limit 
 	And Hmrc return the following submissions for paye scheme
 	| Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | EndofYear Adjustment |
@@ -100,7 +100,7 @@ Scenario: 4 - An End-of-year-adjustment is for a period older than 12 months and
 	And we should see a level 1 screen with a balance of 12650 on the 05/2019
 
 
-Scenario: 5 - A PAYE being used to create a new account has been in a different account within the 12 month limit 
+Scenario: 5 - A PAYE being used to create a new account has been in a different account within the 12 month limit - excludes 4 HMRC submissions from a previous account
 	Given An employer is adding a PAYE which has submissions older than the 12 month expiry rule limit 
 	And Hmrc return the following submissions for paye scheme
 	| Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | EndofYear Adjustment |  
@@ -129,7 +129,8 @@ Scenario: 5 - A PAYE being used to create a new account has been in a different 
 	Then we should see a level 1 screen with a levy declared of 1100 on the 02/2019
 	And we should see a level 1 screen with a balance of 12650 on the 02/2019
 
-Scenario: 6 - A PAYE being used to create a new account has been in a different account longer ago than the 12 month limit and the new account includes end of year adjustments within that time limit and ignores one outside the limit. 
+Scenario: 6 - A PAYE being used to create a new account has been in a different account longer ago than the 12 month limit and the new account includes end of year adjustments within that time limit and ignores one outside the limit -
+		excludes 13 HMRC submissions including an end of year adjustment relating to a period older than 12 months. 
 	Given An employer is adding a PAYE which has submissions older than the 12 month expiry rule limit    
 	And Hmrc return the following submissions for paye scheme  
 	| Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | EndofYear Adjustment |
