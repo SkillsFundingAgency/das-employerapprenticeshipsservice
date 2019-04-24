@@ -192,6 +192,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Me
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.IntegrationTests", "SFA.DAS.EmployerAccounts.IntegrationTests\SFA.DAS.EmployerAccounts.IntegrationTests.csproj", "{9845E503-8B67-4F31-B2BD-202D1EC0D98F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Jobs", "SFA.DAS.EAS.Jobs\SFA.DAS.EAS.Jobs.csproj", "{8DB6697B-7BA8-4BC5-96E3-16CF65FA2D5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -475,6 +477,10 @@ Global
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DB6697B-7BA8-4BC5-96E3-16CF65FA2D5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DB6697B-7BA8-4BC5-96E3-16CF65FA2D5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DB6697B-7BA8-4BC5-96E3-16CF65FA2D5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DB6697B-7BA8-4BC5-96E3-16CF65FA2D5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
