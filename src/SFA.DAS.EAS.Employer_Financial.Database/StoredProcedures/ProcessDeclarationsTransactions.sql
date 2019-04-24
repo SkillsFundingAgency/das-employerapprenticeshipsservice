@@ -5,19 +5,6 @@
 	@expiryPeriod INT = NULL
 AS
 
--- Get Earliest Positive Levy Dec
-DECLARE @EarliestPositiveLevyDecYear varchar(5)
-DECLARE @EarliestPositiveLevyDecMonth int
-
-
-SELECT TOP 1 @EarliestPositiveLevyDecYear = PayrollYear, @EarliestPositiveLevyDecMonth = PayrollMonth
-FROM [employer_financial].[GetLevyDeclarationAndTopUp]
-WHERE [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
-AND LevyDeclaredInMonth > 0
-AND AccountId = @AccountId
-AND EmpRef = @EmpRef
-ORDER BY PayrollYear, PayrollMonth	
-
 --Add the topup from the declaration
 INSERT INTO [employer_financial].LevyDeclarationTopup
 	select mainUpdate.* from
@@ -33,12 +20,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
 		x.LevyDueYTD is not null AND x.LastSubmission = 1 AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-	AND 
-	(@EarliestPositiveLevyDecYear IS NOT NULL
-	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
-	AND @EarliestPositiveLevyDecMonth IS NOT NULL
-	AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
-	OR (SELECT 1 FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, @currentDate)) = 1)
+	AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	union all
 	select
 		x.AccountId,
@@ -50,12 +32,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
 		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-	AND 
-	(@EarliestPositiveLevyDecYear IS NOT NULL
-	AND x.PayrollYear >= @EarliestPositiveLevyDecYear
-	AND @EarliestPositiveLevyDecMonth IS NOT NULL
-	AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
-	OR (SELECT 1 FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, @currentDate)) = 1)
+	AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
@@ -91,12 +68,7 @@ select mainUpdate.* from
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
 			x.LevyDueYTD is not null AND x.LastSubmission = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-		AND 
-		(@EarliestPositiveLevyDecYear IS NOT NULL
-		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
-		AND @EarliestPositiveLevyDecMonth IS NOT NULL
-		AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
-		OR (SELECT 1 FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, @currentDate)) = 1)
+		AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	union all	
 		select 
 			x.AccountId,
@@ -121,12 +93,7 @@ select mainUpdate.* from
 		inner join
 			[employer_financial].[LevyDeclarationTopup] ldt on ldt.SubmissionId = x.SubmissionId
 		where x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
-		AND 
-		(@EarliestPositiveLevyDecYear IS NOT NULL
-		AND x.PayrollYear >= @EarliestPositiveLevyDecYear
-		AND @EarliestPositiveLevyDecMonth IS NOT NULL
-		AND (x.PayrollMonth >= @EarliestPositiveLevyDecMonth OR x.PayrollYear > @EarliestPositiveLevyDecYear)
-		OR (SELECT 1 FROM [employer_financial].[TransactionLine] WHERE AccountId = @AccountId AND TransactionDate > DATEADD(month, @ExpiryPeriod*-1, @currentDate)) = 1)
+		AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
