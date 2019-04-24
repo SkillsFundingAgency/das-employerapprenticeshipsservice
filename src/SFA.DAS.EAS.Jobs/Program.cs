@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using SFA.DAS.EAS.Jobs.Startup;
 
 namespace SFA.DAS.EAS.Jobs
 {
@@ -6,16 +7,22 @@ namespace SFA.DAS.EAS.Jobs
     {
         static void Main(string[] args)
         {
-            var builder = new HostBuilder();
-            builder.ConfigureWebJobs(b =>
-            {
-                b.AddAzureStorageCoreServices();
-            });
-            var host = builder.Build();
-            using (host)
+            using (var host = CreateHostBuilder(args).Build())
             {
                 host.Run();
             }
         }
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            new HostBuilder()
+                .ConfigureDasWebJobs();
+                //.ConfigureDasAppConfiguration(args)
+                //.ConfigureDasLogging()
+                //.UseApplicationInsights()
+                //.UseDasEnvironment()
+                //.UseStructureMap()
+                //.UseConsoleLifetime()
+                //.ConfigureServices(s => s.AddDasNServiceBus())
+                //.ConfigureContainer<Registry>(IoC.Initialize);
     }
 }
