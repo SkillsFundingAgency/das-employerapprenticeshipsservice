@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Hosting;
+using SFA.DAS.EAS.Startup;
 using SFA.DAS.EAS.Jobs.Startup;
 
 namespace SFA.DAS.EAS.Jobs
@@ -15,14 +16,14 @@ namespace SFA.DAS.EAS.Jobs
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             new HostBuilder()
-                .ConfigureDasWebJobs();
-                //.ConfigureDasAppConfiguration(args)
-                //.ConfigureDasLogging()
-                //.UseApplicationInsights()
-                //.UseDasEnvironment()
-                //.UseStructureMap()
-                //.UseConsoleLifetime()
-                //.ConfigureServices(s => s.AddDasNServiceBus())
-                //.ConfigureContainer<Registry>(IoC.Initialize);
+                .ConfigureDasWebJobs()
+                .ConfigureDasAppConfiguration(args)
+                .ConfigureDasLogging();                 //todo: need to check logging/redis/use of localhost:6379 locally
+        //.UseApplicationInsights()
+        //.UseDasEnvironment()
+        //.UseStructureMap()
+        //.UseConsoleLifetime()
+        //.ConfigureServices(s => s.AddDasNServiceBus())
+        //.ConfigureContainer<Registry>(IoC.Initialize);
     }
 }
