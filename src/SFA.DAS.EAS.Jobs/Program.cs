@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Jobs
         //https://stackoverflow.com/questions/51970969/how-to-use-hostbuilder-for-webjob
         //https://github.com/Azure/azure-webjobs-sdk/wiki/Application-Insights-Integration
         //https://github.com/Azure/azure-webjobs-sdk/blob/dev/sample/SampleHost/Program.cs
+        //https://docs.microsoft.com/en-us/azure/app-service/webjobs-sdk-how-to
 
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
         //todo: not finding helloworld webjob

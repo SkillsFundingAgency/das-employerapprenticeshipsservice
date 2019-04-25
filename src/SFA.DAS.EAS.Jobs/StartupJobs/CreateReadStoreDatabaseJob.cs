@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Jobs.StartupJobs
     public class CreateReadStoreDatabaseJob
     {
         // as it creates if not exists, then run on startup
-        //[NoAutomaticTrigger]
+        [NoAutomaticTrigger]
         [Singleton]
         public Task Run(ILogger logger)
         {
