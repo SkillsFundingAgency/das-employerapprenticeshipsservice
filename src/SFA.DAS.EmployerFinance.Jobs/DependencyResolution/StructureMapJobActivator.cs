@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.WebJobs.Host;
 using StructureMap;
 
-namespace SFA.DAS.EmployerFinance.Jobs
+namespace SFA.DAS.EmployerFinance.Jobs.DependencyResolution
 {
     public class StructureMapJobActivator : IJobActivator
     {

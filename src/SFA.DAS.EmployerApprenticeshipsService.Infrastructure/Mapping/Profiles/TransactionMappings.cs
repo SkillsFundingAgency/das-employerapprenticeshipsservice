@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -14,7 +15,7 @@ namespace SFA.DAS.EAS.Infrastructure.Mapping.Profiles
             CreateMap<TransactionEntity, PaymentTransactionLine>();
             CreateMap<TransactionEntity, LevyDeclarationTransactionLine>();
             CreateMap<TransactionEntity, TransferTransactionLine>();
-
+            CreateMap<TransactionEntity, ExpiredFundTransactionLine>();
         }
     }
 }

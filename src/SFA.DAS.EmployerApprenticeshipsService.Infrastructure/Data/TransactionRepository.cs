@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -175,6 +176,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
                     case TransactionItemType.Transfer:
                         transactions.Add(_mapper.Map<TransferTransactionLine>(entity));
+                        break;
+
+                    case TransactionItemType.ExpiredFund:
+                        transactions.Add(_mapper.Map<ExpiredFundTransactionLine>(entity));
                         break;
 
                     case TransactionItemType.Unknown:

@@ -30,5 +30,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
         public string RedisConnectionString { get; set; }
+        public int FundsExpiryPeriod { get; set; }
     }
 }

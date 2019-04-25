@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.Configuration;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.MessageHandlers.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 

@@ -8,12 +8,17 @@ AS
 
 	INSERT INTO @SubmissionIdsInUseByEmpRef
 	SELECT	SubmissionId
+	FROM	employer_financial.TransactionLine
+	WHERE	EmpRef = @empRef
+	UNION
+	SELECT	SubmissionId
 	FROM	employer_financial.LevyDeclaration
 	WHERE	EmpRef = @empRef;
 
 	DELETE	
 	FROM	employer_financial.TransactionLine 
-	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef);
+	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef)
+	OR		EmpRef = @empRef;
 
 	DELETE 
 	FROM	employer_financial.LevyDeclarationTopup
@@ -21,6 +26,7 @@ AS
 
 	DELETE 
 	FROM	employer_financial.LevyDeclaration 
-	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef);
+	WHERE	SubmissionId IN (SELECT SubmissionId FROM @SubmissionIdsInUseByEmpRef)
+	OR		EmpRef = @empRef;
 
 	
