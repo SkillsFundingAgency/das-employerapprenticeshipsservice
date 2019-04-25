@@ -18,8 +18,9 @@ namespace SFA.DAS.EAS.Jobs
             new HostBuilder()
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
-                .ConfigureDasLogging();                 //todo: need to check logging/redis/use of localhost:6379 locally
-        //.UseApplicationInsights()
+                .ConfigureDasLogging() //todo: need to check logging/redis/use of localhost:6379 locally
+                .UseApplicationInsights();  // todo: where does APPINSIGHTS_INSTRUMENTATIONKEY come from?
+
         //.UseDasEnvironment()
         //.UseStructureMap()
         //.UseConsoleLifetime()
