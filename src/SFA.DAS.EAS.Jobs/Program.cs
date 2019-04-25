@@ -9,16 +9,14 @@ namespace SFA.DAS.EAS.Jobs
     {
         //useful links
         //https://stackoverflow.com/questions/51970969/how-to-use-hostbuilder-for-webjob
+        //https://github.com/Azure/azure-webjobs-sdk/wiki/Application-Insights-Integration
+        //https://github.com/Azure/azure-webjobs-sdk/blob/dev/sample/SampleHost/Program.cs
 
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
+        //todo: not finding helloworld webjob
         static async Task Main(string[] args)
         {
-            //todo: instead of building, running and UseConsoleLifetime, can we instead...
             await CreateHostBuilder(args).RunConsoleAsync();
-            //using (var host = CreateHostBuilder(args).Build())
-            //{
-            //    host.Run();
-            //}
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -26,11 +24,8 @@ namespace SFA.DAS.EAS.Jobs
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging() //todo: need to check logging/redis/use of localhost:6379 locally
-                //todo: blows up as no options: use overload with options rather than just passing key
-                //.UseApplicationInsights() // todo: where does APPINSIGHTS_INSTRUMENTATIONKEY come from?
+                .UseApplicationInsights() // todo: need to add APPINSIGHTS_INSTRUMENTATIONKEY to config somewhere. where does it normally live? we could store it in table storage
                 .UseDasEnvironment();
-        //.UseConsoleLifetime();
-
 
         //.UseStructureMap()
         //.ConfigureServices(s => s.AddDasNServiceBus())
