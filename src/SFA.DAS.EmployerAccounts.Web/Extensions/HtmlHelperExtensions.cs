@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.Authorization;
 using System;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
@@ -30,6 +31,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
 
             return result.View != null;
+        }
+
+        public static MvcHtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
+        {
+            var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<Configuration.EmployerAccountsConfiguration>().CdnBaseUrl;
+
+            var trimCharacters = new char[] { '/' };
+            return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
         }
     }
 }

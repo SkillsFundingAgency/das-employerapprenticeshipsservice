@@ -1,4 +1,6 @@
-﻿using StructureMap;
+﻿using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Time;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
@@ -6,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public DateTimeRegistry()
         {
-            Policies.Add<CurrentDatePolicy>();
+            For<ICurrentDateTime>().Use<CurrentDateTime>().Singleton();
         }
     }
 }

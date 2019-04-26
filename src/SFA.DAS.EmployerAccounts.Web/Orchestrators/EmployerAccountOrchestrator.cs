@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Web;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -21,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-        private readonly IHashingService _hashingService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         //Needed for tests
@@ -30,12 +28,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
         public EmployerAccountOrchestrator(IMediator mediator, ILog logger, ICookieStorageService<EmployerAccountData> cookieService,
-            EmployerAccountsConfiguration configuration, IHashingService hashingService)
-            : base(mediator, logger, cookieService, configuration)
+            EmployerAccountsConfiguration configuration)
+            : base(mediator, cookieService, configuration)
         {
             _mediator = mediator;
             _logger = logger;
-            _hashingService = hashingService;
         }
 
 
@@ -158,7 +155,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                Logger.Info($"Create Account Validation Error: {ex.Message}");
+                _logger.Info($"Create Account Validation Error: {ex.Message}");
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel(),
@@ -173,22 +170,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public virtual OrchestratorResponse<SummaryViewModel> GetSummaryViewModel(HttpContextBase context)
         {
-            var enteredData = GetCookieData(context);
+            var enteredData = GetCookieData();
 
             var model = new SummaryViewModel
             {
-                OrganisationType = enteredData.OrganisationType,
-                OrganisationName = enteredData.OrganisationName,
-                RegisteredAddress = enteredData.OrganisationRegisteredAddress,
-                OrganisationReferenceNumber = enteredData.OrganisationReferenceNumber,
-                OrganisationDateOfInception = enteredData.OrganisationDateOfInception,
-                PayeReference = enteredData.PayeReference,
-                EmployerRefName = enteredData.EmployerRefName,
-                EmpRefNotFound = enteredData.EmpRefNotFound,
-                OrganisationStatus = enteredData.OrganisationStatus,
-                PublicSectorDataSource = enteredData.PublicSectorDataSource,
-                Sector = enteredData.Sector,
-                NewSearch = enteredData.NewSearch
+                OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
+                OrganisationName = enteredData.EmployerAccountOrganisationData.OrganisationName,
+                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress,
+                OrganisationReferenceNumber = enteredData.EmployerAccountOrganisationData.OrganisationReferenceNumber,
+                OrganisationDateOfInception = enteredData.EmployerAccountOrganisationData.OrganisationDateOfInception,
+                PayeReference = enteredData.EmployerAccountPayeRefData.PayeReference,
+                EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
+                EmpRefNotFound = enteredData.EmployerAccountPayeRefData.EmpRefNotFound,
+                OrganisationStatus = enteredData.EmployerAccountOrganisationData.OrganisationStatus,
+                PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
+                Sector = enteredData.EmployerAccountOrganisationData.Sector,
+                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch
             };
 
             return new OrchestratorResponse<SummaryViewModel>
@@ -199,23 +196,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
 
-        public virtual EmployerAccountData GetCookieData(HttpContextBase context)
+        public virtual EmployerAccountData GetCookieData()
         {
             return CookieService.Get(CookieName);
-
         }
 
-        public virtual void CreateCookieData(HttpContextBase context, EmployerAccountData data)
-        {
-            CookieService.Create(data, CookieName, 365);
-        }
-
-        public void UpdateCookieData(HttpContextBase context, EmployerAccountData data)
-        {
-            CookieService.Update(CookieName, data);
-        }
-        
-        public virtual void DeleteCookieData(HttpContextBase context)
+        public virtual void DeleteCookieData()
         {
             CookieService.Delete(CookieName);
         }

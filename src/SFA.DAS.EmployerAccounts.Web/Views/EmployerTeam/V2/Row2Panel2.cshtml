@@ -1,0 +1,5 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.PanelViewModel<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
+
+<div class="das-panel">
+    @Html.Action(Model.ViewName, new { model = Model.Data })
+</div>

@@ -172,7 +172,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var requiresAgreementSigning = agreementsResponse.EmployerAgreements.Count(a => a.HasPendingAgreement);
+                var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
 
@@ -190,9 +190,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
                     HashedAccountId = accountId,
-                    RequiresAgreementSigning = requiresAgreementSigning,
-                    AgreementsToSign = requiresAgreementSigning > 0,
-                    SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement)
+                    RequiresAgreementSigning = pendingAgreements.Count(),
+                    AgreementsToSign = pendingAgreements.Count() > 0,
+                    SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
+                    PendingAgreements = pendingAgreements
                 };
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
