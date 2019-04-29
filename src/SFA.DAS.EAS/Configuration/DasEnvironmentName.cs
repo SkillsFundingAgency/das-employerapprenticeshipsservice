@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Hosting;
 
-namespace SFA.DAS.EAS.Configuration
+namespace SFA.DAS.EAS.Portal.Configuration
 {
     public static class DasEnvironmentName
     {

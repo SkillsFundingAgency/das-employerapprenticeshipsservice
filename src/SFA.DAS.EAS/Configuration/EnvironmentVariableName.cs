@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EAS.Configuration
+﻿namespace SFA.DAS.EAS.Portal.Configuration
 {
     public static class EnvironmentVariableName
     {

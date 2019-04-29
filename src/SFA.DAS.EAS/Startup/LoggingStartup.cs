@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using NLog.Extensions.Logging;
 
-namespace SFA.DAS.EAS.Startup
+namespace SFA.DAS.EAS.Portal.Startup
 {
     public static class LoggingStartup
     {

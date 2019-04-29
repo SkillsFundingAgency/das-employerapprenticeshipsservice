@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace SFA.DAS.EAS.Startup
+namespace SFA.DAS.EAS.Portal.Startup
 {
     /// <remarks>
     /// Useful link: https://github.com/Azure/azure-webjobs-sdk/wiki/Application-Insights-Integration

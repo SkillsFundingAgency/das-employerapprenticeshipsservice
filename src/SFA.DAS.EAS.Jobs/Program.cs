@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.EAS.Portal.Jobs.Startup;
 using SFA.DAS.EAS.Portal.Jobs.StartupJobs;
-using SFA.DAS.EAS.Startup;
+using SFA.DAS.EAS.Portal.Startup;
 
 namespace SFA.DAS.EAS.Portal.Jobs
 {

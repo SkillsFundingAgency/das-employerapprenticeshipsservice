@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
-using SFA.DAS.EAS.Configuration;
 
-namespace SFA.DAS.EAS.Startup
+namespace SFA.DAS.EAS.Portal.Startup
 {
     public static class ConfigurationStartup
     {

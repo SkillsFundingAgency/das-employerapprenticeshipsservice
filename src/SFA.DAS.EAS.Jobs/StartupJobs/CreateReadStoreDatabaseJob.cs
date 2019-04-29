@@ -8,7 +8,6 @@ namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
     public class CreateReadStoreDatabaseJob
     {
         // singleton attribute requires a real storage account, so webjobs has access to blobs (so emulator doesn't work)
-        //[FunctionName(nameof(CreateReadStoreDatabase))]
         [NoAutomaticTrigger]
         [Singleton]
         public Task CreateReadStoreDatabase(ILogger logger)

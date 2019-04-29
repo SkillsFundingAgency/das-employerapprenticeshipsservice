@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.EAS.Configuration;
+using SFA.DAS.EAS.Portal.Configuration;
 
-namespace SFA.DAS.EAS.Startup
+namespace SFA.DAS.EAS.Portal.Startup
 {
     public static class EnvironmentStartup
     {
