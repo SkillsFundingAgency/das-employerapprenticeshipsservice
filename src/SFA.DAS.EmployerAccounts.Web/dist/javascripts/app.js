@@ -315,40 +315,6 @@ sfa.welcomeWizard = {
     }
 };
 
-sfa.stickyNav = {
-    elems: {
-        $nav: $(".floating-menu"),
-        $navHolder: $("#floating-menu-holder"),
-        $window: $(window),
-        $body: $(document.body)
-    },
-    init: function() {
-        if (!this.elems.$nav.length) return false;
-        this.elems.topOfNav = this.elems.$navHolder.offset().top;
-        this.elems.$window.on("scroll", this.fixedNav(this));
-        this.elems.$window.on("resize", this.pageResized(this));
-    },
-    pageResized: function(self) {
-        return function() {
-            self.elems.topOfNav = self.elems.$navHolder.offset().top;
-        };
-    },
-    fixedNav: function(self) {
-        return function() {
-            var isSticky = self.elems.$body.hasClass("sticky-nav");
-            if (self.elems.$window.scrollTop() >= self.elems.topOfNav) {
-                if (!isSticky) {
-                self.elems.$body
-                    .addClass("sticky-nav")
-                    .css("padding-top", self.elems.$nav.height() + "px");
-                }
-            } else if (isSticky) {
-                self.elems.$body.removeClass("sticky-nav").css("padding-top", 0);
-            }
-        };
-    }
-};
-
 getIndexOf = function (accountId, items) {
     var i = 0;
     var len = items.length;
@@ -376,7 +342,6 @@ window.onunload = function () {
 sfa.forms.init();
 sfa.navigation.init();
 sfa.tabs.init();
-//sfa.stickyNav.init();
 
 $('ul#global-nav-links').collapsableNav();
 
