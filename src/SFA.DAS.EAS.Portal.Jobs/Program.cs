@@ -20,7 +20,6 @@ namespace SFA.DAS.EAS.Portal.Jobs
         //https://github.com/Azure/azure-webjobs-sdk/issues/1975
 
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
-        //todo: not finding helloworld webjob
         static async Task Main(string[] args)
         {
             //await CreateHostBuilder(args).RunConsoleAsync();
@@ -29,16 +28,10 @@ namespace SFA.DAS.EAS.Portal.Jobs
             {
                 await host.StartAsync();
                 //https://github.com/Azure/azure-webjobs-sdk/issues/1940
-                //await host.Services.GetService<IJobHost>().CallAsync(nameof(CreateReadStoreDatabaseJob));
 
                 var jobHost = host.Services.GetService<IJobHost>();
                 await jobHost.CallAsync(nameof(CreateReadStoreDatabaseJob.CreateReadStoreDatabase));
 
-                //await host.Services.GetService<IJobHost>()
-                //    .CallAsync(nameof(CreateReadStoreDatabaseJob.CreateReadStoreDatabase));
-
-                //host.Run();
-                //await host.RunAsync();
                 await host.WaitForShutdownAsync();
             }
         }
