@@ -14,11 +14,10 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness
 
                 await startup.StartAsync();
 
-                var scenario = container.GetInstance<PublishCreateAccountUserEvents>();
-
                 try
                 {
-                    await scenario.Run();
+                    await container.GetInstance<PublishCreateAccountUserEvents>().Run();
+                    await container.GetInstance<PublishCohortCreatedEvents>().Run();
                 }
                 finally
                 {
