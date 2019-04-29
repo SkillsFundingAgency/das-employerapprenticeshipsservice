@@ -8,6 +8,10 @@ namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
     public class CreateReadStoreDatabaseJob
     {
         // singleton attribute requires a real storage account, so webjobs has access to blobs (so emulator doesn't work)
+        // set env variables AzureWebJobsDashboard & AzureWebJobsStorage (for now) to a real storage account
+        // add to readme.md?
+        //todo: use secret manager, rather than env variables (easier to have different settings for different projects)
+        // ^^ see https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
         [NoAutomaticTrigger]
         [Singleton]
         public Task CreateReadStoreDatabase(ILogger logger)
