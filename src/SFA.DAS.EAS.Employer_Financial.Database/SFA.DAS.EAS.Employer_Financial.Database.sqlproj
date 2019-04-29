@@ -72,6 +72,12 @@
     <Folder Include="Scripts\PostDeployment" />
     <Folder Include="Scripts\PreDeployment" />
     <Folder Include="Scripts\Manual" />
+    <Folder Include="Scripts\Manual\GenerateTestData" />
+    <Folder Include="Scripts\Manual\GenerateTestData\DataGenFramework" />
+    <Folder Include="Scripts\Manual\GenerateTestData\AdHoc" />
+    <Folder Include="Scripts\Manual\GenerateTestData\Cleardown" />
+    <Folder Include="Scripts\Manual\GenerateTestData\Cleardown\All" />
+    <Folder Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\EnglishFraction.sql" />
@@ -141,9 +147,6 @@
     <None Include="Scripts\PostDeployment\CreateTopUpPercentages.sql" />
     <None Include="Scripts\Manual\DeletePayments1819-R01.sql" />
     <Build Include="Types\AccountTransferTable.sql" />
-    <None Include="Scripts\Manual\CreateNonTransferPayments.sql" />
-    <None Include="Scripts\Manual\CreateTransferLevy.sql" />
-    <None Include="Scripts\Manual\CreateTransferPayments.sql" />
     <Build Include="Tables\ClientOutboxData.sql" />
     <Build Include="Tables\OutboxData.sql" />
     <Build Include="StoredProcedures\UpdateTransactionLineDateCreatedToTransactionDate_BySubmissionId.sql" />
@@ -160,6 +163,21 @@
     <Build Include="StoredProcedures\GetEffectivePeriod12Declaration.sql" />
     <None Include="Scripts\Manual\GetAccountTransactionTotalsByMonth.sql" />
     <Build Include="StoredProcedures\GetLastKnownProviderNameForUkprn.sql" />
+    <Build Include="StoredProcedures\GetPaymentFundsOut.sql" />
+    <Build Include="StoredProcedures\GetLevyFundsIn.sql" />
+    <Build Include="StoredProcedures\CreateExpiredFunds.sql" />
+    <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
+    <Build Include="StoredProcedures\GetExpiredFunds.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationFramework.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreateLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreatePayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreateTransferPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount\DeleteAccountLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount\DeleteAccountPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount\DeleteAccountTransfers.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllPayments.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -167,6 +185,12 @@
     <None Include="Scripts\Manual\AML-2502-DeleteFullyFundedPayments.sql" />
     <None Include="Scripts\PreDeployment\AML-2505-PopulateNullProviderNames.sql" />
     <None Include="Scripts\PreDeployment\AML-2873_TransferPaymentDate.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\Notes.txt" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreatePayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateTransferPayments.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateLevies.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\ExampleScenario.sql" />
+    <None Include="Scripts\Manual\GenerateTestData\ReadMe.md" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
