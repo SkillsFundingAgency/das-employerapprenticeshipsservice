@@ -1,1 +1,1 @@
-dotnet SFA.DAS.EAS.Jobs
+dotnet SFA.DAS.EAS.Portal.Jobs.dll

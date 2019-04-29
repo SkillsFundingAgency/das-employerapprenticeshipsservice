@@ -19,6 +19,8 @@ namespace SFA.DAS.EAS.Portal.Jobs
         //todo: how to see & trigger individual jobs in v3?
         //https://github.com/Azure/azure-webjobs-sdk/issues/1975
 
+        //todo: test app insights
+
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
         static async Task Main(string[] args)
         {
