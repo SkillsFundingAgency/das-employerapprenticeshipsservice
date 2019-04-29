@@ -10,6 +10,22 @@ namespace SFA.DAS.EAS.Portal.Jobs
 {
     class Program
     {
+        // to run
+        //   local
+        //     set environment variables
+        //       APPSETTING_EnvironmentName                        LOCAL
+        //       APPSETTING_ConfigurationStorageConnectionString   storage account containing config tables (can be emulator)
+        //       AzureWebJobsStorage                               \ real storage account (not emulator)
+        //       AzureWebJobsDashboard                             /
+        //       todo: ^ ConnectionStrings: prefix??
+        //   real published app service
+        //       Application Settings
+        //         EnvironmentName                                LOCAL
+        //         ConfigurationStorageConnectionString           storage account containing config tables
+        //       Connection Strings
+        //         AzureWebJobsStorage                            \ storage account
+        //         AzureWebJobsDashboard                          /
+
         //useful links
         //https://stackoverflow.com/questions/51970969/how-to-use-hostbuilder-for-webjob
         //https://github.com/Azure/azure-webjobs-sdk/wiki/Application-Insights-Integration
@@ -44,7 +60,8 @@ namespace SFA.DAS.EAS.Portal.Jobs
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging() //todo: need to check logging/redis/use of localhost:6379 locally
                 .UseApplicationInsights() // todo: need to add APPINSIGHTS_INSTRUMENTATIONKEY to config somewhere. where does it normally live? we could store it in table storage
-                .UseDasEnvironment();
+                .UseDasEnvironment()
+                .UseConsoleLifetime();
 
         //.UseStructureMap()
         //.ConfigureServices(s => s.AddDasNServiceBus())
