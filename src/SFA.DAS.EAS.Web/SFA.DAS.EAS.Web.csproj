@@ -526,7 +526,6 @@
     <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="Extensions\DynamicExtentions.cs" />
-    <Compile Include="Extensions\OrchestratorExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />

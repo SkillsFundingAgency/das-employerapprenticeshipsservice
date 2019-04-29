@@ -34,6 +34,11 @@ namespace SFA.DAS.EmployerFinance.Mappings
                 .ForMember(d => d.Description, o => o.Ignore())
                 .ForMember(d => d.SubTransactions, o => o.Ignore())
                 .ForMember(d => d.PayrollDate, o => o.Ignore());
+
+            CreateMap<TransactionEntity, ExpiredFundTransactionLine>()
+                .ForMember(d => d.Description, o => o.Ignore())
+                .ForMember(d => d.SubTransactions, o => o.Ignore())
+                .ForMember(d => d.PayrollDate, o => o.Ignore());
         }
     }
 }

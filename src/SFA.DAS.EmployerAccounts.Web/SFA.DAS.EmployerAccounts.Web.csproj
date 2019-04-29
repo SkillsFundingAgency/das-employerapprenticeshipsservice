@@ -126,12 +126,17 @@
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
-    <Compile Include="Extensions\OrchestratorExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
+    <Compile Include="FeatureToggles\CloudConfigFeatureToggle.cs" />
+    <Compile Include="FeatureToggles\CloudConfigToggleValueProvider.cs" />
+    <Compile Include="FeatureToggles\FeatureToggleViewEngine.cs" />
+    <Compile Include="FeatureToggles\Features.cs" />
+    <Compile Include="FeatureToggles\IBooleanToggleValueProvider.cs" />
+    <Compile Include="FeatureToggles\IFeatureToggle.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -164,6 +169,8 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="ViewModels\PanelViewModel.cs" />
+    <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
     <Compile Include="ViewModels\ConfirmNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\GatewayInformViewModel.cs" />
@@ -505,7 +512,9 @@
     <Content Include="src\svg\cross.svg" />
     <Content Include="src\svg\important.svg" />
     <Content Include="src\svg\tick.svg" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -683,6 +692,20 @@
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
     <Content Include="Views\Home\ConfirmWhoYouAre.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout_v2.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\Row1Panel1.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\Row1Panel2.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\Row2Panel2.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\Row2Panel1.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\SignAgreement.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\ProviderPermissions.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\SavedProviders.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\AccountSettings.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\CheckFunding.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\ProviderPermissionsDenied.cshtml" />
+    <Content Include="Views\EmployerAccount\PayeError.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
