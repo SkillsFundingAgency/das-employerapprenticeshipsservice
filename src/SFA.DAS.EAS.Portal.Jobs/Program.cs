@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Portal.Jobs
         // to run
         //   local
         //     set environment variables
-        //       APPSETTING_EnvironmentName                        LOCAL
+        //       APPSETTING_EnvironmentName                        LOCAL (currently set in launchsettings.json)
         //       APPSETTING_ConfigurationStorageConnectionString   storage account containing config tables (can be emulator)
         //       AzureWebJobsStorage                               \ real storage account (not emulator)
         //       AzureWebJobsDashboard                             /

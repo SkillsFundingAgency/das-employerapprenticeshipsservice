@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "SFA.DAS.EAS.Jobs": {
+    "SFA.DAS.EAS.Portal.Jobs": {
       "commandName": "Project",
       "environmentVariables": {
         "APPSETTING_EnvironmentName": "LOCAL",
