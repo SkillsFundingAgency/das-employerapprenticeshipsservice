@@ -14,9 +14,9 @@ namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
         // ^^ see https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
         [NoAutomaticTrigger]
         [Singleton]
-        public Task CreateReadStoreDatabase(ILogger logger)
+        public Task CreateReadStoreDatabase(ExecutionContext executionContext, ILogger logger)
         {
-            logger.LogInformation("Helo Byd");
+            logger.LogInformation($"{executionContext.InvocationId}: Helo Byd");
             return Task.CompletedTask;
         }
     }

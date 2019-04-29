@@ -62,6 +62,7 @@ namespace SFA.DAS.EAS.Portal.Jobs
                 .UseApplicationInsights() // todo: need to add APPINSIGHTS_INSTRUMENTATIONKEY to config somewhere. where does it normally live? we could store it in table storage
                 .UseDasEnvironment()
                 .UseConsoleLifetime();
+                //.ConfigureServices(s => s.AddDasNServiceBus());
 
         //.UseStructureMap()
         //.ConfigureServices(s => s.AddDasNServiceBus())
