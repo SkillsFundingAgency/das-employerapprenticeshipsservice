@@ -1,9 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.Azure.WebJobs;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.EAS.Portal.Jobs.Startup;
+using SFA.DAS.EAS.Portal.Jobs.StartupJobs;
 using SFA.DAS.EAS.Startup;
-using SFA.DAS.EAS.Jobs.Startup;
 
-namespace SFA.DAS.EAS.Jobs
+namespace SFA.DAS.EAS.Portal.Jobs
 {
     class Program
     {
@@ -13,11 +16,31 @@ namespace SFA.DAS.EAS.Jobs
         //https://github.com/Azure/azure-webjobs-sdk/blob/dev/sample/SampleHost/Program.cs
         //https://docs.microsoft.com/en-us/azure/app-service/webjobs-sdk-how-to
 
+        //todo: how to see & trigger individual jobs in v3?
+        //https://github.com/Azure/azure-webjobs-sdk/issues/1975
+
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
         //todo: not finding helloworld webjob
         static async Task Main(string[] args)
         {
-            await CreateHostBuilder(args).RunConsoleAsync();
+            //await CreateHostBuilder(args).RunConsoleAsync();
+
+            using (var host = CreateHostBuilder(args).Build())
+            {
+                await host.StartAsync();
+                //https://github.com/Azure/azure-webjobs-sdk/issues/1940
+                //await host.Services.GetService<IJobHost>().CallAsync(nameof(CreateReadStoreDatabaseJob));
+
+                var jobHost = host.Services.GetService<IJobHost>();
+                await jobHost.CallAsync(nameof(CreateReadStoreDatabaseJob.CreateReadStoreDatabase));
+
+                //await host.Services.GetService<IJobHost>()
+                //    .CallAsync(nameof(CreateReadStoreDatabaseJob.CreateReadStoreDatabase));
+
+                //host.Run();
+                //await host.RunAsync();
+                await host.WaitForShutdownAsync();
+            }
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>

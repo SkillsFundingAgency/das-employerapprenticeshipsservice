@@ -1,9 +1,8 @@
-﻿using Microsoft.Azure.WebJobs.Host.Config;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.EAS.Jobs.StartupJobs;
+using SFA.DAS.EAS.Portal.Jobs.StartupJobs;
 
-namespace SFA.DAS.EAS.Jobs.Startup
+namespace SFA.DAS.EAS.Portal.Jobs.Startup
 {
     public static class WebJobStartup
     {
