@@ -28,7 +28,8 @@ namespace SFA.DAS.EAS.Portal.Jobs.TestHarness
                 .ConfigureDasLogging()
                 .UseDasEnvironment()
                 //.UseStructureMap()
-                .ConfigureServices(s => s.AddDasNServiceBus());
+                .ConfigureServices(s => s.AddDasNServiceBus())
+                .ConfigureServices(s => s.AddTransient<PublishReserveFundingAddedEvent, PublishReserveFundingAddedEvent>());
         //todo: DI
 
         //.ConfigureContainer<Registry>(IoC.Initialize);
