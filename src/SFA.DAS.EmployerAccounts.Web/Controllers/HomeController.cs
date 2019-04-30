@@ -2,7 +2,6 @@
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -20,6 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerAccountsConfiguration _configuration;
+        private readonly IAuthorizationService _authorizationService;
 
         public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
             EmployerAccountsConfiguration configuration, IAuthorizationService authorization,
@@ -28,6 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;
+            _authorizationService = authorization;
         }
 
         [Route("~/")]
@@ -112,7 +113,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction(ControllerConstants.WhatYoullNeedActionName); //No I have not used the service before
+                case 1: return RedirectToAction(_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney) ? 
+                    ControllerConstants.ConfirmWhoYouAre : 
+                    ControllerConstants.WhatYoullNeedActionName); // No not used before
                 case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
                 default:
 
@@ -144,8 +147,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction(ControllerConstants.ConfirmWhoYouAre); 
-                case 2: return RedirectToAction(ControllerConstants.ConfirmWhoYouAre); 
+                case 1: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {Option = "later"});
+                case 2: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {option = "now"});
                 default:
 
                     var model = new
@@ -191,21 +194,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("register")]
-        public ActionResult RegisterUser()
+        public ActionResult RegisterUser(string option = "new")
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
+            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/{option}");
         }
 
         [Authorize]
         [HttpGet]
-        [Route("register/new")]
-        public async Task<ActionResult> HandleNewRegistration()
+        [Route("register/{option}")]
+        public async Task<ActionResult> HandleNewRegistration(string option = null)
         {
             await OwinWrapper.UpdateClaims();
-            return RedirectToAction(ControllerConstants.IndexActionName);
+
+            switch (option)
+            {
+                case "later": return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName);
+                default: return RedirectToAction(ControllerConstants.IndexActionName);
+            }
         }
 
         [Authorize]
