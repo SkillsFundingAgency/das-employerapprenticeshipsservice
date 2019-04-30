@@ -61,8 +61,8 @@ namespace SFA.DAS.EAS.Portal.Jobs
                 .ConfigureDasLogging() //todo: need to check logging/redis/use of localhost:6379 locally
                 .UseApplicationInsights() // todo: need to add APPINSIGHTS_INSTRUMENTATIONKEY to config somewhere. where does it normally live? we could store it in table storage
                 .UseDasEnvironment()
-                .UseConsoleLifetime();
-                //.ConfigureServices(s => s.AddDasNServiceBus());
+                .UseConsoleLifetime()
+                .ConfigureServices(s => s.AddDasNServiceBus());
 
         //.UseStructureMap()
         //.ConfigureServices(s => s.AddDasNServiceBus())

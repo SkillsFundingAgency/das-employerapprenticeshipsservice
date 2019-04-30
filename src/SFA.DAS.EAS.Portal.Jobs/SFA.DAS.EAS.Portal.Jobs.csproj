@@ -15,7 +15,10 @@
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.6" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.2" />
     <PackageReference Include="NLog.Schema" Version="4.6.2" />
+    <PackageReference Include="NServiceBus" Version="7.1.7" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="10.0.1" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="5.0.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj" />
