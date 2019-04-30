@@ -1,12 +1,36 @@
-﻿using System;
+﻿using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using SFA.DAS.EAS.Portal.Jobs.TestHarness.Scenarios;
+using SFA.DAS.EAS.Portal.Jobs.TestHarness.Startup;
+using SFA.DAS.EAS.Portal.Startup;
 
 namespace SFA.DAS.EAS.Portal.Jobs.TestHarness
 {
-    class Program
+    public static class Program
     {
-        static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            using (var host = CreateHostBuilder(args).Build())
+            {
+                await host.StartAsync();
+
+                var publishAddedPayeSchemeEvent = host.Services.GetService<PublishEmployerAccountsEvents>();
+                await publishAddedPayeSchemeEvent.Run();
+
+                await host.WaitForShutdownAsync();
+            }
         }
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            new HostBuilder()
+                .ConfigureDasAppConfiguration(args)
+                .ConfigureDasLogging()
+                .UseDasEnvironment()
+                //.UseStructureMap()
+                .ConfigureServices(s => s.AddDasNServiceBus());
+        //todo: DI
+
+        //.ConfigureContainer<Registry>(IoC.Initialize);
     }
 }
