@@ -9,15 +9,6 @@ using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 
-//using SFA.DAS.EmployerFinance.Configuration;
-//using SFA.DAS.EmployerFinance.Extensions;
-//using SFA.DAS.EmployerFinance.Startup;
-//using SFA.DAS.NServiceBus;
-//using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-//using SFA.DAS.NServiceBus.NLog;
-//using SFA.DAS.NServiceBus.StructureMap;
-//using StructureMap;
-
 namespace SFA.DAS.EAS.Portal.Jobs.TestHarness.Startup
 {
     public static class NServiceBusStartup
@@ -28,7 +19,6 @@ namespace SFA.DAS.EAS.Portal.Jobs.TestHarness.Startup
                 .AddSingleton(s =>
                 {
                     var configuration = s.GetService<IConfiguration>();
-                    //var container = s.GetService<IContainer>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
                     var portalConfiguration = configuration.GetPortalSection<PortalConfiguration>();
                     var isDevelopment = hostingEnvironment.IsDevelopment();
@@ -40,7 +30,6 @@ namespace SFA.DAS.EAS.Portal.Jobs.TestHarness.Startup
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
-                        //.UseStructureMapBuilder(container)
                         .UseSendOnly();
 
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();

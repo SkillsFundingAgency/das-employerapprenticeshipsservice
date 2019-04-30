@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Portal.Startup;
 
 namespace SFA.DAS.EAS.Portal.Jobs.TestHarness
 {
+    //todo: logging
     public static class Program
     {
         public static async Task Main(string[] args)
@@ -27,11 +28,7 @@ namespace SFA.DAS.EAS.Portal.Jobs.TestHarness
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
                 .UseDasEnvironment()
-                //.UseStructureMap()
                 .ConfigureServices(s => s.AddDasNServiceBus())
                 .ConfigureServices(s => s.AddTransient<PublishReserveFundingAddedEvent, PublishReserveFundingAddedEvent>());
-        //todo: DI
-
-        //.ConfigureContainer<Registry>(IoC.Initialize);
     }
 }
