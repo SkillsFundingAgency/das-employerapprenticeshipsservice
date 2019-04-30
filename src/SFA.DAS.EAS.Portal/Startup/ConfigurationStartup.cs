@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.EAS.Portal.Configuration;
 
 namespace SFA.DAS.EAS.Portal.Startup
 {
@@ -12,8 +13,7 @@ namespace SFA.DAS.EAS.Portal.Startup
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                //todo: we give it a valid config, until we have our new one
-                .AddAzureTableStorage("SFA.DAS.EmployerApprenticeshipsService") // ConfigurationKeys.EmployerApprenticeshipsServiceHomepage)
+                .AddAzureTableStorage(ConfigurationKeys.EmployerApprenticeshipsServicePortal)
                 .AddCommandLine(args));
         }
     }

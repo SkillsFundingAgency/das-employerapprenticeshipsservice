@@ -37,6 +37,8 @@ namespace SFA.DAS.EAS.Portal.Jobs
 
         //todo: test app insights
 
+        //todo: rename if can combine jobs/message handler
+
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
         static async Task Main(string[] args)
         {
@@ -64,8 +66,11 @@ namespace SFA.DAS.EAS.Portal.Jobs
                 .UseConsoleLifetime()
                 .ConfigureServices(s => s.AddDasNServiceBus());
 
+        //todo: need to add unit of work, config etc into container
+        // does e.g. uow support non-structuremap container?
+        // do we even need uow?? if we're only writing to a document collection, no sending further messages, etc.
+
         //.UseStructureMap()
-        //.ConfigureServices(s => s.AddDasNServiceBus())
         //.ConfigureContainer<Registry>(IoC.Initialize);
     }
 }

@@ -26,7 +26,8 @@ namespace SFA.DAS.EAS.Portal.Jobs.Startup
                     var isDevelopment = hostingEnvironment.IsDevelopment();
 
                     var endpointConfiguration = new EndpointConfiguration(EndpointName.EasPortalJobs)
-                        .UseAzureServiceBusTransport(isDevelopment, () => portalConfiguration.ServiceBusConnectionString, r => { })
+                        .UseAzureServiceBusTransport(isDevelopment,
+                            () => portalConfiguration.ServiceBusConnectionString, r => { })
                         .UseInstallers()
                         .UseLicense(portalConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
@@ -34,9 +35,9 @@ namespace SFA.DAS.EAS.Portal.Jobs.Startup
                         .UseNLogFactory()
                         //.UseOutbox()
                         //.UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                        .UseInstallers()
+                        .UseInstallers();
                         //.UseStructureMapBuilder(container)
-                        .UseUnitOfWork();
+                        //.UseUnitOfWork();
 
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
