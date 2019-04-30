@@ -40,6 +40,17 @@ namespace SFA.DAS.EAS.Portal.Jobs
         //todo: rename if can combine jobs/message handler
 
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
+
+        //todo: devops
+        // ServiceBusConnectionString -> reuse existing?
+        // config pr
+        // new app service for SFA.DAS.EAS.Portal.Jobs (or whatever it ends up being called)
+        // ^^ ConnectionStrings: AzureWebJobsDashboard, AzureWebJobsStorage
+        // ^^ ApplicationSettings: ConfigurationStorageConnectionString, EnvironmentName
+        // ^^ LoggingRedisConnectionString (check) LoggingRedisKey (check), StorageConnectionString (needed?)
+        // ^^ APPINSIGHTS_INSTRUMENTATIONKEY?
+        // CosmosDb
+
         static async Task Main(string[] args)
         {
             //await CreateHostBuilder(args).RunConsoleAsync();
