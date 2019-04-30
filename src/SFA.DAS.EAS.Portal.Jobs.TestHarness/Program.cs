@@ -15,8 +15,8 @@ namespace SFA.DAS.EAS.Portal.Jobs.TestHarness
             {
                 await host.StartAsync();
 
-                var publishAddedPayeSchemeEvent = host.Services.GetService<PublishEmployerAccountsEvents>();
-                await publishAddedPayeSchemeEvent.Run();
+                var publishReserveFundingAddedEvent = host.Services.GetService<PublishReserveFundingAddedEvent>();
+                await publishReserveFundingAddedEvent.Run();
 
                 await host.WaitForShutdownAsync();
             }

@@ -5,11 +5,11 @@ using SFA.DAS.EAS.Portal.TempEvents;
 
 namespace SFA.DAS.EAS.Portal.Jobs.TestHarness.Scenarios
 {
-    public class PublishEmployerAccountsEvents
+    public class PublishReserveFundingAddedEvent
     {
         private readonly IMessageSession _messageSession;
 
-        public PublishEmployerAccountsEvents(IMessageSession messageSession)
+        public PublishReserveFundingAddedEvent(IMessageSession messageSession)
         {
             _messageSession = messageSession;
         }
