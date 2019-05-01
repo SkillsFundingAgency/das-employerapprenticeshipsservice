@@ -8,6 +8,7 @@ namespace SFA.DAS.EAS.Portal.Jobs.EventHandlers.Reservations
     //todo: rename when know real event name
     class ReserveFundingAddedEventHandler : IHandleMessages<ReserveFundingAddedEvent>
     {
+        //todo: interface?
         private readonly AddReserveFundingCommand _addReserveFundingCommand;
 
         public ReserveFundingAddedEventHandler(AddReserveFundingCommand addReserveFundingCommand)

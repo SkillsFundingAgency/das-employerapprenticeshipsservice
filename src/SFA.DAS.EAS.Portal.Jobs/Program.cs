@@ -2,6 +2,7 @@
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.EAS.Portal.DependencyResolution;
 using SFA.DAS.EAS.Portal.Jobs.Startup;
 using SFA.DAS.EAS.Portal.Jobs.StartupJobs;
 using SFA.DAS.EAS.Portal.Startup;
@@ -51,10 +52,17 @@ namespace SFA.DAS.EAS.Portal.Jobs
         // ^^ APPINSIGHTS_INSTRUMENTATIONKEY?
         // CosmosDb
 
+        //todo: looks like UseMessageConventions is a bit too inclusive... (consequences?)
+        //2019-05-01 08:34:18.9288 [DEBUG] [NServiceBus.SerializationFeature] - Message definitions:
+        //SFA.DAS.EAS.Portal.Application.Commands.AddReserveFundingCommand
+        //SFA.DAS.NServiceBus.ClientOutbox.Commands.ProcessClientOutboxMessageCommand
+        //NServiceBus.ScheduledTask
+        //SFA.DAS.NServiceBus.Event
+        //SFA.DAS.NServiceBus.Command
+        //SFA.DAS.EAS.Portal.TempEvents.ReserveFundingAddedEvent
+
         static async Task Main(string[] args)
         {
-            //await CreateHostBuilder(args).RunConsoleAsync();
-
             using (var host = CreateHostBuilder(args).Build())
             {
                 await host.StartAsync();
@@ -67,21 +75,27 @@ namespace SFA.DAS.EAS.Portal.Jobs
             }
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            new HostBuilder()
+        private static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            var hostBuilder = new HostBuilder()
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging() //todo: need to check logging/redis/use of localhost:6379 locally
                 .UseApplicationInsights() // todo: need to add APPINSIGHTS_INSTRUMENTATIONKEY to config somewhere. where does it normally live? we could store it in table storage
                 .UseDasEnvironment()
                 .UseConsoleLifetime()
-                .ConfigureServices(s => s.AddDasNServiceBus());
+                .ConfigureServices(s => s.AddApplicationServices());
 
-        //todo: need to add unit of work, config etc into container
-        // does e.g. uow support non-structuremap container?
-        // do we even need uow?? if we're only writing to a document collection, no sending further messages, etc.
+            //todo: need to add unit of work, config etc into container
+            // does e.g. uow support non-structuremap container?
+            // do we even need uow?? if we're only writing to a document collection, no sending further messages, etc.
 
-        //.UseStructureMap()
-        //.ConfigureContainer<Registry>(IoC.Initialize);
+            //.UseStructureMap()
+            //.ConfigureContainer<Registry>(IoC.Initialize);
+
+            //todo: try putting this back into 1
+            hostBuilder.ConfigureServices(s => s.AddDasNServiceBus());
+            return hostBuilder;
+        }
     }
 }
