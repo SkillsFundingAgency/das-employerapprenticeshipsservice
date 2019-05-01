@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+        private static EmulatedFundingViewModel _emulatedFundingViewModel;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -49,9 +50,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.FlashMessage = flashMessage;
                 response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
             }
-
+            response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
             return View(response);
         }
+
         [HttpGet]
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
@@ -291,6 +293,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
+            else if (model.EmulatedFundingViewModel != null)
+            {
+                viewModel.ViewName = "FundingComplete";
+            }
 
             return PartialView(viewModel);
         }       
@@ -349,6 +355,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [HttpGet]
+        [Route("EmulatedReserveFunding")]
+        public ActionResult EmulatedReserveFunding()
+        {
+            return View();
+        }
+        public ActionResult ReturnFromEmulateFundingJourney(EmulatedFundingViewModel model)
+        {
+            _emulatedFundingViewModel = model;
+            return RedirectToAction("Index", "EmployerTeam", new { model.HashedAccountId });
+        }
+        [ChildActionOnly]
+        public ActionResult FundingComplete(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

@@ -1,0 +1,51 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.HashedAccountId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.CourseCode)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.ApprenticeName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.CourseName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.StartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.ReservationId)
+        </th>
+    </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(model => model.EmulatedFundingViewModel.HashedAccountId)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.EmulatedFundingViewModel.CourseCode)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.EmulatedFundingViewModel.ApprenticeName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.EmulatedFundingViewModel.CourseName)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.EmulatedFundingViewModel.StartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.EmulatedFundingViewModel.EndDate)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.EmulatedFundingViewModel.ReservationId)
+        </td>
+    </tr>
+
+</table>
+<p><a href="@Url.Action("Index","EmulatedFundingJourney",new { HashedAccountId = Model.HashedAccountId })" class="das-panel__link">Check and secure funding now</a> </p>
