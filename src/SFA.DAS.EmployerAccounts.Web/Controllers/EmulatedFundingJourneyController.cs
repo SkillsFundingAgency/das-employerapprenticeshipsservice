@@ -4,6 +4,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NServiceBus;
 using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -44,16 +45,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public ActionResult SendEvent(EmulatedFundingViewModel model)
         {
-            _eventPublisher.Publish(new ReserveFundingCreatedEvent
+            if (model.PublishEvent)
             {
-                HashedAccountId = model.HashedAccountId,
-                CourseCode = model.CourseCode,
-                ApprenticeName = model.ApprenticeName,
-                CourseName = model.CourseName,
-                StartDate = model.StartDate,
-                EndDate = model.EndDate,
-                ReservationId = model.ReservationId
-            });
+                _eventPublisher.Publish(new ReserveFundingCreatedEvent
+                {
+                    HashedAccountId = model.HashedAccountId,
+                    CourseCode = model.CourseCode,
+                    ApprenticeName = model.ApprenticeName,
+                    CourseName = model.CourseName,
+                    StartDate = model.StartDate,
+                    EndDate = model.EndDate,
+                    ReservationId = model.ReservationId
+                });
+            }
             return _employerTeamController.ReturnFromEmulateFundingJourney(model);
         }
     }

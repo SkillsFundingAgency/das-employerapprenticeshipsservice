@@ -14,6 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string StartDate { get; set; }
         public string EndDate { get; set; }
         public long ReservationId { get; set; }
-        public bool Delay { get; set; }
+        public bool PublishEvent { get; set; }
     }
 }

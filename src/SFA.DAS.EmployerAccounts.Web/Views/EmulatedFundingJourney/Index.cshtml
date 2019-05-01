@@ -21,7 +21,9 @@
         <span class="form-label-bold">End Date</span>
         <input class="form-control form-control-3-4" id="EndDate" name="EndDate" type="text" aria-required="true" value="@Model.EndDate" />
         <span class="form-label-bold">Reservation ID</span>
-        <input class="form-control form-control-3-4" id="ReservationId" name="ReservationId" type="number" aria-required="true" value="@Model.ReservationId" />
+        <input class="form-control form-control-3-4" id="ReservationId" name="ReservationId" type="number" aria-required="true" value="@Model.ReservationId" placeholder=""/>
+        <span class="form-label-bold">Delay Event Publication</span>
+        <input class="form-control form-control-3-4" id="PublishEvent" name="PublishEvent" type="text" aria-required="true" value="@Model.PublishEvent" placeholder="True or False"/>
 
     </div>
     <button type="submit" class="button" id="sendForm">Send Form</button>
