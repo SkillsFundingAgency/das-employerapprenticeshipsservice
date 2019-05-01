@@ -21,8 +21,8 @@ namespace SFA.DAS.EAS.Portal.Jobs.Startup
                 .AddSingleton(s =>
                 {
                     var configuration = s.GetService<IConfiguration>();
-                    //var container = s.GetService<IContainer>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
+                    //todo: put service bus config into its own section
                     var portalConfiguration = configuration.GetPortalSection<PortalConfiguration>();
                     var isDevelopment = hostingEnvironment.IsDevelopment();
 

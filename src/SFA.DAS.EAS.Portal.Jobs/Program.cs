@@ -84,7 +84,13 @@ namespace SFA.DAS.EAS.Portal.Jobs
                 .UseApplicationInsights() // todo: need to add APPINSIGHTS_INSTRUMENTATIONKEY to config somewhere. where does it normally live? we could store it in table storage
                 .UseDasEnvironment()
                 .UseConsoleLifetime()
-                .ConfigureServices(s => s.AddApplicationServices());
+                //todo: one call to add all services
+                //or package up by functionality, e.g. adddatabase to add services and config??
+                //^^ prob by functionality
+                .ConfigureServices(s => s.AddApplicationServices())
+                .ConfigureServices(s => s.AddCosmosDatabase());
+                //.ConfigureServices(s => s.AddDatabaseServices())
+                //.ConfigureServices(s => s.Configure<CosmosDatabaseConfiguration>(s.GetService<IConfiguration>().GetPortalSection<PortalConfiguration>("CosmosDatabase"));
 
             //todo: need to add unit of work, config etc into container
             // does e.g. uow support non-structuremap container?
