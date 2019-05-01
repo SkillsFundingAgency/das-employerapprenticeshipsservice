@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     HashedAccountId = model.HashedAccountId,
                     CourseCode = model.CourseCode,
-                    ApprenticeName = model.ApprenticeName,
+                    LegalEntityId = model.LegalEntityId,
                     CourseName = model.CourseName,
                     StartDate = model.StartDate,
                     EndDate = model.EndDate,

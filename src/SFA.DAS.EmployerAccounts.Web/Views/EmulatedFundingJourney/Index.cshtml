@@ -10,8 +10,8 @@
 <form method="post" action="@Url.Action("SendEvent","EmulatedFundingJourney")">
     @Html.AntiForgeryToken()
     <div class="form-group">
-        <span class="form-label-bold">Apprentice Name</span>
-        <input class="form-control form-control-3-4" id="ApprenticeName" name="ApprenticeName" type="text" aria-required="true" value="@Model.ApprenticeName" />@Html.HiddenFor(x => x.HashedAccountId)
+        <span class="form-label-bold">Legal Entity ID</span>
+        <input class="form-control form-control-3-4" id="LegalEntityId" name="LegalEntityId" type="text" aria-required="true" value="@Model.LegalEntityId" />@Html.HiddenFor(x => x.HashedAccountId)
         <span class="form-label-bold">Course Name</span>
         <input class="form-control form-control-3-4" id="CourseName" name="CourseName" type="text" aria-required="true" value="@Model.CourseName" />
         <span class="form-label-bold">Course Code</span>

@@ -11,5 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Web.FeatureToggles
         {
             public HomePageFeature() : base(BooleanToggleValueProvider) { }
         }
+
+        public static IFeatureToggle EmulatedFundingJourney => new EmulatedFundingJourneyFeature();
+
+        private class EmulatedFundingJourneyFeature : CloudConfigFeatureToggle
+        {
+            public EmulatedFundingJourneyFeature() : base(BooleanToggleValueProvider) { }
+        }
     }
 }
