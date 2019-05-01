@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Portal.Database;
 
 namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
 {
-    // there's a separate task/pr for this, but we need a 'hello world' job to test the host
     public class CreateReadStoreDatabaseJob
     {
         private readonly IDocumentClient _documentClient;
@@ -21,6 +20,7 @@ namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
         // singleton attribute requires a real storage account, so webjobs has access to blobs (so emulator doesn't work)
         // set env variables AzureWebJobsDashboard & AzureWebJobsStorage (for now) to a real storage account
         // add to readme.md?
+        // emulator support blobs, but this still doesn't work.why?
         //todo: use secret manager, rather than env variables (easier to have different settings for different projects)
         // ^^ see https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
         //todo: inject ilogger in ctor?
