@@ -5,17 +5,6 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
-/* Legal Entity Array
-	AccountLegalEntityId (and/or LegalEntityId), Name
-	Funding Reservation Array
-		Reservation ID
-		Course Name (optional)
-		Start Date
-		End Date
-		Deleted? (don't worry too much for mvp?)
- */
-    
-    
     public class Account : Document //todo:, IAccountDto
     {
         //todo: doc id / accountid
