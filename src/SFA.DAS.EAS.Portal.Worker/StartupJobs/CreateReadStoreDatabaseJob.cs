@@ -24,6 +24,7 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
         //todo: use secret manager, rather than env variables (easier to have different settings for different projects)
         // ^^ see https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
         //todo: inject ilogger in ctor?
+        //todo: indexing strategy
         [NoAutomaticTrigger]
         [Singleton]
         public async Task CreateReadStoreDatabase(ExecutionContext executionContext, ILogger logger)

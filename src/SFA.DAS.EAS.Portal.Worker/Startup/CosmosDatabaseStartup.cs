@@ -16,10 +16,7 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
             return services
                 .AddTransient<IDocumentClientFactory, DocumentClientFactory>()
                 .AddTransient(sp => sp.GetService<IDocumentClientFactory>().CreateDocumentClient())
-                .Configure<CosmosDatabaseConfiguration>(configuration.GetSection($"{ConfigurationKeys.EmployerApprenticeshipsServicePortal}:CosmosDatabase"));
-
-            //todo: non generic GetPortalSection to return section
-            // & generic GetPortalSection to return strongly typed object
+                .Configure<CosmosDatabaseConfiguration>(configuration.GetPortalSection("CosmosDatabase"));
         }
     }
 }
