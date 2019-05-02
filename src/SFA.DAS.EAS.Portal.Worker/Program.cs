@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Portal.Worker
         //       todo: ^ ConnectionStrings: prefix??
         //   real published app service
         //       Application Settings
-        //         EnvironmentName                                LOCAL
+        //         EnvironmentName                                DEVAZURE, AT etc.
         //         ConfigurationStorageConnectionString           storage account containing config tables
         //       Connection Strings
         //         AzureWebJobsStorage                            \ storage account
@@ -89,15 +89,10 @@ namespace SFA.DAS.EAS.Portal.Worker
                 //^^ prob by functionality
                 .ConfigureServices(s => s.AddApplicationServices())
                 .ConfigureServices(s => s.AddCosmosDatabase());
-                //.ConfigureServices(s => s.AddDatabaseServices())
-                //.ConfigureServices(s => s.Configure<CosmosDatabaseConfiguration>(s.GetService<IConfiguration>().GetPortalSection<PortalConfiguration>("CosmosDatabase"));
 
-            //todo: need to add unit of work, config etc into container
+            //todo: need to add unit of work into container?
             // does e.g. uow support non-structuremap container?
             // do we even need uow?? if we're only writing to a document collection, no sending further messages, etc.
-
-            //.UseStructureMap()
-            //.ConfigureContainer<Registry>(IoC.Initialize);
 
             //todo: try putting this back into 1
             hostBuilder.ConfigureServices(s => s.AddDasNServiceBus());

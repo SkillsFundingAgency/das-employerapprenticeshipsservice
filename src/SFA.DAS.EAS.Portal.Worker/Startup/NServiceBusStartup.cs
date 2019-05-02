@@ -22,15 +22,15 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                 {
                     var configuration = s.GetService<IConfiguration>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
-                    //todo: put service bus config into its own section
-                    var portalConfiguration = configuration.GetPortalSection<PortalConfiguration>();
+                    //todo: put section names in class somewhere
+                    var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>("ServiceBus");
                     var isDevelopment = hostingEnvironment.IsDevelopment();
 
                     var endpointConfiguration = new EndpointConfiguration(EndpointName.EasPortalWorker)
                         .UseAzureServiceBusTransport(isDevelopment,
-                            () => portalConfiguration.ServiceBusConnectionString, r => { })
+                            () => serviceBusConfiguration.ConnectionString, r => { })
                         .UseInstallers()
-                        .UseLicense(portalConfiguration.NServiceBusLicense)
+                        .UseLicense(serviceBusConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
