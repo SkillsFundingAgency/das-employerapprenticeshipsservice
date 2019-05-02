@@ -6,6 +6,7 @@ namespace SFA.DAS.EAS.Portal.Configuration
 {
     public static class DasEnvironmentName
     {
+        public static readonly string DevelopmentAzure = nameof(DevelopmentAzure);
         public static readonly string AcceptanceTest = nameof(AcceptanceTest);
         public static readonly string Test = nameof(Test);
         public static readonly string Test2 = nameof(Test2);
@@ -16,6 +17,7 @@ namespace SFA.DAS.EAS.Portal.Configuration
         public static readonly Dictionary<string, string> Map = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
         {
             { "LOCAL", EnvironmentName.Development },
+            { "DEVAZURE", DevelopmentAzure },
             { "AT", AcceptanceTest },
             { "TEST", Test },
             { "TEST2", Test2 },
