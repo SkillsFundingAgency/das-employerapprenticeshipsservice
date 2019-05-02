@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Startup
                     var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>("ServiceBus");
                     var isDevelopment = hostingEnvironment.IsDevelopment();
 
-                    var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerApprenticeshipService.Portal.Worker.TestHarness")
+                    var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Portal.Worker.TestHarness")
                         .UseAzureServiceBusTransport(isDevelopment,  () => serviceBusConfiguration.ConnectionString, r => { })
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
