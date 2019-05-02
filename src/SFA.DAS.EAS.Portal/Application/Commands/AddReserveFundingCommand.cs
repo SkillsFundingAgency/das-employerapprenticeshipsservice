@@ -42,6 +42,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 //first time we've had *any* event relating to this account
                 account = new Account(accountId, eventCreated, messageId);
 
+                //todo: create with reserve funding ctor, or new then add??
+                //account.AddReserveFunding(gubbins, eventCreated, messageId);
+
                 //todo: rest of gubbins
                 await _accountsRepository.Add(account); //, null, cancellationToken);
             }

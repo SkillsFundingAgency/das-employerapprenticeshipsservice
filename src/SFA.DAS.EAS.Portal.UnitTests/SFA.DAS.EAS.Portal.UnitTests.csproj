@@ -13,4 +13,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Portal" />
+    <Folder Include="Worker" />
+  </ItemGroup>
+
 </Project>
