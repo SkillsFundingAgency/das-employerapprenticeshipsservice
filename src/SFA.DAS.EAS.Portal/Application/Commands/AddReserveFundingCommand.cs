@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.CosmosDb;
+using SFA.DAS.EAS.Portal.Database;
+using SFA.DAS.EAS.Portal.Database.Models;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands
 {
     public class AddReserveFundingCommand
     {
+        private readonly IAccountsRepository _accountsRepository;
         //todo: reinstate logging
         //private readonly ILogger _logger;
 
@@ -14,15 +19,42 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
         //    _logger = logger;
         //}
 
-        public AddReserveFundingCommand()
+        //todo: add service
+        public AddReserveFundingCommand(IAccountsRepository accountsRepository)
         {
+            _accountsRepository = accountsRepository;
         }
 
         //todo: accept event directly?
-        public Task Execute(long accountId, long accountLegalEntityId, string legalEntityName, long courseId, string courseName, DateTime startDate, DateTime endDate, DateTime eventCreated)
+        public async Task Execute(long accountId, long accountLegalEntityId, string legalEntityName, 
+            long courseId, string courseName, DateTime startDate, DateTime endDate, DateTime eventCreated, string messageId)
         {
+            //todo: , CancellationToken cancellationToken?
             //_logger.LogInformation("Executing AddReserveFundingCommand");
-            return Task.CompletedTask;
+
+            // can we have accountid as key, rather than guid??
+            var account = await _accountsRepository
+                .CreateQuery()
+                .SingleOrDefaultAsync(a =>  a.AccountId == accountId); //,  cancellationToken);
+
+            if (account == null)
+            {
+                //first time we've had *any* event relating to this account
+                account = new Account(accountId, eventCreated, messageId);
+
+                //todo: rest of gubbins
+                await _accountsRepository.Add(account); //, null, cancellationToken);
+            }
+            else
+            {
+                // account may have been created from non reserved funding event, and there are no reserved funds
+                // or this is a new reserved funding, but existing reserved fundings exist
+                // or account already contains this reserve funding event (method needs to be idempotent)
+                //todo:
+                //account.AddReserveFunding(gubbins, eventCreated, messageId);
+
+                await _accountsRepository.Update(account, null, default(CancellationToken)); // //cancellationToken);
+            }
         }
     }
 }
