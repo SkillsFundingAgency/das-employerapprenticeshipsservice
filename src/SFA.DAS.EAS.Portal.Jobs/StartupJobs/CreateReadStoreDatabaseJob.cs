@@ -30,11 +30,29 @@ namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
         {
             //logger.LogInformation($"{executionContext.InvocationId}: Helo Byd");
 
+            var database = await CreateDatabaseIfNotExists(executionContext, logger);
+
+            await CreateAccountDocumentCollectionIfNotExists(database, executionContext, logger);
+        }
+
+        private async Task<Microsoft.Azure.Documents.Database> CreateDatabaseIfNotExists(ExecutionContext executionContext, ILogger logger)
+        {
             var database = new Microsoft.Azure.Documents.Database
             {
                 Id = DocumentSettings.DatabaseName
             };
 
+            var createDatabaseResponse = await _documentClient.CreateDatabaseIfNotExistsAsync(database);
+            logger.LogInformation($"{executionContext.InvocationId}: Create database returned {createDatabaseResponse.StatusCode}");
+
+            return database;
+        }
+
+        //todo: namespace
+        private async Task CreateAccountDocumentCollectionIfNotExists(
+            Microsoft.Azure.Documents.Database database,
+            ExecutionContext executionContext, ILogger logger)
+        {
             var documentCollection = new DocumentCollection
             {
                 Id = DocumentSettings.AccountsCollectionName,
@@ -57,16 +75,12 @@ namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
                 }
             };
 
-            logger.LogInformation($"{executionContext.InvocationId}: Creating database and collection if they don't exist");
-
-            var createDatabaseResponse = await _documentClient.CreateDatabaseIfNotExistsAsync(database);
-            logger.LogInformation($"{executionContext.InvocationId}: Create database returned {createDatabaseResponse.StatusCode}");
-
             var createDocumentCollectionResponse = await _documentClient.CreateDocumentCollectionIfNotExistsAsync(
                 UriFactory.CreateDatabaseUri(database.Id),
                 documentCollection,
-                new RequestOptions { OfferThroughput = 1000 });
-            logger.LogInformation($"{executionContext.InvocationId}: Create document collection returned {createDocumentCollectionResponse.StatusCode}");
+                new RequestOptions {OfferThroughput = 1000});
+            logger.LogInformation(
+                $"{executionContext.InvocationId}: Create document collection returned {createDocumentCollectionResponse.StatusCode}");
         }
     }
 }
