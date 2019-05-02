@@ -38,14 +38,13 @@ namespace SFA.DAS.EAS.Portal.Worker
 
         //todo: test app insights
 
-        //todo: rename if can combine jobs/message handler
-
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
 
         //todo: devops
-        // ServiceBusConnectionString -> reuse existing?
-        // config pr
-        // new app service for SFA.DAS.EAS.Portal.Worker (or whatever it ends up being called)
+        // config: 4 variables : branch: CON-378-EAS-Portal. pr: https://github.com/SkillsFundingAgency/das-employer-config/pull/264
+        // ^^ ServiceBusConnectionString -> reuse existing?
+        // EAS branch: CON-451-create-webjob-host
+        // new app service for SFA.DAS.EAS.Portal.Worker (core)
         // ^^ ConnectionStrings: AzureWebJobsDashboard, AzureWebJobsStorage
         // ^^ ApplicationSettings: ConfigurationStorageConnectionString, EnvironmentName, LoggingRedisConnectionString, APPINSIGHTS_INSTRUMENTATIONKEY
         // ^^ don't think we need: LoggingRedisKey?? (check), StorageConnectionString (needed?)
