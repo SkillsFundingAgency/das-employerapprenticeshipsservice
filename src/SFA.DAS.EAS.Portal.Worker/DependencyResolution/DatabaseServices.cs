@@ -1,7 +1,7 @@
 ﻿//using Microsoft.Extensions.DependencyInjection;
 //using SFA.DAS.EAS.Portal.Database;
 
-//namespace SFA.DAS.EAS.Portal.Jobs.DependencyResolution
+//namespace SFA.DAS.EAS.Portal.Worker.DependencyResolution
 //{
 //    //not sure which project this will end up in yet
 //    public static class DatabaseServices

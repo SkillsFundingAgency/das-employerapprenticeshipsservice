@@ -2,16 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NServiceBus;
+using SFA.DAS.NServiceBus.AzureServiceBus;
 using SFA.DAS.EAS.Portal.Configuration;
-using SFA.DAS.EAS.Portal.Jobs.NServiceBus;
 using SFA.DAS.EAS.Portal.Startup;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.AzureServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.UnitOfWork.NServiceBus;
 
-namespace SFA.DAS.EAS.Portal.Jobs.Startup
+namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Startup
 {
     public static class NServiceBusStartup
     {
@@ -22,29 +20,23 @@ namespace SFA.DAS.EAS.Portal.Jobs.Startup
                 {
                     var configuration = s.GetService<IConfiguration>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
-                    //todo: put service bus config into its own section
                     var portalConfiguration = configuration.GetPortalSection<PortalConfiguration>();
                     var isDevelopment = hostingEnvironment.IsDevelopment();
 
-                    var endpointConfiguration = new EndpointConfiguration(EndpointName.EasPortalJobs)
-                        .UseAzureServiceBusTransport(isDevelopment,
-                            () => portalConfiguration.ServiceBusConnectionString, r => { })
+                    var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerApprenticeshipService.Portal.Worker.TestHarness")
+                        .UseAzureServiceBusTransport(isDevelopment,  () => portalConfiguration.ServiceBusConnectionString, r => { })
                         .UseInstallers()
                         .UseLicense(portalConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
-                        //.UseOutbox()
-                        //.UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                        .UseInstallers()
-                        .UseServiceCollection(services);
-                    //.UseStructureMapBuilder(container)
-                    //.UseUnitOfWork();
+                        .UseSendOnly();
 
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
                     return endpoint;
                 })
+                .AddSingleton<IMessageSession>(s => s.GetService<IEndpointInstance>())
                 .AddHostedService<NServiceBusHostedService>();
         }
     }

@@ -6,7 +6,7 @@ using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Database;
 
-namespace SFA.DAS.EAS.Portal.Jobs.StartupJobs
+namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
 {
     public class CreateReadStoreDatabaseJob
     {

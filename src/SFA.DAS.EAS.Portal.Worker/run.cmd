@@ -1,0 +1,1 @@
+dotnet SFA.DAS.EAS.Portal.Worker.dll

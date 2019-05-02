@@ -3,7 +3,7 @@ using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.TempEvents;
 
-namespace SFA.DAS.EAS.Portal.Jobs.EventHandlers.Reservations
+namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 {
     //todo: rename when know real event name
     class ReserveFundingAddedEventHandler : IHandleMessages<ReserveFundingAddedEvent>

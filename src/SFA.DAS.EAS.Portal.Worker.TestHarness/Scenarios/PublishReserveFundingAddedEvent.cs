@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.TempEvents;
 
-namespace SFA.DAS.EAS.Portal.Jobs.TestHarness.Scenarios
+namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
 {
     public class PublishReserveFundingAddedEvent
     {

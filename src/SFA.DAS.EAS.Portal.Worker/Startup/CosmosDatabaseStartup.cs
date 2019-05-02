@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.EAS.Portal.Configuration;
 using SFA.DAS.EAS.Portal.Database;
 
-namespace SFA.DAS.EAS.Portal.Jobs.Startup
+namespace SFA.DAS.EAS.Portal.Worker.Startup
 {
     public static class CosmosDatabaseStartup
     {

@@ -18,8 +18,4 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DependencyResolution\" />
-  </ItemGroup>
-
 </Project>

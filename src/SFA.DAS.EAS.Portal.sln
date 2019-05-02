@@ -7,9 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{175EEDEC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Portal", "SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj", "{338F94D2-2462-4849-873E-D4845FB4BDB3}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Portal.Jobs", "SFA.DAS.EAS.Portal.Jobs\SFA.DAS.EAS.Portal.Jobs.csproj", "{85B710BD-6C98-4B8D-9A12-575DB75124CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Portal.Worker", "SFA.DAS.EAS.Portal.Worker\SFA.DAS.EAS.Portal.Worker.csproj", "{85B710BD-6C98-4B8D-9A12-575DB75124CC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Portal.Jobs.TestHarness", "SFA.DAS.EAS.Portal.Jobs.TestHarness\SFA.DAS.EAS.Portal.Jobs.TestHarness.csproj", "{5C0D78C0-2B64-4436-B426-AEE9A84575AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Portal.Worker.TestHarness", "SFA.DAS.EAS.Portal.Worker.TestHarness\SFA.DAS.EAS.Portal.Worker.TestHarness.csproj", "{5C0D78C0-2B64-4436-B426-AEE9A84575AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

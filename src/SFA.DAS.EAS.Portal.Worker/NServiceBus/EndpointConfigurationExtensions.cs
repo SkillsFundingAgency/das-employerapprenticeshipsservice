@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NServiceBus;
 
-namespace SFA.DAS.EAS.Portal.Jobs.NServiceBus
+namespace SFA.DAS.EAS.Portal.Worker.NServiceBus
 {
     public static class EndpointConfigurationExtensions
     {

@@ -3,11 +3,11 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.EAS.Portal.DependencyResolution;
-using SFA.DAS.EAS.Portal.Jobs.Startup;
-using SFA.DAS.EAS.Portal.Jobs.StartupJobs;
+using SFA.DAS.EAS.Portal.Worker.Startup;
 using SFA.DAS.EAS.Portal.Startup;
+using SFA.DAS.EAS.Portal.Worker.StartupJobs;
 
-namespace SFA.DAS.EAS.Portal.Jobs
+namespace SFA.DAS.EAS.Portal.Worker
 {
     class Program
     {
@@ -45,10 +45,10 @@ namespace SFA.DAS.EAS.Portal.Jobs
         //todo: devops
         // ServiceBusConnectionString -> reuse existing?
         // config pr
-        // new app service for SFA.DAS.EAS.Portal.Jobs (or whatever it ends up being called)
+        // new app service for SFA.DAS.EAS.Portal.Worker (or whatever it ends up being called)
         // ^^ ConnectionStrings: AzureWebJobsDashboard, AzureWebJobsStorage
-        // ^^ ApplicationSettings: ConfigurationStorageConnectionString, EnvironmentName
-        // ^^ LoggingRedisConnectionString (check) LoggingRedisKey (check), StorageConnectionString (needed?)
+        // ^^ ApplicationSettings: ConfigurationStorageConnectionString, EnvironmentName, LoggingRedisConnectionString
+        // ^^ LoggingRedisKey (check), StorageConnectionString (needed?)
         // ^^ APPINSIGHTS_INSTRUMENTATIONKEY?
         // CosmosDb
 

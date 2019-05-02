@@ -3,6 +3,6 @@ namespace SFA.DAS.EAS.Portal.Configuration
 {
     public class EndpointName
     {
-        public const string EasPortalJobs = "SFA.DAS.EmployerApprenticeshipService.Portal.Jobs";
+        public const string EasPortalWorker = "SFA.DAS.EmployerApprenticeshipService.Portal.Worker";
     }
 }
