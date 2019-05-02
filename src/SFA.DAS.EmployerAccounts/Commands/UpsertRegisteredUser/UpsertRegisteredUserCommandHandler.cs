@@ -1,7 +1,10 @@
+using System;
 using MediatR;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
@@ -10,11 +13,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
     {
         private readonly Validation.IValidator<UpsertRegisteredUserCommand> _validator;
         private readonly IUserAccountRepository _userRepository;
+        private readonly IEventPublisher _eventPublisher;
 
-        public UpsertRegisteredUserCommandHandler(Validation.IValidator<UpsertRegisteredUserCommand> validator, IUserAccountRepository userRepository)
+        public UpsertRegisteredUserCommandHandler(IValidator<UpsertRegisteredUserCommand> validator,
+            IUserAccountRepository userRepository, IEventPublisher eventPublisher)
         {
             _validator = validator;
             _userRepository = userRepository;
+            _eventPublisher = eventPublisher;
         }
 
         protected override async Task HandleCore(UpsertRegisteredUserCommand message)
@@ -31,6 +37,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
                 FirstName = message.FirstName,
                 LastName = message.LastName
             });
+
+            await _eventPublisher.Publish(new UpsertedUserEvent {Created = DateTime.UtcNow, UserRef = message.UserRef});
         }
     }
 }
