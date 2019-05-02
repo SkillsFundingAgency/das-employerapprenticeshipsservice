@@ -20,9 +20,6 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
 
             //todo: non generic GetPortalSection to return section
             // & generic GetPortalSection to return strongly typed object
-
-            //.ConfigureServices(s => s.Configure<CosmosDatabaseConfiguration>(s.GetService<IConfiguration>().GetPortalSection<PortalConfiguration>("CosmosDatabase"));
-
         }
     }
 }

@@ -47,9 +47,8 @@ namespace SFA.DAS.EAS.Portal.Worker
         // config pr
         // new app service for SFA.DAS.EAS.Portal.Worker (or whatever it ends up being called)
         // ^^ ConnectionStrings: AzureWebJobsDashboard, AzureWebJobsStorage
-        // ^^ ApplicationSettings: ConfigurationStorageConnectionString, EnvironmentName, LoggingRedisConnectionString
-        // ^^ LoggingRedisKey (check), StorageConnectionString (needed?)
-        // ^^ APPINSIGHTS_INSTRUMENTATIONKEY?
+        // ^^ ApplicationSettings: ConfigurationStorageConnectionString, EnvironmentName, LoggingRedisConnectionString, APPINSIGHTS_INSTRUMENTATIONKEY
+        // ^^ don't think we need: LoggingRedisKey?? (check), StorageConnectionString (needed?)
         // CosmosDb
 
         //todo: looks like UseMessageConventions is a bit too inclusive... (consequences?)
