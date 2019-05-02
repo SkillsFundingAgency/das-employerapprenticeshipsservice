@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser
 {
     public class UpsertRegisteredUserCommandHandler : AsyncRequestHandler<UpsertRegisteredUserCommand>
     {
-        private readonly Validation.IValidator<UpsertRegisteredUserCommand> _validator;
+        private readonly IValidator<UpsertRegisteredUserCommand> _validator;
         private readonly IUserAccountRepository _userRepository;
         private readonly IEventPublisher _eventPublisher;
 
