@@ -49,5 +49,32 @@
     </div>
 </main>
 
-
+<section class="das-section das-section--main das-dashboard-footer" aria-labelledby="more-title">
+    <div class="govuk-width-container">
+        <div class="govuk-grid-row">
+            <hr class="das-section-break das-section-break--l das-section-break--heavy das-section-break--gutters">
+            <div class="das-dashboard-footer__column das-dashboard-footer__column--title">
+                <h2 id="more-title" class="das-dashboard-footer__title">More on the Apprenticeships Service</h2>
+            </div>
+            <div class="das-dashboard-footer__column">
+                <h3 class="govuk-heading-m das-dashboard-footer__sub-title">Most active</h3>
+                <ul class="govuk-list das-list--featured">
+                    <li><a href="@("/commitments/accounts/"+Model.Data.HashedAccountId+"/apprentices/home")" class="govuk-link govuk-link--no-visited-state">Add an apprentice</a></li>
+                    <li><a href="@("/commitments/accounts/"+Model.Data.HashedAccountId+"/apprentices/home")" class="govuk-link govuk-link--no-visited-state">Manage your apprentices</a></li>
+                    <li><a href="@("/accounts/"+Model.Data.HashedAccountId+"/providers")" class="govuk-link govuk-link--no-visited-state">Add a new training provider</a></li>
+                    <li><a href="@("/accounts/"+Model.Data.HashedAccountId+"/agreements")" class="govuk-link govuk-link--no-visited-state">Add a new organisation</a></li>
+                    <li><a href="@("/accounts/"+Model.Data.HashedAccountId+"/rename")" class="govuk-link govuk-link--no-visited-state">Rename your account</a></li>
+                </ul>
+            </div>
+            <div class="das-dashboard-footer__column">
+                <a class="das-promo" href="#">
+                    What you need to know about apprenticeships
+                </a>
+                <p>
+                    Find out more about <a href="#" class="govuk-link govuk-link--no-visited-state"> what the Apprenticeship Service can do for your organisation</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
 
