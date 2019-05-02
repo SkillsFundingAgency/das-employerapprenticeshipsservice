@@ -31,7 +31,6 @@ namespace SFA.DAS.EAS.Portal.Worker
         //https://stackoverflow.com/questions/51970969/how-to-use-hostbuilder-for-webjob
         //https://github.com/Azure/azure-webjobs-sdk/wiki/Application-Insights-Integration
         //https://github.com/Azure/azure-webjobs-sdk/blob/dev/sample/SampleHost/Program.cs
-        //https://docs.microsoft.com/en-us/azure/app-service/webjobs-sdk-how-to
 
         //todo: how to see & trigger individual jobs in v3?
         //https://github.com/Azure/azure-webjobs-sdk/issues/1975
@@ -75,28 +74,20 @@ namespace SFA.DAS.EAS.Portal.Worker
             }
         }
 
-        private static IHostBuilder CreateHostBuilder(string[] args)
-        {
-            var hostBuilder = new HostBuilder()
+        //todo: need to add unit of work into container?
+        // does e.g. uow support non-structuremap container?
+        // do we even need uow?? if we're only writing to a document collection, no sending further messages, etc.
+
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            new HostBuilder()
                 .ConfigureDasWebJobs()
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging() //todo: need to check logging/redis/use of localhost:6379 locally
                 .UseApplicationInsights() // todo: need to add APPINSIGHTS_INSTRUMENTATIONKEY to config somewhere. where does it normally live? we could store it in table storage
                 .UseDasEnvironment()
                 .UseConsoleLifetime()
-                //todo: one call to add all services
-                //or package up by functionality, e.g. adddatabase to add services and config??
-                //^^ prob by functionality
                 .ConfigureServices(s => s.AddApplicationServices())
-                .ConfigureServices(s => s.AddCosmosDatabase());
-
-            //todo: need to add unit of work into container?
-            // does e.g. uow support non-structuremap container?
-            // do we even need uow?? if we're only writing to a document collection, no sending further messages, etc.
-
-            //todo: try putting this back into 1
-            hostBuilder.ConfigureServices(s => s.AddDasNServiceBus());
-            return hostBuilder;
-        }
+                .ConfigureServices(s => s.AddCosmosDatabase())
+                .ConfigureServices(s => s.AddDasNServiceBus());
     }
 }
