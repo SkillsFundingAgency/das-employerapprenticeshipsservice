@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Portal.Client.Models;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
-    public class Account : Document, IAccountDto
+    public class Account : Document//, IAccountDto
     {
         //todo: doc id / accountid
         [JsonProperty("accountId")]
