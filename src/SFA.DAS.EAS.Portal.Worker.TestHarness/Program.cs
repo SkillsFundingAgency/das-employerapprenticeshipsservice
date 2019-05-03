@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
             {
                 await host.StartAsync();
 
-                var publishReserveFundingAddedEvent = host.Services.GetService<PublishReserveFundingAddedEvent>();
+                var publishReserveFundingAddedEvent = host.Services.GetService<PublishReserveFundingAddedEvents>();
                 await publishReserveFundingAddedEvent.Run();
 
                 await host.WaitForShutdownAsync();
@@ -29,6 +29,6 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                 .ConfigureDasLogging()
                 .UseDasEnvironment()
                 .ConfigureServices(s => s.AddDasNServiceBus())
-                .ConfigureServices(s => s.AddTransient<PublishReserveFundingAddedEvent, PublishReserveFundingAddedEvent>());
+                .ConfigureServices(s => s.AddTransient<PublishReserveFundingAddedEvents, PublishReserveFundingAddedEvents>());
     }
 }

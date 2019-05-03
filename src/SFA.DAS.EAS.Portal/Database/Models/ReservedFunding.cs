@@ -30,5 +30,10 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             StartDate = startDate;
             EndDate = endDate;
         }
+        
+        [JsonConstructor]
+        private ReservedFunding()
+        {
+        }
     }
 }

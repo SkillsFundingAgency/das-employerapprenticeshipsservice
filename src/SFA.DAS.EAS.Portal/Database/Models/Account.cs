@@ -102,10 +102,13 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             });
         }
 
+        // we have different requirements to provider permissions
+        // permissions could simply check messages are processed chronologically to handle out-of-order messages
+        // we have less strict requirements that we could potentially take advantage of - we only need to check chronological by event
+        
         private bool IsUpdatedDateChronological(DateTime updated)
         {
             return updated > Created && (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
-            //return updated >= Created && (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
         }
 
         private void AddOutboxMessage(string messageId, DateTime created)
@@ -125,11 +128,11 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         // todo: it would be better to have a webjob to periodically clean-up, but for now..
         private void DeleteOldMessages()
         {
-            //todo: configurable. think what we want to set this to         we need to ensure the expiry period is > total retry time! - no we don't, the message will only be there if the message was processed ok!
+            //todo: configurable. think what we want to set this to
             var expiryPeriod = TimeSpan.Parse("2");
             //todo: unit testable
             var now = DateTime.UtcNow;
-            _outboxData = _outboxData.Where(m => m.Created - now > expiryPeriod).ToList();
+            _outboxData = _outboxData.Where(m => now - m.Created < expiryPeriod).ToList();
         }
         
         private bool IsMessageProcessed(string messageId)
