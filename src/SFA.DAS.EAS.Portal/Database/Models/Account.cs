@@ -30,14 +30,15 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         private readonly List<AccountLegalEntity> _accountLegalEntities = new List<AccountLegalEntity>();
 
         [JsonIgnore]
-        private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
+        private List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
         private Account(long accountId, DateTime created, string messageId)
             : base(1)
         {
             Id = Guid.NewGuid();
             AccountId = accountId;
-            Created = created;
+            // the created date originates from event publishers, so we make sure we store it as UTC
+            Created = DateTime.SpecifyKind(created, DateTimeKind.Utc);
             
             AddOutboxMessage(messageId, created);
         }
@@ -121,6 +122,16 @@ namespace SFA.DAS.EAS.Portal.Database.Models
                 throw new InvalidOperationException("Requires account has not been deleted");
         }
 
+        // todo: it would be better to have a webjob to periodically clean-up, but for now..
+        private void DeleteOldMessages()
+        {
+            //todo: configurable. think what we want to set this to         we need to ensure the expiry period is > total retry time! - no we don't, the message will only be there if the message was processed ok!
+            var expiryPeriod = TimeSpan.Parse("2");
+            //todo: unit testable
+            var now = DateTime.UtcNow;
+            _outboxData = _outboxData.Where(m => m.Created - now > expiryPeriod).ToList();
+        }
+        
         private bool IsMessageProcessed(string messageId)
         {
             return OutboxData.Any(m => m.MessageId == messageId);
@@ -128,6 +139,8 @@ namespace SFA.DAS.EAS.Portal.Database.Models
 
         private void ProcessMessage(string messageId, DateTime created, Action action)
         {
+            DeleteOldMessages();
+            
             if (IsMessageProcessed(messageId))
                 return;
             
