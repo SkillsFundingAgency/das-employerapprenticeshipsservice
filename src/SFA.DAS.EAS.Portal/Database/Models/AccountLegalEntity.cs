@@ -29,6 +29,11 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
             : this(accountLegalEntityId, legalEntityName)
         {
+            AddReserveFunding(reservationId, courseId, courseName, startDate, endDate);
+        }
+
+        public void AddReserveFunding(long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
+        {
             _reservedFundings.Add(new ReservedFunding(reservationId, courseId, courseName, startDate, endDate));
         }
     }

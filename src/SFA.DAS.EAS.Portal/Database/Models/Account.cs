@@ -71,8 +71,13 @@ namespace SFA.DAS.EAS.Portal.Database.Models
                     // we also need to handle case where reserve funding is created, then deleted, then created again with same details
                     //EnsureRelationshipHasNotBeenDeleted();
                     
-                    AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
-
+                    // enforce uniqueness with cosmos unique key?
+                    var existingAccountLegalEntity = _accountLegalEntities.FirstOrDefault(ale => ale.AccountLegalEntityId == accountLegalEntityId);
+                    if (existingAccountLegalEntity == null)
+                        AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
+                    else
+                        existingAccountLegalEntity.AddReserveFunding(reservationId, courseId, courseName, startDate, endDate);
+                    
                     Updated = updated;
                     Deleted = null;
                 }
@@ -123,11 +128,28 @@ namespace SFA.DAS.EAS.Portal.Database.Models
 
         private void ProcessMessage(string messageId, DateTime created, Action action)
         {
-            if (!IsMessageProcessed(messageId))
-            {
-                action();
-                AddOutboxMessage(messageId, created);
-            }
+            if (IsMessageProcessed(messageId))
+                return;
+            
+            action();
+            AddOutboxMessage(messageId, created);
         }
+
+//        private abstract class MessageProcessor
+//        {
+//            public void Process(string messageId, DateTime created)
+//            {
+//                if (IsMessageProcessed(messageId))
+//                    return;
+//            
+//                Action();
+//                AddOutboxMessage(messageId, created);
+//            }
+//
+//            public abstract Action()
+//            {
+//                
+//            }
+//        }
     }
 }
