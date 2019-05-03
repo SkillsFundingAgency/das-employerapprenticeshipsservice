@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.CosmosDb;
 using SFA.DAS.EAS.Portal.Database;
 using SFA.DAS.EAS.Portal.Database.Models;
+using SFA.DAS.EAS.Portal.TempEvents;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands
 {
@@ -25,28 +25,25 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             _accountsRepository = accountsRepository;
         }
 
-        //todo: accept event directly?
-        public async Task Execute(long accountId, long accountLegalEntityId, string legalEntityName, 
-            long courseId, string courseName, DateTime startDate, DateTime endDate, DateTime eventCreated, string messageId)
+        public async Task Execute(ReserveFundingAddedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            //todo: , CancellationToken cancellationToken?
             //_logger.LogInformation("Executing AddReserveFundingCommand");
 
             // can we have accountid as key, rather than guid??
             var account = await _accountsRepository
                 .CreateQuery()
-                .SingleOrDefaultAsync(a =>  a.AccountId == accountId); //,  cancellationToken);
+                .SingleOrDefaultAsync(a => a.AccountId == reservedFunding.AccountId, cancellationToken);
 
             if (account == null)
             {
                 //first time we've had *any* event relating to this account
-                account = new Account(accountId, eventCreated, messageId);
+                account = new Account(reservedFunding.AccountId, reservedFunding.Created, messageId);
 
                 //todo: create with reserve funding ctor, or new then add??
                 //account.AddReserveFunding(gubbins, eventCreated, messageId);
 
                 //todo: rest of gubbins
-                await _accountsRepository.Add(account); //, null, cancellationToken);
+                await _accountsRepository.Add(account, null, cancellationToken);
             }
             else
             {
@@ -56,7 +53,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 //todo:
                 //account.AddReserveFunding(gubbins, eventCreated, messageId);
 
-                await _accountsRepository.Update(account, null, default(CancellationToken)); // //cancellationToken);
+                await _accountsRepository.Update(account, null, cancellationToken);
             }
         }
     }

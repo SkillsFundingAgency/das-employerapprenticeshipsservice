@@ -18,8 +18,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 
         public Task Handle(ReserveFundingAddedEvent message, IMessageHandlerContext context)
         {
-            return _addReserveFundingCommand.Execute(message.AccountId, message.AccountLegalEntityId,
-                message.LegalEntityName, message.CourseId, message.CourseName, message.StartDate, message.EndDate, message.Created, context.MessageId);
+            return _addReserveFundingCommand.Execute(message, context.MessageId);
         }
     }
 }
