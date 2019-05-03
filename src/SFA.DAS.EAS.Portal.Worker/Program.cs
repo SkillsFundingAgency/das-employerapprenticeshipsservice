@@ -52,6 +52,8 @@ namespace SFA.DAS.EAS.Portal.Worker
         // CosmosDb
 
         //todo: looks like UseMessageConventions is a bit too inclusive... (consequences?)
+        // better to use IEvent
+        // (also would be worthwhile making sure correlationids flow)
         //2019-05-01 08:34:18.9288 [DEBUG] [NServiceBus.SerializationFeature] - Message definitions:
         //SFA.DAS.EAS.Portal.Application.Commands.AddReserveFundingCommand
         //SFA.DAS.NServiceBus.ClientOutbox.Commands.ProcessClientOutboxMessageCommand
