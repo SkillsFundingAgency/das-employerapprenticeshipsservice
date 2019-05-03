@@ -11,18 +11,13 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
     public class AddReserveFundingCommand
     {
         private readonly IAccountsRepository _accountsRepository;
-        //todo: reinstate logging
+        //todo: logging
         //private readonly ILogger _logger;
 
-        //public AddReserveFundingCommand(ILogger logger)
-        //{
-        //    _logger = logger;
-        //}
-
-        //todo: add service
-        public AddReserveFundingCommand(IAccountsRepository accountsRepository)
+        public AddReserveFundingCommand(IAccountsRepository accountsRepository)//, ILogger logger)
         {
             _accountsRepository = accountsRepository;
+            //_logger = logger;
         }
 
         public async Task Execute(ReserveFundingAddedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default(CancellationToken))
