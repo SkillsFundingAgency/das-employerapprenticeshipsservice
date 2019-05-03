@@ -32,14 +32,23 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         [JsonIgnore]
         private readonly List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
-        public Account(long accountId, DateTime created, string messageId)
+        private Account(long accountId, DateTime created, string messageId)
             : base(1)
         {
             Id = Guid.NewGuid();
             AccountId = accountId;
             Created = created;
-
+            
             AddOutboxMessage(messageId, created);
+        }
+
+        // ctor for when creating account doc from reserved funding
+        // do we accept event, seems a coupling too far!
+        public Account(long accountId, long accountLegalEntityId, string legalEntityName, long reservationId,
+            long courseId, string courseName, DateTime startDate, DateTime endDate, DateTime created, string messageId)
+            : this(accountId, created, messageId)
+        {
+            AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
         }
 
         [JsonConstructor]
@@ -47,6 +56,35 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         {
         }
 
+        public void AddReserveFunding(long accountLegalEntityId, string legalEntityName,  long reservationId,
+            long courseId, string courseName, DateTime startDate, DateTime endDate, DateTime updated, string messageId)
+        {
+            ProcessMessage(messageId, updated, () =>
+            {
+                // don't need to check this when called as part of creation, but we separate out creation and adding reserve funding
+                // as other events handlers will create the account and add their own specific data
+                // we could have different ctors/factories for creation from different events
+                // for now we include updated == created date to let through adding on creation
+                // todo: need lots of tests around this out-of order handling!!
+                if (IsUpdatedDateChronological(updated))
+                {
+                    // we also need to handle case where reserve funding is created, then deleted, then created again with same details
+                    //EnsureRelationshipHasNotBeenDeleted();
+                    
+                    AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
+
+                    Updated = updated;
+                    Deleted = null;
+                }
+            });
+        }
+
+        private void AddReserveFunding(long accountLegalEntityId, string legalEntityName,
+            long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
+        {
+            _accountLegalEntities.Add(new AccountLegalEntity(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate));
+        }
+        
         public void Delete(DateTime deleted, string messageId)
         {
             //todo: nested class?
@@ -56,6 +94,12 @@ namespace SFA.DAS.EAS.Portal.Database.Models
 
                 Deleted = deleted;
             });
+        }
+
+        private bool IsUpdatedDateChronological(DateTime updated)
+        {
+            return updated > Created && (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
+            //return updated >= Created && (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
         }
 
         private void AddOutboxMessage(string messageId, DateTime created)

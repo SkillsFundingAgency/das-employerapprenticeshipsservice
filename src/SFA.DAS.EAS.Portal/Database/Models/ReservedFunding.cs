@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
@@ -8,13 +9,26 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         public long ReservationId { get; private set; }
 
         //optional
+        [JsonProperty("courseId")]
+        public long CourseId { get; private set; }
+
+        //optional
         [JsonProperty("courseName")]
-        public long CourseName { get; private set; }
+        public string CourseName { get; private set; }
 
         [JsonProperty("startDate")]
-        public long StartDate { get; private set; }
+        public DateTime StartDate { get; private set; }
 
         [JsonProperty("endDate")]
-        public long EndDate { get; private set; }
+        public DateTime EndDate { get; private set; }
+
+        public ReservedFunding(long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
+        {
+            ReservationId = reservationId;
+            CourseId = courseId;
+            CourseName = courseName;
+            StartDate = startDate;
+            EndDate = endDate;
+        }
     }
 }

@@ -32,12 +32,14 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             if (account == null)
             {
                 //first time we've had *any* event relating to this account
-                account = new Account(reservedFunding.AccountId, reservedFunding.Created, messageId);
+                //todo: do we want to set the message at create time? or more specific add/update
+                // will there likely be a message that just creates the account -> employer accounts create account message?
+                // need to handle somehow, otherwise add will think message has already been processed
+                // we'll remove message id from ctor for now and revisit if needed
+                account = new Account(reservedFunding.AccountId, reservedFunding.AccountLegalEntityId, reservedFunding.LegalEntityName,
+                    reservedFunding.ReservationId, reservedFunding.CourseId, reservedFunding.CourseName,
+                    reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.Created, messageId);
 
-                //todo: create with reserve funding ctor, or new then add??
-                //account.AddReserveFunding(gubbins, eventCreated, messageId);
-
-                //todo: rest of gubbins
                 await _accountsRepository.Add(account, null, cancellationToken);
             }
             else
@@ -45,8 +47,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 // account may have been created from non reserved funding event, and there are no reserved funds
                 // or this is a new reserved funding, but existing reserved fundings exist
                 // or account already contains this reserve funding event (method needs to be idempotent)
-                //todo:
-                //account.AddReserveFunding(gubbins, eventCreated, messageId);
+                account.AddReserveFunding(reservedFunding.AccountLegalEntityId, reservedFunding.LegalEntityName,
+                    reservedFunding.ReservationId, reservedFunding.CourseId, reservedFunding.CourseName,
+                    reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.Created, messageId);
 
                 await _accountsRepository.Update(account, null, cancellationToken);
             }

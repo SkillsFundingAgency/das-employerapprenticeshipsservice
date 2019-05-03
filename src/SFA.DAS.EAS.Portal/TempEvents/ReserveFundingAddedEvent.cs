@@ -6,6 +6,7 @@ namespace SFA.DAS.EAS.Portal.TempEvents
     {
         public long AccountId { get; set; }
         public long AccountLegalEntityId { get; set; }
+        public long ReservationId { get; set; }
         public string LegalEntityName { get; set; }
         public long CourseId { get; set; }
         public string CourseName { get; set; }
