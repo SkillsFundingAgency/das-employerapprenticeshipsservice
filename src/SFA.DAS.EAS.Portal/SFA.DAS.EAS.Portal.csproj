@@ -20,4 +20,8 @@
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Portal.Client\SFA.DAS.EAS.Portal.Client.csproj" />
+  </ItemGroup>
+
 </Project>
