@@ -11,10 +11,9 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
     //todo: rename when know real event name
     class ReserveFundingAddedEventHandler : IHandleMessages<ReserveFundingAddedEvent>
     {
-        //todo: interface?
-        private readonly AddReserveFundingCommand _addReserveFundingCommand;
+        private readonly IAddReserveFundingCommand _addReserveFundingCommand;
 
-        public ReserveFundingAddedEventHandler(AddReserveFundingCommand addReserveFundingCommand) //, IServiceProvider serviceProvider)
+        public ReserveFundingAddedEventHandler(IAddReserveFundingCommand addReserveFundingCommand) //, IServiceProvider serviceProvider)
         {
             //todo: fix resolving ILogger event side. it's in the service provider, so unsure why it can't be injected/got
             //var logger = serviceProvider.GetService<ILogger>();

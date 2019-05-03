@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            return services.AddTransient<AddReserveFundingCommand>();
+            return services.AddTransient<IAddReserveFundingCommand, AddReserveFundingCommand>();
         }
     }
 }

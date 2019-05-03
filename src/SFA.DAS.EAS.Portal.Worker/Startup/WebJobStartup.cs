@@ -13,11 +13,6 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                 .AddExecutionContextBinding()
                 .AddTimers());
 
-            //todo: is this still necessary?
-#pragma warning disable 618
-            //builder.ConfigureServices(s => s.AddSingleton<IWebHookProvider>(p => null));
-#pragma warning restore 618
-
             builder.ConfigureServices(s => s.AddSingleton<CreateReadStoreDatabaseJob>());
 
             return builder;

@@ -39,8 +39,6 @@ namespace SFA.DAS.EAS.Portal.Worker
 
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
 
-        //todo: remove new projects from old eas solution (once new solution is building on server)
-
         //todo: devops
         // config: 4 variables : branch: CON-378-EAS-Portal. pr: https://github.com/SkillsFundingAgency/das-employer-config/pull/264
         // ^^ ServiceBusConnectionString -> reuse existing?

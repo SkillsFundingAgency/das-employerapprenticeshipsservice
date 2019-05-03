@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Portal.TempEvents;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands
 {
-    public class AddReserveFundingCommand
+    public class AddReserveFundingCommand : IAddReserveFundingCommand
     {
         private readonly IAccountsRepository _accountsRepository;
         //todo: logging
@@ -32,10 +32,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             if (account == null)
             {
                 //first time we've had *any* event relating to this account
-                //todo: do we want to set the message at create time? or more specific add/update
-                // will there likely be a message that just creates the account -> employer accounts create account message?
-                // need to handle somehow, otherwise add will think message has already been processed
-                // we'll remove message id from ctor for now and revisit if needed
                 account = new Account(reservedFunding.AccountId, reservedFunding.AccountLegalEntityId, reservedFunding.LegalEntityName,
                     reservedFunding.ReservationId, reservedFunding.CourseId, reservedFunding.CourseName,
                     reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.Created, messageId);
