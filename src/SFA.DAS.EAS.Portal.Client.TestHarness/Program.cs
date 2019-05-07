@@ -1,8 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SFA.DAS.EAS.Portal.Client.TestHarness.DependencyResolution;
 using SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios;
+using SFA.DAS.EAS.Portal.Client.TestHarness.Startup;
 using SFA.DAS.EAS.Portal.Startup;
+using StructureMap;
 
 namespace SFA.DAS.EAS.Portal.Client.TestHarness
 {
@@ -28,6 +31,8 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
                 .UseDasEnvironment()
-                .ConfigureServices(s => s.AddTransient<GetAccountScenario, GetAccountScenario>());
+                .UseStructureMap()
+                .ConfigureServices(s => s.AddTransient<GetAccountScenario, GetAccountScenario>())
+                .ConfigureContainer<Registry>(IoC.Initialize);
     }
 }
