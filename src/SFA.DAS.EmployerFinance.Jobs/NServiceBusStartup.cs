@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
-using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
@@ -42,8 +41,6 @@ namespace SFA.DAS.EmployerFinance.Jobs
             {
                 c.For<IMessageSession>().Use(_endpoint);
             });
-
-            ServiceLocator.Initialize(_container);
         }
 
         public async Task StopAsync()

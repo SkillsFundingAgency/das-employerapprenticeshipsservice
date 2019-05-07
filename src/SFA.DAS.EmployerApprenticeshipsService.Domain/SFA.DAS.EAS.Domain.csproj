@@ -301,6 +301,7 @@
     <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
     <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\ExpiredFunds\ExpiredFundTransactionLine.cs" />
     <Compile Include="Models\Organisation\AccountLegalEntityModel.cs" />
     <Compile Include="Models\Organisation\Address.cs" />
     <Compile Include="Models\Payments\Payment.cs" />
