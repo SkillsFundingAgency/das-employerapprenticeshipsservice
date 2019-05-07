@@ -1,3 +1,4 @@
+using SFA.DAS.EAS.Portal.Client.DependencyResolution;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Portal.Client.TestHarness.DependencyResolution
@@ -6,7 +7,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.DependencyResolution
     {
         public static void Initialize(Registry registry)
         {
-            //registry.IncludeRegistry<DefaultRegistry>();
+            registry.IncludeRegistry<PortalClientRegistry>();
         }
     }
 }
