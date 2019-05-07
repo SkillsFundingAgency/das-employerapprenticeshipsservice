@@ -40,20 +40,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var trimCharacters = new char[] { '/' };
             return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
         }
-
-        public static bool FeatureToggle(this HtmlHelper html, string FeatureToggleName)
-        {
-            var value = false;
-            switch (FeatureToggleName)
-            {
-                case ("EmulatedFundingJourney"):
-                    value = FeatureToggles.Features.EmulatedFundingJourney.Enabled;
-                    break;
-                default:
-                    break;
-            }
-            
-            return value;
-        }
     }
 }
