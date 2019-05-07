@@ -1,51 +1,16 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.HashedAccountId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.CourseCode)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.LegalEntityId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.CourseName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.StartDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.EndDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EmulatedFundingViewModel.ReservationId)
-        </th>
-    </tr>
-    <tr>
-        <td>
-            @Html.DisplayFor(model => model.EmulatedFundingViewModel.HashedAccountId)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.EmulatedFundingViewModel.CourseCode)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.EmulatedFundingViewModel.LegalEntityId)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.EmulatedFundingViewModel.CourseName)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.EmulatedFundingViewModel.StartDate)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.EmulatedFundingViewModel.EndDate)
-        </td>
-        <td>
-            @Html.DisplayFor(model => model.EmulatedFundingViewModel.ReservationId)
-        </td>
-    </tr>
+<div class="das-panel das-panel--featured">
 
-</table>
-<p><a href="@Url.Action("Index","EmulatedFundingJourney",new { HashedAccountId = Model.HashedAccountId })" class="das-panel__link">Check and secure funding now</a> </p>
+    <h3 class="das-panel__heading">Apprenticeship funding secured</h3>
+    <dl class="das-definition-list das-definition-list--with-separator">
+        <dt class="das-definition-list__title">Legal entity:</dt>
+        <dd class="das-definition-list__definition">@Model.Account.Name</dd>
+        <dt class="das-definition-list__title">Training course:</dt>
+        <dd class="das-definition-list__definition">@Model.EmulatedFundingViewModel.CourseName</dd>
+        <dt class="das-definition-list__title">Start and end date: </dt>
+        <dd class="das-definition-list__definition">@Model.EmulatedFundingViewModel.StartDate to @Model.EmulatedFundingViewModel.EndDate</dd>
+    </dl>
+    <p><a href="@Url.Action("Index","EmulatedFundingJourney",new { HashedAccountId = Model.HashedAccountId })" class="das-panel__link">Check and secure funding now</a> </p>
+
+</div>
+
