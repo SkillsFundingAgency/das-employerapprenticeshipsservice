@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Commands;
-using SFA.DAS.EAS.Portal.TempEvents;
+using SFA.DAS.EAS.Portal.Events.Reservations;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 {

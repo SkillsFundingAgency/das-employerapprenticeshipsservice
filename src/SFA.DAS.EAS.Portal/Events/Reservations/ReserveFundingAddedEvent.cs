@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Portal.TempEvents
+namespace SFA.DAS.EAS.Portal.Events.Reservations
 {
     public class ReserveFundingAddedEvent
     {

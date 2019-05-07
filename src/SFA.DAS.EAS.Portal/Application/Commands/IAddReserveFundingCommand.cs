@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Portal.TempEvents;
+using SFA.DAS.EAS.Portal.Events.Reservations;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands
 {
