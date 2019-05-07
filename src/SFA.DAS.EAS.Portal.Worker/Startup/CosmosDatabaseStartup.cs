@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SFA.DAS.EAS.Portal.Client.Configuration;
 using SFA.DAS.EAS.Portal.Configuration;
 using SFA.DAS.EAS.Portal.Database;
 
