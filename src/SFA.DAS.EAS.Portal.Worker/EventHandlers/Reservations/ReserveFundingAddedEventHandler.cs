@@ -11,9 +11,10 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
     //todo: rename when know real event name
     class ReserveFundingAddedEventHandler : IHandleMessages<ReserveFundingAddedEvent>
     {
-        private readonly IAddReserveFundingCommand _addReserveFundingCommand;
+        // NServiceBus can't inject an interface message with methods
+        private readonly AddReserveFundingCommand _addReserveFundingCommand;
 
-        public ReserveFundingAddedEventHandler(IAddReserveFundingCommand addReserveFundingCommand) //, IServiceProvider serviceProvider)
+        public ReserveFundingAddedEventHandler(AddReserveFundingCommand addReserveFundingCommand) //, IServiceProvider serviceProvider)
         {
             //todo: fix resolving ILogger event side. it's in the service provider, so unsure why it can't be injected/got
             //var logger = serviceProvider.GetService<ILogger>();
