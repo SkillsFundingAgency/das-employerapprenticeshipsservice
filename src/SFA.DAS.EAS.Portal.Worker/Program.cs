@@ -37,6 +37,8 @@ namespace SFA.DAS.EAS.Portal.Worker
 
         //todo: test app insights
 
+        //todo: update sfa.das.nservicebus to use latest nservicebus.newtonsoft.json, so we can use v12 of newtonsoft.json
+        
         //todo: functions instead? https://github.com/tmasternak/NServiceBus.Functions
 
         //todo: devops

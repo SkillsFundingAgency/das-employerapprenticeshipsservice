@@ -1,9 +1,10 @@
 using System;
 using Newtonsoft.Json;
+using SFA.DAS.EAS.Portal.Client.Models;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
-    public class ReservedFunding
+    public class ReservedFunding : IReservedFundingDto
     {
         [JsonProperty("reservationId")]
         public long ReservationId { get; private set; }

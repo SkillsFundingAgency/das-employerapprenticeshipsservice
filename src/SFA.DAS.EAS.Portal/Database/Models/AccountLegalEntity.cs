@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using SFA.DAS.EAS.Portal.Client.Models;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
-    public class AccountLegalEntity
+    public class AccountLegalEntity : IAccountLegalEntityDto<ReservedFunding>
     {
         //todo: rename to id & name?
         [JsonProperty("accountLegalEntityId")]
