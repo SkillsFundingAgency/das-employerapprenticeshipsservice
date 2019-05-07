@@ -36,8 +36,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public ActionResult Index(string HashedAccountId)
         {
-
-            return View(new EmulatedFundingViewModel { HashedAccountId=HashedAccountId});
+            if (FeatureToggles.Features.EmulatedFundingJourney.Enabled)
+            {
+                return View(new EmulatedFundingViewModel { HashedAccountId = HashedAccountId });
+            }
+            else
+            {
+                return View("NotFound");
+            }
         }
 
         [HttpPost]
