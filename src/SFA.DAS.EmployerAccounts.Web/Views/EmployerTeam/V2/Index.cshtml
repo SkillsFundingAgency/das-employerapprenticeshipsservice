@@ -12,27 +12,10 @@
     </div>
 </div>
 
-<section class="das-section das-section--search">
-    <div class="govuk-width-container">
-        <div class="das-dashboard-header__row">
-            <div class="das-dashboard-header__col das-dashboard-header__col--primary">
-                <form>
-                    <div class="govuk-form-group das-form-group-inline das-dashboard-search">
-                        <label for="search" class="govuk-visually-hidden">Search</label>
-                        <input class="govuk-input das-dashboard-search__input" id="search" type="search" placeholder="Search" disabled="disabled">
-                        <div class="das-form-group-inline__button-wrap">
-                            <button class="govuk-button das-dashboard-search__button" type="submit">Search</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="das-dashboard-header__col das-dashboard-header__col--secondary">
-                <h2 class="das-placeholder-tasks">Other tasks you can do</h2>
-            </div>
-        </div>
-    </div>
-</section>
-
+@if (Model.Data.ShowSearchBar)
+{
+    @Html.Action("SearchBar");
+}
 
 <main class="govuk-main-wrapper das-section--dashboard" id="main-content" role="main">
     <div class="govuk-width-container">
@@ -49,32 +32,7 @@
     </div>
 </main>
 
-<section class="das-section das-section--main das-dashboard-footer" aria-labelledby="more-title">
-    <div class="govuk-width-container">
-        <div class="govuk-grid-row">
-            <hr class="das-section-break das-section-break--l das-section-break--heavy das-section-break--gutters">
-            <div class="das-dashboard-footer__column das-dashboard-footer__column--title">
-                <h2 id="more-title" class="das-dashboard-footer__title">More on the Apprenticeships Service</h2>
-            </div>
-            <div class="das-dashboard-footer__column">
-                <h3 class="govuk-heading-m das-dashboard-footer__sub-title">Most active</h3>
-                <ul class="govuk-list das-list--featured">
-                    <li><a href="@Url.EmployerCommitmentsAction("apprentices/Inform")" class="govuk-link govuk-link--no-visited-state">Add an apprentice</a></li>
-                    <li><a href="@Url.EmployerCommitmentsAction("apprentices/manage/all")" class="govuk-link govuk-link--no-visited-state">Manage your apprentices</a></li>
-                    <li><a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">Add a new training provider</a></li>
-                    <li><a href="@("/accounts/"+Model.Data.HashedAccountId+"/agreements")" class="govuk-link govuk-link--no-visited-state">Add a new organisation</a></li>
-                    <li><a href="@("/accounts/"+Model.Data.HashedAccountId+"/rename")" class="govuk-link govuk-link--no-visited-state">Rename your account</a></li>
-                </ul>
-            </div>
-            <div class="das-dashboard-footer__column">
-                <a class="das-promo" href="#">
-                    What you need to know about apprenticeships
-                </a>
-                <p>
-                    <a href="#" class="govuk-link govuk-link--no-visited-state">Find out more</a> about what the Apprenticeship Service can do for your organisation.
-                </p>
-            </div>
-        </div>
-    </div>
-</section>
-
+@if (Model.Data.ShowMostActiveLinks)
+{
+    @Html.Action("MostActiveLinks",new { model = Model.Data });
+}
