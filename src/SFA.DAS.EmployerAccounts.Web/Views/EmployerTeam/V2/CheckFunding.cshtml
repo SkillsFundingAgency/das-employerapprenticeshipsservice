@@ -1,10 +1,9 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.FeatureToggles
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <h3 class="das-panel__heading">Check if government funding is available for apprenticeship training </h3>
 <p>Use government funding to pay for part or all of the cost of apprenticeship training.</p>
 
-@if (Features.EmulatedFundingJourney.Enabled)
+@if (Html.FeatureToggle("EmulatedFundingJourney"))
 {
     <p><a href="@Url.Action("Index", "EmulatedFundingJourney", new { HashedAccountId = Model.HashedAccountId })" class="das-panel__link">Check and secure funding now</a> </p>
 }

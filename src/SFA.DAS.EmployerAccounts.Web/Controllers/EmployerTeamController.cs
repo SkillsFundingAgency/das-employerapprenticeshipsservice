@@ -358,12 +358,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
-        [HttpGet]
-        [Route("EmulatedReserveFunding")]
-        public ActionResult EmulatedReserveFunding()
-        {
-            return View();
-        }
         public ActionResult ReturnFromEmulateFundingJourney(EmulatedFundingViewModel model)
         {
             _emulatedFundingViewModel = model;
