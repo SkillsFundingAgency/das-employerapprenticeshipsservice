@@ -39,11 +39,12 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
         public static async Task AsyncMain(CancellationToken cancellationToken, bool isDevelopment)
         {
             var container = IoC.Initialize();
-
+          
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
+                .UseDasMessageConventions()
                 .UseLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
@@ -51,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
                 .UseOutbox()
                 .UseStructureMapBuilder(container)
                 .UseUnitOfWork();
-
+            
             var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             while (!cancellationToken.IsCancellationRequested)

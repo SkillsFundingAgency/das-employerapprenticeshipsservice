@@ -1,13 +1,13 @@
-﻿using SFA.DAS.EmployerAccounts.Commands.CreateCohort;
-using SFA.DAS.EmployerAccounts.Events.Cohort;
+﻿using SFA.DAS.Commitments.Events;
+using SFA.DAS.EmployerAccounts.Commands.Cohort;
 
 namespace SFA.DAS.EmployerAccounts.Adapters
 {
-    public class CohortAdapter : IAdapter<CohortCreated, CreateCohortCommand>
+    public class CohortAdapter : IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>
     {
-        public CreateCohortCommand Convert(CohortCreated input)
+        public CohortApprovalRequestedCommand Convert(CohortApprovalRequestedByProvider input)
         {
-            return new CreateCohortCommand();
+            return new CohortApprovalRequestedCommand(input.AccountId);
         }
     }
 }

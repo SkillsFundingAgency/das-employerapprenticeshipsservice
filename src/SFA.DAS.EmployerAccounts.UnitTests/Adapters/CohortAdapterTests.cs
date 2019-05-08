@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
+using SFA.DAS.Commitments.Events;
 using SFA.DAS.EmployerAccounts.Adapters;
-using SFA.DAS.EmployerAccounts.Events.Cohort;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Adapters
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Adapters
         public void WhenConvertCalled_ThenTheEventIsMappedToTheCommand()
         {
             // arrange
-            CohortCreated @event = new CohortCreatedBuilder();
+            CohortApprovalRequestedByProvider @event = new ApprovalRequestedBuilder();
 
             // act
             var result = _sut.Convert(@event);

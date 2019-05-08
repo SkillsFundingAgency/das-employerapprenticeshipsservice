@@ -1,10 +1,10 @@
 ﻿using Moq;
 using NServiceBus;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Events;
 using SFA.DAS.EmployerAccounts.Adapters;
 using SFA.DAS.EmployerAccounts.Commands;
-using SFA.DAS.EmployerAccounts.Commands.CreateCohort;
-using SFA.DAS.EmployerAccounts.Events.Cohort;
+using SFA.DAS.EmployerAccounts.Commands.Cohort;
 using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers;
 using SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.Builders;
 using System.Threading;
@@ -13,29 +13,29 @@ using System.Threading.Tasks;
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Cohort
 {
     [TestFixture]
-    public class CohortCreatedEventHandlerTests
+    public class CohortApprovalRequestedEventHandlerTests
     {
-        private CohortCreatedEventHandler _sut;
-        private Mock<ICommandHandler<CreateCohortCommand>> _mockHandler;
-        private Mock<IAdapter<CohortCreated, CreateCohortCommand>> _mockAdapter;
+        private CohortApprovalRequestedByProviderEventHandler _sut;
+        private Mock<ICommandHandler<CohortApprovalRequestedCommand>> _mockHandler;
+        private Mock<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>> _mockAdapter;
         private Mock<IMessageHandlerContext> _mockMessageHandlerContext;        
 
-        public CohortCreatedEventHandlerTests()
+        public CohortApprovalRequestedEventHandlerTests()
         {
-            _mockHandler = new Mock<ICommandHandler<CreateCohortCommand>>();
-            _mockAdapter = new Mock<IAdapter<CohortCreated, CreateCohortCommand>>();
+            _mockHandler = new Mock<ICommandHandler<CohortApprovalRequestedCommand>>();
+            _mockAdapter = new Mock<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>>();
             _mockMessageHandlerContext = new Mock<IMessageHandlerContext>();
 
-            _sut = new CohortCreatedEventHandler(_mockHandler.Object, _mockAdapter.Object);
+            _sut = new CohortApprovalRequestedByProviderEventHandler(_mockHandler.Object, _mockAdapter.Object);
         }
 
-        public class Handle: CohortCreatedEventHandlerTests
+        public class Handle: CohortApprovalRequestedEventHandlerTests
         {
             [Test]
             public async Task WhenCalled_ThenTheAdapterIsCalledToConvertTheMessage()
             {
                 // arrange
-                CohortCreated @event = new CohortCreatedBuilder();
+                CohortApprovalRequestedByProvider @event = new ApprovalRequestedBuilder();
 
                 // act
                 await _sut.Handle(@event, _mockMessageHandlerContext.Object);
@@ -43,13 +43,13 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Cohor
                 //assert
                 _mockAdapter.Verify(m => m.Convert(@event), Times.Once);
             }
-
+            
             [Test]
-            public async Task WhenCalled_ThenTheCommandHandlerIscalledWithTheCreateCohortCommand()
+            public async Task WhenCalled_ThenTheCommandHandlerIsCalled()
             {
                 // arrange
-                CohortCreated @event = new CohortCreatedBuilder();
-                CreateCohortCommand command = new CreateCohortCommandBuilder();
+                CohortApprovalRequestedByProvider @event = new ApprovalRequestedBuilder();
+                CohortApprovalRequestedCommand command = new CreateCohortCommandBuilder();
 
                 _mockAdapter
                     .Setup(m => m.Convert(@event))
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Cohor
 
                 //assert
                 _mockHandler.Verify(m => m.Handle(command, It.IsAny<CancellationToken>()), Times.Once);
-            }
+            }            
         }
     }
 }

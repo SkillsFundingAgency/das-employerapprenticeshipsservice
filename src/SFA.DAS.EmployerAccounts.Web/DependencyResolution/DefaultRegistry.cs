@@ -8,10 +8,6 @@ using System.Web;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
-using SFA.DAS.EmployerAccounts.Commands;
-using SFA.DAS.EmployerAccounts.Commands.CreateCohort;
-using SFA.DAS.EmployerAccounts.Adapters;
-using SFA.DAS.EmployerAccounts.Events.Cohort;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -33,10 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
-            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();
-
-            For<ICommandHandler<CreateCohortCommand>>().Use<CreateCohortCommandHandler>();
-            For<IAdapter<CohortCreated, CreateCohortCommand>>().Use<CohortAdapter>();
+            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();            
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿using SFA.DAS.EmployerAccounts.Commands.CreateCohort;
+﻿using SFA.DAS.EmployerAccounts.Commands.Cohort;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.Builders
 {
     public class CreateCohortCommandBuilder
     {
-        public CreateCohortCommand Build()
+        public CohortApprovalRequestedCommand Build()
         {
-            return new CreateCohortCommand();
+            return new CohortApprovalRequestedCommand(123);
         }
         
-        public static implicit operator CreateCohortCommand(CreateCohortCommandBuilder instance)
+        public static implicit operator CohortApprovalRequestedCommand(CreateCohortCommandBuilder instance)
         {
             return instance.Build();
         }

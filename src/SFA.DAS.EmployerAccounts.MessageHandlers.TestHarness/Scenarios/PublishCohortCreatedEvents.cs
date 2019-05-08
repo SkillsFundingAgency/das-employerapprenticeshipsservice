@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
-using SFA.DAS.EmployerAccounts.Events.Cohort;
+using SFA.DAS.Commitments.Events;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
 {
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.Scenarios
 
         public async Task Run()
         {
-            var newEvent = new CohortCreated();
+            var newEvent = new CohortApprovalRequestedByProvider();
 
             await _messageSession.Publish(newEvent);
 
