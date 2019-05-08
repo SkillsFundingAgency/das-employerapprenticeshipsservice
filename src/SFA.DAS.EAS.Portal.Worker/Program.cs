@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Portal.Worker
 {
     class Program
     {
+        //todo: check >1 webjob
         // to run
         //   local
         //     set environment variables
