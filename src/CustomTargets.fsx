@@ -30,11 +30,12 @@ Target "Build And Zip Webjob Host Projects" ( fun _ ->
             |> MSBuildReleaseExt null properties "Build"
             |> Log "Build-Output: "
 
-        let portalProject = "./SFA.DAS.EAS.Portal.Worker/SFA.DAS.EAS.Portal.Worker.csproj"
-        DotNetCli.Publish(fun p ->
-            { p with
-                Project = portalProject
-                Output = directory})
+        DotNetCli.Publish              
+            (fun p ->
+                { p with
+                    Project = "./SFA.DAS.EAS.Portal.Worker/SFA.DAS.EAS.Portal.Worker.csproj"
+                    Configuration = "Release"
+                    Output = directory})
 )
 
 Target "Build And Zip Web App Projects" ( fun _ ->
@@ -70,11 +71,12 @@ Target "Build And Zip Web App Projects" ( fun _ ->
             |> MSBuildReleaseExt null properties "Build"
             |> Log "Build-Output: "
 
-        let portalProject = "./SFA.DAS.EAS.Portal/SFA.DAS.EAS.Portal.csproj"
-        DotNetCli.Publish(fun p ->
-            { p with
-                Project = portalProject
-                Output = directory})
+        DotNetCli.Publish              
+            (fun p ->
+                { p with
+                    Project = "./SFA.DAS.EAS.Portal/SFA.DAS.EAS.Portal.csproj"
+                    Configuration = "Release"
+                    Output = directory})
 )
 
 Target "Restore Solution Packages" (fun _ ->
