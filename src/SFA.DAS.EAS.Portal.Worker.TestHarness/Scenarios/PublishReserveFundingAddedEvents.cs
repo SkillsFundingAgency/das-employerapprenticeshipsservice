@@ -26,13 +26,13 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
             {
                 AccountId = accountId,
                 AccountLegalEntityId = accountLegalEntityId1,
-                LegalEntityName = legalEntityName1,
+                AccountLegalEntityName = legalEntityName1,
                 ReservationId = 1,
                 CourseId = 3,
                 CourseName = "Fish Monger, Level 3 (Standard)",
                 StartDate = new DateTime(2020, 1, 1),
                 EndDate = new DateTime(2021, 1, 1),
-                Created = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow
             });
 
             // another reservation, same account, same legal entity
@@ -40,13 +40,13 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
             {
                 AccountId = accountId,
                 AccountLegalEntityId = accountLegalEntityId1,
-                LegalEntityName = legalEntityName1,
+                AccountLegalEntityName = legalEntityName1,
                 ReservationId = 2,
                 CourseId = 4,
                 CourseName = "Fish Monger, Level 4 (Standard)",
                 StartDate = new DateTime(2020, 2, 1),
                 EndDate = new DateTime(2021, 2, 1),
-                Created = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow
             });
             
             // another reservation, same account, different legal entity
@@ -54,13 +54,13 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
             {
                 AccountId = accountId,
                 AccountLegalEntityId = accountLegalEntityId2,
-                LegalEntityName = legalEntityName2,
+                AccountLegalEntityName = legalEntityName2,
                 ReservationId = 3,
                 CourseId = 2,
                 CourseName = "Fish Monger, Level 2 (Standard)",
                 StartDate = new DateTime(2020, 2, 1),
                 EndDate = new DateTime(2021, 2, 1),
-                Created = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow
             });
         }
     }

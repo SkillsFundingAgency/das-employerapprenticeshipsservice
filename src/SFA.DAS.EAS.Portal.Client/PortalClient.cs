@@ -9,7 +9,6 @@ namespace SFA.DAS.EAS.Portal.Client
     {
         private readonly GetAccountQuery _getAccountQuery;
 
-        //todo: think through di lifetime, ie transient vs singleton. if we can singleton all the way, wahey
         public PortalClient(GetAccountQuery getAccountQuery)
         {
             _getAccountQuery = getAccountQuery;
