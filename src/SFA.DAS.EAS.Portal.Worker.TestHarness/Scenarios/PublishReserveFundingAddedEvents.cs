@@ -49,7 +49,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
                 Created = DateTime.UtcNow
             });
             
-            // another reservation, same account, differnt legal entity
+            // another reservation, same account, different legal entity
             await _messageSession.Publish(new ReserveFundingAddedEvent
             {
                 AccountId = accountId,
