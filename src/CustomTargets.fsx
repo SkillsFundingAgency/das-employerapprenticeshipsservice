@@ -66,9 +66,19 @@ Target "Build And Zip Web App Projects" ( fun _ ->
 )
 
 Target "Restore Solution Packages" (fun _ ->
-     "./SFA.DAS.EAS.sln"
-     |> RestoreMSSolutionPackages (fun p ->
-         { p with
-             OutputPath = ".\\packages"
-             Retries = 4 })
+    let solutionNames = [| "./SFA.DAS.EAS.sln" |]
+
+    for solutionName in solutionNames do
+        solutionName
+        |> RestoreMSSolutionPackages (fun p ->
+            { p with
+                OutputPath = ".\\packages"
+                Retries = 4 })
+
+    let coreSolutionNames =  [| "./SFA.DAS.EAS.Portal.sln" |]
+    for solutionName in coreSolutionNames do
+        DotNetCli.Restore(fun p ->
+            { p with
+                Project = solutionName })
  )
+
