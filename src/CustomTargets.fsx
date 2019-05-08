@@ -35,7 +35,11 @@ Target "Build And Zip Webjob Host Projects" ( fun _ ->
                 { p with
                     Project = "./SFA.DAS.EAS.Portal.Worker/SFA.DAS.EAS.Portal.Worker.csproj"
                     Configuration = "Release"
-                    Output = directory})
+                    Output = directory + "/SFA.DAS.EAS.Portal.Worker"})
+
+        !! (directory + "/SFA.DAS.EAS.Portal.Worker" + "/**/*.*")
+            -- "*.zip"
+            |> Zip directory (directory + "/SFA.DAS.EAS.Portal.Worker.zip")
 )
 
 Target "Build And Zip Web App Projects" ( fun _ ->
@@ -76,7 +80,11 @@ Target "Build And Zip Web App Projects" ( fun _ ->
                 { p with
                     Project = "./SFA.DAS.EAS.Portal/SFA.DAS.EAS.Portal.csproj"
                     Configuration = "Release"
-                    Output = directory})
+                    Output = directory + "/SFA.DAS.EAS.Portal"})
+
+        !! (directory + "/SFA.DAS.EAS.Portal" + "/**/*.*")
+            -- "*.zip"
+            |> Zip directory (directory + "/SFA.DAS.EAS.Portal.zip")
 )
 
 Target "Restore Solution Packages" (fun _ ->
