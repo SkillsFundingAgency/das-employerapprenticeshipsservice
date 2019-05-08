@@ -29,6 +29,12 @@ Target "Build And Zip Webjob Host Projects" ( fun _ ->
         !! (@".\**\*.Host.csproj")
             |> MSBuildReleaseExt null properties "Build"
             |> Log "Build-Output: "
+
+        let portalProject = "./SFA.DAS.EAS.Portal.Worker/SFA.DAS.EAS.Portal.Worker.csproj"
+        DotNetCli.Publish(fun p ->
+            { p with
+                Project = portalProject
+                Output = directory})
 )
 
 Target "Build And Zip Web App Projects" ( fun _ ->
@@ -63,12 +69,28 @@ Target "Build And Zip Web App Projects" ( fun _ ->
         !! (@".\**\SFA.DAS.EmployerFinance.Api.csproj")
             |> MSBuildReleaseExt null properties "Build"
             |> Log "Build-Output: "
+
+        let portalProject = "./SFA.DAS.EAS.Portal/SFA.DAS.EAS.Portal.csproj"
+        DotNetCli.Publish(fun p ->
+            { p with
+                Project = portalProject
+                Output = directory})
 )
 
 Target "Restore Solution Packages" (fun _ ->
-     "./SFA.DAS.EAS.sln"
-     |> RestoreMSSolutionPackages (fun p ->
-         { p with
-             OutputPath = ".\\packages"
-             Retries = 4 })
+    let solutionNames = [| "./SFA.DAS.EAS.sln" |]
+
+    for solutionName in solutionNames do
+        solutionName
+        |> RestoreMSSolutionPackages (fun p ->
+            { p with
+                OutputPath = ".\\packages"
+                Retries = 4 })
+
+    let coreSolutionNames =  [| "./SFA.DAS.EAS.Portal.sln" |]
+    for solutionName in coreSolutionNames do
+        DotNetCli.Restore(fun p ->
+            { p with
+                Project = solutionName })
  )
+
