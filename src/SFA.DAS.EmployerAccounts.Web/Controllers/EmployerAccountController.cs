@@ -136,6 +136,50 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
+        [Route("confirmWhoYouAre")]
+        public ActionResult ConfirmWhoYouAre()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("confirmWhoYouAre")]
+        public async Task<ActionResult> ConfirmWhoYouAre(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case 1:
+                {
+                    var request = new CreateUserAccountViewModel
+                    {
+                        UserId = GetUserId(),
+                        OrganisationName = "MY ACCOUNT"
+                    };
+
+                    var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+
+                    return RedirectToAction(ControllerConstants.EmployerAccountAccountRegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId = response.Data.HashedId });
+                }
+                case 2: return RedirectToAction(ControllerConstants.SetupAccountViewName, ControllerConstants.HomeControllerName);
+                default:
+
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
+
+                    return View(model);
+            }
+        }
+
+        [HttpGet]
         [Route("youhaveregistered")]
         public ViewResult YouHaveRegistered(string hashedAccountId = null)
         {
@@ -153,7 +197,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             _employerAccountOrchestrator.DeleteCookieData();
 
-            ViewBag.AccountUrl = this.Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
+            ViewBag.AccountUrl = Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
             return View();
         }
 
@@ -223,13 +267,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
             {
-                return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
+                return RedirectToAction(ControllerConstants.EmployerAccountAccountRegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
             }
-            else
-            {
-                _employerAccountOrchestrator.DeleteCookieData();
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
+            
+            _employerAccountOrchestrator.DeleteCookieData();
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         [HttpGet]

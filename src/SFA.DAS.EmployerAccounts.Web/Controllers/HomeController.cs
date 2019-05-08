@@ -71,8 +71,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(accounts);
                 }
 
-                return View(ControllerConstants.SetupAccountViewName, accounts);
+                if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
+                {
+                    return RedirectToAction(ControllerConstants.ConfirmWhoYouAre, ControllerConstants.EmployerAccountControllerName);
+                }
 
+                return View(ControllerConstants.SetupAccountViewName, accounts);
             }
 
             var model = new
@@ -89,9 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("accounts")]
         public async Task<ActionResult> ViewAccounts()
         {
-
-            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue("sub"));
-
+            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
         }
 
@@ -114,7 +116,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (choice ?? 0)
             {
                 case 1: return RedirectToAction(_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney) ? 
-                    ControllerConstants.ConfirmWhoYouAre : 
+                    ControllerConstants.RegisterUserActionName : 
                     ControllerConstants.WhatYoullNeedActionName); // No not used before
                 case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
                 default:
@@ -130,35 +132,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("confirmWhoYouAre")]
-        public ActionResult ConfirmWhoYouAre()
-        {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Route("confirmWhoYouAre")]
-        public ActionResult ConfirmWhoYouAre(int? choice)
-        {
-            switch (choice ?? 0)
-            {
-                case 1: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {Option = "later"});
-                case 2: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {option = "now"});
-                default:
-
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                        InError = true
-                    };
-
-                    return View(model);
-            }
+        [Route("setupAccount")]
+        public async Task<ActionResult> SetupAccount()
+        {        
+            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            return View(accounts);
         }
 
         [HttpGet]
@@ -194,26 +172,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("register")]
-        public ActionResult RegisterUser(string option = "new")
+        public ActionResult RegisterUser()
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/{option}");
+            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [Authorize]
         [HttpGet]
-        [Route("register/{option}")]
-        public async Task<ActionResult> HandleNewRegistration(string option = null)
+        [Route("register/new")]
+        public async Task<ActionResult> HandleNewRegistration()
         {
             await OwinWrapper.UpdateClaims();
-
-            switch (option)
-            {
-                case "later": return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName);
-                default: return RedirectToAction(ControllerConstants.IndexActionName);
-            }
+            return RedirectToAction(ControllerConstants.ConfirmWhoYouAre, ControllerConstants.EmployerAccountControllerName);
+            //switch (option)
+            //{
+            //    case "later": return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName);
+            //    default: return RedirectToAction(ControllerConstants.IndexActionName);
+            //}
         }
 
         [Authorize]
