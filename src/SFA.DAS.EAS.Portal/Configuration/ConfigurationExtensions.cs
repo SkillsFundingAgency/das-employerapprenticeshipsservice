@@ -7,7 +7,9 @@ namespace SFA.DAS.EAS.Portal.Configuration
     {
         public static IConfigurationSection GetPortalSection(this IConfiguration configuration, params string[] subSectionPaths)
         {
-            var key = string.Join(":", Enumerable.Repeat(ConfigurationKeys.EmployerApprenticeshipsServicePortal, 1).Concat(subSectionPaths));
+            var key = string.Join(":", 
+                Enumerable.Repeat(ConfigurationKeys.EmployerApprenticeshipsServicePortal, 1)
+                    .Concat(subSectionPaths));
             return configuration.GetSection(key);
         }
 

@@ -10,6 +10,7 @@ using StructureMap;
 namespace SFA.DAS.EAS.Portal.Client.TestHarness
 {
     //todo: logging?
+    //todo: should probably have framework test client to match eas, rather than core with structuremap
     public static class Program
     {
         public static async Task Main(string[] args)
@@ -27,7 +28,6 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             new HostBuilder()
-                //todo: structuremap di
                 .ConfigureDasAppConfiguration(args)
                 .ConfigureDasLogging()
                 .UseDasEnvironment()

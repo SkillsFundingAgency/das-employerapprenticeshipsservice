@@ -3,7 +3,8 @@ using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 
 namespace SFA.DAS.EAS.Portal.Client.Data
 {
-    internal interface IAccountsReadOnlyRepository : IReadOnlyDocumentRepository<AccountDto>
+    //todo: internal
+    public interface IAccountsReadOnlyRepository : IReadOnlyDocumentRepository<AccountDto>
     {
     }
 }

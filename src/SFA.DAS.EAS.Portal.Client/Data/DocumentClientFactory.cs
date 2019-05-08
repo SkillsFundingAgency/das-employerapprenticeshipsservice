@@ -7,11 +7,11 @@ namespace SFA.DAS.EAS.Portal.Client.Data
 {
     public class DocumentClientFactory : IDocumentClientFactory
     {
-        private readonly ICosmosDbConfiguration _configuration;
+        private readonly ICosmosDbConfiguration _cosmosDbConfiguration;
 
-        public DocumentClientFactory(ICosmosDbConfiguration configuration)
+        public DocumentClientFactory(ICosmosDbConfiguration cosmosDbConfiguration)
         {
-            _configuration = configuration;
+            _cosmosDbConfiguration = cosmosDbConfiguration;
         }
 
         public IDocumentClient CreateDocumentClient()
@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Portal.Client.Data
                 }
             };
 
-            return new DocumentClient(new Uri(_configuration.Uri), _configuration.AuthKey, connectionPolicy);
+            return new DocumentClient(new Uri(_cosmosDbConfiguration.Uri), _cosmosDbConfiguration.AuthKey, connectionPolicy);
         }
     }
 }

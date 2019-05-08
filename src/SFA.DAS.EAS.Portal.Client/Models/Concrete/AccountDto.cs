@@ -4,7 +4,8 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
 {
-    internal class AccountDto : IAccountDto<IAccountLegalEntityDto<IReservedFundingDto>>
+    //todo: internal
+    public class AccountDto : IAccountDto<IAccountLegalEntityDto<IReservedFundingDto>>
     {
         [JsonProperty("accountId")]
         public long AccountId { get; private set; }
