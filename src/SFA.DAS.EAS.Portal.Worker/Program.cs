@@ -77,10 +77,6 @@ namespace SFA.DAS.EAS.Portal.Worker
             }
         }
 
-        //todo: need to add unit of work into container?
-        // does e.g. uow support non-structuremap container?
-        // do we even need uow?? if we're only writing to a document collection, no sending further messages, etc.
-
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             new HostBuilder()
                 .ConfigureDasWebJobs()

@@ -17,7 +17,6 @@ namespace SFA.DAS.EAS.Portal.Client.Application.Queries
 
         public async Task<AccountDto> Get(long accountId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            //todo: throw if doesn't exist?
             return await _accountsReadOnlyRepository.CreateQuery()
                 .FirstOrDefaultAsync( a => a.Deleted == null && a.AccountId == accountId, cancellationToken)
                 .ConfigureAwait(false);
