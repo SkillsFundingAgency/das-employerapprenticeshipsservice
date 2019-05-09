@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Portal.Client.Application.Queries;
-using SFA.DAS.EAS.Portal.Client.Models;
+using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 
 namespace SFA.DAS.EAS.Portal.Client
 {
@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Portal.Client
             _getAccountQuery = getAccountQuery;
         }
 
-        public Task<IAccountDto<IAccountLegalEntityDto<IReservedFundingDto>>> GetAccount(long accountId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<AccountDto> GetAccount(long accountId, CancellationToken cancellationToken = default(CancellationToken))
         {
             return _getAccountQuery.Get(accountId, cancellationToken);
         }
