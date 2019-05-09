@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
-        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToConfirmWhoYouAre()
+        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToGetGovernmentFunding()
         {
             //Act
             var actual = await _homeController.HandleNewRegistration();
@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
             var actualRedirect = actual as RedirectToRouteResult;
             Assert.IsNotNull(actualRedirect);
-            Assert.AreEqual("ConfirmWhoYouAre", actualRedirect.RouteValues["action"]);
+            Assert.AreEqual("GetGovernmentFunding", actualRedirect.RouteValues["action"]);
         }
 
         [Test]
