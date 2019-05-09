@@ -202,11 +202,11 @@
         }
     ],
     "outputs": {
-        "EmployerHomePageworkerAppServiceName": {
+        "PortalWorkerAppServiceName": {
             "type": "string",
             "value": "[variables('workerAppServiceName')]"
         },
-        "EmployerHomePageCosmosDbName": {
+        "PortalCosmosDbName": {
             "type": "string",
             "value": "[variables('cosmosDbName')]"
         }
