@@ -68,6 +68,10 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
                 {
                     UniqueKeys = new Collection<UniqueKey>
                     {
+                        //todo: decide on unique keys
+                        // reservationid could be unique : we don't process the same message >1, so should never get dupes
+                        // (however running test harness multiple times means we end up with dupes, but thats because we publish distinct messages with the same data)
+                        //AccountLegalEntityId could also be unique
                         //new UniqueKey
                         //{
                         //    Paths = new Collection<string> { "/accountProviderLegalEntityId" }

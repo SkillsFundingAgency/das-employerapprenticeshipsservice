@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios;
 
 namespace SFA.DAS.EAS.Portal.Worker.TestHarness
 {
-    //todo: logging?
     public static class Program
     {
         public static async Task Main(string[] args)
@@ -26,7 +25,6 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             new HostBuilder()
                 .ConfigureDasAppConfiguration(args)
-                .ConfigureDasLogging()
                 .UseDasEnvironment()
                 .ConfigureServices(s => s.AddDasNServiceBus())
                 .ConfigureServices(s => s.AddTransient<PublishReserveFundingAddedEvents, PublishReserveFundingAddedEvents>());
