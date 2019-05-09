@@ -12,6 +12,9 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
     /// Creates the read store as a CosmosDB if it doesn't already exist.
     /// </summary>
     /// <remarks>
+    /// 
+    /// UNIQUE KEYS
+    /// 
     /// We don't create any unique keys, because...
     /// * Sparse unique keys are not supported.
     /// As there is no guarantee to the order we receive events from the various subsystems (due to user behaviour and
@@ -28,6 +31,15 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
     /// that discards old messages (which doesn't exist yet).
     /// Possibly every event will end up creating an AccountLegalEntity, so we could have an unique index on its Id,
     /// but even if that fits current known requirements, it might not fit all future requirements.
+    ///
+    /// INDEXING
+    ///
+    /// It's tempting to set indexing to none, as we should be retrieving by accountid only,
+    /// and indexes can be added on the fly if required. However, it's probably prudent to keep indexing on (everything),
+    /// so that ad-hoc queries can be run (at the cost of extra storage and write latency), and also future jobs might
+    /// need them.
+    /// 
+    /// At least the indexing policy is not set in stone at creation time, so we can change it later.
     /// </remarks>
     public class CreateReadStoreDatabaseJob
     {
@@ -45,7 +57,6 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
         //todo: use secret manager, rather than env variables (easier to have different settings for different projects)
         // ^^ see https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-2.2&tabs=windows
         //todo: inject ilogger in ctor?
-        //todo: indexing strategy
         [NoAutomaticTrigger]
         [Singleton]
         public async Task CreateReadStoreDatabase(ExecutionContext executionContext, ILogger logger)
