@@ -50,8 +50,6 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
         [Singleton]
         public async Task CreateReadStoreDatabase(ExecutionContext executionContext, ILogger logger)
         {
-            //logger.LogInformation($"{executionContext.InvocationId}: Helo Byd");
-
             var database = await CreateDatabaseIfNotExists(executionContext, logger);
 
             await CreateAccountDocumentCollectionIfNotExists(database, executionContext, logger);
