@@ -15,6 +15,7 @@ namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
         [JsonProperty("accountId")]
         public virtual long AccountId { get; private set; }
 
+        //todo: return List in dto's, not enumerable (so consumer can add to them without copying - return most specific type)
         [JsonProperty("accountLegalEntities")]
         public virtual IEnumerable<IAccountLegalEntityDto<IReservedFundingDto>> AccountLegalEntities { get; private set; }
 
