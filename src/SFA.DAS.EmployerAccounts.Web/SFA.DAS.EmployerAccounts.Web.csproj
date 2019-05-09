@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props')" />
@@ -692,7 +692,7 @@
     <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
-    <Content Include="Views\EmployerAccount\ConfirmWhoYouAre.cshtml" />
+    <Content Include="Views\EmployerAccount\GetGovernmentFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Index.cshtml" />
     <Content Include="Views\Shared\_Layout_v2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row1Panel1.cshtml" />

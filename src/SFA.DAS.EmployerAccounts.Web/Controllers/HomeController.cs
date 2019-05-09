@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
                 {
-                    return RedirectToAction(ControllerConstants.ConfirmWhoYouAre, ControllerConstants.EmployerAccountControllerName);
+                    return RedirectToAction(ControllerConstants.GetGovernmentFunding, ControllerConstants.EmployerAccountControllerName);
                 }
 
                 return View(ControllerConstants.SetupAccountViewName, accounts);
@@ -186,12 +186,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> HandleNewRegistration()
         {
             await OwinWrapper.UpdateClaims();
-            return RedirectToAction(ControllerConstants.ConfirmWhoYouAre, ControllerConstants.EmployerAccountControllerName);
-            //switch (option)
-            //{
-            //    case "later": return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName);
-            //    default: return RedirectToAction(ControllerConstants.IndexActionName);
-            //}
+            return RedirectToAction(ControllerConstants.GetGovernmentFunding, ControllerConstants.EmployerAccountControllerName);
         }
 
         [Authorize]

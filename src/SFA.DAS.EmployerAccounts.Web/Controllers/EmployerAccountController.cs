@@ -136,8 +136,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("confirmWhoYouAre")]
-        public ActionResult ConfirmWhoYouAre()
+        [Route("getGovernmentFunding")]
+        public ActionResult GetGovernmentFunding()
         {
             var model = new
             {
@@ -149,8 +149,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("confirmWhoYouAre")]
-        public async Task<ActionResult> ConfirmWhoYouAre(int? choice)
+        [Route("getGovernmentFunding")]
+        public async Task<ActionResult> GetGovernmentFunding(int? choice)
         {
             switch (choice ?? 0)
             {

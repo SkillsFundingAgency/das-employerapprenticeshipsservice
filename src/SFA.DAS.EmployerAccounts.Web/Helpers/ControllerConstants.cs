@@ -17,7 +17,7 @@
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
-        public const string ConfirmWhoYouAre = "ConfirmWhoYouAre";
+        public const string GetGovernmentFunding = "GetGovernmentFunding";
         public const string CoursePaymentSummaryViewName = "CoursePaymentSummary";
         public const string EmailClaimKeyName = "email";
         public const string EmployerAccountOrganisationControllerName = "EmployerAccountOrganisation";

@@ -1,10 +1,10 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "confirm-who-you-are"; }
-@{ViewBag.Title = "Confirm Who You Are"; }
+@{ViewBag.PageID = "get-government-funding"; }
+@{ViewBag.Title = "Get Government Funding"; }
 @{ViewBag.HideNav = "true"; }
 
 @{
-    ViewBag.GaData.Vpv = "/service/confirmWhoYouAre/confirm-who-you-are";
+    ViewBag.GaData.Vpv = "/service/getGovernmentFunding/get-government-funding";
     var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "hidden";
     var errorClass = Model?.GetType().GetProperty("InError") != null ? "error" : "";
 }
@@ -12,33 +12,33 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-            Confirm who you are
+            Get government funding
         </h1>
-        <p>To pay for your apprenticeships using government funding you will need to confirm who you are using your organisation’s PAYE scheme.</p>
+        <p>If you’re ready to pay for your apprenticeships using government funding, you can do this now by adding the PAYE scheme for your organisation.</p>
         <p>If you do not need to get government funding yet, you can still register an account to:</p>
         <ul class="list list-bullet">
             <li>search and save apprenticeships</li>
             <li>save your chosen training providers</li>
         </ul>
-        <p>You can add your organisation's PAYE scheme using the Government Gateway login for your PAYE scheme.</p>
+        <p>You can add the PAYE scheme for your organisation using the Government Gateway login for your PAYE scheme.</p>
         <p><a rel="external" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in">Can't find your Government Gateway details?</a></p>
-        <form method="POST" action="@Url.Action(ControllerConstants.ConfirmWhoYouAre, ControllerConstants.EmployerAccountControllerName)" >
+        <form method="POST" action="@Url.Action(ControllerConstants.GetGovernmentFunding, ControllerConstants.EmployerAccountControllerName)" >
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
                 <fieldset>
                     <legend class="form-label-bold">
-                        <span>Do you want to add a PAYE scheme to confirm who you are?</span>
+                        <span>Do you want to add a PAYE scheme to get government funding?</span>
                         <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
                             Tell us if you want to add a PAYE scheme
                         </span>
                     </legend>
                     <label for="want-to-add-paye-scheme" class="block-label">
                         <input type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
-                        Yes, I want to add my PAYE scheme details now
+                        Yes, add my PAYE scheme details now
                     </label>
                     <label for="do-not-want-to-add-paye-scheme" class="block-label">
                         <input type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
-                        No, I’ll add my PAYE scheme details later
+                        No, I’ll do this later
                     </label>
                 </fieldset>
             </div>
