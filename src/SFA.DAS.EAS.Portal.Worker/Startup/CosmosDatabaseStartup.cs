@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                 .AddTransient<IDocumentClientFactory, DocumentClientFactory>()
                 .AddSingleton(sp => sp.GetService<IDocumentClientFactory>().CreateDocumentClient())
                 .AddSingleton<IAccountsRepository, AccountsRepository>()
-                .Configure<CosmosDatabaseConfiguration>(configuration.GetPortalSection("CosmosDatabase"));
+                .Configure<CosmosDatabaseConfiguration>(configuration.GetPortalSection(PortalSections.CosmosDatabase));
         }
     }
 }

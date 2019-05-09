@@ -22,8 +22,7 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                 {
                     var configuration = s.GetService<IConfiguration>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
-                    //todo: put section names in class somewhere
-                    var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>("ServiceBus");
+                    var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>(PortalSections.ServiceBus);
                     var isDevelopment = hostingEnvironment.IsDevelopment();
 
                     var endpointConfiguration = new EndpointConfiguration(EndpointName.EasPortalWorker)

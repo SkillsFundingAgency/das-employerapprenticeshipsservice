@@ -79,7 +79,6 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
             return database;
         }
 
-        //todo: namespace
         private async Task CreateAccountDocumentCollectionIfNotExists(
             Microsoft.Azure.Documents.Database database,
             ExecutionContext executionContext, ILogger logger)
