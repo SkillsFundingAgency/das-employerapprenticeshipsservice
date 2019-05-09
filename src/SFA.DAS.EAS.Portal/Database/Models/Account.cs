@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
                 // we could have different ctors/factories for creation from different events
                 // for now we include updated == created date to let through adding on creation
                 // todo: need lots of tests around this out-of order handling!!
-                if (IsUpdatedDateChronological(updated))
+//                if (IsUpdatedDateChronological(updated))
                 {
                     // we also need to handle case where reserve funding is created, then deleted, then created again with same details
                     //EnsureRelationshipHasNotBeenDeleted();
@@ -103,14 +103,13 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             });
         }
 
-        // we have different requirements to provider permissions
-        // permissions could simply check messages are processed chronologically to handle out-of-order messages
-        // we have less strict requirements that we could potentially take advantage of - we only need to check chronological by event
+        // each created message *must* be processed, not just the latest, otherwise we lose reserved fundings
+        //todo: when we handle delete we'll need to rethink this
         
-        private bool IsUpdatedDateChronological(DateTime updated)
-        {
-            return updated > Created && (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
-        }
+//        private bool IsUpdatedDateChronological(DateTime updated)
+//        {
+//            return updated > Created && (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
+//        }
 
         private void AddOutboxMessage(string messageId, DateTime created)
         {

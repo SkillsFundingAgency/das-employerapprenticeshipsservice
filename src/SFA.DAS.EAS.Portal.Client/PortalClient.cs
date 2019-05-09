@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Portal.Client
             _getAccountQuery = container.GetInstance<GetAccountQuery>();
         }
 
-//        public PortalClient(IServiceCollection container)
+//        public PortalClient(IServicepProvider container)
 //        {
 //        }
         
