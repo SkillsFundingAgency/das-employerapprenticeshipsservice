@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
 {
-    //todo: internal
     public class AccountDto : IAccountDto<IAccountLegalEntityDto<IReservedFundingDto>>
     {
         public AccountDto(IEnumerable<AccountLegalEntityDto> accountLegalEntities)

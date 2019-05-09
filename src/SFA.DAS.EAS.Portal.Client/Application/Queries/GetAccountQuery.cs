@@ -6,8 +6,7 @@ using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 
 namespace SFA.DAS.EAS.Portal.Client.Application.Queries
 {
-    //todo: internal
-    public class GetAccountQuery
+    internal class GetAccountQuery
     {
         private readonly IAccountsReadOnlyRepository _accountsReadOnlyRepository;
 

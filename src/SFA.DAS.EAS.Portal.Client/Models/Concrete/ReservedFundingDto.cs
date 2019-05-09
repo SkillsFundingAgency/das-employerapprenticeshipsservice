@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
 {
-    //todo: internal
     public class ReservedFundingDto : IReservedFundingDto
     {
         [JsonProperty("reservationId")]
