@@ -56,12 +56,12 @@ namespace SFA.DAS.EAS.Portal.Worker
         // better to use IEvent
         // (also would be worthwhile making sure correlationids flow)
         //2019-05-01 08:34:18.9288 [DEBUG] [NServiceBus.SerializationFeature] - Message definitions:
-        //SFA.DAS.EAS.Portal.Application.Commands.AddReserveFundingCommand
+        //SFA.DAS.EAS.Portal.Application.Commands.AddReservationCommand
         //SFA.DAS.NServiceBus.ClientOutbox.Commands.ProcessClientOutboxMessageCommand
         //NServiceBus.ScheduledTask
         //SFA.DAS.NServiceBus.Event
         //SFA.DAS.NServiceBus.Command
-        //SFA.DAS.EAS.Portal.TempEvents.ReserveFundingAddedEvent
+        //SFA.DAS.EAS.Portal.TempEvents.ReservationCreatedEvent
 
         static async Task Main(string[] args)
         {

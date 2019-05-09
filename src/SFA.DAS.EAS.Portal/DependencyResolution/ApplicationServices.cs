@@ -9,8 +9,8 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
         {
             //todo: singleton in similar way to client?
             //todo: 2 interfaces, 1 with props, 1 with methods!?
-            //return services.AddTransient<IAddReserveFundingCommand, AddReserveFundingCommand>();
-            return services.AddTransient<AddReserveFundingCommand>();
+            //return services.AddTransient<IAddReserveFundingCommand, AddReservationCommand>();
+            return services.AddTransient<AddReservationCommand>();
         }
     }
 }

@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
             const long accountLegalEntityId2 = 8008135L;
             const string legalEntityName2 = "Ann Chovy's Fish Emporium Ltd";
 
-            await _messageSession.Publish(new ReserveFundingAddedEvent
+            await _messageSession.Publish(new ReservationCreatedEvent
             {
                 AccountId = accountId,
                 AccountLegalEntityId = accountLegalEntityId1,
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
             });
 
             // another reservation, same account, same legal entity
-            await _messageSession.Publish(new ReserveFundingAddedEvent
+            await _messageSession.Publish(new ReservationCreatedEvent
             {
                 AccountId = accountId,
                 AccountLegalEntityId = accountLegalEntityId1,
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
             });
             
             // another reservation, same account, different legal entity
-            await _messageSession.Publish(new ReserveFundingAddedEvent
+            await _messageSession.Publish(new ReservationCreatedEvent
             {
                 AccountId = accountId,
                 AccountLegalEntityId = accountLegalEntityId2,

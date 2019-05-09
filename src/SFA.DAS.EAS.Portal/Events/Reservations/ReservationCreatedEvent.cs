@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Portal.Events.Reservations
 {
-    public class ReserveFundingAddedEvent
+    public class ReservationCreatedEvent
     {
         public long AccountId { get; set; }
         public long AccountLegalEntityId { get; set; }

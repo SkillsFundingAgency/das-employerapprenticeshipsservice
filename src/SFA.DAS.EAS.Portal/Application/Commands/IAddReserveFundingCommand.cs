@@ -6,7 +6,7 @@
 //{
 //    public interface IAddReserveFundingCommand
 //    {
-//        Task Execute(ReserveFundingAddedEvent reservedFunding, string messageId,
+//        Task Execute(ReservationCreatedEvent reservedFunding, string messageId,
 //            CancellationToken cancellationToken = default(CancellationToken));
 //    }
 //}

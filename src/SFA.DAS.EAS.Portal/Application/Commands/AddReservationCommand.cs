@@ -8,20 +8,20 @@ using SFA.DAS.EAS.Portal.Events.Reservations;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands
 {
-    public class AddReserveFundingCommand //: IAddReserveFundingCommand
+    public class AddReservationCommand //: IAddReservationCommand
     {
         private readonly IAccountsRepository _accountsRepository;
-        private readonly ILogger<AddReserveFundingCommand> _logger;
+        private readonly ILogger<AddReservationCommand> _logger;
 
-        public AddReserveFundingCommand(IAccountsRepository accountsRepository, ILogger<AddReserveFundingCommand> logger)
+        public AddReservationCommand(IAccountsRepository accountsRepository, ILogger<AddReservationCommand> logger)
         {
             _accountsRepository = accountsRepository;
             _logger = logger;
         }
 
-        public async Task Execute(ReserveFundingAddedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task Execute(ReservationCreatedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default(CancellationToken))
         {
-            _logger.LogInformation("Executing AddReserveFundingCommand");
+            _logger.LogInformation("Executing AddReservationCommand");
 
             // can we have accountid as key, rather than guid??
             var account = await _accountsRepository
