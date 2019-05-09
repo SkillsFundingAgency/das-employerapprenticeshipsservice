@@ -8,6 +8,27 @@ using SFA.DAS.EAS.Portal.Client.Data;
 
 namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
 {
+    /// <summary>
+    /// Creates the read store as a CosmosDB if it doesn't already exist.
+    /// </summary>
+    /// <remarks>
+    /// We don't create any unique keys, because...
+    /// * Sparse unique keys are not supported.
+    /// As there is no guarantee to the order we receive events from the various subsystems (due to user behaviour and
+    /// out of order message handling), then we couldn't e.g. have ReservationId as an unique key,
+    /// as the user might not reserve funding first.
+    /// * Existing databases can't have their unique key changed.
+    /// At least not without creating a new database and migrating the data across.
+    /// That effectively stops us from iteratively adding unique keys and having to determine the whole schema up front.
+    /// * As a bonus, it's cheaper not to have them!
+    ///
+    /// It does mean there's no enforcing of sensible data on our documents, especially in light of bugs in the portal
+    /// or bad behaviour by event publishers (which is outside of our control) :-(
+    /// We could have a data sanitiser/checker job to highlight any issues, which could be combined with the job
+    /// that discards old messages (which doesn't exist yet).
+    /// Possibly every event will end up creating an AccountLegalEntity, so we could have an unique index on its Id,
+    /// but even if that fits current known requirements, it might not fit all future requirements.
+    /// </remarks>
     public class CreateReadStoreDatabaseJob
     {
         private readonly IDocumentClient _documentClient;
@@ -62,20 +83,6 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
                     Paths = new Collection<string>
                     {
                         "/accountId"
-                    }
-                },
-                UniqueKeyPolicy = new UniqueKeyPolicy
-                {
-                    UniqueKeys = new Collection<UniqueKey>
-                    {
-                        //todo: decide on unique keys
-                        // reservationid could be unique : we don't process the same message >1, so should never get dupes
-                        // (however running test harness multiple times means we end up with dupes, but thats because we publish distinct messages with the same data)
-                        //AccountLegalEntityId could also be unique
-                        //new UniqueKey
-                        //{
-                        //    Paths = new Collection<string> { "/accountProviderLegalEntityId" }
-                        //}
                     }
                 }
             };
