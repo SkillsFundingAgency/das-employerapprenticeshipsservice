@@ -7,7 +7,6 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 {
     class ReservationCreatedEventHandler : IHandleMessages<ReservationCreatedEvent>
     {
-        // NServiceBus can't inject an interface message with methods
         private readonly AddReservationCommand _addReservationCommand;
 
         public ReservationCreatedEventHandler(AddReservationCommand addReservationCommand)

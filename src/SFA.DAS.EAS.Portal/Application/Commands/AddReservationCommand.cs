@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Portal.Events.Reservations;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands
 {
-    public class AddReservationCommand //: IAddReservationCommand
+    public class AddReservationCommand
     {
         private readonly IAccountsRepository _accountsRepository;
         private readonly ILogger<AddReservationCommand> _logger;
