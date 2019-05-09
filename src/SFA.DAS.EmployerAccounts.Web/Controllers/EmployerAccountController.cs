@@ -164,9 +164,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                     var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
 
-                    return RedirectToAction(ControllerConstants.EmployerAccountAccountRegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { hashedAccountId = response.Data.HashedId });
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
                 }
-                case 2: return RedirectToAction(ControllerConstants.SetupAccountViewName, ControllerConstants.HomeControllerName);
+                case 2: return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 default:
 
                     var model = new
@@ -177,28 +177,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                     return View(model);
             }
-        }
-
-        [HttpGet]
-        [Route("youhaveregistered")]
-        public ViewResult YouHaveRegistered(string hashedAccountId = null)
-        {
-            var cookie = _employerAccountOrchestrator.GetCookieData();
-
-            if (cookie == null)
-            {
-                ViewBag.RequiresPayeScheme = true;
-            }
-            else
-            {
-                ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
-                                             cookie.EmployerAccountPayeRefData.EmpRefNotFound;
-            }
-
-            _employerAccountOrchestrator.DeleteCookieData();
-
-            ViewBag.AccountUrl = Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
-            return View();
         }
 
         [HttpGet]
@@ -264,14 +242,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
-
-            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-            {
-                return RedirectToAction(ControllerConstants.EmployerAccountAccountRegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
             
             _employerAccountOrchestrator.DeleteCookieData();
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         [HttpGet]
