@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Portal.DependencyResolution;
 using SFA.DAS.EAS.Portal.Worker.Startup;
 using SFA.DAS.EAS.Portal.Startup;
 using SFA.DAS.EAS.Portal.Worker.StartupJobs;
+using System;
 
 namespace SFA.DAS.EAS.Portal.Worker
 {
@@ -64,16 +65,33 @@ namespace SFA.DAS.EAS.Portal.Worker
 
         static async Task Main(string[] args)
         {
-            using (var host = CreateHostBuilder(args).Build())
+            IHost host = null;
+            try
             {
+                host = CreateHostBuilder(args).Build();
+
                 await host.StartAsync();
                 //https://github.com/Azure/azure-webjobs-sdk/issues/1940
 
                 var jobHost = host.Services.GetService<IJobHost>();
                 await jobHost.CallAsync(nameof(CreateReadStoreDatabaseJob.CreateReadStoreDatabase));
 
-                await host.WaitForShutdownAsync();
+                await host.WaitForShutdownAsync();               
+
             }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Trace.TraceError(ex.Message + ex.StackTrace);
+                throw;
+            }
+            finally
+            {
+                if (host != null)
+                {
+                    host.Dispose();
+                }
+            }
+          
         }
 
         //todo: need to add unit of work into container?
