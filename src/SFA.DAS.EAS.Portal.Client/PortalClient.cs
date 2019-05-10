@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Portal.Client
 //        {
 //        }
         
-        public Task<AccountDto> GetAccount(long accountId, CancellationToken cancellationToken = default(CancellationToken))
+        public Task<AccountDto> GetAccount(long accountId, CancellationToken cancellationToken = default)
         {
             return _getAccountQuery.Get(accountId, cancellationToken);
         }

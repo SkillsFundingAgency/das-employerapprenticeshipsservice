@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Portal.Client.Application.Queries
             _accountsReadOnlyRepository = accountsReadOnlyRepository;
         }
 
-        public async Task<AccountDto> Get(long accountId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<AccountDto> Get(long accountId, CancellationToken cancellationToken = default)
         {
             return await _accountsReadOnlyRepository.CreateQuery()
                 .FirstOrDefaultAsync( a => a.Deleted == null && a.AccountId == accountId, cancellationToken)
