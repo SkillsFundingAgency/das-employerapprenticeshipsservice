@@ -9,6 +9,10 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
+using System.Linq;
+using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.HashingService;
+using Account = SFA.DAS.EAS.Portal.Types.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -17,6 +21,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+        private readonly IPortalClient _portalClient;
+        private readonly IHashingService _hashingService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -30,28 +36,52 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator)
+            EmployerTeamOrchestrator employerTeamOrchestrator,
+            IPortalClient portalClient,
+            IHashingService hashingService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
+            _portalClient = portalClient;
+            _hashingService = hashingService;
         }
 
         [HttpGet]
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-
-            if (flashMessage != null)
+            if (FeatureToggles.Features.HomePage.Enabled)
             {
-                response.FlashMessage = flashMessage;
-                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
+                var response = new OrchestratorResponse<NewHomepageViewModel>();
+                var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
+                var result = _portalClient.GetAccount(unhashedAccountId);
+                if (result == null)
+                {
+                    NewHomepageHelper homepageHelper = new NewHomepageHelper(_hashingService);
+                    OrchestratorResponse<AccountDashboardViewModel> oldAccountInfo = await GetAccountInformation(hashedAccountId);
+                    var newAccountInfo = homepageHelper.ConvertFromOldModelToNewModel(oldAccountInfo);
+
+                }
+                else
+                {
+                    var resultAccount = result.Result;
+                    response.Data.Account = new Account
+                    {
+                        Id = _hashingService.HashValue(resultAccount.AccountId),
+                        //Organisations = 
+                    };
+                }
+                response.Data.Flags.AgreementsToSign = response.Data.Account.Organisations.FirstOrDefault().Agreements.Select(x => x.IsPending).Count() > 0;
+                return View(response);
+            }
+            else
+            {
+                OrchestratorResponse<AccountDashboardViewModel> response = await GetAccountInformation(hashedAccountId);
+                return View(response);
             }
 
-            return View(response);
         }
+
         [HttpGet]
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
@@ -284,10 +314,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult Row1Panel1(AccountDashboardViewModel model)
+        public ActionResult Row1Panel1(NewHomepageViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
-            if (model.AgreementsToSign)
+            var viewModel = new PanelViewModel<NewHomepageViewModel> { ViewName = "CheckFunding", Data = model };
+            if (model.Flags.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";
             }
@@ -296,10 +326,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }       
 
         [ChildActionOnly]
-        public ActionResult Row1Panel2(AccountDashboardViewModel model)
+        public ActionResult Row1Panel2(NewHomepageViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
-            if (model.AgreementsToSign)
+            var viewModel = new PanelViewModel<NewHomepageViewModel> { ViewName = "ProviderPermissions", Data = model };
+            if (model.Flags.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
             }
@@ -307,50 +337,65 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return PartialView(viewModel);
         }
         [ChildActionOnly]
-        public ActionResult Row2Panel1(AccountDashboardViewModel model)
+        public ActionResult Row2Panel1(NewHomepageViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
+            return PartialView(new PanelViewModel<NewHomepageViewModel> { ViewName = "SavedProviders", Data = model });
         }
         [ChildActionOnly]
-        public ActionResult Row2Panel2(AccountDashboardViewModel model)
+        public ActionResult Row2Panel2(NewHomepageViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
+            return PartialView(new PanelViewModel<NewHomepageViewModel> { ViewName = "CreateVacancy", Data = model });
         }
 
         [ChildActionOnly]
-        public ActionResult SignAgreement(AccountDashboardViewModel model)
+        public ActionResult SignAgreement(NewHomepageViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult ProviderPermissions(AccountDashboardViewModel model)
+        public ActionResult ProviderPermissions(NewHomepageViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
+        public ActionResult ProviderPermissionsDenied(NewHomepageViewModel model)
         {
             return PartialView(model);
         }        
         [ChildActionOnly]
-        public ActionResult SavedProviders(AccountDashboardViewModel model)
+        public ActionResult SavedProviders(NewHomepageViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult AccountSettings(AccountDashboardViewModel model)
+        public ActionResult AccountSettings(NewHomepageViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult CheckFunding(AccountDashboardViewModel model)
+        public ActionResult CheckFunding(NewHomepageViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        public ActionResult CreateVacancy(NewHomepageViewModel model)
         {
             return PartialView(model);
+        }
+
+        private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessage != null)
+            {
+                response.FlashMessage = flashMessage;
+                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
+            }
+
+            return response;
         }
     }
 }

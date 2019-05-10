@@ -27,6 +27,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <WebGreaseLibPath>$(USERPROFILE)\.nuget\packages\WebGrease\1.5.2\lib</WebGreaseLibPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -63,19 +64,25 @@
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
-    <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
+    <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.43" />
-    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
+    <PackageReference Include="SFA.DAS.EAS.Portal.Client">
+      <Version>1.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.EAS.Portal.Types">
+      <Version>1.0.2.5</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
-    <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
+    <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.63777" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
     <PackageReference Include="WebGrease" Version="1.5.2" />
@@ -144,6 +151,7 @@
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
+    <Compile Include="Helpers\NewHomepageHelper.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
@@ -169,6 +177,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="ViewModels\NewHomepageViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
