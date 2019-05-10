@@ -220,7 +220,7 @@
         },
         "PortalCosmosDatabaseUri": {
             "type": "string",
-            "value": "[concat('AccountEndpoint=https://', variables('cosmosDbName'), '.documents.azure.com:443/')]"
+            "value": "[concat('https://', variables('cosmosDbName'), '.documents.azure.com:443/')]"
         },
         "PortalCosmosDatabaseAuthKey": {
             "type": "string",
