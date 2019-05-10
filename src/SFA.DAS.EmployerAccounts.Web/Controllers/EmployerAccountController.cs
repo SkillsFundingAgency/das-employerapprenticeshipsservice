@@ -25,6 +25,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly ILog _logger;
         private readonly IMediator _mediatr;
         private IAuthorizationService _authorizationService;
+        private const int AddPAYELater = 1;
+        private const int AddPAYENow = 2;
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -154,7 +156,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1:
+                case AddPAYELater:
                 {
                     var request = new CreateUserAccountViewModel
                     {
@@ -166,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                     return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
                 }
-                case 2: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                case AddPAYENow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 default:
 
                     var model = new

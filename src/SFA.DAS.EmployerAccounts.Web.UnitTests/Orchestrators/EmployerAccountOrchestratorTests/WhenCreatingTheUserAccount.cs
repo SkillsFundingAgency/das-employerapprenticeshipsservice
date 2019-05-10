@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         }
 
         [Test]
-        public async Task ThenTheMediatorCommandIsCalledWithCorrectParameters()
+        public async Task ThenTheUserAccountIsCreatedWithTheCorrectValues()
         {
             //Arrange
             var model = ArrangeModel();
