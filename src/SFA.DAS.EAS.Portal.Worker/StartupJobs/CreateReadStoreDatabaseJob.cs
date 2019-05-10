@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
                 {
                     Paths = new Collection<string>
                     {
-                        "/accountId"
+                        "/id"
                     }
                 }
             };

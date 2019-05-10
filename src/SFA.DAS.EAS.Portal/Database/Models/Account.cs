@@ -9,8 +9,8 @@ namespace SFA.DAS.EAS.Portal.Database.Models
     public class Account : Document, IAccountDto<AccountLegalEntity>
     {
         //todo: doc id / accountid
-        [JsonProperty("accountId")]
-        public long AccountId { get; private set; }
+//        [JsonProperty("id")]
+//        public string AccountId { get; private set; }
 
         [JsonProperty("accountLegalEntities")]
         public IEnumerable<AccountLegalEntity> AccountLegalEntities => _accountLegalEntities;
@@ -36,8 +36,9 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         private Account(long accountId, DateTime created, string messageId)
             : base(1)
         {
-            Id = Guid.NewGuid();
-            AccountId = accountId;
+//            Id = Guid.NewGuid();
+//            AccountId = accountId.ToString();
+            Id = accountId.ToString();
             // the created date originates from event publishers, so we make sure we store it as UTC
             Created = DateTime.SpecifyKind(created, DateTimeKind.Utc);
             

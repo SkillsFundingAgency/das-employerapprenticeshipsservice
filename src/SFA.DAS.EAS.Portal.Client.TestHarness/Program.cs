@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
 
                 foreach (var accountDto in accountDtos)
                 {
-                    Console.WriteLine($"Account #{accountDto.AccountId} has {accountDto.AccountLegalEntities.Count()} ALEs");
+                    Console.WriteLine($"Account #{accountDto.Id} has {accountDto.AccountLegalEntities.Count()} ALEs");
                 }
 
                 await host.WaitForShutdownAsync();

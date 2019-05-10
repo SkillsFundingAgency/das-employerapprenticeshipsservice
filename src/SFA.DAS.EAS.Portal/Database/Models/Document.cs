@@ -1,13 +1,11 @@
-using System;
 using Newtonsoft.Json;
-using SFA.DAS.CosmosDb;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
     public abstract class Document : IDocument
     {
         [JsonProperty("id")]
-        public Guid Id { get; protected set; }
+        public string Id { get; protected set; }
 
         [JsonIgnore]
         public string ETag { get; protected set; }

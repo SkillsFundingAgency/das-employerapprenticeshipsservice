@@ -1,5 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Azure.Documents;
+using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.CosmosDb;
 using SFA.DAS.EAS.Portal.Database;
@@ -24,9 +26,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             _logger.LogInformation("Executing AddReservationCommand");
 
             // can we have accountid as key, rather than guid??
-            var account = await _accountsRepository
-                .CreateQuery()
-                .SingleOrDefaultAsync(a => a.AccountId == reservedFunding.AccountId, cancellationToken);
+//            var account = await _accountsRepository
+//                .CreateQuery()
+//                .SingleOrDefaultAsync(a => a.AccountId == reservedFunding.AccountId, cancellationToken);
+
+            var options = new RequestOptions {PartitionKey = new PartitionKey(reservedFunding.AccountId)};
+            var account = await _accountsRepository.GetById(reservedFunding.AccountId, options, cancellationToken);
 
             if (account == null)
             {

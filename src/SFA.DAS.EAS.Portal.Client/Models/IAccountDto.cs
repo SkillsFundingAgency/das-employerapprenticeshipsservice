@@ -7,7 +7,8 @@ namespace SFA.DAS.EAS.Portal.Client.Models
     public interface IAccountDto<out TAccountLegalEntityDto> 
         where TAccountLegalEntityDto : IAccountLegalEntityDto<IReservedFundingDto>
     {
-        long AccountId { get; }
+//        string AccountId { get; }
+        string Id { get; }
         IEnumerable<TAccountLegalEntityDto> AccountLegalEntities { get; }
         DateTime? Deleted { get; }
     }
