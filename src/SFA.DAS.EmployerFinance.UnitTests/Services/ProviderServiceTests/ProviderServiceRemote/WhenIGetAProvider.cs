@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             var result = await _sut.Get(ukPrn);
 
             // assert
-            Assert.AreEqual(_providerName, result.ProviderName);
+            Assert.AreEqual(_providerName, result.Name);
         }
 
         [Test]

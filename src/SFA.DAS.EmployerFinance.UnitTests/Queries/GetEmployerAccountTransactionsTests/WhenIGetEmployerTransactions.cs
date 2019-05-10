@@ -325,7 +325,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectPaymentTransactions()
         {
             //Arrange
-            var provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { Name = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -340,7 +340,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 });
 
             _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
-                .ReturnsAsync(provider.ProviderName);
+                .ReturnsAsync(provider.Name);
 
             //Act
             var actual = await RequestHandler.Handle(Query);
@@ -348,7 +348,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual(provider.ProviderName, actualTransaction.Description);
+            Assert.AreEqual(provider.Name, actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 
@@ -356,7 +356,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromSFAPayment()
         {
             //Arrange
-            var provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { Name = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -371,7 +371,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 });
 
             _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
-                .ReturnsAsync(provider.ProviderName);
+                .ReturnsAsync(provider.Name);
 
             //Act
             var actual = await RequestHandler.Handle(Query);
@@ -379,7 +379,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual($"Co-investment - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual($"Co-investment - {provider.Name}", actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 
@@ -387,7 +387,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromEmployerPayment()
         {
             //Arrange
-            var provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var provider = new EmployerFinance.Models.ApprenticeshipProvider.Provider { Name = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -403,7 +403,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
                 });
 
             _dasLevyService.Setup(x => x.GetProviderName(It.IsAny<long>(), It.IsAny<long>(), It.IsAny<string>()))
-                .ReturnsAsync(provider.ProviderName);
+                .ReturnsAsync(provider.Name);
 
             //Act
             var actual = await RequestHandler.Handle(Query);
@@ -411,7 +411,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual($"Co-investment - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual($"Co-investment - {provider.Name}", actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 
