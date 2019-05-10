@@ -11,8 +11,8 @@ namespace SFA.DAS.EmployerAccounts.Extensions
     {
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder)
         {
-            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);            
-
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+          
             config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
             {
                 r.RouteToEndpoint(
@@ -21,13 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Extensions
                     "SFA.DAS.EmployerFinance.MessageHandlers");
             });
 
-            return config;
-        }
-
-        public static EndpointConfiguration UseDasMessageConventions(this EndpointConfiguration config)
-        {
-            var conventions = config.Conventions();
-            conventions.DefiningEventsAs(t => t.Namespace != null && t.Namespace.StartsWith("SFA.DAS.Commitments.Events"));
             return config;
         }
     }

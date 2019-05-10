@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Commands\Cohort\CohortApprovalRequestedCommandHandlerWithLock.cs" />
     <Compile Remove="Interfaces\IDistributedLockProvider.cs" />
     <Compile Remove="Models\HmrcLevy\Employer.cs" />
     <Compile Remove="Models\HmrcLevy\EmployerLevyData.cs" />
