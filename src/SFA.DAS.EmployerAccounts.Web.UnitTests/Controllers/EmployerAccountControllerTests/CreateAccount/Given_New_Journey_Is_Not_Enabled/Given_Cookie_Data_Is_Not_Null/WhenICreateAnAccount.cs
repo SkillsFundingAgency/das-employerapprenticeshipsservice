@@ -10,6 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -18,14 +19,13 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_New_Journey_Is_Not_Enabled.Given_Cookie_Data_Is_Not_Null
 {
     class WhenICreateAnAccount : ControllerTestBase
     {
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
         private EmployerAccountData _accountData;
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IAuthorizationService>();
+            new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -87,9 +87,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
 
+            var mockAuthorization = new Mock<IAuthorizationService>();
+
+            mockAuthorization
+                .Setup(
+                    m =>
+                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
+                .Returns(false);
+
             _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object, _orchestrator.Object, _userViewTestingService.Object, 
-                logger.Object, _flashMessage.Object, Mock.Of<IMediator>())
+                _owinWrapper.Object,
+                _orchestrator.Object,
+                _userViewTestingService.Object,
+                logger.Object,
+                _flashMessage.Object,
+                Mock.Of<IMediator>(),
+                mockAuthorization.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

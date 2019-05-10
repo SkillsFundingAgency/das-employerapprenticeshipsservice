@@ -139,8 +139,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Sector = viewModel.Sector
                 });
 
-                CookieService.Delete(CookieName);
-
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel
