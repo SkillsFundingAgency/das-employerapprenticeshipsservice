@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             _logger = logger;
         }
 
-        public async Task Execute(ReservationCreatedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task Execute(ReservationCreatedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Executing AddReservationCommand");
 
