@@ -25,7 +25,6 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                     //todo: put section names in class somewhere
                     var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>("ServiceBus");
                     var isDevelopment = hostingEnvironment.IsDevelopment();
-                isDevelopment = false; // TODO: remove
                     var endpointConfiguration = new EndpointConfiguration(EndpointName.EasPortalWorker)
                         .UseAzureServiceBusTransport(isDevelopment,
                             () => serviceBusConfiguration.ConnectionString, r => { })
