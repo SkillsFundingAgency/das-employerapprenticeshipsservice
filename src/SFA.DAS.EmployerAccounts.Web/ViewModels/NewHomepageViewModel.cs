@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
     {
         public Account Account { get; set; }
         public FlagsClass Flags { get; set; }
-
+        public EmulatedFundingViewModel EmulatedFundingViewModel { get; set; }
 
         public class FlagsClass
         {

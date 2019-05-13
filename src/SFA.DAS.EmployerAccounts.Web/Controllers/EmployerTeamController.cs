@@ -53,19 +53,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             if (FeatureToggles.Features.HomePage.Enabled)
             {
-                var response = new OrchestratorResponse<NewHomepageViewModel>();
+                var response = new OrchestratorResponse<NewHomepageViewModel> { Data = new NewHomepageViewModel()};
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                var result = _portalClient.GetAccount(unhashedAccountId);
-                if (result.Result == null)
+                var result = await _portalClient.GetAccount(1337);
+                if (result == null)
                 {
                     NewHomepageHelper homepageHelper = new NewHomepageHelper(_hashingService);
                     OrchestratorResponse<AccountDashboardViewModel> oldAccountInfo = await GetAccountInformation(hashedAccountId);
                     var newAccountInfo = homepageHelper.ConvertFromOldModelToNewModel(oldAccountInfo);
+                    response.Data.Account = newAccountInfo;
 
                 }
                 else
                 {
-                    var resultAccount = result.Result;
+                    var resultAccount = result;
                     response.Data.Account = new Account
                     {
                         Id = _hashingService.HashValue(resultAccount.AccountId),
@@ -73,15 +74,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
                 }
                 response.Data.Flags.AgreementsToSign = response.Data.Account.Organisations.FirstOrDefault().Agreements.Select(x => x.IsPending).Count() > 0;
+                response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
                 return View(response);
             }
             else
             {
                 OrchestratorResponse<AccountDashboardViewModel> response = await GetAccountInformation(hashedAccountId);
+                response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
                 return View(response);
             }
-            response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
-            return View(response);
+            
         }
 
         [HttpGet]
@@ -402,6 +404,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
+        }
+
         public ActionResult ReturnFromEmulateFundingJourney(EmulatedFundingViewModel model)
         {
             _emulatedFundingViewModel = model;

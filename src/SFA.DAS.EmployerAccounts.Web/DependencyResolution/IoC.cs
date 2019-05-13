@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
-                //c.AddRegistry<PortalClientRegistry>();
+                c.AddRegistry<PortalClientRegistry>();
 
                 c.AddRegistry<DefaultRegistry>();
             });

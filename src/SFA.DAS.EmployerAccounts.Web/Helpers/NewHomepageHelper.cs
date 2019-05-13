@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             {
                 Id = oldAccountInfo.HashedAccountId,
                 Name = oldAccountInfo.Account.Name,
-                Organisations = oldAccountInfo.Account.AccountLegalEntities.Select(ConvertFromAccountLegalEntityToOrganisation).ToArray(),
+                Organisations = oldAccountInfo.Account.AccountLegalEntities.Count> 0 ? oldAccountInfo.Account.AccountLegalEntities.Select(ConvertFromAccountLegalEntityToOrganisation).ToArray() : new Organisation[] { new Organisation()},
             };
         }
 
