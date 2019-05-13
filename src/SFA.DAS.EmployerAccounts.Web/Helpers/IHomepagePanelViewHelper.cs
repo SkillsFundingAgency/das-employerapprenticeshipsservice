@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 {
     public interface IHomepagePanelViewHelper
     {
-        PanelViewModel<AccountDashboardViewModel> GetPanel1Action(AccountDashboardViewModel model);
+        string GetPanel1Action(AccountDashboardViewModel model);
     }
 }

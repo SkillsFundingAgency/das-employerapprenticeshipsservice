@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -14,6 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
     public class WhenRequestingTheCallToActionPanel
     {
         private IHomepagePanelViewHelper _sut;
+        private AccountDashboardViewModel _accountDashbaoardModel;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -21,36 +17,52 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
             _sut = new HomepagePanelViewHelper();
         }
 
-        [Test, Category("UnitTest")]
-        public void WhenAgreenentHasNotBeenSigned_ShouldAllowPromptToReserveFunding()
+        [SetUp]
+        public void SetUp()
         {
-            // Arrange
-            var model = new AccountDashboardViewModel
+            _accountDashbaoardModel = new AccountDashboardViewModel
             {
+                PayeSchemeCount = 1,
                 AgreementsToSign = true
             };
-
-            // Act
-            var panelViewResult = _sut.GetPanel1Action(model);
-
-            // Assert
-            panelViewResult.ViewName.Should().Be("SignAgreement");
         }
 
         [Test, Category("UnitTest")]
-        public void WhenAgreenentHasBeenSigned_ShouldAllowPromptToReserveFunding()
+        public void WhenAgreenentHasNotBeenSigned_ShouldPromptToReserveFunding()
         {
             // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                AgreementsToSign = false
-            };
 
             // Act
-            var panelViewResult = _sut.GetPanel1Action(model);
+            var panelActionResult = _sut.GetPanel1Action(_accountDashbaoardModel);
 
             // Assert
-            panelViewResult.ViewName.Should().Be("CheckFunding");
+            panelActionResult.Should().Be("SignAgreement");
+        }
+
+        [Test, Category("UnitTest")]
+        public void WhenAgreenentHasBeenSigned_ShouldPromptToReserveFunding()
+        {
+            // Arrange
+            _accountDashbaoardModel.AgreementsToSign = false;
+
+            // Act
+            var panelActionResult = _sut.GetPanel1Action(_accountDashbaoardModel);
+
+            // Assert
+            panelActionResult.Should().Be("CheckFunding");
+        }
+
+        [Test, Category("UnitTest")]
+        public void WhenPayeSchemeHasNotBeenAdded_ShouldPromptToAddPayeScheme()
+        {
+            // Arrange
+            _accountDashbaoardModel.PayeSchemeCount = 0;
+
+            // Act
+            var panelActionResult = _sut.GetPanel1Action(_accountDashbaoardModel);
+
+            // Assert
+            panelActionResult.Should().Be("AddPAYE");
         }
     }
 }

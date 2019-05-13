@@ -289,14 +289,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
-            var viewModel = _homepagePanelViewHelper.GetPanel1Action(model);//new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
-            if (model.AgreementsToSign)
+            var viewModel = new PanelViewModel<AccountDashboardViewModel>
             {
-                viewModel.ViewName = "SignAgreement";
-            }
+                ViewName = _homepagePanelViewHelper.GetPanel1Action(model),
+                Data = model
+            };
 
             return PartialView(viewModel);
-        }       
+        }
 
         [ChildActionOnly]
         public ActionResult Row1Panel2(AccountDashboardViewModel model)
@@ -334,7 +334,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }        
+        }
         [ChildActionOnly]
         public ActionResult SavedProviders(AccountDashboardViewModel model)
         {
