@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
+        private readonly IHomepagePanelViewHelper _homepagePanelViewHelper;
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
 
         public EmployerTeamController(
@@ -30,9 +31,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IHomepagePanelViewHelper homepagePanelViewHelper,
             EmployerTeamOrchestrator employerTeamOrchestrator)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
+            _homepagePanelViewHelper = homepagePanelViewHelper;
             _employerTeamOrchestrator = employerTeamOrchestrator;
         }
 
@@ -286,7 +289,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
+            var viewModel = _homepagePanelViewHelper.GetPanel1Action(model);//new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
             if (model.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";

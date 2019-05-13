@@ -6,6 +6,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -19,6 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+        private Mock<IHomepagePanelViewHelper> _homepagePanelViewHelperMock;
 
         [SetUp]
         public void Arrange()
@@ -28,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-
+            _homepagePanelViewHelperMock = new Mock<IHomepagePanelViewHelper>();
             _orchestrator = new Mock<EmployerTeamOrchestrator>(new Mock<IMediator>().Object, Mock.Of<ICurrentDateTime>());
 
             _controller = new EmployerTeamController(
@@ -36,6 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 _featureToggle.Object,
                 _userViewTestingService.Object,
                 _flashMessage.Object,
+                _homepagePanelViewHelperMock.Object,
                 _orchestrator.Object);
         }
 
