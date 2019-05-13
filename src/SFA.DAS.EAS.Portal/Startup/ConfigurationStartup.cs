@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Portal.Startup
                 .AddJsonFile("appsettings.json", true, true)
                 .AddJsonFile($"appsettings.{c.HostingEnvironment.EnvironmentName}.json", true, true)
                 .AddEnvironmentVariables()
-                .AddAzureTableStorage(ConfigurationKeys.EmployerApprenticeshipsServicePortal)
+                .AddAzureTableStorage(new[] { ConfigurationKeys.EmployerApprenticeshipsServicePortal, ConfigurationKeys.CommitmentsApi})
                 .AddCommandLine(args));
         }
     }

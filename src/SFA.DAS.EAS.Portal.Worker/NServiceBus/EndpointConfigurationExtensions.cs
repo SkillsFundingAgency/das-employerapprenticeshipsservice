@@ -12,5 +12,14 @@ namespace SFA.DAS.EAS.Portal.Worker.NServiceBus
             config.UseContainer<ServicesBuilder>(c => c.ExistingServices(services));
             return config;
         }
+
+        public static EndpointConfiguration UseDasMessageConventions(this EndpointConfiguration config)
+        {
+            var conventions = config.Conventions();
+            conventions.DefiningEventsAs(t => t.Namespace != null &&
+            (t.Namespace.StartsWith("SFA.DAS.CommitmentsV2.Messages.Events")
+            || t.Namespace.StartsWith("SFA.DAS.Commitments.Events")));
+            return config;
+        }
     }
 }

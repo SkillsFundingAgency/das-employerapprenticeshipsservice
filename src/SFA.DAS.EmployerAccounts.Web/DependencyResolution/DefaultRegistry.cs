@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
-            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();
+            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();            
         }
     }
 }

@@ -16,8 +16,11 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
     <PackageReference Include="NServiceBus" Version="7.1.7" />
+    <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="2.1.1305" />
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="1.0.0" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.1" />
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
+    <PackageReference Include="SFA.DAS.EAS.Portal.Types" Version="1.0.2.6" />
   </ItemGroup>
 
   <ItemGroup>
