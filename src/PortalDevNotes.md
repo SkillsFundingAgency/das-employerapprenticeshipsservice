@@ -3,14 +3,14 @@
  to run
    local
      set environment variables
-       APPSETTING_EnvironmentName                        LOCAL (currently set in launchsettings.json)
+       ASPNETCORE_ENVIRONMENT                            Development (currently set in launchsettings.json)
        APPSETTING_ConfigurationStorageConnectionString   storage account containing config tables (can be emulator)
        AzureWebJobsStorage                               \ real storage account (not emulator)
        AzureWebJobsDashboard                             /
        todo: ^ ConnectionStrings: prefix??
    real published app service
        Application Settings
-         EnvironmentName                                DEVAZURE, AT etc.
+         ASPNETCORE_ENVIRONMENT                         DEVAZURE, AT etc.
          ConfigurationStorageConnectionString           storage account containing config tables
        Connection Strings
          AzureWebJobsStorage                            \ storage account
