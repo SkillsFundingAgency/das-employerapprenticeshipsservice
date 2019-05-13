@@ -2,6 +2,6 @@
 {
     public static class EnvironmentVariableName
     {
-        public const string EnvironmentName = "APPSETTING_EnvironmentName";
+        public const string EnvironmentName = "ASPNETCORE_ENVIRONMENT";
     }
 }
