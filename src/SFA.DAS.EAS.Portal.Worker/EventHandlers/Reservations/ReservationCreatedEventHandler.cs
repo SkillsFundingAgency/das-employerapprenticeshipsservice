@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Commands;
-using SFA.DAS.EAS.Portal.Events.Reservations;
+using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 {

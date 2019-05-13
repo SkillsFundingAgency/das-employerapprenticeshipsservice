@@ -18,6 +18,7 @@
     <PackageReference Include="NServiceBus" Version="7.1.7" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.19" />
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
+    <PackageReference Include="SFA.DAS.Reservations.Messages" Version="0.1.0" />
   </ItemGroup>
 
   <ItemGroup>
