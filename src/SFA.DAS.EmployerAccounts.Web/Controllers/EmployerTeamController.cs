@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 var response = new OrchestratorResponse<NewHomepageViewModel>();
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 var result = _portalClient.GetAccount(unhashedAccountId);
-                if (result == null)
+                if (result.Result == null)
                 {
                     NewHomepageHelper homepageHelper = new NewHomepageHelper(_hashingService);
                     OrchestratorResponse<AccountDashboardViewModel> oldAccountInfo = await GetAccountInformation(hashedAccountId);
