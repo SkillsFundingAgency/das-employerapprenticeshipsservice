@@ -9,6 +9,7 @@ using NServiceBus;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Web.Controllers;
@@ -27,6 +28,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
         {
             objectContainer.RegisterInstance<EmployerAccountTransactionsOrchestrator>(container);
             objectContainer.RegisterInstance<EmployerAccountTransactionsController>(container);
+            objectContainer.RegisterInstance<EmployerFinanceConfiguration>(container);
             objectContainer.RegisterInstance<IContainer>(container);
             objectContainer.RegisterInstance<IHashingService>(container);
             objectContainer.RegisterInstance<ILog>(container);
@@ -61,7 +63,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
                 try
                 {
-                    await step(nestedObjectContainer);
+                    await step(nestedObjectContainer).ConfigureAwait(false);
                 }
                 catch (Exception ex)
                 {

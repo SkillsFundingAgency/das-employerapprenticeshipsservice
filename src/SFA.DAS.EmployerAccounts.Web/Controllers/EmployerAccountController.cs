@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using Newtonsoft.Json;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -23,19 +24,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
         private readonly IMediator _mediatr;
+        private IAuthorizationService _authorizationService;
 
-        public EmployerAccountController(
-            IAuthenticationService owinWrapper, 
-            EmployerAccountOrchestrator employerAccountOrchestrator, 
-            IMultiVariantTestingService multiVariantTestingService, 
+        public EmployerAccountController(IAuthenticationService owinWrapper,
+            EmployerAccountOrchestrator employerAccountOrchestrator,
+            IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
-            ICookieStorageService<FlashMessageViewModel> flashMessage, 
-            IMediator mediatr)
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IMediator mediatr,
+            IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+            _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
         }
 
         [HttpGet]
@@ -48,8 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     BreadcrumbDescription = "Back to Your User Profile",
                     ConfirmUrl = Url.Action(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName),
-                },
-
+                }
             };
 
             var flashMessageViewModel = GetFlashMessageViewModelFromCookie();
@@ -78,6 +80,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             try
             {
                 _logger.Info("Starting processing gateway response");
+
+                if (Request.Url == null)
+                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
 
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
                     Request.Params[ControllerConstants.CodeKeyName],
@@ -131,10 +136,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("payeerror")]
-        public ViewResult PayeError(bool? NotFound)
+        [Route("youhaveregistered")]
+        public ViewResult YouHaveRegistered(string hashedAccountId = null)
         {
-            ViewBag.NotFound = NotFound ?? false;
+            var cookie = _employerAccountOrchestrator.GetCookieData();
+
+            if (cookie == null)
+            {
+                ViewBag.RequiresPayeScheme = true;
+            }
+            else
+            {
+                ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
+                                             cookie.EmployerAccountPayeRefData.EmpRefNotFound;
+            }
+
+            _employerAccountOrchestrator.DeleteCookieData();
+
+            ViewBag.AccountUrl = this.Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
+            return View();
+        }
+
+        [HttpGet]
+        [Route("payeerror")]
+        public ViewResult PayeError(bool? notFound)
+        {
+            ViewBag.NotFound = notFound ?? false;
             return View();
         }
 
@@ -194,7 +221,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
 
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
+            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
+            {
+                return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
+            }
+            else
+            {
+                _employerAccountOrchestrator.DeleteCookieData();
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
+            }
         }
 
         [HttpGet]

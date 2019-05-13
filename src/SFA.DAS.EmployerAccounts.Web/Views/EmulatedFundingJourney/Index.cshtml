@@ -1,0 +1,30 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.EmulatedFundingViewModel
+
+<div class="das-dashboard-header">
+    <div class="govuk-width-container das-dashboard-header__border">
+        <h1 class="das-dashboard-header__title">Emulated Funding Journey</h1>
+        <h2 class="das-dashboard-header__account-name">Test Page</h2>
+    </div>
+</div>
+
+<form method="post" action="@Url.Action("SendEvent","EmulatedFundingJourney")">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <span class="form-label-bold">Legal Entity ID</span>
+        <input class="form-control form-control-3-4" id="LegalEntityId" name="LegalEntityId" type="text" aria-required="true" value="@Model.LegalEntityId" />@Html.HiddenFor(x => x.HashedAccountId)
+        <span class="form-label-bold">Course Name</span>
+        <input class="form-control form-control-3-4" id="CourseName" name="CourseName" type="text" aria-required="true" value="@Model.CourseName" />
+        <span class="form-label-bold">Course Code</span>
+        <input class="form-control form-control-3-4" id="CourseCode" name="CourseCode" type="text" aria-required="true" value="@Model.CourseCode" />
+        <span class="form-label-bold">Start Date</span>
+        <input class="form-control form-control-3-4" id="StartDate" name="StartDate" type="text" aria-required="true" value="@Model.StartDate" />
+        <span class="form-label-bold">End Date</span>
+        <input class="form-control form-control-3-4" id="EndDate" name="EndDate" type="text" aria-required="true" value="@Model.EndDate" />
+        <span class="form-label-bold">Reservation ID</span>
+        <input class="form-control form-control-3-4" id="ReservationId" name="ReservationId" type="number" aria-required="true" value="@Model.ReservationId" placeholder=""/>
+        <span class="form-label-bold">Delay Event Publication</span>
+        <input class="form-control form-control-3-4" id="PublishEvent" name="PublishEvent" type="text" aria-required="true" value="@Model.PublishEvent" placeholder="True or False"/>
+
+    </div>
+    <button type="submit" class="button" id="sendForm">Send Form</button>
+</form>

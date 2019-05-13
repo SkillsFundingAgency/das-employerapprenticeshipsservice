@@ -84,5 +84,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
         }
+
+        public static string ReserveFundingJourney(this UrlHelper urlHelper, string HashedAccountId)
+        {
+            if (FeatureToggles.Features.EmulatedFundingJourney.Enabled)
+            {
+                
+                return urlHelper.Action("Index","EmulatedFundingJourney", new{ HashedAccountId});
+            }
+            else
+            {
+                return EmployerAccountsAction(urlHelper, "teams");
+            }
+        }
     }
 }

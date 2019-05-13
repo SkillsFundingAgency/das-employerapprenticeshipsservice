@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Authorization
+namespace SFA.DAS.Authorization
 {
     public enum FeatureType
     {
@@ -10,9 +10,11 @@
         TransferConnectionRequests,
         Transfers,
         HomePageFeature,
+        EmulatedFundingJourneyFeature,
+        EnableNewRegistrationJourney,
 
-        // These enums are only used in unit tests - the numbers can be changed 
-        Test1 = 100,
-        Test2 = 101
-    }
+// These enums are only used in unit tests - the numbers can be changed
+Test1 = 100,
+Test2 = 101
+}
 }

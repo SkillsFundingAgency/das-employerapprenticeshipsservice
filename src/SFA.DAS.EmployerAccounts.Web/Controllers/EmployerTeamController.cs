@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IHashingService _hashingService;
+        private static EmulatedFundingViewModel _emulatedFundingViewModel;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -79,7 +80,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 OrchestratorResponse<AccountDashboardViewModel> response = await GetAccountInformation(hashedAccountId);
                 return View(response);
             }
-
+            response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
+            return View(response);
         }
 
         [HttpGet]
@@ -321,6 +323,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
+            else if (model.EmulatedFundingViewModel != null)
+            {
+                viewModel.ViewName = "FundingComplete";
+            }
 
             return PartialView(viewModel);
         }       
@@ -396,6 +402,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
+        public ActionResult ReturnFromEmulateFundingJourney(EmulatedFundingViewModel model)
+        {
+            _emulatedFundingViewModel = model;
+            return RedirectToAction("Index", "EmployerTeam", new { model.HashedAccountId });
+        }
+        [ChildActionOnly]
+        public ActionResult FundingComplete(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
         }
     }
 }
