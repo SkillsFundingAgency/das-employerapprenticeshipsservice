@@ -66,12 +66,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else
                 {
-                    var resultAccount = result;
-                    response.Data.Account = new Account
-                    {
-                        Id = _hashingService.HashValue(resultAccount.AccountId),
-                        //Organisations = 
-                    };
+                    var tempAcc = new Account();
+                    tempAcc.Id = _hashingService.HashValue(result.AccountId);
+                    tempAcc.Organisations.Add(result.AccountLegalEntities.Select());
+
+                    response.Data.Account = tempAcc;
                 }
                 response.Data.Flags.AgreementsToSign = response.Data.Account.Organisations.FirstOrDefault().Agreements.Select(x => x.IsPending).Count() > 0;
                 response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
