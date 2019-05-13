@@ -8,7 +8,6 @@ namespace SFA.DAS.EAS.Portal.Database.Models
 {
     public class Account : Document, IAccountDto<AccountLegalEntity>
     {
-        //todo: doc id / accountid
         [JsonProperty("accountId")]
         public long AccountId { get; private set; }
 
@@ -63,26 +62,14 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         {
             ProcessMessage(messageId, updated, () =>
             {
-                // don't need to check this when called as part of creation, but we separate out creation and adding reserve funding
-                // as other events handlers will create the account and add their own specific data
-                // we could have different ctors/factories for creation from different events
-                // for now we include updated == created date to let through adding on creation
-                // todo: need lots of tests around this out-of order handling!!
-//                if (IsUpdatedDateChronological(updated))
-                {
-                    // we also need to handle case where reserve funding is created, then deleted, then created again with same details
-                    //EnsureRelationshipHasNotBeenDeleted();
-                    
-                    // enforce uniqueness with cosmos unique key?
-                    var existingAccountLegalEntity = _accountLegalEntities.FirstOrDefault(ale => ale.AccountLegalEntityId == accountLegalEntityId);
-                    if (existingAccountLegalEntity == null)
-                        AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
-                    else
-                        existingAccountLegalEntity.AddReserveFunding(reservationId, courseId, courseName, startDate, endDate);
-                    
-                    Updated = updated;
-                    Deleted = null;
-                }
+                var existingAccountLegalEntity = _accountLegalEntities.FirstOrDefault(ale => ale.AccountLegalEntityId == accountLegalEntityId);
+                if (existingAccountLegalEntity == null)
+                    AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
+                else
+                    existingAccountLegalEntity.AddReserveFunding(reservationId, courseId, courseName, startDate, endDate);
+                
+                Updated = updated;
+                Deleted = null;
             });
         }
 
@@ -91,25 +78,6 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         {
             _accountLegalEntities.Add(new AccountLegalEntity(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate));
         }
-        
-        public void Delete(DateTime deleted, string messageId)
-        {
-            //todo: nested class?
-            ProcessMessage(messageId, deleted, () =>
-            {
-                EnsureHasNotBeenDeleted();
-
-                Deleted = deleted;
-            });
-        }
-
-        // each created message *must* be processed, not just the latest, otherwise we lose reserved fundings
-        //todo: when we handle delete we'll need to rethink this
-        
-//        private bool IsUpdatedDateChronological(DateTime updated)
-//        {
-//            return updated > Created && (Updated == null || updated > Updated.Value) && (Deleted == null || updated > Deleted.Value);
-//        }
 
         private void AddOutboxMessage(string messageId, DateTime created)
         {
@@ -117,12 +85,6 @@ namespace SFA.DAS.EAS.Portal.Database.Models
                 throw new ArgumentNullException(nameof(messageId));
             
             _outboxData.Add(new OutboxMessage(messageId, created));
-        }
-
-        private void EnsureHasNotBeenDeleted()
-        {
-            if (Deleted != null)
-                throw new InvalidOperationException("Requires account has not been deleted");
         }
 
         // todo: it would be better to have a webjob to periodically clean-up, but for now..
@@ -150,22 +112,5 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             action();
             AddOutboxMessage(messageId, created);
         }
-
-//        private abstract class MessageProcessor
-//        {
-//            public void Process(string messageId, DateTime created)
-//            {
-//                if (IsMessageProcessed(messageId))
-//                    return;
-//            
-//                Action();
-//                AddOutboxMessage(messageId, created);
-//            }
-//
-//            public abstract Action()
-//            {
-//                
-//            }
-//        }
     }
 }
