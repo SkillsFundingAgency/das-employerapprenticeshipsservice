@@ -8,6 +8,9 @@
        AzureWebJobsStorage                               \ real storage account (not emulator)
        AzureWebJobsDashboard                             /
        todo: ^ ConnectionStrings: prefix??
+
+    note: Config TableStorage PartitionKey locally must be `Development`, rather than `LOCAL`
+
    real published app service
        Application Settings
          ASPNETCORE_ENVIRONMENT                         DEVAZURE, AT etc.
