@@ -7,8 +7,7 @@ namespace SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap
     {
         public ApplicationRegistry()
         {
-            //todo: interface?
-            For<GetAccountQuery>().Use<GetAccountQuery>();
+            For<GetAccountQuery>().Use<GetAccountQuery>().Singleton();
         }
     }
 }

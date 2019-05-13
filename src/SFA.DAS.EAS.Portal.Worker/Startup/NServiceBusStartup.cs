@@ -9,7 +9,6 @@ using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.AzureServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.UnitOfWork.NServiceBus;
 
 namespace SFA.DAS.EAS.Portal.Worker.Startup
 {
@@ -22,24 +21,19 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                 {
                     var configuration = s.GetService<IConfiguration>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
-                    //todo: put section names in class somewhere
-                    var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>("ServiceBus");
+                    var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>(PortalSections.ServiceBus);
                     var isDevelopment = hostingEnvironment.IsDevelopment();
                     var endpointConfiguration = new EndpointConfiguration(EndpointName.EasPortalWorker)
                         .UseAzureServiceBusTransport(isDevelopment,
                             () => serviceBusConfiguration.ConnectionString, r => { })
+                        .UseErrorQueue()
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
                         .UseDasMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
-                        //.UseOutbox()
-                        //.UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
-                        .UseInstallers()
                         .UseServiceCollection(services);
-                    //.UseStructureMapBuilder(container)
-                    //.UseUnitOfWork();
 
                     var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 

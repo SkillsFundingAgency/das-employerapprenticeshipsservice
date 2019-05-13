@@ -8,7 +8,6 @@ namespace SFA.DAS.EAS.Portal.Database
 {
     public class DocumentClientFactory : IDocumentClientFactory
     {
-        //todo: use ICosmosDbConfiguration?
         private readonly IOptionsMonitor<CosmosDatabaseConfiguration> _options;
 
         public DocumentClientFactory(IOptionsMonitor<CosmosDatabaseConfiguration> options)

@@ -7,11 +7,11 @@ namespace SFA.DAS.EAS.Portal.Database.Models
     public class ReservedFunding : IReservedFundingDto
     {
         [JsonProperty("reservationId")]
-        public long ReservationId { get; private set; }
+        public Guid ReservationId { get; private set; }
 
         //optional
         [JsonProperty("courseId")]
-        public long CourseId { get; private set; }
+        public string CourseId { get; private set; }
 
         //optional
         [JsonProperty("courseName")]
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         [JsonProperty("endDate")]
         public DateTime EndDate { get; private set; }
 
-        public ReservedFunding(long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
+        public ReservedFunding(Guid reservationId, string courseId, string courseName, DateTime startDate, DateTime endDate)
         {
             ReservationId = reservationId;
             CourseId = courseId;

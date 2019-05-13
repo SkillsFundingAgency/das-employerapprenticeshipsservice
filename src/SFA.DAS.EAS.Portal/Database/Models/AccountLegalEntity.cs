@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         }
 
         public AccountLegalEntity(long accountLegalEntityId, string legalEntityName,
-            long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
+            Guid reservationId, string courseId, string courseName, DateTime startDate, DateTime endDate)
             : this(accountLegalEntityId, legalEntityName)
         {
             AddReserveFunding(reservationId, courseId, courseName, startDate, endDate);
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         {
         }
         
-        public void AddReserveFunding(long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
+        public void AddReserveFunding(Guid reservationId, string courseId, string courseName, DateTime startDate, DateTime endDate)
         {
             _reservedFundings.Add(new ReservedFunding(reservationId, courseId, courseName, startDate, endDate));
         }
