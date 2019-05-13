@@ -45,8 +45,8 @@ namespace SFA.DAS.EAS.Portal.Database.Models
 
         // ctor for when creating account doc from reserved funding
         // do we accept event, seems a coupling too far!
-        public Account(long accountId, long accountLegalEntityId, string legalEntityName, long reservationId,
-            long courseId, string courseName, DateTime startDate, DateTime endDate, DateTime created, string messageId)
+        public Account(long accountId, long accountLegalEntityId, string legalEntityName, Guid reservationId,
+            string courseId, string courseName, DateTime startDate, DateTime endDate, DateTime created, string messageId)
             : this(accountId, created, messageId)
         {
             AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
@@ -57,8 +57,8 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         {
         }
 
-        public void AddReserveFunding(long accountLegalEntityId, string legalEntityName,  long reservationId,
-            long courseId, string courseName, DateTime startDate, DateTime endDate, DateTime updated, string messageId)
+        public void AddReserveFunding(long accountLegalEntityId, string legalEntityName,  Guid reservationId,
+            string courseId, string courseName, DateTime startDate, DateTime endDate, DateTime updated, string messageId)
         {
             ProcessMessage(messageId, updated, () =>
             {
@@ -74,7 +74,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         }
 
         private void AddReserveFunding(long accountLegalEntityId, string legalEntityName,
-            long reservationId, long courseId, string courseName, DateTime startDate, DateTime endDate)
+            Guid reservationId, string courseId, string courseName, DateTime startDate, DateTime endDate)
         {
             _accountLegalEntities.Add(new AccountLegalEntity(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate));
         }

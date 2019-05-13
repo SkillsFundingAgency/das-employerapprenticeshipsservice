@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             {
                 //first time we've had *any* event relating to this account
                 account = new Account(reservedFunding.AccountId, reservedFunding.AccountLegalEntityId, reservedFunding.AccountLegalEntityName,
-                    reservedFunding.ReservationId, reservedFunding.CourseId, reservedFunding.CourseName,
+                    reservedFunding.Id, reservedFunding.CourseId, reservedFunding.CourseName,
                     reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.CreatedDate, messageId);
 
                 await _accountsRepository.Add(account, null, cancellationToken);
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 // or this is a new reserved funding, but existing reserved fundings exist
                 // or account already contains this reserve funding event (method needs to be idempotent)
                 account.AddReserveFunding(reservedFunding.AccountLegalEntityId, reservedFunding.AccountLegalEntityName,
-                    reservedFunding.ReservationId, reservedFunding.CourseId, reservedFunding.CourseName,
+                    reservedFunding.Id, reservedFunding.CourseId, reservedFunding.CourseName,
                     reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.CreatedDate, messageId);
 
                 await _accountsRepository.Update(account, null, cancellationToken);
