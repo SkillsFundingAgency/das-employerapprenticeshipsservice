@@ -23,7 +23,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
         {
             _logger.LogInformation("Executing AddReservationCommand");
 
-            // can we have accountid as key, rather than guid??
             var account = await _accountsRepository
                 .CreateQuery()
                 .SingleOrDefaultAsync(a => a.AccountId == reservedFunding.AccountId, cancellationToken);

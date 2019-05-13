@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             new HostBuilder()
-                .ConfigureDasAppConfiguration(args)
+                .ConfigurePortalClientConfiguration(args)
                 .UseDasEnvironment()
                 .UseStructureMap()
                 .ConfigureServices(s => s.AddTransient<GetAccountScenario, GetAccountScenario>())

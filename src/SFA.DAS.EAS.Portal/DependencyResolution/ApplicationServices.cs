@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             //return services.AddTransient<IAddReserveFundingCommand, AddReserveFundingCommand>();
-            services.AddTransient<AddReserveFundingCommand>();
+            services.AddTransient<AddReservationCommand>();
             var configuration = services.BuildServiceProvider().GetService<IConfiguration>();
 
             services.AddCommitmentsApiConfiguration(configuration);
