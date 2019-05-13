@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             _logger = logger;
         }
 
-        public async Task Execute(ReserveFundingAddedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task Execute(ReservationCreatedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default(CancellationToken))
         {
             _logger.LogInformation("Executing AddReserveFundingCommand");
 
@@ -31,9 +31,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             if (account == null)
             {
                 //first time we've had *any* event relating to this account
-                account = new Account(reservedFunding.AccountId, reservedFunding.AccountLegalEntityId, reservedFunding.LegalEntityName,
-                    reservedFunding.ReservationId, reservedFunding.CourseId, reservedFunding.CourseName,
-                    reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.Created, messageId);
+                account = new Account(reservedFunding.AccountId, reservedFunding.AccountLegalEntityId, reservedFunding.AccountLegalEntityName,
+                    reservedFunding.Id, reservedFunding.CourseId, reservedFunding.CourseName,
+                    reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.CreatedDate, messageId);
 
                 await _accountsRepository.Add(account, null, cancellationToken);
             }
@@ -42,9 +42,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 // account may have been created from non reserved funding event, and there are no reserved funds
                 // or this is a new reserved funding, but existing reserved fundings exist
                 // or account already contains this reserve funding event (method needs to be idempotent)
-                account.AddReserveFunding(reservedFunding.AccountLegalEntityId, reservedFunding.LegalEntityName,
-                    reservedFunding.ReservationId, reservedFunding.CourseId, reservedFunding.CourseName,
-                    reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.Created, messageId);
+                account.AddReserveFunding(reservedFunding.AccountLegalEntityId, reservedFunding.AccountLegalEntityName,
+                    reservedFunding.Id, reservedFunding.CourseId, reservedFunding.CourseName,
+                    reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.CreatedDate, messageId);
 
                 await _accountsRepository.Update(account, null, cancellationToken);
             }

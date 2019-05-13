@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     var tempAcc = new Account();
                     tempAcc.Id = _hashingService.HashValue(result.AccountId);
-                    tempAcc.Organisations.Add(result.AccountLegalEntities.Select());
+                    //tempAcc.Organisations.Add(result.AccountLegalEntities.Select());
 
                     response.Data.Account = tempAcc;
                 }
