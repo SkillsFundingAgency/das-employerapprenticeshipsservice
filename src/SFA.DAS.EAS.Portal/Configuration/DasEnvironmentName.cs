@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Portal.Configuration
 
         public static readonly Dictionary<string, string> Map = new Dictionary<string, string>(StringComparer.CurrentCultureIgnoreCase)
         {
-            { "LOCAL", EnvironmentName.Development },
+            { "Development", EnvironmentName.Development },
             { "DEVAZURE", DevelopmentAzure },
             { "AT", AcceptanceTest },
             { "TEST", Test },
