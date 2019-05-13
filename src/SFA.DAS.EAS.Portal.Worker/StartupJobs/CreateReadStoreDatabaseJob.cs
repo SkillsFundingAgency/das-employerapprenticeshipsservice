@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
     /// We don't create any unique keys, because...
     /// * Sparse unique keys are not supported.
     /// As there is no guarantee to the order we receive events from the various subsystems (due to user behaviour and
-    /// out of order message handling), then we couldn't e.g. have ReservationId as an unique key,
+    /// out of order message handling), then we couldn't e.g. have the reservation Id as an unique key,
     /// as the user might not reserve funding first.
     /// * Existing databases can't have their unique key changed.
     /// At least not without creating a new database and migrating the data across.

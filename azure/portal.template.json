@@ -165,6 +165,18 @@
                             }
                         ]
                     },
+                    "appServiceVirtualApplications": {
+                        "value": [
+                            {
+                                "virtualPath": "/",
+                                "physicalPath": "site\\wwwroot"
+                            },
+                            {
+                                "virtualPath": "/EAS.Portal.Worker.Jobs",
+                                "physicalPath": "site\\wwwroot\\app_data\\jobs\\continuous\\EAS.Portal.Worker.Jobs"
+                            }
+                        ]
+                    },
                     "deployStagingSlot": {
                         "value": false
                     }
@@ -206,9 +218,13 @@
             "type": "string",
             "value": "[variables('workerAppServiceName')]"
         },
-        "PortalCosmosDbName": {
+        "PortalCosmosDatabaseUri": {
             "type": "string",
-            "value": "[variables('cosmosDbName')]"
+            "value": "[concat('https://', variables('cosmosDbName'), '.documents.azure.com:443/')]"
+        },
+        "PortalCosmosDatabaseAuthKey": {
+            "type": "string",
+            "value": "[reference('cosmos-db').outputs.PrimaryMasterKey.value]"
         }
     }
 }

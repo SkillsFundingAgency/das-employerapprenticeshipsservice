@@ -6,11 +6,11 @@ namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
     public class ReservedFundingDto : IReservedFundingDto
     {
         [JsonProperty("reservationId")]
-        public virtual long ReservationId { get; private set; }
+        public virtual Guid ReservationId { get; private set; }
 
         //optional
         [JsonProperty("courseId")]
-        public virtual long CourseId { get; private set; }
+        public virtual string CourseId { get; private set; }
 
         //optional
         [JsonProperty("courseName")]

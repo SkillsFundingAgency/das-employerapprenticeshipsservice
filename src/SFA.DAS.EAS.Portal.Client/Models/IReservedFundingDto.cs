@@ -4,9 +4,9 @@ namespace SFA.DAS.EAS.Portal.Client.Models
 {
     public interface IReservedFundingDto
     {
-        long ReservationId { get;}
+        Guid ReservationId { get;}
         //optional
-        long CourseId { get; }
+        string CourseId { get; }
         //optional
         string CourseName { get; }
         DateTime StartDate { get; }

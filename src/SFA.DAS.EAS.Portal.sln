@@ -17,6 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Portal.Client",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Portal.Client.TestHarness", "SFA.DAS.EAS.Portal.Client.TestHarness\SFA.DAS.EAS.Portal.Client.TestHarness.csproj", "{F9467CAA-389C-41D6-BDF8-8658A07917D4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F3ADA632-DC5D-4AAE-BABE-F4F2847B250B}"
+ProjectSection(SolutionItems) = preProject
+	PortalDevNotes.md = PortalDevNotes.md
+EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
