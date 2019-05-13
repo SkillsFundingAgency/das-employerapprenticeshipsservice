@@ -25,6 +25,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Startup
 
                     var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Portal.Worker.TestHarness")
                         .UseAzureServiceBusTransport(isDevelopment,  () => serviceBusConfiguration.ConnectionString, r => { })
+                        .UseErrorQueue()
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
