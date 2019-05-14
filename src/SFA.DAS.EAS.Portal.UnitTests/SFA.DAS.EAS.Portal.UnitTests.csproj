@@ -12,7 +12,6 @@
     <PackageReference Include="nunit" Version="3.11.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Include="SFA.DAS.EAS.Portal.Types" Version="1.0.2.8" />
     <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
   </ItemGroup>
 
