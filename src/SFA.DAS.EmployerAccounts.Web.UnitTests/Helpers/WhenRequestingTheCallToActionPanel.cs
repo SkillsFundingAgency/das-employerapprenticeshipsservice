@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
     public class WhenRequestingTheCallToActionPanel
     {
         private IHomepagePanelViewHelper _sut;
-        private AccountDashboardViewModel _accountDashbaoardModel;
+        private AccountDashboardViewModel _accountDashboardModel;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
         [SetUp]
         public void SetUp()
         {
-            _accountDashbaoardModel = new AccountDashboardViewModel
+            _accountDashboardModel = new AccountDashboardViewModel
             {
                 PayeSchemeCount = 1,
                 AgreementsToSign = true
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
             // Arrange
 
             // Act
-            var panelActionResult = _sut.GetPanel1Action(_accountDashbaoardModel);
+            var panelActionResult = _sut.GetPanel1Action(_accountDashboardModel);
 
             // Assert
             panelActionResult.Should().Be("SignAgreement");
@@ -43,10 +43,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
         public void WhenAgreenentHasBeenSigned_ShouldPromptToReserveFunding()
         {
             // Arrange
-            _accountDashbaoardModel.AgreementsToSign = false;
+            _accountDashboardModel.AgreementsToSign = false;
 
             // Act
-            var panelActionResult = _sut.GetPanel1Action(_accountDashbaoardModel);
+            var panelActionResult = _sut.GetPanel1Action(_accountDashboardModel);
 
             // Assert
             panelActionResult.Should().Be("CheckFunding");
@@ -56,10 +56,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
         public void WhenPayeSchemeHasNotBeenAdded_ShouldPromptToAddPayeScheme()
         {
             // Arrange
-            _accountDashbaoardModel.PayeSchemeCount = 0;
+            _accountDashboardModel.PayeSchemeCount = 0;
 
             // Act
-            var panelActionResult = _sut.GetPanel1Action(_accountDashbaoardModel);
+            var panelActionResult = _sut.GetPanel1Action(_accountDashboardModel);
 
             // Assert
             panelActionResult.Should().Be("AddPAYE");
