@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.HashingService;
+using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -55,6 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel != null && response.Data.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.Count > 0;
             }
             return View(response);
 
@@ -302,6 +304,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             else if (model.EmulatedFundingViewModel != null)
             {
                 viewModel.ViewName = "FundingComplete";
+            }
+            else if (model.ApprenticeshipAdded)
+            {
+                viewModel.ViewName = "ApprenticeshipDetails";
             }
 
             return PartialView(viewModel);

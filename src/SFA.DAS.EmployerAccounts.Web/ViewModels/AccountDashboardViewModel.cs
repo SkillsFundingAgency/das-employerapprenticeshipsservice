@@ -26,5 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
         public EmulatedFundingViewModel EmulatedFundingViewModel { get; set; }
         public AccountDto AccountViewModel { get; set; }
+        public bool ApprenticeshipAdded { get; set; }
     }
 }   
