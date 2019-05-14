@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             }
             else
             {
-                return EmployerAccountsAction(urlHelper, "teams");
+                return "https://securefunding.test-eas.apprenticeships.education.gov.uk/accounts/"+HashedAccountId+"/reservations";//EmployerAccountsAction(urlHelper, "teams");
             }
         }
     }

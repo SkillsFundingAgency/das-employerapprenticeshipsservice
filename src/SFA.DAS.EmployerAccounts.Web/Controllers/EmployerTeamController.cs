@@ -9,10 +9,8 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
-using System.Linq;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.HashingService;
-using Account = SFA.DAS.EAS.Portal.Types.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -51,36 +49,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
+            var response = await GetAccountInformation(hashedAccountId);
+            response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
             if (FeatureToggles.Features.HomePage.Enabled)
             {
-                var response = new OrchestratorResponse<NewHomepageViewModel> { Data = new NewHomepageViewModel()};
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                var result = await _portalClient.GetAccount(unhashedAccountId);
-                NewHomepageHelper homepageHelper = new NewHomepageHelper(_hashingService);
-                if (result == null)
-                {
-                    
-                    OrchestratorResponse<AccountDashboardViewModel> oldAccountInfo = await GetAccountInformation(hashedAccountId);
-                    var newAccountInfo = homepageHelper.ConvertFromOldModelToNewModel(oldAccountInfo);
-                    response.Data.Account = newAccountInfo;
+                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+            }
+            return View(response);
 
-                }
-                else
-                {
-                    var newAccountInfo = homepageHelper.ConvertFromPortalAccountToNewModel(result);
-                    response.Data.Account = newAccountInfo;
-                }
-                //response.Data.AgreementsToSign = response.Data.Account.Organisations.FirstOrDefault().Agreements.Select(x => x.IsPending).Count() > 0;
-                response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
-                return View(response);
-            }
-            else
-            {
-                OrchestratorResponse<AccountDashboardViewModel> response = await GetAccountInformation(hashedAccountId);
-                response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
-                return View(response);
-            }
-            
         }
 
         [HttpGet]
@@ -315,9 +292,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult Row1Panel1(NewHomepageViewModel model)
+        public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<NewHomepageViewModel> { ViewName = "CheckFunding", Data = model };
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
             if (model.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";
@@ -331,9 +308,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }       
 
         [ChildActionOnly]
-        public ActionResult Row1Panel2(NewHomepageViewModel model)
+        public ActionResult Row1Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<NewHomepageViewModel> { ViewName = "ProviderPermissions", Data = model };
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
             if (model.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
@@ -342,48 +319,48 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return PartialView(viewModel);
         }
         [ChildActionOnly]
-        public ActionResult Row2Panel1(NewHomepageViewModel model)
+        public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<NewHomepageViewModel> { ViewName = "SavedProviders", Data = model });
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
         }
         [ChildActionOnly]
-        public ActionResult Row2Panel2(NewHomepageViewModel model)
+        public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<NewHomepageViewModel> { ViewName = "CreateVacancy", Data = model });
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
         }
 
         [ChildActionOnly]
-        public ActionResult SignAgreement(NewHomepageViewModel model)
+        public ActionResult SignAgreement(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult ProviderPermissions(NewHomepageViewModel model)
+        public ActionResult ProviderPermissions(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult ProviderPermissionsDenied(NewHomepageViewModel model)
+        public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }        
         [ChildActionOnly]
-        public ActionResult SavedProviders(NewHomepageViewModel model)
+        public ActionResult SavedProviders(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult AccountSettings(NewHomepageViewModel model)
+        public ActionResult AccountSettings(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult CheckFunding(NewHomepageViewModel model)
+        public ActionResult CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
         [ChildActionOnly]
-        public ActionResult CreateVacancy(NewHomepageViewModel model)
+        public ActionResult CreateVacancy(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -409,8 +386,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction("Index", "EmployerTeam", new { model.HashedAccountId });
         }
         [ChildActionOnly]
-        public ActionResult FundingComplete(NewHomepageViewModel model)
+        public ActionResult FundingComplete(AccountDashboardViewModel model)
         {
+            if (FeatureToggles.Features.EmulatedFundingJourney.Enabled)
+            {
+                return PartialView("EmulatedFundingComplete", model);
+            }
             return PartialView(model);
         }
     }

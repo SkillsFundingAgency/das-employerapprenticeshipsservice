@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
@@ -24,5 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public int SignedAgreementCount { get; set; }
         public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
         public EmulatedFundingViewModel EmulatedFundingViewModel { get; set; }
+        public AccountDto AccountViewModel { get; set; }
     }
 }   

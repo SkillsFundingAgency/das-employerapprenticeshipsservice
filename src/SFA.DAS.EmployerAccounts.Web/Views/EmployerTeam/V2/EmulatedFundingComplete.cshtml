@@ -6,9 +6,9 @@
         <dt class="das-definition-list__title">Legal entity:</dt>
         <dd class="das-definition-list__definition">@Model.Account.Name</dd>
         <dt class="das-definition-list__title">Training course:</dt>
-        <dd class="das-definition-list__definition">@Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().CourseName</dd>
+        <dd class="das-definition-list__definition">@Model.EmulatedFundingViewModel.CourseName</dd>
         <dt class="das-definition-list__title">Start and end date: </dt>
-        <dd class="das-definition-list__definition">@Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().StartDate to @Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().EndDate</dd>
+        <dd class="das-definition-list__definition">@Model.EmulatedFundingViewModel.StartDate to @Model.EmulatedFundingViewModel.EndDate</dd>
     </dl>
     <p><a href="@Url.Action("Index","EmulatedFundingJourney",new { HashedAccountId = Model.HashedAccountId })" class="das-panel__link">Check and secure funding now</a> </p>
     

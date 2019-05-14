@@ -75,9 +75,6 @@
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
       <Version>1.6.48</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.EAS.Portal.Types">
-      <Version>1.0.2.8</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
@@ -158,7 +155,6 @@
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
-    <Compile Include="Helpers\NewHomepageHelper.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
@@ -184,7 +180,6 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
-    <Compile Include="ViewModels\NewHomepageViewModel.cs" />
     <Compile Include="ViewModels\EmulatedFundingViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />
@@ -724,8 +719,10 @@
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
     <Content Include="Views\EmulatedFundingJourney\Index.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\EmulatedFundingComplete.cshtml" />
     <Content Include="Views\EmployerAccount\YouHaveRegistered.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\ApprenticeshipDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
