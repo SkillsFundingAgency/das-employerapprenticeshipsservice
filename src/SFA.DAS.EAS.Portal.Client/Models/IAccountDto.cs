@@ -4,11 +4,10 @@ using System.Collections.Generic;
 namespace SFA.DAS.EAS.Portal.Client.Models
 {
     //todo: can we simplify as we're using covariant?
-    public interface IAccountDto<out TAccountLegalEntityDto> 
-        where TAccountLegalEntityDto : IAccountLegalEntityDto<IReservedFundingDto>
+    public interface IAccountDto
     {
         long AccountId { get; }
-        IEnumerable<TAccountLegalEntityDto> AccountLegalEntities { get; }
+        IEnumerable<IAccountLegalEntityDto> AccountLegalEntities { get; }
         DateTime? Deleted { get; }
     }
 }

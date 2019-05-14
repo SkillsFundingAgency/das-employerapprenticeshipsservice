@@ -2,10 +2,10 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Portal.Client.Models
 {
-    public interface IAccountLegalEntityDto<out TReservedFunding> where TReservedFunding : IReservedFundingDto
+    public interface IAccountLegalEntityDto
     {
         long AccountLegalEntityId { get;}
         string LegalEntityName { get; }
-        IEnumerable<TReservedFunding> ReservedFundings { get; }
+        IEnumerable<IReservedFundingDto> ReservedFundings { get; }
     }
 }

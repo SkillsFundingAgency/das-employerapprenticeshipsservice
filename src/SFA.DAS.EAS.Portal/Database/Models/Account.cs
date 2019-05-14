@@ -6,13 +6,13 @@ using SFA.DAS.EAS.Portal.Client.Models;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
-    public class Account : Document, IAccountDto<AccountLegalEntity>
+    public class Account : Document, IAccountDto
     {
         [JsonProperty("accountId")]
         public long AccountId { get; private set; }
 
         [JsonProperty("accountLegalEntities")]
-        public IEnumerable<AccountLegalEntity> AccountLegalEntities => _accountLegalEntities;
+        public IEnumerable<IAccountLegalEntityDto> AccountLegalEntities => _accountLegalEntities;
 
         [JsonProperty("outboxData")]
         public IEnumerable<OutboxMessage> OutboxData => _outboxData;

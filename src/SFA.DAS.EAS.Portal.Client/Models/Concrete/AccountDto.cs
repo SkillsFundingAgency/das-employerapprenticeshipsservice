@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
 {
-    public class AccountDto : IAccountDto<IAccountLegalEntityDto<IReservedFundingDto>>
+    public class AccountDto : IAccountDto
     {
         public AccountDto(IEnumerable<AccountLegalEntityDto> accountLegalEntities)
         {
@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
         //todo: return List in dto's, not enumerable (so consumer can add to them without copying - return most specific type)
         // https://stackoverflow.com/questions/15490633/why-cant-i-use-a-compatible-concrete-type-when-implementing-an-interface
         [JsonProperty("accountLegalEntities")]
-        public virtual IEnumerable<IAccountLegalEntityDto<IReservedFundingDto>> AccountLegalEntities { get; private set; }
+        public virtual IEnumerable<IAccountLegalEntityDto> AccountLegalEntities { get; private set; }
 
         [JsonProperty("deleted")]
         public virtual DateTime? Deleted { get; private set; }
