@@ -12,7 +12,7 @@
     <PackageReference Include="nunit" Version="3.11.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
-    <PackageReference Include="SFA.DAS.EAS.Portal.Types" Version="1.0.2.6" />
+    <PackageReference Include="SFA.DAS.EAS.Portal.Types" Version="1.0.2.8" />
     <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
   </ItemGroup>
 
@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Portal.Types\SFA.DAS.EAS.Portal.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Portal.Worker.UnitTests\SFA.DAS.EAS.Portal.Worker.UnitTests.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj" />
   </ItemGroup>

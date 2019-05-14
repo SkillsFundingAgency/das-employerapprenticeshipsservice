@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using SFA.DAS.EAS.Portal.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
 {
@@ -18,6 +19,9 @@ namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
         // https://stackoverflow.com/questions/15490633/why-cant-i-use-a-compatible-concrete-type-when-implementing-an-interface
         [JsonProperty("accountLegalEntities")]
         public virtual IEnumerable<IAccountLegalEntityDto<IReservedFundingDto>> AccountLegalEntities { get; private set; }
+
+        [JsonProperty("organisations")]
+        public virtual IEnumerable<Organisation> Organisations { get; private set; }
 
         [JsonProperty("deleted")]
         public virtual DateTime? Deleted { get; private set; }

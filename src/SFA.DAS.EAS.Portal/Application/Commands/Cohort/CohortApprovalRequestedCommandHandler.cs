@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
-using SFA.DAS.EAS.Portal.Types;
 using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Types;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {

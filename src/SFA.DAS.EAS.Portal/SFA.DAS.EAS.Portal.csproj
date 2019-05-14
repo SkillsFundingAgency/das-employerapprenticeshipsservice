@@ -20,11 +20,12 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="1.0.0" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.19" />
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
-    <PackageReference Include="SFA.DAS.EAS.Portal.Types" Version="1.0.2.6" />
+    <PackageReference Include="SFA.DAS.EAS.Portal.Types" Version="1.0.2.8" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Portal.Client\SFA.DAS.EAS.Portal.Client.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EAS.Portal.Types\SFA.DAS.EAS.Portal.Types.csproj" />
   </ItemGroup>
 
 </Project>
