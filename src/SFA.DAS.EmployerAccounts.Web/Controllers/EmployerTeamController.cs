@@ -400,5 +400,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             return PartialView(model);
         }
+        [ChildActionOnly]
+        public ActionResult SearchBar()
+        {
+            return PartialView();
+        }
+        [ChildActionOnly]
+        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
     }
 }

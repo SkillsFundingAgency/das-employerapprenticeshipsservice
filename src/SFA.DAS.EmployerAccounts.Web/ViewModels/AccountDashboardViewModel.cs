@@ -27,5 +27,8 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public EmulatedFundingViewModel EmulatedFundingViewModel { get; set; }
         public AccountDto AccountViewModel { get; set; }
         public bool ApprenticeshipAdded { get; set; }
+        //Todo: Hook these up with the new viewmodel from CON-414
+        public bool ShowSearchBar { get; set; } = false;
+        public bool ShowMostActiveLinks { get; set; } = false;
     }
 }   
