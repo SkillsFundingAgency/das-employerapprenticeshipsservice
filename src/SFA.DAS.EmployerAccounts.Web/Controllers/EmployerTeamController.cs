@@ -409,7 +409,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction("Index", "EmployerTeam", new { model.HashedAccountId });
         }
         [ChildActionOnly]
-        public ActionResult FundingComplete(AccountDashboardViewModel model)
+        public ActionResult FundingComplete(NewHomepageViewModel model)
         {
             return PartialView(model);
         }

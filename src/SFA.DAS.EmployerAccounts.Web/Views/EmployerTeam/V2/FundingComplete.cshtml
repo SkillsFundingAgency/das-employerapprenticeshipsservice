@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.NewHomepageViewModel
 <div class="das-panel das-panel--featured">
 
     <h3 class="das-panel__heading">Apprenticeship funding secured</h3>
@@ -10,7 +10,6 @@
         <dt class="das-definition-list__title">Start and end date: </dt>
         <dd class="das-definition-list__definition">@Model.EmulatedFundingViewModel.StartDate to @Model.EmulatedFundingViewModel.EndDate</dd>
     </dl>
-    <p><a href="@Url.Action("Index","EmulatedFundingJourney",new { HashedAccountId = Model.HashedAccountId })" class="das-panel__link">Check and secure funding now</a> </p>
-
+    <p><a href="@Url.Action("Index","EmulatedFundingJourney",new { HashedAccountId = Model.Account.Id })" class="das-panel__link">Check and secure funding now</a> </p>
+    
 </div>
-
