@@ -5,6 +5,7 @@ using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.NLog.Logger;
@@ -39,6 +40,30 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 await InitialisePayeSchemeRef(c, "123/ACT");
             });
         }
+
+        [Given(@"An employer is adding a PAYE which has submissions older than the (.*) month expiry rule limit")]
+        public Task GivenPAYEAccountAndExpiryLimit(int expiryLimit)
+        {
+            var employerFinanceConfiguration = _objectContainer.Resolve<EmployerFinanceConfiguration>();
+            employerFinanceConfiguration.FundsExpiryPeriod = expiryLimit;
+
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                await _objectContext.CreateAccount(c);
+                await InitialisePayeSchemeRef(c, "123/ACT");
+            });
+        }
+
+        [Given(@"Another account is opened and associated with the paye scheme")]
+        public Task GivenAnotherAccountIsOpenedAndAssociatedWithThePayeScheme()
+        {
+            return _objectContainer.ScopeAsync(async c =>
+            {
+                await _objectContext.CreateAccount(c);
+            });
+        }
+
+
 
         private Task InitialisePayeSchemeRef(IObjectContainer objectContainer, string empRef)
         {
