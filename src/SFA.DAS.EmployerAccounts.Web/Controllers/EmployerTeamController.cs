@@ -396,10 +396,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult FundingComplete(AccountDashboardViewModel model)
         {
-            if (FeatureToggles.Features.EmulatedFundingJourney.Enabled)
-            {
-                return PartialView("EmulatedFundingComplete", model);
-            }
             return PartialView(model);
         }
         [ChildActionOnly]
