@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.CosmosDb;
 using SFA.DAS.EAS.Portal.Database;
 using SFA.DAS.EAS.Portal.Database.Models;
-using SFA.DAS.EAS.Portal.Events.Reservations;
+using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands
 {

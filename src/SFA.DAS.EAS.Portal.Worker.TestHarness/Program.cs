@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                 var publishReserveFundingAddedEvent = host.Services.GetService<PublishReserveFundingAddedEvents>();
                 await publishReserveFundingAddedEvent.Run();
 
-                await host.WaitForShutdownAsync();
+                await host.StopAsync();
             }
         }
 

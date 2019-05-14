@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
                     Console.WriteLine($"Account #{accountDto.AccountId} has {accountDto.AccountLegalEntities.Count()} ALEs");
                 }
 
-                await host.WaitForShutdownAsync();
+                await host.StopAsync();
             }
         }
 

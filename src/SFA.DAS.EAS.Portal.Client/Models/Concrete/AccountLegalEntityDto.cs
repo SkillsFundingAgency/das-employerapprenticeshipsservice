@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
 {
-    public class AccountLegalEntityDto : IAccountLegalEntityDto<IReservedFundingDto>
+    public class AccountLegalEntityDto : IAccountLegalEntityDto
     {
         public AccountLegalEntityDto(IEnumerable<ReservedFundingDto> reservedFundings)
         {

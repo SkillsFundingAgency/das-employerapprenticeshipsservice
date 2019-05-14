@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Portal.Client.Models;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
-    public class AccountLegalEntity : IAccountLegalEntityDto<ReservedFunding>
+    public class AccountLegalEntity : IAccountLegalEntityDto
     {
         //todo: rename to id & name?
         [JsonProperty("accountLegalEntityId")]
@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         public string LegalEntityName { get; private set; }
         
         [JsonProperty("reservedFundings")]
-        public IEnumerable<ReservedFunding> ReservedFundings => _reservedFundings;
+        public IEnumerable<IReservedFundingDto> ReservedFundings => _reservedFundings;
 
         [JsonIgnore]
         private readonly List<ReservedFunding> _reservedFundings = new List<ReservedFunding>();
