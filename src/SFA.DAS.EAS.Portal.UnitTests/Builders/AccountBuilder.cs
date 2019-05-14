@@ -12,9 +12,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
             _organisations = new List<Organisation>();
         }
 
-        public Account Build()
+        public Database.Models.Account Build()
         {
-            return new Account
+            return new Database.Models.Account
             {
                 Organisations = _organisations
             };
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
             return this;
         }
 
-        public static implicit operator Account(AccountBuilder instance)
+        public static implicit operator Database.Models.Account(AccountBuilder instance)
         {
             return instance.Build();
         }

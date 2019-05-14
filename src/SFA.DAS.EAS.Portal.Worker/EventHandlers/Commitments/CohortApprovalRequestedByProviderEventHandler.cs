@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
 
         public Task Handle(CohortApprovalRequestedByProvider message, IMessageHandlerContext context)
         {
-            return _handler.Handle(_adapter.Convert(message));
+            return _handler.Handle(_adapter.Convert(message, context));
         }
     }
 }
