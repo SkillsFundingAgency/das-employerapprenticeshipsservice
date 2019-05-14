@@ -62,10 +62,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             if (model.PublishEvent)
             {
-                _eventPublisher.Publish(new ReservationCreatedEvent(
+                /*_eventPublisher.Publish(new ReservationCreatedEvent(
                     model.Id, model.AccountLegalEntityId, model.AccountLegalEntityName,
                     model.CourseId, model.StartDate, model.CourseName, model.EndDate,
-                    DateTime.UtcNow, model.AccountId));
+                    DateTime.UtcNow, model.AccountId));*/
             }
             return _employerTeamController.ReturnFromEmulateFundingJourney(model);
         }

@@ -73,7 +73,7 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.43" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.491</Version>
+      <Version>1.6.452</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
@@ -722,7 +722,6 @@
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
     <Content Include="Views\EmulatedFundingJourney\Index.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\EmulatedFundingComplete.cshtml" />
     <Content Include="Views\EmployerAccount\YouHaveRegistered.cshtml" />
     <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ApprenticeshipDetails.cshtml" />
