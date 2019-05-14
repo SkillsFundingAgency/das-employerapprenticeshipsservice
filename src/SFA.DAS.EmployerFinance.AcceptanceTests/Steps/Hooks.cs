@@ -3,10 +3,12 @@ using System.Data.Common;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using BoDi;
+using Moq;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.Extensions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
@@ -45,6 +47,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         {
             _container.GetInstance<ILog>().Info("Starting Scenario.");
 
+            ResetCurrentDateTime(_container);
+            ResetFundsExpiryPeriod(_container);
+
             _objectContainer.RegisterInstances(_container);
             _objectContainer.RegisterMocks(_container);
         }
@@ -62,6 +67,18 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             {
                 await StopNServiceBusEndpoint();
             }
+        }
+
+        private static void ResetCurrentDateTime(IContainer container)
+        {
+            var currentDateTime = container.GetInstance<Mock<ICurrentDateTime>>();
+            currentDateTime.Setup(x => x.Now).Returns(DateTime.Now);
+        }
+
+        private static void ResetFundsExpiryPeriod(IContainer container)
+        {
+            var config = container.GetInstance<EmployerFinanceConfiguration>();
+            config.FundsExpiryPeriod = 24;
         }
 
         private static async Task StartNServiceBusEndpoint()

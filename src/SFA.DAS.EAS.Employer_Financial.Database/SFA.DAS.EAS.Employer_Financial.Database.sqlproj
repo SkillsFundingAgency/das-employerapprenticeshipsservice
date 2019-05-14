@@ -168,6 +168,8 @@
     <Build Include="StoredProcedures\CreateExpiredFunds.sql" />
     <Build Include="UserDefinedTypes\ExpiredFundsTable.sql" />
     <Build Include="StoredProcedures\GetExpiredFunds.sql" />
+    <Build Include="Functions\GetPayrollExpiryMonth.sql" />
+    <Build Include="Functions\IsInDateLevy.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\RemoveDataGenerationFramework.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\AddDataGenerationFramework.sql" />
     <None Include="Scripts\Manual\GenerateTestData\AdHoc\CreateLevies.sql" />
