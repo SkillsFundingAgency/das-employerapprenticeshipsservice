@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
@@ -100,6 +101,10 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
                 var paymentTransaction = (PaymentTransactionLine)transaction;
 
                 transaction.Description = GetPaymentTransactionDescription(paymentTransaction);
+            }
+            else if (transaction.GetType() == typeof(ExpiredFundTransactionLine))
+            {
+                transaction.Description = "Expired levy";
             }
             else if (transaction.GetType() == typeof(TransferTransactionLine))
             {

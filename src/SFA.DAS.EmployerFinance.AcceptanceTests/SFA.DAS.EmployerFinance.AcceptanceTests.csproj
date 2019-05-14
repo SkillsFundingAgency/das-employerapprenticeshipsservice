@@ -50,6 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Features\Expired-funds.feature.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Expired-funds.feature</DependentUpon>
+    </Compile>
     <Compile Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -100,6 +105,10 @@
     <None Update="App.Release.config">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>App.config</DependentUpon>
+    </None>
+    <None Update="Features\Expired-funds.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Expired-funds.feature.cs</LastGenOutput>
     </None>
     <None Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature">
       <LastGenOutput>Scenario-01-Single-PAYE-no-adjustments.feature.cs</LastGenOutput>
