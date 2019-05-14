@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.EventHandlers.Cohort
                 await testContext.Sut.Handle(@event, testContext.MockMessageHandlerContext.Object);
 
                 //assert
-                testContext.MockAdapter.Verify(m => m.Convert(@event), Times.Once);
+                testContext.MockAdapter.Verify(m => m.Convert(@event, It.IsAny<IMessageHandlerContext>()), Times.Once);
             }
 
             [Test]
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.EventHandlers.Cohort
                 CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
 
                 testContext.MockAdapter
-                    .Setup(m => m.Convert(@event))
+                    .Setup(m => m.Convert(@event, It.IsAny<IMessageHandlerContext>()))
                     .Returns(command);
 
                 // act

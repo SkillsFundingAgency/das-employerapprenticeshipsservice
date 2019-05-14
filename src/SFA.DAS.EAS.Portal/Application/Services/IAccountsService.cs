@@ -1,24 +1,12 @@
-﻿using SFA.DAS.EAS.Portal.Types;
+﻿using SFA.DAS.EAS.Portal.Database.Models;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Portal.Application.Services
 {
     public interface IAccountsService
     {
-        Task<Account> Get(string id);
-        Task Save(Account account);
-    }
-
-    public class AccountsService : IAccountsService
-    {
-        public Task<Account> Get(string id)
-        {
-            return Task.FromResult(new Account());
-        }
-
-        public Task Save(Account account)
-        {
-            return Task.CompletedTask;
-        }
+        Task<Account> Get(long id, CancellationToken cancellationToken = new CancellationToken());
+        Task Save(string messageId, Account account, CancellationToken cancellationToken = new CancellationToken()); // TODO: move messageId from here
     }
 }

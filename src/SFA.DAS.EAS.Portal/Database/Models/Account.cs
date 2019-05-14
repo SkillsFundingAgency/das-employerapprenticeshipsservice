@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.Models;
+using SFA.DAS.EAS.Portal.Types;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
@@ -13,6 +14,9 @@ namespace SFA.DAS.EAS.Portal.Database.Models
 
         [JsonProperty("accountLegalEntities")]
         public IEnumerable<AccountLegalEntity> AccountLegalEntities => _accountLegalEntities;
+
+        [JsonProperty("organisations")]
+        public ICollection<Organisation> Organisations { get; set; }
 
         [JsonProperty("outboxData")]
         public IEnumerable<OutboxMessage> OutboxData => _outboxData;
@@ -28,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
 
         [JsonIgnore]
         private readonly List<AccountLegalEntity> _accountLegalEntities = new List<AccountLegalEntity>();
-
+                
         [JsonIgnore]
         private List<OutboxMessage> _outboxData = new List<OutboxMessage>();
 
@@ -53,8 +57,9 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         }
 
         [JsonConstructor]
-        private Account()
+        public Account()
         {
+            Organisations = new List<Organisation>();
         }
 
         public void AddReserveFunding(long accountLegalEntityId, string legalEntityName,  Guid reservationId,
@@ -79,7 +84,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             _accountLegalEntities.Add(new AccountLegalEntity(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate));
         }
 
-        private void AddOutboxMessage(string messageId, DateTime created)
+        internal void AddOutboxMessage(string messageId, DateTime created)
         {
             if (messageId == null)
                 throw new ArgumentNullException(nameof(messageId));
@@ -88,7 +93,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         }
 
         // todo: it would be better to have a webjob to periodically clean-up, but for now..
-        private void DeleteOldMessages()
+        internal void DeleteOldMessages()
         {
             //todo: configurable. think what we want to set this to
             var expiryPeriod = TimeSpan.Parse("2");
@@ -96,8 +101,8 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             var now = DateTime.UtcNow;
             _outboxData = _outboxData.Where(m => now - m.Created < expiryPeriod).ToList();
         }
-        
-        private bool IsMessageProcessed(string messageId)
+
+        internal bool IsMessageProcessed(string messageId)
         {
             return OutboxData.Any(m => m.MessageId == messageId);
         }
