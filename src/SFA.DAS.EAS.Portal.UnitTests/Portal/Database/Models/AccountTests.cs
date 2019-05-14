@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Database.Models
     public class AccountTests : FluentTest<AccountTestsFixture>
     {
         [Test]
-        public void ReservedFundingConstructor_()
+        public void ReservedFundingConstructor_WhenConstructWithReservedFunding_ThenShouldBeConstructedWithCoreProperties()
         {
             Test(f => f.ConstructAccountWithReservedFunding(), (f, r) => f.AssertConstructFromMessage());
         }
