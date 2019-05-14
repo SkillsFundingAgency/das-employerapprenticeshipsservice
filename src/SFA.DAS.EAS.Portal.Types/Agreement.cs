@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Portal.Types
 {
-    public class Agreements
+    public class Agreement
     {
         public string HashedAgreementId { get; set; }
         public int Version { get; set; }

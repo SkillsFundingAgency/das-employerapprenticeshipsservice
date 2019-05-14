@@ -8,6 +8,6 @@ namespace SFA.DAS.EAS.Portal.Types
         public string CourseCode { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public long ReservationId { get; set; }
+        public Guid ReservationId { get; set; }
     }
 }

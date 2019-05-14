@@ -55,10 +55,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 var response = new OrchestratorResponse<NewHomepageViewModel> { Data = new NewHomepageViewModel()};
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                var result = await _portalClient.GetAccount(1337);
+                var result = await _portalClient.GetAccount(unhashedAccountId);
+                NewHomepageHelper homepageHelper = new NewHomepageHelper(_hashingService);
                 if (result == null)
                 {
-                    NewHomepageHelper homepageHelper = new NewHomepageHelper(_hashingService);
+                    
                     OrchestratorResponse<AccountDashboardViewModel> oldAccountInfo = await GetAccountInformation(hashedAccountId);
                     var newAccountInfo = homepageHelper.ConvertFromOldModelToNewModel(oldAccountInfo);
                     response.Data.Account = newAccountInfo;
@@ -66,13 +67,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else
                 {
-                    var tempAcc = new Account();
-                    tempAcc.Id = _hashingService.HashValue(result.AccountId);
-                    //tempAcc.Organisations.Add(result.AccountLegalEntities.Select());
-
-                    response.Data.Account = tempAcc;
+                    var newAccountInfo = homepageHelper.ConvertFromPortalAccountToNewModel(result);
+                    response.Data.Account = newAccountInfo;
                 }
-                response.Data.Flags.AgreementsToSign = response.Data.Account.Organisations.FirstOrDefault().Agreements.Select(x => x.IsPending).Count() > 0;
+                //response.Data.AgreementsToSign = response.Data.Account.Organisations.FirstOrDefault().Agreements.Select(x => x.IsPending).Count() > 0;
                 response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
                 return View(response);
             }
@@ -320,7 +318,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel1(NewHomepageViewModel model)
         {
             var viewModel = new PanelViewModel<NewHomepageViewModel> { ViewName = "CheckFunding", Data = model };
-            if (model.Flags.AgreementsToSign)
+            if (model.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";
             }
@@ -336,7 +334,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel2(NewHomepageViewModel model)
         {
             var viewModel = new PanelViewModel<NewHomepageViewModel> { ViewName = "ProviderPermissions", Data = model };
-            if (model.Flags.AgreementsToSign)
+            if (model.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
             }
