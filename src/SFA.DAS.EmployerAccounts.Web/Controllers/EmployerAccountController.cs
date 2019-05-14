@@ -10,10 +10,12 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -27,6 +29,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private IAuthorizationService _authorizationService;
         private const int AddPAYELater = 1;
         private const int AddPAYENow = 2;
+        private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
+        private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -34,13 +38,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediatr,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService, ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
             _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
+            _returnUrlCookieStorageService = returnUrlCookieStorageService;
         }
 
         [HttpGet]
@@ -139,8 +144,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("getGovernmentFunding")]
-        public ActionResult GetGovernmentFunding()
+        public ActionResult GetGovernmentFunding(string returnUrl = "")
         {
+            _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
+
             var model = new
             {
                 HideHeaderSignInLink = true
@@ -165,6 +172,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
 
                     var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+
+                    var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+                    _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+                    if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                        return Redirect(returnUrlCookie.Value);
 
                     return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
                 }
@@ -246,6 +258,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             
             _employerAccountOrchestrator.DeleteCookieData();
+
+            var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+            _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                return Redirect(returnUrlCookie.Value);
+
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 

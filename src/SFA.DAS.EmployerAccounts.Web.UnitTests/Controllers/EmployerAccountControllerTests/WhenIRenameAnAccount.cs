@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
@@ -52,7 +53,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
-                Mock.Of<IAuthorizationService>())
+                Mock.Of<IAuthorizationService>(),
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
