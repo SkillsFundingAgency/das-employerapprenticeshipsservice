@@ -13,9 +13,9 @@ using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.Account;
-using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.NLog.Logger;
 using TechTalk.SpecFlow;
+using SFA.DAS.EmployerFinance.Interfaces;
 
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
@@ -38,9 +38,26 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         public void GivenIHaveTheFollowingSubmissionsForEmpRef(Table table)
         {
             var empRef = _objectContext.Get<string>(Extensions.Constants.ObjectContextKeys.EmpRef);
-            SetupLastEnglishFractionUpdateDate();  
+            SetupLastEnglishFractionUpdateDate();
             SetupEnglishFractions(empRef, table);
             SetupLevyDeclarations(empRef, table);
+        }
+
+        [When(@"we refresh levy data for paye scheme on the (.*)/(.*)")]
+        public Task WhenWeRefreshLevyDataOnGivenDate(int month, int year)
+        {
+            var currentDateTime = _objectContainer.Resolve<Mock<ICurrentDateTime>>();
+            currentDateTime.Setup(x => x.Now).Returns(new DateTime(year, month, 23));
+
+            return WhenWeRefreshLevyData();
+        }
+        [Given(@"we refresh levy data for paye scheme on the (.*)/(.*)")]
+        public Task WhenWeRefreshLevyDataOnGivenDateGiven(int month, int year)
+        {
+            var currentDateTime = _objectContainer.Resolve<Mock<ICurrentDateTime>>();
+            currentDateTime.Setup(x => x.Now).Returns(new DateTime(year, month, 23));
+
+            return WhenWeRefreshLevyData();
         }
 
         [When(@"we refresh levy data for paye scheme")]
