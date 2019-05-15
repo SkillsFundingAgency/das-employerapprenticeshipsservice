@@ -311,19 +311,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     var legalEntity = model.AccountViewModel.AccountLegalEntities
                         .FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
 
+                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
+
                     // would be better to create new model to contain what the panel needs to show,
                     // but we'll be replacing this with displaying all reserved funds anyway
                     model.ReservedFundingToShow =
                         legalEntity?.ReservedFundings?.FirstOrDefault(rf =>
                             rf.ReservationId == model.RecentlyAddedReservationId);
-
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
                 }
 
                 if (model.ReservedFundingToShow == null)
                 {
-                    model.ReservedFundingToShow =
-                        model.AccountViewModel.AccountLegalEntities.First().ReservedFundings.First();
+                    var legalEntity = model.AccountViewModel.AccountLegalEntities.First();
+                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
+                    model.ReservedFundingToShow = legalEntity.ReservedFundings.First();
                 }
             }
             return PartialView(viewModel);
@@ -378,6 +379,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [ChildActionOnly]
+        public ActionResult FundingComplete(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
