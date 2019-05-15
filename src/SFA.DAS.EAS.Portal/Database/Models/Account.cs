@@ -45,6 +45,8 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             Created = DateTime.SpecifyKind(created, DateTimeKind.Utc);
             
             AddOutboxMessage(messageId, created);
+
+            Organisations = new List<Organisation>();
         }
 
         // ctor for when creating account doc from reserved funding
@@ -53,6 +55,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
             string courseId, string courseName, DateTime startDate, DateTime endDate, DateTime created, string messageId)
             : this(accountId, created, messageId)
         {
+            Organisations = new List<Organisation>();
             AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
         }
 
@@ -71,7 +74,9 @@ namespace SFA.DAS.EAS.Portal.Database.Models
                 if (existingAccountLegalEntity == null)
                     AddReserveFunding(accountLegalEntityId, legalEntityName, reservationId, courseId, courseName, startDate, endDate);
                 else
+                {
                     existingAccountLegalEntity.AddReserveFunding(reservationId, courseId, courseName, startDate, endDate);
+                }
                 
                 Updated = updated;
                 Deleted = null;

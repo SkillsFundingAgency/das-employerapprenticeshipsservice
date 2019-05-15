@@ -18,7 +18,9 @@ namespace SFA.DAS.EAS.Portal.Worker.NServiceBus
             var conventions = config.Conventions();
             conventions.DefiningEventsAs(t => t.Namespace != null &&
             (t.Namespace.StartsWith("SFA.DAS.CommitmentsV2.Messages.Events")
-            || t.Namespace.StartsWith("SFA.DAS.Commitments.Events")));
+            || t.Namespace.StartsWith("SFA.DAS.Commitments.Events")
+            || t.Namespace.StartsWith("SFA.DAS.Reservations.Messages")
+            ));
             return config;
         }
     }

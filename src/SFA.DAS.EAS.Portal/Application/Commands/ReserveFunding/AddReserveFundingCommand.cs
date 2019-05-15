@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.CosmosDb;
@@ -35,6 +36,17 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                     reservedFunding.Id, reservedFunding.CourseId, reservedFunding.CourseName,
                     reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.CreatedDate, messageId);
 
+                var newOrg = new Types.Organisation() { Id = reservedFunding.AccountId };
+                account.Organisations.Add(newOrg);
+                newOrg.ReserveFundings.Add(new Types.ReserveFunding()
+                {
+                    ReservationId = reservedFunding.Id,
+                    CourseCode = reservedFunding.CourseId,
+                    CourseName = reservedFunding.CourseName,
+                    StartDate = reservedFunding.StartDate,
+                    EndDate = reservedFunding.EndDate
+                });
+
                 await _accountsRepository.Add(account, null, cancellationToken);
             }
             else
@@ -45,6 +57,17 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 account.AddReserveFunding(reservedFunding.AccountLegalEntityId, reservedFunding.AccountLegalEntityName,
                     reservedFunding.Id, reservedFunding.CourseId, reservedFunding.CourseName,
                     reservedFunding.StartDate, reservedFunding.EndDate, reservedFunding.CreatedDate, messageId);
+
+                var org = account.Organisations.Where(o => o.Id.Equals(reservedFunding.AccountLegalEntityId)).First();
+
+                org.ReserveFundings.Add(new Types.ReserveFunding()
+                {
+                    ReservationId = reservedFunding.Id,
+                    CourseCode = reservedFunding.CourseId,
+                    CourseName = reservedFunding.CourseName,
+                    StartDate = reservedFunding.StartDate,
+                    EndDate = reservedFunding.EndDate
+                });
 
                 await _accountsRepository.Update(account, null, cancellationToken);
             }
