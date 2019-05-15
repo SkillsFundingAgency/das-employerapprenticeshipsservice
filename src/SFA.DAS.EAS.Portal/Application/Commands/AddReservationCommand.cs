@@ -37,9 +37,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
 
                 var newOrg = new Types.Organisation() { Id = reservedFunding.AccountLegalEntityId };
                 account.Organisations.Add(newOrg);
-                newOrg.ReserveFundings.Add(new Types.ReserveFunding()
+                newOrg.Reservations.Add(new Types.Reservation()
                 {
-                    ReservationId = reservedFunding.Id,
+                    Id = reservedFunding.Id,
                     CourseCode = reservedFunding.CourseId,
                     CourseName = reservedFunding.CourseName,
                     StartDate = reservedFunding.StartDate,
@@ -59,9 +59,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
 
                 var org = account.Organisations.Where(o => o.Id.Equals(reservedFunding.AccountLegalEntityId)).First();
 
-                org.ReserveFundings.Add(new Types.ReserveFunding()
+                org.Reservations.Add(new Types.Reservation()
                 {
-                    ReservationId = reservedFunding.Id,
+                    Id = reservedFunding.Id,
                     CourseCode = reservedFunding.CourseId,
                     CourseName = reservedFunding.CourseName,
                     StartDate = reservedFunding.StartDate,

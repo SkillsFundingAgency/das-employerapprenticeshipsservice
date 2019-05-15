@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Portal.Types
         public Organisation()
         {
             Providers = new List<Provider>();
-            ReserveFundings = new List<ReserveFunding>();
+            Reservations = new List<Reservation>();
             Cohorts = new List<Cohort>();
             Agreements = new List<Agreement>();
         }
@@ -17,8 +17,8 @@ namespace SFA.DAS.EAS.Portal.Types
         public long Id { get; set; }
         [JsonProperty("providers")]
         public ICollection<Provider> Providers { get; set; }
-        [JsonProperty("reserveFundings")]
-        public ICollection<ReserveFunding> ReserveFundings { get; set; }
+        [JsonProperty("reservations")]
+        public ICollection<Reservation> Reservations { get; set; }
         [JsonProperty("cohorts")]
         public ICollection<Cohort> Cohorts { get; set; }
         [JsonProperty("agreements")]

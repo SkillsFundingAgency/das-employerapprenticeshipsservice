@@ -3,8 +3,10 @@ using System;
 
 namespace SFA.DAS.EAS.Portal.Types
 {
-    public class ReserveFunding
+    public class Reservation
     {
+        [JsonProperty("id")]
+        public Guid Id { get; set; }
         [JsonProperty("courseName")]
         public string CourseName { get; set; }
         [JsonProperty("courseCode")]
@@ -12,8 +14,6 @@ namespace SFA.DAS.EAS.Portal.Types
         [JsonProperty("startDate")]
         public DateTime StartDate { get; set; }
         [JsonProperty("endDate")]
-        public DateTime EndDate { get; set; }
-        [JsonProperty("reservationId")]
-        public Guid ReservationId { get; set; }
+        public DateTime EndDate { get; set; }        
     }
 }
