@@ -47,13 +47,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
             if (FeatureToggles.Features.HomePage.Enabled)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
+                    response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
             }
 
             return View(response);
@@ -300,6 +302,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             else if (model.AccountViewModel?.AccountLegalEntities?.FirstOrDefault()?.ReservedFundings?.Any() == true)
             {
                 viewModel.ViewName = "FundingComplete";
+
+                //todo: no need to return everything in the event in AccountDto, just what we need to display (probably only save what we need to show also)
+                //todo: accountDto now mixed concrete/interfaces, which is inconsistent
+
+                if (model.RecentlyAddedReservationId != null)
+                {
+                    model.ReservedFundingToShow = model.AccountViewModel.AccountLegalEntities
+                        .Where(ale => ale.ReservedFundings != null)
+                        .SelectMany(ale => ale.ReservedFundings)
+                        .FirstOrDefault(rf => rf.ReservationId == model.RecentlyAddedReservationId);
+
+                    //todo: need to get legal entity name of the reserved funding we've found
+                    //todo: would be better to pass to panel more specific model
+                }
+
+                if (model.ReservedFundingToShow == null)
+                {
+                    model.ReservedFundingToShow =
+                        model.AccountViewModel.AccountLegalEntities.First().ReservedFundings.First();
+                }
             }
             return PartialView(viewModel);
         }       
