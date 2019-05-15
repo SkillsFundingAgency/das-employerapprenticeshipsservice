@@ -325,33 +325,45 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissions(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult SavedProviders(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult AccountSettings(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AddPAYE(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
