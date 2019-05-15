@@ -10,7 +10,7 @@
             <dt class="das-definition-list__title">Training course:</dt>
             <dd class="das-definition-list__definition">@Model.ReservedFundingToShow.CourseName</dd>
             <dt class="das-definition-list__title">Start and end date: </dt>
-            <dd class="das-definition-list__definition">@Model.ReservedFundingToShow.StartDate to @Model.ReservedFundingToShow.EndDate</dd>
+            <dd class="das-definition-list__definition">@Model.ReservedFundingToShow.StartDate.ToString("MMMM yyyy") to @Model.ReservedFundingToShow.EndDate.ToString("MMMM yyyy")</dd>
         </dl>
     }
 
