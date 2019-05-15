@@ -56,7 +56,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
                 apprenticeship.EndDate = a.EndDate;
             });
 
-            await _accountsService.Save(command.MessageId, account);
+            await _accountsService.Save(account);
         }
     }
 }

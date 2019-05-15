@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Portal.Application.Adapters
     {
         public CohortApprovalRequestedCommand Convert(CohortApprovalRequestedByProvider input, IMessageHandlerContext context)
         {
-            return new CohortApprovalRequestedCommand(context.MessageId, input.AccountId, input.ProviderId, input.CommitmentId);
+            return new CohortApprovalRequestedCommand(input.AccountId, input.ProviderId, input.CommitmentId);
         }
     }
 }

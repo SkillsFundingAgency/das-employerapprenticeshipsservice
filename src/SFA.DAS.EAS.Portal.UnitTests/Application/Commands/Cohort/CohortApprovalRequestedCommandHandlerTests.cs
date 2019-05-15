@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m => m.Save(command.MessageId, testContext.TestAccount, It.IsAny<CancellationToken>()), Times.Once);
+                testContext.MockAccountsService.Verify(m => m.Save(testContext.TestAccount, It.IsAny<CancellationToken>()), Times.Once);
             }
 
             [Test]
@@ -108,7 +108,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
 
                 //assert
                 testContext.MockAccountsService.Verify(m =>
-                m.Save(command.MessageId, It.Is<Database.Models.Account>(a =>
+                m.Save(It.Is<Database.Models.Account>(a =>
                 a.Organisations.First().Cohorts.Count.Equals(1) &&
                 a.Organisations.First().Cohorts.ToList().SingleOrDefault(c => c.Id.Equals(cohortReference)) != null), It.IsAny<CancellationToken>()),
                 Times.Once);
@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
 
                 //assert
                 testContext.MockAccountsService.Verify(m =>
-                m.Save(command.MessageId, It.Is<Database.Models.Account>(a =>
+                m.Save(It.Is<Database.Models.Account>(a =>
                 a.Organisations.First().Cohorts.Count.Equals(1)), It.IsAny<CancellationToken>()),
                 Times.Once);
             }
@@ -156,7 +156,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
 
                 //assert
                 testContext.MockAccountsService.Verify(m =>
-                m.Save(command.MessageId, It.Is<Database.Models.Account>(a =>
+                m.Save(It.Is<Database.Models.Account>(a =>
                 a.Organisations.First().Cohorts.Count.Equals(1) &&
                 a.Organisations.First().Cohorts.First().Apprenticeships.Count.Equals(1) &&
                 a.Organisations.First().Cohorts.First().Apprenticeships.First().Id.Equals(apprenticeshipId)), It.IsAny<CancellationToken>()),
@@ -198,7 +198,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
 
                 //assert
                 testContext.MockAccountsService.Verify(m =>
-                m.Save(command.MessageId, It.Is<Database.Models.Account>(a =>
+                m.Save(It.Is<Database.Models.Account>(a =>
                 a.Organisations.First().Cohorts.First().Apprenticeships.Count.Equals(1) &&
                 (a.Organisations.First().Cohorts.First().Apprenticeships.First().Id == testApprenticeship.Id) &&
                 a.Organisations.First().Cohorts.First().Apprenticeships.First().FirstName.Equals(testApprenticeship.FirstName) &&

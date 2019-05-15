@@ -5,14 +5,12 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.Builders
 {
     public class CohortApprovalRequestedCommandBuilder
     {
-        private string _messageId;
         private long _accountId;
         private long _providerId;
         private long _commitmentId;
 
         public CohortApprovalRequestedCommandBuilder()
         {
-            _messageId = Guid.NewGuid().ToString();
             var random = new Random();
             _accountId = random.Next(100, 999);
             _providerId = random.Next(100, 999);
@@ -21,13 +19,7 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.Builders
 
         public CohortApprovalRequestedCommand Build()
         {
-            return new CohortApprovalRequestedCommand(_messageId, _accountId, _providerId, _commitmentId);
-        }
-
-        public CohortApprovalRequestedCommandBuilder WithMessageId(string messageId)
-        {
-            _messageId = messageId;
-            return this;
+            return new CohortApprovalRequestedCommand(_accountId, _providerId, _commitmentId);
         }
 
         public CohortApprovalRequestedCommandBuilder WithAccountId(long accountId)

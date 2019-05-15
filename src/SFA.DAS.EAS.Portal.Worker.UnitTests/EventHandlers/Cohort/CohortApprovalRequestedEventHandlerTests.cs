@@ -5,6 +5,7 @@ using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Adapters;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
+using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments;
 using SFA.DAS.EAS.Portal.Worker.UnitTests.Builders;
 using System.Threading;
@@ -21,14 +22,16 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.EventHandlers.Cohort
             public Mock<ICommandHandler<CohortApprovalRequestedCommand>> MockHandler { get; private set; }
             public Mock<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>> MockAdapter { get; private set; }
             public Mock<IMessageHandlerContext> MockMessageHandlerContext { get; private set; }
+            public Mock<IMessageContext> MockMessageContext { get; private set; }
 
             public TestContext()
             {
                 MockHandler = new Mock<ICommandHandler<CohortApprovalRequestedCommand>>();
                 MockAdapter = new Mock<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>>();
+                MockMessageContext = new Mock<IMessageContext>();
                 MockMessageHandlerContext = new Mock<IMessageHandlerContext>();
 
-                Sut = new CohortApprovalRequestedByProviderEventHandler(MockHandler.Object, MockAdapter.Object);
+                Sut = new CohortApprovalRequestedByProviderEventHandler(MockHandler.Object, MockAdapter.Object, MockMessageContext.Object);
             }
         }        
 
