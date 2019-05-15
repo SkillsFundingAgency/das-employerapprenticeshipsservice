@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -296,7 +297,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
-
+            else if (model.AccountViewModel?.AccountLegalEntities?.FirstOrDefault()?.ReservedFundings?.Any() == true)
+            {
+                viewModel.ViewName = "FundingComplete";
+            }
             return PartialView(viewModel);
         }       
 
