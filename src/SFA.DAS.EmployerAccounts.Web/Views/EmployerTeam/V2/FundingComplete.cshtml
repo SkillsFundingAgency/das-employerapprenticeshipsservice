@@ -10,6 +10,6 @@
         <dt class="das-definition-list__title">Start and end date: </dt>
         <dd class="das-definition-list__definition">@Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().StartDate to @Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().EndDate</dd>
     </dl>
-    <p><a href="https://securefunding.test-eas.apprenticeships.education.gov.uk/accounts/@(Model.HashedAccountId)/reservations" class="das-panel__link">Check and secure funding now</a> </p>
+    <p><a href="@Url.ReservationsAction("reservations")" class="das-panel__link">Check and secure funding now</a> </p>
 
 </div>
