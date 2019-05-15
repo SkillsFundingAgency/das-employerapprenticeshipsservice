@@ -21,8 +21,16 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             services.AddScoped<IMessageContext, MessageContext>();            
             services.AddTransient<IAccountsService, AccountsService>();            
             services.Decorate<IAccountsService, AccountsServiceWithDuplicateCheck>();
-            services.AddTransient<ICommandHandler<CohortApprovalRequestedCommand>, CohortApprovalRequestedCommandHandler>();
             services.AddTransient<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>, CohortAdapter>();
+
+            // Register all ICommandHandler<> types
+            services.Scan(scan =>
+                    scan.FromAssembliesOf(typeof(ICommandHandler<>))
+                    .AddClasses(classes =>
+                    classes.AssignableTo(typeof(ICommandHandler<>)).Where(_ => !_.IsGenericType))
+                        .AsImplementedInterfaces()
+                        .WithTransientLifetime());
+
             return services;
         }
     }
