@@ -310,8 +310,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (model.RecentlyAddedReservationId != null)
                 {
-                    var legalEntity = model.AccountViewModel.AccountLegalEntities
-                        .FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
+                    var legalEntity = model.AccountViewModel?.AccountLegalEntities
+                        ?.FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
 
                     model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
 
@@ -324,9 +324,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (model.ReservedFundingToShow == null)
                 {
-                    var legalEntity = model.AccountViewModel.AccountLegalEntities.First();
+                    var legalEntity = model.AccountViewModel?.AccountLegalEntities?.First();
                     model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
-                    model.ReservedFundingToShow = legalEntity.ReservedFundings.First();
+                    model.ReservedFundingToShow = legalEntity?.ReservedFundings?.First();
                 }
             }
             return PartialView(viewModel);
