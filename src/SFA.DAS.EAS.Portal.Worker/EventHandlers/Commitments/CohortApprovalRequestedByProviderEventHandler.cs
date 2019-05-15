@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
         {
             _messageContext.Id = context.MessageId;
             _messageContext.CreatedDateTime = ToUtcDateTime(context.MessageHeaders["NServiceBus.TimeSent"]);
-            return _handler.Handle(_adapter.Convert(message, context));
+            return _handler.Handle(_adapter.Convert(message));
         }
 
         public static DateTime ToUtcDateTime(string wireFormattedString)

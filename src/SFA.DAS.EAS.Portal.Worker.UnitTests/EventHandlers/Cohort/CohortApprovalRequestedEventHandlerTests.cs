@@ -8,6 +8,9 @@ using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments;
 using SFA.DAS.EAS.Portal.Worker.UnitTests.Builders;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,10 +33,17 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.EventHandlers.Cohort
                 MockAdapter = new Mock<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>>();
                 MockMessageContext = new Mock<IMessageContext>();
                 MockMessageHandlerContext = new Mock<IMessageHandlerContext>();
+                MockMessageHandlerContext
+                    .Setup(m => m.MessageHeaders)
+                    .Returns(
+                    new Dictionary<string, string>
+                    {
+                        { "NServiceBus.TimeSent", DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss:ffffff Z", CultureInfo.InvariantCulture) }
+                    });
 
                 Sut = new CohortApprovalRequestedByProviderEventHandler(MockHandler.Object, MockAdapter.Object, MockMessageContext.Object);
             }
-        }        
+        }
 
         public class Handle : CohortApprovalRequestedEventHandlerTests
         {
@@ -48,7 +58,7 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.EventHandlers.Cohort
                 await testContext.Sut.Handle(@event, testContext.MockMessageHandlerContext.Object);
 
                 //assert
-                testContext.MockAdapter.Verify(m => m.Convert(@event, It.IsAny<IMessageHandlerContext>()), Times.Once);
+                testContext.MockAdapter.Verify(m => m.Convert(@event), Times.Once);
             }
 
             [Test]
@@ -60,7 +70,7 @@ namespace SFA.DAS.EAS.Portal.Worker.UnitTests.EventHandlers.Cohort
                 CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
 
                 testContext.MockAdapter
-                    .Setup(m => m.Convert(@event, It.IsAny<IMessageHandlerContext>()))
+                    .Setup(m => m.Convert(@event))
                     .Returns(command);
 
                 // act

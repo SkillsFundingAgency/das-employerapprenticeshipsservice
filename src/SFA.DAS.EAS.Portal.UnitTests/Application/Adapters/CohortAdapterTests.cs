@@ -3,8 +3,6 @@ using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Adapters;
 using SFA.DAS.EAS.Portal.Worker.UnitTests.Builders;
 using FluentAssertions;
-using Moq;
-using NServiceBus;
 using System;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
@@ -13,18 +11,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
     public class CohortAdapterTests
     {
         private CohortAdapter _sut;
-        private Mock<IMessageHandlerContext> _mockMessageHandlerContext;
         private string _messageId;
 
         public CohortAdapterTests()
         {
             _messageId = Guid.NewGuid().ToString();
-            _mockMessageHandlerContext = new Mock<IMessageHandlerContext>();
-
-            _mockMessageHandlerContext
-                .Setup(m => m.MessageId)
-                .Returns(_messageId);
-
             _sut = new CohortAdapter();
         }
 
@@ -35,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
             CohortApprovalRequestedByProvider @event = new CohortApprovalRequestedByProviderBuilder();
 
             // act
-            var result = _sut.Convert(@event, _mockMessageHandlerContext.Object);
+            var result = _sut.Convert(@event);
 
             //assert
             result.AccountId.Should().Be(@event.AccountId);
