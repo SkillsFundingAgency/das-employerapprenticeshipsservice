@@ -7,13 +7,13 @@ using SFA.DAS.EAS.Portal.Types;
 
 namespace SFA.DAS.EAS.Portal.Database.Models
 {
-    public class Account : Document, IAccountDto<AccountLegalEntity>
+    public class Account : Document, IAccountDto
     {
         [JsonProperty("accountId")]
         public long AccountId { get; private set; }
 
         [JsonProperty("accountLegalEntities")]
-        public IEnumerable<AccountLegalEntity> AccountLegalEntities => _accountLegalEntities;
+        public IEnumerable<IAccountLegalEntityDto> AccountLegalEntities => _accountLegalEntities;
 
         [JsonProperty("organisations")]
         public ICollection<Organisation> Organisations { get; set; }

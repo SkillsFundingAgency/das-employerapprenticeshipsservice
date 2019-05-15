@@ -1,10 +1,11 @@
-﻿using SFA.DAS.Authentication;
+﻿using System;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NServiceBus;
 using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Messages.Events;
-using System.Threading.Tasks;
+using SFA.DAS.HashingService;
+using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -13,7 +14,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmulatedFundingJourneyController : BaseController
     {
         private readonly IEventPublisher _eventPublisher;
-        private EmployerTeamController _employerTeamController;
+        private readonly EmployerTeamController _employerTeamController;
+        private readonly IHashingService _hashingService;
 
         public EmulatedFundingJourneyController(IAuthenticationService owinWrapper) : base(owinWrapper)
         {
@@ -25,11 +27,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IEventPublisher eventPublisher,
-            EmployerTeamController employerTeamController)
+            EmployerTeamController employerTeamController,
+            IHashingService hashingService)
             : base (owinWrapper,multiVariantTestingService,flashMessage)
         {
             _eventPublisher = eventPublisher;
             _employerTeamController = employerTeamController;
+            _hashingService = hashingService;
         }
 
         [HttpGet]
@@ -38,7 +42,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             if (FeatureToggles.Features.EmulatedFundingJourney.Enabled)
             {
-                return View(new EmulatedFundingViewModel { HashedAccountId = HashedAccountId });
+                return View(new EmulatedFundingViewModel {
+                    Id = Guid.NewGuid(),
+                    //todo: use SFA.DAS.Encoding
+                    AccountId = _hashingService.DecodeValue(HashedAccountId),
+                    HashedAccountId = HashedAccountId
+                });
             }
             else
             {
@@ -53,16 +62,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             if (model.PublishEvent)
             {
-                _eventPublisher.Publish(new ReserveFundingCreatedEvent
-                {
-                    HashedAccountId = model.HashedAccountId,
-                    CourseCode = model.CourseCode,
-                    LegalEntityId = model.LegalEntityId,
-                    CourseName = model.CourseName,
-                    StartDate = model.StartDate,
-                    EndDate = model.EndDate,
-                    ReservationId = model.ReservationId
-                });
+                /*_eventPublisher.Publish(new ReservationCreatedEvent(
+                    model.Id, model.AccountLegalEntityId, model.AccountLegalEntityName,
+                    model.CourseId, model.StartDate, model.CourseName, model.EndDate,
+                    DateTime.UtcNow, model.AccountId));*/
             }
             return _employerTeamController.ReturnFromEmulateFundingJourney(model);
         }
