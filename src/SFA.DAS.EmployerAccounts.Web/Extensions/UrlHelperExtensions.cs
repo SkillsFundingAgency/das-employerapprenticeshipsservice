@@ -38,12 +38,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerRecruitAction(this UrlHelper helper)
+        public static string EmployerRecruitAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerRecruitBaseUrl;
 
-            return AccountAction(helper, baseUrl, "");
+            return AccountAction(helper, baseUrl, path);
         }
 
         public static string ProviderRelationshipsAction(this UrlHelper helper, string path)
