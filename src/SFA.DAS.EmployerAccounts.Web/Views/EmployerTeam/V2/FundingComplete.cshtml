@@ -1,0 +1,15 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+<div class="das-panel das-panel--featured">
+
+    <h3 class="das-panel__heading">Apprenticeship funding secured</h3>
+    <dl class="das-definition-list das-definition-list--with-separator">
+        <dt class="das-definition-list__title">Legal entity:</dt>
+        <dd class="das-definition-list__definition">@Model.Account.Name</dd>
+        <dt class="das-definition-list__title">Training course:</dt>
+        <dd class="das-definition-list__definition">@Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().CourseName</dd>
+        <dt class="das-definition-list__title">Start and end date: </dt>
+        <dd class="das-definition-list__definition">@Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().StartDate to @Model.AccountViewModel.AccountLegalEntities.FirstOrDefault().ReservedFundings.FirstOrDefault().EndDate</dd>
+    </dl>
+    <p><a href="https://securefunding.test-eas.apprenticeships.education.gov.uk/accounts/@(Model.HashedAccountId)/reservations" class="das-panel__link">Check and secure funding now</a> </p>
+
+</div>
