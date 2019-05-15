@@ -29,5 +29,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public AccountDto AccountViewModel { get; set; }
         public Guid? RecentlyAddedReservationId { get; set; }
         public IReservedFundingDto ReservedFundingToShow { get; set; }
+        public string ReservedFundingToShowLegalEntityName { get; set; }
     }
 }   

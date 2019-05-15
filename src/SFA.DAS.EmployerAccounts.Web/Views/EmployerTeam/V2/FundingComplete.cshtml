@@ -1,12 +1,12 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 <div class="das-panel das-panel--featured">
     
-    @if (Model.ReservedFundingToShow == null)
+    @if (Model.ReservedFundingToShow != null)
     {
         <h3 class="das-panel__heading">Apprenticeship funding secured</h3>
         <dl class="das-definition-list das-definition-list--with-separator">
             <dt class="das-definition-list__title">Legal entity:</dt>
-            <dd class="das-definition-list__definition">Todo</dd>
+            <dd class="das-definition-list__definition">@Model.ReservedFundingToShowLegalEntityName</dd>
             <dt class="das-definition-list__title">Training course:</dt>
             <dd class="das-definition-list__definition">@Model.ReservedFundingToShow.CourseName</dd>
             <dt class="das-definition-list__title">Start and end date: </dt>

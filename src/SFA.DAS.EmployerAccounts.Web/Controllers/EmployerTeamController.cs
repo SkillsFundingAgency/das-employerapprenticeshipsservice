@@ -308,13 +308,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (model.RecentlyAddedReservationId != null)
                 {
-                    model.ReservedFundingToShow = model.AccountViewModel.AccountLegalEntities
-                        .Where(ale => ale.ReservedFundings != null)
-                        .SelectMany(ale => ale.ReservedFundings)
-                        .FirstOrDefault(rf => rf.ReservationId == model.RecentlyAddedReservationId);
+                    var legalEntity = model.AccountViewModel.AccountLegalEntities
+                        .FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
 
-                    //todo: need to get legal entity name of the reserved funding we've found
-                    //todo: would be better to pass to panel more specific model
+                    // would be better to create new model to contain what the panel needs to show,
+                    // but we'll be replacing this with displaying all reserved funds anyway
+                    model.ReservedFundingToShow =
+                        legalEntity?.ReservedFundings?.FirstOrDefault(rf =>
+                            rf.ReservationId == model.RecentlyAddedReservationId);
+
+                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
                 }
 
                 if (model.ReservedFundingToShow == null)
