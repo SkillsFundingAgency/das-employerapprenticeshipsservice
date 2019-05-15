@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Portal.Application.Services
             account.DeleteOldMessages();
             if (account.IsMessageProcessed(_messageContext.Id)) { return; };
 
-            account.AddOutboxMessage(_messageContext.Id, DateTime.Now);
+            account.AddOutboxMessage(_messageContext.Id, _messageContext.CreatedDateTime);
 
             await _accountsService.Save(account, cancellationToken);
         }
