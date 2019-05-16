@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Portal.Database.Models;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
 {
+    [Parallelizable]
     [TestFixture]
     public class CohortApprovalRequestedCommandHandlerTests
     {

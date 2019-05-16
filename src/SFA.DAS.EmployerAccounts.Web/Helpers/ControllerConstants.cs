@@ -17,13 +17,12 @@
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
-        public const string ConfirmWhoYouAre = "ConfirmWhoYouAre";
+        public const string GetGovernmentFunding = "GetGovernmentFunding";
         public const string CoursePaymentSummaryViewName = "CoursePaymentSummary";
         public const string EmailClaimKeyName = "email";
         public const string EmployerAccountOrganisationControllerName = "EmployerAccountOrganisation";
         public const string EmployerAccountViewName = "EmployerAccount";
         public const string EmployerAccountControllerName = "EmployerAccount";
-        public const string EmployerAccountAccountegisteredActionName = "YouHaveRegistered";
         public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
         public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";
         public const string EmployerAgreementControllerName = "EmployerAgreement";

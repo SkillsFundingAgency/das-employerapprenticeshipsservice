@@ -111,14 +111,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenIShouldGoToTheAccountRegisteredPage()
+        public async Task ThenIShouldGoToTheHomePage()
         {
             //Act
             var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.EmployerAccountAccountegisteredActionName, result.RouteValues["Action"]);
-            Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, result.RouteValues["Controller"]);
+            Assert.AreEqual(ControllerConstants.IndexActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.RouteValues["Controller"]);
         }
 
         [Test]

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client.Models.Concrete;
+using SFA.DAS.EAS.Portal.Client.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
@@ -24,11 +27,12 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool AgreementsToSign { get; set; }
         public int SignedAgreementCount { get; set; }
         public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
-        public EmulatedFundingViewModel EmulatedFundingViewModel { get; set; }
-        public AccountDto AccountViewModel { get; set; }
         public bool ApprenticeshipAdded { get; set; }
-        //Todo: Hook these up with the new viewmodel from CON-414
         public bool ShowSearchBar { get; set; } = false;
         public bool ShowMostActiveLinks { get; set; } = false;
+        public AccountDto AccountViewModel { get; set; }
+        public Guid? RecentlyAddedReservationId { get; set; }
+        public IReservedFundingDto ReservedFundingToShow { get; set; }
+        public string ReservedFundingToShowLegalEntityName { get; set; }
     }
 }   

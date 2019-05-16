@@ -1,12 +1,13 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Adapters;
-using SFA.DAS.EAS.Portal.UnitTests.Builders;
 using FluentAssertions;
 using System;
+using SFA.DAS.EAS.Portal.UnitTests.Builders;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
 {
+    [Parallelizable]
     [TestFixture]
     public class CohortAdapterTests
     {

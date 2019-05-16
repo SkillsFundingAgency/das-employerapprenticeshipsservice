@@ -35,9 +35,7 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                         .UseNLogFactory()
                         .UseServiceCollection(services);
 
-                    var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-
-                    return endpoint;
+                    return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
                 })
                 .AddHostedService<NServiceBusHostedService>();
         }
