@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
     /// 
     /// UNIQUE KEYS
     /// 
-    /// We don't create any unique keys, because...
+    /// We don't create any unique keys beyond accountId, because...
     /// * Sparse unique keys are not supported.
     /// As there is no guarantee to the order we receive events from the various subsystems (due to user behaviour and
     /// out of order message handling), then we couldn't e.g. have the reservation Id as an unique key,
@@ -23,7 +23,6 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
     /// * Existing databases can't have their unique key changed.
     /// At least not without creating a new database and migrating the data across.
     /// That effectively stops us from iteratively adding unique keys and having to determine the whole schema up front.
-    /// * As a bonus, it's cheaper not to have them!
     ///
     /// It does mean there's no enforcing of sensible data on our documents, especially in light of bugs in the portal
     /// or bad behaviour by event publishers (which is outside of our control) :-(
