@@ -45,6 +45,27 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<CreateUserAccountResult> CreateUserAccount(long userId, string employerName)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@userId", userId, DbType.Int64);         
+            parameters.Add("@employerName", employerName, DbType.String);
+            parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
+            parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
+
+            await _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[CreateUserAccount]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+         
+            return new CreateUserAccountResult
+            {
+                AccountId = parameters.Get<long>("@accountId")            
+            };
+        }
+
         public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector)
         {
             var parameters = new DynamicParameters();
