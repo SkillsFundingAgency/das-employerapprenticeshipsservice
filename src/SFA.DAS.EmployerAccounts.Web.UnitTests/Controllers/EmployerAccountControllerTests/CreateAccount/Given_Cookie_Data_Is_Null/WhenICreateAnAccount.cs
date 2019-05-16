@@ -7,7 +7,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -64,15 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator.Setup(x => x.GetCookieData())
                        .Returns((EmployerAccountData)null);
-
-            var mockAuthorization = new Mock<IAuthorizationService>();
-
-            mockAuthorization
-                .Setup(
-                    m =>
-                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(true);
-
+       
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
