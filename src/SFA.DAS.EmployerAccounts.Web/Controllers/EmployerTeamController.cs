@@ -53,7 +53,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (FeatureToggles.Features.HomePage.Enabled)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                unhashedAccountId = 1337;
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
