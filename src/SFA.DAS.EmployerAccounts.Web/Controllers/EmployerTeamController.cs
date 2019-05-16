@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.HashingService;
@@ -48,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
             response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
@@ -59,6 +62,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 //response.Data.ApprenticeshipAdded = response.Data.AccountViewModel != null && response.Data.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.Count > 0;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+                if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
+                    response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
             }
             return View(response);
 
@@ -303,15 +308,35 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
-            else if (model.EmulatedFundingViewModel != null)
+            else if (model.RecentlyAddedReservationId != null
+                || model.AccountViewModel?.AccountLegalEntities?.FirstOrDefault()?.ReservedFundings?.Any() == true)
             {
                 viewModel.ViewName = "FundingComplete";
-            }
-            else if (model.ApprenticeshipAdded)
-            {
-                viewModel.ViewName = "ApprenticeshipDetails";
-            }
 
+                //todo: no need to return everything in the event in AccountDto, just what we need to display (probably only save what we need to show also)
+                //todo: accountDto now mixed concrete/interfaces, which is inconsistent
+
+                if (model.RecentlyAddedReservationId != null)
+                {
+                    var legalEntity = model.AccountViewModel?.AccountLegalEntities
+                        ?.FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
+
+                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
+
+                    // would be better to create new model to contain what the panel needs to show,
+                    // but we'll be replacing this with displaying all reserved funds anyway
+                    model.ReservedFundingToShow =
+                        legalEntity?.ReservedFundings?.FirstOrDefault(rf =>
+                            rf.ReservationId == model.RecentlyAddedReservationId);
+                }
+
+                if (model.ReservedFundingToShow == null)
+                {
+                    var legalEntity = model.AccountViewModel?.AccountLegalEntities?.First();
+                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
+                    model.ReservedFundingToShow = legalEntity?.ReservedFundings?.First();
+                }
+            }
             return PartialView(viewModel);
         }       
 
@@ -364,6 +389,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [ChildActionOnly]
+        public ActionResult FundingComplete(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

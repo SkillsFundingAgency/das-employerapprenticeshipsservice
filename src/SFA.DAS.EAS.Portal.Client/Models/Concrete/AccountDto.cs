@@ -12,6 +12,9 @@ namespace SFA.DAS.EAS.Portal.Client.Models.Concrete
             AccountLegalEntities = accountLegalEntities;
         }
 
+        //todo: don't return accountId or Deleted
+        //todo: we now have a mix'n'match return of concrete containing ienumerable of interfaces!
+        
         [JsonProperty("accountId")]
         public virtual long AccountId { get; private set; }
 
