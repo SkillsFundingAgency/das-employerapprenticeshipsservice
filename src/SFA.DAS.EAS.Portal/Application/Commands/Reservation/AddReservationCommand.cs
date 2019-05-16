@@ -29,6 +29,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             if (accountDocument == null)
             {
                 accountDocument = AccountDocument.Create(reservedFunding.AccountId);
+                accountDocument.Account.Name = reservedFunding.AccountLegalEntityName;
 
                 var newOrg = new Types.Organisation() {
                     Id = reservedFunding.AccountLegalEntityId,

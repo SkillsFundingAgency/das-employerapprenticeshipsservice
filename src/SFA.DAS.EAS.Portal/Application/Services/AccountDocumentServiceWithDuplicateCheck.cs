@@ -30,6 +30,10 @@ namespace SFA.DAS.EAS.Portal.Application.Services
             {
                 accountDocument.Created = _messageContext.CreatedDateTime;
             }
+            else
+            {
+                accountDocument.Updated = _messageContext.CreatedDateTime;
+            }
 
             await _accountDocumentService.Save(accountDocument, cancellationToken);
         }

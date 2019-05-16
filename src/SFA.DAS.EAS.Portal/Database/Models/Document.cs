@@ -11,6 +11,7 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         [JsonProperty("id")]
         public Guid Id { get; protected set; }
 
+        [JsonIgnore]
         public bool IsNew { get; protected set; }
 
         [JsonIgnore]
@@ -26,10 +27,10 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         public DateTime Created { get; internal set; }
 
         [JsonProperty("updated")]
-        public DateTime? Updated { get; protected set; }
+        public DateTime? Updated { get; internal set; }
 
         [JsonProperty("deleted")]
-        public DateTime? Deleted { get; protected set; }
+        public DateTime? Deleted { get; internal set; }
 
         protected Document(short schemaVersion)
         {
