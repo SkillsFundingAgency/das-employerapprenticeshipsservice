@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Adapters;
-using SFA.DAS.EAS.Portal.Worker.UnitTests.Builders;
+using SFA.DAS.EAS.Portal.UnitTests.Builders;
 using FluentAssertions;
 using System;
 

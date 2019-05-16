@@ -1,5 +1,5 @@
+using SFA.DAS.EAS.Portal.Types;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 
 namespace SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios
 {
@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios
             _portalClient = portalClient;
         }
 
-        public async Task<AccountDto> Run()
+        public async Task<Account> Run()
         {
             const long accountId = 1337L;
 

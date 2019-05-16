@@ -27,6 +27,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SFA.DAS.EAS.Portal.Types\SFA.DAS.EAS.Portal.Types.csproj" />
+      <ProjectReference Include="..\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj" />
     </ItemGroup>
 
 </Project>

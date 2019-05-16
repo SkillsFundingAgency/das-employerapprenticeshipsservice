@@ -2,7 +2,7 @@
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Options;
-using SFA.DAS.EAS.Portal.Client.Configuration;
+using SFA.DAS.EAS.Portal.Configuration;
 
 namespace SFA.DAS.EAS.Portal.Database
 {

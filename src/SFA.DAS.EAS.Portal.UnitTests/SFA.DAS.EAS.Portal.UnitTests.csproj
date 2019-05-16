@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="5.6.0" />
+    <PackageReference Include="Moq" Version="4.11.0-rc1" />
     <PackageReference Include="nunit" Version="3.11.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.0.1" />
@@ -21,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Portal.Types\SFA.DAS.EAS.Portal.Types.csproj" />
-    <ProjectReference Include="..\SFA.DAS.EAS.Portal.Worker.UnitTests\SFA.DAS.EAS.Portal.Worker.UnitTests.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EAS.Portal.Worker\SFA.DAS.EAS.Portal.Worker.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj" />
   </ItemGroup>
 

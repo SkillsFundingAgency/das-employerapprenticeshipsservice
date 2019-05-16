@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Portal.Client.Application.Queries;
-using SFA.DAS.EAS.Portal.Client.Models.Concrete;
+using SFA.DAS.EAS.Portal.Types;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Portal.Client
@@ -15,12 +15,8 @@ namespace SFA.DAS.EAS.Portal.Client
         {
             _getAccountQuery = container.GetInstance<GetAccountQuery>();
         }
-
-//        public PortalClient(IServicepProvider container)
-//        {
-//        }
         
-        public Task<AccountDto> GetAccount(long accountId, CancellationToken cancellationToken = default)
+        public Task<Account> GetAccount(long accountId, CancellationToken cancellationToken = default)
         {
             return _getAccountQuery.Get(accountId, cancellationToken);
         }

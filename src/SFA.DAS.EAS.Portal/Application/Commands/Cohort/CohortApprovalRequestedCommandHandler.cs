@@ -10,11 +10,11 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
     public class CohortApprovalRequestedCommandHandler : ICommandHandler<CohortApprovalRequestedCommand>
     {
-        private readonly IAccountsService _accountsService;
+        private readonly IAccountDocumentService _accountsService;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
 
         public CohortApprovalRequestedCommandHandler(
-            IAccountsService accountsService, 
+            IAccountDocumentService accountsService, 
             IProviderCommitmentsApi providerCommitmentsApi)
         {
             _accountsService = accountsService;
@@ -23,11 +23,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
-            var accountTask = _accountsService.Get(command.AccountId);
+            var accountDocumentTask = _accountsService.Get(command.AccountId);
             var commitmentTask = _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);
-            await Task.WhenAll(accountTask, commitmentTask);
+            await Task.WhenAll(accountDocumentTask, commitmentTask);
 
-            var account = await accountTask;
+            var accountDocument = await accountDocumentTask;
+            var account = accountDocument.Account;
             var commitment = await commitmentTask;
 
             var cohortReference = commitment.Reference;            
@@ -56,7 +57,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
                 apprenticeship.EndDate = a.EndDate;
             });
 
-            await _accountsService.Save(account);
+            await _accountsService.Save(accountDocument);
         }
     }
 }

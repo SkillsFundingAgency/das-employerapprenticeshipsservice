@@ -10,17 +10,14 @@ namespace SFA.DAS.EAS.Portal.Types
         public Account()
         {
             Organisations = new List<Organisation>();
-            SavedStandards = new List<object>();
         }
 
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public long Id { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("organisations")]
         public ICollection<Organisation> Organisations { get; set; }
-        [JsonProperty("savedStandards")]
-        public ICollection<object> SavedStandards { get; set; }
         [JsonProperty("deleted")]
         public DateTime? Deleted { get; set; }
     }

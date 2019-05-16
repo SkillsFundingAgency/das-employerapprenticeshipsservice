@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Portal.Client.Models.Concrete;
+using SFA.DAS.EAS.Portal.Types;
 
 namespace SFA.DAS.EAS.Portal.Client
 {
     public interface IPortalClient
     {
-        Task<AccountDto> GetAccount(long accountId, CancellationToken cancellationToken = default);
+        Task<Account> GetAccount(long accountId, CancellationToken cancellationToken = default);
     }
 }

@@ -6,15 +6,15 @@ using SFA.DAS.EAS.Portal.Application.Adapters;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.UnitTests.Builders;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments;
-using SFA.DAS.EAS.Portal.Worker.UnitTests.Builders;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EAS.Portal.Worker.UnitTests.EventHandlers.Cohort
+namespace SFA.DAS.EAS.Portal.UnitTests.EventHandlers.Cohort
 {
     [TestFixture]
     public class CohortApprovalRequestedEventHandlerTests

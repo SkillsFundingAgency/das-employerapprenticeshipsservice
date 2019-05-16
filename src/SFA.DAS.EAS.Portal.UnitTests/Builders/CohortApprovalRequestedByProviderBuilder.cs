@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.CommitmentsV2.Messages.Events;
 using System;
 
-namespace SFA.DAS.EAS.Portal.Worker.UnitTests.Builders
+namespace SFA.DAS.EAS.Portal.UnitTests.Builders
 {
     public class CohortApprovalRequestedByProviderBuilder
     {

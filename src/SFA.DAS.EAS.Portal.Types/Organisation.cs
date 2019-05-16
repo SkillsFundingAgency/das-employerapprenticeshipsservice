@@ -15,6 +15,8 @@ namespace SFA.DAS.EAS.Portal.Types
         }
         [JsonProperty("id")]
         public long Id { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
         [JsonProperty("providers")]
         public ICollection<Provider> Providers { get; set; }
         [JsonProperty("reservations")]
