@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Gateway()
         {
             var url = await _employerAccountOrchestrator.GetGatewayUrl(Url.Action(ControllerConstants.GateWayResponseActionName,
-                ControllerConstants.EmployerAccountControllerName, null,HttpContext.Request.Url?.Scheme));
+                ControllerConstants.EmployerAccountControllerName, null, HttpContext.Request.Url?.Scheme));
 
             return Redirect(url);
         }
@@ -114,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     RefreshToken = response.Data.RefreshToken,
                     EmpRefNotFound = empref.EmprefNotFound,
                 }));
-                
+
                 _logger.Info("Finished processing gateway response");
 
                 if (string.IsNullOrEmpty(empref.Empref) || empref.EmprefNotFound)
@@ -221,15 +221,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
 
-            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-            {
-                return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
-            else
-            {
-                _employerAccountOrchestrator.DeleteCookieData();
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
+            _employerAccountOrchestrator.DeleteCookieData();
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
+
         }
 
         [HttpGet]

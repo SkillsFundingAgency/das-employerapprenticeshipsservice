@@ -10,16 +10,16 @@ using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_New_Journey_Is_Not_Enabled.Given_Cookie_Data_Is_Not_Null
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_Cookie_Data_Is_Not_Null
 {
     class WhenICreateAnAccount : ControllerTestBase
     {
@@ -93,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 .Setup(
                     m =>
                         m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(false);
+                .Returns(true);
 
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
@@ -116,8 +116,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual("Index", result.RouteValues["Action"]);
-            Assert.AreEqual("EmployerTeam", result.RouteValues["Controller"]);
+            Assert.AreEqual(ControllerConstants.IndexActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.RouteValues["Controller"]);
         }
 
         [Test]
