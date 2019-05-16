@@ -175,6 +175,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
@@ -697,7 +698,7 @@
     <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\Shared\_PayeNotFound.cshtml" />
-    <Content Include="Views\Home\ConfirmWhoYouAre.cshtml" />
+    <Content Include="Views\EmployerAccount\GetGovernmentFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Index.cshtml" />
     <Content Include="Views\Shared\_Layout_v2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row1Panel1.cshtml" />

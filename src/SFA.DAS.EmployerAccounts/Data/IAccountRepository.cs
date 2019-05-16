@@ -12,6 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Data
     {
         Task AddPayeToAccount(Paye payeScheme);
         Task<CreateAccountResult>  CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector);
+        Task<CreateUserAccountResult> CreateUserAccount(long userId, string employerName);
         Task<EmployerAgreementView> CreateLegalEntityWithAgreement(CreateLegalEntityWithAgreementParams createParams);
         Task<AccountStats> GetAccountStats(long accountId);
         Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);

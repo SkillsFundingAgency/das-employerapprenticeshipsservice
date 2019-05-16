@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
@@ -30,6 +31,23 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         public T Get<T>(string key)
         {
             return _cache.TryGetValue(key, out var value) ? (T)value : default(T);
+        }
+
+        public void Update<T>(T value)
+        {
+            if(_cache.ContainsKey(typeof(T).FullName))
+            {
+                _cache[typeof(T).FullName] = value;
+            }
+            else
+            {
+                throw new Exception("Cache key does not exist and cannot be updated");
+            }
+        }
+
+        public bool KeyExists<T>()
+        {
+            return _cache.ContainsKey(typeof(T).FullName);
         }
     }
 }
