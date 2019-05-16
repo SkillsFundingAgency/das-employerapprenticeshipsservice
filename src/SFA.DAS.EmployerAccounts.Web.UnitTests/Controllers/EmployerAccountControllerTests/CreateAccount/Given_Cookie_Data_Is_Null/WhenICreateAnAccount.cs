@@ -68,12 +68,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             var mockAuthorization = new Mock<IAuthorizationService>();
 
-            mockAuthorization
-                .Setup(
-                    m =>
-                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(true);
-
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
