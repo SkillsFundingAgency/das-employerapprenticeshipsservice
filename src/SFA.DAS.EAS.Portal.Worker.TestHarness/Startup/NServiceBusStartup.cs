@@ -33,9 +33,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Startup
                         .UseNLogFactory()
                         .UseSendOnly();
 
-                    var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
-
-                    return endpoint;
+                    return Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
                 })
                 .AddSingleton<IMessageSession>(s => s.GetService<IEndpointInstance>())
                 .AddHostedService<NServiceBusHostedService>();

@@ -89,6 +89,16 @@ namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
                     {
                         "/accountId"
                     }
+                },
+                UniqueKeyPolicy = new UniqueKeyPolicy
+                {
+                    UniqueKeys = new Collection<UniqueKey>
+                    {
+                        new UniqueKey
+                        {
+                            Paths = new Collection<string> { "/accountId" }
+                        }
+                    }
                 }
             };
 
