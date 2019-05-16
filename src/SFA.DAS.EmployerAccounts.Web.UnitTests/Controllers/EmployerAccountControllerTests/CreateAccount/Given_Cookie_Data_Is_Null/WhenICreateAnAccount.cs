@@ -9,7 +9,6 @@ using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -36,8 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            new Mock<IAuthorizationService>();
+            _owinWrapper = new Mock<IAuthenticationService>();          
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -81,8 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 _userViewTestingService.Object,
                 logger.Object,
                 _flashMessage.Object,
-                Mock.Of<IMediator>(),
-                mockAuthorization.Object)
+                Mock.Of<IMediator>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
