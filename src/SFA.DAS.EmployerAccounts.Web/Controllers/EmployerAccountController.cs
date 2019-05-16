@@ -25,6 +25,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly ILog _logger;
         private readonly IMediator _mediatr;
         private IAuthorizationService _authorizationService;
+        private const int AddPAYELater = 1;
+        private const int AddPAYENow = 2;
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -136,25 +138,47 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("youhaveregistered")]
-        public ViewResult YouHaveRegistered(string hashedAccountId = null)
+        [Route("getGovernmentFunding")]
+        public ActionResult GetGovernmentFunding()
         {
-            var cookie = _employerAccountOrchestrator.GetCookieData();
-
-            if (cookie == null)
+            var model = new
             {
-                ViewBag.RequiresPayeScheme = true;
-            }
-            else
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("getGovernmentFunding")]
+        public async Task<ActionResult> GetGovernmentFunding(int? choice)
+        {
+            switch (choice ?? 0)
             {
-                ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
-                                             cookie.EmployerAccountPayeRefData.EmpRefNotFound;
+                case AddPAYELater:
+                {
+                    var request = new CreateUserAccountViewModel
+                    {
+                        UserId = GetUserId(),
+                        OrganisationName = "MY ACCOUNT"
+                    };
+
+                    var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
+                }
+                case AddPAYENow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                default:
+
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
+
+                    return View(model);
             }
-
-            _employerAccountOrchestrator.DeleteCookieData();
-
-            ViewBag.AccountUrl = this.Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
-            return View();
         }
 
         [HttpGet]
@@ -220,16 +244,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
-
-            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-            {
-                return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
-            else
-            {
-                _employerAccountOrchestrator.DeleteCookieData();
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
+            
+            _employerAccountOrchestrator.DeleteCookieData();
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         [HttpGet]
