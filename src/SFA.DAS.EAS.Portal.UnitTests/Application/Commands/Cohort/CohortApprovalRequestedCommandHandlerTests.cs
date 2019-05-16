@@ -15,6 +15,7 @@ using SFA.DAS.EAS.Portal.Types;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
 {
+    [Parallelizable]
     [TestFixture]
     public class CohortApprovalRequestedCommandHandlerTests
     {

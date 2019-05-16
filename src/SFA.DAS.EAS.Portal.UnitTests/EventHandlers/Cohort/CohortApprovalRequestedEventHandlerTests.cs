@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.EventHandlers.Cohort
 {
+    [Parallelizable]
     [TestFixture]
     public class CohortApprovalRequestedEventHandlerTests
     {

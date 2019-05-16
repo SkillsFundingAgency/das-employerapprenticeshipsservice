@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Portal.UnitTests.Builders;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
 {
+    [Parallelizable]
     [TestFixture]
     public class CohortAdapterTests
     {
