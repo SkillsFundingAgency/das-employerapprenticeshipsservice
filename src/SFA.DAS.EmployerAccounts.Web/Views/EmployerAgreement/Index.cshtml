@@ -1,6 +1,4 @@
 ﻿@using SFA.DAS.Authorization
-
-
 @model OrchestratorResponse<EmployerAgreementListViewModel>
 
 @{
@@ -61,60 +59,64 @@
     <div class="column-full">
         <table class="responsive">
             <thead>
-                <tr>
-                    <th scope="col">Organisation</th>
-                    <th scope="col">Agreement status</th>
-                    <th scope="col">Action</th>
-                    <th class="no-wrap" scope="col">Agreement ID</th>
-                </tr>
+            <tr>
+                <th scope="col">Organisation</th>
+                <th scope="col">Agreement status</th>
+                <th scope="col">Action</th>
+                <th class="no-wrap" scope="col">Agreement ID</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
+            @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
+            {
+                <tr>
+                    <td data-label="Organisation">@employerAgreement.LegalEntity.Name</td>
+                    <td data-label="Agreement status">
+                        @if (employerAgreement.HasPendingAgreement)
                         {
-                    <tr>
-                        <td data-label="Organisation">@employerAgreement.LegalEntity.Name</td>
-                        <td data-label="Agreement status">
-                            @if (employerAgreement.HasPendingAgreement)
+                            if (employerAgreement.HasSignedAgreement)
                             {
-                                if (employerAgreement.HasSignedAgreement)
-                                {
-                                    @:Updated agreement available
-                                }
-                                else
-                                {
-                                    @:Agreement not signed
-                                }
-                            }
-                            else if (employerAgreement.HasSignedAgreement)
-                            {
-                                @:Signed by @employerAgreement.Signed.SignedByName
-                            }
-                        </td>
-                        <td data-label="Action">
-                            @if (employerAgreement.HasPendingAgreement)
-                            {
-                                <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
-                            }
-                            else if (employerAgreement.HasSignedAgreement)
-                            {
-                                <a href="@Url.Action("Details", "EmployerAgreement", new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
-                            }
-                        </td>
-                        <td data-label="Agreement ID">
-                            @if (employerAgreement.HasSignedAgreement)
-                            {
-                                <span>@employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId</span>
+                                @:Updated agreement available
                             }
                             else
                             {
-                                <span>Sign agreement to receive an agreement ID</span>
+                                @:Agreement not signed
                             }
-                        </td>
-                    </tr>
-                }
+                        }
+                        else if (employerAgreement.HasSignedAgreement)
+                        {
+                            @:Signed by @employerAgreement.Signed.SignedByName
+                        }
+                    </td>
+                    <td data-label="Action">
+                        @if (employerAgreement.HasPendingAgreement)
+                        {
+                            <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
+                        }
+                        else if (employerAgreement.HasSignedAgreement)
+                        {
+                            <a href="@Url.Action("Details", "EmployerAgreement", new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
+                        }
+                    </td>
+                    <td data-label="Agreement ID">
+                        @if (employerAgreement.HasSignedAgreement)
+                        {
+                            <span>@employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId</span>
+                        }
+                        else
+                        {
+                            <span>Sign agreement to receive an agreement ID</span>
+                        }
+                    </td>
+                </tr>
+            }
             </tbody>
         </table>
-        <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new { Model.Data.HashedAccountId })">Remove an organisation from your account</a></p>
+
+        @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Any())
+        {
+            <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new {Model.Data.HashedAccountId})">Remove an organisation from your account</a></p>
+        }
     </div>
 </div>
 
