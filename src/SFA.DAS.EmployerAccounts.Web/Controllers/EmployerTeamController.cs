@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.Authentication;
+﻿using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -12,9 +7,11 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Portal.Client;
-using SFA.DAS.HashingService;
+using System;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -25,7 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IHashingService _hashingService;
-        private static EmulatedFundingViewModel _emulatedFundingViewModel;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -54,7 +50,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            response.Data.EmulatedFundingViewModel = _emulatedFundingViewModel;
             if (FeatureToggles.Features.HomePage.Enabled)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
@@ -416,17 +411,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
-        }
-
-        public ActionResult ReturnFromEmulateFundingJourney(EmulatedFundingViewModel model)
-        {
-            _emulatedFundingViewModel = model;
-            return RedirectToAction("Index", "EmployerTeam", new { model.HashedAccountId });
-        }
-        [ChildActionOnly]
-        public ActionResult FundingComplete(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
         }
         [ChildActionOnly]
         public ActionResult SearchBar()

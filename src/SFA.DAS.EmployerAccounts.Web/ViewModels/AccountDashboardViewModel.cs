@@ -27,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool AgreementsToSign { get; set; }
         public int SignedAgreementCount { get; set; }
         public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
-        public EmulatedFundingViewModel EmulatedFundingViewModel { get; set; }
         public bool ApprenticeshipAdded { get; set; }
         public bool ShowSearchBar { get; set; } = false;
         public bool ShowMostActiveLinks { get; set; } = false;
