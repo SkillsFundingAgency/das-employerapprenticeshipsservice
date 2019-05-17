@@ -61,13 +61,15 @@
                         }
                     </dl>
                 </td>
+                <td>
+                    <a class="button-link" href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Change</a>
+                </td>
             </tr>
         </table>
         <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <button type="submit" class="button" id="continue">These details are correct</button>
-                <a class="button-link" href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Change details</a>                
+                <button type="submit" class="button" id="continue">These details are correct</button>                
             </div>
         </form> 
     </div>
