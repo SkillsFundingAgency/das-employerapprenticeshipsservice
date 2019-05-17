@@ -42,7 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -88,22 +87,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
 
-            var mockAuthorization = new Mock<IAuthorizationService>();
-
-            mockAuthorization
-                .Setup(
-                    m =>
-                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(true);
-
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
                 _userViewTestingService.Object,
                 logger.Object,
                 _flashMessage.Object,
-                Mock.Of<IMediator>(),
-                mockAuthorization.Object)
+                Mock.Of<IMediator>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
