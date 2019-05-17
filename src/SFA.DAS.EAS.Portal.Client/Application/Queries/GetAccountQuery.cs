@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Portal.Client.Application.Queries
                 .FirstOrDefaultAsync( a => a.Deleted == null && a.AccountId == accountId, cancellationToken)
                 .ConfigureAwait(false);
                         
-            return document.Account;
+            return document?.Account;
         }
     }
 }
