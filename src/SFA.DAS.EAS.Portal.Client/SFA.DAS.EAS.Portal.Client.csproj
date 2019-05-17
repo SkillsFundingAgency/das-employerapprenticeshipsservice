@@ -14,6 +14,7 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <Version>1.7.493</Version>
     </PropertyGroup>
 
     <ItemGroup>
