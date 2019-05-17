@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace SFA.DAS.EAS.Portal.Worker.Extensions
 {
-    public static class MessageContextContextExtensions
+    public static class MessageContextExtensions
     {
         const string TimeSentFormat = "yyyy-MM-dd HH:mm:ss:ffffff Z";
 

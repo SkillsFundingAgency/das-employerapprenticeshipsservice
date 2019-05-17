@@ -14,8 +14,6 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <IncludeSymbols>true</IncludeSymbols>
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <Version>1.7.491</Version>
-        <AssemblyVersion>1.7.491.0</AssemblyVersion>
     </PropertyGroup>
 
     <ItemGroup>
