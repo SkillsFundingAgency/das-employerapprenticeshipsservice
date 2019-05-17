@@ -303,34 +303,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
-            else if (model.RecentlyAddedReservationId != null
-                || model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Any() == true)
+            else if (model.ShowReservations) 
             {
                 viewModel.ViewName = "FundingComplete";
-
-                //todo: no need to return everything in the event in AccountDto, just what we need to display (probably only save what we need to show also)
-                //todo: accountDto now mixed concrete/interfaces, which is inconsistent
-
-                if (model.RecentlyAddedReservationId != null)
-                {
-                    var legalEntity = model.AccountViewModel?.Organisations
-                        ?.FirstOrDefault(ale => ale.Reservations?.Any(rf => rf.Id == model.RecentlyAddedReservationId) == true);
-
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.Name;
-
-                    // would be better to create new model to contain what the panel needs to show,
-                    // but we'll be replacing this with displaying all reserved funds anyway
-                    model.ReservedFundingToShow =
-                        legalEntity?.Reservations?.FirstOrDefault(rf =>
-                            rf.Id == model.RecentlyAddedReservationId);
-                }
-
-                if (model.ReservedFundingToShow == null)
-                {
-                    var legalEntity = model.AccountViewModel?.Organisations?.First();
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.Name;
-                    model.ReservedFundingToShow = legalEntity?.Reservations?.First();
-                }
+            }
+            else if(model.RecentlyAddedReservationId != null)
+            {
+                viewModel.ViewName = "NotCurrentlyInStorage";
             }
             return PartialView(viewModel);
         }       
