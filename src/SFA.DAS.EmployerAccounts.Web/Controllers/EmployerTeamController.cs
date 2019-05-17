@@ -345,7 +345,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "FinancialTransactions", Data = model });
         }
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
@@ -369,7 +369,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return PartialView(model);
         }        
         [ChildActionOnly]
-        public ActionResult SavedProviders(AccountDashboardViewModel model)
+        public ActionResult FinancialTransactions(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
