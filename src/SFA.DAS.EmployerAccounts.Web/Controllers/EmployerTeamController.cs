@@ -304,7 +304,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 viewModel.ViewName = "SignAgreement";
             }
             else if (model.RecentlyAddedReservationId != null
-                || model.AccountViewModel?.AccountLegalEntities?.FirstOrDefault()?.ReservedFundings?.Any() == true)
+                || model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Any() == true)
             {
                 viewModel.ViewName = "FundingComplete";
 
@@ -313,23 +313,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (model.RecentlyAddedReservationId != null)
                 {
-                    var legalEntity = model.AccountViewModel?.AccountLegalEntities
-                        ?.FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
+                    var legalEntity = model.AccountViewModel?.Organisations
+                        ?.FirstOrDefault(ale => ale.Reservations?.Any(rf => rf.Id == model.RecentlyAddedReservationId) == true);
 
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
+                    model.ReservedFundingToShowLegalEntityName = legalEntity?.Name;
 
                     // would be better to create new model to contain what the panel needs to show,
                     // but we'll be replacing this with displaying all reserved funds anyway
                     model.ReservedFundingToShow =
-                        legalEntity?.ReservedFundings?.FirstOrDefault(rf =>
-                            rf.ReservationId == model.RecentlyAddedReservationId);
+                        legalEntity?.Reservations?.FirstOrDefault(rf =>
+                            rf.Id == model.RecentlyAddedReservationId);
                 }
 
                 if (model.ReservedFundingToShow == null)
                 {
-                    var legalEntity = model.AccountViewModel?.AccountLegalEntities?.First();
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
-                    model.ReservedFundingToShow = legalEntity?.ReservedFundings?.First();
+                    var legalEntity = model.AccountViewModel?.Organisations?.First();
+                    model.ReservedFundingToShowLegalEntityName = legalEntity?.Name;
+                    model.ReservedFundingToShow = legalEntity?.Reservations?.First();
                 }
             }
             return PartialView(viewModel);

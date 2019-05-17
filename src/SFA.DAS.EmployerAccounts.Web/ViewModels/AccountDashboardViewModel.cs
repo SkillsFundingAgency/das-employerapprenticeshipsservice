@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 using SFA.DAS.EAS.Portal.Client.Models;
+using SFA.DAS.EAS.Portal.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
@@ -30,9 +29,9 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool ApprenticeshipAdded { get; set; }
         public bool ShowSearchBar { get; set; } = false;
         public bool ShowMostActiveLinks { get; set; } = false;
-        public AccountDto AccountViewModel { get; set; }
+        public EAS.Portal.Types.Account AccountViewModel { get; set; }
         public Guid? RecentlyAddedReservationId { get; set; }
-        public IReservedFundingDto ReservedFundingToShow { get; set; }
+        public Reservation ReservedFundingToShow { get; set; }
         public string ReservedFundingToShowLegalEntityName { get; set; }
     }
 }   
