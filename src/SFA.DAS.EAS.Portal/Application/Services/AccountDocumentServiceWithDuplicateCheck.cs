@@ -19,14 +19,14 @@ namespace SFA.DAS.EAS.Portal.Application.Services
             return _accountDocumentService.Get(id, cancellationToken);
         }
 
-        public async Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
+        public Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
         {
             accountDocument.DeleteOldMessages();
-            if (accountDocument.IsMessageProcessed(_messageContext.Id)) { return; };
+            if (accountDocument.IsMessageProcessed(_messageContext.Id)) { return Task.CompletedTask; };
 
             accountDocument.AddOutboxMessage(_messageContext.Id, _messageContext.CreatedDateTime);         
 
-            await _accountDocumentService.Save(accountDocument, cancellationToken);
+            return _accountDocumentService.Save(accountDocument, cancellationToken);
         }
     }
 }

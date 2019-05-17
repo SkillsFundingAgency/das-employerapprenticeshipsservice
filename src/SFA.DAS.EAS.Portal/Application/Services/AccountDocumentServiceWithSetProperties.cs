@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Portal.Application.Services
             return _accountDocumentService.Get(id, cancellationToken);
         }
 
-        public async Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
+        public Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
         {
             if (accountDocument.IsNew)
             {
@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Portal.Application.Services
                 accountDocument.Updated = _messageContext.CreatedDateTime;
             }
 
-            await _accountDocumentService.Save(accountDocument, cancellationToken);
+            return _accountDocumentService.Save(accountDocument, cancellationToken);
         }
     }
 }
