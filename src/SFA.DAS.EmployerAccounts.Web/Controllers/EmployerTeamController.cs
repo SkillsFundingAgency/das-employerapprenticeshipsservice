@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
-        private readonly IHomepagePanelViewHelper _homepagePanelViewHelper;
+        private readonly INextActionPanelViewHelper _homepagePanelViewHelper;
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IHashingService _hashingService;
@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IHomepagePanelViewHelper homepagePanelViewHelper,
+            INextActionPanelViewHelper homepagePanelViewHelper,
             IPortalClient portalClient,
             IHashingService hashingService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
@@ -298,40 +298,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
-            if (model.AgreementsToSign)
-            {
-                viewModel.ViewName = "SignAgreement";
-            }
-            else if (model.RecentlyAddedReservationId != null
-                || model.AccountViewModel?.AccountLegalEntities?.FirstOrDefault()?.ReservedFundings?.Any() == true)
-            {
-                viewModel.ViewName = "FundingComplete";
-
-                //todo: no need to return everything in the event in AccountDto, just what we need to display (probably only save what we need to show also)
-                //todo: accountDto now mixed concrete/interfaces, which is inconsistent
-
-                if (model.RecentlyAddedReservationId != null)
-                {
-                    var legalEntity = model.AccountViewModel?.AccountLegalEntities
-                        ?.FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
-
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
-
-                    // would be better to create new model to contain what the panel needs to show,
-                    // but we'll be replacing this with displaying all reserved funds anyway
-                    model.ReservedFundingToShow =
-                        legalEntity?.ReservedFundings?.FirstOrDefault(rf =>
-                            rf.ReservationId == model.RecentlyAddedReservationId);
-                }
-
-                if (model.ReservedFundingToShow == null)
-                {
-                    var legalEntity = model.AccountViewModel?.AccountLegalEntities?.First();
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
-                    model.ReservedFundingToShow = legalEntity?.ReservedFundings?.First();
-                }
-            }
+            var viewModel = _homepagePanelViewHelper.GetNextAction(model);
             return PartialView(viewModel);
         }
 
@@ -355,6 +322,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
             return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
+        }
+
+        [ChildActionOnly]
+        public ActionResult AddPAYE(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
         }
 
         [ChildActionOnly]

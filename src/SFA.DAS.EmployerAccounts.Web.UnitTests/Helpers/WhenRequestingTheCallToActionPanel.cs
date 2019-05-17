@@ -1,5 +1,9 @@
-﻿using FluentAssertions;
+﻿using System;
+using System.Collections.Generic;
+using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.EAS.Portal.Client.Models.Concrete;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -8,13 +12,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
     [TestFixture]
     public class WhenRequestingTheCallToActionPanel
     {
-        private IHomepagePanelViewHelper _sut;
+        private INextActionPanelViewHelper _sut;
         private AccountDashboardViewModel _accountDashboardModel;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
-            _sut = new HomepagePanelViewHelper();
+            _sut = new NextActionPanelViewHelper();
         }
 
         [SetUp]
@@ -33,10 +37,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
             // Arrange
 
             // Act
-            var panelActionResult = _sut.GetPanel1Action(_accountDashboardModel);
+            var nextAction = _sut.GetNextAction(_accountDashboardModel);
 
             // Assert
-            panelActionResult.Should().Be("SignAgreement");
+            nextAction.ViewName.Should().Be("SignAgreement");
         }
 
         [Test, Category("UnitTest")]
@@ -46,10 +50,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
             _accountDashboardModel.AgreementsToSign = false;
 
             // Act
-            var panelActionResult = _sut.GetPanel1Action(_accountDashboardModel);
+            var nextAction = _sut.GetNextAction(_accountDashboardModel);
 
             // Assert
-            panelActionResult.Should().Be("CheckFunding");
+            nextAction.ViewName.Should().Be("CheckFunding");
         }
 
         [Test, Category("UnitTest")]
@@ -59,10 +63,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
             _accountDashboardModel.PayeSchemeCount = 0;
 
             // Act
-            var panelActionResult = _sut.GetPanel1Action(_accountDashboardModel);
+            var nextAction = _sut.GetNextAction(_accountDashboardModel);
 
             // Assert
-            panelActionResult.Should().Be("AddPAYE");
+            nextAction.ViewName.Should().Be("AddPAYE");
         }
     }
 }

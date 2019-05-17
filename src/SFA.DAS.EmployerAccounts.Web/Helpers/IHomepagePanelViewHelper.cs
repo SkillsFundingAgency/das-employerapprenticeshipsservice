@@ -1,10 +1,9 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+﻿using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers
 {
-    public interface IHomepagePanelViewHelper
+    public interface INextActionPanelViewHelper
     {
-        string GetPanel1Action(AccountDashboardViewModel model);
+        PanelViewModel<AccountDashboardViewModel> GetNextAction(AccountDashboardViewModel model);
     }
 }

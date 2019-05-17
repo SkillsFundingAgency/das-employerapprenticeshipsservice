@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
     {
         private EmployerTeamController _controller;
         private Mock<EmployerTeamOrchestrator> _orchestrator;
-        private Mock<IHomepagePanelViewHelper> _homepagePanelViewHelper;
+        private Mock<INextActionPanelViewHelper> _homepagePanelViewHelper;
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            _homepagePanelViewHelper = new Mock<IHomepagePanelViewHelper>();
+            _homepagePanelViewHelper = new Mock<INextActionPanelViewHelper>();
             _orchestrator = new Mock<EmployerTeamOrchestrator>(new Mock<IMediator>().Object, Mock.Of<ICurrentDateTime>());
             _hashingServiceMock = new Mock<IHashingService>();
             _portalClientMock = new Mock<IPortalClient>();
