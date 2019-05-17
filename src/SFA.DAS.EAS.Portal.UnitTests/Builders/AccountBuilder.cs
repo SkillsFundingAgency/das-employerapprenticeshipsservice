@@ -5,7 +5,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
 {
     public class AccountBuilder
     {
-        private ICollection<Organisation> _organisations;
+        private readonly ICollection<Organisation> _organisations;
 
         public AccountBuilder()
         {

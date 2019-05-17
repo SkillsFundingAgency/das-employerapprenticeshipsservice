@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
         public Task Handle(ReservationCreatedEvent message, IMessageHandlerContext context)
         {
             _messageContext.Initialise(context);
-            return _addReservationCommand.Execute(message, context.MessageId);
+            return _addReservationCommand.Execute(message);
         }
     }
 }
