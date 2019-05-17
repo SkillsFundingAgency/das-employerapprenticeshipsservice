@@ -53,8 +53,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (FeatureToggles.Features.HomePage.Enabled)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
-                //response.Data.ApprenticeshipAdded = response.Data.AccountViewModel != null && response.Data.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.Count > 0;
+                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId) ?? new EAS.Portal.Types.Account();
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel != null && response.Data.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.Count > 0;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
