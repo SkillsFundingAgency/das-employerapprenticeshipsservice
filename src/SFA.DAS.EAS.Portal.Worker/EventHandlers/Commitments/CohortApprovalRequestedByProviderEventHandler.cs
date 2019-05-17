@@ -30,7 +30,5 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
             _messageContext.Initialise(context);
             return _handler.Handle(_adapter.Convert(message));
         }
-
-       
     }
 }
