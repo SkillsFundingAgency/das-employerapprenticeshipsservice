@@ -12,11 +12,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
     public class CohortAdapterTests
     {
         private CohortAdapter _sut;
-        private string _messageId;
 
         public CohortAdapterTests()
         {
-            _messageId = Guid.NewGuid().ToString();
             _sut = new CohortAdapter();
         }
 
