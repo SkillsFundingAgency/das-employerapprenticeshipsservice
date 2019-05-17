@@ -9,7 +9,9 @@
     <Authors>DAS</Authors>
     <Company>DAS</Company>
     <Description>Types for SFA.DAS.EAS.Portal</Description>
-    <Version>1.0.2.8</Version>
+    <Version>1.0.3.0</Version>
+    <AssemblyVersion>1.0.3.0</AssemblyVersion>
+    <FileVersion>1.0.3.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
