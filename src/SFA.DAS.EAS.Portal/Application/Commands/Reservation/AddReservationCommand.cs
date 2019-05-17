@@ -50,7 +50,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             {
                 var org = accountDocument.Account.Organisations.Where(o => o.Id.Equals(reservedFunding.AccountLegalEntityId)).First();
 
-                // TODO: check Reservation with same Id does not already exist in the collection
+                var existing = org.Reservations.FirstOrDefault(r => r.Id.Equals(reservedFunding.Id));
+                if (existing != null)
+                {
+                    return;  // already handled 
+                }
+
                 org.Reservations.Add(new Types.Reservation()
                 {
                     Id = reservedFunding.Id,
