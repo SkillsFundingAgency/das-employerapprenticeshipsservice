@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.EAS.Portal.Database.Models
+namespace SFA.DAS.EAS.Portal.Client.Database.Models
 {
     public class OutboxMessage
     {

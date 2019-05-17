@@ -4,7 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using SFA.DAS.CosmosDb;
 
-namespace SFA.DAS.EAS.Portal.Database.Models
+namespace SFA.DAS.EAS.Portal.Client.Database.Models
 {
     public abstract class Document : IDocument, IDocumentProperties, IOutbox
     {
@@ -24,13 +24,13 @@ namespace SFA.DAS.EAS.Portal.Database.Models
         public DocumentMetadata Metadata { get; protected set;}
 
         [JsonProperty("created")]
-        public DateTime Created { get; internal set; }
+        public DateTime Created { get;  set; }
 
         [JsonProperty("updated")]
-        public DateTime? Updated { get; internal set; }
+        public DateTime? Updated { get; set; }
 
         [JsonProperty("deleted")]
-        public DateTime? Deleted { get; internal set; }
+        public DateTime? Deleted { get; set; }
 
         protected Document(short schemaVersion)
         {

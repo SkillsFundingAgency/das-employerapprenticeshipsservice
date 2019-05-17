@@ -1,7 +1,7 @@
 using System;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.EAS.Portal.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Types;
 using SFA.DAS.Testing;
 

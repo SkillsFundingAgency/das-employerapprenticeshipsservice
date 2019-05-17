@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.CosmosDb;
 using SFA.DAS.EAS.Portal.Database;
-using SFA.DAS.EAS.Portal.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 using System.Threading;
 using System.Threading.Tasks;
 

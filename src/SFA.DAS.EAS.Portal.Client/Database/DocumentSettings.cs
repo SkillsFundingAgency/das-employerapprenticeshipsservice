@@ -1,4 +1,4 @@
-namespace SFA.DAS.EAS.Portal.Database
+namespace SFA.DAS.EAS.Portal.Client.Database
 {
     public static class DocumentSettings
     {

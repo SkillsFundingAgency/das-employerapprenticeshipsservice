@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation

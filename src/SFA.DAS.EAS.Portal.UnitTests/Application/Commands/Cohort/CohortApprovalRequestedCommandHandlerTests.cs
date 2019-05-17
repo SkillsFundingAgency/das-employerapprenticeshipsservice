@@ -12,7 +12,7 @@ using SFA.DAS.EAS.Portal.Application.Services;
 using System.Threading;
 using SFA.DAS.EAS.Portal.Types;
 using Moq;
-using SFA.DAS.EAS.Portal.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
 {

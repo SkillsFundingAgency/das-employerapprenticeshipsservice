@@ -4,7 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Portal.Database;
+using SFA.DAS.EAS.Portal.Client.Database;
 
 namespace SFA.DAS.EAS.Portal.Worker.StartupJobs
 {
