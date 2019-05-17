@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
-            var accountDocumentTask = _accountsService.Get(command.AccountId);
+            var accountDocumentTask = _accountsService.Get(command.AccountId, cancellationToken);
             var commitmentTask = _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);
             await Task.WhenAll(accountDocumentTask, commitmentTask);
 
@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
                 apprenticeship.EndDate = a.EndDate;
             });
 
-            await _accountsService.Save(accountDocument);
+            await _accountsService.Save(accountDocument, cancellationToken);
         }
     }
 }

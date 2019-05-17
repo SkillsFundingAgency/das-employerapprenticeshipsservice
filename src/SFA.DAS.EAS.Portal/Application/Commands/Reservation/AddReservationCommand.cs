@@ -19,12 +19,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             _logger = logger;
         }
 
-        public async Task Execute(ReservationCreatedEvent reservedFunding, string messageId, CancellationToken cancellationToken = default)
+        public async Task Execute(ReservationCreatedEvent reservedFunding, CancellationToken cancellationToken = default)
         {
             // TODO: move logging to a decorator
             _logger.LogInformation("Executing AddReservationCommand");
 
-            var accountDocument = await _accountsService.Get(reservedFunding.AccountId);
+            var accountDocument = await _accountsService.Get(reservedFunding.AccountId, cancellationToken);
 
             if (accountDocument == null)
             {
@@ -48,7 +48,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             }
             else
             {
-                var org = accountDocument.Account.Organisations.Where(o => o.Id.Equals(reservedFunding.AccountLegalEntityId)).First();
+                var org = accountDocument.Account.Organisations.First(o => o.Id.Equals(reservedFunding.AccountLegalEntityId));
 
                 var existing = org.Reservations.FirstOrDefault(r => r.Id.Equals(reservedFunding.Id));
                 if (existing != null)
@@ -66,7 +66,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
                 });
             }
 
-            await _accountsService.Save(accountDocument);
+            await _accountsService.Save(accountDocument, cancellationToken);
         }
     }
 }
