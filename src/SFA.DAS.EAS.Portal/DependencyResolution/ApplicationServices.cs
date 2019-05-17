@@ -24,7 +24,8 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             services.AddCommitmentsApiConfiguration(configuration);
 
             services.AddScoped<IMessageContext, MessageContext>();            
-            services.AddTransient<IAccountDocumentService, AccountDocumentService>();            
+            services.AddTransient<IAccountDocumentService, AccountDocumentService>();                        
+            services.Decorate<IAccountDocumentService, AccountDocumentServiceWithSetProperties>();
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithDuplicateCheck>();
             services.AddTransient<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>, CohortAdapter>();
 

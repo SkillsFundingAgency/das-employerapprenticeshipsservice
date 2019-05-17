@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Portal.Application.Services
 {
-    public class AccountDocumentServiceWithDuplicateCheck : IAccountDocumentService
+    public class AccountDocumentServiceWithSetProperties : IAccountDocumentService
     {
         private readonly IAccountDocumentService _accountDocumentService;
         private readonly IMessageContext _messageContext;
-        public AccountDocumentServiceWithDuplicateCheck(IAccountDocumentService accountDocumentService, IMessageContext messageContext)
+        public AccountDocumentServiceWithSetProperties(IAccountDocumentService accountDocumentService, IMessageContext messageContext)
         {
             _accountDocumentService = accountDocumentService;
             _messageContext = messageContext;
@@ -21,10 +21,14 @@ namespace SFA.DAS.EAS.Portal.Application.Services
 
         public async Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
         {
-            accountDocument.DeleteOldMessages();
-            if (accountDocument.IsMessageProcessed(_messageContext.Id)) { return; };
-
-            accountDocument.AddOutboxMessage(_messageContext.Id, _messageContext.CreatedDateTime);         
+            if (accountDocument.IsNew)
+            {
+                accountDocument.Created = _messageContext.CreatedDateTime;
+            }
+            else
+            {
+                accountDocument.Updated = _messageContext.CreatedDateTime;
+            }
 
             await _accountDocumentService.Save(accountDocument, cancellationToken);
         }
