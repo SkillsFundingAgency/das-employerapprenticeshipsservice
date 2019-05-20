@@ -1,0 +1,25 @@
+﻿using System.Threading.Tasks;
+using SFA.DAS.Validation;
+
+namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator
+{
+    public class GetOrganisationsValidator : IValidator<GetPensionRegulatorRequest>
+    {
+        public ValidationResult Validate(GetPensionRegulatorRequest item)
+        {
+            var validationResult = new ValidationResult();
+
+            if (string.IsNullOrEmpty(item.PayeRef))
+            {
+                validationResult.AddError(nameof(item.PayeRef));
+            }
+
+            return validationResult;
+        }
+
+        public Task<ValidationResult> ValidateAsync(GetPensionRegulatorRequest item)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}

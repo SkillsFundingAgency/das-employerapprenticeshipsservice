@@ -1,0 +1,60 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@model SearchPensionRegulatorResultsViewModel
+
+@{ 
+    ViewBag.PageID = "select-your-pension-regulator-organisation";
+    ViewBag.Title = "Select your organisation";
+    ViewBag.HideNav = Model.IsExistingAccount ? "false" : "true";
+    ViewBag.Section = "pensionregulator";
+}
+
+@{
+    ViewBag.GaData.Vpv = Model.IsExistingAccount ? "/accounts/pensionregulator/search/results/select-your-pensiion-regulator-organisation" : "/onboarding/search/results/select-your-pension-regulator-organisation";
+    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "hidden";
+    var errorClass = Model?.GetType().GetProperty("InError") != null ? "error" : "";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Choose an organisation
+        </h1>
+
+        <p>You can add other organisations to your account later.</p>
+        
+        <form method="POST" action="@Url.Action(ControllerConstants.SearchPensionRegulatorActionName)" >
+            @Html.AntiForgeryToken()      
+            @Html.HiddenFor(m => m.IsExistingAccount)
+            @Html.HiddenFor(m => m.PayeRef)
+            <div class="form-group @errorClass" id="pension-regulator-form">
+                <fieldset>
+                    <legend class="form-label-bold">
+                        <span>Do you have everything you need?</span>
+                        <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                            You need your Government Gateway login details to access your levy funds
+                        </span>
+                    </legend>
+                    @for(int i = 0; i < Model.Results.Count; i++)
+                    {
+                        <label class="block-label">
+                            @Html.RadioButtonFor(m => m.SelectedOrganisation, Model.Results[i].ReferenceNumber, false)
+                            @Html.HiddenFor(m => m.Results[i].Name)
+                            @Html.HiddenFor(m => m.Results[i].ReferenceNumber)
+                            @Model.Results[i].Name
+                        </label>
+                    }
+                </fieldset>
+                <p>or</p>
+                <fieldset>
+                    <label for="not-listed" class="block-label">
+                        @Html.RadioButtonFor(m => m.SelectedOrganisation, string.Empty, false)
+                        My organisation is not listed
+                    </label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button class="button" type="submit" id="submit-organisation-button">Continue</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Info("Starting processing gateway response");
 
                 if (Request.Url == null)
-                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                    return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
 
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
                     Request.Params[ControllerConstants.CodeKeyName],
@@ -128,7 +128,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         });
                 }
 
-                return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
             }
             catch (Exception ex)
             {
