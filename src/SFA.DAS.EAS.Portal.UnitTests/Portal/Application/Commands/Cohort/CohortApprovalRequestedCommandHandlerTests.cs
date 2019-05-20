@@ -1,20 +1,20 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
-using SFA.DAS.EAS.Portal.UnitTests.Builders;
-using System.Threading.Tasks;
-using FluentAssertions;
-using System.Linq;
-using System;
-using System.Collections.Generic;
 using SFA.DAS.EAS.Portal.Application.Services;
-using System.Threading;
-using SFA.DAS.EAS.Portal.Types;
-using Moq;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.UnitTests.Builders;
 
-namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
+namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
 {
     [Parallelizable]
     [TestFixture]
