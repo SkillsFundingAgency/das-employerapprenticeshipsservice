@@ -73,7 +73,7 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.43" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.7.493</Version>
+      <Version>1.7.494</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EAS.Portal.Types">
       <Version>1.0.3</Version>
