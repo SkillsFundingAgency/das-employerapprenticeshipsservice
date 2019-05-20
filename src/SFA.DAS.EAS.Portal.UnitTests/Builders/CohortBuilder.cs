@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
     public class CohortBuilder
     {
         private string _id = Guid.NewGuid().ToString();
-        private ICollection<Apprenticeship> _apprenticeships;
+        private readonly ICollection<Apprenticeship> _apprenticeships;
 
         public CohortBuilder()
         {

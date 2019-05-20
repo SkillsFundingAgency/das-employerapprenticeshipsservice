@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Types;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Database.Models
+namespace SFA.DAS.EAS.Portal.UnitTests.Client.Types
 {
     [TestFixture]
     [Parallelizable]
