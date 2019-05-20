@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                     var configuration = s.GetService<IConfiguration>();
                     var hostingEnvironment = s.GetService<IHostingEnvironment>();
                     var serviceBusConfiguration = configuration.GetPortalSection<ServiceBusConfiguration>(PortalSections.ServiceBus);
-                    var isDevelopment = true; // hostingEnvironment.IsDevelopment();
+                    var isDevelopment = hostingEnvironment.IsDevelopment();
                     var endpointConfiguration = new EndpointConfiguration(EndpointName.EasPortalWorker)
                         .UseAzureServiceBusTransport(isDevelopment,
                             () => serviceBusConfiguration.ConnectionString, r => { })
