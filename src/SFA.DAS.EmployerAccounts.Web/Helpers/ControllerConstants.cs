@@ -65,5 +65,7 @@
         public const string AmendOrganisationActionName = "AmendOrganisation";
         public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
+        public const string SearchPensionRegulatorControllerName = "SearchPensionRegulator";
+        public const string SearchPensionRegulatorActionName = "SearchPensionRegulator";
     }
 }

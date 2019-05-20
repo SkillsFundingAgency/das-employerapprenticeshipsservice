@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -295,6 +296,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("amendOrganisation")]
         public async Task<ActionResult> AmendOrganisation()
         {
+            var employerAccountOrganisationData = _employerAccountOrchestrator.GetCookieData().EmployerAccountOrganisationData;
+            if (employerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
+            {
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+            }
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
         }
 

@@ -5,7 +5,9 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -22,9 +24,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         [SetUp]
         public void Setup()
         {
+            var orchestrator = new Mock<EmployerAccountOrchestrator>();
+            orchestrator.Setup(x => x.GetCookieData()).Returns(new EmployerAccountData
+            {
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData { OrganisationType = OrganisationType.Charities }
+            });
+
             _employerAccountController = new EmployerAccountController(
                 Mock.Of<IAuthenticationService>(),
-                Mock.Of<EmployerAccountOrchestrator>(),
+                orchestrator.Object,
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ILog>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
