@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Portal.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
@@ -29,9 +28,9 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool ApprenticeshipAdded { get; set; }
         public bool ShowSearchBar { get; set; }
         public bool ShowMostActiveLinks { get; set; }
-        public Portal.Types.Account AccountViewModel { get; set; }
+        //public Portal.Types.Account AccountViewModel { get; set; }
         public Guid? RecentlyAddedReservationId { get; set; }
-        public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.FirstOrDefault();
-        public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.Count > 0;
+        //public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.FirstOrDefault();
+        //public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.Count > 0;
     }
 }   
