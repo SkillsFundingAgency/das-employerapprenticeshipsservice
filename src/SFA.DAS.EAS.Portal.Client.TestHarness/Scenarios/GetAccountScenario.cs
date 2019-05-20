@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios
 
         public async Task<Account> Run()
         {
-            const long accountId = 1337L;
+            const long accountId = 1L;
 
             return await _portalClient.GetAccount(accountId);
         }
