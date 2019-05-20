@@ -5,7 +5,7 @@ Scenario: Month-01-submission
 	And Hmrc return the following submissions for paye scheme
 		| Id        | LevyDueYtd | Payroll_Year | Payroll_Month | English_Fraction | SubmissionDate | CreatedDate |
 		| 999000101 | 10000      | 17-18        | 1             | 1                | 2017-05-15     | 2017-05-15  | 
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 06/2017
 	And all the transaction lines in this scenario have had their transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 11000 on the 05/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 05/2017
@@ -19,7 +19,7 @@ Scenario: Month-02-submission
 		| 999000102    | 10000      | 17-18        | 1             | 1                | 2017-05-15     | 
 		| 999000103    | 10000      | 17-18        | 1             | 1                | 2017-05-15     | 
 		| 999000104    | 20000      | 17-18        | 2             | 1                | 2017-06-15     | 		
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 08/2017
 	And all the transaction lines in this scenario have had their transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 22000 on the 06/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 06/2017
@@ -33,7 +33,7 @@ Scenario: Month-03-submission
 		| 999000105    | 10000      | 17-18        | 1             | 1                | 2017-05-15     | 
 		| 999000106    | 20000      | 17-18        | 2             | 1                | 2017-06-15     | 
 		| 999000107    | 30000      | 17-18        | 3             | 1                | 2017-07-15     | 
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 08/2017
 	And all the transaction lines in this scenario have had their transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 33000 on the 07/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 07/2017
@@ -50,7 +50,7 @@ Scenario: Month-06-submission
 		| 999000111    | 40000      | 17-18        | 4             | 1                | 2017-08-15     | 
 		| 999000112    | 50000      | 17-18        | 5             | 1                | 2017-09-15     | 
 		| 999000113    | 60000      | 17-18        | 6             | 1                | 2017-10-15     | 		
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 11/2017
 	And all the transaction lines in this scenario have had their transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 66000 on the 10/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 10/2017
@@ -73,7 +73,7 @@ Scenario: Month-12-submission
 		| 999000123    | 100000     | 17-18        | 10            | 1                | 2018-02-15     | 
 		| 999000124    | 110000     | 17-18        | 11            | 1                | 2018-03-15     | 
 		| 999000125    | 120000     | 17-18        | 12            | 1                | 2018-04-15     | 		
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 05/2018
 	And all the transaction lines in this scenario have had their transaction date updated to their created date
 	Then we should see a level 1 screen with a balance of 132000 on the 04/2018 
 	And we should see a level 1 screen with a total levy of 11000 on the 04/2018 
