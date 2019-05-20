@@ -23,14 +23,17 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
         {
             // arrange
             CohortApprovalRequestedByProvider @event = new CohortApprovalRequestedByProviderBuilder();
+            var accountId = @event.AccountId;
+            var providerId = @event.ProviderId;
+            var commitmentId = @event.CommitmentId;
 
             // act
             var result = _sut.Convert(@event);
 
             //assert
-            result.AccountId.Should().Be(@event.AccountId);
-            result.ProviderId.Should().Be(@event.ProviderId);
-            result.CommitmentId.Should().Be(@event.CommitmentId);
+            result.AccountId.Should().Be(accountId;
+            result.ProviderId.Should().Be(providerId;
+            result.CommitmentId.Should().Be(commitmentId);
         }
     }
 }
