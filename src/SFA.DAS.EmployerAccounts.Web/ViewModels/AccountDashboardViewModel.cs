@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool ShowMostActiveLinks { get; set; }
         public EAS.Portal.Types.Account AccountViewModel { get; set; }
         public Guid? RecentlyAddedReservationId { get; set; }
-        public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.FirstOrDefault();
+        public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.SelectMany(org => org.Reservations).FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.SelectMany(org => org.Reservations)?.LastOrDefault();
         public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.Count > 0;
     }
 }   
