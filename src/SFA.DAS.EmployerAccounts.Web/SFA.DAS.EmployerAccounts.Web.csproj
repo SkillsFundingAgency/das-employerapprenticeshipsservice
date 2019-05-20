@@ -75,9 +75,6 @@
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
       <Version>1.7.494</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.EAS.Portal.Types">
-      <Version>1.0.3</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
