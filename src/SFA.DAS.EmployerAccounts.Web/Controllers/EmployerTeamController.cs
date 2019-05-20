@@ -54,8 +54,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (FeatureToggles.Features.HomePage.Enabled)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                //response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
-                //response.Data.ApprenticeshipAdded = response.Data.AccountViewModel.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
+                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
 
@@ -305,10 +305,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
-            /*else if (model.ShowReservations) 
+            else if (model.ShowReservations) 
             {
                 viewModel.ViewName = "FundingComplete";
-            }*/
+            }
             else if(model.RecentlyAddedReservationId != null)
             {
                 viewModel.ViewName = "NotCurrentlyInStorage";
