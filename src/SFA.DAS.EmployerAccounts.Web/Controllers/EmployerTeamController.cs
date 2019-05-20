@@ -305,10 +305,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
-            /*else if (model.ShowReservations) 
+            else if (model.ShowReservations) 
             {
                 viewModel.ViewName = "FundingComplete";
-            }*/
+            }
             else if(model.RecentlyAddedReservationId != null)
             {
                 viewModel.ViewName = "NotCurrentlyInStorage";
