@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Adapters
     [TestFixture]
     public class CohortAdapterTests
     {
-        private CohortAdapter _sut;
+        private readonly CohortAdapter _sut;
 
         public CohortAdapterTests()
         {
