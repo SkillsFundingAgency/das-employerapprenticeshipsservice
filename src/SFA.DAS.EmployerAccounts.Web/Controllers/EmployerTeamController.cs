@@ -50,6 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
+
             if (FeatureToggles.Features.HomePage.Enabled)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
@@ -57,6 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 //response.Data.ApprenticeshipAdded = response.Data.AccountViewModel.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
             }
