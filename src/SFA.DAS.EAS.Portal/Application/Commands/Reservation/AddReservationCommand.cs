@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Types;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
@@ -31,42 +32,60 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
                 accountDocument = AccountDocument.Create(reservedFunding.AccountId);
                 accountDocument.Account.Name = reservedFunding.AccountLegalEntityName;
 
-                var newOrg = new Types.Organisation() {
-                    Id = reservedFunding.AccountLegalEntityId,
-                    Name = reservedFunding.AccountLegalEntityName };
-
-                accountDocument.Account.Organisations.Add(newOrg);
-
-                newOrg.Reservations.Add(new Types.Reservation()
-                {
-                    Id = reservedFunding.Id,
-                    CourseCode = reservedFunding.CourseId,
-                    CourseName = reservedFunding.CourseName,
-                    StartDate = reservedFunding.StartDate,
-                    EndDate = reservedFunding.EndDate
-                });
+                CreateOrganisationWithReservation(accountDocument, reservedFunding);
             }
             else
             {
-                var org = accountDocument.Account.Organisations.First(o => o.Id.Equals(reservedFunding.AccountLegalEntityId));
-
-                var existing = org.Reservations.FirstOrDefault(r => r.Id.Equals(reservedFunding.Id));
-                if (existing != null)
+                var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.Id.Equals(reservedFunding.AccountLegalEntityId));
+                if (org == null)
                 {
-                    return;  // already handled 
+                    CreateOrganisationWithReservation(accountDocument, reservedFunding);
                 }
-
-                org.Reservations.Add(new Types.Reservation()
+                else
                 {
-                    Id = reservedFunding.Id,
-                    CourseCode = reservedFunding.CourseId,
-                    CourseName = reservedFunding.CourseName,
-                    StartDate = reservedFunding.StartDate,
-                    EndDate = reservedFunding.EndDate
-                });
+                    UpdateOrganisationWithReservation(org, reservedFunding);
+                }
             }
 
             await _accountsService.Save(accountDocument, cancellationToken);
+        }
+
+        private static void UpdateOrganisationWithReservation(Organisation organisation, ReservationCreatedEvent reservedFunding)
+        {
+            var existing = organisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservedFunding.Id));
+            if (existing != null)
+            {
+                return;  // already handled 
+            }
+
+            organisation.Reservations.Add(new Types.Reservation()
+            {
+                Id = reservedFunding.Id,
+                CourseCode = reservedFunding.CourseId,
+                CourseName = reservedFunding.CourseName,
+                StartDate = reservedFunding.StartDate,
+                EndDate = reservedFunding.EndDate
+            });
+        }
+
+        private static void CreateOrganisationWithReservation(AccountDocument accountDocument, ReservationCreatedEvent reservedFunding)
+        {
+            var newOrg = new Types.Organisation()
+            {
+                Id = reservedFunding.AccountLegalEntityId,
+                Name = reservedFunding.AccountLegalEntityName
+            };
+
+            accountDocument.Account.Organisations.Add(newOrg);
+
+            newOrg.Reservations.Add(new Types.Reservation()
+            {
+                Id = reservedFunding.Id,
+                CourseCode = reservedFunding.CourseId,
+                CourseName = reservedFunding.CourseName,
+                StartDate = reservedFunding.StartDate,
+                EndDate = reservedFunding.EndDate
+            });
         }
     }
 }
