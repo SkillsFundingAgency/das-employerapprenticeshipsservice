@@ -169,7 +169,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Application.Commands.Cohort
             }
 
             [Test]
-            public async Task WhenAnExistingCohortIsHandled_ThenAnyApprentishipsChangesAreAlsoStored()
+            public async Task WhenAnExistingCohortIsHandled_ThenAnyApprenticeshipsChangesAreAlsoStored()
             {
                 // arrange
                 var testContext = new TestContext();
