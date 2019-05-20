@@ -4,10 +4,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
 {
     public class CommitmentViewBuilder
     {
-        public CommitmentViewBuilder()
-        {           
-        }
-
         public CommitmentView Build()
         {
             return new CommitmentView();
