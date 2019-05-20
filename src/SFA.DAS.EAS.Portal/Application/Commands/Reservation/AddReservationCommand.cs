@@ -22,7 +22,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
         public async Task Execute(ReservationCreatedEvent reservedFunding, CancellationToken cancellationToken = default)
         {
-            // TODO: move logging to a decorator
             _logger.LogInformation("Executing AddReservationCommand");
 
             var accountDocument = await _accountsService.Get(reservedFunding.AccountId, cancellationToken);
@@ -50,11 +49,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             await _accountsService.Save(accountDocument, cancellationToken);
         }
 
-        private static void UpdateOrganisationWithReservation(Organisation organisation, ReservationCreatedEvent reservedFunding)
+        private void UpdateOrganisationWithReservation(Organisation organisation, ReservationCreatedEvent reservedFunding)
         {
             var existing = organisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservedFunding.Id));
             if (existing != null)
             {
+                _logger.LogInformation($"ReservationCreatedEvent received for a reservation (Id: {reservedFunding.Id}) that has already been handled.  The event will be ignored.");
                 return;  // already handled 
             }
 
