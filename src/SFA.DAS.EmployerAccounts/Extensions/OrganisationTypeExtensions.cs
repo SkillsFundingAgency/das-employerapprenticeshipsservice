@@ -72,19 +72,6 @@ namespace SFA.DAS.EmployerAccounts.Extensions
             }
         }
 
-        /// <summary>
-        ///     Returns true if the supplied reference data organisation type can be round-tripped to a common 
-        ///     organisation type.
-        /// </summary>
-        /// <param name="organisationType"></param>
-        /// <returns></returns>
-        public static bool IsRoundTripCapable(this ReferenceDataOrganisationType organisationType)
-        {
-            var commonOrganisationType = organisationType.ToCommonOrganisationType();
-
-            return commonOrganisationType.TryToReferenceDataOrganisationType(out _);
-        }
-
         public static string GetFriendlyName(this CommonOrganisationType commonOrganisationType)
         {
             switch (commonOrganisationType)
@@ -92,6 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Extensions
                 case CommonOrganisationType.CompaniesHouse: return "Companies House";
                 case CommonOrganisationType.Charities: return "Charity Commission";
                 case CommonOrganisationType.PublicBodies: return "Public Bodies";
+                case CommonOrganisationType.PensionsRegulator: return "Pensions Regulator";
                 default: return "Other";
             }
         }
