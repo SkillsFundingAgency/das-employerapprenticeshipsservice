@@ -30,8 +30,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Adapters
             var result = _sut.Convert(@event);
 
             //assert
-            result.AccountId.Should().Be(accountId;
-            result.ProviderId.Should().Be(providerId;
+            result.AccountId.Should().Be(accountId);
+            result.ProviderId.Should().Be(providerId);
             result.CommitmentId.Should().Be(commitmentId);
         }
     }
