@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Types
             };
             Organisation organisation = new Organisation
             {
-                Id = 2,
+                AccountLegalEntityId = 2,
                 Name = "LegalEntityName"
             };
             AccountDocument.Account.Organisations.Add(organisation);
