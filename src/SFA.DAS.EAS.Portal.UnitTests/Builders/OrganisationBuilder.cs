@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
         {
             return new Organisation
             {                
-                Id = _id,                
+                AccountLegalEntityId = _id,                
                 Cohorts = _cohorts
             };
         }

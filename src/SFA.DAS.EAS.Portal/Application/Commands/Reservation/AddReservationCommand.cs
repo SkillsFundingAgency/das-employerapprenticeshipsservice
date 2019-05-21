@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             }
             else
             {
-                var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.Id.Equals(reservedFunding.AccountLegalEntityId));
+                var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(reservedFunding.AccountLegalEntityId));
                 if (org == null)
                 {
                     CreateOrganisationWithReservation(accountDocument, reservedFunding);
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
         {
             var newOrg = new Organisation()
             {
-                Id = reservedFunding.AccountLegalEntityId,
+                AccountLegalEntityId = reservedFunding.AccountLegalEntityId,
                 Name = reservedFunding.AccountLegalEntityName
             };
 
