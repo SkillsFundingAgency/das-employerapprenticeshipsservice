@@ -307,7 +307,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel2(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
-            if (model.AgreementsToSign)
+            if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
             }
