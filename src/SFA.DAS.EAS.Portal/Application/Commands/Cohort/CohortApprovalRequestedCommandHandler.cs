@@ -31,6 +31,8 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
             var commitment = await commitmentTask;
 
             var cohortReference = commitment.Reference;            
+            // TODO: there is an assumption there is only one Organisation (which is true for the initial development) but in the furture may not be true based on the events we will receive.
+            // Will be covered by tech debt / additional story to cover handling multiple organisations in the future.
             var cohort = account.Organisations.First().Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortReference, StringComparison.OrdinalIgnoreCase));
 
             if (cohort == null)
