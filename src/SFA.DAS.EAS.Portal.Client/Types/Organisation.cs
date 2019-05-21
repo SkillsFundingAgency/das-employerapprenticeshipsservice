@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Portal.Client.Types
             Agreements = new List<Agreement>();
         }
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public long AccountLegalEntityId { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("providers")]
