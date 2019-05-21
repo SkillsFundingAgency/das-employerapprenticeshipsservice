@@ -3,7 +3,7 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator
 {
-    public class GetOrganisationsValidator : IValidator<GetPensionRegulatorRequest>
+    public class GetPensionRegulatorValidator : IValidator<GetPensionRegulatorRequest>
     {
         public ValidationResult Validate(GetPensionRegulatorRequest item)
         {
