@@ -4422,3 +4422,66 @@ tr.total td {
   padding: 35px 50px; }
   .flash-card .button-link {
     margin-left: 25px; }
+
+.dashboard-heading {
+  font-size: 22px;
+  color: #6f777b;
+  margin-top: 30px; }
+
+@media (min-width: 641px) {
+  .dashboard-heading {
+    font-size: 27px; } }
+
+.dashboard-heading-company {
+  margin-top: 0;
+  margin-bottom: .2em;
+  padding-bottom: .3em;
+  border-bottom: 5px solid #bfc1c3; }
+
+.dashboard-section {
+  border-bottom: 2px solid #bfc1c3;
+  padding-bottom: 15px; }
+
+.dashboard-section-last {
+  padding-top: 30px; }
+
+.section-heading {
+  margin-top: .75em; }
+
+.section-description {
+  color: #6f777b; }
+
+@media (min-width: 641px) {
+  .section-description {
+    margin: -10px 0 30px; } }
+
+.cards {
+  background: white;
+  margin: 0 -15px;
+  flex-wrap: wrap;
+  -ms-flex-wrap: wrap; }
+
+@media (min-width: 641px) {
+  .cards {
+    display: flex;
+    display: -ms-flex; } }
+
+.card {
+  padding: 0 15px;
+  margin-bottom: 15px;
+  box-sizing: border-box; }
+
+@media (min-width: 641px) {
+  .card {
+    width: 50%; } }
+
+.card > h3 {
+  margin-top: 0;
+  margin-bottom: .5em; }
+
+.card > p {
+  font-size: 14px; }
+
+@media (min-width: 641px) {
+  .card > p {
+    font-size: 16px; } }
