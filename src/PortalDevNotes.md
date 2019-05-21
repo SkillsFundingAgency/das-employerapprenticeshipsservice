@@ -11,24 +11,6 @@
 
     note: Config TableStorage PartitionKey locally must be `Development`, rather than `LOCAL`
 
-   real published app service
-       Application Settings
-         ASPNETCORE_ENVIRONMENT                         DEVAZURE, AT etc.
-         ConfigurationStorageConnectionString           storage account containing config tables
-       Connection Strings
-         AzureWebJobsStorage                            \ storage account
-         AzureWebJobsDashboard                          /
-
-devops notes
- config: 4 variables : branch: CON-378-EAS-Portal. pr: https://github.com/SkillsFundingAgency/das-employer-config/pull/264
- ^^ ServiceBusConnectionString -> reuse existing?
- EAS branch: CON-451-create-webjob-host
- new app service for SFA.DAS.EAS.Portal.Worker (core)
- ^^ ConnectionStrings: AzureWebJobsDashboard, AzureWebJobsStorage
- ^^ ApplicationSettings: ConfigurationStorageConnectionString, EnvironmentName, LoggingRedisConnectionString, APPINSIGHTS_INSTRUMENTATIONKEY
- ^^ don't think we need: LoggingRedisKey?? (check), StorageConnectionString (needed?)
- CosmosDb
-
 ## Todo
 
 * issue with singleton webjob in AT:
@@ -45,10 +27,12 @@ we can probably leave as is, as the webjob is idempotent, but we could clean it 
 
 * create readme.md for portal
 
+* it would be better to have a webjob to periodically clean-up processed messages
+
+* unit tests for infrastructure
+
 * how to see & trigger individual jobs in v3?
 https://github.com/Azure/azure-webjobs-sdk/issues/1975
-
-* test app insights
 
 * update sfa.das.nservicebus to use latest nservicebus.newtonsoft.json, so we can use v12 of newtonsoft.json
 
