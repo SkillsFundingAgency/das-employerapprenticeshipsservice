@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Portal.Client.Application.Queries;
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Portal.Client

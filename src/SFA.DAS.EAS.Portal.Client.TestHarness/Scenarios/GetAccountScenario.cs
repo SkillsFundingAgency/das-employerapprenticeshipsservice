@@ -1,4 +1,4 @@
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Portal.Types;
+﻿using SFA.DAS.EAS.Portal.Client.Types;
 using System;
 using System.Collections.Generic;
 

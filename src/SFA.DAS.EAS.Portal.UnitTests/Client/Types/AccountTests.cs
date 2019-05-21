@@ -2,7 +2,7 @@ using System;
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Client.Types

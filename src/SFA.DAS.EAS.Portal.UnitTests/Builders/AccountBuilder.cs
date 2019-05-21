@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Portal.Types;
+﻿using SFA.DAS.EAS.Portal.Client.Types;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Builders

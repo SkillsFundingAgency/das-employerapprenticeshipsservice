@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.CosmosDb;
 using SFA.DAS.EAS.Portal.Client.Data;
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Application.Queries
 {

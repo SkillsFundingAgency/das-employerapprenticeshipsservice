@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using System;
 using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 
             if (cohort == null)
             {
-                cohort = new Types.Cohort { Id = cohortReference };
+                cohort = new Client.Types.Cohort { Id = cohortReference };
                 account.Organisations.First().Cohorts.Add(cohort);
             }
             

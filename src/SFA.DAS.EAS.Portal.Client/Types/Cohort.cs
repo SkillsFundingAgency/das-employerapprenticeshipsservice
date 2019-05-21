@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EAS.Portal.Types
+namespace SFA.DAS.EAS.Portal.Client.Types
 {
     public class Cohort
     {

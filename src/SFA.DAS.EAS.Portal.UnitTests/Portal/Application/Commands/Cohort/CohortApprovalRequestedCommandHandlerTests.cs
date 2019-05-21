@@ -11,7 +11,7 @@ using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.UnitTests.Builders;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
@@ -125,7 +125,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 // arrange
                 var testContext = new TestContext();
                 string cohortReference = Guid.NewGuid().ToString();
-                Types.Cohort cohort = new CohortBuilder().WithId(cohortReference);
+                EAS.Portal.Client.Types.Cohort cohort = new CohortBuilder().WithId(cohortReference);
                 testContext.TestAccount.Organisations.First().Cohorts.Add(cohort);
                 testContext.TestCommitment.Reference = cohortReference;
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(1);
@@ -175,7 +175,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 var testContext = new TestContext();
                 string cohortReference = Guid.NewGuid().ToString();
                 Apprenticeship apprenticeship = new ApprenticeshipBuilder();
-                Types.Cohort cohort = new CohortBuilder()
+                EAS.Portal.Client.Types.Cohort cohort = new CohortBuilder()
                     .WithId(cohortReference)
                     .WithApprenticeship(apprenticeship);
                 testContext.TestAccount.Organisations.First().Cohorts.Add(cohort);

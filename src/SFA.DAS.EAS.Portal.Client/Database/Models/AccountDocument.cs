@@ -1,5 +1,5 @@
 using Newtonsoft.Json;
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 using System;
 
 namespace SFA.DAS.EAS.Portal.Client.Database.Models

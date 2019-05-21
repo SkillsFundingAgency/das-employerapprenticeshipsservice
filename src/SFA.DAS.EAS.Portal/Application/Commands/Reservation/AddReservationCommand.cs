@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
-using SFA.DAS.EAS.Portal.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
                 return;  // already handled 
             }
 
-            organisation.Reservations.Add(new Types.Reservation()
+            organisation.Reservations.Add(new Client.Types.Reservation()
             {
                 Id = reservedFunding.Id,
                 CourseCode = reservedFunding.CourseId,
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
         private static void CreateOrganisationWithReservation(AccountDocument accountDocument, ReservationCreatedEvent reservedFunding)
         {
-            var newOrg = new Types.Organisation()
+            var newOrg = new Organisation()
             {
                 Id = reservedFunding.AccountLegalEntityId,
                 Name = reservedFunding.AccountLegalEntityName
@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
             accountDocument.Account.Organisations.Add(newOrg);
 
-            newOrg.Reservations.Add(new Types.Reservation()
+            newOrg.Reservations.Add(new Client.Types.Reservation()
             {
                 Id = reservedFunding.Id,
                 CourseCode = reservedFunding.CourseId,
