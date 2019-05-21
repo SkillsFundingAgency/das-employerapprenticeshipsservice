@@ -12,9 +12,12 @@
 
 .dashboard-heading-company {
     margin-top: 0;
-    margin-bottom: .2em;
-    padding-bottom: .3em;
+    margin-bottom: 0;
+}
+
+hr.dashboard-heading-separator {
     border-bottom: 5px solid #bfc1c3;
+    margin: 10px 0;
 }
 
 .dashboard-section {
@@ -79,4 +82,42 @@
     .card > p {
         font-size: 16px;
     }
+}
+
+
+.das-favourites-link {
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    align-items: center;
+    color: $link-colour;
+    text-decoration: underline;
+    line-height: 1;
+    margin-top: 0;
+    margin-bottom: 0;
+
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+    }
+}
+
+.das-favourites-link__icon {
+    width: 1.6em;
+    height: 1.6em;
+    margin-right: 8px;
+
+    & > svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+}
+
+.das-favourites-link__text {
+    margin-top: 5px;
+}
+
+.das-favourites-link__count {
+    font-weight: bold;
 }

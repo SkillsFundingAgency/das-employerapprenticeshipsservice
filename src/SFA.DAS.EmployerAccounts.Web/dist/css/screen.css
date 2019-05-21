@@ -4739,9 +4739,11 @@ tr.total td {
 
 .dashboard-heading-company {
   margin-top: 0;
-  margin-bottom: .2em;
-  padding-bottom: .3em;
-  border-bottom: 5px solid #bfc1c3; }
+  margin-bottom: 0; }
+
+hr.dashboard-heading-separator {
+  border-bottom: 5px solid #bfc1c3;
+  margin: 10px 0; }
 
 .dashboard-section {
   border-bottom: 2px solid #bfc1c3;
@@ -4790,3 +4792,30 @@ tr.total td {
 @media (min-width: 641px) {
   .card > p {
     font-size: 16px; } }
+
+.das-favourites-link {
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  align-items: center;
+  color: #005ea5;
+  text-decoration: underline;
+  line-height: 1;
+  margin-top: 0;
+  margin-bottom: 0; }
+  .das-favourites-link:hover, .das-favourites-link:focus {
+    text-decoration: none; }
+
+.das-favourites-link__icon {
+  width: 1.6em;
+  height: 1.6em;
+  margin-right: 8px; }
+  .das-favourites-link__icon > svg {
+    width: 100%;
+    height: 100%;
+    display: block; }
+
+.das-favourites-link__text {
+  margin-top: 5px; }
+
+.das-favourites-link__count {
+  font-weight: bold; }
