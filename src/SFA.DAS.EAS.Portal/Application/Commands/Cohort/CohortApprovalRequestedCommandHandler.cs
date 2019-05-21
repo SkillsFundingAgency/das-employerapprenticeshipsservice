@@ -25,8 +25,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
         {
             var accountDocumentTask = _accountsService.Get(command.AccountId, cancellationToken);
             var commitmentTask = _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);
-            await Task.WhenAll(accountDocumentTask, commitmentTask);
-
+            
             var accountDocument = await accountDocumentTask;
             var account = accountDocument.Account;
             var commitment = await commitmentTask;
