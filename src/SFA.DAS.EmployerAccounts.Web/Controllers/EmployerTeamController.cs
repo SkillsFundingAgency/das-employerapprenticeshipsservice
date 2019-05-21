@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -53,12 +52,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled)
+            if (FeatureToggles.Features.HomePage.Enabled || response.Data.PayeSchemeCount == 0)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
+
+                return View("v2/Index", "_Layout_v2", response);
             }
 
             return View(response);
