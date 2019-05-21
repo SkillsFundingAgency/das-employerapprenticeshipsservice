@@ -9,9 +9,9 @@
 }
 
 @{
-    ViewBag.GaData.Vpv = Model.IsExistingAccount ? "/accounts/pensionregulator/search/results/select-your-pensiion-regulator-organisation" : "/onboarding/search/results/select-your-pension-regulator-organisation";
-    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "hidden";
-    var errorClass = Model?.GetType().GetProperty("InError") != null ? "error" : "";
+    ViewBag.GaData.Vpv = Model.IsExistingAccount ? "/accounts/pensionregulator/search/results/select-your-pension-regulator-organisation" : "/onboarding/search/results/select-your-pension-regulator-organisation";
+    var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "hidden";
+    var errorClass = ViewBag.InError != null && ViewBag.InError ? "error" : "";
 }
 
 <div class="grid-row">
@@ -29,9 +29,8 @@
             <div class="form-group @errorClass" id="pension-regulator-form">
                 <fieldset>
                     <legend class="form-label-bold">
-                        <span>Do you have everything you need?</span>
-                        <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
-                            You need your Government Gateway login details to access your levy funds
+                        <span class="error-message @hiddenClass" aria-hidden="true" id="have-not-selected-organisation">
+                            Please choose an organisation
                         </span>
                     </legend>
                     @for(int i = 0; i < Model.Results.Count; i++)
@@ -40,14 +39,17 @@
                             @Html.RadioButtonFor(m => m.SelectedOrganisation, Model.Results[i].ReferenceNumber, false)
                             @Html.HiddenFor(m => m.Results[i].Name)
                             @Html.HiddenFor(m => m.Results[i].ReferenceNumber)
+                            @Html.HiddenFor(m => m.Results[i].Status)
+                            @Html.HiddenFor(m => m.Results[i].Address)
+                            @Html.HiddenFor(m => m.Results[i].Type)
                             @Model.Results[i].Name
                         </label>
                     }
                 </fieldset>
                 <p>or</p>
                 <fieldset>
-                    <label for="not-listed" class="block-label">
-                        @Html.RadioButtonFor(m => m.SelectedOrganisation, string.Empty, false)
+                    <label class="block-label">
+                        @Html.RadioButtonFor(m => m.SelectedOrganisation, "!NotListed!", false)
                         My organisation is not listed
                     </label>
                 </fieldset>

@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -24,7 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
         private readonly IMediator _mediatr;
-        private IAuthorizationService _authorizationService;
         private const int AddPAYELater = 1;
         private const int AddPAYENow = 2;
 
@@ -33,14 +33,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr,
-            IAuthorizationService authorizationService)
+            IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
-            _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
         }
 
         [HttpGet]
@@ -292,6 +290,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             errorResponse.Status = response.Status;
 
             return View(errorResponse);
+        }
+
+        [HttpGet]
+        [Route("amendOrganisation")]
+        public async Task<ActionResult> AmendOrganisation()
+        {
+            var employerAccountOrganisationData = _employerAccountOrchestrator.GetCookieData().EmployerAccountOrganisationData;
+            if (employerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
+            {
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+            }
+            return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
         }
 
         private string GetUserId()

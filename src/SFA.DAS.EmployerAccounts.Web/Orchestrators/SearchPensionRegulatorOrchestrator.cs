@@ -6,7 +6,7 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.ReferenceData;
+using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
 using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
@@ -52,21 +52,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return _cookieService.Get(CookieName);
         }                
 
-        private IEnumerable<PensionRegulatorDetailsViewModel> CreateResult(IEnumerable<OrganisationName> organisations)
+        private IEnumerable<PensionRegulatorDetailsViewModel> CreateResult(IEnumerable<Organisation> organisations)
         {
-            return organisations.Select(ConvertToViewModel).ToList();
+            return organisations.Select(ConvertToViewModel);
         }
         
-        private PensionRegulatorDetailsViewModel ConvertToViewModel(OrganisationName organisation)
+        private PensionRegulatorDetailsViewModel ConvertToViewModel(Organisation organisation)
         {
             return new PensionRegulatorDetailsViewModel
             {
-                //Address = organisation.Address.FormatAddress(),
-                Name = organisation.Name,             
-                //DateOfInception = organisation.RegistrationDate,
-                ReferenceNumber = organisation.Code,    
-                                
-                //Sector = organisation.Sector
+                Name = organisation.Name,
+                Status = organisation.Status,
+                Address = organisation.Address.FormatAddress(),
+                ReferenceNumber = organisation.UniqueIdentity.ToString()
             };
         }      
     }

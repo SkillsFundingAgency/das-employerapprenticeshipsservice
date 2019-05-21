@@ -67,7 +67,7 @@
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.43" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.205" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
       <Version>1.6.472</Version>
     </PackageReference>
@@ -175,7 +175,6 @@
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
@@ -187,7 +186,6 @@
     <Compile Include="ViewModels\PayeSchemeDetailViewModel.cs" />
     <Compile Include="ViewModels\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
-    <Compile Include="ViewModels\AddLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />

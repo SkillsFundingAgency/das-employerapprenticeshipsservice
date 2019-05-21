@@ -1,6 +1,4 @@
-﻿using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Models.ReferenceData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {

@@ -19,6 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly SearchPensionRegulatorOrchestrator _orchestrator;   
         private readonly IMediator _mediatr;
+        private const string OrgNotListed = "!NotListed!";
 
         public SearchPensionRegulatorController(
             IAuthenticationService owinWrapper,
@@ -53,8 +54,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return RedirectToAction(ControllerConstants.SearchForOrganisationResultsActionName, ControllerConstants.SearchOrganisationControllerName);
                 }
                 case 1:
-                {
-                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First());
+                {                  
+                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
                 default:
@@ -68,13 +69,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
         public ActionResult SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
-        {
-            if (viewModel.SelectedOrganisation == null)
+        {    
+            if (string.IsNullOrWhiteSpace(viewModel.SelectedOrganisation))
             {
+                ViewBag.InError = true;
                 return View(ControllerConstants.SearchPensionRegulatorResultsViewName, viewModel);
             }
 
-            if (viewModel.SelectedOrganisation == string.Empty)
+            if (viewModel.SelectedOrganisation == OrgNotListed)
             {
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
@@ -83,11 +85,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (item == null) return View(ControllerConstants.SearchPensionRegulatorResultsViewName, viewModel);
 
-            SavePensionRegulatorOrganisationDataIfItHasAValidName(item);
+            SavePensionRegulatorOrganisationDataIfItHasAValidName(item, true);
             return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
-        private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel)
+        private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch)
         {
             if (viewModel?.Name != null)
             {
@@ -98,6 +100,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         {
                             OrganisationReferenceNumber = viewModel.ReferenceNumber,
                             OrganisationName = viewModel.Name,
+                            OrganisationType = viewModel.Type,                       
+                            OrganisationRegisteredAddress = viewModel.Address,
+                            OrganisationStatus = viewModel.Status ?? string.Empty,                     
+                            NewSearch = newSearch
                         }
                     ));
             }

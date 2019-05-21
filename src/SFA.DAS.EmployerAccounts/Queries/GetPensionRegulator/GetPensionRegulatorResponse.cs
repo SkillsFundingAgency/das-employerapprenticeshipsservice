@@ -1,10 +1,10 @@
-﻿using SFA.DAS.EmployerAccounts.Models.ReferenceData;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator
 {
     public class GetPensionRegulatorResponse
     {
-        public IEnumerable<OrganisationName> Organisations { get; set; }
+        public IEnumerable<Organisation> Organisations { get; set; }
     }
 }

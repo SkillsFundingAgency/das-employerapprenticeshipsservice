@@ -17,6 +17,7 @@
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
         public const string GetGovernmentFunding = "GetGovernmentFunding";
         public const string EmailClaimKeyName = "email";
+        public const string EmployerAccountViewName = "EmployerAccount";
         public const string EmployerAccountControllerName = "EmployerAccount";
         public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
         public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";
@@ -44,7 +45,14 @@
         public const string OrganisationAddedNextStepsSearchActionName = "OrganisationAddedNextStepsSearch";
         public const string OrganisationSharedControllerName = "OrganisationShared";
         public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
-        public const string PayeErrorActionName = "PayeError";            
+<<<<<<< HEAD
+        public const string PayeErrorActionName = "PayeError";      
+        public const string SearchPensionRegulatorControllerName = "SearchPensionRegulator";
+        public const string SearchPensionRegulatorActionName = "SearchPensionRegulator";
+        public const string SearchPensionRegulatorResultsViewName = "SearchPensionRegulatorResults";
+=======
+        public const string PayeErrorActionName = "PayeError";
+>>>>>>> AML-3567_AddAmendDetailsLinksToAccountConfirmationPage
         public const string PdfContentTypeName = "application/pdf";
         public const string RegisterUserActionName = "RegisterUser";
         public const string RemoveViewName = "Remove";
@@ -53,9 +61,6 @@
         public const string SearchForOrganisationViewName = "SearchForOrganisation";
         public const string SearchForOrganisationResultsActionName = "SearchForOrganisationResults";
         public const string SearchForOrganisationResultsViewName = "SearchForOrganisationResults";
-        public const string SearchPensionRegulatorControllerName = "SearchPensionRegulator";
-        public const string SearchPensionRegulatorActionName = "SearchPensionRegulator";
-        public const string SearchPensionRegulatorResultsViewName = "SearchPensionRegulatorResults";
         public const string ServiceStartPageViewName = "ServiceStartPage";
         public const string SetupAccountViewName = "SetupAccount";
         public const string SignAgreementViewName = "SignAgreement";
@@ -67,5 +72,7 @@
         public const string AmendOrganisationActionName = "AmendOrganisation";
         public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
+        public const string SearchPensionRegulatorControllerName = "SearchPensionRegulator";
+        public const string SearchPensionRegulatorActionName = "SearchPensionRegulator";
     }
 }

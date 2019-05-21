@@ -297,6 +297,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         [TestCase(OrganisationType.CompaniesHouse, Types.Models.OrganisationType.CompaniesHouse)]
         [TestCase(OrganisationType.PublicBodies, Types.Models.OrganisationType.PublicBodies)]
         [TestCase(OrganisationType.Other, Types.Models.OrganisationType.Other)]
+        [TestCase(OrganisationType.PensionsRegulator, Types.Models.OrganisationType.PensionsRegulator)]
         public async Task ThenAAddedLegalEntityEventIsPublished(OrganisationType inputOrganisationType, Types.Models.OrganisationType expectedOrganisationType)
         {
             const string organisationName = "Org";
@@ -327,7 +328,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             addedLegalEntityEvent.OrganisationReferenceNumber.Should().Be(ExpectedOrganisationReferenceNumber);
             addedLegalEntityEvent.OrganisationAddress.Should().Be(ExpectedOrganisationAddress);
             addedLegalEntityEvent.OrganisationType.Should().Be(expectedOrganisationType);
-            //addedLegalEntityEvent.Created.Should().Be(rightAboutNow);
         }
     }
 }

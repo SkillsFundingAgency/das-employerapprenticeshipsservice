@@ -1,0 +1,51 @@
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+using MediatR;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.Authentication;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
+
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.AmendOrganisation.Given_Multiple_Organisation_Were_Returned_From_Pensions_Regulator
+{
+    [TestFixture]
+    public class WhenIAmendTheOrganisation
+    {
+        private EmployerAccountController _employerAccountController;
+
+        [SetUp]
+        public void Setup()
+        {
+            var orchestrator = new Mock<EmployerAccountOrchestrator>();
+            orchestrator.Setup(x => x.GetCookieData()).Returns(new EmployerAccountData
+            {
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData { OrganisationType = OrganisationType.PensionsRegulator, PensionsRegulatorReturnedMultipleResults = true }
+            });
+
+            _employerAccountController = new EmployerAccountController(
+                Mock.Of<IAuthenticationService>(),
+                orchestrator.Object,
+                Mock.Of<IMultiVariantTestingService>(),
+                Mock.Of<ILog>(),
+                Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
+                Mock.Of<IMediator>());
+        }
+
+        [Test]
+        public async Task ThenTheChooseOrganisationPageIsDisplayed()
+        {
+            var response = await _employerAccountController.AmendOrganisation();
+            var redirectResponse = (RedirectToRouteResult)response;
+
+            Assert.AreEqual(ControllerConstants.SearchPensionRegulatorActionName, redirectResponse.RouteValues["action"].ToString());
+            Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResponse.RouteValues["controller"].ToString());
+        }
+    }
+}

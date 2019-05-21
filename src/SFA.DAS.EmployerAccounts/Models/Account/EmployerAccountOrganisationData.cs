@@ -14,5 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public string OrganisationStatus { get; set; }
         public string Sector { get; set; }
         public bool NewSearch { get; set; }
+        public bool PensionsRegulatorReturnedMultipleResults { get; set; }
     }
 }
