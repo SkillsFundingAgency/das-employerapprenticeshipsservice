@@ -11,7 +11,7 @@ Scenario: Inactivity-period
 		| 999000604   | 40000      | 17-18        | 4             | 1                | 2017-08-15     | 2017-08-23  |		
 		| 999000605   | 47500      | 17-18        | 7             | 1                | 2017-11-15     | 2017-11-23  |
 		| 999000606   | 57500      | 17-18        | 8             | 1                | 2017-12-15     | 2017-12-23  |		
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 01/2018
 	And all the transaction lines in this scenario have had their transaction date updated to the specified created date
 	Then we should see a level 1 screen with a balance of 63250 on the 12/2017
 	And we should see a level 1 screen with a total levy of 8250 on the 11/2017

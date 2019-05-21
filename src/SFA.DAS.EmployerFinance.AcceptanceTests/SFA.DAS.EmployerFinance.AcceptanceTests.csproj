@@ -20,7 +20,8 @@
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
-    <PackageReference Include="SpecFlow" Version="2.4.0" />
+    <PackageReference Include="SpecFlow" Version="2.4.1" />
+    <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="2.4.1" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
@@ -50,59 +51,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Features\Expired-funds.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Expired-funds.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Late-Accounts.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Late-accounts.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-01-Single-PAYE-no-adjustments.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-02-Seasonal-variations-single-PAYE.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-02-Seasonal-variations-single-PAYE.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-04-a-In-year-adjustment-results-in-balance-change.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-04-a-In-year-adjustment-results-in-balance-change.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-05-Adjustment-to-prior-tax-year.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-05-Adjustment-to-prior-tax-year.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-06-Period-of-inactivity.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-06-Period-of-inactivity.feature</DependentUpon>
-    </Compile>
-    <Compile Update="Features\Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="App.Debug.config">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>App.config</DependentUpon>
@@ -112,44 +60,34 @@
       <DependentUpon>App.config</DependentUpon>
     </None>
     <None Update="Features\Expired-funds.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Expired-funds.feature.cs</LastGenOutput>
+      <Generator></Generator>
     </None>
     <None Update="Features\Late-accounts.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Late-accounts.feature.cs</LastGenOutput>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-01-Single-PAYE-no-adjustments.feature">
-      <LastGenOutput>Scenario-01-Single-PAYE-no-adjustments.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-02-Seasonal-variations-single-PAYE.feature">
-      <LastGenOutput>Scenario-02-Seasonal-variations-single-PAYE.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature">
-      <LastGenOutput>Scenario-03-Multiple-EPS-submissions-for-month-within-submission-window.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-04-a-In-year-adjustment-results-in-balance-change.feature">
-      <LastGenOutput>Scenario-04-a-In-year-adjustment-results-in-balance-change.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature">
-      <LastGenOutput>Scenario-04-b-In-year-adjustments-no-change-to-current-balance.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-05-Adjustment-to-prior-tax-year.feature">
-      <LastGenOutput>Scenario-05-Adjustment-to-prior-tax-year.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-06-Period-of-inactivity.feature">
-      <LastGenOutput>Scenario-06-Period-of-inactivity.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
     <None Update="Features\Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature">
-      <LastGenOutput>Scenario-07-No-Payment-for-Period-and-Ceased-PAYE-Scheme.feature.cs</LastGenOutput>
-      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <Generator></Generator>
     </None>
   </ItemGroup>
 
