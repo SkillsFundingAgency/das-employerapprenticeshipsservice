@@ -13,6 +13,8 @@
 
 ## Todo
 
+* with the current project structure, we should be able to move all of SFA.DAS.EAS.Portal into SFA.DAS.EAS.Portal.Worker
+
 * issue with singleton webjob in AT:
 actually, it's behaving as it's been told - only 1 instance of the job at once, but each host kicks off the job
 we can probably leave as is, as the webjob is idempotent, but we could clean it up so that it only runs in 1 host
