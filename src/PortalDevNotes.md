@@ -13,6 +13,8 @@
 
 ## Todo
 
+* ask devops to have separate build & release for portal solution
+
 * with the current project structure, we should be able to move all of SFA.DAS.EAS.Portal into SFA.DAS.EAS.Portal.Worker
 
 * issue with singleton webjob in AT:
