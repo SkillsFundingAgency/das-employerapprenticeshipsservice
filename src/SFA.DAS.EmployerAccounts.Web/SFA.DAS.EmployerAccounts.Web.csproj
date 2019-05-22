@@ -157,8 +157,6 @@
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
-    <Compile Include="Helpers\HomepagePanelViewHelper.cs" />
-    <Compile Include="Helpers\IHomepagePanelViewHelper.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />

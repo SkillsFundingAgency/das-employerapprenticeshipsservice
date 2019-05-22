@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
-        private readonly INextActionPanelViewHelper _homepagePanelViewHelper;
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IHashingService _hashingService;
@@ -41,12 +40,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            INextActionPanelViewHelper homepagePanelViewHelper,
             IPortalClient portalClient,
             IHashingService hashingService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _homepagePanelViewHelper = homepagePanelViewHelper;
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
             _hashingService = hashingService;
