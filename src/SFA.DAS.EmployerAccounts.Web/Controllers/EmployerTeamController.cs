@@ -1,4 +1,4 @@
-﻿using System;
+﻿﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -11,6 +11,11 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -56,13 +61,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
+                response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
 
                 return View("v2/Index", "_Layout_v2", response);
             }
-
             return View(response);
+
         }
 
         [HttpGet]
@@ -299,7 +307,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
-            var viewModel = _homepagePanelViewHelper.GetNextAction(model);
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
+            if (model.AgreementsToSign)
+            {
+                viewModel.ViewName = "SignAgreement";
+            }
+            else if (model.ShowReservations) 
+            {
+                viewModel.ViewName = "FundingComplete";
+            }
+            else if(model.RecentlyAddedReservationId != null)
+            {
+                viewModel.ViewName = "NotCurrentlyInStorage";
+            }
+            else if(model.PayeSchemeCount == 0)
+            {
+                viewModel.ViewName = "AddPAYE";
+            }
             return PartialView(viewModel);
         }
 
@@ -393,6 +417,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return response;
         }
+        [ChildActionOnly]
+        public ActionResult SearchBar()
+        {
+            return PartialView();
+        }
+        [ChildActionOnly]
+        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
         {
