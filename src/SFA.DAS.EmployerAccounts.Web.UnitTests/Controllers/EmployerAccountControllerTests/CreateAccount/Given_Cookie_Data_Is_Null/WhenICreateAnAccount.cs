@@ -7,9 +7,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -18,7 +16,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_New_Journey_Is_Enabled.Given_Cookie_Data_Is_Null
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_Cookie_Data_Is_Null
 {
     class WhenICreateAnAccount : ControllerTestBase
     {
@@ -36,8 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            new Mock<IAuthorizationService>();
+            _owinWrapper = new Mock<IAuthenticationService>();          
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -66,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator.Setup(x => x.GetCookieData())
                        .Returns((EmployerAccountData)null);
-
+       
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
