@@ -10,7 +10,7 @@
         <h1 class="govuk-heading-m das-account__title">Your employer account</h1>
         <h2 class="govuk-heading-l das-account__account-name">@Model.Data.Account.Name</h2>
         <a href="@Url.FavouritesAction()" class="das-favourites-link govuk-body">
-            <span class="das-favourites-link__icon"><img src="/images/favourite-unchecked-black.svg" alt=""></span>
+            <span class="das-favourites-link__icon"><img src="@Html.CdnLink("images", "favourite-unchecked-black.svg")" alt=""></span>
             <span class="das-favourites-link__text">View saved favourites</span>
         </a>
 </div>
