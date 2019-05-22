@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -14,7 +15,8 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
-    class WhenIViewNextSteps
+    [TestFixture]
+    class WhenIViewPanel2OfHomepage
     {
         private EmployerTeamController _controller;
         private Mock<EmployerTeamOrchestrator> _orchestrator;
@@ -50,46 +52,40 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 _hashingServiceMock.Object);
         }
 
-        [Test]
-        public void ThenIShouldBeToldIfTheUserCanStillSeeTheUserWizard()
+        [Test, Category("UnitTest")]
+        public void WhenNoPayeSchemeAdded_ShouldNotBeAbleToSetProviderPermissions()
         {
             //Arrange
-            const string userId = "123";
-            const string hashedAccountId = "ABC123";
-
-            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(true);
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 0
+            };
 
             //Act
-            var result = _controller.NextSteps(hashedAccountId).Result as ViewResult;
-            var model = result?.Model as OrchestratorResponse<InviteTeamMemberNextStepsViewModel>;
+            var result = _controller.Row1Panel2(model) as PartialViewResult;
+            var viewModel = result?.Model as PanelViewModel<AccountDashboardViewModel>;
 
             //Assert
             Assert.IsNotNull(model);
-            Assert.IsTrue(model.Data.UserShownWizard);
-            _orchestrator.Verify(x => x.UserShownWizard(userId, hashedAccountId), Times.Once);
+            viewModel.ViewName.Should().Be("ProviderPermissionsDenied");
         }
 
-        [Test]
-        public void ThenIShouldBeToldIfTheUserCanStillSeeTheUserWizardWhenIMakeAnIncorrectStepSelection()
+        [Test, Category("UnitTest")]
+        public void WhenPayeSchemeExists_ShouldBeAbleToSetProviderPermissions()
         {
             //Arrange
-            const string userId = "123";
-            const string hashedAccountId = "ABC123";
-
-            _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
-            _orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
-                         .ReturnsAsync(true);
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1
+            };
 
             //Act
-            var result = _controller.NextSteps(hashedAccountId).Result as ViewResult;
-            var model = result?.Model as OrchestratorResponse<InviteTeamMemberNextStepsViewModel>;
+            var result = _controller.Row1Panel2(model) as PartialViewResult;
+            var viewModel = result?.Model as PanelViewModel<AccountDashboardViewModel>;
 
             //Assert
             Assert.IsNotNull(model);
-            Assert.IsTrue(model.Data.UserShownWizard);
-            _orchestrator.Verify(x => x.UserShownWizard(userId, hashedAccountId), Times.Once);
+            viewModel.ViewName.Should().Be("ProviderPermissions");
         }
     }
 }
