@@ -426,6 +426,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult MostActiveLinks(AccountDashboardViewModel model)
         {
             return PartialView(model);
+        }
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
         {
