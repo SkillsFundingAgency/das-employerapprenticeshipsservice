@@ -18,13 +18,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly ICookieStorageService<EmployerAccountData> _cookieService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
+        protected SearchPensionRegulatorOrchestrator()
+        {
+
+        }
+
         public SearchPensionRegulatorOrchestrator(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService)
             : base(mediator)
         {
             _cookieService = cookieService;
         }
 
-        public async Task<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>> SearchPensionRegulator(string payeRef, string hashedAccountId, string userId)
+        public virtual async Task<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>> SearchPensionRegulator(string payeRef)
         {
             var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>();
 

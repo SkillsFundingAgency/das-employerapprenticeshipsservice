@@ -44,18 +44,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName);
             }
 
-            var model = await _orchestrator.SearchPensionRegulator(payeRef, hashedAccountId, OwinWrapper.GetClaimValue(@"sub"));
+            var model = await _orchestrator.SearchPensionRegulator(payeRef);
             model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
             switch (model.Data.Results.Count)
             {
                 case 0:
                 {
-                    return RedirectToAction(ControllerConstants.SearchForOrganisationResultsActionName, ControllerConstants.SearchOrganisationControllerName);
+                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
                 }
                 case 1:
                 {                  
-                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true);
+                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
                 default:
@@ -85,11 +85,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (item == null) return View(ControllerConstants.SearchPensionRegulatorResultsViewName, viewModel);
 
-            SavePensionRegulatorOrganisationDataIfItHasAValidName(item, true);
+            SavePensionRegulatorOrganisationDataIfItHasAValidName(item, true, true);
             return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
-        private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch)
+        private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
         {
             if (viewModel?.Name != null)
             {
@@ -103,7 +103,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                             OrganisationType = viewModel.Type,                       
                             OrganisationRegisteredAddress = viewModel.Address,
                             OrganisationStatus = viewModel.Status ?? string.Empty,                     
-                            NewSearch = newSearch
+                            NewSearch = newSearch,
+                            PensionsRegulatorReturnedMultipleResults = multipleResults
                         }
                     ));
             }
