@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Name = organisation.Name,
                 Status = organisation.Status,
                 Address = organisation.Address.FormatAddress(),
-                ReferenceNumber = organisation.UniqueIdentity.ToString()
+                ReferenceNumber = organisation.UniqueIdentity
             };
         }      
     }

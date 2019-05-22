@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly SearchPensionRegulatorOrchestrator _orchestrator;   
         private readonly IMediator _mediatr;
-        private const string OrgNotListed = "!NotListed!";
+        private const int OrgNotListed = 0;
 
         public SearchPensionRegulatorController(
             IAuthenticationService owinWrapper,
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("pensionregulator", Order = 1)]
         public ActionResult SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
         {    
-            if (string.IsNullOrWhiteSpace(viewModel.SelectedOrganisation))
+            if (!viewModel.SelectedOrganisation.HasValue)
             {
                 ViewBag.InError = true;
                 return View(ControllerConstants.SearchPensionRegulatorResultsViewName, viewModel);
@@ -98,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     (
                         new EmployerAccountOrganisationData
                         {
-                            OrganisationReferenceNumber = viewModel.ReferenceNumber,
+                            OrganisationReferenceNumber = viewModel.ReferenceNumber.ToString(),
                             OrganisationName = viewModel.Name,
                             OrganisationType = viewModel.Type,                       
                             OrganisationRegisteredAddress = viewModel.Address,

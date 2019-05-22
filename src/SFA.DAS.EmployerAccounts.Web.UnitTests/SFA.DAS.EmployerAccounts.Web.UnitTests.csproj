@@ -25,4 +25,8 @@
     <Reference Include="System.Web" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\SearchPensionRegulatorController\" />
+  </ItemGroup>
+
 </Project>
