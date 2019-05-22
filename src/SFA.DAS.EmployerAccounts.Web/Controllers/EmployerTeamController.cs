@@ -350,7 +350,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
+            if (model.PayeSchemeCount == 0)
+            {
+                viewModel.ViewName = "PreAgreementRecruitment";
+            }
+            return PartialView(viewModel);
         }
 
         [ChildActionOnly]
@@ -390,6 +395,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+        [ChildActionOnly]
+        public ActionResult PreAgreementRecruitment(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
