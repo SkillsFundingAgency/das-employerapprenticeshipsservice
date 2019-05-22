@@ -320,6 +320,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "NotCurrentlyInStorage";
             }
+            else if(model.PayeSchemeCount == 0)
+            {
+                viewModel.ViewName = "AddPAYE";
+            }
             return PartialView(viewModel);
         }
 
