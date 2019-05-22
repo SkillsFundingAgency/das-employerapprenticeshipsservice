@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || response.Data.PayeSchemeCount == 0)
+            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
@@ -392,6 +392,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
+        }
+
+        private bool HasPayeScheme(AccountDashboardViewModel data)
+        {
+            return data.PayeSchemeCount > 0;
         }
     }
 }
