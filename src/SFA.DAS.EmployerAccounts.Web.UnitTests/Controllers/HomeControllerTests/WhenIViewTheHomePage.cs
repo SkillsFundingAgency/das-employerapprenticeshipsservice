@@ -14,7 +14,6 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SignInUserViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.SignInUserViewModel;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -24,8 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         private HomeController _homeController;
         private Mock<HomeOrchestrator> _homeOrchestrator;
         private EmployerAccountsConfiguration _configuration;
-        private string ExpectedUserId = "123ABC";
-        private Mock<IAuthorizationService> _featureToggle;
+        private string ExpectedUserId = "123ABC";     
         private Mock<IMultiVariantTestingService> _userTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private Mock<IDependencyResolver> _dependancyResolver;
@@ -69,12 +67,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             _dependancyResolver.Setup(r => r.GetService(typeof(EmployerAccountsConfiguration))).Returns(_configuration);
 
             DependencyResolver.SetResolver(_dependancyResolver.Object);
-
-            _featureToggle = new Mock<IAuthorizationService>();
+         
             _userTestingService = new Mock<IMultiVariantTestingService>();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, _homeOrchestrator.Object, _configuration, _featureToggle.Object,
+                _owinWrapper.Object, _homeOrchestrator.Object, _configuration, 
                 _userTestingService.Object, _flashMessage.Object)
             {
                 Url = new UrlHelper()

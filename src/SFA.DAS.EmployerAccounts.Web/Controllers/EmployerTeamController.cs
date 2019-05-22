@@ -334,12 +334,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
-            if (model.AgreementsToSign)
-            {
-                viewModel.ViewName = "EarlyRecruitment";
-            }
-            return PartialView(viewModel);
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
         }
 
         [ChildActionOnly]
@@ -404,11 +399,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
         [ChildActionOnly]
         public ActionResult MostActiveLinks(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-        [ChildActionOnly]
-        public ActionResult EarlyRecruitment(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
