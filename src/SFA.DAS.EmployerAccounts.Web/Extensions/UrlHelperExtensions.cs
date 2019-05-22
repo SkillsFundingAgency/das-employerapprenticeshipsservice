@@ -78,6 +78,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return Action(baseUrl, path);
         }
 
+        public static string FavouritesAction(this UrlHelper helper, string path = "")
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerFavouritesBaseUrl;
+
+            return AccountAction(helper, baseUrl, path);
+        }
+
         private static string AccountAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];

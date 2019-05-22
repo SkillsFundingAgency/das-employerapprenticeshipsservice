@@ -30,7 +30,7 @@ else
     </h1>
     <p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
 
-    <a href="" class="das-favourites-link govuk-body">
+    <a href="@Url.FavouritesAction()" class="das-favourites-link govuk-body">
         <span class="das-favourites-link__icon">
         <svg class="icon" focusable="false" aria-hidden="true">
             <use xlink:href="#icon-favourite" />
@@ -80,7 +80,7 @@ else
                 </div>
                 <div class="cards">
                     <div class="card">
-                        <h3 class="heading-medium"><a href="#">Manage your funds</a></h3>
+                        <h3 class="heading-medium"><a href="@Url.ReservationsAction("reservations/manage")>Manage your funds</a></h3>
                         <p>Reserve and manage funding.</p>
                     </div>
                     <div class="card">
