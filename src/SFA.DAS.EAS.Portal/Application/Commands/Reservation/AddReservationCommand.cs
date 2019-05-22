@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EAS.Portal.Application.Commands.Account;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
@@ -12,11 +13,16 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
     public class AddReservationCommand
     {
         private readonly IAccountDocumentService _accountsService;
+        private readonly ICommandHandler<AccountCreatedCommand> _accountCreatedHandler;
         private readonly ILogger<AddReservationCommand> _logger;
 
-        public AddReservationCommand(IAccountDocumentService accountsService, ILogger<AddReservationCommand> logger)
+        public AddReservationCommand(
+            IAccountDocumentService accountsService,
+            ICommandHandler<AccountCreatedCommand> accountCreatedHandler,
+            ILogger<AddReservationCommand> logger)
         {
             _accountsService = accountsService;
+            _accountCreatedHandler = accountCreatedHandler;
             _logger = logger;
         }
 
@@ -24,26 +30,18 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
         {
             _logger.LogInformation("Executing AddReservationCommand");
 
+            await _accountCreatedHandler.Handle(new AccountCreatedCommand(reservedFunding.AccountId, reservedFunding.AccountLegalEntityName), cancellationToken);
+
             var accountDocument = await _accountsService.Get(reservedFunding.AccountId, cancellationToken);
 
-            if (accountDocument == null)
+            var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(reservedFunding.AccountLegalEntityId));
+            if (org == null)
             {
-                accountDocument = AccountDocument.Create(reservedFunding.AccountId);
-                accountDocument.Account.Name = reservedFunding.AccountLegalEntityName;
-
                 CreateOrganisationWithReservation(accountDocument, reservedFunding);
             }
             else
             {
-                var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(reservedFunding.AccountLegalEntityId));
-                if (org == null)
-                {
-                    CreateOrganisationWithReservation(accountDocument, reservedFunding);
-                }
-                else
-                {
-                    UpdateOrganisationWithReservation(org, reservedFunding);
-                }
+                UpdateOrganisationWithReservation(org, reservedFunding);
             }
 
             await _accountsService.Save(accountDocument, cancellationToken);

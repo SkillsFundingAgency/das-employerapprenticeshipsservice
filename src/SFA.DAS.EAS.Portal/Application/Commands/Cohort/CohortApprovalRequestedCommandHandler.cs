@@ -5,6 +5,8 @@ using System.Linq;
 using System;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EAS.Portal.Application.Commands.Account;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
@@ -12,28 +14,45 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
     {
         private readonly IAccountDocumentService _accountsService;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
+        private readonly ICommandHandler<AccountCreatedCommand> _accountCreatedHandler;
+        private readonly IHashingService _hashingService;
 
         public CohortApprovalRequestedCommandHandler(
             IAccountDocumentService accountsService, 
-            IProviderCommitmentsApi providerCommitmentsApi)
+            IProviderCommitmentsApi providerCommitmentsApi,
+            ICommandHandler<AccountCreatedCommand> accountCreatedHandler,
+            IHashingService hashingService)
         {
             _accountsService = accountsService;
             _providerCommitmentsApi = providerCommitmentsApi;
+            _accountCreatedHandler = accountCreatedHandler;
+            _hashingService = hashingService;
         }
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
-            var accountDocumentTask = _accountsService.Get(command.AccountId, cancellationToken);
-            var commitmentTask = _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);
-            
-            var accountDocument = await accountDocumentTask;
-            var account = accountDocument.Account;
-            var commitment = await commitmentTask;
+            var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            
+            long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
-            var cohortReference = commitment.Reference;            
-            // TODO: there is an assumption there is only one Organisation (which is true for the initial development) but in the furture may not be true based on the events we will receive.
-            // Will be covered by tech debt / additional story to cover handling multiple organisations in the future.
-            var cohort = account.Organisations.First().Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortReference, StringComparison.OrdinalIgnoreCase));
+            await _accountCreatedHandler.Handle(new AccountCreatedCommand(command.AccountId, commitment.LegalEntityName), cancellationToken);
+
+            var accountDocument = await _accountsService.Get(command.AccountId, cancellationToken);           
+            var account = accountDocument.Account;
+            var cohortReference = commitment.Reference;
+
+            var organisation = account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(accountLegalEntityId));
+            if (organisation == null)
+            {
+                organisation = new Organisation()
+                {
+                    AccountLegalEntityId = accountLegalEntityId,
+                    Name = commitment.LegalEntityName
+                };
+
+                account.Organisations.Add(organisation);
+            }
+
+            var cohort = organisation.Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortReference, StringComparison.OrdinalIgnoreCase));
 
             if (cohort == null)
             {

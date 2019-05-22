@@ -21,10 +21,13 @@ namespace SFA.DAS.EAS.Portal.Application.Services
 
         public Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
         {
-            accountDocument.DeleteOldMessages();
-            if (accountDocument.IsMessageProcessed(_messageContext.Id)) { return Task.CompletedTask; };
+            if (!accountDocument.IsNew) // We ignore for new accounts because the messageContext.Id is the Id for an event not related to account creation
+            {
+                accountDocument.DeleteOldMessages();
+                if (accountDocument.IsMessageProcessed(_messageContext.Id)) { return Task.CompletedTask; };
 
-            accountDocument.AddOutboxMessage(_messageContext.Id, _messageContext.CreatedDateTime);         
+                accountDocument.AddOutboxMessage(_messageContext.Id, _messageContext.CreatedDateTime);
+            }
 
             return _accountDocumentService.Save(accountDocument, cancellationToken);
         }

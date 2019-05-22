@@ -6,6 +6,8 @@ using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Commands.Reservation;
 using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Configuration;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Portal.DependencyResolution
 {
@@ -14,14 +16,20 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddTransient<AddReservationCommand>();
-            var configuration = services.BuildServiceProvider().GetService<IConfiguration>();
+            var serviceProvider = services.BuildServiceProvider();
+            var configuration = serviceProvider.GetService<IConfiguration>();
 
             services.AddCommitmentsApiConfiguration(configuration);
 
+            // hashing service config            
+            var hashServiceConfig = configuration.GetPortalSection<HashingServiceConfiguration>(PortalSections.HashingService);            
+            services.AddSingleton<IHashingService>(s => new HashingService.HashingService(hashServiceConfig.AccountLegalEntityPublicAllowedCharacters, hashServiceConfig.AccountLegalEntityPublicHashstring));
+            
             services.AddScoped<IMessageContext, MessageContext>();            
             services.AddTransient<IAccountDocumentService, AccountDocumentService>();                        
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithSetProperties>();
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithDuplicateCheck>();
+
             services.AddTransient<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>, CohortAdapter>();
 
             // Register all ICommandHandler<> types
