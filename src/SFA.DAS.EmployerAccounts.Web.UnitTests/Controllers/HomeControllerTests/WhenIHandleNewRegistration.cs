@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             _configuration = new EmployerAccountsConfiguration();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, Mock.Of<HomeOrchestrator>(), _configuration, Mock.Of<IAuthorizationService>(),
+                _owinWrapper.Object, Mock.Of<HomeOrchestrator>(), _configuration,
                 Mock.Of<IMultiVariantTestingService>(), Mock.Of<ICookieStorageService<FlashMessageViewModel>>());
         }
 

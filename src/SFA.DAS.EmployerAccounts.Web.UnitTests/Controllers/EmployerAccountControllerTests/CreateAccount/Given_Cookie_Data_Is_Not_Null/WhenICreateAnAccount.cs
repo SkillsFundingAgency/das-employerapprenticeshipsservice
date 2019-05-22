@@ -8,18 +8,17 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_New_Journey_Is_Not_Enabled.Given_Cookie_Data_Is_Not_Null
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_Cookie_Data_Is_Not_Null
 {
     class WhenICreateAnAccount : ControllerTestBase
     {
@@ -40,8 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            new Mock<IAuthorizationService>();
+            _owinWrapper = new Mock<IAuthenticationService>();         
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -86,23 +84,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
-
-            var mockAuthorization = new Mock<IAuthorizationService>();
-
-            mockAuthorization
-                .Setup(
-                    m =>
-                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(false);
-
+       
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
                 _userViewTestingService.Object,
                 logger.Object,
                 _flashMessage.Object,
-                Mock.Of<IMediator>(),
-                mockAuthorization.Object)
+                Mock.Of<IMediator>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
@@ -110,14 +99,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenIShouldGoBackToTheEmployerTeamPage()
+        public async Task ThenIShouldGoToTheHomePage()
         {
             //Act
             var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual("Index", result.RouteValues["Action"]);
-            Assert.AreEqual("EmployerTeam", result.RouteValues["Controller"]);
+            Assert.AreEqual(ControllerConstants.IndexActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.RouteValues["Controller"]);
         }
 
         [Test]
