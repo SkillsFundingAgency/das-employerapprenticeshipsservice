@@ -325,7 +325,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
             if (model.PayeSchemeCount == 0)
             {
-                viewModel.ViewName = "PrePAYERecruitment";
+                viewModel.ViewName = "PrePayeRecruitment";
             }
             return PartialView(viewModel);
         }

@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             var viewName = "CheckFunding";
             if (model.PayeSchemeCount == 0)
             {
-                viewName = "AddPAYE";
+                viewName = "AddPaye";
             }
             else
             {
