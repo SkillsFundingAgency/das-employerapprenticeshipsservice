@@ -8,7 +8,7 @@ Scenario: Future-submission
 		| 999000412 | 20000      | 17-18        | 2             | 1                | 2017-05-16     | 2017-06-23  |
 		| 999000413 | 30000      | 17-18        | 3             | 1                | 2017-07-15     | 2017-07-23  |			
 		| 999000414 | 40000      | 17-18        | 4             | 1                | 2017-08-17     | 2017-08-23  |	
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 09/2017
 	And all the transaction lines in this scenario have had their transaction date updated to the specified created date
 	Then we should see a level 1 screen with a balance of 44000 on the 08/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 05/2017
@@ -30,7 +30,7 @@ Scenario: Late-submissions
 		| 999000420   | 31250      | 17-18        | 3             | 1                | 2017-09-15     | 2017-09-23  |			
 		| 999000421   | 41250      | 17-18        | 4             | 1                | 2017-09-17     | 2017-09-23  |		
 		| 999000422   | 51250      | 17-18        | 5             | 1                | 2017-09-17     | 2017-09-23  |		
-	When we refresh levy data for paye scheme
+	When we refresh levy data for paye scheme on the 10/2017
 	And all the transaction lines in this scenario have had their transaction date updated to the specified created date
 	Then we should see a level 1 screen with a balance of 56375 on the 08/2017
 	And we should see a level 1 screen with a total levy of 11000 on the 08/2017

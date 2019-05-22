@@ -80,7 +80,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 4
  testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table1 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table23 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
                         "LevyDueYtd",
                         "Payroll_Year",
@@ -88,7 +88,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "English_Fraction",
                         "SubmissionDate",
                         "CreatedDate"});
-            table1.AddRow(new string[] {
+            table23.AddRow(new string[] {
                         "999000411",
                         "10000",
                         "17-18",
@@ -96,7 +96,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-05-15",
                         "2017-05-23"});
-            table1.AddRow(new string[] {
+            table23.AddRow(new string[] {
                         "999000412",
                         "20000",
                         "17-18",
@@ -104,7 +104,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-05-16",
                         "2017-06-23"});
-            table1.AddRow(new string[] {
+            table23.AddRow(new string[] {
                         "999000413",
                         "30000",
                         "17-18",
@@ -112,7 +112,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-07-15",
                         "2017-07-23"});
-            table1.AddRow(new string[] {
+            table23.AddRow(new string[] {
                         "999000414",
                         "40000",
                         "17-18",
@@ -121,9 +121,9 @@ this.ScenarioInitialize(scenarioInfo);
                         "2017-08-17",
                         "2017-08-23"});
 #line 5
- testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table1, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table23, "And ");
 #line 11
- testRunner.When("we refresh levy data for paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 09/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 12
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to the specified created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
@@ -156,7 +156,7 @@ this.ScenarioInitialize(scenarioInfo);
 #line 22
  testRunner.Given("We have an account with a paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-            TechTalk.SpecFlow.Table table2 = new TechTalk.SpecFlow.Table(new string[] {
+            TechTalk.SpecFlow.Table table24 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
                         "LevyDueYtd",
                         "Payroll_Year",
@@ -164,7 +164,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "English_Fraction",
                         "SubmissionDate",
                         "CreatedDate"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000415",
                         "10000",
                         "17-18",
@@ -172,7 +172,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-05-15",
                         "2017-05-23"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000416",
                         "20000",
                         "17-18",
@@ -180,7 +180,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-06-16",
                         "2017-06-23"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000417",
                         "30000",
                         "17-18",
@@ -188,7 +188,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-07-15",
                         "2017-07-23"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000418",
                         "40000",
                         "17-18",
@@ -196,7 +196,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-08-17",
                         "2017-08-23"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000419",
                         "21250",
                         "17-18",
@@ -204,7 +204,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-09-16",
                         "2017-09-23"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000420",
                         "31250",
                         "17-18",
@@ -212,7 +212,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-09-15",
                         "2017-09-23"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000421",
                         "41250",
                         "17-18",
@@ -220,7 +220,7 @@ this.ScenarioInitialize(scenarioInfo);
                         "1",
                         "2017-09-17",
                         "2017-09-23"});
-            table2.AddRow(new string[] {
+            table24.AddRow(new string[] {
                         "999000422",
                         "51250",
                         "17-18",
@@ -229,9 +229,9 @@ this.ScenarioInitialize(scenarioInfo);
                         "2017-09-17",
                         "2017-09-23"});
 #line 23
- testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table2, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table24, "And ");
 #line 33
- testRunner.When("we refresh levy data for paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 10/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 34
  testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
                     "d to the specified created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
