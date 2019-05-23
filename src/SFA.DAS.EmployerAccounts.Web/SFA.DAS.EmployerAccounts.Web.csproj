@@ -715,7 +715,8 @@
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
     <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\AddPAYE.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\PrePayeRecruitment.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\AddPaye.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
   </ItemGroup>
   <ItemGroup>

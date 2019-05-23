@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Helpers
             var nextAction = _sut.GetNextAction(_accountDashboardModel);
 
             // Assert
-            nextAction.ViewName.Should().Be("AddPAYE");
+            nextAction.ViewName.Should().Be("AddPaye");
         }
     }
 }
