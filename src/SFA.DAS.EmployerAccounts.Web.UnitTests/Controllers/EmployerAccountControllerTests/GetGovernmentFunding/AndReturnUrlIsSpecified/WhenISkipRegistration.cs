@@ -8,23 +8,21 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
-{
-    class WhenISkipRegistrationAndAReturnUrlIsSpecified : ControllerTestBase
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetGovernmentFunding.AndReturnUrlIsSpecified
+{ 
+    class WhenISkipRegistration : ControllerTestBase
     {
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
-        private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAccountViewModel> _response;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private Mock<ICookieStorageService<ReturnUrlModel>> _returnUrlCookieStorage;

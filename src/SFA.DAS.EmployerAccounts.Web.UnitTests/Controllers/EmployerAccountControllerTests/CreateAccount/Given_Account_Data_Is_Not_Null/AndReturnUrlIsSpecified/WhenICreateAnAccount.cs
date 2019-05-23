@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenIShouldGoToTheHomePage()
+        public async Task ThenIShouldGoToTheReturnUrl()
         {
             //Act
             var result = await _employerAccountController.CreateAccount() as RedirectResult;
