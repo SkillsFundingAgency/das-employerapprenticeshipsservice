@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SFA.DAS.EAS.Portal.Worker.TestHarness": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -18,17 +17,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly HomeOrchestrator _homeOrchestrator;
-        private readonly EmployerAccountsConfiguration _configuration;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly EmployerAccountsConfiguration _configuration;       
+        private const int NotUsedServiceBeforeOption = 1;
+        private const int UsedServiceBeforeOption = 2;
 
-        public HomeController(IAuthenticationService owinWrapper, HomeOrchestrator homeOrchestrator,
-            EmployerAccountsConfiguration configuration, IAuthorizationService authorization,
-            IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
+        public HomeController(IAuthenticationService owinWrapper, 
+            HomeOrchestrator homeOrchestrator,
+            EmployerAccountsConfiguration configuration,
+            IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _homeOrchestrator = homeOrchestrator;
-            _configuration = configuration;
-            _authorizationService = authorization;
+            _configuration = configuration;         
         }
 
         [Route("~/")]
@@ -50,13 +51,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (accounts.Data.Invitations > 0)
                 {
-                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName, new { });
+                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
                 }
 
                 if (accounts.Data.Accounts.AccountList.Count == 1)
                 {
                     var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
-                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
+
+                    if (account != null)
+                    {
+                        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId});
+                    }
                 }
 
                 var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -71,14 +76,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(accounts);
                 }
 
-                return View(ControllerConstants.SetupAccountViewName, accounts);
-
+                return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
             }
 
             var model = new
             {
                 HideHeaderSignInLink = true
-
             };
 
             return View(ControllerConstants.ServiceStartPageViewName, model);
@@ -89,9 +92,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("accounts")]
         public async Task<ActionResult> ViewAccounts()
         {
-
-            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue("sub"));
-
+            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
         }
 
@@ -113,12 +114,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case 1: return RedirectToAction(_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney) ? 
-                    ControllerConstants.ConfirmWhoYouAre : 
-                    ControllerConstants.WhatYoullNeedActionName); // No not used before
-                case 2: return RedirectToAction(ControllerConstants.SignInActionName); // Yes I have used the service
+                case NotUsedServiceBeforeOption: return RedirectToAction(ControllerConstants.RegisterUserActionName);
+                case UsedServiceBeforeOption: return RedirectToAction(ControllerConstants.SignInActionName);
                 default:
-
+                {
                     var model = new
                     {
                         HideHeaderSignInLink = true,
@@ -126,94 +125,35 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
 
                     return View(model); //No option entered
+                }
             }
         }
 
         [HttpGet]
-        [Route("confirmWhoYouAre")]
-        public ActionResult ConfirmWhoYouAre()
-        {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-
-            return View(model);
+        [Route("setupAccount")]
+        public async Task<ActionResult> SetupAccount()
+        {        
+            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            return View(accounts);
         }
-
-        [HttpPost]
-        [Route("confirmWhoYouAre")]
-        public ActionResult ConfirmWhoYouAre(int? choice)
-        {
-            switch (choice ?? 0)
-            {
-                case 1: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {Option = "later"});
-                case 2: return RedirectToAction(ControllerConstants.RegisterUserActionName, new {option = "now"});
-                default:
-
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                        InError = true
-                    };
-
-                    return View(model);
-            }
-        }
-
-        [HttpGet]
-        [Route("whatYoullNeed")]
-        public ActionResult WhatYoullNeed()
-        {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [Route("whatYoullNeed")]
-        public ActionResult WhatYoullNeed(int? choice)
-        {
-            switch (choice ?? 0)
-            {
-                case 2: return RedirectToAction(ControllerConstants.RegisterUserActionName);
-                default:
-
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                        InError = true
-                    };
-
-                    return View(model);
-            }
-        }
-
+  
         [HttpGet]
         [Route("register")]
-        public ActionResult RegisterUser(string option = "new")
+        public ActionResult RegisterUser()
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/{option}");
+            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [Authorize]
         [HttpGet]
-        [Route("register/{option}")]
-        public async Task<ActionResult> HandleNewRegistration(string option = null)
+        [Route("register/new")]
+        public async Task<ActionResult> HandleNewRegistration()
         {
             await OwinWrapper.UpdateClaims();
-
-            switch (option)
-            {
-                case "later": return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName);
-                default: return RedirectToAction(ControllerConstants.IndexActionName);
-            }
+            return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
         [Authorize]
@@ -257,6 +197,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
             }
+
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
@@ -308,6 +249,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 HideHeaderSignInLink = true
             };
+
             return View(model);
         }
 

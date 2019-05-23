@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "SFA.DAS.EAS.Portal.Worker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "APPSETTING_LoggingRedisConnectionString": "localhost:6379"
+      }
+    }
+  }
+}

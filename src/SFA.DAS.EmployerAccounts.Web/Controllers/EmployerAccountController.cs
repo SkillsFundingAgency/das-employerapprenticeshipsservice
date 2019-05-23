@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using Newtonsoft.Json;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -23,22 +22,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
-        private readonly IMediator _mediatr;
-        private IAuthorizationService _authorizationService;
+        private readonly IMediator _mediatr;   
+        private const int AddPayeLater = 1;
+        private const int AddPayeNow = 2;
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr,
-            IAuthorizationService authorizationService)
+            IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
-            _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
         }
 
         [HttpGet]
@@ -68,8 +66,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
-            var url = await _employerAccountOrchestrator.GetGatewayUrl(Url.Action(ControllerConstants.GateWayResponseActionName,
-                ControllerConstants.EmployerAccountControllerName, null,HttpContext.Request.Url?.Scheme));
+            var url = await _employerAccountOrchestrator.GetGatewayUrl(
+                Url.Action(ControllerConstants.GateWayResponseActionName,
+                    ControllerConstants.EmployerAccountControllerName, 
+                    null, 
+                    HttpContext.Request.Url?.Scheme));
 
             return Redirect(url);
         }
@@ -136,25 +137,47 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("youhaveregistered")]
-        public ViewResult YouHaveRegistered(string hashedAccountId = null)
+        [Route("getGovernmentFunding")]
+        public ActionResult GetGovernmentFunding()
         {
-            var cookie = _employerAccountOrchestrator.GetCookieData();
-
-            if (cookie == null)
+            var model = new
             {
-                ViewBag.RequiresPayeScheme = true;
-            }
-            else
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("getGovernmentFunding")]
+        public async Task<ActionResult> GetGovernmentFunding(int? choice)
+        {
+            switch (choice ?? 0)
             {
-                ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
-                                             cookie.EmployerAccountPayeRefData.EmpRefNotFound;
+                case AddPayeLater:
+                {
+                    var request = new CreateUserAccountViewModel
+                    {
+                        UserId = GetUserId(),
+                        OrganisationName = "MY ACCOUNT"
+                    };
+
+                    var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
+                }
+                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                default:
+                {
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
+
+                    return View(model);
+                }
             }
-
-            _employerAccountOrchestrator.DeleteCookieData();
-
-            ViewBag.AccountUrl = this.Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
-            return View();
         }
 
         [HttpGet]
@@ -220,16 +243,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
-
-            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-            {
-                return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
-            else
-            {
-                _employerAccountOrchestrator.DeleteCookieData();
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
+            
+            _employerAccountOrchestrator.DeleteCookieData();
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
         [HttpGet]
@@ -260,7 +276,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 AddFlashMessageToCookie(flashmessage);
 
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName);
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
             }
 
             var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();

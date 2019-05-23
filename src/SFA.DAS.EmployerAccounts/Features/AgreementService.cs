@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Entity;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Caches;
 using SFA.DAS.EmployerAccounts.Data;
@@ -34,12 +35,12 @@ namespace SFA.DAS.EmployerAccounts.Features
 
         private async Task<int> GetMinAgreementVersionAsync(long accountId)
         {
-            var versionNumber = await _db.Value.AccountLegalEntities
+            return await _db.Value.AccountLegalEntities
                 .WithSignedOrPendingAgreementsForAccount(accountId)
-                .MinAsync(ale => ale.SignedAgreementId == null ? 0 : (int)ale.SignedAgreementVersion)
+                .Select(ale => ale.SignedAgreementId == null ? 0 : ale.SignedAgreementVersion ?? 0)
+                .DefaultIfEmpty(NullCacheValue)
+                .MinAsync()
                 .ConfigureAwait(false);
-
-            return versionNumber > 0 ? versionNumber : NullCacheValue;
         }
 
         public Task RemoveFromCacheAsync(long accountId)
