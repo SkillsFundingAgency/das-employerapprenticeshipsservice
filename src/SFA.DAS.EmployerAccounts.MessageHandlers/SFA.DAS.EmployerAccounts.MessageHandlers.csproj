@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="FluentAssertions" Version="4.17.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
@@ -36,12 +37,6 @@
 
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Extensions.Logging">
-      <HintPath>..\..\..\..\..\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.extensions.logging\2.1.1\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.Commitments.Events">
-      <HintPath>..\..\..\das-commitments\src\SFA.DAS.Commitments.Events\bin\Debug\SFA.DAS.Commitments.Events.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
