@@ -15,6 +15,18 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.StatisticsControllerTests
         private CallResponse<StatisticsViewModel> _actualResponse;
         private StatisticsViewModel _expectedStatisticsViewModel;
 
+        [OneTimeSetUp]
+        public void OneTimeSetup()
+        {
+            Testing.AzureStorageEmulator.AzureStorageEmulatorManager.StartStorageEmulator();
+        }
+
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
+        {
+            Testing.AzureStorageEmulator.AzureStorageEmulatorManager.StopStorageEmulator();
+        }
+
         [SetUp]
         public async Task Setup()
         {

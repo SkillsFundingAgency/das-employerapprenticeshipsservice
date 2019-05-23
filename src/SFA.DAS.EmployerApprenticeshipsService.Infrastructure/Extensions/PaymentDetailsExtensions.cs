@@ -93,6 +93,7 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
             paymentsDataTable.Columns.Add("ApprenticeNINumber", typeof(string));
             paymentsDataTable.Columns.Add("ApprenticeshipCourseLevel", typeof(int));
             paymentsDataTable.Columns.Add("ApprenticeshipCourseStartDate", typeof(DateTime));
+            paymentsDataTable.Columns.Add("IsHistoricProviderName", typeof(bool));
 
             foreach (var payment in payments)
             {
