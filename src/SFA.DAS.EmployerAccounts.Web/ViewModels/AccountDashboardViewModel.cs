@@ -30,5 +30,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public Guid? RecentlyAddedReservationId { get; set; }
         public IReservedFundingDto ReservedFundingToShow { get; set; }
         public string ReservedFundingToShowLegalEntityName { get; set; }
+        public bool ShowSavedFavourites => FeatureToggles.Features.HomePage.Enabled;
     }
 }   
