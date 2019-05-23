@@ -8,7 +8,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -31,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         private EmployerAccountData _accountData;
         private OrchestratorResponse<EmployerAgreementViewModel> _response;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-        private const string hashedAccountId = "ABC123";
+        private const string HashedAccountId = "ABC123";
 
         [SetUp]
         public void Arrange()
@@ -53,7 +52,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
-                Mock.Of<IAuthorizationService>(),
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>())
             {
                 ControllerContext = _controllerContext.Object,
@@ -80,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 {
                     EmployerAgreement = new EmployerAgreementView
                     {
-                        HashedAccountId = hashedAccountId
+                        HashedAccountId = HashedAccountId
                     }
                 },
                 Status = HttpStatusCode.OK

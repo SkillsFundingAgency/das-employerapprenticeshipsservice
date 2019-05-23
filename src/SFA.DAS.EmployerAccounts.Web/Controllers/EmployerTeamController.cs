@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -16,7 +18,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
+        private readonly INextActionPanelViewHelper _homepagePanelViewHelper;
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+        private readonly IPortalClient _portalClient;
+        private readonly IHashingService _hashingService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -30,28 +35,36 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator)
+            EmployerTeamOrchestrator employerTeamOrchestrator,
+            INextActionPanelViewHelper homepagePanelViewHelper,
+            IPortalClient portalClient,
+            IHashingService hashingService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
+            _homepagePanelViewHelper = homepagePanelViewHelper;
             _employerTeamOrchestrator = employerTeamOrchestrator;
+            _portalClient = portalClient;
+            _hashingService = hashingService;
         }
 
         [HttpGet]
         [Route]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-
-            if (flashMessage != null)
+            var response = await GetAccountInformation(hashedAccountId);
+            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data))
             {
-                response.FlashMessage = flashMessage;
-                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
+                var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
+                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
+                    response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
+
+                return View("v2/Index", "_Layout_v2", response);
             }
 
             return View(response);
         }
+
         [HttpGet]
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
@@ -286,20 +299,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
-            if (model.AgreementsToSign)
-            {
-                viewModel.ViewName = "SignAgreement";
-            }
-
+            var viewModel = _homepagePanelViewHelper.GetNextAction(model);
             return PartialView(viewModel);
-        }       
+        }
 
         [ChildActionOnly]
         public ActionResult Row1Panel2(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
-            if (model.AgreementsToSign)
+            if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
             }
@@ -318,39 +326,77 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult AddPAYE(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
         public ActionResult SignAgreement(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissions(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }        
+        }
+
         [ChildActionOnly]
         public ActionResult SavedProviders(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult AccountSettings(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
+        [ChildActionOnly]
+        public ActionResult FundingComplete(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
         {
             return PartialView(model);
+        }
+
+        private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessage != null)
+            {
+                response.FlashMessage = flashMessage;
+                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
+            }
+
+            return response;
+        }
+
+        private bool HasPayeScheme(AccountDashboardViewModel data)
+        {
+            return data.PayeSchemeCount > 0;
         }
     }
 }

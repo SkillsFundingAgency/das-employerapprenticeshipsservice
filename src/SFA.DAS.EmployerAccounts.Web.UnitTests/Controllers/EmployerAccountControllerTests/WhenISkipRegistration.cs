@@ -7,7 +7,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -38,8 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            new Mock<IAuthorizationService>();
+            _owinWrapper = new Mock<IAuthenticationService>();       
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();  
@@ -54,15 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             };
 
             _orchestrator.Setup(x => x.CreateUserAccount(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
-                .ReturnsAsync(_response);
-
-            var mockAuthorization = new Mock<IAuthorizationService>();
-
-            mockAuthorization
-                .Setup(
-                    m =>
-                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(true);
+                .ReturnsAsync(_response);        
 
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
@@ -71,7 +61,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
-                mockAuthorization.Object,
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>())
             {
                 ControllerContext = _controllerContext.Object,
@@ -99,84 +88,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
-        }
-    }
-
-    class WhenISkipRegistrationAndAReturnUrlIsSpecified : ControllerTestBase
-    {
-        private EmployerAccountController _employerAccountController;
-        private Mock<EmployerAccountOrchestrator> _orchestrator;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IMultiVariantTestingService> _userViewTestingService;
-        private const string ExpectedRedirectUrl = "http://redirect.local.test";
-        private EmployerAccountData _accountData;
-        private OrchestratorResponse<EmployerAccountViewModel> _response;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
-        private Mock<ICookieStorageService<ReturnUrlModel>> _returnUrlCookieStorage;
-        private const string HashedAccountId = "ABC123";
-        private const string ExpectedReturnUrl = "test.com";
-
-        [SetUp]
-        public void Arrange()
-        {
-            base.Arrange(ExpectedRedirectUrl);
-
-            _orchestrator = new Mock<EmployerAccountOrchestrator>();
-
-            _owinWrapper = new Mock<IAuthenticationService>();
-            new Mock<IAuthorizationService>();
-            _userViewTestingService = new Mock<IMultiVariantTestingService>();
-            var logger = new Mock<ILog>();
-            _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            _returnUrlCookieStorage = new Mock<ICookieStorageService<ReturnUrlModel>>();
-
-            _response = new OrchestratorResponse<EmployerAccountViewModel>()
-            {
-                Data = new EmployerAccountViewModel
-                {
-                    HashedId = HashedAccountId
-                },
-                Status = HttpStatusCode.OK
-            };
-
-            _orchestrator.Setup(x =>
-                    x.CreateUserAccount(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
-                .ReturnsAsync(_response);
-
-            var mockAuthorization = new Mock<IAuthorizationService>();
-
-            mockAuthorization
-                .Setup(
-                    m =>
-                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(true);
-
-            _returnUrlCookieStorage.Setup(x => x.Get("SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie"))
-                .Returns(new ReturnUrlModel() {Value = ExpectedReturnUrl});
-
-            _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object,
-                _orchestrator.Object,
-                _userViewTestingService.Object,
-                logger.Object,
-                _flashMessage.Object,
-                Mock.Of<IMediator>(),
-                mockAuthorization.Object,
-                _returnUrlCookieStorage.Object)
-            {
-                ControllerContext = _controllerContext.Object,
-                Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
-            };
-        }
-
-        [Test]
-        public async Task ThenIShouldGoToTheReturnUrl()
-        {
-            //Act
-            var result = await _employerAccountController.GetGovernmentFunding(1) as RedirectResult;
-
-            //Assert
-            Assert.AreEqual(ExpectedReturnUrl, result.Url);
         }
     }
 }

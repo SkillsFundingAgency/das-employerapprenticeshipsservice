@@ -12,7 +12,6 @@ using System.Web.Mvc;
 using MediatR;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Models;
@@ -25,10 +24,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
-        private readonly IMediator _mediatr;
-        private IAuthorizationService _authorizationService;
-        private const int AddPAYELater = 1;
-        private const int AddPAYENow = 2;
+        private readonly IMediator _mediatr;   
+        private const int AddPayeLater = 1;
+        private const int AddPayeNow = 2;
         private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
         private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
@@ -38,13 +36,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediatr,
-            IAuthorizationService authorizationService, ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService)
+            ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
-            _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
             _returnUrlCookieStorageService = returnUrlCookieStorageService;
         }
 
@@ -75,8 +72,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
-            var url = await _employerAccountOrchestrator.GetGatewayUrl(Url.Action(ControllerConstants.GateWayResponseActionName,
-                ControllerConstants.EmployerAccountControllerName, null,HttpContext.Request.Url?.Scheme));
+            var url = await _employerAccountOrchestrator.GetGatewayUrl(
+                Url.Action(ControllerConstants.GateWayResponseActionName,
+                    ControllerConstants.EmployerAccountControllerName, 
+                    null, 
+                    HttpContext.Request.Url?.Scheme));
 
             return Redirect(url);
         }
@@ -163,7 +163,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case AddPAYELater:
+                case AddPayeLater:
                 {
                     var request = new CreateUserAccountViewModel
                     {
@@ -172,7 +172,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
 
                     var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
-
                     var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
                     _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
                     if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
@@ -180,9 +179,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                     return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
                 }
-                case AddPAYENow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 default:
-
+                {
                     var model = new
                     {
                         HideHeaderSignInLink = true,
@@ -190,6 +189,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
 
                     return View(model);
+                }
             }
         }
 
@@ -295,7 +295,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 AddFlashMessageToCookie(flashmessage);
 
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName);
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
             }
 
             var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
