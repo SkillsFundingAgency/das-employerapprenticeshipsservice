@@ -60,6 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+                response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
 
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
@@ -309,6 +310,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
+            else if (model.ApprenticeshipAdded)
+            {
+                viewModel.ViewName = "ApprenticeshipDetails";
+            }
             else if (model.ShowReservations) 
             {
                 viewModel.ViewName = "FundingComplete";
@@ -335,11 +340,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return PartialView(viewModel);
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
             return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
@@ -404,8 +411,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult PrePAYERecruitment(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult SearchBar()
+        {
+            return PartialView();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -423,16 +449,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
-        }
-        [ChildActionOnly]
-        public ActionResult SearchBar()
-        {
-            return PartialView();
-        }
-        [ChildActionOnly]
-        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
         }
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
