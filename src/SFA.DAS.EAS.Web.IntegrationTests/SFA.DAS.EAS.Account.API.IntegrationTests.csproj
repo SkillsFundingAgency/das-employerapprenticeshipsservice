@@ -139,6 +139,9 @@
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Testing.AzureStorageEmulator">
+      <HintPath>..\..\..\..\..\Users\Michael\.nuget\packages\sfa.das.testing.azurestorageemulator\3.0.96\lib\netstandard2.0\SFA.DAS.Testing.AzureStorageEmulator.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.UnitOfWork, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.UnitOfWork.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.dll</HintPath>
     </Reference>
@@ -222,6 +225,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LegalEntitiesControllerTests\WhenIGetMultipleLegalEntitiesWithKnownIds.cs" />
+    <Compile Include="TestSetup.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponseExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
