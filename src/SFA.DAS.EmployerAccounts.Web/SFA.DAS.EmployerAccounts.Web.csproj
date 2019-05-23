@@ -713,7 +713,8 @@
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
     <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\AddPAYE.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\PrePayeRecruitment.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\AddPaye.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
