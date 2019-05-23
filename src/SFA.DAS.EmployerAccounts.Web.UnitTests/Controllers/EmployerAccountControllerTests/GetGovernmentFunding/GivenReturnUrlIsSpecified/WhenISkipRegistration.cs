@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetGovernmentFunding.AndReturnUrlIsSpecified
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetGovernmentFunding.GivenReturnUrlIsSpecified
 { 
     class WhenISkipRegistration : ControllerTestBase
     {
