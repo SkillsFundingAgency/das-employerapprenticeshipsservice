@@ -49,20 +49,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         public class Handle : CohortApprovalRequestedEventHandlerTests
         {
             [Test]
-            public async Task WhenCalled_ThenTheAdapterIsCalledToConvertTheMessage()
-            {
-                // arrange
-                var testContext = new TestContext();
-                CohortApprovalRequestedByProvider @event = new CohortApprovalRequestedByProviderBuilder();
-
-                // act
-                await testContext.Sut.Handle(@event, testContext.MockMessageHandlerContext.Object);
-
-                //assert
-                testContext.MockAdapter.Verify(m => m.Convert(@event), Times.Once);
-            }
-
-            [Test]
             public async Task WhenCalled_ThenTheCommandHandlerIsCalled()
             {
                 // arrange

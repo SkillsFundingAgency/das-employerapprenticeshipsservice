@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
                 accountId, accountLegalEntityId1,
                 accountLegalEntityId1, 1, ukprn1,
                 new Guid("1D2A5DA7-6133-44F8-BF69-BD16AFA645DE"),
-                new HashSet<Operation>() {Operation.CreateCohort},
+                new HashSet<Operation> {Operation.CreateCohort},
                 DateTime.UtcNow));
             
             Console.WriteLine("Published UpdatedPermissionsEvent.");
