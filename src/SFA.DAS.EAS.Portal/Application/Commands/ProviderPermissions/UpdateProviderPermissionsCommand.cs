@@ -6,28 +6,34 @@ using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.ProviderRelationships.Messages.Events;
+using SFA.DAS.Providers.Api.Client;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
 {
     public class UpdateProviderPermissionsCommand
     {
         private readonly IAccountDocumentService _accountDocumentService;
+        private readonly IProviderApiClient _providerApiClient;
         private readonly ILogger<UpdateProviderPermissionsCommand> _logger;
 
         public UpdateProviderPermissionsCommand(
             IAccountDocumentService accountDocumentService,
+            IProviderApiClient providerApiClient,
             ILogger<UpdateProviderPermissionsCommand> logger)
         {
             _accountDocumentService = accountDocumentService;
+            _providerApiClient = providerApiClient;
             _logger = logger;
         }
 
         public async Task Execute(UpdatedPermissionsEvent updatedPermissionsEvent, CancellationToken cancellationToken = default)
         {
             _logger.LogInformation("Executing UpdateProviderPermissionsCommand");
-            
+
+            var providerTask = _providerApiClient.GetAsync(updatedPermissionsEvent.Ukprn);
             //todo: move getorcreate/ensure into helper. where? service, base, elsewhere?
             var accountDocument = await _accountDocumentService.Get(updatedPermissionsEvent.AccountId, cancellationToken);
+            
             Organisation organisation;
             
             if (accountDocument == null)
@@ -46,11 +52,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
                     organisation = new Organisation {AccountLegalEntityId = updatedPermissionsEvent.AccountLegalEntityId};
                 }
             }
-            
+
+            var provider = await providerTask;
             organisation.Providers.Add(new Provider
             {
                 Ukprn = updatedPermissionsEvent.Ukprn,
-                Name = "todo: fetch from fat/new provider service. fetch each message process or keep local store?",
+                Name = provider.ProviderName,
                 GrantedOperations = updatedPermissionsEvent.GrantedOperations
             });
         }
