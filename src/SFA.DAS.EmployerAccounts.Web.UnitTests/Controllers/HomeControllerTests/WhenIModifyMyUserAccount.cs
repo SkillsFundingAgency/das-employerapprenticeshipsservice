@@ -4,13 +4,11 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -18,8 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
     {
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<HomeOrchestrator> _homeOrchestrator;
-        private EmployerAccountsConfiguration _configuration;
-        private Mock<IAuthorizationService> _featureToggle;
+        private EmployerAccountsConfiguration _configuration;      
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private HomeController _homeController;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -30,15 +27,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             base.Arrange();
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _homeOrchestrator = new Mock<HomeOrchestrator>();
-            _featureToggle = new Mock<IAuthorizationService>();
+            _homeOrchestrator = new Mock<HomeOrchestrator>();          
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-
             _configuration = new EmployerAccountsConfiguration();
 
             _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration, 
-                _featureToggle.Object, _userViewTestingService.Object,_flashMessage.Object)
+               _userViewTestingService.Object,_flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object
             };
@@ -81,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
-        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToTheIndex()
+        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToGetGovernmentFunding()
         {
             //Act
             var actual = await _homeController.HandleNewRegistration();
@@ -91,7 +86,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
             var actualRedirect = actual as RedirectToRouteResult;
             Assert.IsNotNull(actualRedirect);
-            Assert.AreEqual("Index", actualRedirect.RouteValues["action"]);
+            Assert.AreEqual("GetGovernmentFunding", actualRedirect.RouteValues["action"]);
         }
 
         [Test]

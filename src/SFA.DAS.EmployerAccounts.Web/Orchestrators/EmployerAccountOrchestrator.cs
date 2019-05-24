@@ -12,6 +12,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
+using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -34,7 +35,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _mediator = mediator;
             _logger = logger;
         }
-
 
         public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
         {
@@ -117,7 +117,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountViewModel viewModel, HttpContextBase context)
         {
             try
@@ -162,9 +161,39 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     FlashMessage = new FlashMessageViewModel()
                 };
             }
-
         }
 
+        public virtual async Task<OrchestratorResponse<EmployerAccountViewModel>> CreateUserAccount(CreateUserAccountViewModel viewModel, HttpContextBase context)
+        {
+            try
+            {
+                var result = await Mediator.SendAsync(new CreateUserAccountCommand
+                {
+                    ExternalUserId = viewModel.UserId,
+                    OrganisationName = viewModel.OrganisationName
+                });
+
+                return new OrchestratorResponse<EmployerAccountViewModel>
+                {
+                    Data = new EmployerAccountViewModel
+                    {
+                        HashedId = result.HashedAccountId
+                    },
+                    Status = HttpStatusCode.OK
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                _logger.Info($"Create User Account Validation Error: {ex.Message}");
+                return new OrchestratorResponse<EmployerAccountViewModel>
+                {
+                    Data = new EmployerAccountViewModel(),
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = ex,
+                    FlashMessage = new FlashMessageViewModel()
+                };
+            }
+        }
 
         public virtual OrchestratorResponse<SummaryViewModel> GetSummaryViewModel(HttpContextBase context)
         {
@@ -190,9 +219,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 Data = model
             };
-
         }
-
 
         public virtual EmployerAccountData GetCookieData()
         {
@@ -203,6 +230,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             CookieService.Delete(CookieName);
         }
-
     }
 }
