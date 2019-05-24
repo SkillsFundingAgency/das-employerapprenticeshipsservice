@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -30,10 +31,33 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             if (accountDocument == null)
             {
                 accountDocument = AccountDocument.Create(updatedPermissionsEvent.AccountId);
+                CreateOrganisationWithProviderPermissions();
             }
             else
             {
+                //todo: this is common code. probably belongs in account, but now we don't have separate read/write models
+                // could have account extensions, but then pain to unit test
+                // base command?
+                var organisation = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(updatedPermissionsEvent.AccountLegalEntityId));
+                if (organisation == null)
+                {
+                    CreateOrganisationWithProviderPermissions();
+                }
+                else
+                {
+                    UpdateOrganisationWithProviderPermissions();
+                }
             }
+        }
+
+        private void UpdateOrganisationWithProviderPermissions()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private void CreateOrganisationWithProviderPermissions()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

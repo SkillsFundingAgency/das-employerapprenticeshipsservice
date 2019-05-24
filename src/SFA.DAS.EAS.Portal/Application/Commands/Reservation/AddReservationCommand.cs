@@ -52,6 +52,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             var existing = organisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservedFunding.Id));
             if (existing != null)
             {
+                //todo: change to throw
                 _logger.LogInformation($"ReservationCreatedEvent received for a reservation (Id: {reservedFunding.Id}) that has already been handled.  The event will be ignored.");
                 return;  // already handled 
             }
@@ -68,7 +69,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
         private static void CreateOrganisationWithReservation(AccountDocument accountDocument, ReservationCreatedEvent reservedFunding)
         {
-            var newOrg = new Organisation()
+            var newOrg = new Organisation
             {
                 AccountLegalEntityId = reservedFunding.AccountLegalEntityId,
                 Name = reservedFunding.AccountLegalEntityName
@@ -76,7 +77,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
             accountDocument.Account.Organisations.Add(newOrg);
 
-            newOrg.Reservations.Add(new Client.Types.Reservation()
+            newOrg.Reservations.Add(new Client.Types.Reservation
             {
                 Id = reservedFunding.Id,
                 CourseCode = reservedFunding.CourseId,

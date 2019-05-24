@@ -15,13 +15,14 @@ namespace SFA.DAS.EAS.Portal.Client.Database.Models
         {
             Id = Guid.NewGuid();
             IsNew = false;            
-            Account = new Account() { Id = accountId };
+            Account = new Account { Id = accountId };
         }
 
         [JsonConstructor]
         public AccountDocument()
         {         
         }
+        
         public static AccountDocument Create(long accountId)
         {
             return new AccountDocument(accountId) { IsNew = true };
