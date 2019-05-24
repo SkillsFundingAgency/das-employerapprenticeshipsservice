@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
-        private readonly INextActionPanelViewHelper _homepagePanelViewHelper;
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IHashingService _hashingService;
@@ -41,12 +40,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            INextActionPanelViewHelper homepagePanelViewHelper,
             IPortalClient portalClient,
             IHashingService hashingService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _homepagePanelViewHelper = homepagePanelViewHelper;
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
             _hashingService = hashingService;
@@ -63,6 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+                response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
 
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
@@ -312,6 +310,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
+            else if (model.ApprenticeshipAdded)
+            {
+                viewModel.ViewName = "ApprenticeshipDetails";
+            }
             else if (model.ShowReservations) 
             {
                 viewModel.ViewName = "FundingComplete";
@@ -338,15 +340,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return PartialView(viewModel);
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
             return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
+            if (!HasPayeScheme(model))
+            {
+                viewModel.ViewName = "PrePayeRecruitment";
+            }
+            return PartialView(viewModel);
         }
 
         [ChildActionOnly]
@@ -403,6 +412,30 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return PartialView(model);
         }
 
+        [ChildActionOnly]
+        public ActionResult PrePAYERecruitment(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult SearchBar()
+        {
+            return PartialView();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
@@ -417,15 +450,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return response;
         }
-        [ChildActionOnly]
-        public ActionResult SearchBar()
-        {
-            return PartialView();
-        }
-        [ChildActionOnly]
-        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
         {
