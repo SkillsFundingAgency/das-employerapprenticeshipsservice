@@ -39,7 +39,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             if (accountDocument == null)
             {
                 accountDocument = AccountDocument.Create(updatedPermissionsEvent.AccountId);
+                //todo: common code
                 organisation = new Organisation {AccountLegalEntityId = updatedPermissionsEvent.AccountLegalEntityId};
+                accountDocument.Account.Organisations.Add(organisation);
             }
             else
             {
@@ -50,6 +52,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
                 if (organisation == null)
                 {
                     organisation = new Organisation {AccountLegalEntityId = updatedPermissionsEvent.AccountLegalEntityId};
+                    accountDocument.Account.Organisations.Add(organisation);
                 }
             }
 
