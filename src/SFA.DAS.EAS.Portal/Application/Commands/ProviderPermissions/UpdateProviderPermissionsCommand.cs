@@ -49,7 +49,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             
             organisation.Providers.Add(new Provider
             {
-                Ukprn = updatedPermissionsEvent.Ukprn
+                Ukprn = updatedPermissionsEvent.Ukprn,
+                Name = "todo: fetch from fat/new provider service. fetch each message process or keep local store?",
+                GrantedOperations = updatedPermissionsEvent.GrantedOperations
             });
         }
     }
