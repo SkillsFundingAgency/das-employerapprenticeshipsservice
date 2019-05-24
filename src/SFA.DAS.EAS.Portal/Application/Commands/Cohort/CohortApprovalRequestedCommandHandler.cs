@@ -31,14 +31,15 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
+            await _accountCreatedHandler.Handle(new AccountCreatedCommand(command.AccountId), cancellationToken);
+
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
-
-            await _accountCreatedHandler.Handle(new AccountCreatedCommand(command.AccountId, commitment.LegalEntityName), cancellationToken);
 
             var accountDocument = await _accountsService.Get(command.AccountId, cancellationToken);           
             var account = accountDocument.Account;
             var cohortReference = commitment.Reference;
+            var cohortId = commitment.Id;
 
             var organisation = account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(accountLegalEntityId));
             if (organisation == null)
@@ -52,11 +53,11 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
                 account.Organisations.Add(organisation);
             }
 
-            var cohort = organisation.Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortReference, StringComparison.OrdinalIgnoreCase));
+            var cohort = organisation.Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortId.ToString(), StringComparison.OrdinalIgnoreCase));
 
             if (cohort == null)
             {
-                cohort = new Client.Types.Cohort { Id = cohortReference };
+                cohort = new Client.Types.Cohort { Id = cohortId.ToString(), Reference = cohortReference };
                 account.Organisations.First().Cohorts.Add(cohort);
             }
             

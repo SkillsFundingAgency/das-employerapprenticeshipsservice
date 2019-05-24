@@ -7,6 +7,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
     public class CohortBuilder
     {
         private string _id = Guid.NewGuid().ToString();
+        private string _reference = Guid.NewGuid().ToString();
         private readonly ICollection<Apprenticeship> _apprenticeships;
 
         public CohortBuilder()
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
             return new Cohort
             {
                 Id = _id,
+                Reference = _reference,
                 Apprenticeships = _apprenticeships
             };
         }
@@ -26,6 +28,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Builders
         public CohortBuilder WithId(string id)
         {
             _id = id;
+            return this;
+        }
+
+        public CohortBuilder WithReference(string reference)
+        {
+            _reference = reference;
             return this;
         }
 

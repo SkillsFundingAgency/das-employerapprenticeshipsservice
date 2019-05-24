@@ -5,7 +5,7 @@
         public long Id { get; private set; }
         public string Name { get; private set; }
 
-        public AccountCreatedCommand(long id, string name)
+        public AccountCreatedCommand(long id, string name = null)
         {
             Id = id;
             Name = name;
