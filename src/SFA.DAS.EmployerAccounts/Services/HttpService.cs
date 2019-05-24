@@ -33,15 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public virtual Task<string> GetAsync(string url, bool exceptionOnNotFound = true)
         {
-            return GetAsync(url, response =>
-            {
-                if (!exceptionOnNotFound && response.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return false;
-                }
-
-                return true;
-            });
+            return GetAsync(url, response => exceptionOnNotFound || response.StatusCode != HttpStatusCode.NotFound);
         }
       
         public virtual async Task<string> GetAsync(string url, Func<HttpResponseMessage, bool> responseChecker)

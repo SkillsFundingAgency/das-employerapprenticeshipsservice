@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -35,18 +36,29 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             try
             {
-                var result = await Mediator.SendAsync(new GetPensionRegulatorRequest { PayeRef = payeRef });
+                var result = await Mediator.SendAsync(new GetPensionRegulatorRequest {PayeRef = payeRef});
                 response.Data = new SearchPensionRegulatorResultsViewModel
                 {
-                    Results = CreateResult(result.Organisations).ToList(),
+                    Results = CreateResult(result.Organisations).ToList(),                    
                     PayeRef = payeRef
-                };              
+                };
             }
             catch (InvalidRequestException ex)
             {
                 response.Exception = ex;
                 response.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
                 response.Status = HttpStatusCode.BadRequest;
+            }
+            catch (Exception)
+            {
+                response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>
+                {
+                    Data = new SearchPensionRegulatorResultsViewModel
+                    {
+                        Results = new List<PensionRegulatorDetailsViewModel>(),
+                        PayeRef = payeRef
+                    }
+                };
             }
 
             return response;

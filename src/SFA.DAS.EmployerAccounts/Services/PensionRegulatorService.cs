@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         public async Task<IEnumerable<Organisation>> GetOrgansiationsByPayeRef(string payeRef)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}GetByPayeRef?payeRef={HttpUtility.UrlEncode(payeRef)}";
+            var url = $"{baseUrl}api/pensionsregulator/{HttpUtility.UrlEncode(payeRef)}";
 
             var json = await _httpService.GetAsync(url, false);
             return json == null ? null : JsonConvert.DeserializeObject<IEnumerable<Organisation>>(json);
