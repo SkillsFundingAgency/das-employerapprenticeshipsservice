@@ -26,6 +26,7 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="2.1.1395" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="10.0.1" />
+    <PackageReference Include="SFA.DAS.ProviderRelationships.Messages" Version="3.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj" />
@@ -43,5 +44,8 @@
     <None Update="run.cmd">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="EventHandlers\ProviderRelationships\" />
   </ItemGroup>
 </Project>

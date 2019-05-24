@@ -4,6 +4,7 @@ using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Adapters;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
+using SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions;
 using SFA.DAS.EAS.Portal.Application.Commands.Reservation;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Configuration;
@@ -16,6 +17,7 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddTransient<AddReservationCommand>();
+            services.AddTransient<UpdateProviderPermissionsCommand>();
             var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetService<IConfiguration>();
 

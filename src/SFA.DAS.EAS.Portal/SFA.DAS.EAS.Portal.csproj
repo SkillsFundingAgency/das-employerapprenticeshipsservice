@@ -22,6 +22,7 @@
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="3.0.19" />
     <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
+    <PackageReference Include="SFA.DAS.ProviderRelationships.Messages" Version="3.0.2" />
     <PackageReference Include="SFA.DAS.Reservations.Messages" Version="0.1.0" />
   </ItemGroup>
 

@@ -12,16 +12,16 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 {
     public class AddReservationCommand
     {
-        private readonly IAccountDocumentService _accountsService;
+        private readonly IAccountDocumentService _accountDocumentService;
         private readonly ICommandHandler<AccountCreatedCommand> _accountCreatedHandler;
         private readonly ILogger<AddReservationCommand> _logger;
 
         public AddReservationCommand(
-            IAccountDocumentService accountsService,
+            IAccountDocumentService accountDocumentService,
             ICommandHandler<AccountCreatedCommand> accountCreatedHandler,
             ILogger<AddReservationCommand> logger)
         {
-            _accountsService = accountsService;
+            _accountDocumentService = accountDocumentService;
             _accountCreatedHandler = accountCreatedHandler;
             _logger = logger;
         }
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
             await _accountCreatedHandler.Handle(new AccountCreatedCommand(reservedFunding.AccountId, reservedFunding.AccountLegalEntityName), cancellationToken);
 
-            var accountDocument = await _accountsService.Get(reservedFunding.AccountId, cancellationToken);
+            var accountDocument = await _accountDocumentService.Get(reservedFunding.AccountId, cancellationToken);
 
             var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(reservedFunding.AccountLegalEntityId));
             if (org == null)
@@ -44,7 +44,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
                 UpdateOrganisationWithReservation(org, reservedFunding);
             }
 
-            await _accountsService.Save(accountDocument, cancellationToken);
+            await _accountDocumentService.Save(accountDocument, cancellationToken);
         }
 
         private void UpdateOrganisationWithReservation(Organisation organisation, ReservationCreatedEvent reservedFunding)
