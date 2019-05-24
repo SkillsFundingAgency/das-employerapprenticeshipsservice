@@ -4,10 +4,10 @@ namespace SFA.DAS.EAS.Portal.Client.Types
 {
     public class Provider
     {
-        [JsonProperty("name")]
-        public string Name { get; set; }
         [JsonProperty("ukprn")]
         public long Ukprn { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
         [JsonProperty("address")]
         public string Address { get; set; }
         [JsonProperty("telephone")]

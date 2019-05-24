@@ -57,7 +57,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
                 return;  // already handled 
             }
 
-            organisation.Reservations.Add(new Client.Types.Reservation()
+            organisation.Reservations.Add(new Client.Types.Reservation
             {
                 Id = reservedFunding.Id,
                 CourseCode = reservedFunding.CourseId,

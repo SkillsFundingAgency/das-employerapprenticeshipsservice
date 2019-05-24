@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
@@ -27,37 +28,29 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             
             //todo: move getorcreate/ensure into helper. where? service, base, elsewhere?
             var accountDocument = await _accountDocumentService.Get(updatedPermissionsEvent.AccountId, cancellationToken);
-
+            Organisation organisation;
+            
             if (accountDocument == null)
             {
                 accountDocument = AccountDocument.Create(updatedPermissionsEvent.AccountId);
-                CreateOrganisationWithProviderPermissions();
+                organisation = new Organisation {AccountLegalEntityId = updatedPermissionsEvent.AccountLegalEntityId};
             }
             else
             {
                 //todo: this is common code. probably belongs in account, but now we don't have separate read/write models
                 // could have account extensions, but then pain to unit test
                 // base command?
-                var organisation = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(updatedPermissionsEvent.AccountLegalEntityId));
+                organisation = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(updatedPermissionsEvent.AccountLegalEntityId));
                 if (organisation == null)
                 {
-                    CreateOrganisationWithProviderPermissions();
-                }
-                else
-                {
-                    UpdateOrganisationWithProviderPermissions();
+                    organisation = new Organisation {AccountLegalEntityId = updatedPermissionsEvent.AccountLegalEntityId};
                 }
             }
-        }
-
-        private void UpdateOrganisationWithProviderPermissions()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void CreateOrganisationWithProviderPermissions()
-        {
-            throw new System.NotImplementedException();
+            
+            organisation.Providers.Add(new Provider
+            {
+                Ukprn = updatedPermissionsEvent.Ukprn
+            });
         }
     }
 }
