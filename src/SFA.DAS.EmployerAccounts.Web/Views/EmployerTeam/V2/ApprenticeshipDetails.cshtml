@@ -19,7 +19,7 @@
             <dd class="das-definition-list__definition das-definition-list__definition--spacer">@(Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().EndDate?.ToString("MMMM yyyy"))</dd>
 
             <dt class="das-definition-list__title">Agreed training course price</dt>
-            <dd class="das-definition-list__definition">@(Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().ProposedCost?.ToString("C0")) excluding VAT</dd>
+            <dd class="das-definition-list__definition">@(Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().ProposedCost?.ToString("C0",CultureInfo.CreateSpecificCulture("en-GB"))) excluding VAT</dd>
         </dl>
 
         <p><a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")" class="das-panel__link govuk-link--no-visited-state">Review and approve</a> </p>
