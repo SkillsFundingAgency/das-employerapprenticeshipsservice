@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
         public static void Main()
         {
             var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+            
             var config = new JobHostConfiguration();
 
             if (isDevelopment)
@@ -52,6 +53,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
                 .UseStructureMapBuilder(container)
                 .UseUnitOfWork();
 
+            
             var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             while (!cancellationToken.IsCancellationRequested)

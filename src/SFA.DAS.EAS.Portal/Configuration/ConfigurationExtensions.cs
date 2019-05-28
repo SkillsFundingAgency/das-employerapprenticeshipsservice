@@ -17,5 +17,11 @@ namespace SFA.DAS.EAS.Portal.Configuration
         {
             return configuration.GetPortalSection(subSectionPaths).Get<TConfiguration>();
         }
+
+        public static TConfiguration GetSection<TConfiguration>(this IConfiguration configuration, string key,   params string[] subSectionPaths)
+        {
+            var temp = string.Join(":", Enumerable.Repeat(key, 1).Concat(subSectionPaths));
+            return configuration.GetSection(temp).Get<TConfiguration>();
+        }
     }
 }

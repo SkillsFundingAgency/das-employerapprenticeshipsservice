@@ -1,0 +1,25 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+
+        <h3 class="govuk-heading-l">Apprentice details </h3>
+
+        <dl class="das-definition-list das-definition-list--table">
+            <dt class="das-definition-list__title">Name</dt>
+            <dd class="das-definition-list__definition">@Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().FirstName @Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().LastName</dd>
+
+            <dt class="das-definition-list__title das-definition-list__title--spacer">Cohort reference</dt>
+            <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Reference</dd>
+
+            <dt class="das-definition-list__title">Training course</dt>
+            <dd class="das-definition-list__definition">@Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().CourseName</dd>
+
+            <dt class="das-definition-list__title">Start date</dt>
+            <dd class="das-definition-list__definition">@(Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().StartDate?.ToString("MMMM yyyy"))</dd>
+
+            <dt class="das-definition-list__title das-definition-list__title--spacer">Planned end date</dt>
+            <dd class="das-definition-list__definition das-definition-list__definition--spacer">@(Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().EndDate?.ToString("MMMM yyyy"))</dd>
+
+            <dt class="das-definition-list__title">Agreed training course price</dt>
+            <dd class="das-definition-list__definition">@(Model.AccountViewModel.Organisations.FirstOrDefault().Cohorts.FirstOrDefault().Apprenticeships.FirstOrDefault().ProposedCost?.ToString("C0",CultureInfo.CreateSpecificCulture("en-GB"))) excluding VAT</dd>
+        </dl>
+
+        <p><a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")" class="das-panel__link govuk-link--no-visited-state">Review and approve</a> </p>
