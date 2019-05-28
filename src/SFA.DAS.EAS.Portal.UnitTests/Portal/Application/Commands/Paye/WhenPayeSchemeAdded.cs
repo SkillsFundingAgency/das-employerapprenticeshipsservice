@@ -6,8 +6,7 @@ using AutoFixture;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Portal.Application.Commands;
-using SFA.DAS.EAS.Portal.Application.Commands.Account;
+using SFA.DAS.EAS.Portal.Application.AccountHelper;
 using SFA.DAS.EAS.Portal.Application.Commands.Paye;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
@@ -20,7 +19,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Paye
     class WhenPayeSchemeAdded
     {
         PayeSchemeAddedCommandHandler _sut;
-        Mock<ICommandHandler<AccountCreatedCommand>> _accountCreatedCommandHandlerMock;
+        Mock<IAccountHelperService> _accountHelperServiceMock;
         Mock<IAccountDocumentService> _accountServiceMock;
         AccountDocument _accountDoc;
         IFixture Fixture = new Fixture();
@@ -29,8 +28,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Paye
         public void SetUp()
         {
             _accountServiceMock = new Mock<IAccountDocumentService>();
-            _accountCreatedCommandHandlerMock = new Mock<ICommandHandler<AccountCreatedCommand>>();
-            _sut = new PayeSchemeAddedCommandHandler(_accountCreatedCommandHandlerMock.Object, _accountServiceMock.Object);
+            _accountHelperServiceMock = new Mock<IAccountHelperService>();
+            _sut = new PayeSchemeAddedCommandHandler(_accountHelperServiceMock.Object, _accountServiceMock.Object);
 
             Fixture.Customize<Account>(a => a
                 .Without(a2 => a2.PayeSchemes)
@@ -40,37 +39,23 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Paye
                 
                 .Create();
 
-            _accountServiceMock.Setup(mock => mock.Get(1, It.IsAny<CancellationToken>())).ReturnsAsync(_accountDoc);
+            _accountHelperServiceMock.Setup(mock => mock.GetOrCreateAccount(1, It.IsAny<CancellationToken>())).ReturnsAsync(_accountDoc);
         }
 
         [Test]
         [Category("UnitTest")]
-        public async Task ShouldCreateAccountIfNotExists()
+        public async Task ShouldGetAccount()
         {
             // Arrange
             var userRef = Guid.NewGuid();
             var payeCommand = new PayeSchemeAddedCommand(1, "Bob", userRef, "payepayepaye", new DateTime(2019, 5, 31));
+            
 
             // Act
             await _sut.Handle(payeCommand);
 
             // Assert
-            _accountCreatedCommandHandlerMock.Verify(mock => mock.Handle(It.IsAny<AccountCreatedCommand>(), It.IsAny<CancellationToken>()), Times.Once);
-        }
-
-        [Test]
-        [Category("UnitTest")]
-        public async Task ShouldGetExistingAccount()
-        {
-            // Arrange
-            var userRef = Guid.NewGuid();
-            var payeCommand = new PayeSchemeAddedCommand(1, "Bob", userRef, "payepayepaye", new DateTime(2019, 5, 31));
-
-            // Act
-            await _sut.Handle(payeCommand);
-
-            // Assert
-            _accountServiceMock.Verify(mock => mock.Get(1, It.IsAny<CancellationToken>()), Times.Once);
+            _accountHelperServiceMock.VerifyAll();
         }
 
         [Test]
