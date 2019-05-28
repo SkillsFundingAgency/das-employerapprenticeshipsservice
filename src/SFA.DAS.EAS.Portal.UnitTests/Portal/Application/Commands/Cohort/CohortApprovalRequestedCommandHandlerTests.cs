@@ -8,8 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
-using SFA.DAS.EAS.Portal.Application.Commands;
-using SFA.DAS.EAS.Portal.Application.Commands.Account;
+using SFA.DAS.EAS.Portal.Application.AccountHelper;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
@@ -31,22 +30,27 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
             public CommitmentView TestCommitment { get; private set; }
             public Mock<IAccountDocumentService> MockAccountsService { get; private set; }
             public Mock<IProviderCommitmentsApi> MockProviderCommitmentsApi { get; private set; }
-            public Mock<ICommandHandler<AccountCreatedCommand>> MockAccountCreatedCommandHandler { get; private set; }
+            public Mock<IAccountHelperService> MockAccountHelperService { get; private set; }
             public Mock<IHashingService> MockHashingService { get; private set; }
+            public long UnHashedId = 123;
 
             public TestContext()
             {
-                TestAccount = new AccountBuilder().WithOrganisation(new OrganisationBuilder());
+                TestAccount = new AccountBuilder().WithOrganisation(new OrganisationBuilder().WithId(UnHashedId));
                 TestAccountDocument = new AccountDocument() { Account = TestAccount };
                 TestCommitment = new CommitmentViewBuilder();
 
                 MockAccountsService = new Mock<IAccountDocumentService>();
-                MockAccountCreatedCommandHandler = new Mock<ICommandHandler<AccountCreatedCommand>>();
+                MockAccountHelperService = new Mock<IAccountHelperService>();
                 MockHashingService = new Mock<IHashingService>();
 
-                MockAccountsService
-                    .Setup(m => m.Get(It.IsAny<long>(), It.IsAny<CancellationToken>()))                    
+                MockAccountHelperService
+                    .Setup(m => m.GetOrCreateAccount(It.IsAny<long>(), It.IsAny<CancellationToken>()))                    
                     .ReturnsAsync(TestAccountDocument);
+
+                MockHashingService
+                    .Setup(m => m.DecodeValue(It.IsAny<string>()))
+                    .Returns(UnHashedId);                    
 
                 MockProviderCommitmentsApi = new Mock<IProviderCommitmentsApi>();
 
@@ -54,7 +58,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                     .Setup(m => m.GetProviderCommitment(It.IsAny<long>(), It.IsAny<long>()))
                     .ReturnsAsync(TestCommitment);
 
-                Sut = new CohortApprovalRequestedCommandHandler(MockAccountsService.Object, MockProviderCommitmentsApi.Object, MockAccountCreatedCommandHandler.Object, MockHashingService.Object);
+                Sut = new CohortApprovalRequestedCommandHandler(MockAccountsService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockAccountHelperService.Object);
             }
         }
 
@@ -71,7 +75,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m => m.Get(command.AccountId, It.IsAny<CancellationToken>()), Times.Once);
+                testContext.MockAccountHelperService.Verify(m => m.GetOrCreateAccount(command.AccountId, It.IsAny<CancellationToken>()), Times.Once);
             }
 
             [Test]
@@ -108,8 +112,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 // arrange
                 var testContext = new TestContext();
 
-                string cohortReference = Guid.NewGuid().ToString();
-                testContext.TestCommitment.Reference = cohortReference;
+                long cohortId = 456;
+                testContext.TestCommitment.Id = cohortId;
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(0);
 
                 CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
@@ -121,7 +125,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.MockAccountsService.Verify(m =>
                 m.Save(It.Is<AccountDocument>(a =>
                 a.Account.Organisations.First().Cohorts.Count.Equals(1) &&
-                a.Account.Organisations.First().Cohorts.ToList().SingleOrDefault(c => c.Id.Equals(cohortReference)) != null), It.IsAny<CancellationToken>()),
+                a.Account.Organisations.First().Cohorts.ToList().SingleOrDefault(c => c.Id.Equals(cohortId.ToString())) != null), It.IsAny<CancellationToken>()),
                 Times.Once);
             }
 
@@ -130,10 +134,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
             {
                 // arrange
                 var testContext = new TestContext();
-                string cohortReference = Guid.NewGuid().ToString();
-                EAS.Portal.Client.Types.Cohort cohort = new CohortBuilder().WithId(cohortReference);
+                long cohortId = 789;
+                EAS.Portal.Client.Types.Cohort cohort = new CohortBuilder().WithId(cohortId.ToString());
                 testContext.TestAccount.Organisations.First().Cohorts.Add(cohort);
-                testContext.TestCommitment.Reference = cohortReference;
+                testContext.TestCommitment.Id = cohortId;
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(1);
 
                 CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
@@ -179,15 +183,15 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
             {
                 // arrange
                 var testContext = new TestContext();
-                string cohortReference = Guid.NewGuid().ToString();
+                long cohortId = 123;
                 Apprenticeship apprenticeship = new ApprenticeshipBuilder();
                 EAS.Portal.Client.Types.Cohort cohort = new CohortBuilder()
-                    .WithId(cohortReference)
+                    .WithId(cohortId.ToString())
                     .WithApprenticeship(apprenticeship);
                 testContext.TestAccount.Organisations.First().Cohorts.Add(cohort);
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(1);
 
-                testContext.TestCommitment.Reference = cohortReference;
+                testContext.TestCommitment.Id = cohortId;
                 var testApprenticeship = new Commitments.Api.Types.Apprenticeship.Apprenticeship
                 {
                     Id = apprenticeship.Id,

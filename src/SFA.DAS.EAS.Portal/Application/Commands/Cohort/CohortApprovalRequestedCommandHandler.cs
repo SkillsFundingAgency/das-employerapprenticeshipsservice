@@ -5,8 +5,8 @@ using System.Linq;
 using System;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EAS.Portal.Application.Commands.Account;
 using SFA.DAS.HashingService;
+using SFA.DAS.EAS.Portal.Application.AccountHelper;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
@@ -14,31 +14,31 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
     {
         private readonly IAccountDocumentService _accountsService;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
-        private readonly ICommandHandler<AccountCreatedCommand> _accountCreatedHandler;
         private readonly IHashingService _hashingService;
+        private readonly IAccountHelperService _accountHelper;
 
         public CohortApprovalRequestedCommandHandler(
             IAccountDocumentService accountsService, 
             IProviderCommitmentsApi providerCommitmentsApi,
-            ICommandHandler<AccountCreatedCommand> accountCreatedHandler,
-            IHashingService hashingService)
+            IHashingService hashingService,
+            IAccountHelperService accountHelper)
         {
             _accountsService = accountsService;
             _providerCommitmentsApi = providerCommitmentsApi;
-            _accountCreatedHandler = accountCreatedHandler;
             _hashingService = hashingService;
+            _accountHelper = accountHelper;
         }
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
+            var accountDocument = await _accountHelper.GetOrCreateAccount(command.AccountId, cancellationToken);
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
-            await _accountCreatedHandler.Handle(new AccountCreatedCommand(command.AccountId, commitment.LegalEntityName), cancellationToken);
-
-            var accountDocument = await _accountsService.Get(command.AccountId, cancellationToken);           
+                      
             var account = accountDocument.Account;
             var cohortReference = commitment.Reference;
+            var cohortId = commitment.Id;
 
             var organisation = account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(accountLegalEntityId));
             if (organisation == null)
@@ -52,11 +52,11 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
                 account.Organisations.Add(organisation);
             }
 
-            var cohort = organisation.Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortReference, StringComparison.OrdinalIgnoreCase));
+            var cohort = organisation.Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortId.ToString(), StringComparison.OrdinalIgnoreCase));
 
             if (cohort == null)
             {
-                cohort = new Client.Types.Cohort { Id = cohortReference };
+                cohort = new Client.Types.Cohort { Id = cohortId.ToString(), Reference = cohortReference };
                 account.Organisations.First().Cohorts.Add(cohort);
             }
             

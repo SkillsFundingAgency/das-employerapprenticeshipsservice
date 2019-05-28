@@ -14,7 +14,6 @@ namespace SFA.DAS.EAS.Account.Api.Mappings
                 .ForMember(target => target.HashedAccountId, opt => opt.MapFrom(src => src.HashedId))
                 .ForMember(target => target.PublicHashedAccountId, opt => opt.MapFrom(src => src.PublicHashedId))
                 .ForMember(target => target.DateRegistered, opt => opt.MapFrom(src => src.CreatedDate))
-                .ForMember(target => target.LegalEntities, opt => opt.MapFrom(src => new ResourceList(src.AccountLegalEntities.Select(x => new ResourceViewModel { Id = x.Id.ToString() }))))
                 .ForMember(target => target.DasAccountName, opt => opt.MapFrom(src => src.Name));
             CreateMap<LevyDeclarationView, LevyDeclarationViewModel>()
                 .ForMember(target => target.PayeSchemeReference, opt => opt.MapFrom(src => src.EmpRef));
