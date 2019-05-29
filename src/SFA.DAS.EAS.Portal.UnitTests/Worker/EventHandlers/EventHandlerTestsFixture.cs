@@ -41,8 +41,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             Handler = constructHandler != null ? constructHandler(MessageContext.Object) : ConstructHandler();
         }
 
-//        protected abstract TCommand CreateCommand();
-        
         public virtual Task Handle()
         {
             return Handler.Handle(Message, MessageHandlerContext.Object);
@@ -50,7 +48,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
         private TEventHandler ConstructHandler()
         {
-//            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), CreateCommand(), MessageContext.Object);
             return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), Command.Object, MessageContext.Object);
         }
 
