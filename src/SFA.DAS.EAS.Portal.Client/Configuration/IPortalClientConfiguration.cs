@@ -1,3 +1,4 @@
+
 namespace SFA.DAS.EAS.Portal.Client.Configuration
 {
     public interface IPortalClientConfiguration

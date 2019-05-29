@@ -21,19 +21,19 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
 
                 var getAccount = host.Services.GetService<GetAccountScenario>();
                 
-                var accountDtoTasks = Enumerable.Range(0, 9)
+                var accountTasks = Enumerable.Range(0, 9)
                     .AsParallel()
                     .Select(n => getAccount.Run());
 
-                var accountDtos = await Task.WhenAll(accountDtoTasks);
+                var accounts = await Task.WhenAll(accountTasks);
 
-                foreach (var accountDto in accountDtos)
+                foreach (var account in accounts)
                 {
-                    Console.WriteLine($"Account #{accountDto.AccountId} has {accountDto.AccountLegalEntities.Count()} ALEs");
+                    Console.WriteLine($"Account #{account.Id} has {account.Organisations.Count()} ALEs");
                 }
 
                 await host.StopAsync();
-            }
+            }            
         }
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
