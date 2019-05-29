@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.CommitmentsV2.Messages.Events;
+using SFA.DAS.EAS.Portal.Application.AccountHelper;
 using SFA.DAS.EAS.Portal.Application.Adapters;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             services.AddTransient<IAccountDocumentService, AccountDocumentService>();                        
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithSetProperties>();
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithDuplicateCheck>();
-
+            services.AddSingleton<IAccountHelperService, AccountHelperService>();
             services.AddTransient<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>, CohortAdapter>();
 
             // Register all ICommandHandler<> types
