@@ -23,10 +23,10 @@ namespace SFA.DAS.EmployerAccounts.Services
             _configuration = configuration;
             _log = log;
             _httpService = httpServiceFactory.Create(
-                configuration.PensionRegulator.ClientId,
-                configuration.PensionRegulator.ClientSecret,
-                configuration.PensionRegulator.IdentifierUri,
-                configuration.PensionRegulator.Tenant
+                configuration.PensionRegulatorApi.ClientId,
+                configuration.PensionRegulatorApi.ClientSecret,
+                configuration.PensionRegulatorApi.IdentifierUri,
+                configuration.PensionRegulatorApi.Tenant
             );
         }  
 
@@ -41,9 +41,9 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         private string GetBaseUrl()
         {
-            var baseUrl = _configuration.PensionRegulator.BaseUrl.EndsWith("/")
-                ? _configuration.PensionRegulator.BaseUrl
-                : _configuration.PensionRegulator.BaseUrl + "/";
+            var baseUrl = _configuration.PensionRegulatorApi.BaseUrl.EndsWith("/")
+                ? _configuration.PensionRegulatorApi.BaseUrl
+                : _configuration.PensionRegulatorApi.BaseUrl + "/";
 
             return baseUrl;
         }
