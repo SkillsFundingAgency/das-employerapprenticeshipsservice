@@ -21,6 +21,9 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                 var publishCohortApprovalRequestedByProviderEvent = host.Services.GetService<PublishCohortApprovalRequestedByProviderEvents>();
                 await publishCohortApprovalRequestedByProviderEvent.Run();
 
+                var publishAddedPayeSchemeEvent = host.Services.GetService<PublishAddedPayeSchemeEvents>();
+                await publishAddedPayeSchemeEvent.Run();
+
                 await host.StopAsync();
             }
         }
@@ -34,6 +37,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                 {
                     s.AddTransient<PublishReserveFundingAddedEvents, PublishReserveFundingAddedEvents>();
                     s.AddTransient<PublishCohortApprovalRequestedByProviderEvents, PublishCohortApprovalRequestedByProviderEvents>();
+                    s.AddTransient<PublishAddedPayeSchemeEvents, PublishAddedPayeSchemeEvents>();
                 });
     }
 }
