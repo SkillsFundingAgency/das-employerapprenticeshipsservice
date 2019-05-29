@@ -57,6 +57,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             }
 
             var provider = await providerTask;
+            //todo: log useful message if provider / name not found
             organisation.Providers.Add(new Provider
             {
                 Ukprn = updatedPermissionsEvent.Ukprn,
