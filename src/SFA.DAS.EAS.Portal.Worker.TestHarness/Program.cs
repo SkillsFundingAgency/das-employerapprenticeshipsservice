@@ -18,6 +18,9 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                 var publishReserveFundingAddedEvent = host.Services.GetService<PublishReserveFundingAddedEvents>();
                 await publishReserveFundingAddedEvent.Run();
 
+                var publishCohortApprovalRequestedByProviderEvent = host.Services.GetService<PublishCohortApprovalRequestedByProviderEvents>();
+                await publishCohortApprovalRequestedByProviderEvent.Run();
+
                 await host.StopAsync();
             }
         }
@@ -27,6 +30,10 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                 .ConfigureDasAppConfiguration(args)
                 .UseDasEnvironment()
                 .ConfigureServices(s => s.AddDasNServiceBus())
-                .ConfigureServices(s => s.AddTransient<PublishReserveFundingAddedEvents, PublishReserveFundingAddedEvents>());
+                .ConfigureServices(s =>
+                {
+                    s.AddTransient<PublishReserveFundingAddedEvents, PublishReserveFundingAddedEvents>();
+                    s.AddTransient<PublishCohortApprovalRequestedByProviderEvents, PublishCohortApprovalRequestedByProviderEvents>();
+                });
     }
 }

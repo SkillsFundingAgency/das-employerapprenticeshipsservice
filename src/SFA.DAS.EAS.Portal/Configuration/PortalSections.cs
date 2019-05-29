@@ -4,5 +4,6 @@ namespace SFA.DAS.EAS.Portal.Configuration
     {
         public const string CosmosDatabase = "CosmosDatabase";
         public const string ServiceBus = "ServiceBus";
+        public const string HashingService = "HashingService";
     }
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.Azure;
+﻿ using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;

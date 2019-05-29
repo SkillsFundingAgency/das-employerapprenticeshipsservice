@@ -1,22 +1,14 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
-@if (Model.ReservedFundingToShow != null)
-{
+
     <h3 class="das-panel__heading">Apprenticeship funding secured</h3>
     <dl class="das-definition-list das-definition-list--with-separator">
         <dt class="das-definition-list__title">Legal entity:</dt>
-        <dd class="das-definition-list__definition">@Model.ReservedFundingToShowLegalEntityName</dd>
+        <dd class="das-definition-list__definition">@Model.ReservedFundingOrgName</dd>
         <dt class="das-definition-list__title">Training course:</dt>
         <dd class="das-definition-list__definition">@Model.ReservedFundingToShow.CourseName</dd>
         <dt class="das-definition-list__title">Start and end date: </dt>
         <dd class="das-definition-list__definition">@Model.ReservedFundingToShow.StartDate.ToString("MMMM yyyy") to @Model.ReservedFundingToShow.EndDate.ToString("MMMM yyyy")</dd>
     </dl>
-}
-
-@if (Model.RecentlyAddedReservationId != null &&
-     Model.ReservedFundingToShow?.ReservationId != Model.RecentlyAddedReservationId)
-{
-    <p>We're dealing with your request for funding, please check back later.</p>
-}
 
 <p><a href="@Url.ReservationsAction("reservations/manage")" class="das-panel__link">Manage reservations</a> </p>

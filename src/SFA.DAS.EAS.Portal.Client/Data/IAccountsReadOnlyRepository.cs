@@ -1,9 +1,9 @@
 using SFA.DAS.CosmosDb;
-using SFA.DAS.EAS.Portal.Client.Models.Concrete;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 
 namespace SFA.DAS.EAS.Portal.Client.Data
 {
-    internal interface IAccountsReadOnlyRepository : IReadOnlyDocumentRepository<AccountDto>
+    public interface IAccountsReadOnlyRepository : IReadOnlyDocumentRepository<AccountDocument>
     {
     }
 }
