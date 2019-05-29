@@ -26,12 +26,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Types
         public AccountTestsFixture ConstructAccountWithReservedFunding(DateTime? createdDate = null)
         {
             AccountDocument = AccountDocument.Create(AccountId);
-            AccountDocument.Account = new Account
-            {
-                Id = AccountId,
-                Name = "LegalEntityName"
-            };
-            Organisation organisation = new Organisation
+            AccountDocument.Account = new Account { Id = AccountId };
+            var organisation = new Organisation
             {
                 AccountLegalEntityId = 2,
                 Name = "LegalEntityName"

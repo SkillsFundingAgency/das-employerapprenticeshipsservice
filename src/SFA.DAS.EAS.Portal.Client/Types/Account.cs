@@ -15,8 +15,6 @@ namespace SFA.DAS.EAS.Portal.Client.Types
 
         [JsonProperty("id")]
         public long Id { get; set; }
-        [JsonProperty("name")]
-        public string Name { get; set; }
         [JsonProperty("organisations")]
         public ICollection<Organisation> Organisations { get; set; }
         [JsonProperty("providers")]
