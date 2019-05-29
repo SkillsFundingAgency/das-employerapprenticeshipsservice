@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Application.Commands.Account;
@@ -16,21 +17,26 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly ICommandHandler<AccountCreatedCommand> _accountCreatedHandler;
         private readonly IHashingService _hashingService;
+        private readonly ILogger<CohortApprovalRequestedCommandHandler> _logger;
 
         public CohortApprovalRequestedCommandHandler(
             IAccountDocumentService accountsService, 
             IProviderCommitmentsApi providerCommitmentsApi,
             ICommandHandler<AccountCreatedCommand> accountCreatedHandler,
-            IHashingService hashingService)
+            IHashingService hashingService,
+            ILogger<CohortApprovalRequestedCommandHandler> logger)
         {
             _accountsService = accountsService;
             _providerCommitmentsApi = providerCommitmentsApi;
             _accountCreatedHandler = accountCreatedHandler;
             _hashingService = hashingService;
+            _logger = logger;
         }
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
+            _logger.LogInformation($"Executing {nameof(CohortApprovalRequestedCommandHandler)}");
+
             await _accountCreatedHandler.Handle(new AccountCreatedCommand(command.AccountId), cancellationToken);
 
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            

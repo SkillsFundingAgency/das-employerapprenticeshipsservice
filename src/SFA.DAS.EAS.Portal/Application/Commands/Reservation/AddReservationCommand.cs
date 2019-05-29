@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
         public async Task Execute(ReservationCreatedEvent reservedFunding, CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation("Executing AddReservationCommand");
+            _logger.LogInformation($"Executing {nameof(AddReservationCommand)}");
 
             await _accountCreatedHandler.Handle(new AccountCreatedCommand(reservedFunding.AccountId, reservedFunding.AccountLegalEntityName), cancellationToken);
 

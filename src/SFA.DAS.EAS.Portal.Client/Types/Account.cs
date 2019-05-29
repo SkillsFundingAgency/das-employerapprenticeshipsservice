@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         public Account()
         {
             Organisations = new List<Organisation>();
+            Providers = new List<Provider>();
         }
 
         [JsonProperty("id")]
@@ -18,6 +19,8 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         public string Name { get; set; }
         [JsonProperty("organisations")]
         public ICollection<Organisation> Organisations { get; set; }
+        [JsonProperty("providers")]
+        public ICollection<Provider> Providers { get; set; }
         [JsonProperty("deleted")]
         public DateTime? Deleted { get; set; }
     }

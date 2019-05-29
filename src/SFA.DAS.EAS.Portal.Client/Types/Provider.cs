@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json;
-using SFA.DAS.ProviderRelationships.Types.Models;
+﻿using Newtonsoft.Json;
 
 namespace SFA.DAS.EAS.Portal.Client.Types
 {
@@ -10,8 +8,15 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         public long Ukprn { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
-        //todo: will add entourage of SFA.DAS.ProviderRelationships.Types to consumer. ok?
-        public ICollection<Operation> GrantedOperations { get; set; }
-
+        [JsonProperty("email")]
+        public string Email { get; set; }
+        [JsonProperty("phone")]
+        public string Phone { get; set; }
+        [JsonProperty("street")]
+        public string Street { get; set; }
+        [JsonProperty("town")]
+        public string Town { get; set; }
+        [JsonProperty("postcode")]
+        public string Postcode { get; set; }
     }
 }

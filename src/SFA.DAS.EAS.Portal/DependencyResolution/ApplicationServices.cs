@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddTransient<AddReservationCommand>();
-            services.AddTransient<UpdateProviderPermissionsCommand>();
+            services.AddTransient<AddAccountProviderCommand>();
             var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetService<IConfiguration>();
 

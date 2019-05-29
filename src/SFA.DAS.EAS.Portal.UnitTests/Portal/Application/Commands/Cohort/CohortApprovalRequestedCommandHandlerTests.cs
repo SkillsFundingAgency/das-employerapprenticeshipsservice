@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -33,6 +34,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
             public Mock<IProviderCommitmentsApi> MockProviderCommitmentsApi { get; private set; }
             public Mock<ICommandHandler<AccountCreatedCommand>> MockAccountCreatedCommandHandler { get; private set; }
             public Mock<IHashingService> MockHashingService { get; private set; }
+            public Mock<ILogger<CohortApprovalRequestedCommandHandler>> MockLogger { get; private set; }
             public long UnHashedId = 123;
 
             public TestContext()
@@ -44,6 +46,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 MockAccountsService = new Mock<IAccountDocumentService>();
                 MockAccountCreatedCommandHandler = new Mock<ICommandHandler<AccountCreatedCommand>>();
                 MockHashingService = new Mock<IHashingService>();
+                MockLogger = new Mock<ILogger<CohortApprovalRequestedCommandHandler>>();
 
                 MockAccountsService
                     .Setup(m => m.Get(It.IsAny<long>(), It.IsAny<CancellationToken>()))                    
@@ -59,7 +62,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                     .Setup(m => m.GetProviderCommitment(It.IsAny<long>(), It.IsAny<long>()))
                     .ReturnsAsync(TestCommitment);
 
-                Sut = new CohortApprovalRequestedCommandHandler(MockAccountsService.Object, MockProviderCommitmentsApi.Object, MockAccountCreatedCommandHandler.Object, MockHashingService.Object);
+                Sut = new CohortApprovalRequestedCommandHandler(MockAccountsService.Object, MockProviderCommitmentsApi.Object, MockAccountCreatedCommandHandler.Object, MockHashingService.Object, MockLogger.Object);
             }
         }
 
