@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Paye
 
         [Test]
         [Category("UnitTest")]
-        public async Task ShouldNotAddPayeSchemeToAccountIfAlreadyExists()
+        public async Task ShouldNotUpdateAccountIfAlreadyExists()
         {
             // Arrange
             var existingPaye = new PayeScheme { PayeRef = "payepayepaye" };
@@ -94,20 +94,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Paye
             _accountDoc.Account.PayeSchemes.Add(existingPaye);
             var userRef = Guid.NewGuid();
             var payeCommand = new PayeSchemeAddedCommand(1, "Bob", userRef, "payepayepaye", new DateTime(2019, 5, 31));
-
-            AccountDocument resultAccountDoc = null;
-            _accountServiceMock.Setup(mock => mock.Save(It.Is<AccountDocument>(ad => ad.AccountId == 1), It.IsAny<CancellationToken>()))
-                .Callback((AccountDocument accountDoc, CancellationToken ct) =>
-                {
-                    resultAccountDoc = accountDoc;
-                })
-                .Returns(Task.CompletedTask);
-
+            
             // Act
             await _sut.Handle(payeCommand);
 
             // Assert
-            resultAccountDoc.Account.PayeSchemes.Count.Should().Be(4);
+            _accountServiceMock.Verify(mock => mock.Save(It.IsAny<AccountDocument>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

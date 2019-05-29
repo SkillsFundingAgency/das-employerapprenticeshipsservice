@@ -27,9 +27,8 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Paye
             if(existingPaye == null)
             {
                 accountDoc.Account.PayeSchemes.Add(new PayeScheme { PayeRef = command.PayeRef });
+                await _accountService.Save(accountDoc, cancellationToken);
             }
-
-            await _accountService.Save(accountDoc, cancellationToken);
         }
     }
 }
