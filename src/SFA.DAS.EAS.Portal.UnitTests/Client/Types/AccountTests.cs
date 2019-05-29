@@ -1,4 +1,5 @@
 using System;
+using AutoFixture;
 using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
@@ -25,6 +26,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Types
         
         public AccountTestsFixture ConstructAccountWithReservedFunding(DateTime? createdDate = null)
         {
+            //var autoFixture = new Fixture();
+            //todo: don't want to use non-test code to setup if can
             AccountDocument = AccountDocument.Create(AccountId);
             AccountDocument.Account = new Account { Id = AccountId };
             var organisation = new Organisation

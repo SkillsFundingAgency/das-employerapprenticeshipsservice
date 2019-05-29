@@ -18,15 +18,15 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
     /// b) +ve able to handle message even if provider api down, webjob could update stale details
     ///    -ve more data in store, more infrastructure/complexity
     /// </remarks>
-    public class UpdatedPermissionsEventHandler : IHandleMessages<AddedAccountProviderEvent>
+    public class AddedAccountProviderEventHandler : IHandleMessages<AddedAccountProviderEvent>
     {
         //todo: if we have time this sprint, subscribe to provider updated event and update our local store provider details
         // if not, add tech-debt item to backlog
 
-        private readonly AddAccountProviderCommand _addAccountProviderCommand;
+        private readonly IAddAccountProviderCommand _addAccountProviderCommand;
         private readonly IMessageContext _messageContext;
 
-        public UpdatedPermissionsEventHandler(AddAccountProviderCommand addAccountProviderCommand, IMessageContext messageContext)
+        public AddedAccountProviderEventHandler(IAddAccountProviderCommand addAccountProviderCommand, IMessageContext messageContext)
         {
             _addAccountProviderCommand = addAccountProviderCommand;
             _messageContext = messageContext;
