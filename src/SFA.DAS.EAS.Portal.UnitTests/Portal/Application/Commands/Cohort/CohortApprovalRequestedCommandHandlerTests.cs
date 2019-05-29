@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                     .Setup(m => m.GetProviderCommitment(It.IsAny<long>(), It.IsAny<long>()))
                     .ReturnsAsync(TestCommitment);
 
-                Sut = new CohortApprovalRequestedCommandHandler(MockAccountsService.Object, MockProviderCommitmentsApi.Object, MockAccountCreatedCommandHandler.Object, MockHashingService.Object, MockAccountHelperService.Object, MockLogger.Object);
+                Sut = new CohortApprovalRequestedCommandHandler(MockAccountsService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockAccountHelperService.Object, MockLogger.Object);
             }
         }
 
