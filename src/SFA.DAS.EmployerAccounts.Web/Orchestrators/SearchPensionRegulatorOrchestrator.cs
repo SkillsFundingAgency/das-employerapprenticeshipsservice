@@ -10,12 +10,14 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
 using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
     public class SearchPensionRegulatorOrchestrator : UserVerificationOrchestratorBase 
     {
+        private readonly ILog _logger;
         private readonly ICookieStorageService<EmployerAccountData> _cookieService;
         private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
@@ -24,10 +26,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         }
 
-        public SearchPensionRegulatorOrchestrator(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService)
+        public SearchPensionRegulatorOrchestrator(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService, ILog logger)
             : base(mediator)
         {
             _cookieService = cookieService;
+            _logger = logger;
         }
 
         public virtual async Task<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>> SearchPensionRegulator(string payeRef)
@@ -42,15 +45,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Results = CreateResult(result.Organisations).ToList(),                    
                     PayeRef = payeRef
                 };
-            }
-            catch (InvalidRequestException ex)
+            }            
+            catch (Exception ex)
             {
-                response.Exception = ex;
-                response.FlashMessage = FlashMessageViewModel.CreateErrorFlashMessageViewModel(ex.ErrorMessages);
-                response.Status = HttpStatusCode.BadRequest;
-            }
-            catch (Exception)
-            {
+                _logger.Error(ex, ex.Message);
+
                 response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>
                 {
                     Data = new SearchPensionRegulatorResultsViewModel

@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
 using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegulatorOrchestratorTests
@@ -32,7 +33,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
 
             _orchestrator = new SearchPensionRegulatorOrchestrator(
                 _mediator.Object, 
-                Mock.Of<ICookieStorageService<EmployerAccountData>>());
+                Mock.Of<ICookieStorageService<EmployerAccountData>>(),
+                Mock.Of<ILog>());
         }
 
         [Test]
@@ -56,20 +58,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
 
             //Assert
             Assert.IsAssignableFrom<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>>(actual);
-        }
-
-        [Test]
-        public async Task ThenAnInvalidRequestExceptionIsHandledTheOrchestratorResponseIsSetToBadRequest()
-        {
-            //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPensionRegulatorRequest>()))
-                .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string> {{"", ""}}));
-
-            //Act
-            var actual = await _orchestrator.SearchPensionRegulator(It.IsAny<string>());
-
-            //Assert
-            Assert.AreEqual(HttpStatusCode.BadRequest,actual.Status);
-        }     
+        }       
     }
 }

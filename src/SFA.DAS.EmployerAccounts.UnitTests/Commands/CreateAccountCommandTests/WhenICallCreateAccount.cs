@@ -298,7 +298,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         [TestCase(OrganisationType.PublicBodies, Types.Models.OrganisationType.PublicBodies)]
         [TestCase(OrganisationType.Other, Types.Models.OrganisationType.Other)]
         [TestCase(OrganisationType.PensionsRegulator, Types.Models.OrganisationType.PensionsRegulator)]
-        public async Task ThenAAddedLegalEntityEventIsPublished(OrganisationType inputOrganisationType, Types.Models.OrganisationType expectedOrganisationType)
+        public async Task ThenAnAddedLegalEntityEventIsPublished(OrganisationType inputOrganisationType, Types.Models.OrganisationType expectedOrganisationType)
         {
             const string organisationName = "Org";
 
