@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Portal.Worker
                 .UseApplicationInsights()
                 .UseDasEnvironment()
                 .UseConsoleLifetime()
+                //todo: separate out these, passing configuration???
                 .ConfigureServices(s => s.AddApplicationServices())
                 .ConfigureServices(s => s.AddProviderServices())
                 .ConfigureServices(s => s.AddCosmosDatabase())

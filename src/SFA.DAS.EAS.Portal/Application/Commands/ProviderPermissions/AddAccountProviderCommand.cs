@@ -56,7 +56,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
                 accountDocument.Account.Providers.Add(accountProvider);
             }
 
-            //todo: check PRIMARY or LEGAL
             var primaryAddress = provider.Addresses.SingleOrDefault(a => a.ContactType == "PRIMARY");
             
             accountProvider.Ukprn = addedAccountProviderEvent.ProviderUkprn;

@@ -21,6 +21,7 @@ namespace SFA.DAS.EAS.Portal.Application.Services
 
         public Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
         {
+            //todo: think we shouldn't ignore when new, otherwise will process duplicate
             if (!accountDocument.IsNew) // We ignore for new accounts because the messageContext.Id is the Id for an event not related to account creation
             {
                 accountDocument.DeleteOldMessages();
