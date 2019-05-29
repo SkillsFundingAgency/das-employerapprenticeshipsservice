@@ -29,9 +29,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Startup
                         .UseErrorQueue()
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
-                        //todo: remove. we currently have no commands, and is adding internal
-                        .UseMessageConventions()
-                        .UseDasMessageConventions()
+                        .UsePortalMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
                         .UseSendOnly();
