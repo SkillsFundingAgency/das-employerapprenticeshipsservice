@@ -12,9 +12,9 @@ using SFA.DAS.EAS.Portal.Application.Services;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 {
-    public class EventHandlerTestsFixture<TEvent, TEventHandler, TCommand, TCommandParam>
+    public class EventHandlerTestsFixture<TEvent, TEventHandler, TCommand>
         where TEventHandler : IHandleMessages<TEvent>
-        where TCommand : class, IPortalCommand<TCommandParam>
+        where TCommand : class, IPortalCommand<TEvent>
     {
         public TEvent Message { get; set; }
         public TEvent ExpectedMessage { get; set; }
@@ -56,23 +56,18 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), Command.Object, MessageContext.Object);
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand, TCommandParam> VerifyCommandExecutedWithUnchangedEvent()
+        public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyCommandExecutedWithUnchangedEvent()
         {
-            // generic command with execute(TParam)
-            // what we need to check: injected context populated correctly, command executed
-            // introduce base command so can verify execute
-            //return _addAccountProviderCommand.Execute(message);
-
-            //helper for compare clone expectedmessage, alongside clone AreEqual
+            //todo: helper for compare clone expectedmessage, alongside clone AreEqual
             Command.Verify(c => c.Execute(
-                It.Is<TCommandParam>(p => new CompareLogic().Compare(ExpectedMessage,p).AreEqual), It.IsAny<CancellationToken>()),
+                It.Is<TEvent>(p => new CompareLogic().Compare(ExpectedMessage,p).AreEqual), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             //todo: want test to fluent chain using derived methods, covariance?
             return this;
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand, TCommandParam> VerifyMessageContextIsInitialised()
+        public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyMessageContextIsInitialised()
         {
             //todo: the old chestnut of having to verify a mocked object as param. switching to nservicebus's fake should help
             MessageContext.Verify(mc => mc.Initialise(It.IsAny<IMessageHandlerContext>()), Times.Once);

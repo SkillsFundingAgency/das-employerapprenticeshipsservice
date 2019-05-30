@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.Commands;
-using SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 using SFA.DAS.Testing;
@@ -26,8 +25,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
     }
 
     public class AddedAccountProviderEventHandlerTestsFixture : EventHandlerTestsFixture<
-        //todo: we could say param is always event, then this would simplify, but lose flexibility
-        AddedAccountProviderEvent, AddedAccountProviderEventHandler, IPortalCommand<AddedAccountProviderEvent>, AddedAccountProviderEvent>
+        AddedAccountProviderEvent, AddedAccountProviderEventHandler, IPortalCommand<AddedAccountProviderEvent>>
     {
     }
 }
