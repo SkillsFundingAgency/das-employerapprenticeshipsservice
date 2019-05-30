@@ -55,18 +55,17 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
             return (organisation, EntityCreation.Existed);
         }
 
-        //todo: entitycreation
-        // these could be extensions, but not good for testing
-        protected Provider GetOrAddProvider(AccountDocument accountDocument, long ukprn)
+        protected (Provider, EntityCreation) GetOrAddProvider(AccountDocument accountDocument, long ukprn)
         {
             var provider = accountDocument.Account.Providers.SingleOrDefault(p => p.Ukprn == ukprn);
             if (provider == null)
             {
                 provider = new Provider {Ukprn = ukprn};
                 accountDocument.Account.Providers.Add(provider);
+                return (provider, EntityCreation.Created);
             }
 
-            return provider;
+            return (provider, EntityCreation.Existed);
         }
     }
 }

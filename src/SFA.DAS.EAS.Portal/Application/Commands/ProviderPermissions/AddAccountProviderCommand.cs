@@ -64,7 +64,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             if (provider == null)
                 throw new Exception($"Provider with UKPRN={addedAccountProviderEvent.ProviderUkprn} not found");
             
-            var accountProvider = GetOrAddProvider(accountDocument, addedAccountProviderEvent.ProviderUkprn);
+            var (accountProvider,_) = GetOrAddProvider(accountDocument, addedAccountProviderEvent.ProviderUkprn);
 
             var primaryAddress = provider.Addresses.SingleOrDefault(a => a.ContactType == "PRIMARY");
             
