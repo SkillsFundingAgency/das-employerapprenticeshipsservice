@@ -9,7 +9,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
-using SFA.DAS.EAS.Portal.Application.AccountHelper;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
@@ -29,9 +28,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
             public Account TestAccount { get; private set; }
             public AccountDocument TestAccountDocument { get; private set; }
             public CommitmentView TestCommitment { get; private set; }
-            public Mock<IAccountDocumentService> MockAccountsService { get; private set; }
+            public Mock<IAccountDocumentService> MockAccountDocumentService { get; private set; }
             public Mock<IProviderCommitmentsApi> MockProviderCommitmentsApi { get; private set; }
-            public Mock<IAccountHelperService> MockAccountHelperService { get; private set; }
             public Mock<IHashingService> MockHashingService { get; private set; }
             public Mock<ILogger<CohortApprovalRequestedCommandHandler>> MockLogger { get; private set; }
             public long UnHashedId = 123;
@@ -42,14 +40,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 TestAccountDocument = new AccountDocument() { Account = TestAccount };
                 TestCommitment = new CommitmentViewBuilder();
 
-                MockAccountsService = new Mock<IAccountDocumentService>();
-                MockAccountHelperService = new Mock<IAccountHelperService>();
+                MockAccountDocumentService = new Mock<IAccountDocumentService>();
+                MockAccountDocumentService.Setup(s => s.Get(It.IsAny<long>(), It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(TestAccountDocument);
+                
                 MockHashingService = new Mock<IHashingService>();
                 MockLogger = new Mock<ILogger<CohortApprovalRequestedCommandHandler>>();
-
-                MockAccountHelperService
-                    .Setup(m => m.GetOrCreateAccount(It.IsAny<long>(), It.IsAny<CancellationToken>()))                    
-                    .ReturnsAsync(TestAccountDocument);
 
                 MockHashingService
                     .Setup(m => m.DecodeValue(It.IsAny<string>()))
@@ -61,7 +57,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                     .Setup(m => m.GetProviderCommitment(It.IsAny<long>(), It.IsAny<long>()))
                     .ReturnsAsync(TestCommitment);
 
-                Sut = new CohortApprovalRequestedCommandHandler(MockAccountsService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockAccountHelperService.Object, MockLogger.Object);
+                Sut = new CohortApprovalRequestedCommandHandler(MockAccountDocumentService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockLogger.Object);
             }
         }
 
@@ -78,7 +74,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountHelperService.Verify(m => m.GetOrCreateAccount(command.AccountId, It.IsAny<CancellationToken>()), Times.Once);
+                testContext.MockAccountDocumentService.Verify(m => m.Get(command.AccountId, It.IsAny<CancellationToken>()), Times.Once);
             }
 
             [Test]
@@ -106,7 +102,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m => m.Save(testContext.TestAccountDocument, It.IsAny<CancellationToken>()), Times.Once);
+                testContext.MockAccountDocumentService.Verify(m => m.Save(testContext.TestAccountDocument, It.IsAny<CancellationToken>()), Times.Once);
             }
 
             [Test]
@@ -125,7 +121,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m =>
+                testContext.MockAccountDocumentService.Verify(m =>
                 m.Save(It.Is<AccountDocument>(a =>
                 a.Account.Organisations.First().Cohorts.Count.Equals(1) &&
                 a.Account.Organisations.First().Cohorts.ToList().SingleOrDefault(c => c.Id.Equals(cohortId.ToString())) != null), It.IsAny<CancellationToken>()),
@@ -149,12 +145,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m =>
+                testContext.MockAccountDocumentService.Verify(m =>
                 m.Save(It.Is<AccountDocument>(a =>
                 a.Account.Organisations.First().Cohorts.Count.Equals(1)), It.IsAny<CancellationToken>()),
                 Times.Once);
             }
-
 
             [Test]
             public async Task WhenANewCohortIsAdded_ThenApprenticeshipsInTheCohortAreStored()
@@ -173,7 +168,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m =>
+                testContext.MockAccountDocumentService.Verify(m =>
                 m.Save(It.Is<AccountDocument>(a =>
                 a.Account.Organisations.First().Cohorts.Count.Equals(1) &&
                 a.Account.Organisations.First().Cohorts.First().Apprenticeships.Count.Equals(1) &&
@@ -215,7 +210,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m =>
+                testContext.MockAccountDocumentService.Verify(m =>
                 m.Save(It.Is<AccountDocument>(a =>
                 a.Account.Organisations.First().Cohorts.First().Apprenticeships.Count.Equals(1) &&
                 (a.Account.Organisations.First().Cohorts.First().Apprenticeships.First().Id == testApprenticeship.Id) &&

@@ -7,29 +7,26 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.HashingService;
-using SFA.DAS.EAS.Portal.Application.AccountHelper;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
-    public class CohortApprovalRequestedCommandHandler : ICommandHandler<CohortApprovalRequestedCommand>
+    public class CohortApprovalRequestedCommandHandler : Command, ICommandHandler<CohortApprovalRequestedCommand>
     {
         private readonly IAccountDocumentService _accountsService;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly IHashingService _hashingService;
-        private readonly IAccountHelperService _accountHelper;
         private readonly ILogger<CohortApprovalRequestedCommandHandler> _logger;
 
         public CohortApprovalRequestedCommandHandler(
             IAccountDocumentService accountsService, 
             IProviderCommitmentsApi providerCommitmentsApi,
             IHashingService hashingService,
-            IAccountHelperService accountHelper,
             ILogger<CohortApprovalRequestedCommandHandler> logger)
+        : base(accountsService)
         {
             _accountsService = accountsService;
             _providerCommitmentsApi = providerCommitmentsApi;
             _hashingService = hashingService;
-            _accountHelper = accountHelper;
             _logger = logger;
         }
 
@@ -37,10 +34,9 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
         {
             _logger.LogInformation($"Executing {nameof(CohortApprovalRequestedCommandHandler)}");
 
-            var accountDocument = await _accountHelper.GetOrCreateAccount(command.AccountId, cancellationToken);
+            var accountDocument = await GetOrCreateAccountDocument(command.AccountId, cancellationToken);
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
-
                       
             var account = accountDocument.Account;
             var cohortReference = commitment.Reference;
