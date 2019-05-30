@@ -2,7 +2,6 @@
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Commands.Reservation;
 using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Worker.Extensions;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations

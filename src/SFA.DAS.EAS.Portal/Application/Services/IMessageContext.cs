@@ -1,4 +1,5 @@
 ﻿using System;
+using NServiceBus;
 
 namespace SFA.DAS.EAS.Portal.Application.Services
 {
@@ -6,5 +7,7 @@ namespace SFA.DAS.EAS.Portal.Application.Services
     {
         string Id { get; set; }
         DateTime CreatedDateTime { get; set; }
+
+        void Initialise(IMessageHandlerContext handlerContext);
     }
 }

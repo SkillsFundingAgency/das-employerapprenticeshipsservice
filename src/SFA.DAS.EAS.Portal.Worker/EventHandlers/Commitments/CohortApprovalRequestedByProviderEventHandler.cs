@@ -4,7 +4,6 @@ using SFA.DAS.EAS.Portal.Application.Adapters;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Worker.Extensions;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments

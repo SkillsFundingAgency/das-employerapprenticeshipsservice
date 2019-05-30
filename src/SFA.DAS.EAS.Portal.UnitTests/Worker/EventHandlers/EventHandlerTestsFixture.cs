@@ -9,7 +9,6 @@ using Moq;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Worker.Extensions;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 {
@@ -76,8 +75,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand, TCommandParam> VerifyMessageContextIsInitialised()
         {
             //todo: the old chestnut of having to verify a mocked object as param. switching to nservicebus's fake should help
-            //todo: extension method - change, pain to test
-            //MessageContext.Verify(mc => mc.Initialise(It.IsAny<IMessageHandlerContext>()), Times.Once);
+            MessageContext.Verify(mc => mc.Initialise(It.IsAny<IMessageHandlerContext>()), Times.Once);
 
             return this;
         }
