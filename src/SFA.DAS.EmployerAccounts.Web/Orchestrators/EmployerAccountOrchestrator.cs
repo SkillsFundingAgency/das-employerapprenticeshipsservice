@@ -123,7 +123,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateOrUpdateAccount(CreateAccountModel model, HttpContextBase context)
         {
-            if (string.IsNullOrWhiteSpace(model.HashedAccountId.Value))
+            if (string.IsNullOrWhiteSpace(model?.HashedAccountId?.Value))
             {
                 return await CreateNewAccount(model);
             }

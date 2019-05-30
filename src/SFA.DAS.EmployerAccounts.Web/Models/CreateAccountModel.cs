@@ -5,10 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Models
 {
     public class CreateAccountModel
     {
-        public CreateAccountModel()
-        {
-            HashedAccountId = new HashedAccountIdModel {Value = String.Empty};
-        }
         public string UserId { get; set; }
         public OrganisationType OrganisationType { get; set; }
         public short? PublicSectorDataSource { get; set; }
