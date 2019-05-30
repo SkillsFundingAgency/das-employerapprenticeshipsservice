@@ -231,7 +231,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
 
-            var request = new CreateAccountViewModel
+            var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
                 OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
@@ -245,10 +245,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.EmployerAccountOrganisationData.OrganisationStatus) ? null : enteredData.EmployerAccountOrganisationData.OrganisationStatus,
                 EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
-                Sector = enteredData.EmployerAccountOrganisationData.Sector
+                Sector = enteredData.EmployerAccountOrganisationData.Sector,
+                HashedAccountId = _accountCookieStorage.Get(hashedAccountIdCookieName)
             };
 
-            var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
+            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(request, HttpContext);
 
             if (response.Status == HttpStatusCode.BadRequest)
             {

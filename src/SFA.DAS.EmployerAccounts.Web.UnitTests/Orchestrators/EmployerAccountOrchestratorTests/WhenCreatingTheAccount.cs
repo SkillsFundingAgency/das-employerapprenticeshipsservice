@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var model = ArrangeModel();
 
             //Act
-            await _employerAccountOrchestrator.CreateAccount(model, It.IsAny<HttpContextBase>());
+            await _employerAccountOrchestrator.CreateOrUpdateAccount(model, It.IsAny<HttpContextBase>());
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAccountCommand>(
@@ -76,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 });
 
             //Act
-            var response = await _employerAccountOrchestrator.CreateAccount(new CreateAccountViewModel(), It.IsAny<HttpContextBase>());
+            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(new CreateAccountModel(), It.IsAny<HttpContextBase>());
 
             //Assert
             Assert.AreEqual(hashedId, response.Data?.EmployerAgreement?.HashedAccountId);
@@ -124,9 +125,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         }
 
 
-        private static CreateAccountViewModel ArrangeModel()
+        private static CreateAccountModel ArrangeModel()
         {
-            return new CreateAccountViewModel
+            return new CreateAccountModel
             {
                 OrganisationName = "test",
                 UserId = Guid.NewGuid().ToString(),
