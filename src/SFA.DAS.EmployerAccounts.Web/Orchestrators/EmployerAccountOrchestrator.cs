@@ -129,12 +129,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             try
             {
-                // Add paye to existing account
                 await addPayeToExistingAccount(model);
 
-                // Add legal entity to account
                 await addLegalEntityToExistingAccount(model);
-                // rename account to legal entity?
+
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel
