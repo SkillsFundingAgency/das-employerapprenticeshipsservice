@@ -11,7 +11,23 @@ using SFA.DAS.Providers.Api.Client;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
 {
+    //todo: if we have time this sprint, subscribe to provider updated event (is there 1?) and update our local store provider details
+    // if not, add tech-debt item to backlog
+
     /// <remarks>
+    /// Options for retrieving provider details
+    /// ---------------------------------------
+    /// a) fetch each individual provider when processing each event [gone for this option]
+    /// b) bulk fetch all new overnight and keep in local store
+    ///
+    /// a) will need to update provider details on provider details changed event
+    ///    +ve no web job, less storage
+    ///    -ve event handling will fail if provider api down (or we don't store provider details)
+    /// b) +ve able to handle message even if provider api down, webjob could update stale details
+    ///    -ve more data in store, more infrastructure/complexity
+    ///
+    /// Notes on handling provider already exists
+    /// -----------------------------------------
     /// Currently, we shouldn't be asked to process an AddedAccountProviderEvent for a provider twice (message is de-duped),
     /// so there shouldn't be an existing provider.
     /// However, as we're allowing message handlers to create a skeleton account document with the details they have,
