@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
-using KellermanSoftware.CompareNetObjects;
 using Moq;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Commands;
@@ -58,9 +57,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
         public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyCommandExecutedWithUnchangedEvent()
         {
-            //todo: helper for compare clone expectedmessage, alongside clone AreEqual
             Command.Verify(c => c.Execute(
-                It.Is<TEvent>(p => new CompareLogic().Compare(ExpectedMessage,p).AreEqual), It.IsAny<CancellationToken>()),
+                It.Is<TEvent>(p => p.IsEqual(ExpectedMessage)), It.IsAny<CancellationToken>()),
                 Times.Once);
 
             //todo: want test to fluent chain using derived methods, covariance?
