@@ -6,7 +6,6 @@ using System;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.HashingService;
-using SFA.DAS.EAS.Portal.Application.AccountHelper;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
@@ -15,23 +14,20 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
         private readonly IAccountDocumentService _accountsService;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly IHashingService _hashingService;
-        private readonly IAccountHelperService _accountHelper;
 
         public CohortApprovalRequestedCommandHandler(
             IAccountDocumentService accountsService, 
             IProviderCommitmentsApi providerCommitmentsApi,
-            IHashingService hashingService,
-            IAccountHelperService accountHelper)
+            IHashingService hashingService)
         {
             _accountsService = accountsService;
             _providerCommitmentsApi = providerCommitmentsApi;
             _hashingService = hashingService;
-            _accountHelper = accountHelper;
         }
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
-            var accountDocument = await _accountHelper.GetOrCreateAccount(command.AccountId, cancellationToken);
+            var accountDocument = await _accountsService.Get(command.AccountId, cancellationToken);
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 

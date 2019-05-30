@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Portal.Application.AccountHelper;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
@@ -14,15 +13,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
     {
         private readonly IAccountDocumentService _accountsService;
         private readonly ILogger<AddReservationCommand> _logger;
-        private readonly IAccountHelperService _accountHelper;
 
         public AddReservationCommand(
             IAccountDocumentService accountsService,
-            IAccountHelperService accountHelper,
             ILogger<AddReservationCommand> logger)
         {
             _accountsService = accountsService;
-            _accountHelper = accountHelper;
             _logger = logger;
         }
 
@@ -30,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
         {
             _logger.LogInformation("Executing AddReservationCommand");
 
-            var accountDocument = await _accountHelper.GetOrCreateAccount(reservedFunding.AccountId, cancellationToken);
+            var accountDocument = await _accountsService.Get(reservedFunding.AccountId, cancellationToken);
             var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(reservedFunding.AccountLegalEntityId));
             if (org == null)
             {

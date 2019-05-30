@@ -14,12 +14,15 @@ namespace SFA.DAS.EAS.Portal.Application.Services
         {
             _accountsRepository = accountsRepository;
         }
-        public Task<AccountDocument> Get(long id, CancellationToken cancellationToken = default)
+        public async Task<AccountDocument> Get(long id, CancellationToken cancellationToken = default)
         {
-            return
-            _accountsRepository
-                          .CreateQuery()
-               .SingleOrDefaultAsync(a => a.AccountId == id, cancellationToken);            
+            var accountDocument = await _accountsRepository.CreateQuery()
+               .SingleOrDefaultAsync(a => a.AccountId == id, cancellationToken);
+            if (accountDocument == null)
+            {
+                accountDocument = AccountDocument.Create(id);
+            }
+            return accountDocument;
         }
 
         public Task Save(AccountDocument account, CancellationToken cancellationToken = default)
