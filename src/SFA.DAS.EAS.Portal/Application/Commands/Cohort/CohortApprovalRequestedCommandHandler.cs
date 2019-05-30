@@ -42,18 +42,13 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
             var cohortReference = commitment.Reference;
             var cohortId = commitment.Id;
 
-            var organisation = account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(accountLegalEntityId));
-            if (organisation == null)
+            var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, accountLegalEntityId);
+            if (organisationCreation == EntityCreation.Created)
             {
-                organisation = new Organisation()
-                {
-                    AccountLegalEntityId = accountLegalEntityId,
-                    Name = commitment.LegalEntityName
-                };
-
-                account.Organisations.Add(organisation);
+                organisation.Name = commitment.LegalEntityName;
             }
 
+            //todo: use GetOrAdd pattern for cohort
             var cohort = organisation.Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortId.ToString(), StringComparison.OrdinalIgnoreCase));
 
             if (cohort == null)

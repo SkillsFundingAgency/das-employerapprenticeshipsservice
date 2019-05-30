@@ -29,19 +29,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 AccountDocument.Create(accountId);
         }
 
-//        protected Organisation GetOrAddOrganisation(AccountDocument accountDocument, long accountLegalEntityId, Action<Organisation> populateOnCreate = null)
-//        {
-//            var organisation = accountDocument.Account.Organisations.SingleOrDefault(o => o.AccountLegalEntityId == accountLegalEntityId);
-//            if (organisation == null)
-//            {
-//                organisation = new Organisation {AccountLegalEntityId = accountLegalEntityId};
-//                populateOnCreate?.Invoke(organisation);
-//                accountDocument.Account.Organisations.Add(organisation);
-//            }
-//
-//            return organisation;
-//        }
-
         protected (Organisation, EntityCreation) GetOrAddOrganisation(AccountDocument accountDocument, long accountLegalEntityId)
         {
             var organisation = accountDocument.Account.Organisations.SingleOrDefault(o => o.AccountLegalEntityId == accountLegalEntityId);
