@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
     /// we update any existing provider with the latest details (rather than throwing or logging a warning).
     /// Note: there is currently no way to remove or delete a provider relationship, so we don't have to worry about that.
     /// </remarks>
-    public class AddAccountProviderCommand : IAddAccountProviderCommand
+    public class AddAccountProviderCommand : IPortalCommand<AddedAccountProviderEvent>
     {
         private readonly IAccountDocumentService _accountDocumentService;
         private readonly IProviderApiClient _providerApiClient;

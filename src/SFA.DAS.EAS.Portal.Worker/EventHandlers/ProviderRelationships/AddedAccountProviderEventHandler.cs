@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using NServiceBus;
+using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Worker.Extensions;
@@ -23,10 +24,10 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
         //todo: if we have time this sprint, subscribe to provider updated event and update our local store provider details
         // if not, add tech-debt item to backlog
 
-        private readonly IAddAccountProviderCommand _addAccountProviderCommand;
+        private readonly IPortalCommand<AddedAccountProviderEvent> _addAccountProviderCommand;
         private readonly IMessageContext _messageContext;
 
-        public AddedAccountProviderEventHandler(IAddAccountProviderCommand addAccountProviderCommand, IMessageContext messageContext)
+        public AddedAccountProviderEventHandler(IPortalCommand<AddedAccountProviderEvent> addAccountProviderCommand, IMessageContext messageContext)
         {
             _addAccountProviderCommand = addAccountProviderCommand;
             _messageContext = messageContext;
