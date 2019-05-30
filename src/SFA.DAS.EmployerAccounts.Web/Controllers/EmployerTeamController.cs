@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -12,6 +11,11 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -50,16 +54,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled)
+            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
+                response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+                response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
+
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
-            }
 
+                return View("v2/Index", "_Layout_v2", response);
+            }
             return View(response);
+
         }
+
         [HttpGet]
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
@@ -299,58 +310,58 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
-            else if (model.RecentlyAddedReservationId != null
-                || model.AccountViewModel?.AccountLegalEntities?.FirstOrDefault()?.ReservedFundings?.Any() == true)
+            else if (model.ApprenticeshipAdded)
+            {
+                viewModel.ViewName = "ApprenticeshipDetails";
+            }
+            else if (model.ShowReservations) 
             {
                 viewModel.ViewName = "FundingComplete";
-
-                //todo: no need to return everything in the event in AccountDto, just what we need to display (probably only save what we need to show also)
-                //todo: accountDto now mixed concrete/interfaces, which is inconsistent
-
-                if (model.RecentlyAddedReservationId != null)
-                {
-                    var legalEntity = model.AccountViewModel?.AccountLegalEntities
-                        ?.FirstOrDefault(ale => ale.ReservedFundings?.Any(rf => rf.ReservationId == model.RecentlyAddedReservationId) == true);
-
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
-
-                    // would be better to create new model to contain what the panel needs to show,
-                    // but we'll be replacing this with displaying all reserved funds anyway
-                    model.ReservedFundingToShow =
-                        legalEntity?.ReservedFundings?.FirstOrDefault(rf =>
-                            rf.ReservationId == model.RecentlyAddedReservationId);
-                }
-
-                if (model.ReservedFundingToShow == null)
-                {
-                    var legalEntity = model.AccountViewModel?.AccountLegalEntities?.First();
-                    model.ReservedFundingToShowLegalEntityName = legalEntity?.LegalEntityName;
-                    model.ReservedFundingToShow = legalEntity?.ReservedFundings?.First();
-                }
+            }
+            else if(model.RecentlyAddedReservationId != null)
+            {
+                viewModel.ViewName = "NotCurrentlyInStorage";
+            }
+            else if(model.PayeSchemeCount == 0)
+            {
+                viewModel.ViewName = "AddPAYE";
             }
             return PartialView(viewModel);
-        }       
+        }
 
         [ChildActionOnly]
         public ActionResult Row1Panel2(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
-            if (model.AgreementsToSign)
+            if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
             }
 
             return PartialView(viewModel);
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
             return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
+            if (!HasPayeScheme(model))
+            {
+                viewModel.ViewName = "PrePayeRecruitment";
+            }
+            return PartialView(viewModel);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AddPAYE(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
         }
 
         [ChildActionOnly]
@@ -358,38 +369,69 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissions(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }        
+        }
+
         [ChildActionOnly]
         public ActionResult SavedProviders(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult AccountSettings(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult FundingComplete(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PrePAYERecruitment(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult SearchBar()
+        {
+            return PartialView();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -407,6 +449,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
+        }
+
+        private bool HasPayeScheme(AccountDashboardViewModel data)
+        {
+            return data.PayeSchemeCount > 0;
         }
     }
 }

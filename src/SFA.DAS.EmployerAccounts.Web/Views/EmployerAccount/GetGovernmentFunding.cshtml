@@ -15,14 +15,10 @@
             Get government funding
         </h1>
         <p>If you’re ready to pay for your apprenticeships using government funding, you can do this now by adding the PAYE scheme for your organisation.</p>
-        <p>If you do not need to get government funding yet, you can still register an account to:</p>
-        <ul class="list list-bullet">
-            <li>search and save apprenticeships</li>
-            <li>save your chosen training providers</li>
-        </ul>
+        <p>If you do not need to get government funding yet, you can still register an account.</p>      
         <p>You can add the PAYE scheme for your organisation using the Government Gateway login for your PAYE scheme.</p>
         <p><a rel="external" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in">Can't find your Government Gateway details?</a></p>
-        <form method="POST" action="@Url.Action(ControllerConstants.GetGovernmentFunding, ControllerConstants.EmployerAccountControllerName)" >
+        <form method="POST" action="@Url.Action(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName)" >
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
                 <fieldset>

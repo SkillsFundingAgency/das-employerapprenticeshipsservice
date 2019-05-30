@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new FeatureToggleViewEngine());
+            ViewEngines.Engines.Add(new NewHomepageViewEngine());
 
             AuditMessageFactory.RegisterBuilder(m =>
             {

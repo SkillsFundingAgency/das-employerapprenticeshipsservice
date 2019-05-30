@@ -43,7 +43,10 @@
 
 - Open Visual Studio as an administrator
 - Open the solution
-- Set SFA.DAS.CloudService as the startup project
+- Set the following as the startup projects:
+	- SFA.DAS.CloudService
+	- SFA.DAS.EmployerAccounts.Web
+	- SFA.DAS.EmployerFinance.Web
 - Running the solution will launch the site in your browser
 
 ##### Publish the databases
