@@ -13,6 +13,7 @@ using MediatR;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -22,27 +23,39 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
-        private readonly IMediator _mediatr;   
+        private readonly IMediator _mediatr;
+        private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
+        private const string hashedAccountIdCookieName = "SFA.DAS.EmployerAccountsHashedAccountIdCookie";
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr)
+            IMediator mediatr, ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+            _accountCookieStorage = accountCookieStorage;
         }
 
         [HttpGet]
         [Route("gatewayInform")]
-        public ActionResult GatewayInform()
+        [Route("{HashedAccountId}/gatewayInform")]
+        public ActionResult GatewayInform(string hashedAccountId = "")
         {
+
+            if (!string.IsNullOrWhiteSpace(hashedAccountId))
+            {
+                _accountCookieStorage.Create(
+                    new HashedAccountIdModel{Value = hashedAccountId}, 
+                    hashedAccountIdCookieName);
+            }
+
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
             {
                 Data = new GatewayInformViewModel
