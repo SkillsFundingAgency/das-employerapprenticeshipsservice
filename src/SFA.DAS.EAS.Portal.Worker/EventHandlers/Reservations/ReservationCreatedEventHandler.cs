@@ -1,17 +1,17 @@
 ﻿using System.Threading.Tasks;
 using NServiceBus;
-using SFA.DAS.EAS.Portal.Application.Commands.Reservation;
+using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 {
-    class ReservationCreatedEventHandler : IHandleMessages<ReservationCreatedEvent>
+    public class ReservationCreatedEventHandler : IHandleMessages<ReservationCreatedEvent>
     {
         private readonly IMessageContext _messageContext;
-        private readonly AddReservationCommand _addReservationCommand;
+        private readonly IPortalCommand<ReservationCreatedEvent> _addReservationCommand;
 
-        public ReservationCreatedEventHandler(AddReservationCommand addReservationCommand, IMessageContext messageContext)
+        public ReservationCreatedEventHandler(IPortalCommand<ReservationCreatedEvent> addReservationCommand, IMessageContext messageContext)
         {
             _addReservationCommand = addReservationCommand;
             _messageContext = messageContext;

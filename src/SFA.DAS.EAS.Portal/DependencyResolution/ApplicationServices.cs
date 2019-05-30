@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Configuration;
 using SFA.DAS.HashingService;
 using SFA.DAS.ProviderRelationships.Messages.Events;
+using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.DependencyResolution
 {
@@ -18,7 +19,7 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddTransient<AddReservationCommand>();
+            services.AddTransient<IPortalCommand<ReservationCreatedEvent>, AddReservationCommand>();
             services.AddTransient<IPortalCommand<AddedAccountProviderEvent>, AddAccountProviderCommand>();
             var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetService<IConfiguration>();

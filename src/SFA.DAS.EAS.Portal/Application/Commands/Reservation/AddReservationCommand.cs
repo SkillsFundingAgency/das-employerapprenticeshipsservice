@@ -10,7 +10,7 @@ using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 {
-    public class AddReservationCommand
+    public class AddReservationCommand : IPortalCommand<ReservationCreatedEvent>
     {
         private readonly IAccountDocumentService _accountDocumentService;
         private readonly ILogger<AddReservationCommand> _logger;
