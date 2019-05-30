@@ -127,11 +127,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 return await CreateNewAccount(model);
             }
+
+            return await UpdateExistingAccount(model);
+        }
+
+        private async Task<OrchestratorResponse<EmployerAgreementViewModel>> UpdateExistingAccount(CreateAccountModel model)
+        {
             try
             {
                 await addPayeToExistingAccount(model);
 
                 await addLegalEntityToExistingAccount(model);
+
+                await updateAccountNameToLegalEntityName(model);
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
@@ -156,6 +164,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     FlashMessage = new FlashMessageViewModel()
                 };
             }
+        }
+
+        private async Task updateAccountNameToLegalEntityName(CreateAccountModel model)
+        {
+            await _mediator.SendAsync(new RenameEmployerAccountCommand
+            {
+                HashedAccountId = model.HashedAccountId.Value,
+                ExternalUserId = model.UserId,
+                NewName = model.OrganisationName
+            });
         }
 
         private async Task addLegalEntityToExistingAccount(CreateAccountModel model)
