@@ -27,9 +27,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 
             var accountDocument = await GetOrCreateAccountDocument(reservedFunding.AccountId, cancellationToken);
 
-//            var organisation = GetOrAddOrganisation(accountDocument, reservedFunding.AccountLegalEntityId,
-//                o => o.Name = reservedFunding.AccountLegalEntityName);
-
             var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, reservedFunding.AccountLegalEntityId);
             if (organisationCreation == EntityCreation.Created)
             {
