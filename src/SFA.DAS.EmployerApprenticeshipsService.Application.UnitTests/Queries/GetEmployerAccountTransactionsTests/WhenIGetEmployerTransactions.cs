@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
@@ -13,7 +12,6 @@ using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 using SFA.DAS.Hashing;
@@ -215,12 +213,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectPaymentTransactions()
         {
             //Arrange
-            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
                 TransactionType = TransactionItemType.Payment,
-                Amount = 123.45M
+                Amount = 123.45M,
+                ProviderName = "test"
             };
 
 
@@ -236,7 +234,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            //Assert.AreEqual(provider.ProviderName, actualTransaction.Description);
+            Assert.AreEqual(transaction.ProviderName, actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 
