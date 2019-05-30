@@ -51,6 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
+                _accountCookieStorage.Delete(hashedAccountIdCookieName);
                 _accountCookieStorage.Create(
                     new HashedAccountIdModel{Value = hashedAccountId}, 
                     hashedAccountIdCookieName);
@@ -259,6 +260,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             
             _employerAccountOrchestrator.DeleteCookieData();
+            _accountCookieStorage.Delete(hashedAccountIdCookieName);
+
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
