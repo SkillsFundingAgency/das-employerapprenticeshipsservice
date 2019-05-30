@@ -57,17 +57,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             //todo: cross cutting logging. handler could log/decorator/other?
             _logger.LogInformation($"Executing {nameof(AddAccountProviderCommand)}");
 
-            //todo: double check returns null on not found
             var providerTask = _providerApiClient.GetAsync(addedAccountProviderEvent.ProviderUkprn);
             var accountDocument = await GetOrCreateAccountDocument(addedAccountProviderEvent.AccountId, cancellationToken);
-
-            var provider = await providerTask;
-            //todo: throws EntityNotFoundException if not found
-//            if (provider == null)
-//                throw new Exception($"Provider with UKPRN={addedAccountProviderEvent.ProviderUkprn} not found");
             
             var (accountProvider,_) = GetOrAddProvider(accountDocument, addedAccountProviderEvent.ProviderUkprn);
 
+            var provider = await providerTask;
             var primaryAddress = provider.Addresses.SingleOrDefault(a => a.ContactType == "PRIMARY");
             
             accountProvider.Name = provider.ProviderName;
