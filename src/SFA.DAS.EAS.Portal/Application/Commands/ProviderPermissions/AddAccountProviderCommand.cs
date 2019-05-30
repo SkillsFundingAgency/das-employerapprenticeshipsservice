@@ -58,7 +58,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             _logger.LogInformation($"Executing {nameof(AddAccountProviderCommand)}");
 
             var providerTask = _providerApiClient.GetAsync(addedAccountProviderEvent.ProviderUkprn);
-            //todo: move getorcreate/ensure into helper. where? service, base, elsewhere?
             var accountDocument = await GetOrCreateAccountDocument(addedAccountProviderEvent.AccountId, cancellationToken);
 
             var provider = await providerTask;
@@ -69,7 +68,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
 
             var primaryAddress = provider.Addresses.SingleOrDefault(a => a.ContactType == "PRIMARY");
             
-            accountProvider.Ukprn = addedAccountProviderEvent.ProviderUkprn;
             accountProvider.Name = provider.ProviderName;
             accountProvider.Email = provider.Email;
             accountProvider.Phone = provider.Phone;

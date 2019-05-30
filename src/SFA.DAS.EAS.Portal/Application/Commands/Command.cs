@@ -11,6 +11,12 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
     {
         private readonly IAccountDocumentService _accountDocumentService;
 
+        protected enum EntityCreation
+        {
+            Created,
+            Existed
+        }
+        
         protected Command(IAccountDocumentService accountDocumentService)
         //todo: : IPortalCommand<TEvent>
         {
@@ -23,13 +29,40 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
                 AccountDocument.Create(accountId);
         }
 
+//        protected Organisation GetOrAddOrganisation(AccountDocument accountDocument, long accountLegalEntityId, Action<Organisation> populateOnCreate = null)
+//        {
+//            var organisation = accountDocument.Account.Organisations.SingleOrDefault(o => o.AccountLegalEntityId == accountLegalEntityId);
+//            if (organisation == null)
+//            {
+//                organisation = new Organisation {AccountLegalEntityId = accountLegalEntityId};
+//                populateOnCreate?.Invoke(organisation);
+//                accountDocument.Account.Organisations.Add(organisation);
+//            }
+//
+//            return organisation;
+//        }
+
+        protected (Organisation, EntityCreation) GetOrAddOrganisation(AccountDocument accountDocument, long accountLegalEntityId)
+        {
+            var organisation = accountDocument.Account.Organisations.SingleOrDefault(o => o.AccountLegalEntityId == accountLegalEntityId);
+            if (organisation == null)
+            {
+                organisation = new Organisation {AccountLegalEntityId = accountLegalEntityId};
+                accountDocument.Account.Organisations.Add(organisation);
+                return (organisation, EntityCreation.Created);
+            }
+
+            return (organisation, EntityCreation.Existed);
+        }
+
+        //todo: entitycreation
         // these could be extensions, but not good for testing
         protected Provider GetOrAddProvider(AccountDocument accountDocument, long ukprn)
         {
             var provider = accountDocument.Account.Providers.SingleOrDefault(p => p.Ukprn == ukprn);
             if (provider == null)
             {
-                provider = new Provider();
+                provider = new Provider {Ukprn = ukprn};
                 accountDocument.Account.Providers.Add(provider);
             }
 
