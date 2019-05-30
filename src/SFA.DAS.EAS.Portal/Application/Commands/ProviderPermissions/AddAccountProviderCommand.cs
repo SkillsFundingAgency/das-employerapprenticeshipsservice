@@ -4,8 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Client.Database.Models;
-using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 using SFA.DAS.Providers.Api.Client;
 
@@ -36,16 +34,18 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
     /// we update any existing provider with the latest details (rather than throwing or logging a warning).
     /// Note: there is currently no way to remove or delete a provider relationship, so we don't have to worry about that.
     /// </remarks>
-    public class AddAccountProviderCommand : IPortalCommand<AddedAccountProviderEvent>
+    public class AddAccountProviderCommand : Command, IPortalCommand<AddedAccountProviderEvent>
     {
         private readonly IAccountDocumentService _accountDocumentService;
         private readonly IProviderApiClient _providerApiClient;
         private readonly ILogger<AddAccountProviderCommand> _logger;
 
+        //todo: optimisation: these commands should be able to be singleton
         public AddAccountProviderCommand(
             IAccountDocumentService accountDocumentService,
             IProviderApiClient providerApiClient,
             ILogger<AddAccountProviderCommand> logger)
+        : base(accountDocumentService)
         {
             _accountDocumentService = accountDocumentService;
             _providerApiClient = providerApiClient;
@@ -54,23 +54,18 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
 
         public async Task Execute(AddedAccountProviderEvent addedAccountProviderEvent, CancellationToken cancellationToken = default)
         {
+            //todo: cross cutting logging. handler could log/decorator/other?
             _logger.LogInformation($"Executing {nameof(AddAccountProviderCommand)}");
 
             var providerTask = _providerApiClient.GetAsync(addedAccountProviderEvent.ProviderUkprn);
             //todo: move getorcreate/ensure into helper. where? service, base, elsewhere?
-            var accountDocument = await _accountDocumentService.Get(addedAccountProviderEvent.AccountId, cancellationToken) ??
-                                  AccountDocument.Create(addedAccountProviderEvent.AccountId);
+            var accountDocument = await GetOrCreateAccountDocument(addedAccountProviderEvent.AccountId, cancellationToken);
 
             var provider = await providerTask;
             if (provider == null)
                 throw new Exception($"Provider with UKPRN={addedAccountProviderEvent.ProviderUkprn} not found");
             
-            var accountProvider = accountDocument.Account.Providers.SingleOrDefault(p => p.Ukprn == addedAccountProviderEvent.ProviderUkprn);
-            if (accountProvider == null)
-            {
-                accountProvider = new Provider();
-                accountDocument.Account.Providers.Add(accountProvider);
-            }
+            var accountProvider = GetOrAddProvider(accountDocument, addedAccountProviderEvent.ProviderUkprn);
 
             var primaryAddress = provider.Addresses.SingleOrDefault(a => a.ContactType == "PRIMARY");
             
