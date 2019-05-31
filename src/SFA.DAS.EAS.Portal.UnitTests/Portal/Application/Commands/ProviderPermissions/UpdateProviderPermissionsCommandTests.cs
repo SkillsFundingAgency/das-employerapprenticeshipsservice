@@ -40,9 +40,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
         }
 
         [Test]
-        public Task Execute_WhenProviderApiReturnsProviderWithoutPrimaryAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
+        public Task Execute_WhenProviderApiReturnsProviderWithoutPrimaryOrLegalAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
         {
-            return TestAsync(f => f.ArrangeApiReturnsProviderWithoutPrimaryAddress(), f => f.Execute(),
+            return TestAsync(f => f.ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress(), f => f.Execute(),
                 f => f.VerifyAccountDocumentSavedWithProviderWithoutAddress());
         }
         
@@ -115,7 +115,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             return this;
         }
 
-        public UpdateProviderPermissionsCommandTestsFixture ArrangeApiReturnsProviderWithoutPrimaryAddress()
+        public UpdateProviderPermissionsCommandTestsFixture ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress()
         {
             foreach (var providerAddress in Provider.Addresses)
             {

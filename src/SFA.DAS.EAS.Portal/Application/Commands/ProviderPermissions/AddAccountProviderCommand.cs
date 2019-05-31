@@ -63,15 +63,15 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             var (accountProvider,_) = GetOrAddProvider(accountDocument, addedAccountProviderEvent.ProviderUkprn);
 
             var provider = await providerTask;
-            var primaryAddress = provider.Addresses.SingleOrDefault(a => a.ContactType == "PRIMARY");
-            //todo: we could fallback to LEGAL address if PRIMARY not found
+            var address = provider.Addresses.FirstOrDefault(a => a.ContactType == "PRIMARY")
+                ?? provider.Addresses.FirstOrDefault(a => a.ContactType == "LEGAL");
             
             accountProvider.Name = provider.ProviderName;
             accountProvider.Email = provider.Email;
             accountProvider.Phone = provider.Phone;
-            accountProvider.Street = primaryAddress?.Street;
-            accountProvider.Town = primaryAddress?.Town;
-            accountProvider.Postcode = primaryAddress?.PostCode;
+            accountProvider.Street = address?.Street;
+            accountProvider.Town = address?.Town;
+            accountProvider.Postcode = address?.PostCode;
                 
             await _accountDocumentService.Save(accountDocument, cancellationToken);
         }
