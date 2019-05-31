@@ -1,18 +1,22 @@
 ﻿
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
     
-<div class="das-panel">
-    <h3 class="das-panel__heading">ABC Training Limited</h3>
-    <dl class="das-definition-list das-definition-list--inline  das-definition-list--muted govuk-!-font-size-16">
+    <h3 class="das-panel__heading">@Model.AccountViewModel.Providers.First().Name</h3>
+    <dl class="das-definition-list das-definition-list--inline das-definition-list--muted govuk-!-font-size-16">
         <dt class="das-definition-list__title">UK Provider Reference Number</dt>
-        <dd class="das-definition-list__definition">35353535</dd>
+        <dd class="das-definition-list__definition">@Model.AccountViewModel.Providers.First().Ukprn</dd>
     </dl>
-    <p>123 Coventry Road, <br>Coventry, CV1 AB3</p>
+    <p>
+        @if (@Model.AccountViewModel.Providers.First().Street != null)
+        {
+            @(Model.AccountViewModel.Providers.First().Street)@:, <br>
+        }
+        @(Model.AccountViewModel.Providers.First().Town)<text>, </text>@(Model.AccountViewModel.Providers.First().Postcode)
+    </p>
     <dl class="das-definition-list das-definition-list--inline">
         <dt class="das-definition-list__title">Tel</dt>
-        <dd class="das-definition-list__definition">02476 789 101</dd>
+        <dd class="das-definition-list__definition">@Model.AccountViewModel.Providers.First().Phone</dd>
         <dt class="das-definition-list__title">Email</dt>
-        <dd class="das-definition-list__definition"><span class="das-breakable">info@apextraining.com</span></dd>
+        <dd class="das-definition-list__definition"><span class="das-breakable">@Model.AccountViewModel.Providers.First().Email</span></dd>
     </dl>
-    <p><a href="#" class="govuk-link govuk-link--no-visited-state">View permissions</a> </p>
-</div>
+    <p><a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">View permissions</a> </p>

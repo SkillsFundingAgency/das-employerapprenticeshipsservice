@@ -33,6 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public Guid? RecentlyAddedReservationId { get; set; }
         public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.SelectMany(org => org.Reservations).FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.SelectMany(org => org.Reservations)?.LastOrDefault();
         public string ReservedFundingOrgName => AccountViewModel?.Organisations?.Where(org => org.Reservations.Contains(ReservedFundingToShow)).Select(org => org.Name).FirstOrDefault();
-        public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.Count > 0;
+        public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Count > 0;
     }
 }   
