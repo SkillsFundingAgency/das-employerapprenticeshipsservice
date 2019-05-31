@@ -33,7 +33,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
         }
 
         [Test]
-        [Ignore("verify needs work")]
         public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesContainProvider_ThenAccountDocumentIsSavedWithUpdatedProvider()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsProvider(),
@@ -72,7 +71,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
         {
             AccountDocumentService = new Mock<IAccountDocumentService>();
 
-            //todo: better way to do this?
             Fixture = new Fixture();
             Provider = Fixture.Create<ApiProvider>();
             
@@ -135,26 +133,39 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
 
         }
 
+        //todo: not keen on this. better way?
         public bool AccountIsAsExpected(AccountDocument document)
         {
-            var expectedPrimaryAddress = ExpectedProvider.Addresses.Single(a => a.ContactType == "PRIMARY");
-            return document?.Account != null && document.Account.IsEqual(new Account
+            Account expectedAccount;
+            PortalProvider expectedProvider;
+            
+            if (AccountDocument == null)
             {
-                Id = ExpectedAddedAccountProviderEvent.AccountId,
-                Providers = new List<PortalProvider>
+                expectedAccount = new Account
                 {
-                    new PortalProvider
-                    {
-                        Name = ExpectedProvider.ProviderName,
-                        Email = ExpectedProvider.Email,
-                        Phone = ExpectedProvider.Phone,
-                        Postcode = expectedPrimaryAddress.PostCode,
-                        Street = expectedPrimaryAddress.Street,
-                        Town = expectedPrimaryAddress.Town,
-                        Ukprn = Ukprn
-                    }
-                }
-            });
+                    Id = ExpectedAddedAccountProviderEvent.AccountId,
+                    Providers = new List<Provider>()
+                };
+                expectedProvider = new PortalProvider();
+                expectedAccount.Providers.Add(expectedProvider);
+            }
+            else
+            {
+                expectedAccount = AccountDocument.Account;
+                expectedProvider = expectedAccount.Providers.Single(p => p.Ukprn == Ukprn);
+            }
+
+            var expectedPrimaryAddress = ExpectedProvider.Addresses.Single(a => a.ContactType == "PRIMARY");
+            
+            expectedProvider.Name = ExpectedProvider.ProviderName;
+            expectedProvider.Email = ExpectedProvider.Email;
+            expectedProvider.Phone = ExpectedProvider.Phone;
+            expectedProvider.Postcode = expectedPrimaryAddress.PostCode;
+            expectedProvider.Street = expectedPrimaryAddress.Street;
+            expectedProvider.Town = expectedPrimaryAddress.Town;
+            expectedProvider.Ukprn = Ukprn;
+
+            return document?.Account != null && document.Account.IsEqual(expectedAccount);
         }
     }
 }
