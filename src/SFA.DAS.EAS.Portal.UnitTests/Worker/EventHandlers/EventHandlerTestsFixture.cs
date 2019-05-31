@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             MessageContext = new Mock<IMessageContext>();
             
             MessageId = fixture.Create<string>();
-            //todo: use nservicebus's version??
+            // nservicebus's TestableMessageHandlerContext is available, but we don't need it yet
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(c => c.MessageId).Returns(MessageId);
 
@@ -67,8 +67,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
         public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyMessageContextIsInitialised()
         {
-            //todo: the old chestnut of having to verify a mocked object as param. switching to nservicebus's fake should help
-            MessageContext.Verify(mc => mc.Initialise(It.IsAny<IMessageHandlerContext>()), Times.Once);
+            MessageContext.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
 
             return this;
         }
