@@ -29,16 +29,23 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
         [Test]
         public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
         {
-            return TestAsync(f => f.Execute(), f => f.VerifyAccountDocumentSavedWithProvider());
+            return TestAsync(f => f.Execute(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
         }
 
         [Test]
         public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesContainProvider_ThenAccountDocumentIsSavedWithUpdatedProvider()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsProvider(), f => f.Execute(), 
-                f => f.VerifyAccountDocumentSavedWithProvider());
+                f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
         }
 
+        [Test]
+        public Task Execute_WhenProviderApiReturnsProviderWithLegalButNotPrimaryAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
+        {
+            return TestAsync(f => f.ArrangeApiReturnsProviderWithLegalButNotPrimaryAddress(), f => f.Execute(),
+                f => f.VerifyAccountDocumentSavedWithProviderWithLegalAddress());
+        }
+        
         [Test]
         public Task Execute_WhenProviderApiReturnsProviderWithoutPrimaryOrLegalAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
         {
@@ -80,8 +87,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             Provider.Addresses.Skip(new Random().Next(Provider.Addresses.Count()))
                 .First().ContactType = "PRIMARY";
             
-            ExpectedProvider = Provider.Clone();
-            
             ProviderApiClient = new Mock<IProviderApiClient>();
             ProviderApiClient.Setup(c => c.GetAsync(Ukprn)).ReturnsAsync(Provider);
             
@@ -115,6 +120,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             return this;
         }
 
+        public UpdateProviderPermissionsCommandTestsFixture ArrangeApiReturnsProviderWithLegalButNotPrimaryAddress()
+        {
+            ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress();
+            
+            Provider.Addresses.Skip(new Random().Next(Provider.Addresses.Count()))
+                .First().ContactType = "LEGAL";
+
+            return this;
+        }
+        
         public UpdateProviderPermissionsCommandTestsFixture ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress()
         {
             foreach (var providerAddress in Provider.Addresses)
@@ -135,26 +150,54 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
 
         public async Task Execute()
         {
+            ExpectedProvider = Provider.Clone();
+
             await AddAccountProviderCommand.Execute(AddedAccountProviderEvent, CancellationToken.None);
         }
 
-        public void VerifyAccountDocumentSavedWithProviderWithoutAddress()
+        public UpdateProviderPermissionsCommandTestsFixture VerifyAccountDocumentSavedWithProviderWithPrimaryAddress()
         {
+            var expectedLegalAddress = ExpectedProvider.Addresses.Single(a => a.ContactType == "PRIMARY");
+
             VerifyAccountDocumentSavedWithProvider(p =>
             {
-                p.Street = null;
-                p.Town = null;
-                p.Postcode = null;
+                p.Street = expectedLegalAddress.Street;
+                p.Town = expectedLegalAddress.Town;
+                p.Postcode = expectedLegalAddress.PostCode;
             });
+
+            return this;
+        }
+
+        public UpdateProviderPermissionsCommandTestsFixture VerifyAccountDocumentSavedWithProviderWithLegalAddress()
+        {
+            var expectedLegalAddress = ExpectedProvider.Addresses.Single(a => a.ContactType == "LEGAL");
+
+            VerifyAccountDocumentSavedWithProvider(p =>
+            {
+                p.Street = expectedLegalAddress.Street;
+                p.Town = expectedLegalAddress.Town;
+                p.Postcode = expectedLegalAddress.PostCode;
+            });
+
+            return this;
         }
         
-        public void VerifyAccountDocumentSavedWithProvider(Action<PortalProvider> mutateExpectedProvider = null)
+        public UpdateProviderPermissionsCommandTestsFixture VerifyAccountDocumentSavedWithProviderWithoutAddress()
+        {
+            VerifyAccountDocumentSavedWithProvider();
+            
+            return this;
+        }
+        
+        public UpdateProviderPermissionsCommandTestsFixture VerifyAccountDocumentSavedWithProvider(Action<PortalProvider> mutateExpectedProvider = null)
         {
             AccountDocumentService.Verify(
                 s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d, mutateExpectedProvider)), It.IsAny<CancellationToken>()), Times.Once);
+            
+            return this;
         }
 
-        //todo: not keen on this. better way?
         public bool AccountIsAsExpected(AccountDocument document, Action<PortalProvider> mutateExpectedProvider = null)
         {
             Account expectedAccount;
@@ -176,14 +219,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
                 expectedProvider = expectedAccount.Providers.Single(p => p.Ukprn == Ukprn);
             }
 
-            var expectedPrimaryAddress = ExpectedProvider.Addresses.Single(a => a.ContactType == "PRIMARY");
-            
             expectedProvider.Name = ExpectedProvider.ProviderName;
             expectedProvider.Email = ExpectedProvider.Email;
             expectedProvider.Phone = ExpectedProvider.Phone;
-            expectedProvider.Postcode = expectedPrimaryAddress.PostCode;
-            expectedProvider.Street = expectedPrimaryAddress.Street;
-            expectedProvider.Town = expectedPrimaryAddress.Town;
             expectedProvider.Ukprn = Ukprn;
 
             mutateExpectedProvider?.Invoke(expectedProvider);
