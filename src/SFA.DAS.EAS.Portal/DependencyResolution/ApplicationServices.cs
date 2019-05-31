@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Configuration;
@@ -9,15 +9,11 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
 {
     public static class ApplicationServices
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services, HostBuilderContext hostBuilderContext)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            var configuration = serviceProvider.GetService<IConfiguration>();
-
-            services.AddCommitmentsApiConfiguration(configuration);
-
+            //todo: AddHashingServices
             // hashing service config            
-            var hashServiceConfig = configuration.GetPortalSection<HashingServiceConfiguration>(PortalSections.HashingService);            
+            var hashServiceConfig = hostBuilderContext.Configuration.GetPortalSection<HashingServiceConfiguration>(PortalSections.HashingService);
             services.AddSingleton<IHashingService>(s => new HashingService.HashingService(hashServiceConfig.AccountLegalEntityPublicAllowedCharacters, hashServiceConfig.AccountLegalEntityPublicHashstring));
             
             services.AddScoped<IMessageContext, MessageContext>();            
