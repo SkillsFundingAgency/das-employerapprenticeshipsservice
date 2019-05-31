@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
 {
     public class Command
     {
-        private readonly IAccountDocumentService _accountDocumentService;
+        protected readonly IAccountDocumentService _accountDocumentService;
 
         protected enum EntityCreation
         {

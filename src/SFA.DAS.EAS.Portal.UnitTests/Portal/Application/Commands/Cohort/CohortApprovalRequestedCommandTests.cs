@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
@@ -24,14 +26,17 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
     {
         public class TestContext
         {
-            public CohortApprovalRequestedCommandHandler Sut { get; private set; }
+            //todo: rename
+            public CohortApprovalRequestedCommand Sut { get; private set; }
+            public CohortApprovalRequestedByProvider CohortApprovalRequestedByProvider { get; private set; }
+            public Fixture Fixture { get; private set; }
             public Account TestAccount { get; private set; }
             public AccountDocument TestAccountDocument { get; private set; }
             public CommitmentView TestCommitment { get; private set; }
             public Mock<IAccountDocumentService> MockAccountDocumentService { get; private set; }
             public Mock<IProviderCommitmentsApi> MockProviderCommitmentsApi { get; private set; }
             public Mock<IHashingService> MockHashingService { get; private set; }
-            public Mock<ILogger<CohortApprovalRequestedCommandHandler>> MockLogger { get; private set; }
+            public Mock<ILogger<CohortApprovalRequestedCommand>> MockLogger { get; private set; }
             public long UnHashedId = 123;
 
             public TestContext()
@@ -45,7 +50,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                     .ReturnsAsync(TestAccountDocument);
                 
                 MockHashingService = new Mock<IHashingService>();
-                MockLogger = new Mock<ILogger<CohortApprovalRequestedCommandHandler>>();
+                MockLogger = new Mock<ILogger<CohortApprovalRequestedCommand>>();
 
                 MockHashingService
                     .Setup(m => m.DecodeValue(It.IsAny<string>()))
@@ -57,49 +62,23 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                     .Setup(m => m.GetProviderCommitment(It.IsAny<long>(), It.IsAny<long>()))
                     .ReturnsAsync(TestCommitment);
 
-                Sut = new CohortApprovalRequestedCommandHandler(MockAccountDocumentService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockLogger.Object);
+                Fixture = new Fixture();
+                CohortApprovalRequestedByProvider = Fixture.Create<CohortApprovalRequestedByProvider>();
+                
+                Sut = new CohortApprovalRequestedCommand(MockAccountDocumentService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockLogger.Object);
             }
         }
 
         public class Handle : CohortApprovalRequestedCommandHandlerTests
         {
             [Test]
-            public async Task WhenCalled_ThenTheAccountServiceIsCalledToRetrieveTheAccount()
-            {
-                // arrange
-                var testContext = new TestContext();
-                CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
-
-                // act
-                await testContext.Sut.Handle(command);
-
-                //assert
-                testContext.MockAccountDocumentService.Verify(m => m.Get(command.AccountId, It.IsAny<CancellationToken>()), Times.Once);
-            }
-
-            [Test]
-            public async Task WhenCalled_ThenTheCommitmentsServiceIsCalledToRetrieveTheCommitmentForTheProvider()
-            {
-                // arrange
-                var testContext = new TestContext();
-                CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
-
-                // act
-                await testContext.Sut.Handle(command);
-
-                //assert
-                testContext.MockProviderCommitmentsApi.Verify(m => m.GetProviderCommitment(command.ProviderId, command.CommitmentId), Times.Once);
-            }
-
-            [Test]
             public async Task WhenCalled_ThenTheAccountServiceIsCalledToSaveTheAccount()
             {
                 // arrange
                 var testContext = new TestContext();
-                CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
 
                 // act
-                await testContext.Sut.Handle(command);
+                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m => m.Save(testContext.TestAccountDocument, It.IsAny<CancellationToken>()), Times.Once);
@@ -115,10 +94,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.TestCommitment.Id = cohortId;
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(0);
 
-                CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
-
                 // act
-                await testContext.Sut.Handle(command);
+                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>
@@ -139,10 +116,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.TestCommitment.Id = cohortId;
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(1);
 
-                CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
-
                 // act
-                await testContext.Sut.Handle(command);
+                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>
@@ -162,10 +137,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.TestCommitment.Reference = cohortReference;
                 testContext.TestCommitment.Apprenticeships = new List<Commitments.Api.Types.Apprenticeship.Apprenticeship>() { new Commitments.Api.Types.Apprenticeship.Apprenticeship { Id = apprenticeshipId } };
 
-                CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
-
                 // act
-                await testContext.Sut.Handle(command);
+                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>
@@ -204,10 +177,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
 
                 testContext.TestAccount.Organisations.First().Cohorts.First().Apprenticeships.Count.Should().Be(1);
 
-                CohortApprovalRequestedCommand command = new CohortApprovalRequestedCommandBuilder();
-
                 // act
-                await testContext.Sut.Handle(command);
+                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>

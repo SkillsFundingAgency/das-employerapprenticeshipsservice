@@ -9,7 +9,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 {
     public class AddReservationCommand : Command, IPortalCommand<ReservationCreatedEvent>
     {
-        private readonly IAccountDocumentService _accountDocumentService;
         private readonly ILogger<AddReservationCommand> _logger;
 
         public AddReservationCommand(
@@ -17,7 +16,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
             ILogger<AddReservationCommand> logger)
         : base(accountDocumentService)
         {
-            _accountDocumentService = accountDocumentService;
             _logger = logger;
         }
 

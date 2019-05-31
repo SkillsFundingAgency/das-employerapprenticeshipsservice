@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -36,7 +35,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
     /// </remarks>
     public class AddAccountProviderCommand : Command, IPortalCommand<AddedAccountProviderEvent>
     {
-        private readonly IAccountDocumentService _accountDocumentService;
         private readonly IProviderApiClient _providerApiClient;
         private readonly ILogger<AddAccountProviderCommand> _logger;
 
@@ -47,7 +45,6 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             ILogger<AddAccountProviderCommand> logger)
         : base(accountDocumentService)
         {
-            _accountDocumentService = accountDocumentService;
             _providerApiClient = providerApiClient;
             _logger = logger;
         }

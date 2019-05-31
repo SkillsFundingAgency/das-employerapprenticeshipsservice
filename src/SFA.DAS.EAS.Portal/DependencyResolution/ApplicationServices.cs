@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.CommitmentsV2.Messages.Events;
-using SFA.DAS.EAS.Portal.Application.Adapters;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Cohort;
 using SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions;
@@ -20,6 +19,8 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
         {
             services.AddTransient<IPortalCommand<ReservationCreatedEvent>, AddReservationCommand>();
             services.AddTransient<IPortalCommand<AddedAccountProviderEvent>, AddAccountProviderCommand>();
+            services.AddTransient<IPortalCommand<CohortApprovalRequestedByProvider>, CohortApprovalRequestedCommand>();
+            
             var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetService<IConfiguration>();
 
@@ -33,15 +34,15 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             services.AddTransient<IAccountDocumentService, AccountDocumentService>();                        
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithSetProperties>();
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithDuplicateCheck>();
-            services.AddTransient<IAdapter<CohortApprovalRequestedByProvider, CohortApprovalRequestedCommand>, CohortAdapter>();
 
+            //todo: use scanning to scan all IPortalCommands?
             // Register all ICommandHandler<> types
-            services.Scan(scan =>
-                    scan.FromAssembliesOf(typeof(ICommandHandler<>))
-                    .AddClasses(classes =>
-                    classes.AssignableTo(typeof(ICommandHandler<>)).Where(_ => !_.IsGenericType))
-                        .AsImplementedInterfaces()
-                        .WithTransientLifetime());
+//            services.Scan(scan =>
+//                    scan.FromAssembliesOf(typeof(ICommandHandler<>))
+//                    .AddClasses(classes =>
+//                    classes.AssignableTo(typeof(ICommandHandler<>)).Where(_ => !_.IsGenericType))
+//                        .AsImplementedInterfaces()
+//                        .WithTransientLifetime());
 
             return services;
         }
