@@ -33,6 +33,7 @@ namespace SFA.DAS.EAS.Portal.Worker
                 .UseDasEnvironment()
                 .UseConsoleLifetime()
                 .ConfigureServices((c, s) => s.AddApplicationServices(c))
+                .ConfigureServices((c, s) => s.AddHashingServices(c))
                 .ConfigureServices((c, s) => s.AddCommitmentsApiConfiguration(c))
                 .ConfigureServices((c, s) => s.AddProviderServices(c))
                 .ConfigureServices((c, s) => s.AddCosmosDatabase(c))
