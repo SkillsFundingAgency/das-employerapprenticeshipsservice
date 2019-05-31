@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
             public TestContext()
             {
                 TestAccount = new AccountBuilder().WithOrganisation(new OrganisationBuilder().WithId(UnHashedId));
-                TestAccountDocument = new AccountDocument() { Account = TestAccount };
+                TestAccountDocument = new AccountDocument { Account = TestAccount };
                 TestCommitment = new CommitmentViewBuilder();
 
                 MockAccountDocumentService = new Mock<IAccountDocumentService>();
