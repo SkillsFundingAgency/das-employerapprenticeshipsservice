@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -13,15 +12,12 @@ namespace SFA.DAS.EmployerAccounts.Services
     {
         private readonly EmployerAccountsConfiguration _configuration;
         private readonly IHttpService _httpService;    
-        private readonly ILog _log;
-
+       
         public PensionRegulatorService(
             IHttpServiceFactory httpServiceFactory,
-            EmployerAccountsConfiguration configuration,
-            ILog log)
+            EmployerAccountsConfiguration configuration)
         {           
-            _configuration = configuration;
-            _log = log;
+            _configuration = configuration;         
             _httpService = httpServiceFactory.Create(
                 configuration.PensionRegulatorApi.ClientId,
                 configuration.PensionRegulatorApi.ClientSecret,
