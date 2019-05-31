@@ -15,7 +15,6 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
     {
         public static IServiceCollection AddCommitmentsApiConfiguration(this IServiceCollection services, HostBuilderContext hostBuilderContext)
         {
-            //todo: we can probably get away with not leaving the config in the container
             services.AddSingleton(s => hostBuilderContext.Configuration.GetSection<CommitmentsApiClientConfiguration>(ConfigurationKeys.CommitmentsApi));
             services.AddTransient<ICommitmentsApiClientConfiguration, CommitmentsApiClientConfiguration>();
             services.AddTransient<IProviderCommitmentsApi>(s => new ProviderCommitmentsApi(GetHttpClient(s), s.GetService<CommitmentsApiClientConfiguration>()));

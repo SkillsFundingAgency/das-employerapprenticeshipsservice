@@ -26,8 +26,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
     {
         public class TestContext
         {
-            //todo: rename
-            public CohortApprovalRequestedCommand Sut { get; private set; }
+            public CohortApprovalRequestedCommand CohortApprovalRequestedCommand { get; private set; }
             public CohortApprovalRequestedByProvider CohortApprovalRequestedByProvider { get; private set; }
             public Fixture Fixture { get; private set; }
             public Account TestAccount { get; private set; }
@@ -65,7 +64,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 Fixture = new Fixture();
                 CohortApprovalRequestedByProvider = Fixture.Create<CohortApprovalRequestedByProvider>();
                 
-                Sut = new CohortApprovalRequestedCommand(MockAccountDocumentService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockLogger.Object);
+                CohortApprovalRequestedCommand = new CohortApprovalRequestedCommand(MockAccountDocumentService.Object, MockProviderCommitmentsApi.Object, MockHashingService.Object, MockLogger.Object);
             }
         }
 
@@ -78,7 +77,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 var testContext = new TestContext();
 
                 // act
-                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
+                await testContext.CohortApprovalRequestedCommand.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m => m.Save(testContext.TestAccountDocument, It.IsAny<CancellationToken>()), Times.Once);
@@ -95,7 +94,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(0);
 
                 // act
-                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
+                await testContext.CohortApprovalRequestedCommand.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>
@@ -117,7 +116,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.TestAccount.Organisations.First().Cohorts.Count.Should().Be(1);
 
                 // act
-                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
+                await testContext.CohortApprovalRequestedCommand.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>
@@ -138,7 +137,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.TestCommitment.Apprenticeships = new List<Commitments.Api.Types.Apprenticeship.Apprenticeship>() { new Commitments.Api.Types.Apprenticeship.Apprenticeship { Id = apprenticeshipId } };
 
                 // act
-                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
+                await testContext.CohortApprovalRequestedCommand.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>
@@ -178,7 +177,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 testContext.TestAccount.Organisations.First().Cohorts.First().Apprenticeships.Count.Should().Be(1);
 
                 // act
-                await testContext.Sut.Execute(testContext.CohortApprovalRequestedByProvider);
+                await testContext.CohortApprovalRequestedCommand.Execute(testContext.CohortApprovalRequestedByProvider);
 
                 //assert
                 testContext.MockAccountDocumentService.Verify(m =>
