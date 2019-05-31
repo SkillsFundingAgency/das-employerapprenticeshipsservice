@@ -7,7 +7,7 @@ using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
 {
-    public class AddReservationCommand : Command, IPortalCommand<ReservationCreatedEvent>
+    public class AddReservationCommand : Command, ICommand<ReservationCreatedEvent>
     {
         private readonly ILogger<AddReservationCommand> _logger;
 
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
                 EndDate = reservedFunding.EndDate
             });
             
-            await _accountDocumentService.Save(accountDocument, cancellationToken);
+            await AccountDocumentService.Save(accountDocument, cancellationToken);
         }
     }
 }

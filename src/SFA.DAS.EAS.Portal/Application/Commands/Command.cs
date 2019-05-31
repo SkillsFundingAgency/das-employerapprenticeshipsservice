@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
 {
     public class Command
     {
-        protected readonly IAccountDocumentService _accountDocumentService;
+        protected readonly IAccountDocumentService AccountDocumentService;
 
         protected enum EntityCreation
         {
@@ -18,14 +18,13 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
         }
         
         protected Command(IAccountDocumentService accountDocumentService)
-        //todo: : IPortalCommand<TEvent>
         {
-            _accountDocumentService = accountDocumentService;
+            AccountDocumentService = accountDocumentService;
         }
         
         protected async Task<AccountDocument> GetOrCreateAccountDocument(long accountId, CancellationToken cancellationToken = default)
         {
-            return await _accountDocumentService.Get(accountId, cancellationToken) ??
+            return await AccountDocumentService.Get(accountId, cancellationToken) ??
                 AccountDocument.Create(accountId);
         }
 

@@ -17,9 +17,9 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
-            services.AddTransient<IPortalCommand<ReservationCreatedEvent>, AddReservationCommand>();
-            services.AddTransient<IPortalCommand<AddedAccountProviderEvent>, AddAccountProviderCommand>();
-            services.AddTransient<IPortalCommand<CohortApprovalRequestedByProvider>, CohortApprovalRequestedCommand>();
+            services.AddTransient<ICommand<ReservationCreatedEvent>, AddReservationCommand>();
+            services.AddTransient<ICommand<AddedAccountProviderEvent>, AddAccountProviderCommand>();
+            services.AddTransient<ICommand<CohortApprovalRequestedByProvider>, CohortApprovalRequestedCommand>();
             
             var serviceProvider = services.BuildServiceProvider();
             var configuration = serviceProvider.GetService<IConfiguration>();

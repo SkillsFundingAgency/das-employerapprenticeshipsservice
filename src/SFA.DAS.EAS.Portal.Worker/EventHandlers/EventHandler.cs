@@ -7,10 +7,10 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
 {
     public class EventHandler<TEvent> : IHandleMessages<TEvent>
     {
-        private readonly IPortalCommand<TEvent> _command;
+        private readonly ICommand<TEvent> _command;
         private readonly IMessageContext _messageContext;
 
-        protected EventHandler(IPortalCommand<TEvent> command, IMessageContext messageContext)
+        protected EventHandler(ICommand<TEvent> command, IMessageContext messageContext)
         {
             _command = command;
             _messageContext = messageContext;

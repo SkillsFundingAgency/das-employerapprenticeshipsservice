@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
     }
 
     public class AddedAccountProviderEventHandlerTestsFixture : EventHandlerTestsFixture<
-        AddedAccountProviderEvent, AddedAccountProviderEventHandler, IPortalCommand<AddedAccountProviderEvent>>
+        AddedAccountProviderEvent, AddedAccountProviderEventHandler, ICommand<AddedAccountProviderEvent>>
     {
     }
 }

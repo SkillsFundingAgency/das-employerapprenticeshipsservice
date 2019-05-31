@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
     }
 
     public class CohortApprovalRequestedByProviderEventHandlerTestsFixture : EventHandlerTestsFixture<
-        CohortApprovalRequestedByProvider, CohortApprovalRequestedByProviderEventHandler, IPortalCommand<CohortApprovalRequestedByProvider>>
+        CohortApprovalRequestedByProvider, CohortApprovalRequestedByProviderEventHandler, ICommand<CohortApprovalRequestedByProvider>>
     {
     }
 }

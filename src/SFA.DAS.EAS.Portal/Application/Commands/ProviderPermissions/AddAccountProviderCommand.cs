@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
     /// we update any existing provider with the latest details (rather than throwing or logging a warning).
     /// Note: there is currently no way to remove or delete a provider relationship, so we don't have to worry about that.
     /// </remarks>
-    public class AddAccountProviderCommand : Command, IPortalCommand<AddedAccountProviderEvent>
+    public class AddAccountProviderCommand : Command, ICommand<AddedAccountProviderEvent>
     {
         private readonly IProviderApiClient _providerApiClient;
         private readonly ILogger<AddAccountProviderCommand> _logger;
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
             accountProvider.Town = address?.Town;
             accountProvider.Postcode = address?.PostCode;
                 
-            await _accountDocumentService.Save(accountDocument, cancellationToken);
+            await AccountDocumentService.Save(accountDocument, cancellationToken);
         }
     }
 }

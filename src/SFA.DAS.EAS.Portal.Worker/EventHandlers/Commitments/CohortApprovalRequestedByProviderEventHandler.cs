@@ -7,7 +7,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
     public class CohortApprovalRequestedByProviderEventHandler : EventHandler<CohortApprovalRequestedByProvider>
     {
         //todo: rename command to directive, not event
-        public CohortApprovalRequestedByProviderEventHandler(IPortalCommand<CohortApprovalRequestedByProvider> cohortApprovalRequestedCommand, IMessageContext messageContext)
+        public CohortApprovalRequestedByProviderEventHandler(ICommand<CohortApprovalRequestedByProvider> cohortApprovalRequestedCommand, IMessageContext messageContext)
             : base(cohortApprovalRequestedCommand, messageContext)
         {
         }

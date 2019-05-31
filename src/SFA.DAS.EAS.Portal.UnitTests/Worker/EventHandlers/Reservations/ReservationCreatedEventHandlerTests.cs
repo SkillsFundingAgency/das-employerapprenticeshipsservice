@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
     }
 
     public class ReservationCreatedEventHandlerTestsFixture : EventHandlerTestsFixture<
-        ReservationCreatedEvent, ReservationCreatedEventHandler, IPortalCommand<ReservationCreatedEvent>>
+        ReservationCreatedEvent, ReservationCreatedEventHandler, ICommand<ReservationCreatedEvent>>
     {
     }
 }

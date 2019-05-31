@@ -11,7 +11,7 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
-    public class CohortApprovalRequestedCommand : Command, IPortalCommand<CohortApprovalRequestedByProvider>
+    public class CohortApprovalRequestedCommand : Command, ICommand<CohortApprovalRequestedByProvider>
     {
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
         private readonly IHashingService _hashingService;
@@ -73,7 +73,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
                 apprenticeship.EndDate = a.EndDate;
             });
 
-            await _accountDocumentService.Save(accountDocument, cancellationToken);
+            await AccountDocumentService.Save(accountDocument, cancellationToken);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 {
     public class EventHandlerTestsFixture<TEvent, TEventHandler, TCommand>
         where TEventHandler : IHandleMessages<TEvent>
-        where TCommand : class, IPortalCommand<TEvent>
+        where TCommand : class, ICommand<TEvent>
     {
         public TEvent Message { get; set; }
         public TEvent ExpectedMessage { get; set; }
