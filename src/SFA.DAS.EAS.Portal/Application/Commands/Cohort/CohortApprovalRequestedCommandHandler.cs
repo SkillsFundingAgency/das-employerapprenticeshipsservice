@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
-            var accountDocument = await _accountsService.Get(command.AccountId, cancellationToken);
+            var accountDocument = await _accountsService.GetOrCreate(command.AccountId, cancellationToken);
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 

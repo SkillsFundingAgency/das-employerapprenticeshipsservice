@@ -14,9 +14,9 @@ namespace SFA.DAS.EAS.Portal.Application.Services
             _messageContext = messageContext;
         }
 
-        public Task<AccountDocument> Get(long id, CancellationToken cancellationToken = default)
+        public Task<AccountDocument> GetOrCreate(long id, CancellationToken cancellationToken = default)
         {
-            return _accountDocumentService.Get(id, cancellationToken);
+            return _accountDocumentService.GetOrCreate(id, cancellationToken);
         }
 
         public Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)

@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 MockHashingService = new Mock<IHashingService>();
 
                 MockAccountsService
-                    .Setup(m => m.Get(It.IsAny<long>(), It.IsAny<CancellationToken>()))                    
+                    .Setup(m => m.GetOrCreate(It.IsAny<long>(), It.IsAny<CancellationToken>()))                    
                     .ReturnsAsync(TestAccountDocument);
 
                 MockHashingService
@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
                 await testContext.Sut.Handle(command);
 
                 //assert
-                testContext.MockAccountsService.Verify(m => m.Get(command.AccountId, It.IsAny<CancellationToken>()), Times.Once);
+                testContext.MockAccountsService.Verify(m => m.GetOrCreate(command.AccountId, It.IsAny<CancellationToken>()), Times.Once);
             }
 
             [Test]

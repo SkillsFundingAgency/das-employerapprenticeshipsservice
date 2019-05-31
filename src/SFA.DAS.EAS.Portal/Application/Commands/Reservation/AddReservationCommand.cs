@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
         {
             _logger.LogInformation("Executing AddReservationCommand");
 
-            var accountDocument = await _accountsService.Get(reservedFunding.AccountId, cancellationToken);
+            var accountDocument = await _accountsService.GetOrCreate(reservedFunding.AccountId, cancellationToken);
             var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(reservedFunding.AccountLegalEntityId));
             if (org == null)
             {
