@@ -121,17 +121,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         private string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
         {
             var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
+            return $"{transactionPrefix}{transaction.ProviderName}";
 
-            try
-            {
-                return $"{transactionPrefix}{transaction.ProviderName}";
-            }
-            catch (Exception ex)
-            {
-                _logger.Info($"Provider not found for UkPrn:{transaction.UkPrn} - {ex.Message}");
-            }
-
-            return $"{transactionPrefix}Training provider - name not recognised";
         }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions, int year, int month)
