@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
-        private const string HashedAccountIdCookieName = "SFA.DAS.EmployerAccountsHashedAccountIdCookie";
 
         public void Configuration(IAppBuilder app)
         {
@@ -140,7 +139,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
 
             Task.Run(() => accountDataCookieStorageService.Delete(AccountDataCookieName)).Wait();
-            Task.Run(() => hashedAccountIdCookieStorageService.Delete(HashedAccountIdCookieName)).Wait();
+            Task.Run(() => hashedAccountIdCookieStorageService.Delete(typeof(HashedAccountIdModel).FullName)).Wait();
             Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
         }
     }
