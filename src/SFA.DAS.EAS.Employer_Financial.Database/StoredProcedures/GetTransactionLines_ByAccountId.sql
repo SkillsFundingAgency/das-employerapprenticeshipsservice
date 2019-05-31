@@ -26,6 +26,7 @@ AS
 			on ld.submissionid = tl.submissionid
 		LEFT JOIN [employer_financial].Payment p
 			on P.Ukprn = tl.Ukprn
+			and p.PeriodEnd = tl.PeriodEnd
 		LEFT JOIN [employer_financial].PaymentMetaData pmd
 			on pmd.Id = p.PaymentMetaDataId
   WHERE tl.AccountId = @accountId 
