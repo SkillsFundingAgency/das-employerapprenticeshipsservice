@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
-        private const string hashedAccountIdCookieName = "SFA.DAS.EmployerAccountsHashedAccountIdCookie";
+        private readonly string _hashedAccountIdCookieName;
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -41,6 +41,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
             _accountCookieStorage = accountCookieStorage;
+
+            _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
         }
 
         [HttpGet]
@@ -51,10 +53,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
-                _accountCookieStorage.Delete(hashedAccountIdCookieName);
+                _accountCookieStorage.Delete(_hashedAccountIdCookieName);
                 _accountCookieStorage.Create(
                     new HashedAccountIdModel{Value = hashedAccountId}, 
-                    hashedAccountIdCookieName);
+                    _hashedAccountIdCookieName);
             }
 
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
@@ -247,7 +249,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
                 Sector = enteredData.EmployerAccountOrganisationData.Sector,
-                HashedAccountId = _accountCookieStorage.Get(hashedAccountIdCookieName)
+                HashedAccountId = _accountCookieStorage.Get(_hashedAccountIdCookieName)
             };
 
             var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(request, HttpContext);
@@ -260,7 +262,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             
             _employerAccountOrchestrator.DeleteCookieData();
-            _accountCookieStorage.Delete(hashedAccountIdCookieName);
+            _accountCookieStorage.Delete(_hashedAccountIdCookieName);
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
