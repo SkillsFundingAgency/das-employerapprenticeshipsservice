@@ -16,11 +16,11 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="2.1.1395" />
-    <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
+    <PackageReference Include="SFA.DAS.Testing" Version="3.0.99" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Worker" />
+    <Folder Include="Client" />
   </ItemGroup>
 
   <ItemGroup>
