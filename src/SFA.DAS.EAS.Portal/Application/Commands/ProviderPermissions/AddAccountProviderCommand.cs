@@ -64,6 +64,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions
 
             var provider = await providerTask;
             var primaryAddress = provider.Addresses.SingleOrDefault(a => a.ContactType == "PRIMARY");
+            //todo: we could fallback to LEGAL address if PRIMARY not found
             
             accountProvider.Name = provider.ProviderName;
             accountProvider.Email = provider.Email;

@@ -35,13 +35,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
         [Test]
         public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesContainProvider_ThenAccountDocumentIsSavedWithUpdatedProvider()
         {
-            return TestAsync(f => f.ArrangeAccountDocumentContainsProvider(),
-                f => f.Execute(), 
+            return TestAsync(f => f.ArrangeAccountDocumentContainsProvider(), f => f.Execute(), 
                 f => f.VerifyAccountDocumentSavedWithProvider());
         }
 
-        //todo: tests with multiple providers, inc. dupes?
-        //todo: test with no primary address
+        [Test]
+        public Task Execute_WhenProviderApiReturnsProviderWithoutPrimaryAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
+        {
+            return TestAsync(f => f.ArrangeApiReturnsProviderWithoutPrimaryAddress(), f => f.Execute(),
+                f => f.VerifyAccountDocumentSavedWithProviderWithoutAddress());
+        }
         
         [Test]
         public Task Execute_WhenProviderApiThrows_ThenExceptionIsPropagated()
@@ -86,7 +89,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
 
             AddAccountProviderCommand = new AddAccountProviderCommand(AccountDocumentService.Object, ProviderApiClient.Object, Logger.Object);
 
-            //AddedAccountProviderEvent = Fixture.Create<AddedAccountProviderEvent>();
             AddedAccountProviderEvent = new AddedAccountProviderEvent(1, AccountId, Ukprn, Guid.NewGuid(), DateTime.UtcNow);
             ExpectedAddedAccountProviderEvent = AddedAccountProviderEvent.Clone();
         }
@@ -113,6 +115,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             return this;
         }
 
+        public UpdateProviderPermissionsCommandTestsFixture ArrangeApiReturnsProviderWithoutPrimaryAddress()
+        {
+            foreach (var providerAddress in Provider.Addresses)
+            {
+                providerAddress.ContactType = "CONTACTTYPE";
+            }
+
+            return this;
+        }
+        
         public UpdateProviderPermissionsCommandTestsFixture ArrangeProviderApiThrowsException()
         {
             ProviderApiClient.Setup(c => c.GetAsync(Ukprn))
@@ -126,15 +138,24 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             await AddAccountProviderCommand.Execute(AddedAccountProviderEvent, CancellationToken.None);
         }
 
-        public void VerifyAccountDocumentSavedWithProvider()
+        public void VerifyAccountDocumentSavedWithProviderWithoutAddress()
+        {
+            VerifyAccountDocumentSavedWithProvider(p =>
+            {
+                p.Street = null;
+                p.Town = null;
+                p.Postcode = null;
+            });
+        }
+        
+        public void VerifyAccountDocumentSavedWithProvider(Action<PortalProvider> mutateExpectedProvider = null)
         {
             AccountDocumentService.Verify(
-                s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d)), It.IsAny<CancellationToken>()), Times.Once);
-
+                s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d, mutateExpectedProvider)), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         //todo: not keen on this. better way?
-        public bool AccountIsAsExpected(AccountDocument document)
+        public bool AccountIsAsExpected(AccountDocument document, Action<PortalProvider> mutateExpectedProvider = null)
         {
             Account expectedAccount;
             PortalProvider expectedProvider;
@@ -165,6 +186,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             expectedProvider.Town = expectedPrimaryAddress.Town;
             expectedProvider.Ukprn = Ukprn;
 
+            mutateExpectedProvider?.Invoke(expectedProvider);
+            
             return document?.Account != null && document.Account.IsEqual(expectedAccount);
         }
     }
