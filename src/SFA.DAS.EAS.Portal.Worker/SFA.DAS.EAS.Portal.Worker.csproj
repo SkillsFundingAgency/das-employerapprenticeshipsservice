@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.3.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.8" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.2" />
-    <PackageReference Include="NLog.Schema" Version="4.6.3" />
+    <PackageReference Include="NLog.Schema" Version="4.6.4" />
     <PackageReference Include="NServiceBus" Version="7.1.7" />
     <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
     <PackageReference Include="Scrutor" Version="3.0.2" />
