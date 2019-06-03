@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -15,19 +17,24 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
 {
     [Parallelizable]
     [TestFixture]
-    [Ignore("In progress")]
     public class AddReservationCommandTests : FluentTest<AddReservationCommandTestsFixture>
     {
         [Test]
-        public Task Execute_WhenAccountDoesNotContainReservation_ThenAccountDocumentIsSavedWithNewReservation()
+        public Task Execute_WhenAccountDoesNotExist_ThenAccountDocumentIsSavedWithNewReservation()
         {
             return TestAsync(f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
+        }
+
+        [Test]
+        public Task Execute_WhenAccountDoesNotContainReservation_ThenAccountDocumentIsSavedWithNewReservation()
+        {
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(),f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
         }
         
         [Test]
         public Task Execute_WhenAccountDoesContainReservation_ThenAccountDocumentIsSavedWithUpdatedReservation()
         {
-            return TestAsync(f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
+            return TestAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
         }
     }
 
@@ -40,7 +47,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
         public ReservationCreatedEvent ReservationCreatedEvent { get; set; }
         public ReservationCreatedEvent ExpectedReservationCreatedEvent { get; set; }
         public Fixture Fixture { get; set; }
-        public const long AccountId = 456;
+        public const long AccountId = 456L;
+        public const long AccountLegalEntityId = 789L;
+        public Guid ReservationId = Guid.NewGuid();
 
         public AddReservationCommandTestsFixture()
         {
@@ -51,8 +60,22 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
             Logger = new Mock<ILogger<AddReservationCommand>>();
 
             AddReservationCommand = new AddReservationCommand(AccountDocumentService.Object, Logger.Object);
+
+            ReservationCreatedEvent = Fixture.Create<ReservationCreatedEvent>();
+            ReservationCreatedEvent.Id = ReservationId;
+            ReservationCreatedEvent.AccountId = AccountId;
+            ReservationCreatedEvent.AccountLegalEntityId = AccountLegalEntityId;
         }
         
+        public AddReservationCommandTestsFixture ArrangeEmptyAccountDocument()
+        {
+            AccountDocument = new AccountDocument(AccountId) {IsNew = false};
+
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+
         public AddReservationCommandTestsFixture ArrangeAccountDocumentContainsReservation()
         {
             AccountDocument = Fixture.Create<AccountDocument>();
@@ -61,6 +84,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
             
             AccountDocument.Deleted = null;
             AccountDocument.Account.Deleted = null;
+            
+            //todo: helper for picking random
+            var organisation = AccountDocument.Account.Organisations.Skip(new Random().Next(AccountDocument.Account.Organisations.Count))
+                .First();
+            organisation.Reservations.Skip(new Random().Next(organisation.Reservations.Count)).First().Id = ReservationId;
             
             AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
@@ -85,18 +113,38 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
         public bool AccountIsAsExpected(AccountDocument document)
         {
             Account expectedAccount;
+            Reservation expectedReservation;
             
             if (AccountDocument == null)
             {
                 expectedAccount = new Account
                 {
-                    Id = ExpectedReservationCreatedEvent.AccountId
+                    Id = ExpectedReservationCreatedEvent.AccountId,
                 };
+
+                var organisation = new Organisation
+                {
+                    AccountLegalEntityId = AccountLegalEntityId,
+                    Name = ExpectedReservationCreatedEvent.AccountLegalEntityName
+                };
+                expectedAccount.Organisations.Add(organisation);
+
+                expectedReservation = new Reservation();
+                organisation.Reservations.Add(expectedReservation);
             }
             else
             {
                 expectedAccount = AccountDocument.Account;
+                expectedReservation = expectedAccount
+                    .Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId)
+                    .Reservations.Single(r => r.Id == ReservationId);
             }
+
+            expectedReservation.Id = ReservationId;
+            expectedReservation.CourseCode = ExpectedReservationCreatedEvent.CourseId;
+            expectedReservation.CourseName = ExpectedReservationCreatedEvent.CourseName;
+            expectedReservation.StartDate = ExpectedReservationCreatedEvent.StartDate;
+            expectedReservation.EndDate = ExpectedReservationCreatedEvent.EndDate;
             
             return document?.Account != null && document.Account.IsEqual(expectedAccount);
         }

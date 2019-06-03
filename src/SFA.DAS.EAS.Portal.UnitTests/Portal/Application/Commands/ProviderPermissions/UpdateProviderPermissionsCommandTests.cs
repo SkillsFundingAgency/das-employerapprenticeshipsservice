@@ -222,7 +222,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
                 expectedAccount = new Account
                 {
                     Id = ExpectedAddedAccountProviderEvent.AccountId,
-                    Providers = new List<Provider>()
                 };
                 expectedProvider = new PortalProvider();
                 expectedAccount.Providers.Add(expectedProvider);
