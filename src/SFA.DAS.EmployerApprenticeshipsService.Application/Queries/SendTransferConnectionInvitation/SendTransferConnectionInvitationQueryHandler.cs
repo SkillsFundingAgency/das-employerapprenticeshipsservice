@@ -42,6 +42,11 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
                 throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
             }
 
+            if (receiverAccount == null)
+            {
+                throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
+            }
+
             if (receiverAccount?.Id == message.AccountId)
             {
                 throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
