@@ -146,6 +146,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("getGovernmentFunding")]
         public ActionResult GetGovernmentFunding(string returnUrl = "")
         {
+            _logger.Info($"Called into GetGovernmentFunding with returnUrl: '{returnUrl}'");
             try
             {
                 _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
