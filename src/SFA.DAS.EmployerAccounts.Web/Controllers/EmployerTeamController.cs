@@ -413,7 +413,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult PrePAYERecruitment(AccountDashboardViewModel model)
+        public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
