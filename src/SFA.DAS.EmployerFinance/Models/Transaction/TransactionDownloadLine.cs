@@ -30,6 +30,7 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
         public string TenPercentTopUpFormatted => TenPercentTopUp.ToString("0.00000", NumberFormatInfo.InvariantInfo);
 
         public string TrainingProvider { get; set; }
+        public string TrainingProviderFormatted => String.Format("\"{0}\"",TrainingProvider);
 
         public string CohortReference { get; set; }
 
