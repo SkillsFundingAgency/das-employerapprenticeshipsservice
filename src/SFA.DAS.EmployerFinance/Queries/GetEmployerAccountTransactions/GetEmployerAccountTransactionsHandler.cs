@@ -4,7 +4,6 @@ using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Models.Transfers;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -12,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.ObsoleteHashing;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
 {
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions
             IValidator<GetEmployerAccountTransactionsQuery> validator,
             ILog logger,
             IHashingService hashingService,
-            Hashing.IPublicHashingService publicHashingService)
+            IPublicHashingService publicHashingService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;

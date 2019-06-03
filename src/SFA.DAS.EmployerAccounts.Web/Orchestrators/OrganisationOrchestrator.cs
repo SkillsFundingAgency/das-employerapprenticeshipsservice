@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiy;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
@@ -20,7 +21,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Web.Validation;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Extensions;
-using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 

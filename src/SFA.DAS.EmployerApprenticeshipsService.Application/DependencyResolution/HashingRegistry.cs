@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
+using SFA.DAS.ObsoleteHashing;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution

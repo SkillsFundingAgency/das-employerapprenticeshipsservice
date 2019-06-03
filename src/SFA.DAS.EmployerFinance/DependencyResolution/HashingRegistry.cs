@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
+using SFA.DAS.ObsoleteHashing;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution

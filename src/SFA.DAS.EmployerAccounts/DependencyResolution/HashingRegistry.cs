@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.Hashing;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.HashingService;
 using StructureMap;
 
@@ -25,17 +25,17 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         private IPublicHashingService GetPublicHashingService(IContext context)
         {
             var config = context.GetInstance<EmployerAccountsConfiguration>();
-            var publicHashingService = new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
+            var publicHashingService = new HashingService.HashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
 
-            return publicHashingService;
+            return publicHashingService as IPublicHashingService;
         }
 
         private IAccountLegalEntityPublicHashingService GetAccountLegalEntityPublicHashingService(IContext context)
         {
             var config = context.GetInstance<EmployerAccountsConfiguration>();
-            var accountLegalEntityPublicHashingService = new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt);
+            var accountLegalEntityPublicHashingService = new HashingService.HashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt);
 
-            return accountLegalEntityPublicHashingService;
+            return accountLegalEntityPublicHashingService as IAccountLegalEntityPublicHashingService;
         }
     }
 }

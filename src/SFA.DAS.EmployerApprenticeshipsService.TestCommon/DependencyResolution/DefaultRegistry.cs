@@ -10,8 +10,8 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using StructureMap;
 using SFA.DAS.HashingService;
-using SFA.DAS.Hashing;
 using SFA.DAS.Messaging.Interfaces;
+using SFA.DAS.ObsoleteHashing;
 
 namespace SFA.DAS.EAS.TestCommon.DependencyResolution
 {

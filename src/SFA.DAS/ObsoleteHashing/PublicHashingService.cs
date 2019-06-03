@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Hashing
+﻿namespace SFA.DAS.ObsoleteHashing
 {
     public class PublicHashingService : HashingService.HashingService, IPublicHashingService, IAccountLegalEntityPublicHashingService
     {

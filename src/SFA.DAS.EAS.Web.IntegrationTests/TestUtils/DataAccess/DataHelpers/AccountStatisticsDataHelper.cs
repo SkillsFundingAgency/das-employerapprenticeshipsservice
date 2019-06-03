@@ -9,8 +9,8 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.ObsoleteHashing;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
 {

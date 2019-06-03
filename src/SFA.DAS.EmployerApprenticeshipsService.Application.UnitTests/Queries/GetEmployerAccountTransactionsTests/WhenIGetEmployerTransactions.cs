@@ -16,7 +16,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
-using SFA.DAS.Hashing;
+using SFA.DAS.ObsoleteHashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {

@@ -6,8 +6,8 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Dtos;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
-using SFA.DAS.Hashing;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation

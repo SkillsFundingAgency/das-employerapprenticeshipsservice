@@ -6,11 +6,11 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
-using SFA.DAS.Hashing;
 using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
