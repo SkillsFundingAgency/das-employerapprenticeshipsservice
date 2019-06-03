@@ -26,7 +26,7 @@
                 <th scope="row">
                     Address
                 </th>
-                <td>
+                <td colspan="2">
                     @Model.Data.RegisteredAddress
                 </td>
             </tr>
@@ -44,7 +44,7 @@
                         }
                     }
                 </th>
-                <td>
+                <td colspan="2">
                     @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
                     {
                         <span>@Model.Data.OrganisationReferenceNumber</span>
