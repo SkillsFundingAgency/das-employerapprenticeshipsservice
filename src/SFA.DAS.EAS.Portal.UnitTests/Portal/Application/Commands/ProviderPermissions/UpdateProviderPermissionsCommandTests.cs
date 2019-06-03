@@ -106,8 +106,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
 
         public UpdateProviderPermissionsCommandTestsFixture ArrangeEmptyAccountDocument()
         {
-            AccountDocument = AccountDocument.Create(AccountId);
-            AccountDocument.IsNew = false;
+            AccountDocument = new AccountDocument(AccountId) {IsNew = false};
 
             AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             

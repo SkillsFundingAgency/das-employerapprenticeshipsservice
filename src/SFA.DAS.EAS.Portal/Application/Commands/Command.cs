@@ -24,8 +24,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands
         
         protected async Task<AccountDocument> GetOrCreateAccountDocument(long accountId, CancellationToken cancellationToken = default)
         {
-            return await AccountDocumentService.Get(accountId, cancellationToken) ??
-                AccountDocument.Create(accountId);
+            return await AccountDocumentService.Get(accountId, cancellationToken) ?? new AccountDocument(accountId);
         }
 
         protected (Organisation, EntityCreation) GetOrAddOrganisation(AccountDocument accountDocument, long accountLegalEntityId)
