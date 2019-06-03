@@ -249,7 +249,6 @@ namespace SFA.DAS.EmployerAccounts.Services
             var result = _inProcessCache.Get<List<OrganisationName>>(cacheKey);
             if (result != null) return result;
 
-            System.Net.ServicePointManager.ServerCertificateValidationCallback = (senderX, certificate, chain, sslPolicyErrors) => { return true; };
             var orgs = await _client.SearchOrganisations(searchTerm);
 
             if (orgs == null) return new List<OrganisationName>();
