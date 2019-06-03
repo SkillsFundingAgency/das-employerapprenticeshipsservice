@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -26,15 +28,22 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
         }
 
         [Test]
-        public Task Execute_WhenAccountDoesNotContainReservation_ThenAccountDocumentIsSavedWithNewReservation()
+        public Task Execute_WhenAccountDoesNotContainOrganisationOrReservation_ThenAccountDocumentIsSavedWithNewReservation()
         {
             return TestAsync(f => f.ArrangeEmptyAccountDocument(),f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
         }
+
+        [Test]
+        public Task Execute_WhenAccountDoesContainOrganisationButNotReservation_ThenAccountDocumentIsSavedWithNewReservation()
+        {
+            return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
+        }
         
         [Test]
-        public Task Execute_WhenAccountDoesContainReservation_ThenAccountDocumentIsSavedWithUpdatedReservation()
+        public Task Execute_WhenAccountDoesContainOrganisationAndReservation_ThenExceptionIsThrown()
         {
-            return TestAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
+            return TestExceptionAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Execute(),
+                (f, r) => r.Should().Throw<Exception>().Where(ex => ex.Message.StartsWith("Received ReservationCreatedEvent with")));
         }
     }
 
@@ -76,7 +85,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
             return this;
         }
 
-        public AddReservationCommandTestsFixture ArrangeAccountDocumentContainsReservation()
+        private Organisation SetUpAccountDocumentWithOrganisation()
         {
             AccountDocument = Fixture.Create<AccountDocument>();
 
@@ -88,6 +97,25 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
             //todo: helper for picking random
             var organisation = AccountDocument.Account.Organisations.Skip(new Random().Next(AccountDocument.Account.Organisations.Count))
                 .First();
+            organisation.AccountLegalEntityId = AccountLegalEntityId;
+
+            return organisation;
+        }
+        
+        public AddReservationCommandTestsFixture ArrangeAccountDocumentContainsOrganisation()
+        {
+            var organisation = SetUpAccountDocumentWithOrganisation();
+            organisation.Reservations = new List<Reservation>();
+            
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+        
+        public AddReservationCommandTestsFixture ArrangeAccountDocumentContainsReservation()
+        {
+            var organisation = SetUpAccountDocumentWithOrganisation();
+
             organisation.Reservations.Skip(new Random().Next(organisation.Reservations.Count)).First().Id = ReservationId;
             
             AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
