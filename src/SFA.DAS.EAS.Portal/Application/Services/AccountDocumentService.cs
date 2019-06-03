@@ -16,13 +16,7 @@ namespace SFA.DAS.EAS.Portal.Application.Services
         }
         public async Task<AccountDocument> GetOrCreate(long id, CancellationToken cancellationToken = default)
         {
-            var accountDocument = await _accountsRepository.CreateQuery()
-               .SingleOrDefaultAsync(a => a.AccountId == id, cancellationToken);
-            if (accountDocument == null)
-            {
-                accountDocument = AccountDocument.Create(id);
-            }
-            return accountDocument;
+           return await _accountsRepository.GetAccountDocumentById(id, cancellationToken) ?? AccountDocument.Create(id);
         }
 
         public Task Save(AccountDocument account, CancellationToken cancellationToken = default)
