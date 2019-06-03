@@ -56,12 +56,14 @@ namespace SFA.DAS.Authorization.Mvc
 
         private long? GetAccountId(string accountHashedId)
         {
-            if (!_hashingService.TryDecodeValue(accountHashedId, out var accountId))
+            try
+            {
+                return _hashingService.DecodeValue(accountHashedId);
+            }
+            catch (Exception)
             {
                 throw new UnauthorizedAccessException();
             }
-
-            return accountId;
         }
 
         private Guid? GetUserRef()

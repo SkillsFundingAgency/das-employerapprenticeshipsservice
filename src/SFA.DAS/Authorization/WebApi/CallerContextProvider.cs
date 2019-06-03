@@ -52,12 +52,14 @@ namespace SFA.DAS.Authorization.WebApi
 
         private long? GetAccountId(string accountHashedId)
         {
-            if (!_hashingService.TryDecodeValue(accountHashedId, out var accountId))
+            try
+            {
+                return _hashingService.DecodeValue(accountHashedId);
+            }
+            catch (Exception)
             {
                 throw new UnauthorizedAccessException();
             }
-
-            return accountId;
         }
     }
 }
