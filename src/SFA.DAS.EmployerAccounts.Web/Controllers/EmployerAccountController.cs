@@ -159,7 +159,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Error processing getGovernmentFunding ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
+                _logger.Error(ex, $"Error processing getGovernmentFunding. ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
                 throw;
             }
         }
