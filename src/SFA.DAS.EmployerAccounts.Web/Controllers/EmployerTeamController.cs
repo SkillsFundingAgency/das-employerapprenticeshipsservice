@@ -431,6 +431,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult OtherTasksPanel(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
         public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
         {
             return PartialView(model);
