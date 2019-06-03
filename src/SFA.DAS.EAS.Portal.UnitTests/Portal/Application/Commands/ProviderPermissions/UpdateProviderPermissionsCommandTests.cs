@@ -89,8 +89,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             Fixture = new Fixture();
             Provider = Fixture.Create<ApiProvider>();
             
-            Provider.Addresses.Skip(new Random().Next(Provider.Addresses.Count()))
-                .First().ContactType = "PRIMARY";
+            Provider.Addresses.RandomElement().ContactType = "PRIMARY";
             
             ProviderApiClient = new Mock<IProviderApiClient>();
             ProviderApiClient.Setup(c => c.GetAsync(Ukprn)).ReturnsAsync(Provider);
@@ -120,8 +119,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             
             AccountDocument = Fixture.Create<AccountDocument>();
 
-            AccountDocument.Account.Providers.Skip(new Random().Next(AccountDocument.Account.Providers.Count))
-                .First().Ukprn = Ukprn;
+            AccountDocument.Account.Providers.RandomElement().Ukprn = Ukprn;
 
             AccountDocument.Account.Id = AccountId;
             
@@ -137,8 +135,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
         {
             ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress();
             
-            Provider.Addresses.Skip(new Random().Next(Provider.Addresses.Count()))
-                .First().ContactType = "LEGAL";
+            Provider.Addresses.RandomElement().ContactType = "LEGAL";
 
             return this;
         }

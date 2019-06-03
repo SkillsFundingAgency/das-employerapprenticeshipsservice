@@ -94,9 +94,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
             AccountDocument.Deleted = null;
             AccountDocument.Account.Deleted = null;
             
-            //todo: helper for picking random
-            var organisation = AccountDocument.Account.Organisations.Skip(new Random().Next(AccountDocument.Account.Organisations.Count))
-                .First();
+            var organisation = AccountDocument.Account.Organisations.RandomElement();
             organisation.AccountLegalEntityId = AccountLegalEntityId;
 
             return organisation;
@@ -116,7 +114,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
         {
             var organisation = SetUpAccountDocumentWithOrganisation();
 
-            organisation.Reservations.Skip(new Random().Next(organisation.Reservations.Count)).First().Id = ReservationId;
+            organisation.Reservations.RandomElement().Id = ReservationId;
             
             AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
