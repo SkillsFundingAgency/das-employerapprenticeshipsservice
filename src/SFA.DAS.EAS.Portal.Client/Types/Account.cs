@@ -6,7 +6,6 @@ namespace SFA.DAS.EAS.Portal.Client.Types
 {
     public class Account
     {
-        [JsonConstructor]
         public Account()
         {
             Organisations = new List<Organisation>();

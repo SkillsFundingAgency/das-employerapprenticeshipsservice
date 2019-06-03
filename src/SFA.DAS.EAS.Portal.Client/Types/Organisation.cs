@@ -5,7 +5,6 @@ namespace SFA.DAS.EAS.Portal.Client.Types
 {
     public class Organisation
     {
-        [JsonConstructor]
         public Organisation()
         {
             Reservations = new List<Reservation>();
