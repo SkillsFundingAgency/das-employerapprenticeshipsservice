@@ -146,14 +146,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("getGovernmentFunding")]
         public ActionResult GetGovernmentFunding(string returnUrl = "")
         {
-            _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
-
-            var model = new
+            try
             {
-                HideHeaderSignInLink = true
-            };
+                _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
 
-            return View(model);
+                var model = new
+                {
+                    HideHeaderSignInLink = true
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error processing getGovernmentFunding ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
+                throw;
+            }
         }
 
         [HttpPost]
