@@ -27,9 +27,15 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
     public class UpdateProviderPermissionsCommandTests : FluentTest<UpdateProviderPermissionsCommandTestsFixture>
     {
         [Test]
-        public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
+        public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotExist_ThenAccountDocumentIsSavedWithNewProvider()
         {
             return TestAsync(f => f.Execute(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
+        }
+
+        [Test]
+        public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
+        {
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(), f => f.Execute(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
         }
 
         [Test]
@@ -98,9 +104,18 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
             ExpectedAddedAccountProviderEvent = AddedAccountProviderEvent.Clone();
         }
 
+        public UpdateProviderPermissionsCommandTestsFixture ArrangeEmptyAccountDocument()
+        {
+            AccountDocument = AccountDocument.Create(AccountId);
+            AccountDocument.IsNew = false;
+
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+
         public UpdateProviderPermissionsCommandTestsFixture ArrangeAccountDocumentContainsProvider()
         {
-            //todo: builder using autofixture?
             //note customization will stay in fixture
             long uniqueUkprnAddition = 0;
             Fixture.Customize<PortalProvider>(p => p.With(pr => pr.Ukprn, () => Ukprn + ++uniqueUkprnAddition));

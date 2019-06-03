@@ -15,11 +15,17 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
 {
     [Parallelizable]
     [TestFixture]
+    [Ignore("In progress")]
     public class AddReservationCommandTests : FluentTest<AddReservationCommandTestsFixture>
     {
         [Test]
-        [Ignore("In progress")]
         public Task Execute_WhenAccountDoesNotContainReservation_ThenAccountDocumentIsSavedWithNewReservation()
+        {
+            return TestAsync(f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
+        }
+        
+        [Test]
+        public Task Execute_WhenAccountDoesContainReservation_ThenAccountDocumentIsSavedWithUpdatedReservation()
         {
             return TestAsync(f => f.Execute(), f => f.VerifyAccountDocumentSavedWithReservation());
         }
@@ -45,6 +51,20 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
             Logger = new Mock<ILogger<AddReservationCommand>>();
 
             AddReservationCommand = new AddReservationCommand(AccountDocumentService.Object, Logger.Object);
+        }
+        
+        public AddReservationCommandTestsFixture ArrangeAccountDocumentContainsReservation()
+        {
+            AccountDocument = Fixture.Create<AccountDocument>();
+
+            AccountDocument.Account.Id = AccountId;
+            
+            AccountDocument.Deleted = null;
+            AccountDocument.Account.Deleted = null;
+            
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
         }
         
         public async Task Execute()

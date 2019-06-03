@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Portal.Client.Database.Models
         public Guid Id { get; protected set; }
 
         [JsonIgnore]
-        public bool IsNew { get; protected set; }
+        public bool IsNew { get; set; }
 
         [JsonIgnore]
         public string ETag { get; protected set; }
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Portal.Client.Database.Models
         private string ReadOnlyETag { set => ETag = value; }
 
         [JsonProperty("metadata")]
-        public DocumentMetadata Metadata { get; protected set;}
+        public DocumentMetadata Metadata { get; protected set; }
 
         [JsonProperty("created")]
         public DateTime Created { get;  set; }
