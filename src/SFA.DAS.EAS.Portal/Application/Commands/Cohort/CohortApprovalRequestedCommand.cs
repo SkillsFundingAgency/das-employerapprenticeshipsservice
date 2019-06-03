@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
-using System;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Services;
@@ -33,29 +32,23 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
         {
             _logger.LogInformation($"Executing {nameof(CohortApprovalRequestedCommand)}");
 
-            var accountDocument = await GetOrCreateAccountDocument(cohortApprovalRequestedByProvider.AccountId, cancellationToken);
+            var accountDocumentTask = GetOrCreateAccountDocument(cohortApprovalRequestedByProvider.AccountId, cancellationToken);
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(cohortApprovalRequestedByProvider.ProviderId, cohortApprovalRequestedByProvider.CommitmentId);
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
-                      
-            var account = accountDocument.Account;
-            var cohortReference = commitment.Reference;
-            var cohortId = commitment.Id;
 
+            var accountDocument = await accountDocumentTask;
             var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, accountLegalEntityId);
             if (organisationCreation == EntityCreation.Created)
             {
                 organisation.Name = commitment.LegalEntityName;
             }
 
-            //todo: use GetOrAdd pattern for cohort
-            var cohort = organisation.Cohorts.FirstOrDefault(c => c.Id != null && c.Id.Equals(cohortId.ToString(), StringComparison.OrdinalIgnoreCase));
-
-            if (cohort == null)
+            var (cohort, cohortCreated) = GetOrAddCohort(organisation, commitment.Id);
+            if (cohortCreated == EntityCreation.Created)
             {
-                cohort = new Client.Types.Cohort { Id = cohortId.ToString(), Reference = cohortReference };
-                account.Organisations.First().Cohorts.Add(cohort);
+                cohort.Reference = commitment.Reference;
             }
-            
+ 
             commitment.Apprenticeships.ForEach(a =>
             {
                 var apprenticeship = cohort.Apprenticeships.FirstOrDefault(ca => ca.Id == a.Id);
