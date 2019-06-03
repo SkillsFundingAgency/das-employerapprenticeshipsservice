@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
                 builder.Append($"{transaction.LevyDeclaredFormatted},");
                 builder.Append($"{transaction.EnglishFractionFormatted},");
                 builder.Append($"{transaction.TenPercentTopUpFormatted},");
-                builder.Append($"{transaction.TrainingProvider},");
+                builder.Append($"{transaction.TrainingProviderFormatted},");
                 builder.Append($"{transaction.Uln},");
                 builder.Append($"{transaction.Apprentice},");
                 builder.Append($"{transaction.ApprenticeTrainingCourse},");
