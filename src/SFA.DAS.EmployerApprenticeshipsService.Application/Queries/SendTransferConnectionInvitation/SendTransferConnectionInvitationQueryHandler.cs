@@ -30,11 +30,19 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 
         public async Task<SendTransferConnectionInvitationResponse> Handle(SendTransferConnectionInvitationQuery message)
         {
-            var receiverAccount = _publicHashingService.TryDecodeValue(message.ReceiverAccountPublicHashedId, out var receiverAccountId)
-                ? await _db.Value.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == receiverAccountId)
-                : null;
+            AccountDto receiverAccount;
 
-            if (receiverAccount == null || receiverAccount.Id == message.AccountId)
+            try
+            {
+                var receiverAccountId = _publicHashingService.DecodeValue(message.ReceiverAccountPublicHashedId);
+                receiverAccount = await _db.Value.Accounts.ProjectTo<AccountDto>(_configurationProvider).SingleOrDefaultAsync(a => a.Id == receiverAccountId);
+            }
+            catch (Exception)
+            {
+                throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
+            }
+
+            if (receiverAccount?.Id == message.AccountId)
             {
                 throw new ValidationException<SendTransferConnectionInvitationQuery>(q => q.ReceiverAccountPublicHashedId, "You must enter a valid account ID");
             }
