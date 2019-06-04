@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Configuration;
+﻿using System;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.HashingService;
 using StructureMap;
@@ -9,33 +10,71 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public HashingRegistry()
         {
-            For<IHashingService>().Use(c => GetHashingService(c));
-            For<IPublicHashingService>().Use(c => GetPublicHashingService(c));
-            For<IAccountLegalEntityPublicHashingService>().Add(c => GetAccountLegalEntityPublicHashingService(c));
+            For<IHashingService>()
+                .Use(c =>
+                    new HashingService.HashingService(
+                        c.GetInstance<EmployerAccountsConfiguration>().AllowedHashstringCharacters,
+                        c.GetInstance<EmployerAccountsConfiguration>().Hashstring));
+
+            For<IPublicHashingService>()
+                .Use<MarkerInterfaceWrapper>()
+                .Ctor<IHashingService>()
+                .Is(c =>
+                     new HashingService.HashingService(
+                        c.GetInstance<EmployerAccountsConfiguration>().PublicAllowedHashstringCharacters,
+                        c.GetInstance<EmployerAccountsConfiguration>().PublicHashstring)
+                );
+
+            For<IAccountLegalEntityPublicHashingService>()
+                .Use<MarkerInterfaceWrapper>()
+                .Ctor<IHashingService>()
+                .Is(c =>
+                    new HashingService.HashingService(
+                        c.GetInstance<EmployerAccountsConfiguration>() .PublicAllowedAccountLegalEntityHashstringCharacters,
+                        c.GetInstance<EmployerAccountsConfiguration>().PublicAllowedAccountLegalEntityHashstringSalt));
+
+        }
+    }
+
+    public class MarkerInterfaceWrapper
+    : IAccountLegalEntityPublicHashingService,
+       IPublicHashingService
+    {
+        private IHashingService _hashingServiceWithCorrectValuesForMarkerInterface;
+
+        public MarkerInterfaceWrapper(IHashingService hashingServiceWithCorrectValuesForMarkerInterface)
+        {
+            _hashingServiceWithCorrectValuesForMarkerInterface = hashingServiceWithCorrectValuesForMarkerInterface;
         }
 
-        private IHashingService GetHashingService(IContext context)
+        public string HashValue(long id)
         {
-            var config = context.GetInstance<EmployerAccountsConfiguration>();
-            var hashingService = new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring);
-
-            return hashingService;
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
         }
 
-        private IPublicHashingService GetPublicHashingService(IContext context)
+        public string HashValue(Guid id)
         {
-            var config = context.GetInstance<EmployerAccountsConfiguration>();
-            var publicHashingService = new HashingService.HashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
-
-            return publicHashingService as IPublicHashingService;
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
         }
 
-        private IAccountLegalEntityPublicHashingService GetAccountLegalEntityPublicHashingService(IContext context)
+        public string HashValue(string id)
         {
-            var config = context.GetInstance<EmployerAccountsConfiguration>();
-            var accountLegalEntityPublicHashingService = new HashingService.HashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt);
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
+        }
 
-            return accountLegalEntityPublicHashingService as IAccountLegalEntityPublicHashingService;
+        public long DecodeValue(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValue(id);
+        }
+
+        public Guid DecodeValueToGuid(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValueToGuid(id);
+        }
+
+        public string DecodeValueToString(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValueToString(id);
         }
     }
 }
