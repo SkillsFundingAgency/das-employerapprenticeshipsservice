@@ -1,7 +1,5 @@
-﻿
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <h3 class="das-panel__heading">You've successfully registered your account </h3>
 <p>Add your organisation's PAYE scheme and sign your employer agreement with the Education and Skills Funding Agency to get government funding for apprenticeship training.</p>
-
-<p><a href="@Url.Action("gatewayInform", "EmployerAccount")" class="das-panel__link">Add your PAYE scheme</a> </p>
+<p><a href="@("/accounts/" + Model.HashedAccountId + "/gatewayInform")" class="das-panel__link">Add your PAYE scheme</a> </p>

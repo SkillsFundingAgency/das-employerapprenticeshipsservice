@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MediatR;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
 {
@@ -47,7 +48,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 _userViewTestingService.Object,
                 logger.Object,
                 _flashMessage.Object,
-                Mock.Of<IMediator>())
+                Mock.Of<IMediator>(),
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
