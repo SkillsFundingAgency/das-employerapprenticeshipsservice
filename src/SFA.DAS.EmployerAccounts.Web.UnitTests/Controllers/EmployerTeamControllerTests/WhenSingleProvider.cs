@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
 using System.Web.Mvc;
+using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
@@ -53,9 +54,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.PayeSchemeCount = 1;
             model.AgreementsToSign = false;
 
-            var organisation = new EAS.Portal.Client.Types.Organisation();
-            organisation.Providers.Add(new EAS.Portal.Client.Types.Provider());
-            model.AccountViewModel = new EAS.Portal.Client.Types.Account();
+            var organisation = new Model.Organisation();
+            organisation.Providers.Add(new Model.Provider());
+            model.AccountViewModel = new Model.Account();
             model.AccountViewModel.Organisations.Add(organisation);
 
             //Act
