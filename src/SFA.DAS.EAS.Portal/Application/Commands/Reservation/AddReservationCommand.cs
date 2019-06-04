@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Portal.Application.Commands.Account;
+using SFA.DAS.EAS.Portal.Application.AccountHelper;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
@@ -13,16 +13,16 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
     public class AddReservationCommand
     {
         private readonly IAccountDocumentService _accountsService;
-        private readonly ICommandHandler<AccountCreatedCommand> _accountCreatedHandler;
         private readonly ILogger<AddReservationCommand> _logger;
+        private readonly IAccountHelperService _accountHelper;
 
         public AddReservationCommand(
             IAccountDocumentService accountsService,
-            ICommandHandler<AccountCreatedCommand> accountCreatedHandler,
+            IAccountHelperService accountHelper,
             ILogger<AddReservationCommand> logger)
         {
             _accountsService = accountsService;
-            _accountCreatedHandler = accountCreatedHandler;
+            _accountHelper = accountHelper;
             _logger = logger;
         }
 
@@ -30,10 +30,7 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Reservation
         {
             _logger.LogInformation("Executing AddReservationCommand");
 
-            await _accountCreatedHandler.Handle(new AccountCreatedCommand(reservedFunding.AccountId, reservedFunding.AccountLegalEntityName), cancellationToken);
-
-            var accountDocument = await _accountsService.Get(reservedFunding.AccountId, cancellationToken);
-
+            var accountDocument = await _accountHelper.GetOrCreateAccount(reservedFunding.AccountId, cancellationToken);
             var org = accountDocument.Account.Organisations.FirstOrDefault(o => o.AccountLegalEntityId.Equals(reservedFunding.AccountLegalEntityId));
             if (org == null)
             {

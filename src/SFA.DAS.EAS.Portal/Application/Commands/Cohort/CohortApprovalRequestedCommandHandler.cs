@@ -5,8 +5,8 @@ using System.Linq;
 using System;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EAS.Portal.Application.Commands.Account;
 using SFA.DAS.HashingService;
+using SFA.DAS.EAS.Portal.Application.AccountHelper;
 
 namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
 {
@@ -14,29 +14,28 @@ namespace SFA.DAS.EAS.Portal.Application.Commands.Cohort
     {
         private readonly IAccountDocumentService _accountsService;
         private readonly IProviderCommitmentsApi _providerCommitmentsApi;
-        private readonly ICommandHandler<AccountCreatedCommand> _accountCreatedHandler;
         private readonly IHashingService _hashingService;
+        private readonly IAccountHelperService _accountHelper;
 
         public CohortApprovalRequestedCommandHandler(
             IAccountDocumentService accountsService, 
             IProviderCommitmentsApi providerCommitmentsApi,
-            ICommandHandler<AccountCreatedCommand> accountCreatedHandler,
-            IHashingService hashingService)
+            IHashingService hashingService,
+            IAccountHelperService accountHelper)
         {
             _accountsService = accountsService;
             _providerCommitmentsApi = providerCommitmentsApi;
-            _accountCreatedHandler = accountCreatedHandler;
             _hashingService = hashingService;
+            _accountHelper = accountHelper;
         }
 
         public async Task Handle(CohortApprovalRequestedCommand command, CancellationToken cancellationToken = default)
         {
-            await _accountCreatedHandler.Handle(new AccountCreatedCommand(command.AccountId), cancellationToken);
-
+            var accountDocument = await _accountHelper.GetOrCreateAccount(command.AccountId, cancellationToken);
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(command.ProviderId, command.CommitmentId);            
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
-            var accountDocument = await _accountsService.Get(command.AccountId, cancellationToken);           
+                      
             var account = accountDocument.Account;
             var cohortReference = commitment.Reference;
             var cohortId = commitment.Id;

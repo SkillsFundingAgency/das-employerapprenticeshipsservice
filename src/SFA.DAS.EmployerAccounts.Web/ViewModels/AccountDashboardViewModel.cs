@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class AccountDashboardViewModel
     {
-        public Models.Account.Account Account { get; set; }
+        public EmployerAccounts.Models.Account.Account Account { get; set; }
         public string EmployerAccountType { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedUserId { get; set; }
