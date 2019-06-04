@@ -12,7 +12,6 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             var apiClientConfig = hostBuilderContext.Configuration.GetSection<ApprenticeshipInfoServiceApiConfiguration>(ConfigurationKeys.ApprenticeshipInfoServiceApi);
 
             services.AddTransient<IProviderApiClient>(sp => new ProviderApiClient(apiClientConfig.BaseUrl));
-            // if we want to support config changes on the fly, we could create wrapper class that accepts IOptionsMonitor and picks out url
 
             return services;
         }
