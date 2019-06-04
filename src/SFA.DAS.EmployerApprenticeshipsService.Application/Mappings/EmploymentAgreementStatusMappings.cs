@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using SFA.DAS.EAS.Application.Dtos.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 
 namespace SFA.DAS.EAS.Application.Mappings
 {

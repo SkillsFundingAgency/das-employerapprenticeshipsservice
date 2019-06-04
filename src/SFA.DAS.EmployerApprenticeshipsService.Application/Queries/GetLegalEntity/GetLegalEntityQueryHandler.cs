@@ -7,7 +7,6 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Infrastructure.Data;
-using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
 {

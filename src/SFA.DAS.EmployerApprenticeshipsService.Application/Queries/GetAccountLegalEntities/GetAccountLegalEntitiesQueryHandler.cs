@@ -16,12 +16,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
 
         public GetAccountLegalEntitiesQueryHandler(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IValidator<GetAccountLegalEntitiesRequest> validator)
         {
-            if (membershipRepository == null)
-                throw new ArgumentNullException(nameof(membershipRepository));
-            if (employerAgreementRepository == null)
-                throw new ArgumentNullException(nameof(employerAgreementRepository));
-            _membershipRepository = membershipRepository;
-            _employerAgreementRepository = employerAgreementRepository;
+            _membershipRepository = membershipRepository ?? throw new ArgumentNullException(nameof(membershipRepository));
+            _employerAgreementRepository = employerAgreementRepository ?? throw new ArgumentNullException(nameof(employerAgreementRepository));
             _validator = validator;
         }
 
@@ -37,7 +33,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
             var membership = await _membershipRepository.GetCaller(message.HashedLegalEntityId, message.UserId);
 
             if (membership == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Membership", "Caller is not a member of this account" } });
+                throw new InvalidRequestException(new Dictionary<string, string> {{"Membership", "Caller is not a member of this account"}});
 
             var accountSpecificLegalEntity = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(membership.AccountId, message.SignedOnly);
 

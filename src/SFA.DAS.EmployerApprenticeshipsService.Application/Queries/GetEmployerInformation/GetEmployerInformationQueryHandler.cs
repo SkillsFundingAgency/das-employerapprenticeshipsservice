@@ -11,9 +11,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerInformation
 
         public GetEmployerInformationQueryHandler(IEmployerVerificationService employerVerificationService)
         {
-            if (employerVerificationService == null)
-                throw new ArgumentNullException(nameof(employerVerificationService));
-            _employerVerificationService = employerVerificationService;
+            _employerVerificationService = employerVerificationService ?? throw new ArgumentNullException(nameof(employerVerificationService));
         }
 
         public async Task<GetEmployerInformationResponse> Handle(GetEmployerInformationRequest message)

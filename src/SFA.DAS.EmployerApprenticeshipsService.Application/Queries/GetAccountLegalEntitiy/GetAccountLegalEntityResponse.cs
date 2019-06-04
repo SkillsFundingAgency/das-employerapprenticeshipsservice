@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.Organisation;
+﻿using SFA.DAS.EAS.Domain.Models.Organisation;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy
 {

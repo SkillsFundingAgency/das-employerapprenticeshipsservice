@@ -1,6 +1,4 @@
-﻿using SFA.DAS.EAS.Domain.Models.HmrcLevy;
-
-namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
+﻿namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
 {
     public class GetHmrcEmployerInformationResponse
     {

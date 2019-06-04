@@ -15,9 +15,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntitiy
             IEmployerAgreementRepository employerAgreementRepository, 
             IValidator<GetAccountLegalEntityRequest> validator)
         {
-            if (employerAgreementRepository == null)
-                throw new ArgumentNullException(nameof(employerAgreementRepository));
-            _employerAgreementRepository = employerAgreementRepository;
+            _employerAgreementRepository = employerAgreementRepository ?? throw new ArgumentNullException(nameof(employerAgreementRepository));
             _validator = validator;
         }
 

@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
             else if (transaction.GetType() == typeof(PaymentTransactionLine))
             {
-                var paymentTransaction = (PaymentTransactionLine)transaction;
+                var paymentTransaction = (PaymentTransactionLine) transaction;
 
                 transaction.Description = GetPaymentTransactionDescription(paymentTransaction);
             }
@@ -108,16 +108,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
             else if (transaction.GetType() == typeof(TransferTransactionLine))
             {
-                var transferTransaction = (TransferTransactionLine)transaction;
+                var transferTransaction = (TransferTransactionLine) transaction;
 
-                if (transferTransaction.TransactionAccountIsTransferSender)
-                {
-                    transaction.Description = $"Transfer sent to {transferTransaction.ReceiverAccountName}";
-                }
-                else
-                {
-                    transaction.Description = $"Transfer received from {transferTransaction.SenderAccountName}";
-                }
+                transaction.Description = transferTransaction.TransactionAccountIsTransferSender 
+                    ? $"Transfer sent to {transferTransaction.ReceiverAccountName}" 
+                    : $"Transfer received from {transferTransaction.SenderAccountName}";
             }
         }
 

@@ -13,9 +13,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetMember
 
         public GetMemberQueryHandler(IAccountTeamRepository accountTeamRepository, IHashingService hashingService)
         {
-            if (accountTeamRepository == null)
-                throw new ArgumentNullException(nameof(accountTeamRepository));
-            _accountTeamRepository = accountTeamRepository;
+            _accountTeamRepository = accountTeamRepository ?? throw new ArgumentNullException(nameof(accountTeamRepository));
             _hashingService = hashingService;
         }
 

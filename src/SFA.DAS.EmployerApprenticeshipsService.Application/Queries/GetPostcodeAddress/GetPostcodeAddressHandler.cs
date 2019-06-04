@@ -2,7 +2,6 @@
 using MediatR;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetPostcodeAddress
 {
@@ -10,13 +9,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetPostcodeAddress
     {
         private readonly IAddressLookupService _addressLookupService;
         private readonly IValidator<GetPostcodeAddressRequest> _validator;
-        private readonly ILog _logger;
 
-        public GetPostcodeAddressHandler(IAddressLookupService addressLookupService, IValidator<GetPostcodeAddressRequest> validator, ILog logger)
+        public GetPostcodeAddressHandler(IAddressLookupService addressLookupService, IValidator<GetPostcodeAddressRequest> validator)
         {
             _addressLookupService = addressLookupService;
             _validator = validator;
-            _logger = logger;
         }
 
         public async Task<GetPostcodeAddressResponse> Handle(GetPostcodeAddressRequest request)

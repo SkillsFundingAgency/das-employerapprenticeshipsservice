@@ -8,14 +8,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
 {
     public class GetEmployerAccountHandler : IAsyncRequestHandler<GetEmployerAccountQuery, GetEmployerAccountResponse>
     {
-        private readonly IEmployerAccountRepository _employerAccountRepository   ;
+        private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly IValidator<GetEmployerAccountQuery> _validator;
 
         public GetEmployerAccountHandler(IEmployerAccountRepository employerAccountRepository, IValidator<GetEmployerAccountQuery> validator)
         {
-            if (employerAccountRepository == null)
-                throw new ArgumentNullException(nameof(employerAccountRepository));
-            _employerAccountRepository = employerAccountRepository;
+            _employerAccountRepository = employerAccountRepository ?? throw new ArgumentNullException(nameof(employerAccountRepository));
             _validator = validator;
         }
 
@@ -31,8 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
             if (result.IsUnauthorized)
             {
                 throw new UnauthorizedAccessException();
-            }
-            
+            }          
 
             var employerAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
 

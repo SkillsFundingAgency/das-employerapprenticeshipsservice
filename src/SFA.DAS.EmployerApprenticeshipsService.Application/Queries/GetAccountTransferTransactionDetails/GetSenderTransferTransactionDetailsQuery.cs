@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Application.Messages;
 using System.ComponentModel.DataAnnotations;
 using SFA.DAS.Authorization;
 
