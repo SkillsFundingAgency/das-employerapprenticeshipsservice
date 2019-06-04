@@ -14,14 +14,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities
             {
                 validationResult.AddError(nameof(item.HashedLegalEntityId), "HashedLegalEntityId has not been supplied");
             }
+
             if (string.IsNullOrWhiteSpace(item.UserId))
             {
                 validationResult.AddError(nameof(item.UserId), "User Id has not been supplied");
             }
             else
             {
-                Guid output;
-                if (!Guid.TryParse(item.UserId, out output))
+                if (!Guid.TryParse(item.UserId, out _))
                 {
                     validationResult.AddError(nameof(item.UserId), "User Id has not been supplied in the correct format");
                 }

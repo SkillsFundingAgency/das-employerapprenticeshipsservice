@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             }
             else
             {
-                For<IDistributedCache>().Use<RedisCache>(() => new RedisCache(CloudConfigurationManager.GetSetting("RedisConnection"))).Singleton();
+                For<IDistributedCache>().Use(() => new RedisCache(CloudConfigurationManager.GetSetting("RedisConnection"))).Singleton();
             }
         }
     }

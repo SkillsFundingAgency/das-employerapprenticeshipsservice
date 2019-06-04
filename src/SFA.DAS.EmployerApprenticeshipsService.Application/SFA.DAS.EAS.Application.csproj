@@ -327,9 +327,7 @@
     <Compile Include="DependencyResolution\MapperRegistry.cs" />
     <Compile Include="DependencyResolution\MediatorRegistry.cs" />
     <Compile Include="DependencyResolution\MessagePublisherRegistry.cs" />
-    <Compile Include="DependencyResolution\MessageSubscriberRegistry.cs" />
     <Compile Include="DependencyResolution\NotificationsRegistry.cs" />
-    <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
     <Compile Include="DependencyResolution\ServicesRegistry.cs" />
@@ -347,8 +345,6 @@
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
-    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsQuery.cs" />
-    <Compile Include="Queries\GetAccountTransferTransactionDetails\GetSenderTransferTransactionDetailsResponse.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQueryHandler.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsQuery.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
@@ -377,7 +373,6 @@
     <Compile Include="Queries\GetTransferTransactionDetails\GetTransferTransactionDetailsQuery.cs" />
     <Compile Include="Queries\GetTransferTransactionDetails\GetTransferTransactionDetailsQueryHandler.cs" />
     <Compile Include="Queries\GetTransferTransactionDetails\GetTransferTransactionDetailsResponse.cs" />
-    <Compile Include="Services\ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommand.cs" />
     <Compile Include="Commands\ApproveTransferConnectionInvitation\ApproveTransferConnectionInvitationCommandHandler.cs" />
     <Compile Include="Commands\DeleteSentTransferConnectionInvitation\DeleteTransferConnectionInvitationCommand.cs" />
@@ -414,20 +409,11 @@
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
-    <Compile Include="Factories\LevyEventFactory.cs" />
-    <Compile Include="Factories\GenericEventFactory.cs" />
-    <Compile Include="Factories\ILevyEventFactory.cs" />
-    <Compile Include="Factories\IGenericEventFactory.cs" />
-    <Compile Include="Factories\ILegalEntityEventFactory.cs" />
-    <Compile Include="Factories\IPayeSchemeEventFactory.cs" />
-    <Compile Include="Factories\LegalEntityEventFactory.cs" />
-    <Compile Include="Factories\PayeSchemeEventFactory.cs" />
     <Compile Include="Helpers\NameOf.cs" />
     <Compile Include="Mappings\AccountMappings.cs" />
     <Compile Include="Mappings\MembershipMappings.cs" />
     <Compile Include="Mappings\TransferConnectionInvitationMappings.cs" />
     <Compile Include="Mappings\UserMappings.cs" />
-    <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesRequest.cs" />
@@ -489,10 +475,6 @@
     <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryValidator.cs" />
-    <Compile Include="Formatters\TransactionDowloads\CsvTransactionFormatter.cs" />
-    <Compile Include="Formatters\TransactionDowloads\DownloadFormatType.cs" />
-    <Compile Include="Formatters\TransactionDowloads\ExcelTransactionFormatter.cs" />
-    <Compile Include="Formatters\TransactionDowloads\ITransactionFormatter.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestHandler.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestValidator.cs" />
@@ -616,7 +598,6 @@
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
     <Compile Include="Services\DasLevyService.cs" />
     <Compile Include="Services\RefreshEmployerLevyService.cs" />
-    <Compile Include="Services\TransferAllowanceService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
