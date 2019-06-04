@@ -1,7 +1,8 @@
-﻿using SFA.DAS.EmployerFinance.Configuration;
+﻿using System;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.HashingService;
-using SFA.DAS.ObsoleteHashing;
 using StructureMap;
+using IPublicHashingService = SFA.DAS.EmployerFinance.MarkerInterfaces.IPublicHashingService;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
@@ -9,24 +10,74 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public HashingRegistry()
         {
-            For<IHashingService>().Use(c => GetHashingService(c));
-            For<IPublicHashingService>().Use(c => GetPublicHashingservice(c));
+            For<IHashingService>()
+                .Use(
+                    c =>
+                        new HashingService.HashingService(
+                            c.GetInstance<EmployerFinanceConfiguration>()
+                                .AllowedHashstringCharacters,
+                            c.GetInstance<EmployerFinanceConfiguration>()
+                                .Hashstring));
+
+            For<IPublicHashingService>()
+                .Use<MarkerInterfaceWrapper>()
+                .Ctor<IHashingService>()
+                .Is(
+                    c =>
+                        new HashingService.HashingService(
+                            c.GetInstance<EmployerFinanceConfiguration>()
+                                .PublicAllowedHashstringCharacters,
+                            c.GetInstance<EmployerFinanceConfiguration>()
+                                .PublicHashstring)
+                );
+        }
+    }
+
+    class MarkerInterfaceWrapper
+    :IPublicHashingService
+    {
+        private readonly IHashingService _hashingServiceWithCorrectValuesForMarkerInterface;
+
+        public MarkerInterfaceWrapper(IHashingService hashingServiceWithCorrectValuesForMarkerInterface)
+        {
+            _hashingServiceWithCorrectValuesForMarkerInterface = hashingServiceWithCorrectValuesForMarkerInterface;
         }
 
-        private IHashingService GetHashingService(IContext context)
+        public string HashValue(long id)
         {
-            var config = context.GetInstance<EmployerFinanceConfiguration>();
-            var hashingService = new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring);
-
-            return hashingService;
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
         }
 
-        private IPublicHashingService GetPublicHashingservice(IContext context)
+        public string HashValue(Guid id)
         {
-            var config = context.GetInstance<EmployerFinanceConfiguration>();
-            var publicHashingService = new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
+        }
 
-            return publicHashingService;
+        public string HashValue(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
+        }
+
+        public long DecodeValue(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValue(id);
+        }
+
+        public Guid DecodeValueToGuid(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValueToGuid(id);
+        }
+
+        public string DecodeValueToString(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValueToString(id);
+        }
+
+        public bool TryDecodeValue(string input, out long output)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.TryDecodeValue(
+                input,
+                out output);
         }
     }
 }
