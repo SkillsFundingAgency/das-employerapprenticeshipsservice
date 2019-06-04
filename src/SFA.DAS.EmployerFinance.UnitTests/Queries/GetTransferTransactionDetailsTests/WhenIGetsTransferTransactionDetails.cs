@@ -8,12 +8,14 @@ using SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails;
 using SFA.DAS.Testing.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.ObsoleteHashing;
+using SFA.DAS.EmployerFinance.MarkerInterfaces;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransferTransactionDetailsTests
 {
+    [ExcludeFromCodeCoverage]
     class WhenAReceiverGetsTransferTransactionDetails
     {
         private const long SenderAccountId = 1;

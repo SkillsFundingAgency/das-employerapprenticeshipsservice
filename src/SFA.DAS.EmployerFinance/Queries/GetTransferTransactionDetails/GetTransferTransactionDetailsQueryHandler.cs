@@ -6,7 +6,7 @@ using SFA.DAS.EmployerFinance.Models.Transfers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.ObsoleteHashing;
+using SFA.DAS.EmployerFinance.MarkerInterfaces;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetTransferTransactionDetails
 {
