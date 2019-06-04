@@ -30,8 +30,10 @@
             </div>
         </div>
     </div>
-
-    @Html.Action("OtherTasksPanel", new {model = Model.Data})
+    @if (Model.Data.ShowSearchBar)
+    {
+        @Html.Action("OtherTasksPanel", new {model = Model.Data})
+    }
 
 </main>
 
