@@ -149,18 +149,16 @@
                                     <p>You do not have any tasks</p>
                                 }
                             </div>
-                            @if (Html.IsAuthorized(FeatureType.Activities))
-                            {
-                                <div class="js-tab-pane" id="pane-activity" role="tabpanel">
-                                    @Html.Action("Latest", "Activities")
-                                </div>
-                            }
+   
                         </div>
                     </section>
                     <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="tab-activity">
-                        <div class="js-tab-pane" id="pane-activity" role="tabpanel">
-                            @Html.Action("Latest", "Activities")
-                        </div>
+                        @if (Html.IsAuthorized(FeatureType.Activities))
+                        {
+                            <div class="js-tab-pane" id="pane-activity" role="tabpanel">
+                                @Html.Action("Latest", "Activities")
+                            </div>
+                        }
                     </section>
                 </div>
             </div>
