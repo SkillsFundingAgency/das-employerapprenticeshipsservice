@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using AutoFixture;
 using Dapper;
@@ -9,11 +10,12 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EAS.Infrastructure.MarkerInterfaces;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.ObsoleteHashing;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
 {
+    [ExcludeFromCodeCoverage]
     internal class AccountStatisticsDataHelper
     {
         private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";

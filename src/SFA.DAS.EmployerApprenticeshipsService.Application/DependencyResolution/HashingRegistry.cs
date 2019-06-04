@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EAS.Domain.Configuration;
+﻿using System;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.HashingService;
 using SFA.DAS.ObsoleteHashing;
 using StructureMap;
@@ -11,7 +12,18 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         {
             For<IHashingService>().Use(c => GetHashingService(c));
             For<IPublicHashingService>().Use(c => GetPublicHashingService(c));
-            For<IAccountLegalEntityPublicHashingService>().Add(c => GetAccountLegalEntityPublicHashingService(c));
+
+
+            For<Infrastructure.MarkerInterfaces.IAccountLegalEntityPublicHashingService>()
+                .Add<MarkerInterfaceWrapper>()
+                .Ctor<IHashingService>()
+                .Is(
+                    c =>
+                        new HashingService.HashingService(
+                            c.GetInstance<EmployerApprenticeshipsServiceConfiguration>()
+                                .PublicAllowedAccountLegalEntityHashstringCharacters,
+                            c.GetInstance<EmployerApprenticeshipsServiceConfiguration>()
+                                .PublicAllowedAccountLegalEntityHashstringSalt));
         }
 
         private IHashingService GetHashingService(IContext context)
@@ -29,13 +41,47 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
 
             return publicHashingService;
         }
+    }
 
-        private IAccountLegalEntityPublicHashingService GetAccountLegalEntityPublicHashingService(IContext context)
+    class MarkerInterfaceWrapper
+    : Infrastructure.MarkerInterfaces.IAccountLegalEntityPublicHashingService
+    {
+        private IHashingService
+            _hashingServiceWithCorrectValuesForMarkerInterface;
+
+        public MarkerInterfaceWrapper(IHashingService hashingServiceWithCorrectValuesForMarkerInterface)
         {
-            var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
-            var accountLegalEntityPublicHashingService = new PublicHashingService(config.PublicAllowedAccountLegalEntityHashstringCharacters, config.PublicAllowedAccountLegalEntityHashstringSalt);
+            _hashingServiceWithCorrectValuesForMarkerInterface = hashingServiceWithCorrectValuesForMarkerInterface;
+        }
 
-            return accountLegalEntityPublicHashingService;
+        public string HashValue(long id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
+        }
+
+        public string HashValue(Guid id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
+        }
+
+        public string HashValue(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.HashValue(id);
+        }
+
+        public long DecodeValue(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValue(id);
+        }
+
+        public Guid DecodeValueToGuid(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValueToGuid(id);
+        }
+
+        public string DecodeValueToString(string id)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValueToString(id);
         }
     }
 }
