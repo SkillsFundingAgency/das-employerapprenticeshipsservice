@@ -337,9 +337,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
             }
-            else if (model.AccountViewModel?.Providers?.Any() ?? false)
+            else if (model.HasSingleProvider)
             {
-                // for now we display the details of a single provider if there are any providers
                 viewModel.ViewName = "SingleProvider";
             }
             else
