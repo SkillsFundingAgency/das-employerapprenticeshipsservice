@@ -37,8 +37,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr, ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-            ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService)
+            IMediator mediatr,
+            ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
+            ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
