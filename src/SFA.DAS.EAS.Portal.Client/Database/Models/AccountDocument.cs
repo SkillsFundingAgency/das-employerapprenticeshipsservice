@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Portal.Client.Database.Models
         }
 
         [JsonConstructor]
-        public AccountDocument()
+        private AccountDocument()
         {         
         }
     }
