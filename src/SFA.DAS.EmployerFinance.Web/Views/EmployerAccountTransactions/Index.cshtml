@@ -45,6 +45,27 @@
                     <dd class="@balanceClass">@balance</dd>
                 </dl>
             </div>
+            <div class="data data--current">
+                <dl class="transfer-funds">
+                    <dt>
+                        Total Spend for Last 12 Months
+                    </dt>
+                    @{
+                        var totalSpend = Model.Data.TotalSpendForLastYear.ToString("C0", culture);
+                        var totalSpendClass = string.Empty;
+
+                        if (totalSpend.Length > 8)
+                        {
+                            totalSpendClass = "long";
+                        }
+                        if (totalSpend.Length > 10)
+                        {
+                            totalSpendClass = "longer";
+                        }
+                    }
+                    <dd class="@totalSpendClass">@totalSpend</dd>
+                </dl>
+            </div>
             @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiringFunds > 0 && Model.Data.ExpiryDate.HasValue)
             {
                 <div class="data data--long data--expired">

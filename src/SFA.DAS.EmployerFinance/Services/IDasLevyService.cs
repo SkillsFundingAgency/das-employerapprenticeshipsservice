@@ -27,5 +27,7 @@ namespace SFA.DAS.EmployerFinance.Services
             where T : TransactionLine;
 
         Task<string> GetProviderName(long ukprn, long accountId, string periodEnd);
+
+        Task<decimal> GetAllPaymentsForLastYear(long accountId);
     }
 }

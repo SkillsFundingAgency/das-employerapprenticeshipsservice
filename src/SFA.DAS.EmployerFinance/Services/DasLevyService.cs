@@ -100,5 +100,10 @@ namespace SFA.DAS.EmployerFinance.Services
                 }
             }
         }
+
+        public async Task<decimal> GetAllPaymentsForLastYear(long accountId)
+        {
+            return await _transactionRepository.GetAllPaymentsForLastYear(accountId);
+        }
     }
 }

@@ -180,6 +180,7 @@
     <None Include="Scripts\Manual\GenerateTestData\Cleardown\ByAccount\DeleteAccountTransfers.sql" />
     <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllPayments.sql" />
+    <Build Include="StoredProcedures\GetAllPaymentsForLastYearByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

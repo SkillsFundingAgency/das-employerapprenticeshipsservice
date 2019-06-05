@@ -257,5 +257,17 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return transactionDownloadLines.OrderByDescending(txn => txn.DateCreated).ToArray();
         }
+
+        public async Task<decimal> GetAllPaymentsForLastYear(long accountId)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@AccountId",accountId,DbType.Int64);
+
+            return await _db.Value.Database.Connection.ExecuteScalarAsync<decimal>(
+                sql: "[employer_financial].[GetAllPaymentsForLastYearByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }
