@@ -25,16 +25,18 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public Mock<IAccountDocumentService> AccountDocumentService { get; set; }
         public AccountDocument AccountDocument { get; set; }
         public Mock<ILogger<TEventHandler>> Logger { get; set; }
+        public Fixture Fixture { get; set; }
         public const long AccountId = 456L;
         
         public EventHandlerTestsFixture(bool constructHandler = true)
         {
-            var fixture = new Fixture();
-            Message = fixture.Create<TEvent>();
+            Fixture = new Fixture();
+            
+            Message = Fixture.Create<TEvent>();
 
             MessageContextInitialisation = new Mock<IMessageContextInitialisation>();
             
-            MessageId = fixture.Create<string>();
+            MessageId = Fixture.Create<string>();
             // nservicebus's TestableMessageHandlerContext is available, but we don't need it yet
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
             MessageHandlerContext.Setup(c => c.MessageId).Returns(MessageId);

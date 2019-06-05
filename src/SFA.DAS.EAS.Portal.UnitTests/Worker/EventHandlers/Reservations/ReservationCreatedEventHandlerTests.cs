@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
@@ -22,11 +24,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             return TestAsync(f => f.Handle(), f => f.VerifyMessageContextIsInitialised());
         }
         
-//        [Test]
-//        public Task Handle_WhenAccountDoesNotExist_ThenAccountDocumentIsSavedWithNewReservation()
-//        {
-//            return TestAsync(f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
-//        }
+        [Test]
+        public Task Handle_WhenAccountDoesNotExist_ThenAccountDocumentIsSavedWithNewReservation()
+        {
+            return TestAsync(f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
+        }
 
         [Test]
         public Task Handle_WhenAccountDoesNotContainOrganisationOrReservation_ThenAccountDocumentIsSavedWithNewReservation()
@@ -34,12 +36,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             return TestAsync(f => f.ArrangeEmptyAccountDocument(),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
         }
 
-//        [Test]
-//        public Task Handle_WhenAccountDoesContainOrganisationButNotReservation_ThenAccountDocumentIsSavedWithNewReservation()
-//        {
-//            return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
-//        }
-//        
+        [Test]
+        public Task Handle_WhenAccountDoesContainOrganisationButNotReservation_ThenAccountDocumentIsSavedWithNewReservation()
+        {
+            return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
+        }
+        
 //        [Test]
 //        public Task Handle_WhenAccountDoesContainOrganisationAndReservation_ThenExceptionIsThrown()
 //        {
@@ -62,6 +64,42 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             Message.AccountLegalEntityId = AccountLegalEntityId;
         }
 
+        public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
+        {
+            var organisation = SetUpAccountDocumentWithOrganisation();
+            organisation.Reservations = new List<Reservation>();
+            
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+        
+        public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsReservation()
+        {
+            var organisation = SetUpAccountDocumentWithOrganisation();
+
+            organisation.Reservations.RandomElement().Id = ReservationId;
+            
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+        
+        private Organisation SetUpAccountDocumentWithOrganisation()
+        {
+            AccountDocument = Fixture.Create<AccountDocument>();
+
+            AccountDocument.Account.Id = AccountId;
+            
+            AccountDocument.Deleted = null;
+            AccountDocument.Account.Deleted = null;
+            
+            var organisation = AccountDocument.Account.Organisations.RandomElement();
+            organisation.AccountLegalEntityId = AccountLegalEntityId;
+
+            return organisation;
+        }
+        
         public ReservationCreatedEventHandlerTestsFixture VerifyAccountDocumentSavedWithReservation()
         {
             AccountDocumentService.Verify(

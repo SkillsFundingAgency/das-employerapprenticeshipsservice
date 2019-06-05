@@ -28,13 +28,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         public Mock<IProviderCommitmentsApi> ProviderCommitmentsApi { get; set; }
         public Mock<IHashingService> HashingService { get; set; }
         public CommitmentView Commitment { get; set; }
-        public Fixture Fixture { get; set; }
         public const long UnHashedId = 123L;
 
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture() : base(false)
         {
-            Fixture = new Fixture();
-
             Commitment = Fixture.Create<CommitmentView>();
             
             ProviderCommitmentsApi = new Mock<IProviderCommitmentsApi>();

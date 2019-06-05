@@ -26,8 +26,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
     {
         public Mock<IProviderApiClient> ProviderApiClient { get; set; }
         public ApiProvider Provider { get; set; }
-        public Fixture Fixture { get; set; }
-        //public const long Ukprn = 123;
 
         public AddedAccountProviderEventHandlerTestsFixture() 
             : base(false)
