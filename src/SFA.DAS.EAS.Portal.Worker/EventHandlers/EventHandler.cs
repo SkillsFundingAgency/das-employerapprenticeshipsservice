@@ -8,17 +8,17 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
     public class EventHandler<TEvent> : IHandleMessages<TEvent>
     {
         private readonly ICommand<TEvent> _command;
-        private readonly IMessageContext _messageContext;
+        private readonly IMessageContextInitialisation _messageContextInitialisation;
 
-        protected EventHandler(ICommand<TEvent> command, IMessageContext messageContext)
+        protected EventHandler(ICommand<TEvent> command, IMessageContextInitialisation messageContextInitialisation)
         {
             _command = command;
-            _messageContext = messageContext;
+            _messageContextInitialisation = messageContextInitialisation;
         }
         
         public Task Handle(TEvent message, IMessageHandlerContext context)
         {
-            _messageContext.Initialise(context);
+            _messageContextInitialisation.Initialise(context);
             return _command.Execute(message);
         }
     }

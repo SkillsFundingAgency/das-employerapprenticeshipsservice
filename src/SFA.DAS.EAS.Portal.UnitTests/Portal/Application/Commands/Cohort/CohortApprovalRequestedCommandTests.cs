@@ -7,6 +7,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
@@ -41,7 +42,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Cohort
             public TestContext()
             {
                 TestAccount = new AccountBuilder().WithOrganisation(new OrganisationBuilder().WithId(UnHashedId));
-                TestAccountDocument = new AccountDocument { Account = TestAccount };
+                // tactical fix until we can replace builder with autofixture
+                var jsonTestAccount = JsonConvert.SerializeObject(TestAccount);
+                TestAccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {jsonTestAccount}}}");
+
                 TestCommitment = new CommitmentViewBuilder();
 
                 MockAccountDocumentService = new Mock<IAccountDocumentService>();

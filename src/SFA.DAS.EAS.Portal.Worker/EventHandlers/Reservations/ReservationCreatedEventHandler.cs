@@ -6,8 +6,8 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 {
     public class ReservationCreatedEventHandler : EventHandler<ReservationCreatedEvent>
     {
-        public ReservationCreatedEventHandler(ICommand<ReservationCreatedEvent> addReservationCommand, IMessageContext messageContext)
-            : base(addReservationCommand, messageContext)
+        public ReservationCreatedEventHandler(ICommand<ReservationCreatedEvent> addReservationCommand, IMessageContextInitialisation messageContextInitialisation)
+            : base(addReservationCommand, messageContextInitialisation)
         {
         }
     }

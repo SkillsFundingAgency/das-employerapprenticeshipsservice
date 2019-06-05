@@ -6,8 +6,8 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
 {
     public class AddedAccountProviderEventHandler : EventHandler<AddedAccountProviderEvent>
     {
-        public AddedAccountProviderEventHandler(ICommand<AddedAccountProviderEvent> addAccountProviderCommand, IMessageContext messageContext)
-            : base(addAccountProviderCommand, messageContext)
+        public AddedAccountProviderEventHandler(ICommand<AddedAccountProviderEvent> addAccountProviderCommand, IMessageContextInitialisation messageContextInitialisation)
+            : base(addAccountProviderCommand, messageContextInitialisation)
         {
         }
     }

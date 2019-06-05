@@ -19,16 +19,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public TEvent ExpectedMessage { get; set; }
         public IHandleMessages<TEvent> Handler { get; set; }
         public string MessageId { get; set; }
-        public Mock<IMessageContext> MessageContext { get; set; }
+        public Mock<IMessageContextInitialisation> MessageContextInitialisation { get; set; }
         public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
         public Mock<TCommand> Command { get; set; }
         
-        public EventHandlerTestsFixture(Func<IMessageContext, IHandleMessages<TEvent>> constructHandler = null)
+        public EventHandlerTestsFixture(Func<IMessageContextInitialisation, IHandleMessages<TEvent>> constructHandler = null)
         {
             var fixture = new Fixture();
             Message = fixture.Create<TEvent>();
 
-            MessageContext = new Mock<IMessageContext>();
+            MessageContextInitialisation = new Mock<IMessageContextInitialisation>();
             
             MessageId = fixture.Create<string>();
             // nservicebus's TestableMessageHandlerContext is available, but we don't need it yet
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
             Command = new Mock<TCommand>();
             
-            Handler = constructHandler != null ? constructHandler(MessageContext.Object) : ConstructHandler();
+            Handler = constructHandler != null ? constructHandler(MessageContextInitialisation.Object) : ConstructHandler();
         }
 
         public virtual Task Handle()
@@ -52,7 +52,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
         private TEventHandler ConstructHandler()
         {
-            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), Command.Object, MessageContext.Object);
+            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), Command.Object, MessageContextInitialisation.Object);
         }
 
         public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyCommandExecutedWithUnchangedEvent()
@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
         public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyMessageContextIsInitialised()
         {
-            MessageContext.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
+            MessageContextInitialisation.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
 
             return this;
         }
