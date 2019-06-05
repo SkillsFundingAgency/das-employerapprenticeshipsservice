@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Infrastructure.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.ObsoleteHashing;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
 {

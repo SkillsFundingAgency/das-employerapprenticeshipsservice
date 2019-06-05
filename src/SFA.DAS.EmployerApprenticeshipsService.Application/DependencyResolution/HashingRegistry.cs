@@ -1,7 +1,6 @@
 ﻿using System;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.HashingService;
-using SFA.DAS.ObsoleteHashing;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
@@ -10,9 +9,26 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public HashingRegistry()
         {
-            For<IHashingService>().Use(c => GetHashingService(c));
-            For<IPublicHashingService>().Use(c => GetPublicHashingService(c));
+            For<IHashingService>()
+                .Use(
+                    c =>
+                        new HashingService.HashingService(
+                            c.GetInstance<EmployerApprenticeshipsServiceConfiguration>()
+                                .AllowedHashstringCharacters,
+                            c.GetInstance<EmployerApprenticeshipsServiceConfiguration>()
+                                .Hashstring));
 
+            For<MarkerInterfaces.IPublicHashingService>()
+                .Use<MarkerInterfaceWrapper>()
+                .Ctor<IHashingService>()
+                .Is(
+                    c =>
+                        new HashingService.HashingService(
+                            c.GetInstance<EmployerApprenticeshipsServiceConfiguration>()
+                                .PublicAllowedHashstringCharacters,
+                            c.GetInstance<EmployerApprenticeshipsServiceConfiguration>()
+                                .PublicHashstring)
+                );
 
             For<Infrastructure.MarkerInterfaces.IAccountLegalEntityPublicHashingService>()
                 .Add<MarkerInterfaceWrapper>()
@@ -25,28 +41,13 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
                             c.GetInstance<EmployerApprenticeshipsServiceConfiguration>()
                                 .PublicAllowedAccountLegalEntityHashstringSalt));
         }
-
-        private IHashingService GetHashingService(IContext context)
-        {
-            var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
-            var hashingService = new HashingService.HashingService(config.AllowedHashstringCharacters, config.Hashstring);
-
-            return hashingService;
-        }
-
-        private IPublicHashingService GetPublicHashingService(IContext context)
-        {
-            var config = context.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
-            var publicHashingService = new PublicHashingService(config.PublicAllowedHashstringCharacters, config.PublicHashstring);
-
-            return publicHashingService;
-        }
     }
 
     class MarkerInterfaceWrapper
-    : Infrastructure.MarkerInterfaces.IAccountLegalEntityPublicHashingService
+        : Infrastructure.MarkerInterfaces.IAccountLegalEntityPublicHashingService,
+            MarkerInterfaces.IPublicHashingService
     {
-        private IHashingService
+        private readonly IHashingService
             _hashingServiceWithCorrectValuesForMarkerInterface;
 
         public MarkerInterfaceWrapper(IHashingService hashingServiceWithCorrectValuesForMarkerInterface)

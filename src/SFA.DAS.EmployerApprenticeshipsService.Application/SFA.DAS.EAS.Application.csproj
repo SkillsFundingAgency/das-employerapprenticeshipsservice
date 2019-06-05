@@ -332,6 +332,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\AddressExtensions.cs" />
+    <Compile Include="MarkerInterfaces\IPublicHashingService.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityResponse.cs" />
