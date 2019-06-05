@@ -1,0 +1,8 @@
+﻿CREATE PROCEDURE [employer_financial].[GetTotalSpendForLastYearByAccountId]
+	@AccountId BIGINT
+AS
+	SELECT SUM(Amount)*-1 AS TotalSpend 
+	FROM employer_financial.TransactionLine 
+	WHERE TransactionDate >= DATEADD(DAY,DATEDIFF(DAY,0,DATEADD(YEAR,-1,GETDATE())),0)
+	AND AccountId = @AccountId
+	AND TransactionType IN (3,4)

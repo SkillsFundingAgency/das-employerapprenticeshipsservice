@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
            
             var currentBalance = await GetAccountBalance(query.AccountId.Value);
             var earliestFundsToExpire = await GetExpiringFunds(query.AccountId.Value);
-            var paymentsForLastYear = await GetAllPaymentsForLastYear(query.AccountId.Value);
+            var paymentsForLastYear = await GetTotalSpendForLastYear(query.AccountId.Value);
 
             if (earliestFundsToExpire == null)
             {
@@ -93,9 +93,9 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             }
         }
 
-        private async Task<decimal> GetAllPaymentsForLastYear(long accountId)
+        private async Task<decimal> GetTotalSpendForLastYear(long accountId)
         {
-            return await _levyService.GetAllPaymentsForLastYear(accountId);
+            return await _levyService.GetTotalSpendForLastYear(accountId);
         }
     }
 }

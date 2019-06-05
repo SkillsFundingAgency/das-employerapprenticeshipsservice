@@ -28,6 +28,6 @@ namespace SFA.DAS.EmployerFinance.Services
 
         Task<string> GetProviderName(long ukprn, long accountId, string periodEnd);
 
-        Task<decimal> GetAllPaymentsForLastYear(long accountId);
+        Task<decimal> GetTotalSpendForLastYear(long accountId);
     }
 }
