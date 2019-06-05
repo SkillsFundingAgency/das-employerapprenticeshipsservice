@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateAccount(It.IsAny<CreateAccountViewModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateOrUpdateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
        
             _employerAccountController = new EmployerAccountController(
@@ -93,7 +93,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
-                Mock.Of<ICookieStorageService<ReturnUrlModel>>())
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)
@@ -129,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             await _employerAccountController.CreateAccount();
 
             //Assert
-            _orchestrator.Verify(x => x.CreateAccount(It.Is<CreateAccountViewModel>(
+            _orchestrator.Verify(x => x.CreateOrUpdateAccount(It.Is<CreateAccountModel>(
                 c =>
                     c.OrganisationStatus.Equals(_accountData.EmployerAccountOrganisationData.OrganisationStatus) &&
                     c.OrganisationName.Equals(_accountData.EmployerAccountOrganisationData.OrganisationName) &&

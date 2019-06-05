@@ -1,9 +1,9 @@
 ﻿using System;
 using SFA.DAS.Common.Domain.Types;
 
-namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+namespace SFA.DAS.EmployerAccounts.Web.Models
 {
-    public class CreateAccountViewModel
+    public class CreateAccountModel
     {
         public string UserId { get; set; }
         public OrganisationType OrganisationType { get; set; }
@@ -18,5 +18,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
         public string Sector { get; set; }
+        public HashedAccountIdModel HashedAccountId { get; set; }
     }
 }
