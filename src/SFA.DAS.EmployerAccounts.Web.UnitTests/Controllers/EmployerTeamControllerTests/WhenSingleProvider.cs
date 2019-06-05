@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenTheProviderPermissionsMultipleViewIsReturned()
+        public void ThenTheSingleProviderViewIsReturned()
         {
             // Arrange
             var model = new AccountDashboardViewModel();
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("ProviderPermissions", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("SingleProvider", (result.Model as dynamic).ViewName);
         }
     }
 }
