@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Paye
 {
     [Parallelizable]
     [TestFixture]
-    class WhenPayeSchemeAdded
+    class WhenPayeSchemeAddedTests
     {
         PayeSchemeAddedCommandHandler _sut;
         Mock<IAccountHelperService> _accountHelperServiceMock;
@@ -32,11 +32,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Paye
             _sut = new PayeSchemeAddedCommandHandler(_accountHelperServiceMock.Object, _accountServiceMock.Object);
 
             Fixture.Customize<Account>(a => a
-                .Without(a2 => a2.PayeSchemes)
                 .With(acc => acc.Id, 1));
             _accountDoc = Fixture
                 .Build<AccountDocument>()
-                
                 .Create();
 
             _accountHelperServiceMock.Setup(mock => mock.GetOrCreateAccount(1, It.IsAny<CancellationToken>())).ReturnsAsync(_accountDoc);

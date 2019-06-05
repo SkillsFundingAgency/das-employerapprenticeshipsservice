@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Paye
 {
     [Parallelizable]
     [TestFixture]
-    class WhenAddedPayeSchemeEventReceived
+    class AddedPayeSchemeEventHandlerTests
     {
         private AddedPayeSchemeEventHandler _sut;
         private Mock<ICommandHandler<PayeSchemeAddedCommand>> _commandHandlerMock;
