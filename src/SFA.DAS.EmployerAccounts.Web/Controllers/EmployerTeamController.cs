@@ -341,6 +341,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SingleProvider";
             }
+            else if (model.HasMultipleProviders)
+            {
+                viewModel.ViewName = "ProviderPermissionsMultiple";
+            }
             else
             {
                 viewModel.ViewName = "ProviderPermissions";
@@ -380,6 +384,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult ProviderPermissions(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ProviderPermissionsMultiple(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

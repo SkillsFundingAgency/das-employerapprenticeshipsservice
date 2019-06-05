@@ -35,5 +35,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string ReservedFundingOrgName => AccountViewModel?.Organisations?.Where(org => org.Reservations.Contains(ReservedFundingToShow)).Select(org => org.Name).FirstOrDefault();
         public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Count > 0;
         public bool HasSingleProvider => AccountViewModel?.Providers?.Count == 1;
+        public bool HasMultipleProviders => AccountViewModel?.Organisations?.FirstOrDefault().Providers?.Count > 1;
     }
 }   
