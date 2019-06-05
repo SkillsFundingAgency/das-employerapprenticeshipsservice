@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
@@ -42,12 +43,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
         }
         
-//        [Test]
-//        public Task Handle_WhenAccountDoesContainOrganisationAndReservation_ThenExceptionIsThrown()
-//        {
-//            return TestExceptionAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Handle(),
-//                (f, r) => r.Should().Throw<Exception>().Where(ex => ex.Message.StartsWith("Received ReservationCreatedEvent with")));
-//        }
+        [Test]
+        public Task Handle_WhenAccountDoesContainOrganisationAndReservation_ThenExceptionIsThrown()
+        {
+            return TestExceptionAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Handle(),
+                (f, r) => r.Should().Throw<Exception>().Where(ex => ex.Message.StartsWith("Received ReservationCreatedEvent with")));
+        }
     }
 
     public class ReservationCreatedEventHandlerTestsFixture : EventHandlerTestsFixture<
