@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 {
@@ -20,7 +23,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public Mock<IMessageContextInitialisation> MessageContextInitialisation { get; set; }
         public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
         public Mock<IAccountDocumentService> AccountDocumentService { get; set; }
+        public AccountDocument AccountDocument { get; set; }
         public Mock<ILogger<TEventHandler>> Logger { get; set; }
+        public const long AccountId = 456L;
         
         public EventHandlerTestsFixture(bool constructHandler = true)
         {
@@ -46,6 +51,15 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
                 Handler = ConstructHandler();
         }
 
+        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeEmptyAccountDocument()
+        {
+            AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {AccountId} }}}}");
+
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+        
         public virtual Task Handle()
         {
             ExpectedMessage = Message.Clone();
