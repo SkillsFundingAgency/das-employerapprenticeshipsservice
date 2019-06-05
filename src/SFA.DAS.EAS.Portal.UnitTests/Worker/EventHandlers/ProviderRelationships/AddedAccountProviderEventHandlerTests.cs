@@ -1,10 +1,7 @@
-using System;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
-using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 using SFA.DAS.Providers.Api.Client;
@@ -22,12 +19,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
         {
             return TestAsync(f => f.Handle(), f => f.VerifyMessageContextIsInitialised());
         }
-        
-//        [Test]
-//        public Task Handle_WhenHandlingAddedAccountProviderEvent_ThenShouldExecuteAddAccountProviderCommand()
-//        {
-//            return TestAsync(f => f.Handle(), f => f.VerifyCommandExecutedWithUnchangedEvent());
-//        }
     }
 
     public class AddedAccountProviderEventHandlerTestsFixture : EventHandlerTestsFixture<
@@ -50,6 +41,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
             Handler = new AddedAccountProviderEventHandler(
                 AccountDocumentService.Object,
                 MessageContextInitialisation.Object,
+                Logger.Object,
                 ProviderApiClient.Object);
         }
     }

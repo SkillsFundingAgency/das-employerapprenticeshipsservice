@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Services;
@@ -12,7 +12,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 {
     public class EventHandlerTestsFixture<TEvent, TEventHandler>
         where TEventHandler : IHandleMessages<TEvent>
-        //where TCommand : class, ICommand<TEvent>
     {
         public TEvent Message { get; set; }
         public TEvent ExpectedMessage { get; set; }
@@ -21,8 +20,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public Mock<IMessageContextInitialisation> MessageContextInitialisation { get; set; }
         public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
         public Mock<IAccountDocumentService> AccountDocumentService { get; set; }
+        public Mock<ILogger<TEventHandler>> Logger { get; set; }
         
-//        public EventHandlerTestsFixture(Func<IAccountDocumentService, IMessageContextInitialisation, IHandleMessages<TEvent>> constructHandler = null)
         public EventHandlerTestsFixture(bool constructHandler = true)
         {
             var fixture = new Fixture();
@@ -39,8 +38,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             messageHeaders.SetupGet(c => c["NServiceBus.TimeSent"]).Returns(DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss:ffffff Z", CultureInfo.InvariantCulture));
             MessageHandlerContext.Setup(c => c.MessageHeaders).Returns(messageHeaders.Object);
 
-            //Command = new Mock<TCommand>();
             AccountDocumentService = new Mock<IAccountDocumentService>();
+            
+            Logger = new Mock<ILogger<TEventHandler>>();
             
             if (constructHandler)
                 Handler = ConstructHandler();
@@ -54,7 +54,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
         private TEventHandler ConstructHandler()
         {
-            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, MessageContextInitialisation.Object);
+            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, MessageContextInitialisation.Object, Logger.Object);
         }
 
 //        public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyCommandExecutedWithUnchangedEvent()

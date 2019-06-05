@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 using SFA.DAS.Providers.Api.Client;
@@ -38,11 +39,9 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
         public AddedAccountProviderEventHandler(
             IAccountDocumentService accountDocumentService,
             IMessageContextInitialisation messageContextInitialisation,
-            //todo: can nservicebus inject logger?
-            //ILogger<AddedAccountProviderEventHandler> logger,
+            ILogger<AddedAccountProviderEventHandler> logger,
             IProviderApiClient providerApiClient)
-        //add logger
-            : base(accountDocumentService, messageContextInitialisation)
+                : base(accountDocumentService, messageContextInitialisation, logger)
         {
             _providerApiClient = providerApiClient;
         }

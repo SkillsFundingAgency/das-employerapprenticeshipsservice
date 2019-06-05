@@ -15,12 +15,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         {
             return TestAsync(f => f.Handle(), f => f.VerifyMessageContextIsInitialised());
         }
-        
-//        [Test]
-//        public Task Handle_WhenHandlingReservationCreatedEvent_ThenShouldExecuteAddReservationCommand()
-//        {
-//            return TestAsync(f => f.Handle(), f => f.VerifyCommandExecutedWithUnchangedEvent());
-//        }
     }
 
     public class ReservationCreatedEventHandlerTestsFixture : EventHandlerTestsFixture<

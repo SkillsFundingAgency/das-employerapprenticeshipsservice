@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.Reservations.Messages;
@@ -12,8 +13,9 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
     {
         public ReservationCreatedEventHandler(
             IAccountDocumentService accountDocumentService,
-            IMessageContextInitialisation messageContextInitialisation)
-            : base(accountDocumentService, messageContextInitialisation)
+            IMessageContextInitialisation messageContextInitialisation,
+            ILogger<ReservationCreatedEventHandler> logger)
+                : base(accountDocumentService, messageContextInitialisation, logger)
         {
         }
 

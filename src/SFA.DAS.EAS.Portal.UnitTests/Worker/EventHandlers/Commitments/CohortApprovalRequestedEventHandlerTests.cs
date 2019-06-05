@@ -20,12 +20,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         {
             return TestAsync(f => f.Handle(), f => f.VerifyMessageContextIsInitialised());
         }
-        
-//        [Test]
-//        public Task Handle_WhenHandlingCohortApprovalRequestedByProvider_ThenShouldExecuteCohortApprovalRequestedCommand()
-//        {
-//            return TestAsync(f => f.Handle(), f => f.VerifyCommandExecutedWithUnchangedEvent());
-//        }
     }
 
     public class CohortApprovalRequestedByProviderEventHandlerTestsFixture : EventHandlerTestsFixture<
@@ -58,6 +52,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             Handler = new CohortApprovalRequestedByProviderEventHandler(
                 AccountDocumentService.Object,
                 MessageContextInitialisation.Object,
+                Logger.Object,
                 ProviderCommitmentsApi.Object,
                 HashingService.Object);
         }
