@@ -54,11 +54,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.PayeSchemeCount = 1;
             model.AgreementsToSign = false;
 
-            var organisation = new Model.Organisation();
-            organisation.Providers.Add(new Model.Provider());
-            organisation.Providers.Add(new Model.Provider());
             model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Organisations.Add(organisation);
+            model.AccountViewModel.Providers.Add(new Model.Provider());
+            model.AccountViewModel.Providers.Add(new Model.Provider());
 
             //Act
             var result = _controller.Row1Panel2(model) as PartialViewResult;
