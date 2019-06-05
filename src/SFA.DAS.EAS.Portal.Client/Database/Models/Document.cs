@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Portal.Client.Database.Models
         public Guid Id { get; protected set; }
 
         [JsonIgnore]
-        public bool IsNew { get; set; }
+        public bool IsNew { get; protected set; }
 
         [JsonIgnore]
         public string ETag { get; protected set; }

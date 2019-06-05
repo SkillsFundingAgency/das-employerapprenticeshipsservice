@@ -6,6 +6,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.EAS.Portal.Application.Commands.ProviderPermissions;
@@ -104,7 +105,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.ProviderPermi
 
         public UpdateProviderPermissionsCommandTestsFixture ArrangeEmptyAccountDocument()
         {
-            AccountDocument = new AccountDocument(AccountId) {IsNew = false};
+            AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {AccountId} }}}}");
 
             AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             

@@ -7,6 +7,7 @@ using AutoFixture;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
+using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.Commands.Reservation;
 using SFA.DAS.EAS.Portal.Application.Services;
@@ -78,7 +79,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.Commands.Reservations
         
         public AddReservationCommandTestsFixture ArrangeEmptyAccountDocument()
         {
-            AccountDocument = new AccountDocument(AccountId) {IsNew = false};
+            AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {AccountId} }}}}");
 
             AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
