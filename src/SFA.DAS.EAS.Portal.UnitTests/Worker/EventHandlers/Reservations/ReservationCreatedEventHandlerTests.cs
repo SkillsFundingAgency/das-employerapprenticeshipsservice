@@ -99,29 +99,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         {
             var expectedAccount = GetExpectedAccount();
             var expectedOrganisation = GetExpectedOrganisation(expectedAccount);
-            Reservation expectedReservation;
-            
-            if (OriginalAccountDocument == null)
-            {
-                expectedReservation = new Reservation();
-                expectedOrganisation.Reservations.Add(expectedReservation);
-            }
-            else if (!OriginalAccountDocument.Account.Organisations.Any())
-            {
-                expectedReservation = new Reservation();
-                expectedOrganisation.Reservations.Add(expectedReservation);
-            }
-            else
-            {
-                expectedReservation = expectedOrganisation
-                    .Reservations.SingleOrDefault(r => r.Id == ReservationId);
-                
-                if (expectedReservation == null)
-                {
-                    expectedReservation = new Reservation();
-                    expectedOrganisation.Reservations.Add(expectedReservation);
-                }
-            }
+            var expectedReservation = GetExpectedReservation(expectedOrganisation);
 
             expectedReservation.Id = ReservationId;
             expectedReservation.CourseCode = OriginalMessage.CourseId;
@@ -167,6 +145,27 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             expectedAccount.Organisations.Add(expectedOrganisation);
 
             return expectedOrganisation;
+        }
+
+        private Reservation GetExpectedReservation(Organisation expectedOrganisation)
+        {
+            Reservation expectedReservation;
+            if (OriginalAccountDocument == null
+                || !OriginalAccountDocument.Account.Organisations.Any())
+            {
+                //todo: AddNewReservation()?
+                expectedReservation = new Reservation();
+                expectedOrganisation.Reservations.Add(expectedReservation);
+                return expectedReservation;
+            }
+            
+            expectedReservation = expectedOrganisation.Reservations.SingleOrDefault(r => r.Id == ReservationId);
+            if (expectedReservation == null)
+            {
+                expectedReservation = new Reservation();
+                expectedOrganisation.Reservations.Add(expectedReservation);
+            }
+            return expectedReservation;
         }
     }
 }
