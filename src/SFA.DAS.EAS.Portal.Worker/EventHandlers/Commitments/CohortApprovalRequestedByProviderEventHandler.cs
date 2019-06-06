@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
                 organisation.Name = commitment.LegalEntityName;
             }
 
-            var (cohort, cohortCreated) = GetOrAddCohort(organisation, commitment.Id);
+            var (cohort, cohortCreated) = GetOrAddCohort(organisation, cohortApprovalRequestedByProvider.CommitmentId);
             if (cohortCreated == EntityCreation.Created)
             {
                 cohort.Reference = commitment.Reference;
