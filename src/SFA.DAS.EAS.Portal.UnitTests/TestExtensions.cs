@@ -26,7 +26,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests
                 {
                     MaxDifferences = 100,
                     IgnoreCollectionOrder = true,
-                    //DecimalPrecision = 0.001m
                     //todo: hack. *appears* to be bug in CompareNetObjects!?
                     ClassTypesToIgnore = new List<Type>() {typeof(Apprenticeship)}
                 })

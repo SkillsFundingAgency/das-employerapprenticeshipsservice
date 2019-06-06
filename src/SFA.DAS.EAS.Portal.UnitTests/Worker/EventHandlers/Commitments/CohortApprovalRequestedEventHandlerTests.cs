@@ -155,7 +155,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
 
             expectedCohort.Reference = ExpectedCommitment.Reference;
 
-            return AccountIsAsExpected(expectedAccount, document);
+            bool accountIsAsExpected = AccountIsAsExpected(expectedAccount, document);
+
+            // this is a workaround for a bug in CompareNetObjects, where it believes equal apprenticeships are not equal
+            // so we catch that case with this fluent assertion (and we exclude Apprenticeships from the CompareNetObjects comparison)
+            document.Account.Organisations.Should().BeEquivalentTo(expectedAccount.Organisations);
+            
+            return accountIsAsExpected;
         }
         
         private Cohort GetExpectedCohort(Organisation expectedOrganisation)
