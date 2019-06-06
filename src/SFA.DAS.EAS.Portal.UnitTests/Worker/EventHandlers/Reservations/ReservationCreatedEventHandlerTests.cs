@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         [Test]
         public Task Handle_WhenAccountDoesNotContainOrganisation_ThenAccountDocumentIsSavedWithNewReservation()
         {
-            return TestAsync(f => f.ArrangeEmptyAccountDocument(f.OriginalMessage.AccountId),f => f.Handle(),
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(f.Message.AccountId),f => f.Handle(),
                 f => f.VerifyAccountDocumentSavedWithReservation());
         }
 
@@ -63,28 +63,27 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         {
             //todo: let test use fixture generated?
             Message.Id = ReservationId;
-            Message.AccountId = OriginalMessage.AccountId;
             Message.AccountLegalEntityId = AccountLegalEntityId;
         }
 
         //todo: move to base
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(OriginalMessage.AccountId, AccountLegalEntityId);
+            var organisation = SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
             organisation.Reservations = new List<Reservation>();
             
-            AccountDocumentService.Setup(s => s.Get(OriginalMessage.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.Get(Message.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }
         
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsReservation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(OriginalMessage.AccountId, AccountLegalEntityId);
+            var organisation = SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
 
             organisation.Reservations.RandomElement().Id = ReservationId;
             
-            AccountDocumentService.Setup(s => s.Get(OriginalMessage.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.Get(Message.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }

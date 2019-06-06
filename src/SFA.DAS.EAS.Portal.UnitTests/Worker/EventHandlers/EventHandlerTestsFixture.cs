@@ -36,7 +36,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             Fixture = new Fixture();
             
             Message = Fixture.Create<TEvent>();
-            OriginalMessage = Message.Clone();
 
             MessageContextInitialisation = new Mock<IMessageContextInitialisation>();
             
@@ -83,7 +82,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         
         public virtual Task Handle()
         {
-            // update original message with any arranged modifications
             OriginalMessage = Message.Clone();
             OriginalAccountDocument = AccountDocument.Clone();
             return Handler.Handle(Message, MessageHandlerContext.Object);
