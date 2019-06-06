@@ -36,7 +36,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
         }
 
         [Test]
-        [Ignore("needs fixing")]
         public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
         {
             return TestAsync(f => f.ArrangeEmptyAccountDocument(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
@@ -196,41 +195,30 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
 
         public bool AccountIsAsExpected(AccountDocument document, Action<PortalProvider> mutateExpectedProvider = null)
         {
-            Account expectedAccount;
-            PortalProvider expectedProvider;
-            
-            if (OriginalAccountDocument == null)
-            {
-                expectedAccount = new Account
-                {
-                    Id = OriginalMessage.AccountId,
-                };
-                expectedProvider = new PortalProvider();
-                expectedAccount.Providers.Add(expectedProvider);
-            }
-            else
-            {
-                expectedAccount = OriginalAccountDocument.Account;
-                expectedProvider = expectedAccount.Providers.Single(p => p.Ukprn == OriginalMessage.ProviderUkprn);
-            }
+            var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);
+            var expectedProvider = GetExpectedProvider(expectedAccount, OriginalMessage.ProviderUkprn);
 
             expectedProvider.Name = ExpectedProvider.ProviderName;
             expectedProvider.Email = ExpectedProvider.Email;
             expectedProvider.Phone = ExpectedProvider.Phone;
-            expectedProvider.Ukprn = OriginalMessage.ProviderUkprn;
 
             mutateExpectedProvider?.Invoke(expectedProvider);
-            
-            if (document?.Account == null)
-                return false;
-            
-            var (accountIsAsExpected, differences) = document.Account.IsEqual(expectedAccount);
-            if (!accountIsAsExpected)
+
+            return AccountIsAsExpected(expectedAccount, document);
+        }
+        
+        protected Provider GetExpectedProvider(Account expectedAccount, long ukprn)
+        {
+            if (OriginalAccountDocument != null && OriginalAccountDocument.Account.Providers.Any())
+                return expectedAccount.Providers.Single(o => o.Ukprn == ukprn);
+
+            var expectedProvider = new Provider
             {
-                TestContext.WriteLine($"Saved account is not as expected: {differences}");
-            }
-            
-            return accountIsAsExpected;
+                Ukprn = ukprn
+            };
+            expectedAccount.Providers.Add(expectedProvider);
+
+            return expectedProvider;
         }
     }
 }
