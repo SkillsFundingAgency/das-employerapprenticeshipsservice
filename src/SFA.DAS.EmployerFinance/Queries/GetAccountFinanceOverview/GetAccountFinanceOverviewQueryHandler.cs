@@ -43,6 +43,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
            
             var currentBalance = await GetAccountBalance(query.AccountId.Value);
             var earliestFundsToExpire = await GetExpiringFunds(query.AccountId.Value);
+            var FundingProjection = await GetFundingProjection(query.AccountId.Value);
 
             if (earliestFundsToExpire == null)
             {
@@ -60,6 +61,11 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 ExpiringFundsExpiryDate = earliestFundsToExpire.PayrollDate,
                 ExpiringFundsAmount = earliestFundsToExpire.Amount
             };
+        }
+
+        private async Task<dynamic> GetFundingProjection(long accountId)
+        {
+            return await _dasForecastingService.GetProjectedFundingSummary(accountId);
         }
 
         private async Task<ExpiringFunds> GetExpiringFunds(long accountId)
