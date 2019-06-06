@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NServiceBus;
+using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
@@ -96,6 +98,47 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             MessageContextInitialisation.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
 
             return this;
+        }
+        
+        protected Account GetExpectedAccount(long accountId)
+        {
+            if (OriginalAccountDocument == null)
+            {
+                return new Account
+                {
+                    Id = accountId,
+                };
+            }
+            return OriginalAccountDocument.Account;
+        }
+
+        protected Organisation GetExpectedOrganisation(Account expectedAccount, long accountLegalEntityId, string accountLegalEntityName)
+        {
+            if (OriginalAccountDocument != null && OriginalAccountDocument.Account.Organisations.Any())
+                return expectedAccount.Organisations.Single(o => o.AccountLegalEntityId == accountLegalEntityId);
+
+            var expectedOrganisation = new Organisation
+            {
+                AccountLegalEntityId = accountLegalEntityId,
+                Name = accountLegalEntityName
+            };
+            expectedAccount.Organisations.Add(expectedOrganisation);
+
+            return expectedOrganisation;
+        }
+        
+        protected bool AccountIsAsExpected(Account expectedAccount, AccountDocument savedAccountDocument)
+        {
+            if (savedAccountDocument?.Account == null)
+                return false;
+
+            var (accountIsAsExpected, differences) = savedAccountDocument.Account.IsEqual(expectedAccount);
+            if (!accountIsAsExpected)
+            {
+                TestContext.WriteLine($"Saved account is not as expected: {differences}");
+            }
+
+            return accountIsAsExpected;
         }
     }
 }

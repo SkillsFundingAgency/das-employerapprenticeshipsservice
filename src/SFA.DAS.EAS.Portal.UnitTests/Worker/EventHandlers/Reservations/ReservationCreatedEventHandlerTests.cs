@@ -64,6 +64,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             Message.AccountLegalEntityId = AccountLegalEntityId;
         }
 
+        //todo: move to base
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
             var organisation = SetUpAccountDocumentWithOrganisation(AccountLegalEntityId);
@@ -97,8 +98,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         //todo: move what can into base
         private bool AccountIsAsExpected(AccountDocument document)
         {
-            var expectedAccount = GetExpectedAccount();
-            var expectedReservation = GetExpectedReservation(GetExpectedOrganisation(expectedAccount));
+            var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);
+            var expectedReservation = GetExpectedReservation(
+                GetExpectedOrganisation(expectedAccount, AccountLegalEntityId, OriginalMessage.AccountLegalEntityName));
 
             expectedReservation.Id = ReservationId;
             expectedReservation.CourseCode = OriginalMessage.CourseId;
@@ -107,34 +109,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             expectedReservation.EndDate = OriginalMessage.EndDate;
 
             return AccountIsAsExpected(expectedAccount, document);
-        }
-
-        //todo: property?
-        private Account GetExpectedAccount()
-        {
-            if (OriginalAccountDocument == null)
-            {
-                return new Account
-                {
-                    Id = OriginalMessage.AccountId,
-                };
-            }
-            return OriginalAccountDocument.Account;
-        }
-
-        private Organisation GetExpectedOrganisation(Account expectedAccount)
-        {
-            if (OriginalAccountDocument != null && OriginalAccountDocument.Account.Organisations.Any())
-                return expectedAccount.Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId);
-
-            var expectedOrganisation = new Organisation
-            {
-                AccountLegalEntityId = AccountLegalEntityId,
-                Name = OriginalMessage.AccountLegalEntityName
-            };
-            expectedAccount.Organisations.Add(expectedOrganisation);
-
-            return expectedOrganisation;
         }
 
         private Reservation GetExpectedReservation(Organisation expectedOrganisation)
@@ -156,20 +130,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
                 expectedOrganisation.Reservations.Add(expectedReservation);
             }
             return expectedReservation;
-        }
-
-        private bool AccountIsAsExpected(Account expectedAccount, AccountDocument savedAccountDocument)
-        {
-            if (savedAccountDocument?.Account == null)
-                return false;
-
-            var (accountIsAsExpected, differences) = savedAccountDocument.Account.IsEqual(expectedAccount);
-            if (!accountIsAsExpected)
-            {
-                TestContext.WriteLine($"Saved account is not as expected: {differences}");
-            }
-
-            return accountIsAsExpected;
         }
     }
 }
