@@ -95,7 +95,21 @@ The configuration is loaded from azure table storage.
 
 > The two repos above are private. If the links appear to be dead make sure you are logged into github with an account that has access to these (i.e. that you are part of the Skills Funding Agency Team organization).
 
-  
+##### Create an Azure table storage account
+
+- Create an [Azure] account and set up a table storage
+- Create a table called Configuration and copy across these 4 rows from the employer config setup above changing the PartitionKey to "Development" from "LOCAL":
+* SFA.DAS.EmployerApprenticeshipsService.Portal_1.0
+* SFA.DAS.CommitmentsAPI_1.0
+* SFA.DAS.ApprenticeshipInfoServiceAPI_1.0
+* SFA.DAS.EmployerApprenticeshipsService.Portal.Client_1.0
+
+##### Set up enivronment variables
+
+- Create two new environment variables:
+* ASPNETCORE_ENVIRONMENT set to Development
+* APPSETTING_ConfigurationStorageConnectionString set to the connection string of the Azure table storage created above
+ 
 Using `"Action": "*"` can also be used to disable all actions on the controller.
 
 [Azure Storage Explorer]: http://storageexplorer.com/
@@ -106,6 +120,7 @@ Using `"Action": "*"` can also be used to disable all actions on the controller.
 [SQL Server Management Studio]: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
 [Visual Studio]: https://www.visualstudio.com
 [CosmosDB Emulator]: https://aka.ms/cosmosdb-emulator
+[Azure]: https://azure.microsoft.com/en-us/
 
 ## See Also
 * [Integration Tests](docs/IntegrationTesting.md "Integration Testing")
