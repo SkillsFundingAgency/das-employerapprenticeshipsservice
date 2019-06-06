@@ -119,19 +119,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         private bool AccountIsAsExpected(AccountDocument document)
         {
             var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);
+            var expectedOrganisation = GetExpectedOrganisation(
+                expectedAccount, AccountLegalEntityId, ExpectedCommitment.LegalEntityName);
             Cohort expectedCohort;
             
             if (OriginalAccountDocument == null)
             {
-                var organisation = new Organisation
-                {
-                    AccountLegalEntityId = AccountLegalEntityId,
-                    Name = ExpectedCommitment.LegalEntityName
-                };
-                expectedAccount.Organisations.Add(organisation);
-
                 expectedCohort = new Cohort();
-                organisation.Cohorts.Add(expectedCohort);
+                expectedOrganisation.Cohorts.Add(expectedCohort);
 
                 expectedCohort.Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
                     new Apprenticeship
@@ -147,8 +142,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             }
             else
             {
-                expectedCohort = expectedAccount
-                    .Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId)
+                expectedCohort = expectedOrganisation
                     .Cohorts.Single(r => r.Id == CohortId.ToString());
             }
 
