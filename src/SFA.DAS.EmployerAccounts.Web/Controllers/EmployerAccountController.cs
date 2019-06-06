@@ -10,9 +10,11 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -22,27 +24,47 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
-        private readonly IMediator _mediatr;   
+        private readonly IMediator _mediatr;
+        private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
+        private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
+        private readonly string _hashedAccountIdCookieName;
+        private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr)
+            IMediator mediatr,
+            ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
+            ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+            _returnUrlCookieStorageService = returnUrlCookieStorageService;
+            _accountCookieStorage = accountCookieStorage;
+
+            _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
         }
 
         [HttpGet]
         [Route("gatewayInform")]
-        public ActionResult GatewayInform()
+        [Route("{HashedAccountId}/gatewayInform")]
+        public ActionResult GatewayInform(string hashedAccountId = "")
         {
+
+            if (!string.IsNullOrWhiteSpace(hashedAccountId))
+            {
+                _accountCookieStorage.Delete(_hashedAccountIdCookieName);
+                _accountCookieStorage.Create(
+                    new HashedAccountIdModel{Value = hashedAccountId}, 
+                    _hashedAccountIdCookieName);
+            }
+
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
             {
                 Data = new GatewayInformViewModel
@@ -138,14 +160,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("getGovernmentFunding")]
-        public ActionResult GetGovernmentFunding()
+        public ActionResult GetGovernmentFunding(string returnUrl = "")
         {
-            var model = new
+            _logger.Info($"Called into GetGovernmentFunding with returnUrl: '{returnUrl}'");
+            try
             {
-                HideHeaderSignInLink = true
-            };
+                _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
 
-            return View(model);
+                var model = new
+                {
+                    HideHeaderSignInLink = true
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error processing getGovernmentFunding. ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
+                throw;
+            }
         }
 
         [HttpPost]
@@ -164,6 +197,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
 
                     var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+                    var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+                    _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+                    if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                        return Redirect(returnUrlCookie.Value);
+
                     return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
                 }
                 case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
@@ -218,7 +256,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
 
-            var request = new CreateAccountViewModel
+            var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
                 OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
@@ -232,10 +270,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.EmployerAccountOrganisationData.OrganisationStatus) ? null : enteredData.EmployerAccountOrganisationData.OrganisationStatus,
                 EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
-                Sector = enteredData.EmployerAccountOrganisationData.Sector
+                Sector = enteredData.EmployerAccountOrganisationData.Sector,
+                HashedAccountId = _accountCookieStorage.Get(_hashedAccountIdCookieName)
             };
 
-            var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
+            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(request, HttpContext);
 
             if (response.Status == HttpStatusCode.BadRequest)
             {
@@ -245,6 +284,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             
             _employerAccountOrchestrator.DeleteCookieData();
+
+            var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+            _accountCookieStorage.Delete(_hashedAccountIdCookieName);
+
+            _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                return Redirect(returnUrlCookie.Value);
+
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
