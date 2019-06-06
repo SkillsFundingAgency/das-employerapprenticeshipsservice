@@ -50,7 +50,9 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 return new GetAccountFinanceOverviewResponse
                 {
                     AccountId = query.AccountId.Value,
-                    CurrentFunds = currentBalance
+                    CurrentFunds = currentBalance,
+                    FundingExpected = FundingProjection.fundingExpected,
+                    ProjectedSpend = FundingProjection.projectedSpend
                 };
             }
 
