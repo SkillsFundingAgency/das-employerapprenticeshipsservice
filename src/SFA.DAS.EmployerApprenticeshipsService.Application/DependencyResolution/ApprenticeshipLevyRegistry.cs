@@ -17,6 +17,5 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
             var httpClient = new HttpClient {BaseAddress = new Uri(config.Hmrc.BaseUrl)};
             For<IApprenticeshipLevyApiClient>().Use<ApprenticeshipLevyApiClient>().Ctor<HttpClient>().Is(httpClient);
         }
-
     }
 }

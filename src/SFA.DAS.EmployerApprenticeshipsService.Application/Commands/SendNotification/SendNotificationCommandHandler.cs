@@ -32,6 +32,7 @@ namespace SFA.DAS.EAS.Application.Commands.SendNotification
                 _logger.Info("SendNotificationCommandHandler Invalid Request");
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
+
             try
             {
                 await _notificationsApi.SendEmail(message.Email);
@@ -40,7 +41,6 @@ namespace SFA.DAS.EAS.Application.Commands.SendNotification
             {
                 _logger.Error(ex, "Error sending email to notifications api");
             }
-
         }
     }
 }

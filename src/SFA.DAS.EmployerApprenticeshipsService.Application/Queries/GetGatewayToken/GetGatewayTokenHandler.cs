@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetGatewayToken
 
         public async Task<GetGatewayTokenQueryResponse> Handle(GetGatewayTokenQuery message)
         {
-            var response =  await _hmrcService.GetAuthenticationToken(message.RedirectUrl, message.AccessCode);
+            var response = await _hmrcService.GetAuthenticationToken(message.RedirectUrl, message.AccessCode);
 
             return new GetGatewayTokenQueryResponse
             {

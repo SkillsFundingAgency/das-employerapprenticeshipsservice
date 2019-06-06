@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate
 {
-    public class GetLatestAccountAgreementTemplateQueryHandler : 
+    public class GetLatestAccountAgreementTemplateQueryHandler :
         IAsyncRequestHandler<GetLatestAccountAgreementTemplateRequest, GetLatestAccountAgreementResponse>
     {
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestAccountAgreementTemplate
         {
             var template = await _employerAgreementRepository.GetLatestAgreementTemplate();
 
-            return new GetLatestAccountAgreementResponse { Template = template};
+            return new GetLatestAccountAgreementResponse {Template = template};
         }
     }
 }

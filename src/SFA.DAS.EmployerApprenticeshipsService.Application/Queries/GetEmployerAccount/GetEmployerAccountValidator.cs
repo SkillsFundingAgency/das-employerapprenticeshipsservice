@@ -25,8 +25,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccount
 
             if (string.IsNullOrEmpty(item.ExternalUserId))
             {
-                result.AddError(nameof(item.ExternalUserId),"UserId has not been supplied");
+                result.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
             }
+
             if (item.AccountId == 0)
             {
                 result.AddError(nameof(item.AccountId), "AccountId has not been supplied");

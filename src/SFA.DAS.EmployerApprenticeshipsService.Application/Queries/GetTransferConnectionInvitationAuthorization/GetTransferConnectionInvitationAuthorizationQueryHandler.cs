@@ -37,8 +37,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnectionInvitationAuthori
 
             var isReceiver = await _accountDb.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.ReceiverAccount.Id == message.AccountId && (
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved));
+                    i.Status == TransferConnectionInvitationStatus.Pending ||
+                    i.Status == TransferConnectionInvitationStatus.Approved));
 
             var isValidSender = transferAllowance.RemainingTransferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
 

@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse
 
             if (string.IsNullOrWhiteSpace(item.Empref))
             {
-                validationResult.AddError(nameof(item.Empref),"Empref has not been supplied");
+                validationResult.AddError(nameof(item.Empref), "Empref has not been supplied");
             }
 
             return validationResult;

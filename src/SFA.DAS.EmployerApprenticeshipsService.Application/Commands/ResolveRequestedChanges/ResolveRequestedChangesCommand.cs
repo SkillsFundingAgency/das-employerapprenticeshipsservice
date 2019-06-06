@@ -1,5 +1,4 @@
 ﻿using MediatR;
-
 using SFA.DAS.Commitments.Api.Types.DataLock.Types;
 
 namespace SFA.DAS.EAS.Application.Commands.ResolveRequestedChanges

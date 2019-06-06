@@ -27,9 +27,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
             var targetAccountId = _publicHashingService.DecodeValue(query.TargetAccountPublicHashedId);
 
             var result = await _dbContext.GetTransfersByTargetAccountId(
-                                    query.AccountId.GetValueOrDefault(),
-                                    targetAccountId,
-                                    query.PeriodEnd);
+                query.AccountId.GetValueOrDefault(),
+                targetAccountId,
+                query.PeriodEnd);
 
             var transfers = result as List<AccountTransfer> ?? result.ToList();
 
@@ -41,14 +41,14 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails
             var receiverAccountName = firstTransfer.ReceiverAccountName;
             var receiverPublicHashedAccountId = _publicHashingService.HashValue(firstTransfer.ReceiverAccountId);
 
-            var courseTransfers = transfers.GroupBy(t => new { t.CourseName, t.CourseLevel });
+            var courseTransfers = transfers.GroupBy(t => new {t.CourseName, t.CourseLevel});
 
             var transferDetails = courseTransfers.Select(ct => new AccountTransferDetails
             {
                 CourseName = ct.First().CourseName,
                 CourseLevel = ct.First().CourseLevel,
                 PaymentTotal = ct.Sum(t => t.Amount),
-                ApprenticeCount = (uint)ct.DistinctBy(t => t.CommitmentId).Count()
+                ApprenticeCount = (uint) ct.DistinctBy(t => t.CommitmentId).Count()
             }).ToArray();
 
             var periodEnd = _dbContext.PeriodEnds.Single(p => p.PeriodEndId.Equals(firstTransfer.PeriodEnd));

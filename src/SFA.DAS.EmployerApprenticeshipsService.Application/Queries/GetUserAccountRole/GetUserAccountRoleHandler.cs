@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.GetUserAccountRole
 {
-    public class GetUserAccountRoleHandler: IAsyncRequestHandler<GetUserAccountRoleQuery, GetUserAccountRoleResponse>
+    public class GetUserAccountRoleHandler : IAsyncRequestHandler<GetUserAccountRoleQuery, GetUserAccountRoleResponse>
     {
         private readonly IMembershipRepository _membershipRepository;
         private readonly IValidator<GetUserAccountRoleQuery> _validator;

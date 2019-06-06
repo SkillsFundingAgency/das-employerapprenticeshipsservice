@@ -14,8 +14,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById
         private readonly IValidator<GetEmployerAgreementByIdRequest> _validator;
 
         public GetEmployerAgreementByIdRequestHandler(
-            IEmployerAgreementRepository employerAgreementRepository, 
-            IHashingService hashingService, 
+            IEmployerAgreementRepository employerAgreementRepository,
+            IHashingService hashingService,
             IValidator<GetEmployerAgreementByIdRequest> validator)
         {
             _employerAgreementRepository = employerAgreementRepository;
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
             if (agreement == null)
-                throw new InvalidRequestException(new Dictionary<string, string> { { "Agreement", "The agreement could not be found" } });
+                throw new InvalidRequestException(new Dictionary<string, string> {{"Agreement", "The agreement could not be found"}});
 
             agreement.HashedAgreementId = message.HashedAgreementId;
 

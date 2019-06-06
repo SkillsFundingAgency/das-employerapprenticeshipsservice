@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclaration
 
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
-                result.AddError(nameof(item.HashedAccountId),"HashedAccountId has not been supplied");
+                result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
 
             return result;

@@ -8,6 +8,6 @@
         public SignedEmployerAgreementDetailsDto Signed { get; set; }
         public PendingEmployerAgreementDetailsDto Pending { get; set; }
         public bool HasPendingAgreement => Pending != null;
-        public bool HasSignedAgreement => Signed!= null;
+        public bool HasSignedAgreement => Signed != null;
     }
 }

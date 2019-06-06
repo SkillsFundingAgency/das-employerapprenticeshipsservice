@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransac
     {
         public ValidationResult Validate(GetPreviousTransactionsCountRequest request)
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task<ValidationResult> ValidateAsync(GetPreviousTransactionsCountRequest request)

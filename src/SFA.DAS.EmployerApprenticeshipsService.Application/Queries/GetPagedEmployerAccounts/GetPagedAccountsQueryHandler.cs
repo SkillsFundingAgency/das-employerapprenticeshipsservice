@@ -15,7 +15,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts
 
         public async Task<GetPagedEmployerAccountsResponse> Handle(GetPagedEmployerAccountsQuery message)
         {
-
             var accounts = await _employerAccountRepository.GetAccounts(message.ToDate, message.PageNumber, message.PageSize);
             return new GetPagedEmployerAccountsResponse() {AccountsCount = accounts.AccountsCount, Accounts = accounts.AccountList};
         }

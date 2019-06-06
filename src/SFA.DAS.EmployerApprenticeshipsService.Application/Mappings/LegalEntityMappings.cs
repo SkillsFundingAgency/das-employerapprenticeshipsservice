@@ -38,8 +38,8 @@ namespace SFA.DAS.EAS.Application.Mappings
             CreateMap<AccountLegalEntity, LegalEntityViewModel>()
                 .ForMember(d => d.Agreements, o => o.MapFrom(l => l.Agreements.Where(a =>
                     a.AccountLegalEntity.AccountId == accountId && (
-                    a.StatusId == EmployerAgreementStatus.Pending ||
-                    a.StatusId == EmployerAgreementStatus.Signed))))
+                        a.StatusId == EmployerAgreementStatus.Pending ||
+                        a.StatusId == EmployerAgreementStatus.Signed))))
                 .ForMember(d => d.DasAccountId, o => o.MapFrom(l => accountHashedId))
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId))

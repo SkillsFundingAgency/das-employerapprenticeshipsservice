@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
 
             var schemeInformation = await _mediator.SendAsync(new GetPayeSchemeInUseQuery {Empref = message.EmpRef});
 
-            return new GetEmployerEnglishFractionResponse {Fractions = result, EmpRef = message.EmpRef,EmpRefAddedDate = schemeInformation.PayeScheme.AddedDate};
+            return new GetEmployerEnglishFractionResponse {Fractions = result, EmpRef = message.EmpRef, EmpRefAddedDate = schemeInformation.PayeScheme.AddedDate};
         }
     }
 }

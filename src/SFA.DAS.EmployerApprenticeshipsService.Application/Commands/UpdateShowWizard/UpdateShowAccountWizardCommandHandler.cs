@@ -18,6 +18,7 @@ namespace SFA.DAS.EAS.Application.Commands.UpdateShowWizard
             _validator = validator;
             _logger = logger;
         }
+
         protected override async Task HandleCore(UpdateShowAccountWizardCommand message)
         {
             var validationResult = _validator.Validate(message);

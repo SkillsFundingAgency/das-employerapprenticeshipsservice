@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclara
     {
         private readonly IValidator<GetLastLevyDeclarationQuery> _validator;
         private readonly IDasLevyRepository _dasLevyRepository;
-        
+
         public GetLastLevyDeclarationQueryHandler(IValidator<GetLastLevyDeclarationQuery> validator, IDasLevyRepository dasLevyRepository)
         {
             _validator = validator;
@@ -26,8 +26,8 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclara
             }
 
             var result = await _dasLevyRepository.GetLastSubmissionForScheme(message.EmpRef);
-            
-            return new GetLastLevyDeclarationResponse {Transaction = result };
+
+            return new GetLastLevyDeclarationResponse {Transaction = result};
         }
     }
 }

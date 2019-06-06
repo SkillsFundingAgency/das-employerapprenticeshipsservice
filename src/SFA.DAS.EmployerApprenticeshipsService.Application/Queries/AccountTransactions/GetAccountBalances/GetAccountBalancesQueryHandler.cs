@@ -18,7 +18,6 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances
 
         public async Task<GetAccountBalancesResponse> Handle(GetAccountBalancesRequest message)
         {
-
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid())
             {
@@ -27,7 +26,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances
 
             var result = await _dasLevyRepository.GetAccountBalances(message.AccountIds);
 
-            return new GetAccountBalancesResponse { Accounts = result };
+            return new GetAccountBalancesResponse {Accounts = result};
         }
     }
 }

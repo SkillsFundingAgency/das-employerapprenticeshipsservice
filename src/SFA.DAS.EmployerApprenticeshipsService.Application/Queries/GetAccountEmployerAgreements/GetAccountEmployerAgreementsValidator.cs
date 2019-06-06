@@ -6,7 +6,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 {
-    public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmployerAgreementsRequest> 
+    public class GetAccountEmployerAgreementsValidator : IValidator<GetAccountEmployerAgreementsRequest>
     {
         private readonly IMembershipRepository _membershipRepository;
         private readonly ILog _logger;
@@ -28,8 +28,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
             if (string.IsNullOrEmpty(item.ExternalUserId))
             {
-                validationResult.AddError(nameof(item.ExternalUserId),"ExternalUserId has not been supplied");
+                validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
             }
+
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
                 validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
@@ -48,7 +49,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountEmployerAgreements
 
                 validationResult.IsUnauthorized = true;
             }
-                
+
 
             return validationResult;
         }

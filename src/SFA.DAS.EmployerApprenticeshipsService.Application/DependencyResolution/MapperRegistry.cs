@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
                 .Where(a => a.FullName.StartsWith(Constants.ServiceNamespace))
                 .SelectMany(a => a.GetTypes())
                 .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
-                .Select(t => (Profile)Activator.CreateInstance(t));
+                .Select(t => (Profile) Activator.CreateInstance(t));
 
             var config = new MapperConfiguration(c =>
             {

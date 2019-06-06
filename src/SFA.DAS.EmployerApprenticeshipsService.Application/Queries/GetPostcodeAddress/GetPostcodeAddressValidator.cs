@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetPostcodeAddress
             }
 
             if (!results.ValidationDictionary.ContainsKey(nameof(item.Postcode)) &&
-             (!string.IsNullOrEmpty(item.Postcode) && item.Postcode.Trim().Length > MaxPostCodeLength))
+                (!string.IsNullOrEmpty(item.Postcode) && item.Postcode.Trim().Length > MaxPostCodeLength))
                 results.ValidationDictionary.Add(nameof(item.Postcode), "Enter a valid postcode");
 
             if (!results.ValidationDictionary.ContainsKey(nameof(item.Postcode)) &&

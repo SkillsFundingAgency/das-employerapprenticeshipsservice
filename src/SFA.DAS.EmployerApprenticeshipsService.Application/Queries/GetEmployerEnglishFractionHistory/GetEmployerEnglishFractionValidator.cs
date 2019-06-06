@@ -27,10 +27,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerEnglishFractionHistory
             {
                 validationResult.AddError(nameof(item.EmpRef));
             }
+
             if (string.IsNullOrEmpty(item.UserId))
             {
                 validationResult.AddError(nameof(item.UserId));
             }
+
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
                 validationResult.AddError(nameof(item.HashedAccountId));

@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
     {
         private readonly IHashingService _hashingService;
         private readonly ITransactionRepository _transactionRepository;
-        
+
         public GetAccountTransactionSummaryQueryHandler(IHashingService hashingService, ITransactionRepository transactionRepository)
         {
             _hashingService = hashingService;
@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var result = await _transactionRepository.GetAccountTransactionSummary(accountId);
 
-            return new GetAccountTransactionSummaryResponse { Data = result };
+            return new GetAccountTransactionSummaryResponse {Data = result};
         }
     }
 }

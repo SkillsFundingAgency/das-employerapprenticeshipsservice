@@ -8,7 +8,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProvider
     {
         public ValidationResult Validate(GetAccountProviderPaymentsByDateRangeQuery item)
         {
-           throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public Task<ValidationResult> ValidateAsync(GetAccountProviderPaymentsByDateRangeQuery item)

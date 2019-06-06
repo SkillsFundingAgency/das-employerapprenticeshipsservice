@@ -19,7 +19,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetCharity
 
         public async Task<GetCharityQueryResponse> Handle(GetCharityQueryRequest message)
         {
-
             var validationResult = _validator.Validate(message);
             if (!validationResult.IsValid())
             {
@@ -33,6 +32,5 @@ namespace SFA.DAS.EAS.Application.Queries.GetCharity
                 Charity = charity
             };
         }
-
     }
 }

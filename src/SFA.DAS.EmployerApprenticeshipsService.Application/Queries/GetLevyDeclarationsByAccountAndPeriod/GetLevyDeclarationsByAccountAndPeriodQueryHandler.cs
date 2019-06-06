@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod
         {
             var accountId = GetAccountId(message.HashedAccountId);
             var declarations = await _repository.GetAccountLevyDeclarations(accountId, message.PayrollYear, message.PayrollMonth);
-            return new GetLevyDeclarationsByAccountAndPeriodResponse { Declarations = declarations };
+            return new GetLevyDeclarationsByAccountAndPeriodResponse {Declarations = declarations};
         }
 
         private long GetAccountId(string hashedAccountId)

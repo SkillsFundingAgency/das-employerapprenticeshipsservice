@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUser
             _validator = validator;
         }
 
-        public async  Task<GetUserResponse> Handle(GetUserQuery message)
+        public async Task<GetUserResponse> Handle(GetUserQuery message)
         {
             var result = _validator.Validate(message);
 

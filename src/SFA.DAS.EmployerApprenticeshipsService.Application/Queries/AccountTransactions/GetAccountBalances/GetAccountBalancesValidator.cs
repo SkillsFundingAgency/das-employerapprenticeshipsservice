@@ -10,13 +10,12 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountIds==null || !item.AccountIds.Any())
+            if (item.AccountIds == null || !item.AccountIds.Any())
             {
-                validationResult.AddError(nameof(item.AccountIds),"AccountIds has not been supplied");
+                validationResult.AddError(nameof(item.AccountIds), "AccountIds has not been supplied");
             }
 
             return validationResult;
-            
         }
 
         public Task<ValidationResult> ValidateAsync(GetAccountBalancesRequest item)

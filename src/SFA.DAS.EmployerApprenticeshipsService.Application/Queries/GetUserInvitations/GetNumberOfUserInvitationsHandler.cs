@@ -28,7 +28,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserInvitations
             var repositoryValue = await _invitationRepository.GetNumberOfInvites(message.UserId);
 
 
-            return new GetNumberOfUserInvitationsResponse { NumberOfInvites = repositoryValue };
+            return new GetNumberOfUserInvitationsResponse {NumberOfInvites = repositoryValue};
         }
     }
 }

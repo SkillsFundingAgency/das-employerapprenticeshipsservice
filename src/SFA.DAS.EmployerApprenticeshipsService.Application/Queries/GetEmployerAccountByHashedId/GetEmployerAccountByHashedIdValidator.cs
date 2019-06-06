@@ -14,6 +14,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId
             {
                 validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
             }
+
             return validationResult;
         }
 

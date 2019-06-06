@@ -11,9 +11,9 @@ namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
 
             if (string.IsNullOrWhiteSpace(item.AuthToken))
             {
-                validationResult.AddError(nameof(item.AuthToken),"AuthToken has not been supplied");
+                validationResult.AddError(nameof(item.AuthToken), "AuthToken has not been supplied");
             }
-            
+
             return validationResult;
         }
 

@@ -46,15 +46,15 @@ namespace SFA.DAS.EAS.Application.Queries.GetHmrcEmployerInformation
                 _logger.Warn($"The call to GetEmprefInformation() for employer reference '{empref}' has not returned a name - continuing but the name in the database will be empty");
             }
 
-            var schemeCheck = await _mediator.SendAsync(new GetPayeSchemeInUseQuery { Empref = empref });
+            var schemeCheck = await _mediator.SendAsync(new GetPayeSchemeInUseQuery {Empref = empref});
 
             if (schemeCheck.PayeScheme != null)
             {
                 _logger.Warn($"PAYE scheme {empref} already in use.");
                 throw new ConstraintException("PAYE scheme already in use");
             }
-            
-            return new GetHmrcEmployerInformationResponse { EmployerLevyInformation = emprefInformation, Empref = empref };
+
+            return new GetHmrcEmployerInformationResponse {EmployerLevyInformation = emprefInformation, Empref = empref};
         }
     }
 }

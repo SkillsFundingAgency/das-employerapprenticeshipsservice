@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransact
 
             if (item.AccountId == 0)
             {
-                validationResult.AddError(nameof(item.AccountId),"AccountId has not been supplied");
+                validationResult.AddError(nameof(item.AccountId), "AccountId has not been supplied");
             }
 
             return validationResult;

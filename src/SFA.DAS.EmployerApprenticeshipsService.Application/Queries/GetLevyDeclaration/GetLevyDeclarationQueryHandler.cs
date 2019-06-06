@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLevyDeclaration
 
             var declarations = await _repository.GetAccountLevyDeclarations(accountId);
 
-            return new GetLevyDeclarationResponse { Declarations = declarations };
+            return new GetLevyDeclarationResponse {Declarations = declarations};
         }
     }
 }

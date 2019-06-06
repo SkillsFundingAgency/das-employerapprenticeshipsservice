@@ -1,5 +1,4 @@
-﻿
-using SFA.DAS.Activities.Client;
+﻿using SFA.DAS.Activities.Client;
 
 namespace SFA.DAS.EAS.Application.Queries.GetActivities
 {

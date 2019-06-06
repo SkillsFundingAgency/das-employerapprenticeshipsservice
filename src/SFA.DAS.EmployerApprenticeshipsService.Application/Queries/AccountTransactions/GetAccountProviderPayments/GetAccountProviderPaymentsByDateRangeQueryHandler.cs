@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Domain.Interfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProviderPayments
 {
-    public class GetAccountProviderPaymentsByDateRangeQueryHandler : IAsyncRequestHandler<GetAccountProviderPaymentsByDateRangeQuery,GetAccountProviderPaymentsByDateRangeResponse>
+    public class GetAccountProviderPaymentsByDateRangeQueryHandler : IAsyncRequestHandler<GetAccountProviderPaymentsByDateRangeQuery, GetAccountProviderPaymentsByDateRangeResponse>
     {
         private readonly IValidator<GetAccountProviderPaymentsByDateRangeQuery> _validator;
         private readonly ITransactionRepository _transactionRepository;
@@ -23,14 +23,14 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProvider
         public async Task<GetAccountProviderPaymentsByDateRangeResponse> Handle(GetAccountProviderPaymentsByDateRangeQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
-            
+
             if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
             var transactions = await _transactionRepository.GetAccountTransactionByProviderAndDateRange(
-                message.AccountId, 
+                message.AccountId,
                 message.UkPrn,
                 message.FromDate,
                 message.ToDate);
@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountProvider
                 }
             }
 
-            return new GetAccountProviderPaymentsByDateRangeResponse { Transactions = transactions };
+            return new GetAccountProviderPaymentsByDateRangeResponse {Transactions = transactions};
         }
     }
 }

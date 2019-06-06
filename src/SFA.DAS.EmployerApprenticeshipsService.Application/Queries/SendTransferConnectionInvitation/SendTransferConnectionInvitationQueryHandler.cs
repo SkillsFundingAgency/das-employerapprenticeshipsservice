@@ -41,8 +41,8 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
 
             var isReceiverASender = await _db.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.SenderAccountId == receiverAccount.Id && (
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved));
+                    i.Status == TransferConnectionInvitationStatus.Pending ||
+                    i.Status == TransferConnectionInvitationStatus.Approved));
 
             if (isReceiverASender)
             {
@@ -50,10 +50,10 @@ namespace SFA.DAS.EAS.Application.Queries.SendTransferConnectionInvitation
             }
 
             var anyTransferConnectionInvitations = await _db.Value.TransferConnectionInvitations.AnyAsync(i => (
-                i.SenderAccount.Id == message.AccountId.Value && i.ReceiverAccount.Id == receiverAccount.Id ||
-                i.SenderAccount.Id == receiverAccount.Id && i.ReceiverAccount.Id == message.AccountId.Value) && (
-                i.Status == TransferConnectionInvitationStatus.Pending ||
-                i.Status == TransferConnectionInvitationStatus.Approved));
+                                                                                                                   i.SenderAccount.Id == message.AccountId.Value && i.ReceiverAccount.Id == receiverAccount.Id ||
+                                                                                                                   i.SenderAccount.Id == receiverAccount.Id && i.ReceiverAccount.Id == message.AccountId.Value) && (
+                                                                                                                   i.Status == TransferConnectionInvitationStatus.Pending ||
+                                                                                                                   i.Status == TransferConnectionInvitationStatus.Approved));
 
             if (anyTransferConnectionInvitations)
             {

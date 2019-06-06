@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferRequests
             var transferRequests = await _employerCommitmentApi.GetTransferRequests(message.AccountHashedId);
 
             var accountIds = transferRequests
-                .SelectMany(r => new [] { r.HashedSendingEmployerAccountId, r.HashedReceivingEmployerAccountId })
+                .SelectMany(r => new[] {r.HashedSendingEmployerAccountId, r.HashedReceivingEmployerAccountId})
                 .Select(h => _hashingService.DecodeValue(h))
                 .ToList();
 

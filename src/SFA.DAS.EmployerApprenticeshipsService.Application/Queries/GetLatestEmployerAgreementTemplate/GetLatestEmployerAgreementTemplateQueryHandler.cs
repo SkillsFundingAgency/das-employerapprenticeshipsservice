@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate
 {
-    public class GetLatestEmployerAgreementTemplateQueryHandler : 
+    public class GetLatestEmployerAgreementTemplateQueryHandler :
         IAsyncRequestHandler<GetLatestEmployerAgreementTemplateRequest, GetLatestEmployerAgreementResponse>
     {
         private readonly IValidator<GetLatestEmployerAgreementTemplateRequest> _validator;
@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestEmployerAgreementTemplate
 
             var template = await _employerAgreementRepository.GetLatestAgreementTemplate();
 
-            return new GetLatestEmployerAgreementResponse { Template = template};
+            return new GetLatestEmployerAgreementResponse {Template = template};
         }
     }
 }

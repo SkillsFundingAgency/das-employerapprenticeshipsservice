@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetUserByRef
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            return new GetUserByRefResponse{ User = user};
+            return new GetUserByRefResponse {User = user};
         }
     }
 }

@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef
 
             var payeScheme = await _payeRepository.GetPayeForAccountByRef(message.HashedAccountId, message.Ref);
 
-            return new GetPayeSchemeByRefResponse { PayeScheme = payeScheme};
+            return new GetPayeSchemeByRefResponse {PayeScheme = payeScheme};
         }
     }
 }

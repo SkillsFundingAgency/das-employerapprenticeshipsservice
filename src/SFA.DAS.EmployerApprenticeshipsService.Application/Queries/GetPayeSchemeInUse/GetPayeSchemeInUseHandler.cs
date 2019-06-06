@@ -5,7 +5,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.Queries.GetPayeSchemeInUse
 {
-    public class GetPayeSchemeInUseHandler : IAsyncRequestHandler<GetPayeSchemeInUseQuery,GetPayeSchemeInUseResponse>
+    public class GetPayeSchemeInUseHandler : IAsyncRequestHandler<GetPayeSchemeInUseQuery, GetPayeSchemeInUseResponse>
     {
         private readonly IValidator<GetPayeSchemeInUseQuery> _validator;
         private readonly IEmployerSchemesRepository _employerSchemesRepository;

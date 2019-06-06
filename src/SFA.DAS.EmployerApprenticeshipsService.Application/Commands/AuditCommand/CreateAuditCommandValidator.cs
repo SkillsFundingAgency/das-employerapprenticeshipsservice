@@ -22,18 +22,17 @@ namespace SFA.DAS.EAS.Application.Commands.AuditCommand
                 validationResult.AddError(nameof(item.EasAuditMessage.Description));
             }
 
-            if (item.EasAuditMessage.ChangedProperties==null || !item.EasAuditMessage.ChangedProperties.Any())
+            if (item.EasAuditMessage.ChangedProperties == null || !item.EasAuditMessage.ChangedProperties.Any())
             {
                 validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
             }
-            
+
             if (string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Id) || string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Type))
             {
                 validationResult.AddError(nameof(item.EasAuditMessage.AffectedEntity));
             }
-            
-            return validationResult;
 
+            return validationResult;
         }
 
         public Task<ValidationResult> ValidateAsync(CreateAuditCommand item)

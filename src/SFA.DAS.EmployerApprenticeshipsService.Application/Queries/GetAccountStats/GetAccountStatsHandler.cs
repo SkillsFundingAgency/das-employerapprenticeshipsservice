@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountStats
 
             var stats = await _repository.GetAccountStats(accoundId);
 
-            return new GetAccountStatsResponse { Stats = stats };
+            return new GetAccountStatsResponse {Stats = stats};
         }
     }
 }

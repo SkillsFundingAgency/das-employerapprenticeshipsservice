@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById
     {
         public ValidationResult Validate(GetEmployerAgreementByIdRequest item)
         {
-            var validationResults = new Dictionary<string,string>();
+            var validationResults = new Dictionary<string, string>();
 
             if (string.IsNullOrEmpty(item.HashedAgreementId))
             {

@@ -26,6 +26,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountTeamMembers
             {
                 validationResult.AddError(nameof(item.ExternalUserId), "UserId has not been supplied");
             }
+
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
                 validationResult.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
