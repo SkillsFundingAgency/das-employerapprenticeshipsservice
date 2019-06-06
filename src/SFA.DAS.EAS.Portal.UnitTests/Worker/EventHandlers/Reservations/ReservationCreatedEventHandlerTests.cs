@@ -97,25 +97,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         //todo: tidy up and move what can into base
         private bool AccountIsAsExpected(AccountDocument document)
         {
-            Account expectedAccount = GetExpectedAccount();
-            Organisation expectedOrganisation;
+            var expectedAccount = GetExpectedAccount();
+            var expectedOrganisation = GetExpectedOrganisation(expectedAccount);
             Reservation expectedReservation;
-
-            if (OriginalAccountDocument == null
-                || !OriginalAccountDocument.Account.Organisations.Any())
-            {
-                expectedOrganisation = new Organisation
-                {
-                    AccountLegalEntityId = AccountLegalEntityId,
-                    Name = OriginalMessage.AccountLegalEntityName
-                };
-                expectedAccount.Organisations.Add(expectedOrganisation);
-            }
-            else
-            {
-                expectedOrganisation = expectedAccount
-                    .Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId);
-            }
             
             if (OriginalAccountDocument == null)
             {
@@ -169,16 +153,20 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             }
             return OriginalAccountDocument.Account;
         }
-        
-        //todo: base?
-        private void AddExpectedOrganisation(Account expectedAccount)
+
+        private Organisation GetExpectedOrganisation(Account expectedAccount)
         {
-            var organisation = new Organisation
+            if (OriginalAccountDocument != null && OriginalAccountDocument.Account.Organisations.Any())
+                return expectedAccount.Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId);
+
+            var expectedOrganisation = new Organisation
             {
                 AccountLegalEntityId = AccountLegalEntityId,
                 Name = OriginalMessage.AccountLegalEntityName
             };
-            expectedAccount.Organisations.Add(organisation);
+            expectedAccount.Organisations.Add(expectedOrganisation);
+
+            return expectedOrganisation;
         }
     }
 }
