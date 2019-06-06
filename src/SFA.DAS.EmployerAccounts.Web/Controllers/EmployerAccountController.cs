@@ -50,12 +50,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{HashedAccountId}/gatewayInform")]
         public ActionResult GatewayInform(string hashedAccountId = "")
         {
-
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
                 _accountCookieStorage.Delete(_hashedAccountIdCookieName);
                 _accountCookieStorage.Create(
-                    new HashedAccountIdModel{Value = hashedAccountId}, 
+                    new HashedAccountIdModel {Value = hashedAccountId}, 
                     _hashedAccountIdCookieName);
             }
 
@@ -153,8 +152,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("getGovernmentFunding")]
-        public ActionResult GetGovernmentFunding()
+        [Route("getApprenticeshipFunding")]
+        public ActionResult GetApprenticeshipFunding()
         {
             var model = new
             {
@@ -166,8 +165,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("getGovernmentFunding")]
-        public async Task<ActionResult> GetGovernmentFunding(int? choice)
+        [Route("getApprenticeshipFunding")]
+        public async Task<ActionResult> GetApprenticeshipFunding(int? choice)
         {
             switch (choice ?? 0)
             {
@@ -180,7 +179,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
 
                     var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
-                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {hashedAccountId = response.Data.HashedId});
                 }
                 case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 default:
@@ -257,14 +256,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (response.Status == HttpStatusCode.BadRequest)
             {
                 response.Status = HttpStatusCode.OK;
-                response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
+                response.FlashMessage = new FlashMessageViewModel {Headline = "There was a problem creating your account"};
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
             
             _employerAccountOrchestrator.DeleteCookieData();
             _accountCookieStorage.Delete(_hashedAccountIdCookieName);
 
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {response.Data.EmployerAgreement.HashedAccountId});
         }
 
         [HttpGet]
