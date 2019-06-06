@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(accounts);
                 }
 
-                return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
+                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
             }
 
             var model = new
@@ -119,7 +119,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> HandleNewRegistration()
         {
             await OwinWrapper.UpdateClaims();
-            return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
+            return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
         [Authorize]

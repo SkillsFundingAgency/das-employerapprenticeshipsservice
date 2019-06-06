@@ -159,10 +159,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("getGovernmentFunding")]
-        public ActionResult GetGovernmentFunding(string returnUrl = "")
+        [Route("getApprenticeshipFunding")]
+        public ActionResult GetApprenticeshipFunding(string returnUrl = "")
         {
-            _logger.Info($"Called into GetGovernmentFunding with returnUrl: '{returnUrl}'");
+            _logger.Info($"Called into GetApprenticeshipFunding with returnUrl: '{returnUrl}'");
             try
             {
                 _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
@@ -176,15 +176,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Error processing getGovernmentFunding. ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
+                _logger.Error(ex, $"Error processing getApprenticeshipFunding. ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
                 throw;
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("getGovernmentFunding")]
-        public async Task<ActionResult> GetGovernmentFunding(int? choice)
+        [Route("getApprenticeshipFunding")]
+        public async Task<ActionResult> GetApprenticeshipFunding(int? choice)
         {
             switch (choice ?? 0)
             {
