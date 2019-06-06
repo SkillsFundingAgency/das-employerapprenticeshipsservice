@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.HashingService;
-using SFA.DAS.ObsoleteHashing;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
 {
