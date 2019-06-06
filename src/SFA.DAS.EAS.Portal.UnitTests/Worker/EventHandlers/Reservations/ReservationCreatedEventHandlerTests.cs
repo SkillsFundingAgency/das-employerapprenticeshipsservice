@@ -94,29 +94,19 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             return this;
         }
         
-        //todo: tidy up and move what can into base
+        //todo: move what can into base
         private bool AccountIsAsExpected(AccountDocument document)
         {
             var expectedAccount = GetExpectedAccount();
-            var expectedOrganisation = GetExpectedOrganisation(expectedAccount);
-            var expectedReservation = GetExpectedReservation(expectedOrganisation);
+            var expectedReservation = GetExpectedReservation(GetExpectedOrganisation(expectedAccount));
 
             expectedReservation.Id = ReservationId;
             expectedReservation.CourseCode = OriginalMessage.CourseId;
             expectedReservation.CourseName = OriginalMessage.CourseName;
             expectedReservation.StartDate = OriginalMessage.StartDate;
             expectedReservation.EndDate = OriginalMessage.EndDate;
-            
-            if (document?.Account == null)
-                return false;
-            
-            var (accountIsAsExpected, differences) = document.Account.IsEqual(expectedAccount);
-            if (!accountIsAsExpected)
-            {
-                TestContext.WriteLine($"Saved account is not as expected: {differences}");
-            }
-            
-            return accountIsAsExpected;
+
+            return AccountIsAsExpected(expectedAccount, document);
         }
 
         //todo: property?
@@ -166,6 +156,20 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
                 expectedOrganisation.Reservations.Add(expectedReservation);
             }
             return expectedReservation;
+        }
+
+        private bool AccountIsAsExpected(Account expectedAccount, AccountDocument savedAccountDocument)
+        {
+            if (savedAccountDocument?.Account == null)
+                return false;
+
+            var (accountIsAsExpected, differences) = savedAccountDocument.Account.IsEqual(expectedAccount);
+            if (!accountIsAsExpected)
+            {
+                TestContext.WriteLine($"Saved account is not as expected: {differences}");
+            }
+
+            return accountIsAsExpected;
         }
     }
 }
