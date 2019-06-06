@@ -3,14 +3,17 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Apprenticeships.Api.Types.Exceptions;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 using SFA.DAS.Providers.Api.Client;
 using SFA.DAS.Testing;
+using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationships.AddedAccountProviderEventHandlerTestsFixture;
 using ApiProvider = SFA.DAS.Apprenticeships.Api.Types.Providers.Provider;
 using PortalProvider = SFA.DAS.EAS.Portal.Client.Types.Provider;
 
@@ -32,39 +35,39 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
             return TestAsync(f => f.Handle(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
         }
 
-//        [Test]
-//        public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
-//        {
-//            return TestAsync(f => f.ArrangeEmptyAccountDocument(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
-//        }
-//
-//        [Test]
-//        public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesContainProvider_ThenAccountDocumentIsSavedWithUpdatedProvider()
-//        {
-//            return TestAsync(f => f.ArrangeAccountDocumentContainsProvider(), f => f.Handle(), 
-//                f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
-//        }
-//
-//        [Test]
-//        public Task Execute_WhenProviderApiReturnsProviderWithLegalButNotPrimaryAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
-//        {
-//            return TestAsync(f => f.ArrangeApiReturnsProviderWithLegalButNotPrimaryAddress(), f => f.Handle(),
-//                f => f.VerifyAccountDocumentSavedWithProviderWithLegalAddress());
-//        }
-//        
-//        [Test]
-//        public Task Execute_WhenProviderApiReturnsProviderWithoutPrimaryOrLegalAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
-//        {
-//            return TestAsync(f => f.ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress(), f => f.Handle(),
-//                f => f.VerifyAccountDocumentSavedWithProviderWithoutAddress());
-//        }
-//        
-//        [Test]
-//        public Task Execute_WhenProviderApiThrows_ThenExceptionIsPropagated()
-//        {
-//            return TestExceptionAsync(f => f.ArrangeProviderApiThrowsException(), f => f.Handle(), 
-//                (f, r) => r.Should().Throw<EntityNotFoundException>().WithMessage(Fix.ProviderApiExceptionMessage));
-//        }
+        [Test]
+        public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
+        {
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
+        }
+
+        [Test]
+        public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesContainProvider_ThenAccountDocumentIsSavedWithUpdatedProvider()
+        {
+            return TestAsync(f => f.ArrangeAccountDocumentContainsProvider(), f => f.Handle(), 
+                f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
+        }
+
+        [Test]
+        public Task Execute_WhenProviderApiReturnsProviderWithLegalButNotPrimaryAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
+        {
+            return TestAsync(f => f.ArrangeApiReturnsProviderWithLegalButNotPrimaryAddress(), f => f.Handle(),
+                f => f.VerifyAccountDocumentSavedWithProviderWithLegalAddress());
+        }
+        
+        [Test]
+        public Task Execute_WhenProviderApiReturnsProviderWithoutPrimaryOrLegalAddressAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProviderWithoutAddress()
+        {
+            return TestAsync(f => f.ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress(), f => f.Handle(),
+                f => f.VerifyAccountDocumentSavedWithProviderWithoutAddress());
+        }
+        
+        [Test]
+        public Task Execute_WhenProviderApiThrows_ThenExceptionIsPropagated()
+        {
+            return TestExceptionAsync(f => f.ArrangeProviderApiThrowsException(), f => f.Handle(), 
+                (f, r) => r.Should().Throw<EntityNotFoundException>().WithMessage(Fix.ProviderApiExceptionMessage));
+        }
     }
 
     public class AddedAccountProviderEventHandlerTestsFixture : EventHandlerTestsFixture<
@@ -73,6 +76,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
         public Mock<IProviderApiClient> ProviderApiClient { get; set; }
         public ApiProvider Provider { get; set; }
         public ApiProvider ExpectedProvider { get; set; }
+        public const string ProviderApiExceptionMessage = "Test message";
 
         public AddedAccountProviderEventHandlerTestsFixture() 
             : base(false)
@@ -92,6 +96,53 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
             Message = new AddedAccountProviderEvent(1, AccountId, Message.ProviderUkprn, Guid.NewGuid(), DateTime.UtcNow);
         }
 
+        public AddedAccountProviderEventHandlerTestsFixture ArrangeAccountDocumentContainsProvider()
+        {
+            //note customization will stay in fixture
+            long uniqueUkprnAddition = 0;
+            Fixture.Customize<PortalProvider>(p => p.With(pr => pr.Ukprn, () => Message.ProviderUkprn + ++uniqueUkprnAddition));
+            
+            AccountDocument = Fixture.Create<AccountDocument>();
+
+            AccountDocument.Account.Providers.RandomElement().Ukprn = Message.ProviderUkprn;
+
+            AccountDocument.Account.Id = AccountId;
+            
+            AccountDocument.Deleted = null;
+            AccountDocument.Account.Deleted = null;
+            
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+
+        public AddedAccountProviderEventHandlerTestsFixture ArrangeApiReturnsProviderWithLegalButNotPrimaryAddress()
+        {
+            ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress();
+            
+            Provider.Addresses.RandomElement().ContactType = "LEGAL";
+
+            return this;
+        }
+        
+        public AddedAccountProviderEventHandlerTestsFixture ArrangeApiReturnsProviderWithoutPrimaryOrLegalAddress()
+        {
+            foreach (var providerAddress in Provider.Addresses)
+            {
+                providerAddress.ContactType = "CONTACTTYPE";
+            }
+
+            return this;
+        }
+        
+        public AddedAccountProviderEventHandlerTestsFixture ArrangeProviderApiThrowsException()
+        {
+            ProviderApiClient.Setup(c => c.GetAsync(Message.ProviderUkprn))
+                .ThrowsAsync(new EntityNotFoundException(ProviderApiExceptionMessage, null));
+            
+            return this;
+        }
+        
         public override Task Handle()
         {
             ExpectedProvider = Provider.Clone();
