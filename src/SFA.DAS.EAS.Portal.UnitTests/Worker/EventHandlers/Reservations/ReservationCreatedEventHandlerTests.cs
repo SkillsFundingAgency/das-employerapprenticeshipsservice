@@ -95,7 +95,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             return this;
         }
         
-        //todo: move what can into base
         private bool AccountIsAsExpected(AccountDocument document)
         {
             var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);

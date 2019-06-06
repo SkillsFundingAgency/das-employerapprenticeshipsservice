@@ -118,16 +118,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         
         private bool AccountIsAsExpected(AccountDocument document)
         {
-            Account expectedAccount;
+            var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);
             Cohort expectedCohort;
             
             if (OriginalAccountDocument == null)
             {
-                expectedAccount = new Account
-                {
-                    Id = OriginalMessage.AccountId,
-                };
-
                 var organisation = new Organisation
                 {
                     AccountLegalEntityId = AccountLegalEntityId,
@@ -152,7 +147,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             }
             else
             {
-                expectedAccount = OriginalAccountDocument.Account;
                 expectedCohort = expectedAccount
                     .Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId)
                     .Cohorts.Single(r => r.Id == CohortId.ToString());
@@ -162,16 +156,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             expectedCohort.Id = CohortId.ToString();
             expectedCohort.Reference = ExpectedCommitment.Reference;
 
-            if (document?.Account == null)
-                return false;
-            
-            var (accountIsAsExpected, differences) = document.Account.IsEqual(expectedAccount);
-            if (!accountIsAsExpected)
-            {
-                TestContext.WriteLine($"Saved account is not as expected: {differences}");
-            }
-            
-            return accountIsAsExpected;
+            return AccountIsAsExpected(expectedAccount, document);
         }
     }
 }
