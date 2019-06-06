@@ -13,6 +13,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments;
 using SFA.DAS.HashingService;
 using SFA.DAS.Testing;
+using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments.CohortApprovalRequestedByProviderEventHandlerTestsFixture;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
 {
@@ -33,14 +34,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         }
         
         [Test]
-        [Ignore("in progress")]
+        [Ignore("In progress")]
         public Task Handle_WhenAccountDoesNotContainOrganisation_ThenAccountDocumentIsSavedWithNewCohort()
         {
-            return TestAsync(f => f.ArrangeEmptyAccountDocument(),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(Fix.AccountId),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
         }
 
         [Test]
-        [Ignore("in progress")]
+        [Ignore("In progress")]
         public Task Handle_WhenAccountDoesContainOrganisationButNotCohort_ThenAccountDocumentIsSavedWithNewCohort()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
@@ -61,8 +62,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         public Mock<IHashingService> HashingService { get; set; }
         public CommitmentView Commitment { get; set; }
         public CommitmentView ExpectedCommitment { get; set; }
-        public long CohortId = 6789L;
-        public const long AccountLegalEntityId = 123L;
+        public const long AccountId = 123L;
+        public const long AccountLegalEntityId = 456L;
+        public const long CohortId = 789L;
 
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture() : base(false)
         {
@@ -93,7 +95,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(AccountLegalEntityId);
+            var organisation = SetUpAccountDocumentWithOrganisation(AccountId, AccountLegalEntityId);
             organisation.Cohorts = new List<Cohort>();
             
             AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
@@ -121,36 +123,52 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);
             var expectedOrganisation = GetExpectedOrganisation(
                 expectedAccount, AccountLegalEntityId, ExpectedCommitment.LegalEntityName);
-            Cohort expectedCohort;
-            
-            if (OriginalAccountDocument == null)
-            {
-                expectedCohort = new Cohort();
-                expectedOrganisation.Cohorts.Add(expectedCohort);
+            var expectedCohort = GetExpectedCohort(expectedOrganisation);
 
-                expectedCohort.Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
-                    new Apprenticeship
-                    {
-                        Id = ea.Id,
-                        FirstName = ea.FirstName,
-                        LastName  = ea.LastName,
-                        CourseName = ea.TrainingName,
-                        ProposedCost = ea.Cost,
-                        StartDate = ea.StartDate,
-                        EndDate = ea.EndDate
-                    }).ToList();
-            }
-            else
-            {
-                expectedCohort = expectedOrganisation
-                    .Cohorts.Single(r => r.Id == CohortId.ToString());
-            }
-
-            //todo: id should be long
-            expectedCohort.Id = CohortId.ToString();
             expectedCohort.Reference = ExpectedCommitment.Reference;
+            //todo: tidy up apprenticeships
 
             return AccountIsAsExpected(expectedAccount, document);
+        }
+        
+        private Cohort GetExpectedCohort(Organisation expectedOrganisation)
+        {
+            Cohort expectedCohort;
+            if (OriginalAccountDocument == null
+                || !OriginalAccountDocument.Account.Organisations.Any())
+            {
+                //todo: AddNewCohort()?
+                expectedCohort = new Cohort
+                {
+                    //todo: id should be long
+                    Id = CohortId.ToString(),
+                    Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
+                        new Apprenticeship
+                        {
+                            Id = ea.Id,
+                            FirstName = ea.FirstName,
+                            LastName = ea.LastName,
+                            CourseName = ea.TrainingName,
+                            ProposedCost = ea.Cost,
+                            StartDate = ea.StartDate,
+                            EndDate = ea.EndDate
+                        }).ToList()
+                };
+
+                expectedOrganisation.Cohorts.Add(expectedCohort);
+                return expectedCohort;
+            }
+            
+            expectedCohort = expectedOrganisation.Cohorts.SingleOrDefault(r => r.Id == CohortId.ToString());
+            if (expectedCohort == null)
+            {
+                expectedCohort = new Cohort
+                {
+                    Id = CohortId.ToString()
+                };
+                expectedOrganisation.Cohorts.Add(expectedCohort);
+            }
+            return expectedCohort;
         }
     }
 }

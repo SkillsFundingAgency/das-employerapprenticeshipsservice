@@ -30,13 +30,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public AccountDocument OriginalAccountDocument { get; set; }
         public Mock<ILogger<TEventHandler>> Logger { get; set; }
         public Fixture Fixture { get; set; }
-        public const long AccountId = 456L;
         
         public EventHandlerTestsFixture(bool constructHandler = true)
         {
             Fixture = new Fixture();
             
             Message = Fixture.Create<TEvent>();
+            OriginalMessage = Message.Clone();
 
             MessageContextInitialisation = new Mock<IMessageContextInitialisation>();
             
@@ -57,32 +57,33 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
                 Handler = ConstructHandler();
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeEmptyAccountDocument()
+        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeEmptyAccountDocument(long accountId)
         {
-            AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {AccountId} }}}}");
+            AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {accountId} }}}}");
 
-            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.Get(accountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }
         
-        protected Organisation SetUpAccountDocumentWithOrganisation(long accountLegalEntity)
+        protected Organisation SetUpAccountDocumentWithOrganisation(long accountId, long accountLegalEntityId)
         {
             AccountDocument = Fixture.Create<AccountDocument>();
 
-            AccountDocument.Account.Id = AccountId;
+            AccountDocument.Account.Id = accountId;
             
             AccountDocument.Deleted = null;
             AccountDocument.Account.Deleted = null;
             
             var organisation = AccountDocument.Account.Organisations.RandomElement();
-            organisation.AccountLegalEntityId = accountLegalEntity;
+            organisation.AccountLegalEntityId = accountLegalEntityId;
 
             return organisation;
         }
         
         public virtual Task Handle()
         {
+            // update original message with any arranged modifications
             OriginalMessage = Message.Clone();
             OriginalAccountDocument = AccountDocument.Clone();
             return Handler.Handle(Message, MessageHandlerContext.Object);

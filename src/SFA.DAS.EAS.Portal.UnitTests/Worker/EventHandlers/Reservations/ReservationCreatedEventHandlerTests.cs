@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations;
 using SFA.DAS.Reservations.Messages;
 using SFA.DAS.Testing;
+using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations.ReservationCreatedEventHandlerTestsFixture;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
 {
@@ -33,13 +34,15 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         [Test]
         public Task Handle_WhenAccountDoesNotContainOrganisation_ThenAccountDocumentIsSavedWithNewReservation()
         {
-            return TestAsync(f => f.ArrangeEmptyAccountDocument(),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(f.OriginalMessage.AccountId),f => f.Handle(),
+                f => f.VerifyAccountDocumentSavedWithReservation());
         }
 
         [Test]
         public Task Handle_WhenAccountDoesContainOrganisationButNotReservation_ThenAccountDocumentIsSavedWithNewReservation()
         {
-            return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
+            return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(),
+                f => f.VerifyAccountDocumentSavedWithReservation());
         }
         
         [Test]
@@ -53,35 +56,35 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
     public class ReservationCreatedEventHandlerTestsFixture : EventHandlerTestsFixture<
         ReservationCreatedEvent, ReservationCreatedEventHandler>
     {
-        public const long AccountLegalEntityId = 789L;
+        public const long AccountLegalEntityId = 456L;
         public Guid ReservationId = Guid.NewGuid();
 
         public ReservationCreatedEventHandlerTestsFixture()
         {
             //todo: let test use fixture generated?
             Message.Id = ReservationId;
-            Message.AccountId = AccountId;
+            Message.AccountId = OriginalMessage.AccountId;
             Message.AccountLegalEntityId = AccountLegalEntityId;
         }
 
         //todo: move to base
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(AccountLegalEntityId);
+            var organisation = SetUpAccountDocumentWithOrganisation(OriginalMessage.AccountId, AccountLegalEntityId);
             organisation.Reservations = new List<Reservation>();
             
-            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.Get(OriginalMessage.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }
         
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsReservation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(AccountLegalEntityId);
+            var organisation = SetUpAccountDocumentWithOrganisation(OriginalMessage.AccountId, AccountLegalEntityId);
 
             organisation.Reservations.RandomElement().Id = ReservationId;
             
-            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.Get(OriginalMessage.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }

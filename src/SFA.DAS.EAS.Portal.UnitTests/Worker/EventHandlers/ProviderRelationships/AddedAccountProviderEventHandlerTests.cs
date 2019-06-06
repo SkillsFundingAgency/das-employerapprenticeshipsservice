@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
         [Test]
         public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
         {
-            return TestAsync(f => f.ArrangeEmptyAccountDocument(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(Fix.AccountId), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
         }
 
         [Test]
@@ -76,6 +76,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
         public Mock<IProviderApiClient> ProviderApiClient { get; set; }
         public ApiProvider Provider { get; set; }
         public ApiProvider ExpectedProvider { get; set; }
+        public const long AccountId = 123L;
         public const string ProviderApiExceptionMessage = "Test message";
 
         public AddedAccountProviderEventHandlerTestsFixture() 

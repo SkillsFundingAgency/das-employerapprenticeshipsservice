@@ -21,7 +21,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests
         /// </summary>
         public static (bool, string) IsEqual(this object source, object expected)
         {
-            var comparisonResult = new CompareLogic().Compare(expected, source);
+            var comparisonResult = new CompareLogic(new ComparisonConfig {MaxDifferences = 100})
+                .Compare(expected, source);
             return (comparisonResult.AreEqual,comparisonResult.DifferencesString);
         }
         
