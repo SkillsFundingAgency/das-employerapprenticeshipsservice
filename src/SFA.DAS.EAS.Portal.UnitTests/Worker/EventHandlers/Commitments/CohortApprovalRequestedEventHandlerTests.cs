@@ -52,7 +52,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         [Test]
         public Task Handle_WhenAccountDoesContainOrganisationAndCohort_ThenAccountDocumentIsSavedWithUpdatedCohort()
         {
-            //todo: new test like this, but verify that number of hasnt changed
             return TestAsync(f => f.ArrangeAccountDocumentContainsCohort(), f => f.Handle(),
                 f => f.VerifyAccountDocumentSavedWithCohort());
         }
