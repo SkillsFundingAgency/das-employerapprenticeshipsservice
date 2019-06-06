@@ -60,6 +60,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.SendTransferConnectionInvit
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
             _publicHashingService.Setup(h => h.DecodeValue(_receiverAccount.PublicHashedId)).Returns(_receiverAccount.Id);
 
+            var outParam = _receiverAccount.Id;
+
+            _publicHashingService.Setup(
+                    h => h.TryDecodeValue(
+                        _receiverAccount.PublicHashedId,
+                        out outParam))
+                .Returns(true);
+
             _handler = new SendTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _publicHashingService.Object);
 
             _query = new SendTransferConnectionInvitationQuery

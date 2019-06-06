@@ -76,5 +76,12 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             return _hashingServiceWithCorrectValuesForMarkerInterface.DecodeValueToString(id);
         }
+
+        public bool TryDecodeValue(string input, out long output)
+        {
+            return _hashingServiceWithCorrectValuesForMarkerInterface.TryDecodeValue(
+                input,
+                out output);
+        }
     }
 }
