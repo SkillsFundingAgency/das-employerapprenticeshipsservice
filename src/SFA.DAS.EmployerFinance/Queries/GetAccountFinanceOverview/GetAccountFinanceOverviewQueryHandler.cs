@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
            
             var currentBalance = await GetAccountBalance(query.AccountId.Value);
             var earliestFundsToExpire = await GetExpiringFunds(query.AccountId.Value);
-            var paymentsForLastYear = await GetTotalSpendForLastYear(query.AccountId.Value);
+            var totalSpendForLastYear = await GetTotalSpendForLastYear(query.AccountId.Value);
 
             if (earliestFundsToExpire == null)
             {
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 {
                     AccountId = query.AccountId.Value,
                     CurrentFunds = currentBalance,
-                    TotalSpendForLastYear = paymentsForLastYear
+                    TotalSpendForLastYear = totalSpendForLastYear
                 };
             }
 
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 CurrentFunds = currentBalance,
                 ExpiringFundsExpiryDate = earliestFundsToExpire.PayrollDate,
                 ExpiringFundsAmount = earliestFundsToExpire.Amount,
-                TotalSpendForLastYear = paymentsForLastYear
+                TotalSpendForLastYear = totalSpendForLastYear
             };
         }
 
