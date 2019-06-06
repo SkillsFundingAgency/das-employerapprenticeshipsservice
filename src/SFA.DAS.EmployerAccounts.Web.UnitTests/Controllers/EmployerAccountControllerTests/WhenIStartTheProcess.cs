@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 _userViewTestingService.Object,
                 logger.Object,
                 _flashMessage.Object,
-                Mock.Of<IMediator>(),
+                Mock.Of<IMediator>(),                       Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
                 Mock.Of<ICookieStorageService<HashedAccountIdModel>>())            
             {
                 ControllerContext = _controllerContext.Object,
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         //}
 
         [Test]
-        public async Task ThenIAmRedirectedToTheGovermentGatewayWhenIConfirmIHaveGatewayCredentials()
+        public async Task ThenIAmRedirectedToTheGovernmentGatewayWhenIConfirmIHaveGatewayCredentials()
         {
             //Arrange
             _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);

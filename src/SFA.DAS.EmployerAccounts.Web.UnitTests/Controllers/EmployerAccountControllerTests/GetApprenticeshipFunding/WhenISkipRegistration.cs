@@ -16,7 +16,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetApprenticeshipFunding
 {
     class WhenISkipRegistration : ControllerTestBase
     {
@@ -61,6 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
                 Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
             {
                 ControllerContext = _controllerContext.Object,
@@ -72,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         public async Task ThenIShouldGoToTheHomePage()
         {
             //Act
-            var result = await _employerAccountController.GetGovernmentFunding(1) as RedirectToRouteResult;
+            var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectToRouteResult;
 
             //Assert
             Assert.AreEqual(ControllerConstants.IndexActionName, result.RouteValues["Action"]);
@@ -83,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         public async Task ThenIShouldGetBackTheAccountId()
         {
             //Act
-            var result = await _employerAccountController.GetGovernmentFunding(1) as RedirectToRouteResult;
+            var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectToRouteResult;
 
             //Assert
             Assert.IsNotNull(result);
