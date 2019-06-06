@@ -31,14 +31,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         }
 
         [Test]
-        [Ignore("needs fixing")]
         public Task Handle_WhenAccountDoesNotContainOrganisation_ThenAccountDocumentIsSavedWithNewReservation()
         {
             return TestAsync(f => f.ArrangeEmptyAccountDocument(),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
         }
 
         [Test]
-        [Ignore("needs fixing")]
         public Task Handle_WhenAccountDoesContainOrganisationButNotReservation_ThenAccountDocumentIsSavedWithNewReservation()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
@@ -101,6 +99,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             Account expectedAccount;
             Reservation expectedReservation;
             
+            //todo: tidy up and move what can into base
             if (OriginalAccountDocument == null)
             {
                 expectedAccount = new Account
@@ -118,12 +117,34 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
                 expectedReservation = new Reservation();
                 organisation.Reservations.Add(expectedReservation);
             }
+            else if (!OriginalAccountDocument.Account.Organisations.Any())
+            {
+                expectedAccount = OriginalAccountDocument.Account;
+
+                var organisation = new Organisation
+                {
+                    AccountLegalEntityId = AccountLegalEntityId,
+                    Name = OriginalMessage.AccountLegalEntityName
+                };
+                expectedAccount.Organisations.Add(organisation);
+
+                expectedReservation = new Reservation();
+                organisation.Reservations.Add(expectedReservation);
+            }
             else
             {
                 expectedAccount = OriginalAccountDocument.Account;
-                expectedReservation = expectedAccount
-                    .Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId)
-                    .Reservations.Single(r => r.Id == ReservationId);
+                var expectedOrganisation = expectedAccount
+                    .Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId);
+                
+                expectedReservation = expectedOrganisation
+                    .Reservations.SingleOrDefault(r => r.Id == ReservationId);
+                
+                if (expectedReservation == null)
+                {
+                    expectedReservation = new Reservation();
+                    expectedOrganisation.Reservations.Add(expectedReservation);
+                }
             }
 
             expectedReservation.Id = ReservationId;
