@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -30,6 +31,27 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         {
             return TestAsync(f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
         }
+        
+        [Test]
+        [Ignore("in progress")]
+        public Task Handle_WhenAccountDoesNotContainOrganisation_ThenAccountDocumentIsSavedWithNewCohort()
+        {
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
+        }
+
+        [Test]
+        [Ignore("in progress")]
+        public Task Handle_WhenAccountDoesContainOrganisationButNotCohort_ThenAccountDocumentIsSavedWithNewCohort()
+        {
+            return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
+        }
+
+//        [Test]
+//        public Task Handle_WhenAccountDoesContainOrganisationAndCohort_ThenExceptionIsThrown()
+//        {
+//            return TestExceptionAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Handle(),
+//                (f, r) => r.Should().Throw<Exception>().Where(ex => ex.Message.StartsWith("Received ReservationCreatedEvent with")));
+//        }
     }
 
     public class CohortApprovalRequestedByProviderEventHandlerTestsFixture : EventHandlerTestsFixture<
@@ -40,7 +62,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         public CommitmentView Commitment { get; set; }
         public CommitmentView ExpectedCommitment { get; set; }
         public long CohortId = 6789L;
-        public const long DecodedAccountLegalEntityId = 123L;
+        public const long AccountLegalEntityId = 123L;
 
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture() : base(false)
         {
@@ -56,7 +78,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             HashingService
                     //todo: real value
                 .Setup(m => m.DecodeValue(It.IsAny<string>()))
-                .Returns(DecodedAccountLegalEntityId);                    
+                .Returns(AccountLegalEntityId);                    
             
             Handler = new CohortApprovalRequestedByProviderEventHandler(
                 AccountDocumentService.Object,
@@ -69,6 +91,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             Message.CommitmentId = CohortId;
         }
         
+        public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
+        {
+            var organisation = SetUpAccountDocumentWithOrganisation(AccountLegalEntityId);
+            organisation.Cohorts = new List<Cohort>();
+            
+            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            
+            return this;
+        }
+
         public override Task Handle()
         {
             ExpectedCommitment = Commitment.Clone();
@@ -89,16 +121,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             Account expectedAccount;
             Cohort expectedCohort;
             
-            if (AccountDocument == null)
+            if (OriginalAccountDocument == null)
             {
                 expectedAccount = new Account
                 {
-                    Id = ExpectedMessage.AccountId,
+                    Id = OriginalMessage.AccountId,
                 };
 
                 var organisation = new Organisation
                 {
-                    AccountLegalEntityId = DecodedAccountLegalEntityId,
+                    AccountLegalEntityId = AccountLegalEntityId,
                     Name = ExpectedCommitment.LegalEntityName
                 };
                 expectedAccount.Organisations.Add(organisation);
@@ -120,17 +152,26 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             }
             else
             {
-                expectedAccount = AccountDocument.Account;
+                expectedAccount = OriginalAccountDocument.Account;
                 expectedCohort = expectedAccount
-                    .Organisations.Single(o => o.AccountLegalEntityId == DecodedAccountLegalEntityId)
+                    .Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId)
                     .Cohorts.Single(r => r.Id == CohortId.ToString());
             }
 
             //todo: id should be long
             expectedCohort.Id = CohortId.ToString();
             expectedCohort.Reference = ExpectedCommitment.Reference;
+
+            if (document?.Account == null)
+                return false;
             
-            return document?.Account != null && document.Account.IsEqual(expectedAccount);
+            var (accountIsAsExpected, differences) = document.Account.IsEqual(expectedAccount);
+            if (!accountIsAsExpected)
+            {
+                TestContext.WriteLine($"Saved account is not as expected: {differences}");
+            }
+            
+            return accountIsAsExpected;
         }
     }
 }

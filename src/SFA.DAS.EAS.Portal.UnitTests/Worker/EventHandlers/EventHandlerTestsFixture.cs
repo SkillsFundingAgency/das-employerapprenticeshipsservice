@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 {
@@ -17,13 +18,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         where TEventHandler : IHandleMessages<TEvent>
     {
         public TEvent Message { get; set; }
-        public TEvent ExpectedMessage { get; set; }
+        public TEvent OriginalMessage { get; set; }
         public IHandleMessages<TEvent> Handler { get; set; }
         public string MessageId { get; set; }
         public Mock<IMessageContextInitialisation> MessageContextInitialisation { get; set; }
         public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
         public Mock<IAccountDocumentService> AccountDocumentService { get; set; }
         public AccountDocument AccountDocument { get; set; }
+        public AccountDocument OriginalAccountDocument { get; set; }
         public Mock<ILogger<TEventHandler>> Logger { get; set; }
         public Fixture Fixture { get; set; }
         public const long AccountId = 456L;
@@ -62,9 +64,25 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             return this;
         }
         
+        protected Organisation SetUpAccountDocumentWithOrganisation(long accountLegalEntity)
+        {
+            AccountDocument = Fixture.Create<AccountDocument>();
+
+            AccountDocument.Account.Id = AccountId;
+            
+            AccountDocument.Deleted = null;
+            AccountDocument.Account.Deleted = null;
+            
+            var organisation = AccountDocument.Account.Organisations.RandomElement();
+            organisation.AccountLegalEntityId = accountLegalEntity;
+
+            return organisation;
+        }
+        
         public virtual Task Handle()
         {
-            ExpectedMessage = Message.Clone();
+            OriginalMessage = Message.Clone();
+            OriginalAccountDocument = AccountDocument.Clone();
             return Handler.Handle(Message, MessageHandlerContext.Object);
         }
 
@@ -72,16 +90,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         {
             return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, MessageContextInitialisation.Object, Logger.Object);
         }
-
-//        public EventHandlerTestsFixture<TEvent, TEventHandler, TCommand> VerifyCommandExecutedWithUnchangedEvent()
-//        {
-//            Command.Verify(c => c.Execute(
-//                It.Is<TEvent>(p => p.IsEqual(ExpectedMessage)), It.IsAny<CancellationToken>()),
-//                Times.Once);
-//
-//            //todo: want test to fluent chain using derived methods, covariance?
-//            return this;
-//        }
 
         public EventHandlerTestsFixture<TEvent, TEventHandler> VerifyMessageContextIsInitialised()
         {

@@ -19,9 +19,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests
         /// <summary>
         /// Are two test objects equal, without having to implement Equals, GetHashCode, operators
         /// </summary>
-        public static bool IsEqual(this object source, object expected)
+        public static (bool, string) IsEqual(this object source, object expected)
         {
-            return new CompareLogic().Compare(expected, source).AreEqual;
+            var comparisonResult = new CompareLogic().Compare(expected, source);
+            return (comparisonResult.AreEqual,comparisonResult.DifferencesString);
         }
         
         /// <summary>
