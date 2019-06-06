@@ -10,6 +10,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -27,19 +28,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
+        private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
         private readonly string _hashedAccountIdCookieName;
+        private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr, ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
+            IMediator mediatr,
+            ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
+            ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+            _returnUrlCookieStorageService = returnUrlCookieStorageService;
             _accountCookieStorage = accountCookieStorage;
 
             _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
@@ -154,14 +160,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("getGovernmentFunding")]
-        public ActionResult GetGovernmentFunding()
+        public ActionResult GetGovernmentFunding(string returnUrl = "")
         {
-            var model = new
+            _logger.Info($"Called into GetGovernmentFunding with returnUrl: '{returnUrl}'");
+            try
             {
-                HideHeaderSignInLink = true
-            };
+                _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
 
-            return View(model);
+                var model = new
+                {
+                    HideHeaderSignInLink = true
+                };
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Error processing getGovernmentFunding. ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
+                throw;
+            }
         }
 
         [HttpPost]
@@ -180,6 +197,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     };
 
                     var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+                    var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+                    _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+                    if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                        return Redirect(returnUrlCookie.Value);
+
                     return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
                 }
                 case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
@@ -262,7 +284,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             
             _employerAccountOrchestrator.DeleteCookieData();
+
+            var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
             _accountCookieStorage.Delete(_hashedAccountIdCookieName);
+
+            _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                return Redirect(returnUrlCookie.Value);
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }

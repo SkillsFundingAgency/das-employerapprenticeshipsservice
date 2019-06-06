@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 _userViewTestingService.Object,
                 logger.Object,
                 _flashMessage.Object,
-                Mock.Of<IMediator>(),
+                Mock.Of<IMediator>(),                       Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
                 Mock.Of<ICookieStorageService<HashedAccountIdModel>>())            
             {
                 ControllerContext = _controllerContext.Object,

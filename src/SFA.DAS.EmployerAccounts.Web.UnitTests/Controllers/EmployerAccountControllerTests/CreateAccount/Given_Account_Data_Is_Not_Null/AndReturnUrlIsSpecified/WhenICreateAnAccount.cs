@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -7,26 +8,32 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_Cookie_Data_Is_Null
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.CreateAccount.Given_New_Journey_Is_Enabled.Given_Return_Url_Cookie_Is_Present
 {
-    class WhenICreateAnAccount : ControllerTestBase
+    public class WhenICreateAnAccount : ControllerTestBase
     {
         private EmployerAccountController _employerAccountController;
         private Mock<EmployerAccountOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
+        private EmployerAccountData _accountData;
+        private OrchestratorResponse<EmployerAgreementViewModel> _response;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+        private Mock<ICookieStorageService<ReturnUrlModel>> _returnUrlCookieStorage;
+        private const string HashedAccountId = "ABC123";
+        private const string ExpectedReturnUrl = "test.com";
 
         [SetUp]
         public void Arrange()
@@ -35,15 +42,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();          
+            _owinWrapper = new Mock<IAuthenticationService>();
+            new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+            _returnUrlCookieStorage = new Mock<ICookieStorageService<ReturnUrlModel>>();
 
-            new EmployerAccountData
+            _accountData = new EmployerAccountData
             {
                 EmployerAccountOrganisationData = new EmployerAccountOrganisationData
-                { 
+                {
                     OrganisationName = "Test Corp",
                     OrganisationReferenceNumber = "1244454",
                     OrganisationRegisteredAddress = "1, Test Street",
@@ -53,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                     Sector = "Public"
                 },
                 EmployerAccountPayeRefData = new EmployerAccountPayeRefData
-                { 
+                {
                     PayeReference = "123/ABC",
                     EmployerRefName = "Scheme 1",
                     RefreshToken = "123",
@@ -63,8 +72,34 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             };
 
             _orchestrator.Setup(x => x.GetCookieData())
-                       .Returns((EmployerAccountData)null);
-       
+                       .Returns(_accountData);
+
+            _response = new OrchestratorResponse<EmployerAgreementViewModel>()
+            {
+                Data = new EmployerAgreementViewModel
+                {
+                    EmployerAgreement = new EmployerAgreementView
+                    {
+                        HashedAccountId = HashedAccountId
+                    }
+                },
+                Status = HttpStatusCode.OK
+            };
+
+            _orchestrator.Setup(x => x.CreateOrUpdateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
+                .ReturnsAsync(_response);
+
+            var mockAuthorization = new Mock<IAuthorizationService>();
+
+            mockAuthorization
+                .Setup(
+                    m =>
+                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
+                .Returns(true);
+
+            _returnUrlCookieStorage.Setup(x => x.Get("SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie"))
+                .Returns(new ReturnUrlModel {Value = ExpectedReturnUrl});
+
             _employerAccountController = new EmployerAccountController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
@@ -72,6 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 logger.Object,
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
+                _returnUrlCookieStorage.Object,
                 Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
             {
                 ControllerContext = _controllerContext.Object,
@@ -80,25 +116,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task Then_I_Should_Be_Redirected_To_Search_Organisatoin_Page()
+        public async Task ThenIShouldGoToTheReturnUrl()
         {
             //Act
-            var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
+            var result = await _employerAccountController.CreateAccount() as RedirectResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, result.RouteValues["Action"]);
-            Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, result.RouteValues["Controller"]);
-        }
-
-        [Test]
-        public async Task Then_Orchestrator_Create_Account_Is_Not_Called()
-        {
-            await _employerAccountController.CreateAccount();
-
-            _orchestrator
-                .Verify(
-                    m => m.CreateOrUpdateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>())
-                    , Times.Never);
+            Assert.AreEqual(ExpectedReturnUrl, result.Url);
         }
     }
 }
