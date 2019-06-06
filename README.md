@@ -26,7 +26,8 @@
     - .NET desktop development
 2. Install [SQL Server Management Studio]
 3. Install [Azure Storage Explorer]
-4. Administator Access
+4. Install [CosmosDB Emulator]
+5. Administator Access
 
 #### Setup
 
@@ -75,6 +76,12 @@ Steps:
 
 ![Select Local > ProjectsV13](/docs/img/db3.PNG)
 
+To publish the CosmosDB necessary for the homepage follow these steps:
+
+* Open the SFA.DAS.EAS.Portal.sln
+* Set SFA.DAS.EAS.Portal.Worker as the startup project
+* Build and run the solution to build the database
+
 ** TODO replace the publish with a post deploy step on building**
 
 ##### Add configuration to Azure Storage Emulator
@@ -98,6 +105,7 @@ Using `"Action": "*"` can also be used to disable all actions on the controller.
 [SFA.DAS.Activities]: https://github.com/SkillsFundingAgency/das-activities/blob/master/README.md
 [SQL Server Management Studio]: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms
 [Visual Studio]: https://www.visualstudio.com
+[CosmosDB Emulator]: https://aka.ms/cosmosdb-emulator
 
 ## See Also
 * [Integration Tests](docs/IntegrationTesting.md "Integration Testing")
