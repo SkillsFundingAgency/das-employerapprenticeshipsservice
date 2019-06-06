@@ -13,7 +13,6 @@ using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments;
 using SFA.DAS.HashingService;
 using SFA.DAS.Testing;
-using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments.CohortApprovalRequestedByProviderEventHandlerTestsFixture;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
 {
@@ -34,14 +33,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         }
         
         [Test]
-        [Ignore("In progress")]
         public Task Handle_WhenAccountDoesNotContainOrganisation_ThenAccountDocumentIsSavedWithNewCohort()
         {
-            return TestAsync(f => f.ArrangeEmptyAccountDocument(Fix.AccountId),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(f.OriginalMessage.AccountId),f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
         }
 
         [Test]
-        [Ignore("In progress")]
         public Task Handle_WhenAccountDoesContainOrganisationButNotCohort_ThenAccountDocumentIsSavedWithNewCohort()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(), f => f.VerifyAccountDocumentSavedWithCohort());
@@ -62,7 +59,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         public Mock<IHashingService> HashingService { get; set; }
         public CommitmentView Commitment { get; set; }
         public CommitmentView ExpectedCommitment { get; set; }
-        public const long AccountId = 123L;
         public const long AccountLegalEntityId = 456L;
         public const long CohortId = 789L;
 
@@ -95,10 +91,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(AccountId, AccountLegalEntityId);
+            var organisation = SetUpAccountDocumentWithOrganisation(OriginalMessage.AccountId, AccountLegalEntityId);
             organisation.Cohorts = new List<Cohort>();
             
-            AccountDocumentService.Setup(s => s.Get(AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.Get(OriginalMessage.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }
@@ -126,7 +122,17 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             var expectedCohort = GetExpectedCohort(expectedOrganisation);
 
             expectedCohort.Reference = ExpectedCommitment.Reference;
-            //todo: tidy up apprenticeships
+            expectedCohort.Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
+                new Apprenticeship
+                {
+                    Id = ea.Id,
+                    FirstName = ea.FirstName,
+                    LastName = ea.LastName,
+                    CourseName = ea.TrainingName,
+                    ProposedCost = ea.Cost,
+                    StartDate = ea.StartDate,
+                    EndDate = ea.EndDate
+                }).ToList();
 
             return AccountIsAsExpected(expectedAccount, document);
         }
@@ -141,18 +147,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
                 expectedCohort = new Cohort
                 {
                     //todo: id should be long
-                    Id = CohortId.ToString(),
-                    Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
-                        new Apprenticeship
-                        {
-                            Id = ea.Id,
-                            FirstName = ea.FirstName,
-                            LastName = ea.LastName,
-                            CourseName = ea.TrainingName,
-                            ProposedCost = ea.Cost,
-                            StartDate = ea.StartDate,
-                            EndDate = ea.EndDate
-                        }).ToList()
+                    Id = CohortId.ToString()
                 };
 
                 expectedOrganisation.Cohorts.Add(expectedCohort);
