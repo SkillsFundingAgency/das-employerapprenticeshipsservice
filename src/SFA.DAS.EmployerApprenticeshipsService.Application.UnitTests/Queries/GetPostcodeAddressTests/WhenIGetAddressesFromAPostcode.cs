@@ -6,14 +6,12 @@ using SFA.DAS.EAS.Application.Queries.GetPostcodeAddress;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Employer;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPostcodeAddressTests
 {
-    public class WhenIGetAddressesFromAPostcode : QueryBaseTest<GetPostcodeAddressHandler,GetPostcodeAddressRequest,GetPostcodeAddressResponse>
+    public class WhenIGetAddressesFromAPostcode : QueryBaseTest<GetPostcodeAddressHandler, GetPostcodeAddressRequest, GetPostcodeAddressResponse>
     {
         private Mock<IAddressLookupService> _addressLookupService;
-        private Mock<ILog> _logger;
         private ICollection<Address> _addresses;
 
         public override GetPostcodeAddressRequest Query { get; set; }
@@ -24,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPostcodeAddressTests
         [SetUp]
         public void Arrange()
         {
-            base.SetUp();
+            SetUp();
 
             _addresses = new List<Address>
             {
@@ -32,17 +30,15 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetPostcodeAddressTests
             };
 
             _addressLookupService = new Mock<IAddressLookupService>();
-            _logger = new Mock<ILog>();
-
+           
             _addressLookupService.Setup(x => x.GetAddressesByPostcode(It.IsAny<string>()))
-                                 .ReturnsAsync(_addresses);
+                .ReturnsAsync(_addresses);
 
             Query = new GetPostcodeAddressRequest {Postcode = "TE12 3ST"};
 
             RequestHandler = new GetPostcodeAddressHandler(
-                _addressLookupService.Object, 
-                RequestValidator.Object, 
-                _logger.Object);
+                _addressLookupService.Object,
+                RequestValidator.Object);
         }
         
         [Test]
