@@ -61,7 +61,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             await _expiredFundsRepository.Create(message.AccountId, expiredFundsList, now);
 
             //todo: do we publish the event if no fund expired? we could add a bool like the levy declared message
-            if (expiredFundsList.Any())
+            // once an account has an expired fund, we'll publish every run, even if no additional funds have expired
+            if (expiredFundsList.Any(ef => ef.Amount != 0m))
                 await PublishAccountFundsExpiredEvent(context, message.AccountId);
 
             _logger.Info($"Expired '{expiredFunds.Count}' month(s) of funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
