@@ -66,7 +66,10 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                     AccountHashedId = query.AccountHashedId,
                     CurrentLevyFunds = response.CurrentFunds,
                     ExpiringFunds = response.ExpiringFundsAmount,
-                    ExpiryDate = response.ExpiringFundsExpiryDate
+                    ExpiryDate = response.ExpiringFundsExpiryDate,
+                    FundingExpected = response.FundingExpected,
+                    AvailableFunds = response.FundingExpected - response.ProjectedSpend,
+                    ProjectedSpend = response.ProjectedSpend
                 }
             };
 
