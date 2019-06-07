@@ -4,6 +4,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Http;
+using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -66,6 +67,58 @@ namespace SFA.DAS.EmployerFinance.Services
                     case 500 : _logger.Error(ex, $"Forecast API reported internal Server error for account ID: {accountId}");
                         break;
                     case 503 : _logger.Error(ex, "Forecast API is unavailable");
+                        break;
+
+                    default: throw;
+                }
+
+                return null;
+            }
+        }
+
+        public async Task<ProjectedCalculation> GetProjectedCalculations(long accountId)
+        {
+            _logger.Info($"Getting projected calculations for account ID: {accountId}");
+
+            var expiredFundsUrl = $"/api/accounts/{accountId}/AccountProjection/projected-summary";
+
+            var accessToken = await _azureAdAuthService.GetAuthenticationResult(
+                _apiClientConfiguration.ClientId,
+                _apiClientConfiguration.ClientSecret,
+                _apiClientConfiguration.IdentifierUri,
+                _apiClientConfiguration.Tenant);
+
+            try
+            {
+                var accountExpiredFunds =
+                    await _httpClient.Get<ProjectedCalculation>(accessToken, expiredFundsUrl);
+
+                return accountExpiredFunds;
+            }
+            catch (ResourceNotFoundException ex)
+            {
+                _logger.Error(ex, $"Could not find projected calculations for account ID: {accountId} when calling forecast API");
+
+                return null;
+            }
+            catch (HttpException ex)
+            {
+                switch (ex.StatusCode)
+                {
+                    case 400:
+                        _logger.Error(ex, $"Bad request sent to forecast API for account ID: {accountId}");
+                        break;
+                    case 408:
+                        _logger.Error(ex, $"Request sent to forecast API for account ID: {accountId} timed out");
+                        break;
+                    case 429:
+                        _logger.Error(ex, $"To many requests sent to forecast API for account ID: {accountId}");
+                        break;
+                    case 500:
+                        _logger.Error(ex, $"Forecast API reported internal Server error for account ID: {accountId}");
+                        break;
+                    case 503:
+                        _logger.Error(ex, "Forecast API is unavailable");
                         break;
 
                     default: throw;
