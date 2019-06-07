@@ -140,7 +140,7 @@
       <HintPath>..\packages\RestSharp.105.2.3\lib\net46\RestSharp.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.ActiveDirectory, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.ActiveDirectory.1.0.2\lib\netstandard2.0\SFA.DAS.ActiveDirectory.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.ActiveDirectory.1.0.3\lib\netstandard2.0\SFA.DAS.ActiveDirectory.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Apprenticeships.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Apprenticeships.Api.Types.0.11.98\lib\net462\SFA.DAS.Apprenticeships.Api.Types.dll</HintPath>
