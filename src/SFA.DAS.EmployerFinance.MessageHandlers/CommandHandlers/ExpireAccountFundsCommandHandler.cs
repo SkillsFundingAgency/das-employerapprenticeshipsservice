@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
@@ -6,6 +8,7 @@ using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Types.Models;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
@@ -54,9 +57,23 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 _configuration.FundsExpiryPeriod,
                 now);
 
-            await _expiredFundsRepository.Create(message.AccountId, expiredFunds.ToExpiredFundsList(), now);
+            var expiredFundsList = expiredFunds.ToExpiredFundsList();
+            await _expiredFundsRepository.Create(message.AccountId, expiredFundsList, now);
+
+            //todo: do we publish the event if no fund expired? we could add a bool like the levy declared message
+            if (expiredFundsList.Any())
+                await PublishAccountFundsExpiredEvent(context, message.AccountId);
 
             _logger.Info($"Expired '{expiredFunds.Count}' month(s) of funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
+        }
+
+        private async Task PublishAccountFundsExpiredEvent(IMessageHandlerContext context, long accountId)
+        {
+            await context.Publish(new AccountFundsExpired
+            {
+                AccountId = accountId,
+                Created = DateTime.UtcNow
+            });
         }
     }
 }
