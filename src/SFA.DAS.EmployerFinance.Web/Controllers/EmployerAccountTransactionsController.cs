@@ -67,9 +67,9 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
                     CurrentLevyFunds = response.CurrentFunds,
                     ExpiringFunds = response.ExpiringFundsAmount,
                     ExpiryDate = response.ExpiringFundsExpiryDate,
-                    FundingExpected = response.FundingExpected,
-                    AvailableFunds = response.FundingExpected - response.ProjectedSpend,
-                    ProjectedSpend = response.ProjectedSpend
+                    FundingExpected = response.FundsIn,
+                    AvailableFunds = response.FundsIn - response.FundsOut,
+                    ProjectedSpend = response.FundsOut
                 }
             };
 

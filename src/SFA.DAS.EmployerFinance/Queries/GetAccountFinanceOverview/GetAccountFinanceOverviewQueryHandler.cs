@@ -63,11 +63,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             return response;
         }
 
-        private async Task<dynamic> GetFundingProjection(long accountId)
-        {
-            return await _dasForecastingService.GetProjectedFundingSummary(accountId);
-        }
-
         private async Task<ExpiringFunds> GetExpiringFunds(long accountId)
         {
             _logger.Info($"Getting expiring funds for account ID: {accountId}");
