@@ -53,6 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Mock.Of<ILog>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>(),
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
                 _mockAccountCookieStorage.Object)
             {
                 ControllerContext = _controllerContext.Object,

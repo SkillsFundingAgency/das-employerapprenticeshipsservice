@@ -39,7 +39,7 @@
         public const string GatewayViewName = "Gateway";
         public const string GateWayResponseActionName = "GateWayResponse";
         public const string GetGatewayActionName = "GetGateway";
-        public const string GetGovernmentFundingActionName = "GetGovernmentFunding";
+        public const string GetApprenticeshipFundingActionName = "GetApprenticeshipFunding";
         public const string HomeControllerName = "Home";
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";
