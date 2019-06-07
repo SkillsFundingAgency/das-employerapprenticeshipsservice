@@ -43,6 +43,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             return RunAsync(f => f.ArrangeNoExpiringFunds(), f => f.Handle(),
                 f => f.VerifyAccountFundsExpiredEventNotPublished());
         }
+
+        [Test]
+        //todo: better names
+        public Task Handle_WhenHandlingExpireAccountFundsCommandAndNoAccountExpiredFundsAreReturned_ThenShouldNotPublishAccountFundsExpiredEvent()
+        {
+            return RunAsync(f => f.ArrangeNoExpiringFundsReturned(), f => f.Handle(),
+                f => f.VerifyAccountFundsExpiredEventNotPublished());
+        }
     }
 
     public class ExpireAccountFundsCommandHandlerTestsFixture
@@ -138,6 +146,15 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 { new CalendarPeriod(2018, 03), 0m },
                 { new CalendarPeriod(2018, 04), 0m }
             });
+        }
+
+        public void ArrangeNoExpiringFundsReturned()
+        {
+            MockExpiredFunds.Setup(x => x.GetExpiringFunds(
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fi => AreFundsInEqual(FundsIn, fi)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fo => AreFundsOutEqual(FundsOut, fo)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(ex => AreExpiredFundsEqual(ExistingExpiredFunds, ex)),
+                FundsExpiryPeriod)).Returns(new Dictionary<CalendarPeriod, decimal>());
         }
 
         public Task Handle()
