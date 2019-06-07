@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetGovernmentFunding.GivenReturnUrlIsSpecified
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.GetApprenticeshipFunding.GivenReturnUrlIsSpecified
 { 
     class WhenISkipRegistration : ControllerTestBase
     {
@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         public async Task ThenIShouldGoToTheReturnUrl()
         {
             //Act
-            var result = await _employerAccountController.GetGovernmentFunding(1) as RedirectResult;
+            var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectResult;
 
             //Assert
             Assert.AreEqual(ExpectedReturnUrl, result.Url);
