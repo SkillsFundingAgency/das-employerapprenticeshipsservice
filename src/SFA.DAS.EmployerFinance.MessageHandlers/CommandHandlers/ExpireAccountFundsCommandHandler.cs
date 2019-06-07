@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
         private async Task PublishAccountFundsExpiredEvent(IMessageHandlerContext context, long accountId)
         {
-            await context.Publish(new AccountFundsExpired
+            await context.Publish(new AccountFundsExpiredEvent
             {
                 AccountId = accountId,
                 Created = DateTime.UtcNow

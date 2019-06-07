@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class AccountFundsExpired : Event
+    public class AccountFundsExpiredEvent : Event
     {
         public long AccountId { get; set; }
         public short PeriodMonth { get; set; }

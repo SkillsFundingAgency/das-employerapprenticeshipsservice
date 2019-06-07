@@ -29,6 +29,18 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                 f => f.MockExpiredFundsRepository.Verify(x =>
                     x.Create(f.ExpectedAccountId, It.Is<IEnumerable<ExpiredFund>>(ex => f.AreExpiredFundsEqual(ex, f.ExpiredFunds)), f.Now), Times.Once));
         }
+
+        [Test, Ignore("WIP")]
+        public Task Handle_WhenHandlingExpireAccountFundsCommandAndAccountFundsAreExpired_ThenShouldPublishAccountFundsExpiredEvent()
+        {
+            return RunAsync(f => f.Handle(), f => { });
+        }
+
+        [Test, Ignore("WIP")]
+        public Task Handle_WhenHandlingExpireAccountFundsCommandAndNoAccountFundsAreExpired_ThenShouldNotPublishAccountFundsExpiredEvent()
+        {
+            return RunAsync(f => f.Handle(), f => { });
+        }
     }
 
     public class ExpireAccountFundsCommandHandlerTestsFixture
