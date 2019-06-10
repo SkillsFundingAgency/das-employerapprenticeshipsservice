@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
@@ -17,6 +18,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -256,6 +258,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
+                var existingUserInformation =
+                    await Mediator.SendAsync(new GetUserByRefQuery {UserRef = viewModel.UserId});
+
+                if(existingUserInformation.User.Memberships.Any())
+                    return new OrchestratorResponse<EmployerAccountViewModel>
+                    {
+                        Data = new EmployerAccountViewModel
+                        {
+                            HashedId = existingUserInformation.User.Memberships.First().Account.HashedId
+                        },
+                        Status = HttpStatusCode.OK
+                    };
+
                 var result = await Mediator.SendAsync(new CreateUserAccountCommand
                 {
                     ExternalUserId = viewModel.UserId,
