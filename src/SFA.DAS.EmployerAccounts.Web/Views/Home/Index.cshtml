@@ -52,7 +52,7 @@
                             <td class="link-right">
                                 <a aria-label="View account homepage for @account.Name"
                                    title="View account homepage for @account.Name"
-                                   href="@Url.Action("Index", "EmployerTeam", new {HashedAccountId = account.HashedId})">
+                                   href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})">
                                     Open<span class="vh"> @account.Name account homepage</span>
                                 </a>
                             </td>
