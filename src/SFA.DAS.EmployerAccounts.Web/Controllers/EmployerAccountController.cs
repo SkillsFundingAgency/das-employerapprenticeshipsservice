@@ -196,7 +196,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         OrganisationName = "MY ACCOUNT"
                     };
 
-                    var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+                    var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
                     var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
                     _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
                     if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
