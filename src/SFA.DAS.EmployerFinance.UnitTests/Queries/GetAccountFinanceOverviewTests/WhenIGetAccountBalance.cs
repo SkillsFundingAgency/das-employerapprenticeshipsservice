@@ -9,6 +9,7 @@ using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Services;
+using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
@@ -97,6 +98,17 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             var response = await _handler.Handle(_query);
 
             response.FundsOut.Should().Be(ExpectedFundsOut);
+        }
+
+        [Test]
+        public async Task ThenZeroFundsShouldBeReturnedIfNull()
+        {
+            _forecastingService.Setup(s => s.GetProjectedCalculations(ExpectedAccountId)).ReturnsAsync(new ProjectedCalculation());
+
+            var response = await _handler.Handle(_query);
+
+            response.FundsIn.Should().Be(0);
+            response.FundsOut.Should().Be(0);
         }
 
         [Test]
