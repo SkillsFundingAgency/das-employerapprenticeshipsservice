@@ -18,6 +18,7 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Web.Models;
 
@@ -258,15 +259,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
-                var existingUserInformation =
-                    await Mediator.SendAsync(new GetUserByRefQuery {UserRef = viewModel.UserId});
+                var existingUserAccounts =
+                    await Mediator.SendAsync(new GetUserAccountsQuery {UserRef = viewModel.UserId});
 
-                if(existingUserInformation.User.Memberships.Any())
+                if(existingUserAccounts?.Accounts?.AccountList?.Any() == true)
                     return new OrchestratorResponse<EmployerAccountViewModel>
                     {
                         Data = new EmployerAccountViewModel
                         {
-                            HashedId = existingUserInformation.User.Memberships.First().Account.HashedId
+                            HashedId = existingUserAccounts.Accounts.AccountList.First().HashedId
                         },
                         Status = HttpStatusCode.OK
                     };

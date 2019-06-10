@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -38,10 +39,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 _cookieService.Object, 
                 _configuration);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>()))
-                .ReturnsAsync(new GetUserByRefResponse()
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountsQuery>()))
+                .ReturnsAsync(new GetUserAccountsQueryResponse()
                 {
-                    User = new User()
+                    Accounts = new Accounts<Account>()
                 });
 
 
