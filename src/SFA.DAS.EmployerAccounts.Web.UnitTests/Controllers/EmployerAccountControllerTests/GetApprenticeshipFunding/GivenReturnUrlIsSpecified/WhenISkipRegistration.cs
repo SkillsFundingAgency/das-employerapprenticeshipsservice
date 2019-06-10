@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             };
 
             _orchestrator.Setup(x =>
-                    x.CreateUserAccount(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
+                    x.CreateMinimalUserAccountForSkipJourney(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
 
             _returnUrlCookieStorage.Setup(x => x.Get("SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie"))
