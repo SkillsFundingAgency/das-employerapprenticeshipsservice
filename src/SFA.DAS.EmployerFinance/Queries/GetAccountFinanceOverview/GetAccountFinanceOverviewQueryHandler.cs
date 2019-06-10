@@ -49,8 +49,8 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             {
                 AccountId = query.AccountId.Value,
                 CurrentFunds = currentBalance,
-                FundsIn = projectedCalculations.FundsIn,
-                FundsOut = projectedCalculations.FundsOut
+                FundsIn = projectedCalculations?.FundsIn ?? 0,
+                FundsOut = projectedCalculations?.FundsOut ?? 0
             };
 
             var earliestFundsToExpire = await earliestFundsToExpireTask;
