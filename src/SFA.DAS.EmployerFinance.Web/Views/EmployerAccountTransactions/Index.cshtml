@@ -27,22 +27,22 @@
             <div class="data data--current">
                 <dl class="transfer-funds">
                     <dt>
-                        Current funds
+                        Funds available to spend for the next 12 months
                     </dt>
                     @{
-                        var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
-                        var balanceClass = string.Empty;
+                        var availabledFunds = Model.Data.AvailableFunds.ToString("C0", culture);
+                        var availabledFundsClass = string.Empty;
 
-                        if (balance.Length > 8)
+                        if (availabledFunds.Length > 8)
                         {
-                            balanceClass = "long";
+                            availabledFundsClass = "long";
                         }
-                        if (balance.Length > 10)
+                        if (availabledFunds.Length > 10)
                         {
-                            balanceClass = "longer";
+                            availabledFundsClass = "longer";
                         }
                     }
-                    <dd class="@balanceClass">@balance</dd>
+                    <dd class="@availabledFundsClass">@availabledFunds</dd>
                 </dl>
             </div>
             <div class="data data--current">
@@ -87,27 +87,29 @@
                     <dd class="@projectedSpendClass">@projectedSpend</dd>
                 </dl>
             </div>
+
             <div class="data data--current">
                 <dl class="transfer-funds">
                     <dt>
-                        Funds available to spend for the next 12 months
+                        Current funds
                     </dt>
                     @{
-                        var availabledFunds = Model.Data.AvailableFunds.ToString("C0", culture);
-                        var availabledFundsClass = string.Empty;
+                        var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+                        var balanceClass = string.Empty;
 
-                        if (availabledFunds.Length > 8)
+                        if (balance.Length > 8)
                         {
-                            availabledFundsClass = "long";
+                            balanceClass = "long";
                         }
-                        if (availabledFunds.Length > 10)
+                        if (balance.Length > 10)
                         {
-                            availabledFundsClass = "longer";
+                            balanceClass = "longer";
                         }
                     }
-                    <dd class="@availabledFundsClass">@availabledFunds</dd>
+                    <dd class="@balanceClass">@balance</dd>
                 </dl>
             </div>
+
             @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiringFunds > 0 && Model.Data.ExpiryDate.HasValue)
             {
                 <div class="data data--long data--expired">
