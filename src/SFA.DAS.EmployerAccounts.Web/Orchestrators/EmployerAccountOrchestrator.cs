@@ -252,7 +252,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAccountViewModel>> CreateUserAccount(CreateUserAccountViewModel viewModel, HttpContextBase context)
+        public virtual async Task<OrchestratorResponse<EmployerAccountViewModel>> CreateMinimalUserAccountForSkipJourney(CreateUserAccountViewModel viewModel, HttpContextBase context)
         {
             try
             {

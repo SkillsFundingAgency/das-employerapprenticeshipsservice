@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var model = ArrangeModel();
 
             //Act
-            await _employerAccountOrchestrator.CreateUserAccount(model, It.IsAny<HttpContextBase>());
+            await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(model, It.IsAny<HttpContextBase>());
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateUserAccountCommand>(
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
 
             //Act
             var response =
-                await _employerAccountOrchestrator.CreateUserAccount(new CreateUserAccountViewModel(),
+                await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(new CreateUserAccountViewModel(),
                     It.IsAny<HttpContextBase>());
 
             //Assert
