@@ -74,10 +74,7 @@ namespace SFA.DAS.EmployerFinance.Services
 
             try
             {
-                var accountExpiredFunds =
-                    await _httpClient.Get<T>(accessToken, endpointUrl);
-
-                return accountExpiredFunds;
+                return await _httpClient.Get<T>(accessToken, endpointUrl);
             }
             catch (ResourceNotFoundException ex)
             {
