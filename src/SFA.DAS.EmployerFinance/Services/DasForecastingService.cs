@@ -5,6 +5,7 @@ using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Http;
 using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
+using System;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -33,55 +34,38 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             _logger.Info($"Getting expiring funds for account ID: {accountId}");
 
-            var expiredFundsUrl = $"/api/accounts/{accountId}/AccountProjection/expiring-funds";
-
-            var accessToken = await _azureAdAuthService.GetAuthenticationResult(
-                _apiClientConfiguration.ClientId,
-                _apiClientConfiguration.ClientSecret,
-                _apiClientConfiguration.IdentifierUri,
-                _apiClientConfiguration.Tenant);
-
-            try
-            {
-                var accountExpiredFunds =
-                    await _httpClient.Get<ExpiringAccountFunds>(accessToken, expiredFundsUrl);
-
-                return accountExpiredFunds;
-            }
-            catch (ResourceNotFoundException ex)
-            {
-                _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
-                
-                return null;
-            }
-            catch (HttpException ex)
-            {
-                switch (ex.StatusCode)
+            return await CallAuthService<ExpiringAccountFunds>(
+                $"/api/accounts/{accountId}/AccountProjection/expiring-funds",
+                accountId,
+                (ex) =>
                 {
-                    case 400 : _logger.Error(ex, $"Bad request sent to forecast API for account ID: {accountId}");
-                        break;
-                    case 408 : _logger.Error(ex, $"Request sent to forecast API for account ID: {accountId} timed out");
-                        break;
-                    case 429 : _logger.Error(ex, $"To many requests sent to forecast API for account ID: {accountId}");
-                        break;
-                    case 500 : _logger.Error(ex, $"Forecast API reported internal Server error for account ID: {accountId}");
-                        break;
-                    case 503 : _logger.Error(ex, "Forecast API is unavailable");
-                        break;
-
-                    default: throw;
+                    if (ex is ResourceNotFoundException)
+                    {
+                        _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
+                    }
                 }
-
-                return null;
-            }
+                );
         }
 
         public async Task<ProjectedCalculation> GetProjectedCalculations(long accountId)
         {
             _logger.Info($"Getting projected calculations for account ID: {accountId}");
 
-            var expiredFundsUrl = $"/api/accounts/{accountId}/AccountProjection/projected-summary";
+            return await CallAuthService<ProjectedCalculation>(
+                $"/api/accounts/{accountId}/AccountProjection/projected-summary",
+                accountId,
+                (ex) =>
+                {
+                    if (ex is ResourceNotFoundException)
+                    {
+                        _logger.Error(ex, $"Could not find projected calculations for account ID: {accountId} when calling forecast API");
+                    }
+                }
+                );
+        }
 
+        private async Task<T> CallAuthService<T>(string endpointUrl, long accountId, Action<Exception> OnError = null)
+        {
             var accessToken = await _azureAdAuthService.GetAuthenticationResult(
                 _apiClientConfiguration.ClientId,
                 _apiClientConfiguration.ClientSecret,
@@ -91,18 +75,20 @@ namespace SFA.DAS.EmployerFinance.Services
             try
             {
                 var accountExpiredFunds =
-                    await _httpClient.Get<ProjectedCalculation>(accessToken, expiredFundsUrl);
+                    await _httpClient.Get<T>(accessToken, endpointUrl);
 
                 return accountExpiredFunds;
             }
             catch (ResourceNotFoundException ex)
             {
-                _logger.Error(ex, $"Could not find projected calculations for account ID: {accountId} when calling forecast API");
-
-                return null;
+                OnError?.Invoke(ex);
+                _logger.Error(ex, $"ResourceNotFoundException returned from forecast API for account ID: {accountId}");                
+                return default(T);
             }
             catch (HttpException ex)
             {
+                OnError?.Invoke(ex);
+
                 switch (ex.StatusCode)
                 {
                     case 400:
@@ -124,7 +110,7 @@ namespace SFA.DAS.EmployerFinance.Services
                     default: throw;
                 }
 
-                return null;
+                return default(T);
             }
         }
     }
