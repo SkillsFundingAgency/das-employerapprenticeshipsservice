@@ -96,14 +96,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }     
      
         [HttpGet]
-        [Route("setupAccount")]
-        public async Task<ActionResult> SetupAccount()
-        {        
-            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            return View(accounts);
-        }
-  
-        [HttpGet]
         [Route("register")]
         public ActionResult RegisterUser()
         {
