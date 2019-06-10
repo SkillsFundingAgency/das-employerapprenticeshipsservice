@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             _logger.Info($"Getting projected calculations for account ID: {accountId}");
 
-            var expiredFundsUrl = $"/api/accounts/{accountId}/AccountProjection/projected-summary";
+            var accountProjectionUrl = $"/api/accounts/{accountId}/AccountProjection/projected-summary";
 
             var accessToken = await _azureAdAuthService.GetAuthenticationResult(
                 _apiClientConfiguration.ClientId,
@@ -90,10 +90,10 @@ namespace SFA.DAS.EmployerFinance.Services
 
             try
             {
-                var accountExpiredFunds =
-                    await _httpClient.Get<ProjectedCalculation>(accessToken, expiredFundsUrl);
+                var accountProjectionFunds =
+                    await _httpClient.Get<ProjectedCalculation>(accessToken, accountProjectionUrl);
 
-                return accountExpiredFunds;
+                return accountProjectionFunds;
             }
             catch (ResourceNotFoundException ex)
             {
