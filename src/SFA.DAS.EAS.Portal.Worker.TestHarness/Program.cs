@@ -24,6 +24,9 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                 var publishUpdatedPermissionsEvent = host.Services.GetService<PublishAddedAccountProviderEvent>();
                 await publishUpdatedPermissionsEvent.Run();
 
+                var publishCohortApprovedByEmployerEvent = host.Services.GetService<PublishCohortApprovedByEmployerEvents>();
+                await publishCohortApprovedByEmployerEvent.Run();
+
                 await host.StopAsync();
             }
         }
@@ -38,6 +41,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness
                     s.AddTransient<PublishReserveFundingAddedEvents>();
                     s.AddTransient<PublishCohortApprovalRequestedByProviderEvents>();
                     s.AddTransient<PublishAddedAccountProviderEvent>();
+                    s.AddTransient<PublishCohortApprovedByEmployerEvents>();
                 });
     }
 }

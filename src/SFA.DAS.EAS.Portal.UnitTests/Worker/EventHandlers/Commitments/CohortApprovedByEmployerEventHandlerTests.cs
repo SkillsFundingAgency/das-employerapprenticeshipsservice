@@ -30,7 +30,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         }
 
         [Test]
-        [Ignore("In progress")]
         public Task Handle_WhenAccountDoesContainOrganisationAndCohort_ThenAccountDocumentIsSavedWithUpdatedCohort()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsCohort(), f => f.Handle(),
@@ -41,8 +40,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
     public class CohortApprovedByEmployerEventHandlerTestsFixture : EventHandlerTestsFixture<
         CohortApprovedByEmployer, CohortApprovedByEmployerEventHandler>
     {
-        public Mock<IProviderCommitmentsApi> ProviderCommitmentsApi { get; set; }
-        public Mock<IHashingService> HashingService { get; set; }
         public CommitmentView Commitment { get; set; }
         public CommitmentView ExpectedCommitment { get; set; }
         public const long AccountLegalEntityId = 456L;
@@ -91,6 +88,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             var expectedCohort = GetExpectedCohort(expectedOrganisation);
 
             expectedCohort.Reference = ExpectedCommitment.Reference;
+            expectedCohort.IsApproved = true;
             expectedCohort.Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
                 new Apprenticeship
                 {
