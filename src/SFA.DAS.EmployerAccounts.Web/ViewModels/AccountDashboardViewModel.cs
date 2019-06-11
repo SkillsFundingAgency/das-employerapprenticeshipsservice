@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Portal.Client.Models;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EAS.Portal.Client.Models.Concrete;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class AccountDashboardViewModel
     {
-        public Account Account { get; set; }
+        public EmployerAccounts.Models.Account.Account Account { get; set; }
         public string EmployerAccountType { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedUserId { get; set; }
@@ -26,9 +26,13 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool AgreementsToSign { get; set; }
         public int SignedAgreementCount { get; set; }
         public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
-        public AccountDto AccountViewModel { get; set; }
+        public bool ApprenticeshipAdded { get; set; }
+        public bool ShowSearchBar { get; set; }
+        public bool ShowMostActiveLinks { get; set; }
+        public EAS.Portal.Client.Types.Account AccountViewModel { get; set; }
         public Guid? RecentlyAddedReservationId { get; set; }
-        public IReservedFundingDto ReservedFundingToShow { get; set; }
-        public string ReservedFundingToShowLegalEntityName { get; set; }
+        public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.SelectMany(org => org.Reservations).FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.SelectMany(org => org.Reservations)?.LastOrDefault();
+        public string ReservedFundingOrgName => AccountViewModel?.Organisations?.Where(org => org.Reservations.Contains(ReservedFundingToShow)).Select(org => org.Name).FirstOrDefault();
+        public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault().Reservations?.Count > 0;
     }
 }   

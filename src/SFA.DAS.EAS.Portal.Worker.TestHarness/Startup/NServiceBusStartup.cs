@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Portal.Startup;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
+using SFA.DAS.EAS.Portal.Worker.NServiceBus;
 
 namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Startup
 {
@@ -29,6 +30,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Startup
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
                         .UseMessageConventions()
+                        .UseDasMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
                         .UseSendOnly();

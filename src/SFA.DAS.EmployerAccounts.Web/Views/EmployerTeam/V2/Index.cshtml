@@ -12,6 +12,11 @@
     </div>
 </div>
 
+@if (Model.Data.ShowSearchBar)
+{
+    @Html.Action("SearchBar");
+}
+
 <main class="govuk-main-wrapper das-section--dashboard" id="main-content" role="main">
     <div class="govuk-width-container">
         <div class="das-panels">
@@ -27,3 +32,7 @@
     </div>
 </main>
 
+@if (Model.Data.ShowMostActiveLinks)
+{
+    @Html.Action("MostActiveLinks",new { model = Model.Data });
+}
