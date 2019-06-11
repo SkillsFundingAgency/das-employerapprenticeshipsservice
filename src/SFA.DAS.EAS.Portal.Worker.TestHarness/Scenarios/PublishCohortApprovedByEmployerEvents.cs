@@ -28,12 +28,5 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
             Console.WriteLine($"Published {nameof(CohortApprovedByEmployer)}. ProviderId: 456, CommitmentId = 789");
             
         }
-
-        public class CohortApprovedByEmployer : IEvent
-        {
-            public long AccountId { get; set; }
-            public int ProviderId { get; set; }
-            public int CommitmentId { get; set; }
-        }
     }
 }

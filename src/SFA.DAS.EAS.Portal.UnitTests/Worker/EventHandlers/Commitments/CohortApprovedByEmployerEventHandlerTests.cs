@@ -7,6 +7,7 @@ using SFA.DAS.Testing;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.CommitmentsV2.Messages.Events;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
 {
