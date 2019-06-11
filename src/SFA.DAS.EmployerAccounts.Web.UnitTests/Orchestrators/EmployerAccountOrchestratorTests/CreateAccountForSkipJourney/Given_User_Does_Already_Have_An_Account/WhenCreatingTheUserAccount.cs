@@ -16,7 +16,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests.CreateMinimalUserAccountForSkipJourney.Given_User_Does_Already_Have_An_Account
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOrchestratorTests.CreateAccountForSkipJourney.Given_User_Does_Already_Have_An_Account
 {
     public class WhenCreatingTheUserAccount
     {
