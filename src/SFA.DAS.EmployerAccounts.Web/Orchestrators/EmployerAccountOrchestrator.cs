@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
@@ -17,6 +18,8 @@ using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -252,10 +255,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAccountViewModel>> CreateUserAccount(CreateUserAccountViewModel viewModel, HttpContextBase context)
+        public virtual async Task<OrchestratorResponse<EmployerAccountViewModel>> CreateMinimalUserAccountForSkipJourney(CreateUserAccountViewModel viewModel, HttpContextBase context)
         {
             try
             {
+                var existingUserAccounts =
+                    await Mediator.SendAsync(new GetUserAccountsQuery {UserRef = viewModel.UserId});
+
+                if(existingUserAccounts?.Accounts?.AccountList?.Any() == true)
+                    return new OrchestratorResponse<EmployerAccountViewModel>
+                    {
+                        Data = new EmployerAccountViewModel
+                        {
+                            HashedId = existingUserAccounts.Accounts.AccountList.First().HashedId
+                        },
+                        Status = HttpStatusCode.OK
+                    };
+
                 var result = await Mediator.SendAsync(new CreateUserAccountCommand
                 {
                     ExternalUserId = viewModel.UserId,
