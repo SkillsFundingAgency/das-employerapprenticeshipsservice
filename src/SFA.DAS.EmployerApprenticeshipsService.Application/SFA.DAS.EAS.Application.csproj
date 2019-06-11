@@ -654,10 +654,6 @@
       <Project>{0E46510C-0D06-4B63-8E17-B9037DB7C7ED}</Project>
       <Name>SFA.DAS.EmployerAccounts.Events</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
-      <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
-      <Name>SFA.DAS.EmployerAccounts.Messages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
       <Name>SFA.DAS.EmployerAccounts</Name>
