@@ -39,8 +39,9 @@
         public const string GatewayViewName = "Gateway";
         public const string GateWayResponseActionName = "GateWayResponse";
         public const string GetGatewayActionName = "GetGateway";
-        public const string GetGovernmentFundingActionName = "GetGovernmentFunding";
+        public const string GetApprenticeshipFundingActionName = "GetApprenticeshipFunding";
         public const string HomeControllerName = "Home";
+        public const string HelpActionName = "Help";
         public const string IndexActionName = "Index";
         public const string InformActionName = "Inform";
         public const string InvitationControllerName = "Invitation";
@@ -61,8 +62,10 @@
         public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
         public const string PayeErrorActionName = "PayeError";
         public const string ProviderPaymentSummaryViewName = "ProviderPaymentSummary";
+        public const string PrivacyActionName = "Privacy";
         public const string PdfContentTypeName = "application/pdf";
         public const string RegisterUserActionName = "RegisterUser";
+        public const string RenameAccountActionName = "RenameAccount";
         public const string RemoveViewName = "Remove";
         public const string SearchOrganisationControllerName = "SearchOrganisation";
         public const string SearchForOrganisationActionName = "SearchForOrganisation";
@@ -73,9 +76,11 @@
         public const string ServiceStartPageViewName = "ServiceStartPage";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
+        public const string SignOutActionName = "SignOut";
         public const string SummaryActionName = "Summary";
+        public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
-        public const string ViewTeamViewName = "ViewTeam";    
+        public const string ViewTeamViewName = "ViewTeam";
         public const string TransfersControllerName = "Transfers";
         public const string TransferDetailsViewName = "TransferDetails";
         public const string UserRefClaimKeyName = "sub";

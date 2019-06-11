@@ -136,7 +136,7 @@ FROM @levyDecByMonth
 --- Process the levy decs into transaction lines
 ---
 
-EXEC employer_financial.processdeclarationstransactions @accountId, @payeScheme
+EXEC employer_financial.processdeclarationstransactions @accountId, @payeScheme, @toDate, 24
 GO
 
 COMMIT TRANSACTION CreateLevy

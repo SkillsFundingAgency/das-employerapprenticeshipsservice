@@ -23,21 +23,23 @@ using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
+ using SFA.DAS.EmployerAccounts.Web.Models;
 
-[assembly: OwinStartup(typeof(Startup))]
+ [assembly: OwinStartup(typeof(Startup))]
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
     public class Startup
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+        private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         public void Configuration(IAppBuilder app)
         {
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>();
-            var cookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
+            var accountDataCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
+            var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
 
@@ -67,7 +69,12 @@ namespace SFA.DAS.EmployerAccounts.Web
                 TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
                 AuthenticatedCallback = identity =>
                 {
-                    PostAuthentiationAction(identity, authenticationOrchestrator, constants, cookieStorageService);
+                    PostAuthentiationAction(
+                        identity,
+                        authenticationOrchestrator,
+                        constants,
+                        accountDataCookieStorageService,
+                        hashedAccountIdCookieStorageService);
                 }
             });
 
@@ -112,7 +119,10 @@ namespace SFA.DAS.EmployerAccounts.Web
             };
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants, ICookieStorageService<EmployerAccountData> cookieStorageService)
+        private static void PostAuthentiationAction(ClaimsIdentity identity,
+            AuthenticationOrchestrator authenticationOrchestrator, Constants constants,
+            ICookieStorageService<EmployerAccountData> accountDataCookieStorageService,
+            ICookieStorageService<HashedAccountIdModel> hashedAccountIdCookieStorageService)
         {
             Logger.Info("Retrieving claims from OIDC server.");
 
@@ -128,7 +138,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
 
-            Task.Run(() => cookieStorageService.Delete(CookieName)).Wait();
+            Task.Run(() => accountDataCookieStorageService.Delete(AccountDataCookieName)).Wait();
+            Task.Run(() => hashedAccountIdCookieStorageService.Delete(typeof(HashedAccountIdModel).FullName)).Wait();
             Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
         }
     }

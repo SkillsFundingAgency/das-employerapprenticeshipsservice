@@ -33,13 +33,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("usedServiceBefore")]
-        public ActionResult UsedServiceBefore()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/usedServiceBefore", false));
-        }     
-
-        [HttpGet]
         [Route("register")]
         public ActionResult RegisterUser()
         {
