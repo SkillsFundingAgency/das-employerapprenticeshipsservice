@@ -3,12 +3,12 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Events.Messages;
-using SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers;
+using SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.Messaging.Interfaces;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.EmployerFinance
 {
     [TestFixture]
     public class RefreshPaymentDataConpletedEventHandlerTests : FluentTest<RefreshPaymentDataConpletedEventHandlerTestsFixture>
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
             const string periodEnd = "2018R03";
 
 
-            return RunAsync(f => f.Handle(new RefreshPaymentDataCompletedEvent()
+            return TestAsync(f => f.Handle(new RefreshPaymentDataCompletedEvent()
                 {
                     AccountId = accountId,
                     PaymentsProcessed = levyImported,
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         }
     }
 
-    public class RefreshPaymentDataConpletedEventHandlerTestsFixture : FluentTestFixture
+    public class RefreshPaymentDataConpletedEventHandlerTestsFixture
     {
         private readonly RefreshPaymentDataCompletedEventHandler _handler;
         private readonly Mock<IMessagePublisher> _mockMessagePublisher;
