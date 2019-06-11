@@ -16,8 +16,7 @@
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
-        public const string EmailClaimKeyName = "email";
-        public const string EmployerAccountViewName = "EmployerAccount";
+        public const string EmailClaimKeyName = "email";      
         public const string EmployerAccountControllerName = "EmployerAccount";
         public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
         public const string EmployerAccountPayeControllerName = "EmployerAccountPaye";
@@ -31,8 +30,9 @@
         public const string GatewayViewName = "Gateway";
         public const string GateWayResponseActionName = "GateWayResponse";
         public const string GetGatewayActionName = "GetGateway";
-        public const string GetGovernmentFundingActionName = "GetGovernmentFunding";
+        public const string GetApprenticeshipFundingActionName = "GetApprenticeshipFunding";
         public const string HomeControllerName = "Home";
+        public const string HelpActionName = "Help";
         public const string IndexActionName = "Index";
         public const string InvitationControllerName = "Invitation";
         public const string InvitationIndexName = "All";
@@ -47,8 +47,10 @@
         public const string OrganisationSharedControllerName = "OrganisationShared";
         public const string OrganisationUpdatedNextStepsActionName = "OrganisationUpdatedNextSteps";
         public const string PayeErrorActionName = "PayeError";
+        public const string PrivacyActionName = "Privacy";
         public const string PdfContentTypeName = "application/pdf";
         public const string RegisterUserActionName = "RegisterUser";
+        public const string RenameAccountActionName = "RenameAccount";
         public const string RemoveViewName = "Remove";
         public const string SearchOrganisationControllerName = "SearchOrganisation";
         public const string SearchForOrganisationActionName = "SearchForOrganisation";
@@ -61,7 +63,9 @@
         public const string ServiceStartPageViewName = "ServiceStartPage";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
+        public const string SignOutActionName = "SignOut";
         public const string SummaryActionName = "Summary";
+        public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
         public const string TransfersControllerName = "Transfers";
