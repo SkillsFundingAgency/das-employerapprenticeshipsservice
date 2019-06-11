@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
@@ -36,13 +37,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ILog>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
-                Mock.Of<IMediator>());
+                Mock.Of<IMediator>(),
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>()
+                );
         }
 
         [Test]
         public async Task ThenTheSearchOrganisationPageIsDisplayed()
         {
-            var response = await _employerAccountController.AmendOrganisation();
+            var response =  _employerAccountController.AmendOrganisation();
             var redirectResponse = (RedirectToRouteResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.RouteValues["action"].ToString());
