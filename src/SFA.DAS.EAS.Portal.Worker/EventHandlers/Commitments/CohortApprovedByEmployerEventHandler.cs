@@ -19,10 +19,8 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
 
         }
 
-        protected override async Task Handle(CohortApprovedByEmployer cohortApprovedEvent)
+        protected override async Task Handle(CohortApprovedByEmployer cohortApprovedEvent, CancellationToken cancellationToken = default)
         {
-            var cancellationToken = default(CancellationToken);
-
             var accountDocument = await GetOrCreateAccountDocument(cohortApprovedEvent.AccountId, cancellationToken);
 
             var cohort = accountDocument.Account.Organisations.SelectMany(org => org.Cohorts)

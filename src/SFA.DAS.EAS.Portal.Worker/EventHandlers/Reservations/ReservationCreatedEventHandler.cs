@@ -19,10 +19,8 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
         {
         }
 
-        protected override async Task Handle(ReservationCreatedEvent reservationCreatedEvent)
+        protected override async Task Handle(ReservationCreatedEvent reservationCreatedEvent, CancellationToken cancellationToken = default)
         {
-            var cancellationToken = default(CancellationToken);
-
             var accountDocument = await GetOrCreateAccountDocument(reservationCreatedEvent.AccountId, cancellationToken);
 
             var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, reservationCreatedEvent.AccountLegalEntityId);
