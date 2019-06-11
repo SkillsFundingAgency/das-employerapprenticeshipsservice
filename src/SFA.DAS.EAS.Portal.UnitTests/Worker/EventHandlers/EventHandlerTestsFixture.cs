@@ -34,7 +34,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public EventHandlerTestsFixture(bool constructHandler = true)
         {
             Fixture = new Fixture();
-            
+            Fixture.Customize<Cohort>(co => co.With(x => x.IsApproved, false));
+
             Message = Fixture.Create<TEvent>();
 
             MessageContextInitialisation = new Mock<IMessageContextInitialisation>();

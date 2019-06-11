@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using AutoFixture;
-using FluentAssertions;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
-using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments;
-using SFA.DAS.HashingService;
 using SFA.DAS.Testing;
-using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments.CohortApprovedByEmployerEventHandlerTestsFixture;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
 {
@@ -33,7 +25,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         public Task Handle_WhenAccountDoesContainOrganisationAndCohort_ThenAccountDocumentIsSavedWithUpdatedCohort()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsCohort(), f => f.Handle(),
-                f => f.VerifyAccountDocumentSavedWithCohort());
+                f => f.VerifyAccountDocumentSavedWithCohortApproved());
         }
     }
 
@@ -43,11 +35,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         public CommitmentView Commitment { get; set; }
         public CommitmentView ExpectedCommitment { get; set; }
         public const long AccountLegalEntityId = 456L;
-        public const string ProviderCommitmentsApiExceptionMessage = "Test message";
 
         public CohortApprovedByEmployerEventHandlerTestsFixture() : base(false)
         {
-
             Handler = new CohortApprovedByEmployerEventHandler(
                 AccountDocumentService.Object,
                 MessageContextInitialisation.Object,
@@ -72,36 +62,18 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             return base.Handle();
         }
         
-        public CohortApprovedByEmployerEventHandlerTestsFixture VerifyAccountDocumentSavedWithCohort()
+        public CohortApprovedByEmployerEventHandlerTestsFixture VerifyAccountDocumentSavedWithCohortApproved()
         {
             AccountDocumentService.Verify(
-                s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()), Times.Once);
+                s => s.Save(It.Is<AccountDocument>(d => CohortIsSetToApproved(d)),It.IsAny<CancellationToken>()), Times.Once);
             
             return this;
         }
         
-        private bool AccountIsAsExpected(AccountDocument document)
+        private bool CohortIsSetToApproved(AccountDocument document)
         {
-            var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);
-            var expectedOrganisation = GetExpectedOrganisation(
-                expectedAccount, AccountLegalEntityId, ExpectedCommitment.LegalEntityName);
-            var expectedCohort = GetExpectedCohort(expectedOrganisation);
-
-            expectedCohort.Reference = ExpectedCommitment.Reference;
-            expectedCohort.IsApproved = true;
-            expectedCohort.Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
-                new Apprenticeship
-                {
-                    Id = ea.Id,
-                    FirstName = ea.FirstName,
-                    LastName = ea.LastName,
-                    CourseName = ea.TrainingName,
-                    ProposedCost = ea.Cost,
-                    StartDate = ea.StartDate,
-                    EndDate = ea.EndDate
-                }).ToList();
-
-            return AccountIsAsExpected(expectedAccount, document);
+            return document.Account.Organisations.SelectMany(org => org.Cohorts)
+                .SingleOrDefault(co => co.Id == Message.CommitmentId.ToString()).IsApproved;
         }
         
         private Cohort GetExpectedCohort(Organisation expectedOrganisation)
