@@ -88,13 +88,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
             return this;
         }
         
-        public ReservationCreatedEventHandlerTestsFixture VerifyAccountDocumentSavedWithReservation()
+        public void VerifyAccountDocumentSavedWithReservation()
         {
-            //todo: improve message on fail
             AccountDocumentService.Verify(
                 s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()), Times.Once);
-            
-            return this;
         }
         
         private bool AccountIsAsExpected(AccountDocument document)

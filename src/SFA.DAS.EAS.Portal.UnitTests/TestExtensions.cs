@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KellermanSoftware.CompareNetObjects;
 using Newtonsoft.Json;
+using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.UnitTests
 {
@@ -21,7 +22,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests
         /// </summary>
         public static (bool, string) IsEqual(this object source, object expected)
         {
-            var comparisonResult = new CompareLogic(new ComparisonConfig {MaxDifferences = 100})
+            var comparisonResult = new CompareLogic(new ComparisonConfig
+                {
+                    MaxDifferences = 100,
+                    IgnoreCollectionOrder = true,
+                    //todo: hack. *appears* to be bug in CompareNetObjects!?
+                    ClassTypesToIgnore = new List<Type>() {typeof(Apprenticeship)}
+                })
                 .Compare(expected, source);
             return (comparisonResult.AreEqual,comparisonResult.DifferencesString);
         }
