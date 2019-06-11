@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
-using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments;
 using SFA.DAS.Testing;
 using System.Linq;
@@ -74,35 +73,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         {
             return document.Account.Organisations.SelectMany(org => org.Cohorts)
                 .SingleOrDefault(co => co.Id == Message.CommitmentId.ToString()).IsApproved;
-        }
-        
-        private Cohort GetExpectedCohort(Organisation expectedOrganisation)
-        {
-            Cohort expectedCohort;
-            if (OriginalAccountDocument == null
-                || !OriginalAccountDocument.Account.Organisations.Any())
-            {
-                //todo: AddNewCohort()?
-                expectedCohort = new Cohort
-                {
-                    //todo: id should be long
-                    Id = OriginalMessage.CommitmentId.ToString()
-                };
-
-                expectedOrganisation.Cohorts.Add(expectedCohort);
-                return expectedCohort;
-            }
-            
-            expectedCohort = expectedOrganisation.Cohorts.SingleOrDefault(r => r.Id == OriginalMessage.CommitmentId.ToString());
-            if (expectedCohort == null)
-            {
-                expectedCohort = new Cohort
-                {
-                    Id = OriginalMessage.CommitmentId.ToString()
-                };
-                expectedOrganisation.Cohorts.Add(expectedCohort);
-            }
-            return expectedCohort;
         }
     }
 }
