@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         private bool CohortIsSetToApproved(AccountDocument document)
         {
             return document.Account.Organisations.SelectMany(org => org.Cohorts)
-                .SingleOrDefault(co => co.Id == Message.CommitmentId.ToString()).IsApproved;
+                .Single(co => co.Id == Message.CommitmentId.ToString()).IsApproved;
         }
     }
 }
