@@ -35,7 +35,6 @@ namespace SFA.DAS.EmployerFinance.Services
             _logger.Info($"Getting expiring funds for account ID: {accountId}");
 
             return await CallAuthService<ExpiringAccountFunds>(
-                $"/api/accounts/{accountId}/AccountProjection/expiring-funds",
                 accountId,
                 (ex) =>
                 {
@@ -52,7 +51,6 @@ namespace SFA.DAS.EmployerFinance.Services
             _logger.Info($"Getting projected calculations for account ID: {accountId}");
 
             return await CallAuthService<ProjectedCalculation>(
-                $"/api/accounts/{accountId}/AccountProjection/projected-summary",
                 accountId,
                 (ex) =>
                 {
@@ -64,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Services
                 );
         }
 
-        private async Task<T> CallAuthService<T>(string endpointUrl, long accountId, Action<Exception> OnError = null)
+        private async Task<T> CallAuthService<T>(long accountId, Action<Exception> OnError = null)
         {
             var accessToken = await _azureAdAuthService.GetAuthenticationResult(
                 _apiClientConfiguration.ClientId,
@@ -74,7 +72,7 @@ namespace SFA.DAS.EmployerFinance.Services
 
             try
             {
-                return await _httpClient.Get<T>(accessToken, endpointUrl);
+                return await _httpClient.Get<T>(accessToken, GetUrl(typeof(T), accountId));
             }
             catch (ResourceNotFoundException ex)
             {
@@ -109,6 +107,21 @@ namespace SFA.DAS.EmployerFinance.Services
 
                 return default(T);
             }
+        }
+
+        private string GetUrl(Type type, long accountId)
+        {
+            string url = $"/api/accounts/{accountId}/AccountProjection/";
+            if (type.IsAssignableFrom(typeof(ProjectedCalculation)))
+            {
+                url = url + "projected-summary";
+            };
+            if (type.IsAssignableFrom(typeof(ExpiringAccountFunds)))
+            {
+                url = url + "expiring-funds";
+            };
+
+            return url;
         }
     }
 }
