@@ -41,13 +41,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenTheEnterYourPAYESchemeDetailsIsDisplayed()
+        public async Task ThenTheGatewayInformPageIsDisplayed()
         {
             var response = _employerAccountController.AmendPaye();
-            var redirectResponse = (RedirectToRouteResult)response;
+            var redirectResponse = (RedirectToRouteResult) response;
 
-            Assert.AreEqual(ControllerConstants.GatewayInformActionName, redirectResponse.RouteValues["action"].ToString());
-            Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());
+            Assert.AreEqual(ControllerConstants.GatewayInformActionName, redirectResponse.RouteValues["action"].ToString());       
         }
     }
 }

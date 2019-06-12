@@ -41,10 +41,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenTheEnterYourPAYESchemeDetailsIsDisplayed()
+        public async Task ThenTheEnterYourPAYESchemeDetailsPageIsDisplayed()
         {
-            var response = _employerAccountController.AmendPaye()();
-            var redirectResponse = (RedirectToRouteResult)response;
+            var response = _employerAccountController.AmendPaye();
+            var redirectResponse = (RedirectToRouteResult) response;
 
             Assert.AreEqual(ControllerConstants.WaysToAddPayeSchemeActionName, redirectResponse.RouteValues["action"].ToString());
             Assert.AreEqual(ControllerConstants.EmployerAccountPayeControllerName, redirectResponse.RouteValues["controller"].ToString());

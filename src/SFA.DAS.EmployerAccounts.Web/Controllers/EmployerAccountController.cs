@@ -361,7 +361,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var employerAccountPayeData = _employerAccountOrchestrator.GetCookieData().EmployerAccountPayeRefData;
 
-            if (string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
+            if (!string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
             {
                 return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
             }
