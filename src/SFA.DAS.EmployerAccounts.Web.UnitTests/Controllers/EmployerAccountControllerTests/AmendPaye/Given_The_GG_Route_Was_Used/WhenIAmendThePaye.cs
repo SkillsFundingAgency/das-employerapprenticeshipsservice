@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         [Test]
         public async Task ThenTheEnterYourPAYESchemeDetailsIsDisplayed()
         {
-            var response = _employerAccountController.AmendOrganisation();
+            var response = _employerAccountController.AmendPaye();
             var redirectResponse = (RedirectToRouteResult)response;
 
             Assert.AreEqual(ControllerConstants.GatewayInformActionName, redirectResponse.RouteValues["action"].ToString());
