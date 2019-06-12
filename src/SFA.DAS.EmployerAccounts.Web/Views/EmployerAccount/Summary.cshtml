@@ -18,19 +18,25 @@
                 <td>
                     @Model.Data.OrganisationName
                 </td>
-                </tr>
-            <tr>
-                <th scope="row">
-                    Address
-                </th>
-                <td>
-                    @Model.Data.RegisteredAddress
+                <td class="link-right">
+                    <a href="@Url.Action(ControllerConstants.AmendOrganisationActionName, ControllerConstants.EmployerAccountControllerName)">Change</a>
                 </td>
             </tr>
             <tr>
                 <th scope="row">
-                    @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+                    Address
+                </th>
+                <td colspan="2">
+                    @foreach (var line in Model.Data.RegisteredAddress)
                     {
+                        <div>@line</div>
+                    }
+                </td>
+            </tr>
+            @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+            {
+                <tr>
+                    <th scope="row">                       
                         if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
                         {
                             <span>Companies House number</span>
@@ -38,16 +44,13 @@
                         else
                         {
                             <span>Charity number</span>
-                        }
-                    }
-                </th>
-                <td>
-                    @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
-                    {
-                        <span>@Model.Data.OrganisationReferenceNumber</span>
-                    }
-                </td> 
-            </tr>
+                        }                     
+                    </th>
+                    <td colspan="2">                      
+                        <span>@Model.Data.OrganisationReferenceNumber</span>                
+                    </td>
+                </tr>
+            }
             <tr>
                 <th scope="row">
                     PAYE scheme
@@ -61,13 +64,15 @@
                         }
                     </dl>
                 </td>
+                <td class="link-right">
+                    <a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Change</a>
+                </td>
             </tr>
         </table>
         <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <button type="submit" class="button" id="continue">These details are correct</button>
-                <a class="button-link" href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Change details</a>                
+                <button type="submit" class="button" id="continue">These details are correct</button>                
             </div>
         </form> 
     </div>

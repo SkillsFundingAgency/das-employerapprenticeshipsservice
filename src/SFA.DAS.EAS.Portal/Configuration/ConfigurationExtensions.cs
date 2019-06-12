@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 
 namespace SFA.DAS.EAS.Portal.Configuration
@@ -18,10 +19,17 @@ namespace SFA.DAS.EAS.Portal.Configuration
             return configuration.GetPortalSection(subSectionPaths).Get<TConfiguration>();
         }
 
-        public static TConfiguration GetSection<TConfiguration>(this IConfiguration configuration, string key,   params string[] subSectionPaths)
+        //todo: don't need section argument, but then clashes with core's. rename?
+        // also, add IConfigurationSection returning method, and delegate above to below, throw in all if not found, exceptions for unable to find key and unable to deserialize
+        public static TConfiguration GetSection<TConfiguration>(this IConfiguration configuration, string section, params string[] subSectionPaths)
         {
-            var temp = string.Join(":", Enumerable.Repeat(key, 1).Concat(subSectionPaths));
-            return configuration.GetSection(temp).Get<TConfiguration>();
+            var key = string.Join(":", Enumerable.Repeat(section, 1).Concat(subSectionPaths));
+
+            var config = configuration.GetSection(key).Get<TConfiguration>();
+            if (config == null)
+                throw new Exception($"Unable to find configuration with key {key}");
+
+            return config;
         }
     }
 }
