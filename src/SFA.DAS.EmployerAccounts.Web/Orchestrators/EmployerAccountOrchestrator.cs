@@ -317,7 +317,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OrganisationStatus = enteredData.EmployerAccountOrganisationData.OrganisationStatus,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
                 Sector = enteredData.EmployerAccountOrganisationData.Sector,
-                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch
+                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch,
+                AORN = enteredData.EmployerAccountPayeRefData.AORN
             };
 
             return new OrchestratorResponse<SummaryViewModel>

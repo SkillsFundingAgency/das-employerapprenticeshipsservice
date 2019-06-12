@@ -355,6 +355,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
         }
 
+        [HttpGet]
+        [Route("amendPaye")]
+        public ActionResult AmendPaye()
+        {
+            var employerAccountPayeData = _employerAccountOrchestrator.GetCookieData().EmployerAccountPayeRefData;
+
+            if (string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
+            {
+                return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
+            }
+
+            return RedirectToAction(ControllerConstants.GatewayInformActionName);
+        }
+
         private string GetUserId()
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
