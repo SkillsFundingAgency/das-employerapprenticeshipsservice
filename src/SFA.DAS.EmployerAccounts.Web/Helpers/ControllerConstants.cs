@@ -72,5 +72,6 @@
         public const string UserRefClaimKeyName = "sub";
         public const string WaysToAddPayeSchemeActionName = "WaysToAdd";
         public const string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
+        public const string SkipRegistrationActionName = "SkipRegistration";
     }
 }
