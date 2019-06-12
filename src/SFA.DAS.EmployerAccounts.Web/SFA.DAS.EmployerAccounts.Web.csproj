@@ -711,13 +711,13 @@
     <Content Include="Views\EmployerTeam\V2\Row2Panel1.cshtml" />
     <Content Include="Views\EmployerTeam\V2\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissions.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\SavedProviders.cshtml" />
     <Content Include="Views\EmployerTeam\V2\AccountSettings.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CheckFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissionsDenied.cshtml" />
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
     <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\FinancialTransactions.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ApprenticeshipDetails.cshtml" />
     <Content Include="Views\EmployerTeam\V2\SearchBar.cshtml" />
     <Content Include="Views\EmployerTeam\V2\MostActiveLinks.cshtml" />
