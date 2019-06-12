@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.Extensions
+﻿namespace SFA.DAS.Extensions
 {
     public static class DynamicExtensions
     {
@@ -15,26 +9,12 @@ namespace SFA.DAS.Extensions
                 return false;
             }
 
-            var hideNavString = viewBag.HideNav as string;
-
-            if (hideNavString != null)
+            if (viewBag.HideNav is string hideNavString)
             {
-                bool hideNavFlag;
-
-                if (bool.TryParse(hideNavString, out hideNavFlag))
-                {
-                    return hideNavFlag;
-                }
-
-                return false;
+                return bool.TryParse(hideNavString, out var hideNavFlag) && hideNavFlag;
             }
 
-            if (viewBag.HideNav is bool)
-            {
-                return viewBag.HideNav;
-            }
-
-            return false;
+            return viewBag.HideNav is bool && (bool) viewBag.HideNav;
         }
     }
 }
