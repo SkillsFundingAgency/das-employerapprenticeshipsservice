@@ -12,12 +12,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAccountTransactionsController: BaseController
+    public class EmployerAccountTransactionsController: Controller
     {
-        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-        }
-
         [Route("finance")]
         [Route("balance")]
         public ActionResult Index(string hashedAccountId)

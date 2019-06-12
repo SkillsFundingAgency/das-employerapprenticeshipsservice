@@ -11,18 +11,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{hashedAccountId}/apprentices/manage")]
-    public class EmployerManageApprenticesController : BaseController
+    public class EmployerManageApprenticesController : Controller
     {
-
-        public EmployerManageApprenticesController(
-            IAuthenticationService owinWrapper,
-            IAuthorizationService authorization,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-                : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-        }
-
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]

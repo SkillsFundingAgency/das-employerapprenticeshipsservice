@@ -10,19 +10,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAgreementController : BaseController
-    {
-       
-        public EmployerAgreementController(IAuthenticationService owinWrapper,
-            IAuthorizationService authorization,
-            IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-            if (owinWrapper == null)
-                throw new ArgumentNullException(nameof(owinWrapper));
-        }
-
+    public class EmployerAgreementController : Controller
+    { 
         [HttpGet]
         [Route("agreements")]
         public ActionResult Index()

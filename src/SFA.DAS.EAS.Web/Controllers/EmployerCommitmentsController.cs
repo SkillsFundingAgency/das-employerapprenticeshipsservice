@@ -10,14 +10,8 @@ namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
-    public class EmployerCommitmentsController : BaseController
+    public class EmployerCommitmentsController : Controller
     {
-        public EmployerCommitmentsController(IAuthenticationService owinWrapper,
-            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-        }
 
         [HttpGet]
         [Route("home", Name = "CommitmentsHome")]
