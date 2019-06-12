@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchPensionRegu
         }
 
         [Test]
-        public async Task ThenEachResultIsCorrectlyMakredAsComingFromPensionsRegulator()
+        public async Task ThenEachResultIsCorrectlyMarkedAsComingFromPensionsRegulator()
         {
             var actual = await _orchestrator.SearchPensionRegulator(It.IsAny<string>());
 
