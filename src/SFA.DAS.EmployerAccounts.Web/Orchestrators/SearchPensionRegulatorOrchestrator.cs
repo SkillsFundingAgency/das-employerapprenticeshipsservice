@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -11,7 +11,6 @@ using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
 using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -23,7 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         protected SearchPensionRegulatorOrchestrator()
         {
-
         }
 
         public SearchPensionRegulatorOrchestrator(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService, ILog logger)
@@ -39,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             try
             {
-                var result = await Mediator.SendAsync(new GetPensionRegulatorRequest {PayeRef = payeRef});
+                var result = await Mediator.SendAsync(new GetPensionRegulatorRequest { PayeRef = payeRef });
                 response.Data = new SearchPensionRegulatorResultsViewModel
                 {
                     Results = CreateResult(result.Organisations).ToList(),                    
@@ -80,7 +78,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Name = organisation.Name,
                 Status = organisation.Status,
                 Address = organisation.Address.FormatAddress(),
-                ReferenceNumber = organisation.UniqueIdentity
+                ReferenceNumber = organisation.UniqueIdentity,
+                Type = OrganisationType.PensionsRegulator
             };
         }      
     }
