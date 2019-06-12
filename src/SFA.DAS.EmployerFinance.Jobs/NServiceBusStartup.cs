@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
         public async Task StartAsync()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.Jobs")
-                .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
+                .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString, _container)
                 .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
                 .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()

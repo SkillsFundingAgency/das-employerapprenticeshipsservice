@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.Api
             var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.Api")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString, container)
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
