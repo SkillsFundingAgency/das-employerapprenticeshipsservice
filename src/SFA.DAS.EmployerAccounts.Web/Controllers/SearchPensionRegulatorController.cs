@@ -89,6 +89,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
+        public ViewResult SearchPensionRegulatorByAorn()
+        {
+            return View();
+        }
+
         private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
         {
             if (viewModel?.Name != null)

@@ -16,6 +16,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountPayeController : BaseController
     {
+        private const int AddPayeUsingGovernmentGateway = 1;
+        private const int AddPayeUsingAorn = 2;
+
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
         public EmployerAccountPayeController(
@@ -209,6 +212,43 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { model.HashedAccountId });
+        }
+
+        [HttpGet]
+        [Route("schemes/waysToAdd")]
+        public ViewResult WaysToAdd()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("scheme/waysToAdd")]
+        public ActionResult WaysToAdd(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case AddPayeUsingGovernmentGateway:
+                    return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                case AddPayeUsingAorn:
+                    return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+                default:
+                {
+                    ViewBag.InError = true;
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+            }
         }
     }
 }

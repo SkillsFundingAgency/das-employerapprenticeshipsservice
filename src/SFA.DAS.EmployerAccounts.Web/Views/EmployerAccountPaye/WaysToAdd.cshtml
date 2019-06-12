@@ -1,0 +1,55 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@{ViewBag.PageID = "page-paye-scheme-ways-to-add"; }
+@{ViewBag.Title = "Ways to add your PAYE scheme"; }
+@{ViewBag.Section = "paye";}
+@{ViewBag.HideNav = "true"; }
+@{
+    ViewBag.GaData.Vpv = "/accounts/schemes/ways-to-add";
+    var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "hidden";
+    var errorClass = ViewBag.InError != null && ViewBag.InError ? "error" : "";
+}
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Ways to add your PAYE scheme
+        </h1>
+        <p>You can add a PAYE scheme using either your:</p>
+        <ul class="list list-bullet">
+            <li>Government Gateway login for your PAYE scheme</li>
+            <li>accounts office reference number and employer PAYE scheme reference</li>
+        </ul>
+        <h2 class="heading-small">By continuing you agree to the following:</h2>
+        <div class="panel">I have the authority to add PAYE schemes to this account that are used by my organisation.</div>
+        <form method="POST" action="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName)">
+            @Html.AntiForgeryToken()
+            <div class="form-group @errorClass" id="how-do-you-want-to-add-paye-scheme-form">
+                <fieldset>
+                    <legend class="form-label-bold">
+                        <span>How do you want to add your PAYE scheme?</span>
+                        <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                            You must select an option to continue.
+                        </span>
+                    </legend>
+                    <label for="want-to-use-gov-gateway" class="block-label">
+                        <input type="radio" name="choice" id="want-to-use-gov-gateway" value="1" />
+                        I want to use Government Gateway
+                    </label>
+                    <label for="want-to-use-aorn" class="block-label">
+                        <input type="radio" name="choice" id="want-to-use-aorn" value="1" />
+                        I want to use my account office reference number and employer PAYE scheme reference
+                    </label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button class="button" type="submit" id="submit-how-to-add-payescheme">Continue</button>
+            </div>
+        </form>
+    </div>
+</div>
+@section pageSpecificJS {
+    <script type="text/javascript">
+        $(function () {
+            sfa.homePage.init();
+        });
+    </script>
+}
