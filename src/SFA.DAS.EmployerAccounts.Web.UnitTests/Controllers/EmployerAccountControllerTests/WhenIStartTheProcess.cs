@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         //}
 
         [Test]
-        public async Task ThenIAmRedirectedToTheGovermentGatewayWhenIConfirmIHaveGatewayCredentials()
+        public async Task ThenIAmRedirectedToTheGovernmentGatewayWhenIConfirmIHaveGatewayCredentials()
         {
             //Arrange
             _orchestrator.Setup(x => x.GetGatewayUrl(It.IsAny<string>())).ReturnsAsync(ExpectedRedirectUrl);
