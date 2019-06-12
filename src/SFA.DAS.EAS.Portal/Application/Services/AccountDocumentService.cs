@@ -16,9 +16,7 @@ namespace SFA.DAS.EAS.Portal.Application.Services
         }
         public Task<AccountDocument> Get(long id, CancellationToken cancellationToken = default)
         {
-            return
-            _accountsRepository
-                          .CreateQuery()
+            return _accountsRepository.CreateQuery()
                .SingleOrDefaultAsync(a => a.AccountId == id, cancellationToken);            
         }
 

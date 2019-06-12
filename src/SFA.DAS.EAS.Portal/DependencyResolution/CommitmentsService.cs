@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -8,14 +7,15 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using System;
 using System.Net.Http;
+using Microsoft.Extensions.Hosting;
 
 namespace SFA.DAS.EAS.Portal.DependencyResolution
 {
     public static class CommitmentsService
     {
-        public static IServiceCollection AddCommitmentsApiConfiguration(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddCommitmentsApiConfiguration(this IServiceCollection services, HostBuilderContext hostBuilderContext)
         {
-            services.AddSingleton(s => configuration.GetSection<CommitmentsApiClientConfiguration>(ConfigurationKeys.CommitmentsApi));
+            services.AddSingleton(s => hostBuilderContext.Configuration.GetSection<CommitmentsApiClientConfiguration>(ConfigurationKeys.CommitmentsApi));
             services.AddTransient<ICommitmentsApiClientConfiguration, CommitmentsApiClientConfiguration>();
             services.AddTransient<IProviderCommitmentsApi>(s => new ProviderCommitmentsApi(GetHttpClient(s), s.GetService<CommitmentsApiClientConfiguration>()));
 

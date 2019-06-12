@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using KellermanSoftware.CompareNetObjects;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.TestHarness.DependencyResolution;
 using SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios;
 using SFA.DAS.EAS.Portal.Client.TestHarness.Startup;
@@ -27,11 +29,20 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
 
                 var accounts = await Task.WhenAll(accountTasks);
 
-                foreach (var account in accounts)
-                {
-                    Console.WriteLine($"Account #{account.Id} has {account.Organisations.Count()} ALEs");
-                }
+                var firstAccount = accounts.First();
 
+                // display account
+                Console.WriteLine(JsonConvert.SerializeObject(firstAccount));
+                
+                // assert all are identical
+                var compareLogic = new CompareLogic(new ComparisonConfig {MaxDifferences = 100});
+                foreach (var account in accounts.Skip(1))
+                {
+                    var comparisonResult = compareLogic.Compare(firstAccount, account);
+                    if (!comparisonResult.AreEqual)
+                        Console.WriteLine($"Not all accounts are identical: {comparisonResult.DifferencesString}");
+                }
+                
                 await host.StopAsync();
             }            
         }
