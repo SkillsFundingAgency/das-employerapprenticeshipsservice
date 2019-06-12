@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
                 CommitmentId = 789
             });
 
-            Console.WriteLine("Published CohortApprovalRequestedByProvider. ProviderId: 456, CommitmentId = 789");
+            Console.WriteLine($"Published {nameof(CohortApprovalRequestedByProvider)}. ProviderId: 456, CommitmentId = 789");
             
         }
     }

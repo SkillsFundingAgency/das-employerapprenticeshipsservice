@@ -32,8 +32,11 @@ namespace SFA.DAS.EAS.Portal.Worker
                 .UseApplicationInsights()
                 .UseDasEnvironment()
                 .UseConsoleLifetime()
-                .ConfigureServices(s => s.AddApplicationServices())
-                .ConfigureServices(s => s.AddCosmosDatabase())
-                .ConfigureServices(s => s.AddDasNServiceBus());
+                .ConfigureServices((c, s) => s.AddApplicationServices(c))
+                .ConfigureServices((c, s) => s.AddHashingServices(c))
+                .ConfigureServices((c, s) => s.AddCommitmentsApiConfiguration(c))
+                .ConfigureServices((c, s) => s.AddProviderServices(c))
+                .ConfigureServices((c, s) => s.AddCosmosDatabase(c))
+                .ConfigureServices((c, s) => s.AddDasNServiceBus());
     }
 }

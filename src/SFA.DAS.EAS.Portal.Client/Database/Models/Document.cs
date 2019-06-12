@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Portal.Client.Database.Models
         private string ReadOnlyETag { set => ETag = value; }
 
         [JsonProperty("metadata")]
-        public DocumentMetadata Metadata { get; protected set;}
+        public DocumentMetadata Metadata { get; protected set; }
 
         [JsonProperty("created")]
         public DateTime Created { get;  set; }
