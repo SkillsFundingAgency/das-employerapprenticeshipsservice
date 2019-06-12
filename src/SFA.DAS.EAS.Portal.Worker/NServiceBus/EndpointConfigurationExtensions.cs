@@ -20,6 +20,7 @@ namespace SFA.DAS.EAS.Portal.Worker.NServiceBus
             (t.Namespace.StartsWith("SFA.DAS.CommitmentsV2.Messages.Events")
             || t.Namespace.StartsWith("SFA.DAS.Commitments.Events")
             || t.Namespace.StartsWith("SFA.DAS.Reservations.Messages")
+            || t.Namespace.StartsWith("SFA.DAS.EmployerAccounts.Messages.Events")
             ));
             return config;
         }
