@@ -47,6 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             //Assert
             var redirectResult = (RedirectToRouteResult)result;
             Assert.AreEqual(ControllerConstants.GatewayInformActionName, redirectResult.RouteValues["action"].ToString());
+            Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResult.RouteValues["controller"].ToString());
         }
 
         [Test]
