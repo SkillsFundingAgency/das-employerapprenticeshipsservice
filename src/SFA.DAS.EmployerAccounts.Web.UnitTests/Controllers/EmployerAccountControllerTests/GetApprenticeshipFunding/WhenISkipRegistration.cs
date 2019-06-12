@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateUserAccount(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateMinimalUserAccountForSkipJourney(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);        
 
             _employerAccountController = new EmployerAccountController(
