@@ -27,13 +27,16 @@
                     Address
                 </th>
                 <td colspan="2">
-                    @Model.Data.RegisteredAddress
+                    @foreach (var line in Model.Data.RegisteredAddress.Split(','))
+                    {
+                        <div>@line</div>
+                    }
                 </td>
             </tr>
-            <tr>
-                <th scope="row">
-                    @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
-                    {
+            @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+            {
+                <tr>
+                    <th scope="row">                       
                         if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
                         {
                             <span>Companies House number</span>
@@ -41,16 +44,13 @@
                         else
                         {
                             <span>Charity number</span>
-                        }
-                    }
-                </th>
-                <td colspan="2">
-                    @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
-                    {
-                        <span>@Model.Data.OrganisationReferenceNumber</span>
-                    }
-                </td> 
-            </tr>
+                        }                     
+                    </th>
+                    <td colspan="2">                      
+                        <span>@Model.Data.OrganisationReferenceNumber</span>                
+                    </td>
+                </tr>
+            }
             <tr>
                 <th scope="row">
                     PAYE scheme
