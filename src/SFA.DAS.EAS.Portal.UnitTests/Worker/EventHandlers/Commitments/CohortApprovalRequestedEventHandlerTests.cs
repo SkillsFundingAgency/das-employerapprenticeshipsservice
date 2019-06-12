@@ -50,7 +50,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         }
 
         [Test]
-        [Ignore("In progress")]
         public Task Handle_WhenAccountDoesContainOrganisationAndCohort_ThenAccountDocumentIsSavedWithUpdatedCohort()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsCohort(), f => f.Handle(),
@@ -119,7 +118,15 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
         {
             var organisation = SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
 
-            organisation.Cohorts.RandomElement().Id = Message.CommitmentId.ToString();
+            var cohort = organisation.Cohorts.RandomElement();
+            cohort.Id = Message.CommitmentId.ToString();
+            cohort.Reference = Commitment.Reference;
+            cohort.Apprenticeships = cohort.Apprenticeships.Zip(Commitment.Apprenticeships,
+                (accountDocumentApprenticeship, apiApprenticeship) =>
+                {
+                    accountDocumentApprenticeship.Id = apiApprenticeship.Id;
+                    return accountDocumentApprenticeship;
+                }).ToList();
             
             AccountDocumentService.Setup(s => s.Get(Message.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
@@ -133,12 +140,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             return base.Handle();
         }
         
-        public CohortApprovalRequestedByProviderEventHandlerTestsFixture VerifyAccountDocumentSavedWithCohort()
+        public void VerifyAccountDocumentSavedWithCohort()
         {
             AccountDocumentService.Verify(
                 s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()), Times.Once);
-            
-            return this;
         }
         
         private bool AccountIsAsExpected(AccountDocument document)
@@ -149,19 +154,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             var expectedCohort = GetExpectedCohort(expectedOrganisation);
 
             expectedCohort.Reference = ExpectedCommitment.Reference;
-            expectedCohort.Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
-                new Apprenticeship
-                {
-                    Id = ea.Id,
-                    FirstName = ea.FirstName,
-                    LastName = ea.LastName,
-                    CourseName = ea.TrainingName,
-                    ProposedCost = ea.Cost,
-                    StartDate = ea.StartDate,
-                    EndDate = ea.EndDate
-                }).ToList();
 
-            return AccountIsAsExpected(expectedAccount, document);
+            bool accountIsAsExpected = AccountIsAsExpected(expectedAccount, document);
+
+            // this is a workaround for a bug in CompareNetObjects, where it believes equal apprenticeships are not equal
+            // so we catch that case with this fluent assertion (and we exclude Apprenticeships from the CompareNetObjects comparison)
+            document.Account.Organisations.Should().BeEquivalentTo(expectedAccount.Organisations);
+            
+            return accountIsAsExpected;
         }
         
         private Cohort GetExpectedCohort(Organisation expectedOrganisation)
@@ -174,7 +174,18 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
                 expectedCohort = new Cohort
                 {
                     //todo: id should be long
-                    Id = OriginalMessage.CommitmentId.ToString()
+                    Id = OriginalMessage.CommitmentId.ToString(),
+                    Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
+                        new Apprenticeship
+                        {
+                            Id = ea.Id,
+                            FirstName = ea.FirstName,
+                            LastName = ea.LastName,
+                            CourseName = ea.TrainingName,
+                            ProposedCost = ea.Cost,
+                            StartDate = ea.StartDate,
+                            EndDate = ea.EndDate
+                        }).ToList()
                 };
 
                 expectedOrganisation.Cohorts.Add(expectedCohort);
@@ -186,9 +197,33 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
             {
                 expectedCohort = new Cohort
                 {
-                    Id = OriginalMessage.CommitmentId.ToString()
+                    Id = OriginalMessage.CommitmentId.ToString(),
+                    Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
+                        new Apprenticeship
+                        {
+                            Id = ea.Id,
+                            FirstName = ea.FirstName,
+                            LastName = ea.LastName,
+                            CourseName = ea.TrainingName,
+                            ProposedCost = ea.Cost,
+                            StartDate = ea.StartDate,
+                            EndDate = ea.EndDate
+                        }).ToList()
                 };
                 expectedOrganisation.Cohorts.Add(expectedCohort);
+            }
+            else
+            {
+                foreach (var apiApprenticeship in ExpectedCommitment.Apprenticeships)
+                {
+                    var expectedApprenticeship = expectedCohort.Apprenticeships.Single(a => a.Id == apiApprenticeship.Id);
+                    expectedApprenticeship.FirstName = apiApprenticeship.FirstName;
+                    expectedApprenticeship.LastName = apiApprenticeship.LastName;
+                    expectedApprenticeship.CourseName = apiApprenticeship.TrainingName;
+                    expectedApprenticeship.ProposedCost = apiApprenticeship.Cost;
+                    expectedApprenticeship.StartDate = apiApprenticeship.StartDate;
+                    expectedApprenticeship.EndDate = apiApprenticeship.EndDate;
+                }
             }
             return expectedCohort;
         }

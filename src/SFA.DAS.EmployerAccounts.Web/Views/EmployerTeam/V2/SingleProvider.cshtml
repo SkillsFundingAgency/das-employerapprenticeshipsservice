@@ -1,4 +1,5 @@
 ﻿
+@using Microsoft.Ajax.Utilities
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
     
     <h3 class="das-panel__heading">@Model.AccountViewModel.Providers.First().Name</h3>
@@ -13,10 +14,16 @@
         }
         @(Model.AccountViewModel.Providers.First().Town)<text>, </text>@(Model.AccountViewModel.Providers.First().Postcode)
     </p>
-    <dl class="das-definition-list das-definition-list--inline">
-        <dt class="das-definition-list__title">Tel</dt>
-        <dd class="das-definition-list__definition">@Model.AccountViewModel.Providers.First().Phone</dd>
-        <dt class="das-definition-list__title">Email</dt>
-        <dd class="das-definition-list__definition"><span class="das-breakable">@Model.AccountViewModel.Providers.First().Email</span></dd>
+    <dl class="das-definition-list das-definition-list--table-narrow">
+        @if (!Model.AccountViewModel.Providers.First().Phone.IsNullOrWhiteSpace())
+        {
+            <dt class="das-definition-list__title">Tel</dt>
+            <dd class="das-definition-list__definition">@Model.AccountViewModel.Providers.First().Phone</dd>
+        }
+        @if (!Model.AccountViewModel.Providers.First().Email.IsNullOrWhiteSpace())
+        {
+            <dt class="das-definition-list__title">Email</dt>
+            <dd class="das-definition-list__definition"><span class="das-breakable">@Model.AccountViewModel.Providers.First().Email</span></dd>
+        }
     </dl>
     <p><a href="@Url.ProviderRelationshipsAction("providers")" class="govuk-link govuk-link--no-visited-state">View permissions</a> </p>

@@ -93,11 +93,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, MessageContextInitialisation.Object, Logger.Object);
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler> VerifyMessageContextIsInitialised()
+        public void VerifyMessageContextIsInitialised()
         {
             MessageContextInitialisation.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
-
-            return this;
         }
         
         protected Account GetExpectedAccount(long accountId)

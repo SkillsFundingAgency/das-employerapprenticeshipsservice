@@ -151,7 +151,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
             return base.Handle();
         }
 
-        public AddedAccountProviderEventHandlerTestsFixture VerifyAccountDocumentSavedWithProviderWithPrimaryAddress()
+        public void VerifyAccountDocumentSavedWithProviderWithPrimaryAddress()
         {
             var expectedLegalAddress = ExpectedProvider.Addresses.Single(a => a.ContactType == "PRIMARY");
 
@@ -161,11 +161,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
                 p.Town = expectedLegalAddress.Town;
                 p.Postcode = expectedLegalAddress.PostCode;
             });
-
-            return this;
         }
 
-        public AddedAccountProviderEventHandlerTestsFixture VerifyAccountDocumentSavedWithProviderWithLegalAddress()
+        public void VerifyAccountDocumentSavedWithProviderWithLegalAddress()
         {
             var expectedLegalAddress = ExpectedProvider.Addresses.Single(a => a.ContactType == "LEGAL");
 
@@ -175,23 +173,17 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
                 p.Town = expectedLegalAddress.Town;
                 p.Postcode = expectedLegalAddress.PostCode;
             });
-
-            return this;
         }
         
-        public AddedAccountProviderEventHandlerTestsFixture VerifyAccountDocumentSavedWithProviderWithoutAddress()
+        public void VerifyAccountDocumentSavedWithProviderWithoutAddress()
         {
             VerifyAccountDocumentSavedWithProvider();
-            
-            return this;
         }
         
-        public AddedAccountProviderEventHandlerTestsFixture VerifyAccountDocumentSavedWithProvider(Action<PortalProvider> mutateExpectedProvider = null)
+        public void VerifyAccountDocumentSavedWithProvider(Action<PortalProvider> mutateExpectedProvider = null)
         {
             AccountDocumentService.Verify(
                 s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d, mutateExpectedProvider)), It.IsAny<CancellationToken>()), Times.Once);
-            
-            return this;
         }
 
         public bool AccountIsAsExpected(AccountDocument document, Action<PortalProvider> mutateExpectedProvider = null)
