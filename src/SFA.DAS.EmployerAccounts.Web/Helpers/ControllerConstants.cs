@@ -71,6 +71,6 @@
         public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
         public const string WaysToAddPayeSchemeActionName = "WaysToAdd";
-        public static string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
+        public const string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
     }
 }
