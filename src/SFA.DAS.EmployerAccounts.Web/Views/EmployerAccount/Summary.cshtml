@@ -27,7 +27,7 @@
                     Address
                 </th>
                 <td colspan="2">
-                    @foreach (var line in Model.Data.RegisteredAddress.Split(','))
+                    @foreach (var line in Model.Data.RegisteredAddress)
                     {
                         <div>@line</div>
                     }
