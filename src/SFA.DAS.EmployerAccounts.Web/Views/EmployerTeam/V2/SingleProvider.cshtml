@@ -18,7 +18,7 @@
         @if (!Model.AccountViewModel.Providers.First().Phone.IsNullOrWhiteSpace())
         {
             <dt class="das-definition-list__title">Tel</dt>
-            <dd class="das-definition-list__definition">@Model.AccountViewModel.Providers.First().Phone</dd>
+            <dd class="das-definition-list__definition"><span class="das-breakable">@Model.AccountViewModel.Providers.First().Phone</span></dd>
         }
         @if (!Model.AccountViewModel.Providers.First().Email.IsNullOrWhiteSpace())
         {
