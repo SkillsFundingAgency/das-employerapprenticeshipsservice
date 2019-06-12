@@ -1,6 +1,7 @@
 ﻿using System.Data.Common;
 using System.Threading.Tasks;
 using NServiceBus;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.NServiceBus;
@@ -16,18 +17,20 @@ namespace SFA.DAS.EmployerAccounts.Jobs
     {
         private readonly IContainer _container;
         private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+        private readonly IEnvironmentService _environmentService;
         private IEndpointInstance _endpoint;
 
-        public EndpointStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration)
+        public EndpointStartup(IContainer container, EmployerAccountsConfiguration employerAccountsConfiguration, IEnvironmentService environmentService)
         {
             _container = container;
             _employerAccountsConfiguration = employerAccountsConfiguration;
+            _environmentService = environmentService;
         }
 
         public async Task StartAsync()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
-                .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString)
+                .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _environmentService.IsCurrent(DasEnv.LOCAL))
                 .UseLicense(_employerAccountsConfiguration.NServiceBusLicense)
                 .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()

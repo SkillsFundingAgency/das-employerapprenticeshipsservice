@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         public ReferenceDataRegistry()
         {
             For<IReferenceDataApiConfiguration>().Use(c => c.GetInstance<ReferenceDataApiClientConfiguration>());
-            For<ReferenceDataApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<ReferenceDataApiClientConfiguration>("SFA.DAS.ReferenceDataApiClient")).Singleton();
+            //For<ReferenceDataApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<ReferenceDataApiClientConfiguration>("SFA.DAS.ReferenceDataApiClient")).Singleton();
             For<IReferenceDataService>().Use<ReferenceDataService>().Singleton();
         }
     }

@@ -357,7 +357,6 @@
     <Compile Include="DependencyResolution\MapperRegistry.cs" />
     <Compile Include="DependencyResolution\MediatorRegistry.cs" />
     <Compile Include="DependencyResolution\MessagePublisherRegistry.cs" />
-    <Compile Include="DependencyResolution\MessageSubscriberRegistry.cs" />
     <Compile Include="DependencyResolution\NotificationsRegistry.cs" />
     <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />

@@ -9,9 +9,10 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public ConfigurationRegistry()
         {
-            For<EmployerApprenticeshipsServiceConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Constants.ServiceName)).Singleton();
-            For<LevyDeclarationProviderConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider")).Singleton();
-            For<PaymentProviderConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider")).Singleton();
+            //todo we need a config registry like this following the prov perms pattern for each app
+            //For<EmployerApprenticeshipsServiceConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Constants.ServiceName)).Singleton();
+            //For<LevyDeclarationProviderConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider")).Singleton();
+            //For<PaymentProviderConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider")).Singleton();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
             if (views == null)
             {
-                views = GetDataFromTableStorage();
+                //views = GetDataFromTableStorage();
                 if (views.Data != null && views.Data.Any())
                 {
                     _inProcessCache.Set(nameof(MultiVariantViewLookup), views, new TimeSpan(0, 30, 0));

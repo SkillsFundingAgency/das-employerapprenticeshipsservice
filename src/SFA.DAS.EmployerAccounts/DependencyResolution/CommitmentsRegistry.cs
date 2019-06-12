@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public CommitmentsRegistry()
         {
-            For<CommitmentsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI")).Singleton();
+            //For<CommitmentsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI")).Singleton();
             For<ICommitmentsApiClientConfiguration>().Use(c => c.GetInstance<CommitmentsApiClientConfiguration>());
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
             For<IValidationApi>().Use<ValidationApi>();

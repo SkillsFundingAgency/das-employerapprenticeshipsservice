@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using HMRC.ESFA.Levy.Api.Client;
-using SFA.DAS.Configuration;
-using SFA.DAS.EAS.Domain;
 using SFA.DAS.EAS.Domain.Configuration;
 using StructureMap;
 
@@ -13,9 +11,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public ApprenticeshipLevyRegistry()
         {
-            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Constants.ServiceName);
-            var httpClient = new HttpClient {BaseAddress = new Uri(config.Hmrc.BaseUrl)};
-            For<IApprenticeshipLevyApiClient>().Use<ApprenticeshipLevyApiClient>().Ctor<HttpClient>().Is(httpClient);
+            For<IApprenticeshipLevyApiClient>().Use<ApprenticeshipLevyApiClient>().Ctor<HttpClient>().Is(c => new HttpClient{ BaseAddress = new Uri(c.GetInstance<EmployerApprenticeshipsServiceConfiguration>().Hmrc.BaseUrl) });
         }
 
     }

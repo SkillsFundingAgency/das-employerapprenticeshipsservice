@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public AuthorizationRegistry()
         {
-            For<FeaturesConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<FeaturesConfiguration>($"{Constants.ServiceName}.FeaturesV2")).Singleton();
+            //For<FeaturesConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<FeaturesConfiguration>($"{Constants.ServiceName}.FeaturesV2")).Singleton();
             For<IAgreementService>().Use<AgreementService>();
             For<IAuthorizationService>().Use<AuthorizationService>();
 

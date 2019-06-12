@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Http;
 using NServiceBus;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.Extensions;
@@ -37,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Api
             var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Api")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL))
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())

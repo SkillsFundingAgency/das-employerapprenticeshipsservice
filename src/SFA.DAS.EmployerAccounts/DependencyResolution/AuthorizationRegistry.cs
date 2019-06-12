@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public AuthorizationRegistry()
         {
-            For<FeaturesConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<FeaturesConfiguration>($"SFA.DAS.EmployerApprenticeshipsService.FeaturesV2")).Singleton();
+            //For<FeaturesConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<FeaturesConfiguration>($"SFA.DAS.EmployerApprenticeshipsService.FeaturesV2")).Singleton();
             For<IAgreementService>().Use<AgreementService>();
             For<IAuthorizationService>().Use<AuthorizationService>();
 

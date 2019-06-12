@@ -8,9 +8,10 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public ConfigurationRegistry()
         {
-            For<EmployerAccountsConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts")).Singleton();
-            For<EmployerFinanceConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance")).Singleton();
-            For<ForecastingApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<ForecastingApiClientConfiguration>("SFA.DAS.Forecasting.Api.Client")).Singleton();
+            //todo need one of these
+            //For<EmployerAccountsConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts")).Singleton();
+            //For<EmployerFinanceConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance")).Singleton();
+            //For<ForecastingApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<ForecastingApiClientConfiguration>("SFA.DAS.Forecasting.Api.Client")).Singleton();
         }
     }
 }

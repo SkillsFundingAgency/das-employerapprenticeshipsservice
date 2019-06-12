@@ -154,6 +154,9 @@
     <Reference Include="SFA.DAS.Audit.Types, Version=1.0.0.20553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
     </Reference>
@@ -331,7 +334,6 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
-    <Compile Include="Messaging\MessageSubscriberPolicy.cs" />
     <Compile Include="Models\UserResponse.cs" />
     <Compile Include="Entities\LevyAggregationEntity.cs" />
     <Compile Include="Interfaces\REST\IRestServiceFactory.cs" />

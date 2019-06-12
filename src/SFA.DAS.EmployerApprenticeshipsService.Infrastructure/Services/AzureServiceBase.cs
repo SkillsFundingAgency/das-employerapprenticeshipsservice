@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure;
@@ -30,12 +31,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public virtual T GetDataFromTableStorage()
         {
-            return ConfigurationHelper.GetConfiguration<T>(ConfigurationName);
-        }
-
-        public Task<T> GetDataFromTableStorageAsync()
-        {
-            return ConfigurationHelper.GetConfigurationAsync<T>(ConfigurationName);
+            //return ConfigurationHelper.GetConfiguration<T>(ConfigurationName);
+            throw new NotImplementedException("Removed this method only used in legacy web app"); //todo tidy this up
         }
 
         public async Task<MemoryStream> StreamDataFromBlobStorage(string containerName, string blobName)

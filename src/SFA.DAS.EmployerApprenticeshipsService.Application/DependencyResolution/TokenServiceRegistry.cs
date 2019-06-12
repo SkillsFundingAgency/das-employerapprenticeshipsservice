@@ -10,7 +10,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public TokenServiceRegistry()
         {
             For<ITokenServiceApiClientConfiguration>().Use(c => c.GetInstance<TokenServiceApiClientConfiguration>());
-            For<TokenServiceApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient")).Singleton();
+            //For<TokenServiceApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<TokenServiceApiClientConfiguration>("SFA.DAS.TokenServiceApiClient")).Singleton();
         }
     }
 }
