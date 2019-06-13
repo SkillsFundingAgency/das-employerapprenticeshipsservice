@@ -42,11 +42,10 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
                 addedOrganisation.Name = commitment.LegalEntityName;
             });
 
-            var (cohort, cohortCreated) = organisation.GetOrAddCohort(cohortApprovalRequestedByProvider.CommitmentId);
-            if (cohortCreated == EntityCreation.Created)
+            var cohort = organisation.GetOrAddCohort(cohortApprovalRequestedByProvider.CommitmentId, addedCohort =>
             {
-                cohort.Reference = commitment.Reference;
-            }
+                addedCohort.Reference = commitment.Reference;
+            });
  
             commitment.Apprenticeships.ForEach(a =>
             {
