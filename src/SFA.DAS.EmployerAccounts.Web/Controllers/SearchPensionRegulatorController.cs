@@ -89,6 +89,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
+        [HttpGet]
+        [Route("pensionregulator/aorn")]
         public ViewResult SearchPensionRegulatorByAorn()
         {
             return View();
