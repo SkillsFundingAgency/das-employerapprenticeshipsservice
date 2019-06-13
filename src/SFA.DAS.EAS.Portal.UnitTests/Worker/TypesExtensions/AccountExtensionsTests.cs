@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using AutoFixture;
 using FluentAssertions;
@@ -23,40 +24,48 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
             Test(f => f.GetOrAddOrganisation(), (f, r) => f.AssertReturnCreatedOrganisation(r));
         }
         
-        [Test, Ignore("Not implemented yet")]
+        [Test]
         public void GetOrAddOrganisation_WhenOrganisationNotInAccountAndOnAddActionGiven_ThenShouldCreateAndAddMutatedOrganisationToAccount()
         {
-            Test(f => f.GetOrAddOrganisation());
+            Test(f => f.ArrangeOnAddActionGiven(), f => f.GetOrAddOrganisation(),
+                f => f.AssertOrganisationCreatedAndAddedToAccount(true));
         }
 
-        [Test, Ignore("Not implemented yet")]
+        [Test]
         public void GetOrAddOrganisation_WhenOrganisationNotInAccountAndOnAddActionGiven_ThenShouldReturnMutatedOrganisation()
         {
-            Test(f => f.GetOrAddOrganisation());
+            Test(f => f.ArrangeOnAddActionGiven(), f => f.GetOrAddOrganisation(),
+                (f, r) => f.AssertReturnCreatedOrganisation(r, true));
         }
 
-        [Test, Ignore("Not implemented yet")]
+        [Test]
         public void GetOrAddOrganisation_WhenOrganisationInAccount_ThenShouldNotAddANewOrganisationToAccount()
         {
-            Test(f => f.ArrangeOrganisationInAccount(), f => f.GetOrAddOrganisation());
+            Test(f => f.ArrangeOrganisationInAccount(), f => f.GetOrAddOrganisation(),
+                f => f.AssertOriginalOrganisationsInAccount());
         }
 
-        [Test, Ignore("Not implemented yet")]
+        [Test]
         public void GetOrAddOrganisation_WhenOrganisationInAccount_ThenShouldReturnExistingOrganisation()
         {
-            Test(f => f.ArrangeOrganisationInAccount(), f => f.GetOrAddOrganisation());
+            Test(f => f.ArrangeOrganisationInAccount(), f => f.GetOrAddOrganisation(),
+                (f, r) => f.AssertReturnExistingOrganisation(r));
         }
         
-        [Test, Ignore("Not implemented yet")]
-        public void GetOrAddOrganisation_WhenOrganisationInAccountAndOnGetActionGiven_ThenShouldAddMutatedExistingOrganisationToAccount()
+        [Test]
+        public void GetOrAddOrganisation_WhenOrganisationInAccountAndOnGetActionGiven_ThenShouldMutateExistingOrganisationInAccount()
         {
-            Test(f => f.ArrangeOrganisationInAccount(), f => f.GetOrAddOrganisation());
+            Test(f => f.ArrangeOrganisationInAccount().ArrangeOnGetActionGiven(),
+                f => f.GetOrAddOrganisation(),
+                (f, r) => f.AssertExistingOrganisationMutatedInAccount());
         }
 
-        [Test, Ignore("Not implemented yet")]
+        [Test]
         public void GetOrAddOrganisation_WhenOrganisationInAccountAndOnGetActionGiven_ThenShouldReturnMutatedExistingOrganisation()
         {
-            Test(f => f.ArrangeOrganisationInAccount(), f => f.GetOrAddOrganisation());
+            Test(f => f.ArrangeOrganisationInAccount().ArrangeOnGetActionGiven(),
+                f => f.GetOrAddOrganisation(),
+                (f, r) => f.AssertReturnExistingOrganisation(r, true));
         }
     }
 
@@ -65,7 +74,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
         public Account Account { get; set; }
         public Account OriginalAccount { get; set; }
         public Fixture Fixture { get; set; }
+        public Action<Organisation> OnAdd { get; set; }
+        public Action<Organisation> OnGet { get; set; }
         public long AccountLegalEntityId { get; set; }
+        public string MutatedOrganisationName { get; set; }
 
         public AccountExtensionsTestsFixture()
         {
@@ -75,28 +87,79 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
             Account.Deleted = null;
         }
 
-        public void ArrangeOrganisationInAccount()
+        public AccountExtensionsTestsFixture ArrangeOrganisationInAccount()
         {
             Account.Organisations.RandomElement().AccountLegalEntityId = AccountLegalEntityId;
+            return this;
+        }
+
+        public AccountExtensionsTestsFixture ArrangeOnAddActionGiven()
+        {
+            OnAdd = organisation => organisation.Name = MutatedOrganisationName = Fixture.Create<string>();
+            return this;
+        }
+
+        public AccountExtensionsTestsFixture ArrangeOnGetActionGiven()
+        {
+            OnGet = organisation => organisation.Name = MutatedOrganisationName = Fixture.Create<string>();
+            return this;
         }
         
         public Organisation GetOrAddOrganisation()
         {
             OriginalAccount = Account.Clone();
-            return Account.GetOrAddOrganisation(AccountLegalEntityId);
+            return Account.GetOrAddOrganisation(AccountLegalEntityId, OnAdd, OnGet);
         }
 
-        public void AssertOrganisationCreatedAndAddedToAccount()
+        public void AssertOrganisationCreatedAndAddedToAccount(bool mutated = false)
         {
             Account.Organisations.Should()
-                .BeEquivalentTo(OriginalAccount.Organisations.Append(new Organisation
-                    {AccountLegalEntityId = AccountLegalEntityId}));
+                .BeEquivalentTo(OriginalAccount.Organisations.Append(ExpectedCreatedOrganisation(mutated)));
         }
 
-        public void AssertReturnCreatedOrganisation(Organisation returnedOrganisation)
+        public void AssertReturnCreatedOrganisation(Organisation returnedOrganisation, bool mutated = false)
         {
             returnedOrganisation.Should()
-                .BeEquivalentTo(new Organisation {AccountLegalEntityId = AccountLegalEntityId});
+                .BeEquivalentTo(ExpectedCreatedOrganisation(mutated));
+        }
+        
+        private Organisation ExpectedCreatedOrganisation(bool mutated)
+        {
+            var expectedOrganisation = new Organisation
+            {
+                AccountLegalEntityId = AccountLegalEntityId
+            };
+            if (mutated)
+                expectedOrganisation.Name = MutatedOrganisationName;
+
+            return expectedOrganisation;
+        }
+
+        public void AssertOriginalOrganisationsInAccount()
+        {
+            Account.Organisations.Should().BeEquivalentTo(OriginalAccount.Organisations);
+        }
+        
+        public void AssertExistingOrganisationMutatedInAccount()
+        {
+            ExpectedExistingOrganisation(true);
+            Account.Organisations.Should()
+                .BeEquivalentTo(OriginalAccount.Organisations);
+        }
+        
+        public void AssertReturnExistingOrganisation(Organisation returnedOrganisation, bool mutated = false)
+        {
+            returnedOrganisation.Should()
+                .BeEquivalentTo(ExpectedExistingOrganisation(mutated));
+        }
+        
+        private Organisation ExpectedExistingOrganisation(bool mutated = false)
+        {
+            var expectedExistingOrganisation = OriginalAccount.Organisations.Single(o => o.AccountLegalEntityId == AccountLegalEntityId);
+            if (mutated)
+                expectedExistingOrganisation.Name = MutatedOrganisationName;
+            
+            return expectedExistingOrganisation;
         }
     }
 }
