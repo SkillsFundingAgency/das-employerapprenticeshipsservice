@@ -123,8 +123,17 @@
         </div>
     </footer>
 
+    <script src="@Html.CdnLink("libs/govuk-frontend", "all.js")"></script>
     <script src="@Html.CdnLink("libs/jquery", "jquery.min.js")"></script>
+    <script src="@Html.CdnLink("js", "das-all.js")"></script>
     <script src="@Html.CdnLink("js", "app.min.js")"></script>
+
+    <script>
+        window.GOVUKFrontend.initAll();
+        window.DASFrontend.initAll();
+    </script>
+
+    @RenderSection("pageSpecificJS", required: false)
 
 </body>
 

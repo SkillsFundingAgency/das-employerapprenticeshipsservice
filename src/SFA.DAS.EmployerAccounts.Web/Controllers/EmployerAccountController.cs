@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using MediatR;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Models;
@@ -47,7 +48,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
             _returnUrlCookieStorageService = returnUrlCookieStorageService;
             _accountCookieStorage = accountCookieStorage;
-
             _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
         }
 
@@ -56,12 +56,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("{HashedAccountId}/gatewayInform")]
         public ActionResult GatewayInform(string hashedAccountId = "")
         {
-
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
                 _accountCookieStorage.Delete(_hashedAccountIdCookieName);
+
                 _accountCookieStorage.Create(
-                    new HashedAccountIdModel{Value = hashedAccountId}, 
+                    new HashedAccountIdModel { Value = hashedAccountId }, 
                     _hashedAccountIdCookieName);
             }
 
@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Info("Starting processing gateway response");
 
                 if (Request.Url == null)
-                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                    return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
 
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
                     Request.Params[ControllerConstants.CodeKeyName],
@@ -149,7 +149,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         });
                 }
 
-                return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
             }
             catch (Exception ex)
             {
@@ -196,7 +196,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         OrganisationName = "MY ACCOUNT"
                     };
 
-                    var response = await _employerAccountOrchestrator.CreateUserAccount(request, HttpContext);
+                    var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
                     var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
                     _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
                     if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
@@ -289,6 +289,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _accountCookieStorage.Delete(_hashedAccountIdCookieName);
 
             _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+
             if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
                 return Redirect(returnUrlCookie.Value);
 
@@ -338,6 +339,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             errorResponse.Status = response.Status;
 
             return View(errorResponse);
+        }
+
+        [HttpGet]
+        [Route("amendOrganisation")]
+        public ActionResult AmendOrganisation()
+        {
+            var employerAccountOrganisationData = _employerAccountOrchestrator.GetCookieData().EmployerAccountOrganisationData;
+
+            if (employerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
+            {
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+            }
+
+            return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
         }
 
         private string GetUserId()

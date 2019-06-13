@@ -5,7 +5,6 @@ namespace SFA.DAS.EAS.Portal.Client.Types
 {
     public class Cohort
     {
-        [JsonConstructor]
         public Cohort()
         {
             Apprenticeships = new List<Apprenticeship>();

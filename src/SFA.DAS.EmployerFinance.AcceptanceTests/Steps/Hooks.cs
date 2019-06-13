@@ -16,6 +16,7 @@ using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
+using SFA.DAS.Testing.AzureStorageEmulator;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -37,6 +38,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [BeforeTestRun]
         public static async Task BeforeTestRun()
         {
+            AzureStorageEmulatorManager.StartStorageEmulator();
+
             _container = IoC.Initialize();
 
             await StartNServiceBusEndpoint();

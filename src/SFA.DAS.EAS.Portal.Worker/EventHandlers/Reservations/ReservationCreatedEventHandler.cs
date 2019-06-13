@@ -1,27 +1,67 @@
-﻿using System.Threading.Tasks;
-using NServiceBus;
-using SFA.DAS.EAS.Portal.Application.Commands.Reservation;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Worker.Extensions;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 {
-    class ReservationCreatedEventHandler : IHandleMessages<ReservationCreatedEvent>
+    public class ReservationCreatedEventHandler : EventHandler<ReservationCreatedEvent>
     {
-        private readonly IMessageContext _messageContext;
-        private readonly AddReservationCommand _addReservationCommand;
-
-        public ReservationCreatedEventHandler(AddReservationCommand addReservationCommand, IMessageContext messageContext)
+        public ReservationCreatedEventHandler(
+            IAccountDocumentService accountDocumentService,
+            IMessageContextInitialisation messageContextInitialisation,
+            ILogger<ReservationCreatedEventHandler> logger)
+                : base(accountDocumentService, messageContextInitialisation, logger)
         {
-            _addReservationCommand = addReservationCommand;
-            _messageContext = messageContext;
         }
 
-        public Task Handle(ReservationCreatedEvent message, IMessageHandlerContext context)
+        protected override async Task Handle(ReservationCreatedEvent reservationCreatedEvent)
         {
-            _messageContext.Initialise(context);
-            return _addReservationCommand.Execute(message);
+            var cancellationToken = default(CancellationToken);
+
+            var accountDocument = await GetOrCreateAccountDocument(reservationCreatedEvent.AccountId, cancellationToken);
+
+            var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, reservationCreatedEvent.AccountLegalEntityId);
+            if (organisationCreation == EntityCreation.Created)
+            {
+                organisation.Name = reservationCreatedEvent.AccountLegalEntityName;
+            }
+            else
+            {
+                var existingReservation = organisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservationCreatedEvent.Id));
+                if (existingReservation != null)
+                    throw DuplicateReservationCreatedEventException(reservationCreatedEvent);
+            }
+            
+            organisation.Reservations.Add(new Client.Types.Reservation
+            {
+                Id = reservationCreatedEvent.Id,
+                CourseCode = reservationCreatedEvent.CourseId,
+                CourseName = reservationCreatedEvent.CourseName,
+                StartDate = reservationCreatedEvent.StartDate,
+                EndDate = reservationCreatedEvent.EndDate
+            });
+            
+            await AccountDocumentService.Save(accountDocument, cancellationToken);
+        }
+        
+        private Exception DuplicateReservationCreatedEventException(ReservationCreatedEvent reservationCreatedEvent)
+        {
+            return new Exception(
+                $@"Received {nameof(ReservationCreatedEvent)} with 
+Id:{reservationCreatedEvent.Id}, 
+AccountId:{reservationCreatedEvent.AccountId},
+AccountLegalEntityId:{reservationCreatedEvent.AccountLegalEntityId},
+AccountLegalEntityName:{reservationCreatedEvent.AccountLegalEntityName},
+CourseId:{reservationCreatedEvent.CourseId},
+CourseName:{reservationCreatedEvent.CourseName},
+StartDate:{reservationCreatedEvent.StartDate},
+EndDate:{reservationCreatedEvent.EndDate},
+when {nameof(AccountDocument)} already contains a reservation with that Id.");
         }
     }
 }

@@ -9,12 +9,19 @@
     <div class="govuk-width-container das-dashboard-header__border">
         <h1 class="govuk-heading-m das-account__title">Your employer account</h1>
         <h2 class="govuk-heading-l das-account__account-name">@Model.Data.Account.Name</h2>
-    </div>
+        @if (Model.Data.ShowSavedFavourites)
+        {
+        <a href="@Url.FavouritesAction()" class="das-favourites-link govuk-body">
+            <span class="das-favourites-link__icon"><img src="@Html.CdnLink("images", "favourite-unchecked-black.svg")" alt=""></span>
+            <span class="das-favourites-link__text">View saved favourites</span>
+        </a>
+        }
+</div>
 </div>
 
 @if (Model.Data.ShowSearchBar)
 {
-    @Html.Action("SearchBar");
+    @Html.Action("SearchBar")
 }
 
 <main class="govuk-main-wrapper das-section--dashboard" id="main-content" role="main">
@@ -30,9 +37,46 @@
             </div>
         </div>
     </div>
+    @if (Model.Data.ShowSearchBar)
+    {
+        @Html.Action("OtherTasksPanel", new {model = Model.Data})
+    }
+
 </main>
+
 
 @if (Model.Data.ShowMostActiveLinks)
 {
-    @Html.Action("MostActiveLinks",new { model = Model.Data });
+    @Html.Action("MostActiveLinks", new { model = Model.Data });
+}
+
+@section pageSpecificJS {
+<script>
+
+    $(function () {
+
+        var $link = $('#other-tasks-link'),
+            $target = $('#das-dashbaord-other-tasks'),
+            activeClass = 'das-dashboard-header__tasks-link--active';
+
+        $link.on('click', function (e) {
+            if ($link.hasClass(activeClass)) {
+                $link.removeClass(activeClass);
+                $target.hide()
+            } else {
+                $link.addClass(activeClass);
+                $target.show();
+            }
+            e.preventDefault();
+        });
+
+        $link.on('keydown', function (e) {
+            if (e.which === 9 && $link.hasClass(activeClass)) {
+                $('.das-section__inner-wrap').focus();
+            }
+        });
+
+    });
+
+</script>
 }
