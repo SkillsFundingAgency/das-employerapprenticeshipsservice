@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
@@ -25,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 
             var accountDocument = await GetOrCreateAccountDocument(reservationCreatedEvent.AccountId, cancellationToken);
 
-            var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, reservationCreatedEvent.AccountLegalEntityId);
+            var (organisation, organisationCreation) = accountDocument.Account.GetOrAddOrganisation(reservationCreatedEvent.AccountLegalEntityId);
             if (organisationCreation == EntityCreation.Created)
             {
                 organisation.Name = reservationCreatedEvent.AccountLegalEntityName;

@@ -6,6 +6,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
@@ -36,7 +37,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
             var accountDocument = await accountDocumentTask;
-            var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, accountLegalEntityId);
+            var (organisation, organisationCreation) = accountDocument.Account.GetOrAddOrganisation(accountLegalEntityId);
             if (organisationCreation == EntityCreation.Created)
             {
                 organisation.Name = commitment.LegalEntityName;

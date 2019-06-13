@@ -7,6 +7,7 @@ using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
 {
@@ -34,30 +35,9 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
 
         protected abstract Task Handle(TEvent message);
         
-        protected enum EntityCreation
-        {
-            Created,
-            Existed
-        }
-
-        //todo: use extension methods on the model
-        
         protected async Task<AccountDocument> GetOrCreateAccountDocument(long accountId, CancellationToken cancellationToken = default)
         {
             return await AccountDocumentService.Get(accountId, cancellationToken) ?? new AccountDocument(accountId);
-        }
-
-        protected (Organisation, EntityCreation) GetOrAddOrganisation(AccountDocument accountDocument, long accountLegalEntityId)
-        {
-            var organisation = accountDocument.Account.Organisations.SingleOrDefault(o => o.AccountLegalEntityId == accountLegalEntityId);
-            if (organisation == null)
-            {
-                organisation = new Organisation {AccountLegalEntityId = accountLegalEntityId};
-                accountDocument.Account.Organisations.Add(organisation);
-                return (organisation, EntityCreation.Created);
-            }
-
-            return (organisation, EntityCreation.Existed);
         }
 
         protected (Provider, EntityCreation) GetOrAddProvider(AccountDocument accountDocument, long ukprn)
