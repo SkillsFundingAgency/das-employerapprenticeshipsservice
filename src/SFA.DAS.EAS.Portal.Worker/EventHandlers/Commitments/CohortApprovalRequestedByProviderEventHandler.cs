@@ -37,11 +37,10 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
             var accountDocument = await accountDocumentTask;
-            var (organisation, organisationCreation) = accountDocument.Account.GetOrAddOrganisation(accountLegalEntityId);
-            if (organisationCreation == EntityCreation.Created)
+            var organisation = accountDocument.Account.GetOrAddOrganisation(accountLegalEntityId, addedOrganisation =>
             {
-                organisation.Name = commitment.LegalEntityName;
-            }
+                addedOrganisation.Name = commitment.LegalEntityName;
+            });
 
             var (cohort, cohortCreated) = organisation.GetOrAddCohort(cohortApprovalRequestedByProvider.CommitmentId);
             if (cohortCreated == EntityCreation.Created)

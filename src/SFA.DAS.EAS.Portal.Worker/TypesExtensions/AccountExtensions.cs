@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 
@@ -5,17 +6,21 @@ namespace SFA.DAS.EAS.Portal.Worker.TypesExtensions
 {
     public static class AccountExtensions
     {
-        public static (Organisation, EntityCreation) GetOrAddOrganisation(this Account account, long accountLegalEntityId)
+        public static Organisation GetOrAddOrganisation(this Account account, long accountLegalEntityId, Action<Organisation> onAdd = null, Action<Organisation> onGet = null)
         {
             var organisation = account.Organisations.SingleOrDefault(o => o.AccountLegalEntityId == accountLegalEntityId);
             if (organisation == null)
             {
                 organisation = new Organisation {AccountLegalEntityId = accountLegalEntityId};
                 account.Organisations.Add(organisation);
-                return (organisation, EntityCreation.Created);
+                onAdd?.Invoke(organisation);
+            }
+            else
+            {
+                onGet?.Invoke(organisation);
             }
 
-            return (organisation, EntityCreation.Existed);
+            return organisation;
         }
 
         public static (Provider, EntityCreation) GetOrAddProvider(this Account account, long ukprn)

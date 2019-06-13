@@ -26,17 +26,17 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
 
             var accountDocument = await GetOrCreateAccountDocument(reservationCreatedEvent.AccountId, cancellationToken);
 
-            var (organisation, organisationCreation) = accountDocument.Account.GetOrAddOrganisation(reservationCreatedEvent.AccountLegalEntityId);
-            if (organisationCreation == EntityCreation.Created)
-            {
-                organisation.Name = reservationCreatedEvent.AccountLegalEntityName;
-            }
-            else
-            {
-                var existingReservation = organisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservationCreatedEvent.Id));
-                if (existingReservation != null)
-                    throw DuplicateReservationCreatedEventException(reservationCreatedEvent);
-            }
+            var organisation = accountDocument.Account.GetOrAddOrganisation(reservationCreatedEvent.AccountLegalEntityId,
+                addedOrganisation =>
+                {
+                    addedOrganisation.Name = reservationCreatedEvent.AccountLegalEntityName;
+                },
+                existingOrganisation =>
+                {
+                    var existingReservation = existingOrganisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservationCreatedEvent.Id));
+                    if (existingReservation != null)
+                        throw DuplicateReservationCreatedEventException(reservationCreatedEvent);
+                });
             
             organisation.Reservations.Add(new Client.Types.Reservation
             {
