@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -7,6 +9,7 @@ using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.Commands;
 using SFA.DAS.EAS.Portal.Application.Commands.Paye;
+using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Worker.EventHandlers.PayeScheme;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 
@@ -18,14 +21,23 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Paye
     {
         private AddedPayeSchemeEventHandler _sut;
         private Mock<ICommandHandler<PayeSchemeAddedCommand>> _commandHandlerMock;
-        private IMessageHandlerContext _messageHandlerMockContext;
+        private Mock<IMessageHandlerContext> _messageHandlerContextMock;
+        private Mock<IMessageContext> _messageContextMock;
 
         [SetUp]
         public void SetUp()
         {
+            _messageContextMock = new Mock<IMessageContext>();
             _commandHandlerMock = new Mock<ICommandHandler<PayeSchemeAddedCommand>>();
-            _messageHandlerMockContext = Mock.Of<IMessageHandlerContext>();
-            _sut = new AddedPayeSchemeEventHandler(_commandHandlerMock.Object);
+            _messageHandlerContextMock = new Mock<IMessageHandlerContext>();
+            _messageHandlerContextMock
+                   .Setup(m => m.MessageHeaders)
+                   .Returns(
+                   new Dictionary<string, string>
+                   {
+                        { "NServiceBus.TimeSent", DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss:ffffff Z", CultureInfo.InvariantCulture) }
+                   });
+            _sut = new AddedPayeSchemeEventHandler(_commandHandlerMock.Object, _messageContextMock.Object);
         }
 
         [Test]
@@ -54,7 +66,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Paye
                 .Returns(Task.CompletedTask);
 
             // Act 
-            await _sut.Handle(payeEvent, _messageHandlerMockContext);
+            await _sut.Handle(payeEvent, _messageHandlerContextMock.Object);
 
             // Assert
             resultCommand.AccountId.Should().Be(1);
