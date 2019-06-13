@@ -73,7 +73,7 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.205" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.658</Version>
+      <Version>1.6.752</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
@@ -713,18 +713,21 @@
     <Content Include="Views\EmployerTeam\V2\Row2Panel1.cshtml" />
     <Content Include="Views\EmployerTeam\V2\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissions.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\SavedProviders.cshtml" />
     <Content Include="Views\EmployerTeam\V2\AccountSettings.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CheckFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissionsDenied.cshtml" />
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
     <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\FinancialTransactions.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ApprenticeshipDetails.cshtml" />
     <Content Include="Views\EmployerTeam\V2\SearchBar.cshtml" />
     <Content Include="Views\EmployerTeam\V2\MostActiveLinks.cshtml" />
     <Content Include="Views\EmployerTeam\V2\PrePayeRecruitment.cshtml" />
     <Content Include="Views\EmployerTeam\V2\AddPaye.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\OtherTasksPanel.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\SingleProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\ProviderPermissionsMultiple.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />

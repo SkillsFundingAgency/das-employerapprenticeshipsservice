@@ -308,7 +308,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
                 OrganisationName = enteredData.EmployerAccountOrganisationData.OrganisationName,
-                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress,
+                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress.Split(','),
                 OrganisationReferenceNumber = enteredData.EmployerAccountOrganisationData.OrganisationReferenceNumber,
                 OrganisationDateOfInception = enteredData.EmployerAccountOrganisationData.OrganisationDateOfInception,
                 PayeReference = enteredData.EmployerAccountPayeRefData.PayeReference,
