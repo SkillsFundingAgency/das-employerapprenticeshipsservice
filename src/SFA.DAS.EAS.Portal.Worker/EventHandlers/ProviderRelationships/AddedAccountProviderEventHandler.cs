@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
             var providerTask = _providerApiClient.GetAsync(addedAccountProviderEvent.ProviderUkprn);
             var accountDocument = await GetOrCreateAccountDocument(addedAccountProviderEvent.AccountId, cancellationToken);
             
-            var (accountProvider,_) = accountDocument.Account.GetOrAddProvider(addedAccountProviderEvent.ProviderUkprn);
+            var accountProvider = accountDocument.Account.GetOrAddProvider(addedAccountProviderEvent.ProviderUkprn);
 
             var provider = await providerTask;
             var address = provider.Addresses.FirstOrDefault(a => a.ContactType == "PRIMARY")
