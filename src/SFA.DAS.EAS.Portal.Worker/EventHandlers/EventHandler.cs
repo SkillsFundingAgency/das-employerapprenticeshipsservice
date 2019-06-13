@@ -40,19 +40,6 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
             return await AccountDocumentService.Get(accountId, cancellationToken) ?? new AccountDocument(accountId);
         }
 
-        protected (Provider, EntityCreation) GetOrAddProvider(AccountDocument accountDocument, long ukprn)
-        {
-            var provider = accountDocument.Account.Providers.SingleOrDefault(p => p.Ukprn == ukprn);
-            if (provider == null)
-            {
-                provider = new Provider {Ukprn = ukprn};
-                accountDocument.Account.Providers.Add(provider);
-                return (provider, EntityCreation.Created);
-            }
-
-            return (provider, EntityCreation.Existed);
-        }
-
         protected (Client.Types.Cohort, EntityCreation) GetOrAddCohort(Organisation organisation, long cohortId)
         {
             //todo: is there a reason for this?

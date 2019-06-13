@@ -18,5 +18,17 @@ namespace SFA.DAS.EAS.Portal.Worker.TypesExtensions
             return (organisation, EntityCreation.Existed);
         }
 
+        public static (Provider, EntityCreation) GetOrAddProvider(this Account account, long ukprn)
+        {
+            var provider = account.Providers.SingleOrDefault(p => p.Ukprn == ukprn);
+            if (provider == null)
+            {
+                provider = new Provider {Ukprn = ukprn};
+                account.Providers.Add(provider);
+                return (provider, EntityCreation.Created);
+            }
+
+            return (provider, EntityCreation.Existed);
+        }
     }
 }
