@@ -35,6 +35,15 @@ namespace SFA.DAS.EmployerAccounts.Services
             return json == null ? null : JsonConvert.DeserializeObject<IEnumerable<Organisation>>(json);
         }
 
+        public async Task<IEnumerable<Organisation>> GetOrgansiationsByAorn(string aorn, string payeRef)
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/pensionsregulator?payeRef={HttpUtility.UrlEncode(payeRef)}&aorn={HttpUtility.UrlEncode(aorn)}";
+
+            var json = await _httpService.GetAsync(url, false);
+            return json == null ? null : JsonConvert.DeserializeObject<IEnumerable<Organisation>>(json);
+        }
+
         private string GetBaseUrl()
         {
             var baseUrl = _configuration.PensionRegulatorApi.BaseUrl.EndsWith("/")
