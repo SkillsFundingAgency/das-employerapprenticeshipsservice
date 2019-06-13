@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.Web
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString)
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString, container)
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dapper;
 using Moq;
-using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;

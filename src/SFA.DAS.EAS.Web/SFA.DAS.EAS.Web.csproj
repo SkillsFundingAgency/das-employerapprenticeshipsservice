@@ -530,7 +530,6 @@
     <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="Extensions\DynamicExtentions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
@@ -1027,7 +1026,6 @@
     <Content Include="src\sass\_icons.scss" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
     <Content Include="src\sass\_tasks.scss" />
-    <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">

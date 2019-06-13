@@ -2,7 +2,6 @@
 using System.Data.Common;
 using System.Data.SqlClient;
 using Moq;
-using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;

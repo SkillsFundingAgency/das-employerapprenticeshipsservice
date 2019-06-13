@@ -34,7 +34,7 @@ namespace SFA.DAS.EAS.Web
         public void Configuration(IAppBuilder app)
         {
             var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
-            var config = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
+            var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerApprenticeshipsServiceConfiguration>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
 
