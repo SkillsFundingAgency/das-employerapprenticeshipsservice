@@ -1,4 +1,6 @@
+using System.Linq;
 using AutoFixture;
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.Testing;
 using SFA.DAS.EAS.Portal.Client.Types;
@@ -9,16 +11,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
     [TestFixture, Parallelizable]
     public class AccountExtensionsTests : FluentTest<AccountExtensionsTestsFixture>
     {
-        [Test, Ignore("Not implemented yet")]
+        [Test]
         public void GetOrAddOrganisation_WhenOrganisationNotInAccount_ThenShouldCreateAndAddOrganisationToAccount()
         {
-            Test(f => f.GetOrAddOrganisation());
+            Test(f => f.GetOrAddOrganisation(), f => f.AssertOrganisationCreatedAndAddedToAccount());
         }
 
-        [Test, Ignore("Not implemented yet")]
+        [Test]
         public void GetOrAddOrganisation_WhenOrganisationNotInAccount_ThenShouldReturnCreatedOrganisation()
         {
-            Test(f => f.GetOrAddOrganisation());
+            Test(f => f.GetOrAddOrganisation(), (f, r) => f.AssertReturnCreatedOrganisation(r));
         }
         
         [Test, Ignore("Not implemented yet")]
@@ -67,8 +69,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
 
         public AccountExtensionsTestsFixture()
         {
-            AccountLegalEntityId = Fixture.Create<long>();
             Fixture = new Fixture();
+            AccountLegalEntityId = Fixture.Create<long>();
             Account = Fixture.Create<Account>();
             Account.Deleted = null;
         }
@@ -82,6 +84,19 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
         {
             OriginalAccount = Account.Clone();
             return Account.GetOrAddOrganisation(AccountLegalEntityId);
+        }
+
+        public void AssertOrganisationCreatedAndAddedToAccount()
+        {
+            Account.Organisations.Should()
+                .BeEquivalentTo(OriginalAccount.Organisations.Append(new Organisation
+                    {AccountLegalEntityId = AccountLegalEntityId}));
+        }
+
+        public void AssertReturnCreatedOrganisation(Organisation returnedOrganisation)
+        {
+            returnedOrganisation.Should()
+                .BeEquivalentTo(new Organisation {AccountLegalEntityId = AccountLegalEntityId});
         }
     }
 }
