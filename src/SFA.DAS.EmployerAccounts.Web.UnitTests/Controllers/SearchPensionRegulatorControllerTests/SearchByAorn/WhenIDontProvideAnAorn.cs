@@ -20,7 +20,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         
         [SetUp]
         public void Setup()
-        {  _controller = new SearchPensionRegulatorController(
+        {
+            _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
                 Mock.Of<SearchPensionRegulatorOrchestrator>(),
                 Mock.Of<IMultiVariantTestingService>(),
