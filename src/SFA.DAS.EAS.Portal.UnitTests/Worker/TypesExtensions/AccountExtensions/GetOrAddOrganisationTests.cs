@@ -3,14 +3,14 @@ using System.Linq;
 using AutoFixture;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.Testing;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
+using SFA.DAS.Testing;
 
-namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
+namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
 {
     [TestFixture, Parallelizable]
-    public class AccountExtensionsTests : FluentTest<AccountExtensionsTestsFixture>
+    public class GetOrAddOrganisationTests : FluentTest<GetOrAddOrganisationTestsFixture>
     {
         [Test]
         public void GetOrAddOrganisation_WhenOrganisationNotInAccount_ThenShouldCreateAndAddOrganisationToAccount()
@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
         }
     }
 
-    public class AccountExtensionsTestsFixture
+    public class GetOrAddOrganisationTestsFixture
     {
         public Account Account { get; set; }
         public Account OriginalAccount { get; set; }
@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
         public long AccountLegalEntityId { get; set; }
         public string MutatedOrganisationName { get; set; }
 
-        public AccountExtensionsTestsFixture()
+        public GetOrAddOrganisationTestsFixture()
         {
             Fixture = new Fixture();
             AccountLegalEntityId = Fixture.Create<long>();
@@ -87,19 +87,19 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions
             Account.Deleted = null;
         }
 
-        public AccountExtensionsTestsFixture ArrangeOrganisationInAccount()
+        public GetOrAddOrganisationTestsFixture ArrangeOrganisationInAccount()
         {
             Account.Organisations.RandomElement().AccountLegalEntityId = AccountLegalEntityId;
             return this;
         }
 
-        public AccountExtensionsTestsFixture ArrangeOnAddActionGiven()
+        public GetOrAddOrganisationTestsFixture ArrangeOnAddActionGiven()
         {
             OnAdd = organisation => organisation.Name = MutatedOrganisationName = Fixture.Create<string>();
             return this;
         }
 
-        public AccountExtensionsTestsFixture ArrangeOnGetActionGiven()
+        public GetOrAddOrganisationTestsFixture ArrangeOnGetActionGiven()
         {
             OnGet = organisation => organisation.Name = MutatedOrganisationName = Fixture.Create<string>();
             return this;
