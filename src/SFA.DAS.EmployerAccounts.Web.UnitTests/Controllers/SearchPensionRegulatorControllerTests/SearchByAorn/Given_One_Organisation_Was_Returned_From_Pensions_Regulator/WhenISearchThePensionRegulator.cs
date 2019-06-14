@@ -7,8 +7,8 @@ using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -65,6 +65,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
             await _controller.SearchPensionRegulatorByAorn(ExpectedAorn, ExpectedPayeRef);
 
             _mediator.Verify(x => x.SendAsync(It.Is<SaveOrganisationData>(y => OrganisationDataMatchesViewModel(y))));
+        }
+
+        [Test]
+        public async Task ThenThePayeDetailsAreSaved()
+        {
+            await _controller.SearchPensionRegulatorByAorn(ExpectedAorn, ExpectedPayeRef);
+
+            _mediator.Verify(x => x.SendAsync(It.Is<SavePayeRefData>(y => y.PayeRefData.AORN == ExpectedAorn && y.PayeRefData.PayeReference == ExpectedPayeRef)));
         }
 
         [Test]

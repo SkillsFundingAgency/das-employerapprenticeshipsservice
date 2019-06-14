@@ -5,6 +5,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -21,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         private const string ExpectedPayeRef = "payeref";
         private SearchPensionRegulatorController _controller;
         private SearchPensionRegulatorResultsViewModel _expectedData;
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Setup()
@@ -46,12 +48,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                         }
                     });
 
+            _mediator = new Mock<IMediator>();
+
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
                 orchestrator.Object,
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
-                Mock.Of<IMediator>());
+                _mediator.Object);
+        }
+
+        [Test]
+        public async Task ThenThePayeDetailsAreSaved()
+        {
+            await _controller.SearchPensionRegulatorByAorn(ExpectedAorn, ExpectedPayeRef);
+
+            _mediator.Verify(x => x.SendAsync(It.Is<SavePayeRefData>(y => y.PayeRefData.AORN == ExpectedAorn && y.PayeRefData.PayeReference == ExpectedPayeRef)));
         }
 
         [Test]

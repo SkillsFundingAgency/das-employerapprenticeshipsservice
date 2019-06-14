@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -55,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
                 }
                 case 1:
-                {                  
+                {
                     SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
@@ -109,10 +110,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 case 1:
                 {
                     SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
+                    await SavePayeDetails(aorn, payeRef);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
-                default: return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
+                default:
+                {
+                    await SavePayeDetails(aorn, payeRef);
+                    return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
+                }
             }
+        }
+
+        private async Task SavePayeDetails(string aorn, string payeRef)
+        {
+            await _mediatr.SendAsync(new SavePayeRefData(new EmployerAccountPayeRefData
+            {
+                PayeReference = payeRef,
+                AORN = aorn
+            }));
         }
 
         private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
