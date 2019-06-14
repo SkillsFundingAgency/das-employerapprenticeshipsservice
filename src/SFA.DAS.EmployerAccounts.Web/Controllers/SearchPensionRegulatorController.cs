@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("pensionregulator/aorn")]
         public async Task<ViewResult> SearchPensionRegulatorByAorn()
         {
-            return View();
+            return View(ControllerConstants.SearchUsingAornViewName, new SearchPensionRegulatorByAornViewModel());
         }
 
         [HttpPost]
@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             switch (model.Data.Results.Count)
             {
-                case 0: return View(ControllerConstants.SearchUsingAornViewName);
+                case 0: return View(ControllerConstants.SearchUsingAornViewName, viewModel);
                 case 1:
                 {
                     SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
