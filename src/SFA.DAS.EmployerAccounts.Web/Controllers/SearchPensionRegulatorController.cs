@@ -100,9 +100,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [Route("pensionregulator/aorn")]
-        public async Task<ActionResult> SearchPensionRegulatorByAorn(string aorn, string payeRef)
+        public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorResultsViewModel viewModel)
         {
-            var model = await _orchestrator.GetOrganisationsByAorn(aorn, payeRef);
+            var model = await _orchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
             switch (model.Data.Results.Count)
             {
@@ -110,12 +110,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 case 1:
                 {
                     SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
-                    await SavePayeDetails(aorn, payeRef);
+                    await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
                 default:
                 {
-                    await SavePayeDetails(aorn, payeRef);
+                    await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
                 }
             }
