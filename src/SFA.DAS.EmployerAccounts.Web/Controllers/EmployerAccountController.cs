@@ -345,11 +345,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("amendOrganisation")]
         public ActionResult AmendOrganisation()
         {
-            var employerAccountOrganisationData = _employerAccountOrchestrator.GetCookieData().EmployerAccountOrganisationData;
+            var employerAccountData = _employerAccountOrchestrator.GetCookieData();
 
-            if (employerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
+            if (employerAccountData.EmployerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountData.EmployerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
             {
-                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+                return RedirectToAction(!string.IsNullOrWhiteSpace(employerAccountData.EmployerAccountPayeRefData.AORN)
+                        ? ControllerConstants.SearchUsingAornActionName
+                        : ControllerConstants.SearchPensionRegulatorActionName, 
+                    ControllerConstants.SearchPensionRegulatorControllerName);
             }
 
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);

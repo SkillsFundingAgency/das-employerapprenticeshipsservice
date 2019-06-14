@@ -60,6 +60,7 @@
         public const string SearchPensionRegulatorControllerName = "SearchPensionRegulator";
         public const string SearchPensionRegulatorActionName = "SearchPensionRegulator";
         public const string SearchPensionRegulatorResultsViewName = "SearchPensionRegulatorResults";
+        public const string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
         public const string ServiceStartPageViewName = "ServiceStartPage";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
