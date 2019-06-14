@@ -1,8 +1,8 @@
+﻿using SFA.DAS.EAS.Portal.Client.Types;
 using System;
 using System.Linq;
-using SFA.DAS.EAS.Portal.Client.Types;
 
-namespace SFA.DAS.EAS.Portal.Worker.TypesExtensions
+namespace SFA.DAS.EAS.Portal.Extensions
 {
     public static class OrganisationExtensions
     {
@@ -13,7 +13,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TypesExtensions
             var cohort = organisation.Cohorts.SingleOrDefault(c => cohortIdAsString.Equals(c.Id, StringComparison.OrdinalIgnoreCase));
             if (cohort == null)
             {
-                cohort = new Cohort {Id = cohortIdAsString};
+                cohort = new Cohort { Id = cohortIdAsString };
                 organisation.Cohorts.Add(cohort);
                 onAdd?.Invoke(cohort);
             }
