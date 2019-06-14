@@ -15,12 +15,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
     /// </summary>
     static class TestSetupIoC
     {
-        private static readonly Lazy<EmployerApprenticeshipsServiceConfiguration> LazyAccountConfiguration = 
-            new Lazy<EmployerApprenticeshipsServiceConfiguration>(GetAccountConfiguration);
-
-        private static readonly Lazy<LevyDeclarationProviderConfiguration> LazyFinanceConfiguration = 
-            new Lazy<LevyDeclarationProviderConfiguration>(GetFinanceConfiguration);
-
         public static IContainer CreateIoC()
         {
             var ioc = new Container(config =>
@@ -41,7 +35,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             config.AddRegistry<HashingRegistry>();
             config.AddRegistry<RepositoriesRegistry>();
 
-            var accountConfiguration = LazyAccountConfiguration.Value;
+            var accountConfiguration = new EmployerApprenticeshipsServiceConfiguration()
+            {
+                DatabaseConnectionString = System.Configuration.ConfigurationManager.AppSettings["AccountsDatabaseConnectionString"]
+            };
+
+
             var dbContext = new EmployerAccountsDbContext(accountConfiguration.DatabaseConnectionString);
 
             config.For<DbConnection>().Use(context => new SqlConnection(accountConfiguration.DatabaseConnectionString));
@@ -52,19 +51,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private static void SetUpFinanceIoC(ConfigurationExpression config)
         {
-            var financeConfiguration = LazyFinanceConfiguration.Value;
+            var financeConfiguration = new LevyDeclarationProviderConfiguration()
+            {
+                DatabaseConnectionString = System.Configuration.ConfigurationManager.AppSettings["FinanceDatabaseConnectionString"]
+            };
+
             config.For<LevyDeclarationProviderConfiguration>().Use(financeConfiguration);
             config.For<EmployerFinanceDbContext>().Use(context => new EmployerFinanceDbContext(financeConfiguration.DatabaseConnectionString));
-        }
-
-        private static EmployerApprenticeshipsServiceConfiguration GetAccountConfiguration()
-        {
-            return ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Domain.Constants.ServiceName);
-        }
-
-        private static LevyDeclarationProviderConfiguration GetFinanceConfiguration()
-        {
-            return ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider");
         }
     }
 }

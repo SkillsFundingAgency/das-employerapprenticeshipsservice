@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -20,7 +21,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
 
         public FinanceStatisticsDataHelper()
         {
-            _configuration = ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>(ServiceName);
+            _configuration = new LevyDeclarationProviderConfiguration
+            {
+                DatabaseConnectionString = ConfigurationManager.AppSettings["FinanceDatabaseConnectionString"]
+            };
         }
 
         public async Task<StatisticsViewModel> GetStatistics()

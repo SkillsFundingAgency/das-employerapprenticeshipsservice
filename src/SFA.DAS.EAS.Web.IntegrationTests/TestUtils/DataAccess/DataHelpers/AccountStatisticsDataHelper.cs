@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -20,7 +21,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
         
         public AccountStatisticsDataHelper()
         {
-            _configuration = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
+            _configuration = new EmployerApprenticeshipsServiceConfiguration
+            {
+                DatabaseConnectionString = ConfigurationManager.AppSettings["AccountsDatabaseConnectionString"]
+            };
         }
 
         public async Task<StatisticsViewModel> GetStatistics()

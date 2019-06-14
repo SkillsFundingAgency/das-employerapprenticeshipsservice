@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -69,8 +70,10 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
     {
         public EmployerAccountTeamRepositoryTestFixtures()
         {
-            EmployerAccountsConfiguration =
-                ConfigurationHelper.GetConfiguration<EmployerAccountsConfiguration>(Constants.ServiceName);
+            EmployerAccountsConfiguration = new EmployerAccountsConfiguration
+            {
+                DatabaseConnectionString = ConfigurationManager.AppSettings["AccountsDatabaseConnectionString"]
+            };
 
             LoggerMock = new Mock<ILog>();
         }
