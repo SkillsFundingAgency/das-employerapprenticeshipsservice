@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using StructureMap.Pipeline;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -91,9 +92,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("pensionregulator/aorn")]
-        public ViewResult SearchPensionRegulatorByAorn()
+        public async Task<ViewResult> SearchPensionRegulatorByAorn()
         {
             return View();
+        }
+
+        [HttpPost]
+        [Route("pensionregulator/aorn")]
+        public async Task<ActionResult> SearchPensionRegulatorByAorn(string aorn, string payeRef)
+        {
+            var model = await _orchestrator.GetOrganisationsByAorn(aorn, payeRef);
+
+            switch (model.Data.Results.Count)
+            {
+                case 0: return View(ControllerConstants.SearchUsingAornViewName);
+                case 1:
+                {
+                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
+                    return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
+                }
+                default: return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
+            }
         }
 
         private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
