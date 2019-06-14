@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationsByAornTests
         }
 
         [Test]
-        public void ThenTrueIsRetrunedWhenAllFieldsArePopulated()
+        public void ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
             var actual = _validator.Validate(new GetOrganisationsByAornRequest("aorn", "PayeRefTest"));
