@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using AutoFixture;
 using FluentAssertions;
@@ -69,22 +68,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
         }
     }
 
-    public class GetOrAddProviderTestsFixture
+    public class GetOrAddProviderTestsFixture : AccountExtensionsTestsFixture<Provider>
     {
-        public Account Account { get; set; }
-        public Account OriginalAccount { get; set; }
-        public Fixture Fixture { get; set; }
-        public Action<Provider> OnAdd { get; set; }
-        public Action<Provider> OnGet { get; set; }
         public long Ukprn { get; set; }
         public string MutatedProviderName { get; set; }
 
         public GetOrAddProviderTestsFixture()
         {
-            Fixture = new Fixture();
             Ukprn = Fixture.Create<long>();
-            Account = Fixture.Create<Account>();
-            Account.Deleted = null;
         }
 
         public GetOrAddProviderTestsFixture ArrangeProviderInAccount()
@@ -95,13 +86,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
 
         public GetOrAddProviderTestsFixture ArrangeOnAddActionGiven()
         {
-            OnAdd = Provider => Provider.Name = MutatedProviderName = Fixture.Create<string>();
+            OnAdd = provider => provider.Name = MutatedProviderName = Fixture.Create<string>();
             return this;
         }
 
         public GetOrAddProviderTestsFixture ArrangeOnGetActionGiven()
         {
-            OnGet = Provider => Provider.Name = MutatedProviderName = Fixture.Create<string>();
+            OnGet = provider => provider.Name = MutatedProviderName = Fixture.Create<string>();
             return this;
         }
         

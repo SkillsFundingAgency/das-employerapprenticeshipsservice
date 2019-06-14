@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using AutoFixture;
 using FluentAssertions;
@@ -69,24 +68,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
         }
     }
 
-    public class GetOrAddOrganisationTestsFixture
+    public class GetOrAddOrganisationTestsFixture : AccountExtensionsTestsFixture<Organisation>
     {
-        public Account Account { get; set; }
-        public Account OriginalAccount { get; set; }
-        public Fixture Fixture { get; set; }
-        public Action<Organisation> OnAdd { get; set; }
-        public Action<Organisation> OnGet { get; set; }
         public long AccountLegalEntityId { get; set; }
         public string MutatedOrganisationName { get; set; }
 
         public GetOrAddOrganisationTestsFixture()
         {
-            Fixture = new Fixture();
             AccountLegalEntityId = Fixture.Create<long>();
-            Account = Fixture.Create<Account>();
-            Account.Deleted = null;
         }
-
+        
         public GetOrAddOrganisationTestsFixture ArrangeOrganisationInAccount()
         {
             Account.Organisations.RandomElement().AccountLegalEntityId = AccountLegalEntityId;
