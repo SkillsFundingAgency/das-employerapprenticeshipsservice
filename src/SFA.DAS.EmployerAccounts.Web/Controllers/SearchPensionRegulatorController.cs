@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -100,8 +101,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [Route("pensionregulator/aorn")]
-        public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorResultsViewModel viewModel)
+        public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
+            ValidateSearchPensionRegulatorResultsViewModel(viewModel);
+            if (!viewModel.Valid)
+            {
+                return View(ControllerConstants.SearchUsingAornViewName, viewModel);
+            }
+
             var model = await _orchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
             switch (model.Data.Results.Count)
@@ -119,6 +126,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
                 }
             }
+        }
+
+        private void ValidateSearchPensionRegulatorResultsViewModel(SearchPensionRegulatorByAornViewModel viewModel)
+        {
+            var errors = new Dictionary<string, string>();
+            if (string.IsNullOrWhiteSpace(viewModel.Aorn))
+            {
+                errors.Add(nameof(viewModel.Aorn), "Enter your reference number to continue");
+            }
+
+            if (string.IsNullOrWhiteSpace(viewModel.PayeRef))
+            {
+                errors.Add(nameof(viewModel.PayeRef), "Enter your PAYE scheme to continue");
+            }
+
+            viewModel.AddErrorsFromDictionary(errors);
         }
 
         private async Task SavePayeDetails(string aorn, string payeRef)

@@ -4,5 +4,8 @@
     {
         public string Aorn { get; set; }
         public string PayeRef { get; set; }
+
+        public string AornError => GetErrorMessage(nameof(Aorn));
+        public string PayeRefError => GetErrorMessage(nameof(PayeRef));
     }
 }
