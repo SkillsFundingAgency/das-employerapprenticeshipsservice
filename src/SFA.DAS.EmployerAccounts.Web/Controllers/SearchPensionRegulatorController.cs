@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("pensionregulator/aorn")]
         public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
-            ValidateSearchPensionRegulatorResultsViewModel(viewModel);
+            ValidateSearchPensionRegulatorByAornViewModel(viewModel);
             if (!viewModel.Valid)
             {
                 return View(ControllerConstants.SearchUsingAornViewName, viewModel);
@@ -128,7 +128,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
         }
 
-        private void ValidateSearchPensionRegulatorResultsViewModel(SearchPensionRegulatorByAornViewModel viewModel)
+        private void ValidateSearchPensionRegulatorByAornViewModel(SearchPensionRegulatorByAornViewModel viewModel)
         {
             var errors = new Dictionary<string, string>();
             if (string.IsNullOrWhiteSpace(viewModel.Aorn))

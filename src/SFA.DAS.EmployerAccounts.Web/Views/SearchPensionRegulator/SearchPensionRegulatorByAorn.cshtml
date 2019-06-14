@@ -20,19 +20,27 @@
             @Html.AntiForgeryToken()
             <div class="form-group" id="aorn-details-form">
                 <fieldset>
-                    <div class="form-group">
+                    <div class="form-group @(!string.IsNullOrEmpty(Model.AornError) ? "error" : "")">
                         <label for="aorn">
                             <span class="form-label-bold">Accounts office reference number</span>
                             <span class="form-hint">For example, 123PA12345678</span>
+                            @if (!string.IsNullOrEmpty(Model.AornError))
+                            {
+                                <span class="error-message" id="error-message-aorn">@Model.AornError</span>
+                            }
                         </label>
-                        <input class="form-control" id="aorn" name="aorn" type="text" value="@Model.Aorn" required="required">
+                        <input class="form-control" id="aorn" name="aorn" type="text" value="@Model.Aorn" required="required" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group @(!string.IsNullOrEmpty(Model.PayeRefError) ? "error" : "")">
                         <label for="payeRef">
                             <span class="form-label-bold">Employer PAYE scheme reference</span>
                             <span class="form-hint">For example, 123/AB12345</span>
+                            @if (!string.IsNullOrEmpty(Model.PayeRefError))
+                            {
+                                <span class="error-message" id="error-message-payeRef">@Model.PayeRef</span>
+                            }
                         </label>
-                        <input class="form-control" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" required="required">
+                        <input class="form-control" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" required="required" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
                     </div>
                 </fieldset>
             </div>
