@@ -5,5 +5,6 @@
         public const string EmployerAccounts = "SFA.DAS.EmployerAccounts";
         public const string EmployerFinance = "SFA.DAS.EmployerFinance";
         public const string ForecastingApiClient = "SFA.DAS.Forecasting.Api.Client";
+        public const string Features = "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
     }
 }

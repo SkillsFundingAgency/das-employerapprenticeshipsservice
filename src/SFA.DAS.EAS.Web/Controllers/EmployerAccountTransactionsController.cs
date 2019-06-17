@@ -4,9 +4,6 @@ using System;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.Validation.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {

@@ -12,7 +12,6 @@ using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using NLog;
 using Owin;
-using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web;
 using SFA.DAS.EAS.Web.App_Start;

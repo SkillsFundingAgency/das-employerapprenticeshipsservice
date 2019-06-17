@@ -2,7 +2,6 @@
 using System.Web;
 using System.Web.Http;
 using NServiceBus;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.Extensions;

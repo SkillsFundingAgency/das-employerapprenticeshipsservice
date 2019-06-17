@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EmployerAccounts.Configuration
+﻿namespace SFA.DAS.EmployerAccounts.Configuration
 {
     public static class ConfigurationKeys
     {
         public const string EmployerAccounts = "SFA.DAS.EmployerAccounts";
         public const string Features = "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
+        public const string TokenServiceApiClient = "SFA.DAS.TokenServiceApiClient";
+        public const string TasksApi = "SFA.DAS.Tasks.Api";
+        public const string ReferenceDataApiClient = "SFA.DAS.ReferenceDataApiClient";
+        public const string NotificationsApiClient = "SFA.DAS.EmployerAccounts.Notifications";
+        public const string CommitmentsApiClient = "SFA.DAS.CommitmentsAPI";
     }
 }

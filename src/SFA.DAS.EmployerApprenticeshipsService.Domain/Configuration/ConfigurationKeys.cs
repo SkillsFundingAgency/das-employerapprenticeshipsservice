@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SFA.DAS.EAS.Domain.Configuration
+﻿namespace SFA.DAS.EAS.Domain.Configuration
 {
     public static class ConfigurationKeys
     {
-        public static string LevyDeclarationProvider = "SFA.DAS.LevyAggregationProvider";
-        public static string PaymentProvider = "SFA.DAS.PaymentProvider";
-        public static string EmployerApprenticeshipsService = "SFA.DAS.EmployerApprenticeshipsService";
+        public const string LevyDeclarationProvider = "SFA.DAS.LevyAggregationProvider";
+        public const string PaymentProvider = "SFA.DAS.PaymentProvider";
+        public const string EmployerApprenticeshipsService = "SFA.DAS.EmployerApprenticeshipsService";
+        public const string TaskApi = "SFA.DAS.Tasks.Api";
+        public const string ReferenceDataApi = "SFA.DAS.ReferenceDataApiClient";
+        public const string PaymentsApiClient = "SFA.DAS.PaymentsAPI";
+        public const string NotificationsApiClient = "SFA.DAS.EmployerApprenticeshipsService.Notifications";
+        public const string CommitmentsApiClient = "SFA.DAS.CommitmentsAPI";
+        public const string Features = "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
     }
 }

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Configuration;
+﻿using SFA.DAS.AutoConfiguration;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
@@ -11,7 +12,8 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public TasksRegistry()
         {
-            //For<ITaskApiConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<TaskApiConfiguration>("SFA.DAS.Tasks.Api")).Singleton();
+            For<ITaskApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ITaskApiConfiguration>(ConfigurationKeys.TasksApi)).Singleton();
+
             For<ITaskService>().Use<TaskService>();
         }
     }
