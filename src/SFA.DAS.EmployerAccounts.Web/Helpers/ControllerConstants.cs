@@ -66,6 +66,7 @@
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
         public const string SignOutActionName = "SignOut";
+        public const string SkipRegistrationActionName = "SkipRegistration";
         public const string SummaryActionName = "Summary";
         public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
