@@ -1,0 +1,58 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@{ViewBag.PageID = "page-paye-scheme-ways-to-add"; }
+@{ViewBag.Title = "Ways to add your PAYE scheme"; }
+@{ViewBag.Section = "paye";}
+@{ViewBag.HideNav = "true"; }
+@{
+    ViewBag.GaData.Vpv = "/accounts/pensionregulator/search-by-aorn";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            Enter your PAYE scheme details
+        </h1>
+
+        <p>Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
+
+        <form method="POST" action="@Url.Action(ControllerConstants.SearchUsingAornActionName)">
+            @Html.AntiForgeryToken()
+            <div class="form-group" id="aorn-details-form">
+                <fieldset>
+                    <div class="form-group">
+                        <label for="aorn">
+                            <span class="form-label-bold">Accounts office reference number</span>
+                            <span class="form-hint">For example, 123PA12345678</span>
+                        </label>
+                        <input class="form-control" id="aorn" name="aorn" type="text" value="" required="required">
+                    </div>
+                    <div class="form-group">
+                        <label for="payeRef">
+                            <span class="form-label-bold">Employer PAYE scheme reference</span>
+                            <span class="form-hint">For example, 123/AB12345</span>
+                        </label>
+                        <input class="form-control" id="payeRef" name="payeRef" type="text" value="" required="required">
+                    </div>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <button class="button" type="submit" id="submit-aorn-details">Continue</button>
+                <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName)" class="button button-link">Skip this step for now</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <a href="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName)" class="back-link">Back</a>
+    </div>
+}
+
+@section pageSpecificJS {
+    <script type="text/javascript">
+        $(function () {
+            sfa.homePage.init();
+        });
+    </script>
+}

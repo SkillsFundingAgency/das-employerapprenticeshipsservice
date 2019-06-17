@@ -188,22 +188,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case AddPayeLater:
-                {
-                    var request = new CreateUserAccountViewModel
-                    {
-                        UserId = GetUserId(),
-                        OrganisationName = "MY ACCOUNT"
-                    };
-
-                    var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
-                    var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
-                    _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-                    if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
-                        return Redirect(returnUrlCookie.Value);
-
-                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
-                }
+                case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
                 case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 default:
                 {
@@ -216,6 +201,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(model);
                 }
             }
+        }
+
+        public async Task<ActionResult> SkipRegistration()
+        {
+            var request = new CreateUserAccountViewModel
+            {
+                UserId = GetUserId(),
+                OrganisationName = "MY ACCOUNT"
+            };
+
+            var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
+            var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+            _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                return Redirect(returnUrlCookie.Value);
+
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
         }
 
         [HttpGet]

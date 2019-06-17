@@ -5,11 +5,13 @@ using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using StructureMap.Pipeline;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -54,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
                 }
                 case 1:
-                {                  
+                {
                     SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
@@ -66,6 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
         public ActionResult SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
@@ -87,6 +90,46 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             SavePensionRegulatorOrganisationDataIfItHasAValidName(item, true, true);
             return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
+        }
+
+        [HttpGet]
+        [Route("pensionregulator/aorn")]
+        public async Task<ViewResult> SearchPensionRegulatorByAorn()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("pensionregulator/aorn")]
+        public async Task<ActionResult> SearchPensionRegulatorByAorn(string aorn, string payeRef)
+        {
+            var model = await _orchestrator.GetOrganisationsByAorn(aorn, payeRef);
+
+            switch (model.Data.Results.Count)
+            {
+                case 0: return View(ControllerConstants.SearchUsingAornViewName);
+                case 1:
+                {
+                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
+                    await SavePayeDetails(aorn, payeRef);
+                    return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
+                }
+                default:
+                {
+                    await SavePayeDetails(aorn, payeRef);
+                    return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
+                }
+            }
+        }
+
+        private async Task SavePayeDetails(string aorn, string payeRef)
+        {
+            await _mediatr.SendAsync(new SavePayeRefData(new EmployerAccountPayeRefData
+            {
+                PayeReference = payeRef,
+                AORN = aorn
+            }));
         }
 
         private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)

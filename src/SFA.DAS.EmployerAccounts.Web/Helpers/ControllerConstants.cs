@@ -70,5 +70,9 @@
         public const string ViewTeamViewName = "ViewTeam";
         public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
+        public const string WaysToAddPayeSchemeActionName = "WaysToAdd";
+        public const string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
+        public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
+        public const string SkipRegistrationActionName = "SkipRegistration";
     }
 }
