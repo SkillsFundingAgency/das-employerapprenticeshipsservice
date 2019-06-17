@@ -6,5 +6,5 @@ namespace SFA.DAS.EAS.Portal.Application.Services
     {
         string Id { get; set; }
         DateTime CreatedDateTime { get; set; }
-    }
+   }
 }

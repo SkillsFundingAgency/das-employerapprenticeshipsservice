@@ -54,11 +54,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data))
+            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
-                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault() != null && response.Data.AccountViewModel?.Organisations?.FirstOrDefault().Cohorts?.FirstOrDefault().Apprenticeships?.Count > 0;
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
 
@@ -332,10 +332,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row1Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { Data = model };
             if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
+            }
+            else if (model.HasSingleProvider)
+            {
+                viewModel.ViewName = "SingleProvider";
+            }
+            else if (model.HasMultipleProviders)
+            {
+                viewModel.ViewName = "ProviderPermissionsMultiple";
+            }
+            else
+            {
+                viewModel.ViewName = "ProviderPermissions";
             }
 
             return PartialView(viewModel);
@@ -344,7 +356,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "FinancialTransactions", Data = model });
         }
 
         [ChildActionOnly]
@@ -377,7 +389,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult ProviderPermissionsMultiple(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
         public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult FinancialTransactions(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        public ActionResult SingleProvider(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -413,7 +442,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult PrePAYERecruitment(AccountDashboardViewModel model)
+        public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -426,6 +455,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult OtherTasksPanel(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -454,6 +489,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private bool HasPayeScheme(AccountDashboardViewModel data)
         {
             return data.PayeSchemeCount > 0;
+        }
+
+        private bool HasOrganisation(AccountDashboardViewModel data)
+        {
+            return data.OrgainsationCount > 0;
         }
     }
 }

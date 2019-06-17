@@ -218,6 +218,33 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
         }
 
         [Test]
+        public async Task ThenIfAPensionsRegulatorOrganisationIsAlreadyAddedToTheAccountThenItIsNotSelectable()
+        {
+            //Arrange
+            var hashedAccountId = "ABC123";
+            var userId = "test";
+            var companyCode = "zzz9435";
+            var searchTerm = "Test Org";
+            var pageNumber = 2;
+            var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
+            {
+                Entites = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.PensionsRegulator, Code = companyCode } }
+            };
+            _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
+            var expectedSearchResults = new GetOrganisationsResponse
+            {
+                Organisations = new PagedResponse<OrganisationName> { Data = new List<OrganisationName> { new OrganisationName { Type = OrganisationType.PensionsRegulator, Code = companyCode, Address = new Address() } } }
+            };
+            _mediator.Setup(x => x.SendAsync(It.Is<GetOrganisationsRequest>(c => c.SearchTerm.Equals(searchTerm) && c.PageNumber == pageNumber))).ReturnsAsync(expectedSearchResults);
+
+            //Act
+            var result = await _orchestrator.SearchOrganisation(searchTerm, pageNumber, null, hashedAccountId, userId);
+
+            //Assert
+            Assert.IsTrue(result.Data.Results.Data.Single().AddedToAccount);
+        }
+
+        [Test]
         public async Task ThenIfThereIsNoDasAccountThenExistingOrganisationsArentChecked()
         {
             //Act

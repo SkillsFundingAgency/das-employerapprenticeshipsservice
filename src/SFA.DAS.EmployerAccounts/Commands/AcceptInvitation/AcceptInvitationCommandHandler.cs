@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Types.Models;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.TimeProvider;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
         private readonly IUserAccountRepository _userAccountRepository;
         private readonly IAuditService _auditService;
         private readonly IValidator<AcceptInvitationCommand> _validator;
+        private readonly IHashingService _hashingService;
         private readonly IEventPublisher _eventPublisher;
         private readonly ILog _logger;
 
@@ -34,6 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
             IAuditService auditService,
             IEventPublisher eventPublisher,
             IValidator<AcceptInvitationCommand> validator,
+            IHashingService hashingService,
             ILog logger)
         {
             _invitationRepository = invitationRepository;
@@ -42,6 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
             _auditService = auditService;
             _eventPublisher = eventPublisher;
             _validator = validator;
+            _hashingService = hashingService;
             _logger = logger;
         }
 
@@ -69,8 +73,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
             await _invitationRepository.Accept(invitation.Email, invitation.AccountId,invitation.Role);
 
             await CreateAuditEntry(message, user, invitation);
-
-
 
             await PublishUserJoinedMessage(invitation.AccountId, user, invitation);
         }
@@ -127,6 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AcceptInvitation
             return _eventPublisher.Publish(new UserJoinedEvent
             {
                 AccountId = accountId,
+                HashedAccountId = _hashingService.HashValue(accountId),
                 UserName = user.FullName,
                 UserRef = user.Ref,
                 Role = (UserRole)invitation.Role,
