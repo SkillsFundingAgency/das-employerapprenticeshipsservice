@@ -2,8 +2,9 @@
 using StructureMap;
 using System.Collections.Generic;
 using SFA.DAS.Authorization;
-using SFA.DAS.Configuration;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Authorization;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
@@ -11,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public AuthorizationRegistry()
         {
-            //For<FeaturesConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<FeaturesConfiguration>($"SFA.DAS.EmployerApprenticeshipsService.FeaturesV2")).Singleton();
+            For<FeaturesConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<FeaturesConfiguration>(ConfigurationKeys.Features)).Singleton();
             For<IAgreementService>().Use<AgreementService>();
             For<IAuthorizationService>().Use<AuthorizationService>();
 

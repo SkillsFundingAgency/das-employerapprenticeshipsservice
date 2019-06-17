@@ -10,6 +10,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public ConfigurationRegistry()
         {
+            //todo configuration keys
             IncludeRegistry<AutoConfigurationRegistry>();
             For<EmployerAccountsConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsConfiguration>("SFA.DAS.EmployerAccounts")).Singleton();
             For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceConfiguration>("SFA.DAS.EmployerFinance")).Singleton();
