@@ -10,5 +10,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
     {
         public static string LevyDeclarationProvider = "SFA.DAS.LevyAggregationProvider";
         public static string PaymentProvider = "SFA.DAS.PaymentProvider";
+        public static string EmployerApprenticeshipsService = "SFA.DAS.EmployerApprenticeshipsService";
     }
 }

@@ -7,6 +7,7 @@ using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Testing.Helpers;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
@@ -37,6 +38,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             config.AddRegistry<RepositoriesRegistry>();
             config.AddRegistry<AutoConfigurationRegistry>();
 
+
             //this needs to be conditional based on environment...? or just read from the azure local storage - using something maybe test helper?
             //var accountConfiguration = new EmployerApprenticeshipsServiceConfiguration()
             //{
@@ -45,20 +47,15 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             //let's just wire up using auto config and get the instance that way as per the real code
 
             config.For<DbConnection>().Use(context => new SqlConnection(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
-            config.For<EmployerApprenticeshipsServiceConfiguration>().Use(c => ConfigurationTestHelper);
+            config.For<EmployerApprenticeshipsServiceConfiguration>().Use(c => ConfigurationTestHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ConfigurationKeys.EmployerApprenticeshipsService));
             config.For<EmployerAccountsDbContext>().Use(context => new EmployerAccountsDbContext(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
-            config.For<Lazy<EmployerAccountsDbContext>>().Use(context => new Lazy<EmployerAccountsDbContext>(() => context.GetInstance<EmployerAccountsDbContext>()));
+            config.For<Lazy<EmployerAccountsDbContext>>().Use(context => new Lazy<EmployerAccountsDbContext>(() => new EmployerAccountsDbContext(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString)));
         }
 
         private static void SetUpFinanceIoC(ConfigurationExpression config)
         {
-            var financeConfiguration = new LevyDeclarationProviderConfiguration()
-            {
-                DatabaseConnectionString = System.Configuration.ConfigurationManager.AppSettings["FinanceDatabaseConnectionString"]
-            };
-
-            config.For<LevyDeclarationProviderConfiguration>().Use(financeConfiguration);
-            config.For<EmployerFinanceDbContext>().Use(context => new EmployerFinanceDbContext(financeConfiguration.DatabaseConnectionString));
+            config.For<LevyDeclarationProviderConfiguration>().Use(ConfigurationTestHelper.GetConfiguration<LevyDeclarationProviderConfiguration>(ConfigurationKeys.LevyDeclarationProvider));
+            config.For<EmployerFinanceDbContext>().Use(context => new EmployerFinanceDbContext(ConfigurationTestHelper.GetConfiguration<LevyDeclarationProviderConfiguration>(ConfigurationKeys.LevyDeclarationProvider).DatabaseConnectionString));
         }
     }
 }
