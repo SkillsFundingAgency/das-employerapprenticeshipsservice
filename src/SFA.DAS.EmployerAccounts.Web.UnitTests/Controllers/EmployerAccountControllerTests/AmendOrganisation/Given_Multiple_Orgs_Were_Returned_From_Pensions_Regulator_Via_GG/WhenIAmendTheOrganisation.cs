@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.AmendOrganisation.Given_Multiple_Organisation_Were_Returned_From_Pensions_Regulator
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests.AmendOrganisation.Given_Multiple_Orgs_Were_Returned_From_Pensions_Regulator_Via_GG
 {
     [TestFixture]
     public class WhenIAmendTheOrganisation
@@ -27,7 +27,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             var orchestrator = new Mock<EmployerAccountOrchestrator>();
             orchestrator.Setup(x => x.GetCookieData()).Returns(new EmployerAccountData
             {
-                EmployerAccountOrganisationData = new EmployerAccountOrganisationData { OrganisationType = OrganisationType.PensionsRegulator, PensionsRegulatorReturnedMultipleResults = true }
+                EmployerAccountOrganisationData = new EmployerAccountOrganisationData { OrganisationType = OrganisationType.PensionsRegulator, PensionsRegulatorReturnedMultipleResults = true },
+                EmployerAccountPayeRefData = new EmployerAccountPayeRefData { AORN = "" }
             });
 
             _employerAccountController = new EmployerAccountController(
@@ -42,9 +43,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenTheChooseOrganisationPageIsDisplayed()
+        public async Task ThenTheGovernmentGatewayPensionRegulatorChooseOrganisationPageIsDisplayed()
         {
-            var response =  _employerAccountController.AmendOrganisation();
+            var response = _employerAccountController.AmendOrganisation();
             var redirectResponse = (RedirectToRouteResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchPensionRegulatorActionName, redirectResponse.RouteValues["action"].ToString());
