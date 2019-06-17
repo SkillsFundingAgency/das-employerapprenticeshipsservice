@@ -29,10 +29,11 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
         public Task Handle(TEvent message, IMessageHandlerContext context)
         {
             _messageContextInitialisation.Initialise(context);
-            return Handle(message);
+            var cancellationToken = default(CancellationToken);
+            return Handle(message, cancellationToken);
         }
 
-        protected abstract Task Handle(TEvent message);
+        protected abstract Task Handle(TEvent message, CancellationToken cancellationToken);
         
         protected enum EntityCreation
         {
@@ -73,14 +74,14 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
             return (provider, EntityCreation.Existed);
         }
 
-        protected (Client.Types.Cohort, EntityCreation) GetOrAddCohort(Organisation organisation, long cohortId)
+        protected (Cohort, EntityCreation) GetOrAddCohort(Organisation organisation, long cohortId)
         {
             //todo: is there a reason for this?
             var cohortIdAsString = cohortId.ToString();
             var cohort = organisation.Cohorts.SingleOrDefault(c => cohortIdAsString.Equals(c.Id, StringComparison.OrdinalIgnoreCase));
             if (cohort == null)
             {
-                cohort = new Client.Types.Cohort {Id = cohortIdAsString};
+                cohort = new Cohort {Id = cohortIdAsString};
                 organisation.Cohorts.Add(cohort);
                 return (cohort, EntityCreation.Created);
             }
