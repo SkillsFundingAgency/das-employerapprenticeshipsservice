@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
-using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
+using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
 {
@@ -70,10 +68,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
     {
         public EmployerAccountTeamRepositoryTestFixtures()
         {
-            EmployerAccountsConfiguration = new EmployerAccountsConfiguration
-            {
-                DatabaseConnectionString = ConfigurationManager.AppSettings["AccountsDatabaseConnectionString"]
-            };
+            EmployerAccountsConfiguration = ConfigurationTestHelper.GetConfiguration<EmployerAccountsConfiguration>(ConfigurationKeys.EmployerAccounts);
 
             LoggerMock = new Mock<ILog>();
         }
