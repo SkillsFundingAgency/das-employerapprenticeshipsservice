@@ -7,23 +7,6 @@
 //{
 //    public static class ConfigurationHelper
 //    {
-//        public static Environment CurrentEnvironment
-//        {
-//            get
-//            {
-//                switch (CurrentEnvironmentName)
-//                {
-//                    case "LOCAL": return Environment.Local;
-//                    case "AT": return Environment.At;
-//                    case "TEST": return Environment.Test;
-//                    case "PROD": return Environment.Prod;
-//                    case "MO": return Environment.Mo;
-//                    case "DEMO": return Environment.Demo;
-//                    default: return Environment.Unknown;
-//                }
-//            }
-//        }
-
 //        private static string CurrentEnvironmentName
 //        {
 //            get
@@ -51,12 +34,7 @@
 //            return configurationService.GetAsync<T>();
 //        }
 
-//        public static bool IsEnvironmentAnyOf(params Environment[] environment)
-//        {
-//            return environment.Contains(CurrentEnvironment);
-//        }
-
-//        private static ConfigurationService CreateConfigurationService(string serviceName)
+//        private static IAutoConfigurationService CreateConfigurationService(string serviceName)
 //        {
 //            var storageConnectionString = CloudConfigurationManager.GetSetting("ConfigurationStorageConnectionString");
 //            var configurationRepository = new AzureTableStorageConfigurationRepository(storageConnectionString);
