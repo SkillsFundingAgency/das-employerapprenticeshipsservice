@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
 {
@@ -21,10 +21,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
 
         public FinanceStatisticsDataHelper()
         {
-            _configuration = new LevyDeclarationProviderConfiguration
-            {
-                DatabaseConnectionString = ConfigurationManager.AppSettings["FinanceDatabaseConnectionString"]
-            };
+            _configuration = ConfigurationTestHelper.GetConfiguration<LevyDeclarationProviderConfiguration>(ServiceName);
         }
 
         public async Task<StatisticsViewModel> GetStatistics()

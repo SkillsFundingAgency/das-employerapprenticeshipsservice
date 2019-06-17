@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using AutoFixture;
@@ -11,6 +10,7 @@ using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
 {
@@ -21,10 +21,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
         
         public AccountStatisticsDataHelper()
         {
-            _configuration = new EmployerApprenticeshipsServiceConfiguration
-            {
-                DatabaseConnectionString = ConfigurationManager.AppSettings["AccountsDatabaseConnectionString"]
-            };
+            _configuration = ConfigurationTestHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
         }
 
         public async Task<StatisticsViewModel> GetStatistics()

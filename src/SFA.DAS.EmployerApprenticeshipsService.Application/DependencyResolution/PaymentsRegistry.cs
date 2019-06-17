@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.AutoConfiguration;
-using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Provider.Events.Api.Client;
 using StructureMap;

@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.AutoConfiguration;
-using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;

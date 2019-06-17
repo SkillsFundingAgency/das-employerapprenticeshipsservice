@@ -9,5 +9,7 @@
         public const string ReferenceDataApiClient = "SFA.DAS.ReferenceDataApiClient";
         public const string NotificationsApiClient = "SFA.DAS.EmployerAccounts.Notifications";
         public const string CommitmentsApiClient = "SFA.DAS.CommitmentsAPI";
+        public const string EmployerFinance = "SFA.DAS.EmployerFinance";
+        public const string EmployerAccountsReadStore = "SFA.DAS.EmployerAccounts.ReadStore";
     }
 }
