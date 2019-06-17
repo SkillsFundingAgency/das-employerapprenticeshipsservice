@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             //let's just wire up using auto config and get the instance that way as per the real code
 
             config.For<DbConnection>().Use(context => new SqlConnection(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
-            //config.For<EmployerApprenticeshipsServiceConfiguration>().Use(c => c.GetInstance<>() accountConfiguration);
+            config.For<EmployerApprenticeshipsServiceConfiguration>().Use(c => ConfigurationTestHelper);
             config.For<EmployerAccountsDbContext>().Use(context => new EmployerAccountsDbContext(context.GetInstance<EmployerApprenticeshipsServiceConfiguration>().DatabaseConnectionString));
             config.For<Lazy<EmployerAccountsDbContext>>().Use(context => new Lazy<EmployerAccountsDbContext>(() => context.GetInstance<EmployerAccountsDbContext>()));
         }
