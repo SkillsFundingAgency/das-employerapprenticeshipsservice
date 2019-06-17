@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         [Test]
         public async Task ThenTheOrganisationDetailsAreSaved()
         {
-            await _controller.SearchPensionRegulatorByAorn(ExpectedAorn, ExpectedPayeRef);
+            await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
 
             _mediator.Verify(x => x.SendAsync(It.Is<SaveOrganisationData>(y => OrganisationDataMatchesViewModel(y))));
         }
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         [Test]
         public async Task ThenThePayeDetailsAreSaved()
         {
-            await _controller.SearchPensionRegulatorByAorn(ExpectedAorn, ExpectedPayeRef);
+            await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
 
             _mediator.Verify(x => x.SendAsync(It.Is<SavePayeRefData>(y => y.PayeRefData.AORN == ExpectedAorn && y.PayeRefData.PayeReference == ExpectedPayeRef)));
         }
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         [Test]
         public async Task ThenTheCheckYourDetailsPageIsDisplayed()
         {
-            var response = await _controller.SearchPensionRegulatorByAorn(ExpectedAorn, ExpectedPayeRef);
+            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
             var redirectResponse = (RedirectToRouteResult)response;
 
             Assert.AreEqual(ControllerConstants.SummaryActionName, redirectResponse.RouteValues["action"].ToString());
