@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public IHandleMessages<TEvent> Handler { get; set; }
         public string MessageId { get; set; }
         public Mock<IMessageContextInitialisation> MockMessageContextInitialisation { get; set; }
-        public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
+        public Mock<IMessageHandlerContext> MockMessageHandlerContext { get; set; }
         public Fixture Fixture { get; set; }
 
         public EventHandlerTestsFixture()
@@ -29,23 +29,23 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             MockMessageContextInitialisation = new Mock<IMessageContextInitialisation>();
 
             MessageId = Fixture.Create<string>();
-            MessageHandlerContext = new Mock<IMessageHandlerContext>();
-            MessageHandlerContext.Setup(c => c.MessageId).Returns(MessageId);
+            MockMessageHandlerContext = new Mock<IMessageHandlerContext>();
+            MockMessageHandlerContext.Setup(c => c.MessageId).Returns(MessageId);
 
             var messageHeaders = new Mock<IReadOnlyDictionary<string, string>>();
             messageHeaders.SetupGet(c => c["NServiceBus.TimeSent"]).Returns(DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss:ffffff Z", CultureInfo.InvariantCulture));
-            MessageHandlerContext.Setup(c => c.MessageHeaders).Returns(messageHeaders.Object);
+            MockMessageHandlerContext.Setup(c => c.MessageHeaders).Returns(messageHeaders.Object);
         }
 
         public virtual Task Handle()
         {
             OriginalMessage = Message.Clone();
-            return Handler.Handle(Message, MessageHandlerContext.Object);
+            return Handler.Handle(Message, MockMessageHandlerContext.Object);
         }
 
         public void VerifyMessageContextIsInitialised()
         {
-            MockMessageContextInitialisation.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
+            MockMessageContextInitialisation.Verify(mc => mc.Initialise(MockMessageHandlerContext.Object), Times.Once);
         }
     }
 }
