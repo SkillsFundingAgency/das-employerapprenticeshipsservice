@@ -72,29 +72,5 @@ namespace SFA.DAS.EAS.Infrastructure.Extensions
                     return false;
             }
         }
-
-        /// <summary>
-        ///     Returns true if the supplied reference data organisation type can be round-tripped to a common 
-        ///     organisation type.
-        /// </summary>
-        /// <param name="organisationType"></param>
-        /// <returns></returns>
-        public static bool IsRoundTripCapable(this ReferenceDataOrganisationType organisationType)
-        {
-            var commonOrganisationType = organisationType.ToCommonOrganisationType();
-
-            return commonOrganisationType.TryToReferenceDataOrganisationType(out _);
-        }
-
-        public static string GetFriendlyName(this CommonOrganisationType commonOrganisationType)
-        {
-            switch (commonOrganisationType)
-            {
-                case CommonOrganisationType.CompaniesHouse: return "Companies House";
-                case CommonOrganisationType.Charities: return "Charity Commission";
-                case CommonOrganisationType.PublicBodies: return "Public Bodies";
-                default: return "Other";
-            }
-        }
     }
 }
