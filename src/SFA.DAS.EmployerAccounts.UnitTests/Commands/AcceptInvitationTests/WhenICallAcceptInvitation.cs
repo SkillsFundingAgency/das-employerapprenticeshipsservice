@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Types.Models;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.TimeProvider;
@@ -31,6 +32,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
         private Mock<IAuditService> _auditService;
         private TestableEventPublisher _eventPublisher;
         private Mock<IValidator<AcceptInvitationCommand>> _validator;
+        private Mock<IHashingService> _hashingService;
 
         [SetUp]
         public void Setup()
@@ -52,6 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             _auditService = new Mock<IAuditService>();
             _eventPublisher = new TestableEventPublisher();
             _validator = new Mock<IValidator<AcceptInvitationCommand>>();
+            _hashingService = new Mock<IHashingService>();
 
             _validator.Setup(x => x.Validate(It.IsAny<AcceptInvitationCommand>())).Returns(new ValidationResult());
 
@@ -67,6 +70,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
                 _auditService.Object,
                 _eventPublisher,
                 _validator.Object,
+                _hashingService.Object,
                 Mock.Of<ILog>());
         }
 
@@ -173,6 +177,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
             _userAccountRepository.Setup(x => x.Get(_invitation.Email))
                                  .ReturnsAsync(user);
 
+            var expectedHashedId = "HASHED";
+            _hashingService.Setup(x => x.HashValue(_invitation.AccountId)).Returns(expectedHashedId);
+
             //Act
             await _handler.Handle(new AcceptInvitationCommand());
 
@@ -183,6 +190,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AcceptInvitationTests
 
             message.UserRef.Should().Be(Guid.Parse(user.UserRef));
             message.AccountId.Should().Be(_invitation.AccountId);
+            message.HashedAccountId.Should().Be(expectedHashedId);
             message.UserName.Should().Be(user.FullName);
             message.Role.Should().Be((UserRole)_invitation.Role);
         }
