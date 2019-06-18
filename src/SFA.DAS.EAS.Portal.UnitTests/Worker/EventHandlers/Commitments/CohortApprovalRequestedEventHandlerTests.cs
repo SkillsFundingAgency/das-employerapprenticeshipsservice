@@ -27,20 +27,20 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
 
     public class CohortApprovalRequestedEventHandlerFixture : EventHandlerTestsFixture<CohortApprovalRequestedByProvider, CohortApprovalRequestedByProviderEventHandler>
     {
-        public Mock<IEventHandler<CohortApprovalRequestedByProvider>> MockHandler { get; set; }
+        public Mock<IEventHandler<CohortApprovalRequestedByProvider>> HandlerMock { get; set; }
 
         public CohortApprovalRequestedEventHandlerFixture()
         {
-            MockHandler = new Mock<IEventHandler<CohortApprovalRequestedByProvider>>();
+            HandlerMock = new Mock<IEventHandler<CohortApprovalRequestedByProvider>>();
 
             Handler = new CohortApprovalRequestedByProviderEventHandler(
-                MockHandler.Object,
-                MockMessageContextInitialisation.Object);
+                HandlerMock.Object,
+                MessageContextInitialisationMock.Object);
         }
 
         public void VerifyDomainHandlerCalled()
         {
-            MockHandler.Verify(s => s.Handle(Message, It.IsAny<CancellationToken>()), Times.Once);
+            HandlerMock.Verify(s => s.Handle(Message, It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

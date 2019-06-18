@@ -27,20 +27,20 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationship
 
     public class AddedAccountProviderEventHandlerFixture : EventHandlerTestsFixture<AddedAccountProviderEvent, AddedAccountProviderEventHandler>
     {
-        public Mock<IEventHandler<AddedAccountProviderEvent>> MockHandler { get; set; }
+        public Mock<IEventHandler<AddedAccountProviderEvent>> HandlerMock { get; set; }
 
         public AddedAccountProviderEventHandlerFixture()
         {
-            MockHandler = new Mock<IEventHandler<AddedAccountProviderEvent>>();
+            HandlerMock = new Mock<IEventHandler<AddedAccountProviderEvent>>();
 
             Handler = new AddedAccountProviderEventHandler(
-                MockHandler.Object,
-                MockMessageContextInitialisation.Object);
+                HandlerMock.Object,
+                MessageContextInitialisationMock.Object);
         }
 
         public void VerifyDomainHandlerCalled()
         {
-            MockHandler.Verify(s => s.Handle(Message, It.IsAny<CancellationToken>()), Times.Once);
+            HandlerMock.Verify(s => s.Handle(Message, It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }

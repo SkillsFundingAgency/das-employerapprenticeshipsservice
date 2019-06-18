@@ -27,20 +27,20 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
 
     public class ReservationCreatedEventHandlerFixture : EventHandlerTestsFixture<ReservationCreatedEvent, ReservationCreatedEventHandler>
     {
-        public Mock<IEventHandler<ReservationCreatedEvent>> MockHandler { get; set; }
+        public Mock<IEventHandler<ReservationCreatedEvent>> HandlerMock { get; set; }
 
         public ReservationCreatedEventHandlerFixture()
         {
-            MockHandler = new Mock<IEventHandler<ReservationCreatedEvent>>();
+            HandlerMock = new Mock<IEventHandler<ReservationCreatedEvent>>();
 
             Handler = new ReservationCreatedEventHandler(
-                MockHandler.Object,
-                MockMessageContextInitialisation.Object);
+                HandlerMock.Object,
+                MessageContextInitialisationMock.Object);
         }
 
         public void VerifyDomainHandlerCalled()
         {
-            MockHandler.Verify(s => s.Handle(Message, It.IsAny<CancellationToken>()), Times.Once);
+            HandlerMock.Verify(s => s.Handle(Message, It.IsAny<CancellationToken>()), Times.Once);
         }
     }
 }
