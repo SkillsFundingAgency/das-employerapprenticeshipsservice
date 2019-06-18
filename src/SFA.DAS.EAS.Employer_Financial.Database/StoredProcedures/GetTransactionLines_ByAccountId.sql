@@ -10,6 +10,7 @@ AS
 		  MAX(tl.TransactionDate) as TransactionDate,
 		  Sum(tl.Amount) as Amount,
 		  tl.Ukprn,
+		  pmd.ProviderName,
 		  tl.DateCreated,
 		  tl.SfaCoInvestmentAmount,
 		  tl.EmployerCoInvestmentAmount,
@@ -23,13 +24,19 @@ AS
   FROM	[employer_financial].[TransactionLine] tl
 		LEFT JOIN [employer_financial].LevyDeclaration ld 
 			on ld.submissionid = tl.submissionid
+		LEFT JOIN [employer_financial].Payment p
+			on P.Ukprn = tl.Ukprn
+			and p.PeriodEnd = tl.PeriodEnd
+		LEFT JOIN [employer_financial].PaymentMetaData pmd
+			on pmd.Id = p.PaymentMetaDataId
   WHERE tl.AccountId = @accountId 
 		AND tl.DateCreated >= @fromDate 
 		AND DateCreated <= @toDate
   GROUP BY 
 		tl.DateCreated, 
 		tl.AccountId, 
-		tl.UKPRN, 
+		tl.UKPRN,
+		pmd.ProviderName, 
 		tl.SfaCoInvestmentAmount, 
 		tl.EmployerCoInvestmentAmount, 
 		tl.TransactionType, 
@@ -41,6 +48,6 @@ AS
 		tl.TransferReceiverAccountId, 
 		tl.TransferReceiverAccountName
 order by 
-		DateCreated desc, 
-		TransactionType desc, 
-		ukprn desc
+		tl.DateCreated desc, 
+		tl.TransactionType desc, 
+		tl.ukprn desc
