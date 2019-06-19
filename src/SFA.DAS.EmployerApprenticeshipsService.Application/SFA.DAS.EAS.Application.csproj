@@ -556,9 +556,6 @@
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountValidator.cs" />
-    <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationQueryHandler.cs" />
-    <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationRequest.cs" />
-    <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationHandler.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationRequest.cs" />
     <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationResponse.cs" />

@@ -359,7 +359,6 @@
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIGetUserAccounts.cs" />
-    <Compile Include="Queries\GetEmployerInformationTests\WhenIRequestEmployerInformation.cs" />
     <Compile Include="Queries\GetGatewayInformationTests\WhenGettingGatewayQuery.cs" />
     <Compile Include="Queries\GetGatewayTokenTests\WhenGettingTokenResponseFromHmrc.cs" />
     <Compile Include="Queries\GetHmrcEmployerInformationTests\WhenRequestingEmployerInformation.cs" />

@@ -300,6 +300,7 @@
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
+    <Compile Include="Models\Employer\Address.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\ExpiredFunds\ExpiredFundTransactionLine.cs" />
     <Compile Include="Models\Organisation\AccountLegalEntityModel.cs" />
@@ -332,7 +333,6 @@
     <Compile Include="Data\Repositories\IMembershipRepository.cs" />
     <Compile Include="Data\Repositories\IUserAccountRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
-    <Compile Include="Models\Employer\EmployerInformation.cs" />
     <Compile Include="Models\Account\Account.cs" />
     <Compile Include="Models\Account\AccountBalance.cs" />
     <Compile Include="Models\Account\Accounts.cs" />
@@ -348,7 +348,6 @@
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
-    <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
