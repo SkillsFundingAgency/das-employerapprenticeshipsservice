@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
-    <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="1.0.43" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="2.2.0" />
@@ -22,10 +21,10 @@
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
     <PackageReference Include="WebApi.StructureMap" Version="1.0.23" />
-    <PackageReference Include="Z.EntityFramework.Plus.QueryFuture.EF6" Version="1.7.19" />
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />

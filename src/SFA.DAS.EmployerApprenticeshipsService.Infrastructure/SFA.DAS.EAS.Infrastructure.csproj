@@ -175,6 +175,9 @@
     <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.EntityFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EntityFramework.1.0.1\lib\netstandard2.0\SFA.DAS.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.57835, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.0.57835\lib\net45\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
