@@ -6,6 +6,7 @@ using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
@@ -34,17 +35,15 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
             var accountDocument = await accountDocumentTask;
-            var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, accountLegalEntityId);
-            if (organisationCreation == EntityCreation.Created)
+            var organisation = accountDocument.Account.GetOrAddOrganisation(accountLegalEntityId, addedOrganisation =>
             {
-                organisation.Name = commitment.LegalEntityName;
-            }
+                addedOrganisation.Name = commitment.LegalEntityName;
+            });
 
-            var (cohort, cohortCreated) = GetOrAddCohort(organisation, cohortApprovalRequestedByProvider.CommitmentId);
-            if (cohortCreated == EntityCreation.Created)
+            var cohort = organisation.GetOrAddCohort(cohortApprovalRequestedByProvider.CommitmentId, addedCohort =>
             {
-                cohort.Reference = commitment.Reference;
-            }
+                addedCohort.Reference = commitment.Reference;
+            });
  
             commitment.Apprenticeships.ForEach(a =>
             {
