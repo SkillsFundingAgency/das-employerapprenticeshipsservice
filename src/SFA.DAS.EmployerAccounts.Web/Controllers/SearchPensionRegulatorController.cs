@@ -12,7 +12,6 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using StructureMap.Pipeline;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -58,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 case 1:
                 {
-                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
+                    await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
                 default:
@@ -72,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
-        public ActionResult SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
+        public async Task<ActionResult> SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
         {    
             if (!viewModel.SelectedOrganisation.HasValue)
             {
@@ -89,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (item == null) return View(ControllerConstants.SearchPensionRegulatorResultsViewName, viewModel);
 
-            SavePensionRegulatorOrganisationDataIfItHasAValidName(item, true, true);
+            await SavePensionRegulatorOrganisationDataIfItHasAValidName(item, true, true);
             return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
@@ -134,7 +133,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 case 0: return View(ControllerConstants.SearchUsingAornViewName, viewModel);
                 case 1:
                 {
-                    SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
+                    await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
@@ -171,11 +170,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }));
         }
 
-        private void SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
+        private async Task SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
         {
             if (viewModel?.Name != null)
             {
-                _mediatr
+                await _mediatr
                     .SendAsync(new SaveOrganisationData
                     (
                         new EmployerAccountOrganisationData
