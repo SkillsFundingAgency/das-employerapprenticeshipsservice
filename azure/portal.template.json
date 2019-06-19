@@ -25,6 +25,9 @@
         },
         "workerAppServicePlanInstances": {
             "type": "int"
+        },
+        "workerAppServiceLocation": {
+            "type": "string"
         }
     },
     "variables": {
@@ -118,6 +121,9 @@
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[resourceGroup().name]"
+                    },
+                    "appServiceLocation": {
+                        "value": "[parameters('workerAppServiceLocation')]"
                     },
                     "appServiceAppSettings": {
                         "value": [

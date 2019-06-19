@@ -26,10 +26,11 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
         public Task Handle(TEvent message, IMessageHandlerContext context)
         {
             _messageContextInitialisation.Initialise(context);
-            return Handle(message);
+            var cancellationToken = default(CancellationToken);
+            return Handle(message, cancellationToken);
         }
 
-        protected abstract Task Handle(TEvent message);
+        protected abstract Task Handle(TEvent message, CancellationToken cancellationToken);
         
         protected async Task<AccountDocument> GetOrCreateAccountDocument(long accountId, CancellationToken cancellationToken = default)
         {

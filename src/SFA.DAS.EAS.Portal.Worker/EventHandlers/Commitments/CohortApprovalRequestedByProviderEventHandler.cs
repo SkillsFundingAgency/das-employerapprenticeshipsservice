@@ -28,10 +28,8 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Commitments
             _hashingService = hashingService;
         }
 
-        protected override async Task Handle(CohortApprovalRequestedByProvider cohortApprovalRequestedByProvider)
+        protected override async Task Handle(CohortApprovalRequestedByProvider cohortApprovalRequestedByProvider, CancellationToken cancellationToken = default)
         {
-            var cancellationToken = default(CancellationToken);
-
             var accountDocumentTask = GetOrCreateAccountDocument(cohortApprovalRequestedByProvider.AccountId, cancellationToken);
             var commitment = await _providerCommitmentsApi.GetProviderCommitment(cohortApprovalRequestedByProvider.ProviderId, cohortApprovalRequestedByProvider.CommitmentId);
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);

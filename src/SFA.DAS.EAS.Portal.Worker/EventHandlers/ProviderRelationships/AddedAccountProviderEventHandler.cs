@@ -47,11 +47,8 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
             _providerApiClient = providerApiClient;
         }
 
-        protected override async Task Handle(AddedAccountProviderEvent addedAccountProviderEvent)
+        protected override async Task Handle(AddedAccountProviderEvent addedAccountProviderEvent, CancellationToken cancellationToken = default)
         {
-            //todo: as we don't get one passed to the handler, and we don't need one, remove our cancellationtoken support?
-            var cancellationToken = default(CancellationToken);
-            
             var providerTask = _providerApiClient.GetAsync(addedAccountProviderEvent.ProviderUkprn);
             var accountDocument = await GetOrCreateAccountDocument(addedAccountProviderEvent.AccountId, cancellationToken);
             
