@@ -69,6 +69,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
         
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
         public ActionResult SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
@@ -100,6 +101,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Route("pensionregulator/aorn")]
         public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {

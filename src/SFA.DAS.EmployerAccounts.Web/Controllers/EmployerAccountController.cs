@@ -203,6 +203,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("skipRegistration")]
         public async Task<ActionResult> SkipRegistration()
         {
             var request = new CreateUserAccountViewModel

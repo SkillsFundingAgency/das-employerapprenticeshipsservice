@@ -1,21 +1,19 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_No_Organisation_Was_Returned_From_Pensions_Regulator
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_Multiple_Org_Was_Returned_From_Pensions_Regulator
 {
     [TestFixture]
-    class WhenISearchThePensionRegulator
+    class WhenISelectOrganisationNotListed
     {
         private SearchPensionRegulatorController _controller;    
        
@@ -23,28 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public void Setup()
         {                   
             var orchestrator = new Mock<SearchPensionRegulatorOrchestrator>();
-
-            orchestrator
-                .Setup(x => x.SearchPensionRegulator(It.IsAny<string>()))
-                .ReturnsAsync(
-                    new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>
-                    {
-                        Data = new SearchPensionRegulatorResultsViewModel
-                        {
-                            Results = new List<PensionRegulatorDetailsViewModel>()
-                        }
-                    });
-
-            orchestrator.Setup(x => x.GetCookieData())
-                .Returns(
-                    new EmployerAccountData
-                    {
-                        EmployerAccountPayeRefData = new EmployerAccountPayeRefData
-                        {
-                            PayeReference = "PayeRef"
-                        }
-                    });
-
+          
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
                 orchestrator.Object,
@@ -54,9 +31,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         }
 
         [Test]
-        public async Task ThenTheSearchOrganisationPageIsDisplayed()
+        public void ThenTheSearchOrganisationPageIsDisplayed()
         {
-            var response = await _controller.SearchPensionRegulator(It.IsAny<string>());
+            var viewModel = new SearchPensionRegulatorResultsViewModel
+            {
+                Results = new List<PensionRegulatorDetailsViewModel>
+                {
+                    new PensionRegulatorDetailsViewModel {ReferenceNumber = 1},
+                    new PensionRegulatorDetailsViewModel {ReferenceNumber = 2}
+                },
+                SelectedOrganisation = 0
+            };
+
+            var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel);
             var redirectResponse = (RedirectToRouteResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.RouteValues["action"].ToString());
