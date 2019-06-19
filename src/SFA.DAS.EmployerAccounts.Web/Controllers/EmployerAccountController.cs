@@ -349,10 +349,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (employerAccountData.EmployerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountData.EmployerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
             {
-                return RedirectToAction(!string.IsNullOrWhiteSpace(employerAccountData.EmployerAccountPayeRefData.AORN)
-                        ? ControllerConstants.SearchUsingAornActionName
-                        : ControllerConstants.SearchPensionRegulatorActionName, 
-                    ControllerConstants.SearchPensionRegulatorControllerName);
+                if (!string.IsNullOrWhiteSpace(employerAccountData.EmployerAccountPayeRefData.AORN))
+                {
+                    return RedirectToAction(
+                        ControllerConstants.SearchUsingAornActionName,
+                        ControllerConstants.SearchPensionRegulatorControllerName,
+                        new
+                        {
+                            Aorn = employerAccountData.EmployerAccountPayeRefData.AORN,
+                            payeRef = employerAccountData.EmployerAccountPayeRefData.PayeReference
+                        });
+                }
+
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
             }
 
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
