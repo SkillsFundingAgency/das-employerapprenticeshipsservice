@@ -95,8 +95,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("pensionregulator/aorn")]
-        public async Task<ViewResult> SearchPensionRegulatorByAorn()
+        public async Task<ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn)
         {
+            if (!string.IsNullOrWhiteSpace(payeRef) && !string.IsNullOrWhiteSpace(aorn))
+            {
+                return await PerformSearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel
+                {
+                    Aorn = aorn,
+                    PayeRef = payeRef
+                });
+            }
+
             return View(ControllerConstants.SearchUsingAornViewName, new SearchPensionRegulatorByAornViewModel());
         }
 
@@ -106,11 +115,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
             ValidateSearchPensionRegulatorByAornViewModel(viewModel);
+
             if (!viewModel.Valid)
             {
                 return View(ControllerConstants.SearchUsingAornViewName, viewModel);
             }
 
+            return await PerformSearchPensionRegulatorByAorn(viewModel);
+        }
+
+        [NonAction]
+        private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
+        {
             var model = await _orchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
             switch (model.Data.Results.Count)
