@@ -8,7 +8,6 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         public ExecutionPoliciesRegistry()
         {
             For<ExecutionPolicy>().Use<HmrcExecutionPolicy>().Named(HmrcExecutionPolicy.Name).SelectConstructor(() => new HmrcExecutionPolicy(null));
-            For<ExecutionPolicy>().Use<IdamsExecutionPolicy>().Named(IdamsExecutionPolicy.Name);
             Policies.Add(new ExecutionPolicyPolicy());
         }
     }
