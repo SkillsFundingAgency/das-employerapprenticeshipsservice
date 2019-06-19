@@ -37,7 +37,7 @@
                             <span class="form-hint">For example, 123/AB12345</span>
                             @if (!string.IsNullOrEmpty(Model.PayeRefError))
                             {
-                                <span class="error-message" id="error-message-payeRef">@Model.PayeRef</span>
+                                <span class="error-message" id="error-message-payeRef">@Model.PayeRefError</span>
                             }
                         </label>
                         <input class="form-control" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
