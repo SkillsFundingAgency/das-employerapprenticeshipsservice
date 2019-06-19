@@ -10,10 +10,10 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_Multiple_Organisation_Was_Returned_From_Pensions_Regulator
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_Multiple_Org_Was_Returned_From_Pensions_Regulator
 {
     [TestFixture]
-    class WhenISelectOrganisationNotListed
+    class WhenIDontSelectAnOrganisation
     {
         private SearchPensionRegulatorController _controller;    
        
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         }
 
         [Test]
-        public void ThenTheSearchOrganisationPageIsDisplayed()
+        public void ThenThePensionRegulatorResultsPageIsDisplayed()
         {
             var viewModel = new SearchPensionRegulatorResultsViewModel
             {
@@ -39,15 +39,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                 {
                     new PensionRegulatorDetailsViewModel {ReferenceNumber = 1},
                     new PensionRegulatorDetailsViewModel {ReferenceNumber = 2}
-                },
-                SelectedOrganisation = 0
+                }             
             };
 
             var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel);
-            var redirectResponse = (RedirectToRouteResult)response;
+            var viewResponse = (ViewResult)response;
 
-            Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.RouteValues["action"].ToString());
-            Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, redirectResponse.RouteValues["controller"].ToString());
+            Assert.AreEqual(ControllerConstants.SearchPensionRegulatorResultsViewName, viewResponse.ViewName);
+            Assert.AreEqual(true, viewResponse.ViewBag.InError);
         }
     }
 }

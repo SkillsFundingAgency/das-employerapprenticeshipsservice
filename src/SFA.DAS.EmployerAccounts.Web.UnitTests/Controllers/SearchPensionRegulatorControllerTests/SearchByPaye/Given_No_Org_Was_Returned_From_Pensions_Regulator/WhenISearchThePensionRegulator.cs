@@ -12,7 +12,7 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_Multiple_Organisation_Was_Returned_From_Pensions_Regulator
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_No_Org_Was_Returned_From_Pensions_Regulator
 {
     [TestFixture]
     class WhenISearchThePensionRegulator
@@ -31,11 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                     {
                         Data = new SearchPensionRegulatorResultsViewModel
                         {
-                            Results = new List<PensionRegulatorDetailsViewModel>
-                            {
-                                new PensionRegulatorDetailsViewModel(),
-                                new PensionRegulatorDetailsViewModel()
-                            }
+                            Results = new List<PensionRegulatorDetailsViewModel>()
                         }
                     });
 
@@ -58,12 +54,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         }
 
         [Test]
-        public async Task ThenThePensionRegulatorResultsPageIsDisplayed()
+        public async Task ThenTheSearchOrganisationPageIsDisplayed()
         {
             var response = await _controller.SearchPensionRegulator(It.IsAny<string>());
-            var viewResponse = (ViewResult) response;
+            var redirectResponse = (RedirectToRouteResult)response;
 
-            Assert.AreEqual(ControllerConstants.SearchPensionRegulatorResultsViewName, viewResponse.ViewName);
+            Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.RouteValues["action"].ToString());
+            Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, redirectResponse.RouteValues["controller"].ToString());
         }
     }
 }
