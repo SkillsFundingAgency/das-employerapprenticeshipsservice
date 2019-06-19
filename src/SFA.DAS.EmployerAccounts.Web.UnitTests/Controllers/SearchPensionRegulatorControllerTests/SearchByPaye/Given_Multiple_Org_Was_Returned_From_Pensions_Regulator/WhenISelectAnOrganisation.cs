@@ -43,8 +43,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                 SelectedOrganisation = 2
             };
 
-            var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel);
-            var redirectResponse = (RedirectToRouteResult)response;
+            var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel).Result;
+            var redirectResponse = (RedirectToRouteResult) response;
 
             Assert.AreEqual(ControllerConstants.SummaryActionName, redirectResponse.RouteValues["action"].ToString());
             Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());

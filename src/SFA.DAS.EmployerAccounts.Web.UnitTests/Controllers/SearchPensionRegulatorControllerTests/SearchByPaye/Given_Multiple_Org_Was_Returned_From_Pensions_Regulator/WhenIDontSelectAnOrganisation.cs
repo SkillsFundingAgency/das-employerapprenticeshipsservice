@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                 }             
             };
 
-            var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel);
+            var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel).Result;
             var viewResponse = (ViewResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchPensionRegulatorResultsViewName, viewResponse.ViewName);
