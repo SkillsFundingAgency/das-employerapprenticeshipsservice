@@ -19,8 +19,7 @@ using PortalProvider = SFA.DAS.EAS.Portal.Client.Types.Provider;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.ProviderRelationships
 {
-    [TestFixture]
-    [Parallelizable]
+    [TestFixture, Parallelizable]
     public class AddedAccountProviderEventHandlerTests : FluentTest<AddedAccountProviderEventHandlerTestsFixture>
     {
         [Test]

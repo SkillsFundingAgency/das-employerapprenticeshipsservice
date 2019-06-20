@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
 using SFA.DAS.Reservations.Messages;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
@@ -19,23 +20,21 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations
         {
         }
 
-        protected override async Task Handle(ReservationCreatedEvent reservationCreatedEvent)
+        protected override async Task Handle(ReservationCreatedEvent reservationCreatedEvent, CancellationToken cancellationToken = default)
         {
-            var cancellationToken = default(CancellationToken);
-
             var accountDocument = await GetOrCreateAccountDocument(reservationCreatedEvent.AccountId, cancellationToken);
 
-            var (organisation, organisationCreation) = GetOrAddOrganisation(accountDocument, reservationCreatedEvent.AccountLegalEntityId);
-            if (organisationCreation == EntityCreation.Created)
-            {
-                organisation.Name = reservationCreatedEvent.AccountLegalEntityName;
-            }
-            else
-            {
-                var existingReservation = organisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservationCreatedEvent.Id));
-                if (existingReservation != null)
-                    throw DuplicateReservationCreatedEventException(reservationCreatedEvent);
-            }
+            var organisation = accountDocument.Account.GetOrAddOrganisation(reservationCreatedEvent.AccountLegalEntityId,
+                addedOrganisation =>
+                {
+                    addedOrganisation.Name = reservationCreatedEvent.AccountLegalEntityName;
+                },
+                existingOrganisation =>
+                {
+                    var existingReservation = existingOrganisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservationCreatedEvent.Id));
+                    if (existingReservation != null)
+                        throw DuplicateReservationCreatedEventException(reservationCreatedEvent);
+                });
             
             organisation.Reservations.Add(new Client.Types.Reservation
             {

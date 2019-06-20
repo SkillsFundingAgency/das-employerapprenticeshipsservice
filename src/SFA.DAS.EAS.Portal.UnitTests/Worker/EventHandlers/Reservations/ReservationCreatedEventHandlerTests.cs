@@ -15,8 +15,7 @@ using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations.Reser
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
 {
-    [TestFixture]
-    [Parallelizable]
+    [TestFixture, Parallelizable]
     public class ReservationCreatedEventHandlerTests : FluentTest<ReservationCreatedEventHandlerTestsFixture>
     {
         [Test]

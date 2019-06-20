@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 using SFA.DAS.Providers.Api.Client;
 
@@ -46,15 +47,12 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
             _providerApiClient = providerApiClient;
         }
 
-        protected override async Task Handle(AddedAccountProviderEvent addedAccountProviderEvent)
+        protected override async Task Handle(AddedAccountProviderEvent addedAccountProviderEvent, CancellationToken cancellationToken = default)
         {
-            //todo: as we don't get one passed to the handler, and we don't need one, remove our cancellationtoken support?
-            var cancellationToken = default(CancellationToken);
-            
             var providerTask = _providerApiClient.GetAsync(addedAccountProviderEvent.ProviderUkprn);
             var accountDocument = await GetOrCreateAccountDocument(addedAccountProviderEvent.AccountId, cancellationToken);
             
-            var (accountProvider,_) = GetOrAddProvider(accountDocument, addedAccountProviderEvent.ProviderUkprn);
+            var accountProvider = accountDocument.Account.GetOrAddProvider(addedAccountProviderEvent.ProviderUkprn);
 
             var provider = await providerTask;
             var address = provider.Addresses.FirstOrDefault(a => a.ContactType == "PRIMARY")

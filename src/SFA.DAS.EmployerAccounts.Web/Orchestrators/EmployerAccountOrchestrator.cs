@@ -19,7 +19,6 @@ using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
-using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -188,7 +187,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 DateOfIncorporation = model.OrganisationDateOfInception,
                 Status = model.OrganisationStatus,
                 Source = model.OrganisationType,
-                PublicSectorDataSource = Convert.ToByte(model.PublicSectorDataSource) ,
+                PublicSectorDataSource = Convert.ToByte(model.PublicSectorDataSource),
                 Sector = model.Sector,
                 Name = model.OrganisationName,
                 Address = model.OrganisationAddress,
@@ -260,9 +259,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             try
             {
                 var existingUserAccounts =
-                    await Mediator.SendAsync(new GetUserAccountsQuery {UserRef = viewModel.UserId});
+                    await Mediator.SendAsync(new GetUserAccountsQuery { UserRef = viewModel.UserId });
 
-                if(existingUserAccounts?.Accounts?.AccountList?.Any() == true)
+                if (existingUserAccounts?.Accounts?.AccountList?.Any() == true)
                     return new OrchestratorResponse<EmployerAccountViewModel>
                     {
                         Data = new EmployerAccountViewModel
@@ -308,7 +307,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
                 OrganisationName = enteredData.EmployerAccountOrganisationData.OrganisationName,
-                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress.Split(','),
+                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress?.Split(','),
                 OrganisationReferenceNumber = enteredData.EmployerAccountOrganisationData.OrganisationReferenceNumber,
                 OrganisationDateOfInception = enteredData.EmployerAccountOrganisationData.OrganisationDateOfInception,
                 PayeReference = enteredData.EmployerAccountPayeRefData.PayeReference,
@@ -317,7 +316,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OrganisationStatus = enteredData.EmployerAccountOrganisationData.OrganisationStatus,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
                 Sector = enteredData.EmployerAccountOrganisationData.Sector,
-                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch
+                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch,
+                AORN = enteredData.EmployerAccountPayeRefData.AORN
             };
 
             return new OrchestratorResponse<SummaryViewModel>
