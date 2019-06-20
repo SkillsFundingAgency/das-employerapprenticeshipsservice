@@ -1,9 +1,9 @@
 ﻿using System.Data.Common;
+using System.Net;
 using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
@@ -28,12 +28,11 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness
 
         public async Task StartAsync()
         {
-
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
                 .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
-                .UseLicense(_employerAccountsConfiguration.NServiceBusLicense.HtmlDecode())
+                .UseLicense(WebUtility.HtmlDecode(_employerAccountsConfiguration.NServiceBusLicense))
                 .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
