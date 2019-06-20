@@ -11,5 +11,6 @@
         public const string CommitmentsApiClient = "SFA.DAS.CommitmentsAPI";
         public const string EmployerFinance = "SFA.DAS.EmployerFinance";
         public const string EmployerAccountsReadStore = "SFA.DAS.EmployerAccounts.ReadStore";
+        public const string ReferenceDataApi = "SFA.DAS.ReferenceDataApiClient";
     }
 }
