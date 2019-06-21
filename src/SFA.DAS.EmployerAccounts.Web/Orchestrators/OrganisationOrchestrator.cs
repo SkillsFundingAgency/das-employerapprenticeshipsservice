@@ -54,11 +54,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         protected OrganisationOrchestrator()
         {
-            
         }
+
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntityViewModel request)
         {
-
             var result = await _mediator.SendAsync(new CreateLegalEntityCommand
             {
                 HashedAccountId = request.HashedAccountId,
@@ -81,7 +80,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 },
                 Status = HttpStatusCode.OK
             };
-
         }
 
         public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
@@ -274,7 +272,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             string userId,
             string hashedAccountId)
         {
-            return this.GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, string.Empty);
+            return GetOrganisationAddedNextStepViewModel(organisationName, userId, hashedAccountId, string.Empty);
         }
 
         public virtual async Task<OrchestratorResponse<OrganisationAddedNextStepsViewModel>> GetOrganisationAddedNextStepViewModel(
@@ -291,8 +289,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             };
         }
 
-
-
         public async Task<OrchestratorResponse<ReviewOrganisationAddressViewModel>> GetRefreshedOrganisationDetails(string accountLegalEntityPublicHashedId)
         {
             var currentDetails = await Mediator.SendAsync(new GetAccountLegalEntityRequest
@@ -305,19 +301,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Identifier = currentDetails.AccountLegalEntity.Identifier,
                 OrganisationType = currentDetails.AccountLegalEntity.OrganisationType
             });
-
-            OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
-            {
-                // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
-                // Also, the names and addresses returned by CH search and get by id are inconsistent. Specifically the spacing within a 
-                // name of address are different. To counter this one or spaces will be considered to be equivalent. 
-                if (!currentValue.IsEquivalent(updatedValue, StringEquivalenceOptions.IgnoreLeadingSpaces | StringEquivalenceOptions.IgnoreTrailingSpaces | StringEquivalenceOptions.MultipleSpacesAreEquivalent))
-                {
-                    return includeIfDifferent;
-                }
-
-                return OrganisationUpdatesAvailable.None;
-            }
 
             var result = new OrchestratorResponse<ReviewOrganisationAddressViewModel>
             {
@@ -338,10 +321,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return result;
         }
 
-
-
         public async Task<OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>> UpdateOrganisation(
-            string accountLegalEntityPublicHashedId, string organisationName, string organisationAddress, string hashedAccountId, string userId)
+            string accountLegalEntityPublicHashedId, 
+            string organisationName, 
+            string organisationAddress, 
+            string hashedAccountId, 
+            string userId)
         {
             var result = new OrchestratorResponse<OrganisationUpdatedNextStepsViewModel>
             {
@@ -367,6 +352,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
 
             return result;
+        }
+
+        private OrganisationUpdatesAvailable CheckForUpdate(string currentValue, string updatedValue, OrganisationUpdatesAvailable includeIfDifferent)
+        {
+            // The address will be stored with leading and trailing spaces removed, so the change comparison will exclude these.
+            // Also, the names and addresses returned by CH search and get by id are inconsistent. Specifically the spacing within a 
+            // name of address are different. To counter this one or spaces will be considered to be equivalent. 
+            return !currentValue.IsEquivalent(updatedValue, StringEquivalenceOptions.IgnoreLeadingSpaces | StringEquivalenceOptions.IgnoreTrailingSpaces | StringEquivalenceOptions.MultipleSpacesAreEquivalent) 
+                ? includeIfDifferent 
+                : OrganisationUpdatesAvailable.None;
         }
     }
 }

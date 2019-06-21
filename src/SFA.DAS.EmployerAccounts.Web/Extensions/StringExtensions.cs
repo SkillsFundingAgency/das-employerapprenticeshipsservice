@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace SFA.DAS.EmployerAccounts.Web.Extensions
+﻿namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public enum StringEquivalenceOptions
     {
@@ -23,20 +21,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     }
 
     public static class StringExtensions
-    {   
-        public static string FormatPayeForUrl(this string scheme)
-        {
-            return scheme.Replace("/", "_");
-        }
-
+    {
         public static string FormatPayeFromUrl(this string scheme)
         {
             return scheme.Replace("_", "/");
-        }
-
-        public static bool IsEquivalent(this string s1, string s2)
-        {
-            return s1.IsEquivalent(s2, StringEquivalenceOptions.Default);
         }
 
         public static bool IsEquivalent(this string s1, string s2, StringEquivalenceOptions options)
@@ -74,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                     }
                 }
 
-                if ((caseInsensitive || s1[idx1] == s2[idx2]) && (!caseInsensitive || char.ToUpperInvariant(s1[idx1]) == char.ToUpperInvariant(s2[idx2])))
+                if (!((caseInsensitive || s1[idx1] == s2[idx2]) && (!caseInsensitive || char.ToUpperInvariant(s1[idx1]) == char.ToUpperInvariant(s2[idx2]))))
                 {
                     return false;
                 }
@@ -83,11 +71,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 idx2++;
             }
 
-            if (options.HasFlag(StringEquivalenceOptions.IgnoreTrailingSpaces))
+            if (!options.HasFlag(StringEquivalenceOptions.IgnoreTrailingSpaces))
             {
-                SkipToNextNonSpace(s1, ref idx1);
-                SkipToNextNonSpace(s2, ref idx2);
+                return idx1 == s1.Length && idx2 == s2.Length;
             }
+
+            SkipToNextNonSpace(s1, ref idx1);
+            SkipToNextNonSpace(s2, ref idx2);
 
             return idx1 == s1.Length && idx2 == s2.Length;
         }
