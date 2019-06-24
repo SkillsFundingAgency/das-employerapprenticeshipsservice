@@ -8,12 +8,12 @@ using HMRC.ESFA.Levy.Api.Client;
 using Newtonsoft.Json;
 using SFA.DAS.Caches;
 using SFA.DAS.Http;
-using SFA.DAS.ExecutionPolicies;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services

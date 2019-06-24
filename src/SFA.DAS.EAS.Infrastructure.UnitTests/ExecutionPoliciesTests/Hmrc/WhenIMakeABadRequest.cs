@@ -3,7 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.ExecutionPolicies;
+using SFA.DAS.EAS.Infrastructure.ExecutionPolicies;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
 

@@ -1,8 +1,8 @@
-﻿using Polly;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Polly;
 
-namespace SFA.DAS.ExecutionPolicies
+namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
 {
     public abstract class ExecutionPolicy
     {
