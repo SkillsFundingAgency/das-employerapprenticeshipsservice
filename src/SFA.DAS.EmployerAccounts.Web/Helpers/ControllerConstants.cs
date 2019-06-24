@@ -11,6 +11,7 @@
         public const string AddOrganisationAddressActionName = "AddOrganisationAddress";      
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string AmendOrganisationActionName = "AmendOrganisation";
+        public const string AmendPayeActionName = "AmendPaye";
         public const string CodeKeyName = "code";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
@@ -60,15 +61,19 @@
         public const string SearchPensionRegulatorControllerName = "SearchPensionRegulator";
         public const string SearchPensionRegulatorActionName = "SearchPensionRegulator";
         public const string SearchPensionRegulatorResultsViewName = "SearchPensionRegulatorResults";
+        public const string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
         public const string ServiceStartPageViewName = "ServiceStartPage";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
         public const string SignOutActionName = "SignOut";
+        public const string SkipRegistrationActionName = "SkipRegistration";
         public const string SummaryActionName = "Summary";
         public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
         public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
+        public const string WaysToAddPayeSchemeActionName = "WaysToAdd";
+        public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
     }
 }

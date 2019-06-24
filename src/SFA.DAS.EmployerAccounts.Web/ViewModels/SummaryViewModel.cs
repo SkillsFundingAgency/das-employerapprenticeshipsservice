@@ -17,5 +17,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string EmployerRefName { get; set; }
         public string Sector { get; set; }
         public bool NewSearch { get; set; }
+        public string AORN { get; set; }
     }
 }

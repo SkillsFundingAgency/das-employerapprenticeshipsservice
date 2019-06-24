@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.PensionRegulator;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationsByAorn;
 using SFA.DAS.EmployerAccounts.Queries.GetPensionRegulator;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
@@ -33,34 +34,41 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>> SearchPensionRegulator(string payeRef)
         {
-            var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>();
+            var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>() { Data = new SearchPensionRegulatorResultsViewModel { PayeRef = payeRef } };
 
             try
             {
                 var result = await Mediator.SendAsync(new GetPensionRegulatorRequest { PayeRef = payeRef });
-                response.Data = new SearchPensionRegulatorResultsViewModel
-                {
-                    Results = CreateResult(result.Organisations).ToList(),                    
-                    PayeRef = payeRef
-                };
+                response.Data.Results = CreateResult(result.Organisations).ToList();
             }            
             catch (Exception ex)
             {
                 _logger.Error(ex, ex.Message);
-
-                response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>
-                {
-                    Data = new SearchPensionRegulatorResultsViewModel
-                    {
-                        Results = new List<PensionRegulatorDetailsViewModel>(),
-                        PayeRef = payeRef
-                    }
-                };
+                response.Data.Results = new List<PensionRegulatorDetailsViewModel>();
             }
 
             return response;
         }
-        
+
+        public virtual async Task<OrchestratorResponse<SearchPensionRegulatorResultsViewModel>> GetOrganisationsByAorn(string aorn, string payeRef)
+        {
+            var response = new OrchestratorResponse<SearchPensionRegulatorResultsViewModel>() { Data = new SearchPensionRegulatorResultsViewModel { Aorn = aorn, PayeRef = payeRef } };
+
+            try
+            {
+                var result = await Mediator.SendAsync(new GetOrganisationsByAornRequest(aorn, payeRef));
+                response.Data.Results = CreateResult(result.Organisations).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, ex.Message);
+                response.Data.Results = new List<PensionRegulatorDetailsViewModel>();
+            }
+
+            return response;
+        }
+
+
         public virtual EmployerAccountData GetCookieData()
         {
             return _cookieService.Get(CookieName);
