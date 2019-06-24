@@ -4,7 +4,7 @@ using System.Reflection;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
+namespace SFA.DAS.ExecutionPolicies
 {
     public class ExecutionPolicyPolicy : ConfiguredInstancePolicy
     {

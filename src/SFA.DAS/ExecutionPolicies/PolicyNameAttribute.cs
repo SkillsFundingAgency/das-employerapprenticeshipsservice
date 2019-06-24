@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
+namespace SFA.DAS.ExecutionPolicies
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class PolicyNameAttribute : Attribute

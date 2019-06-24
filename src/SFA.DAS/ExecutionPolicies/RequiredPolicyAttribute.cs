@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
+namespace SFA.DAS.ExecutionPolicies
 {
     [AttributeUsage(AttributeTargets.Parameter)]
     public class RequiredPolicyAttribute : Attribute

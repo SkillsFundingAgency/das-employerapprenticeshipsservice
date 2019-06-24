@@ -1,10 +1,10 @@
-﻿using System;
-using HMRC.ESFA.Levy.Api.Types.Exceptions;
+﻿using HMRC.ESFA.Levy.Api.Types.Exceptions;
 using Polly;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
+using System;
 
-namespace SFA.DAS.EAS.Infrastructure.ExecutionPolicies
+namespace SFA.DAS.ExecutionPolicies
 {
     [PolicyName(Name)]
     public class HmrcExecutionPolicy : ExecutionPolicy
