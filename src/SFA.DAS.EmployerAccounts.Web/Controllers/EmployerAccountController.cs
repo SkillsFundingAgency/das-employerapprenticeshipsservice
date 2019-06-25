@@ -275,7 +275,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
                 Sector = enteredData.EmployerAccountOrganisationData.Sector,
-                HashedAccountId = _accountCookieStorage.Get(_hashedAccountIdCookieName)
+                HashedAccountId = _accountCookieStorage.Get(_hashedAccountIdCookieName),
+                Aorn = enteredData.EmployerAccountPayeRefData.AORN
             };
 
             var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(request, HttpContext);
