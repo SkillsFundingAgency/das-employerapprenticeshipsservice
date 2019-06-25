@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerSchemes
 
         public async Task<GetEmployerSchemesResponse> Handle(GetEmployerSchemesQuery message)
         {
-             var employerSchemes = await _employerSchemesRepository.GetSchemesByEmployerId(message.Id);
+             var employerSchemes = await _employerSchemesRepository.GetSchemesAddedUsingGovernmentGatewayByEmployerId(message.Id);
             return new GetEmployerSchemesResponse {PayeSchemes = new PayeSchemes {SchemesList = employerSchemes.SchemesList} };
         }
     }

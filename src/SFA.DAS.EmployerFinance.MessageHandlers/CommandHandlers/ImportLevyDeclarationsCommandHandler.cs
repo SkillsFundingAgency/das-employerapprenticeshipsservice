@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
             foreach (var account in employerAccounts)
             {
-                var schemes = await _employerSchemesRepository.GetSchemesByEmployerId(account.Id);
+                var schemes = await _employerSchemesRepository.GetSchemesAddedUsingGovernmentGatewayByEmployerId(account.Id);
 
                 if (schemes?.SchemesList == null)
                 {

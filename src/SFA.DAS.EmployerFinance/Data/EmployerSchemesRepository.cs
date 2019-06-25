@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.Data
             _db = db;
         }
 
-        public async Task<PayeSchemes> GetSchemesByEmployerId(long employerId)
+        public async Task<PayeSchemes> GetSchemesAddedUsingGovernmentGatewayByEmployerId(long employerId)
         {
             var parameters = new DynamicParameters();
 
