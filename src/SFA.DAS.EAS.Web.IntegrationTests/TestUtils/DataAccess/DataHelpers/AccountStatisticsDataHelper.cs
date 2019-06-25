@@ -82,6 +82,7 @@ select (
                     fixture.Create<string>(),
                     2,
                     1,
+                    fixture.Create<string>(),
                     fixture.Create<string>());
 
                 accountDbContext.Database.CurrentTransaction.Commit();
