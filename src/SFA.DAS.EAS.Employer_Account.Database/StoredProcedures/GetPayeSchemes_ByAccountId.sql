@@ -5,7 +5,9 @@ AS
 		* 
 	FROM 
 		[employer_account].[Paye] p
-	inner join 
-		[employer_account].[AccountHistory] ah on ah.PayeRef = p.Ref
+	INNER JOIN 
+		[employer_account].[AccountHistory] ah ON ah.PayeRef = p.Ref
 	WHERE
-		ah.AccountId = @accountId and ah.RemovedDate is null
+		ah.AccountId = @accountId 
+		AND ah.RemovedDate IS NULL
+		AND p.Aorn IS NULL
