@@ -82,5 +82,18 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
         }
 
+        public Task SetAccountAsLevy(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@LevyStatus", true, DbType.Boolean);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpdateAccount_SetAccountLevyStatus]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }
