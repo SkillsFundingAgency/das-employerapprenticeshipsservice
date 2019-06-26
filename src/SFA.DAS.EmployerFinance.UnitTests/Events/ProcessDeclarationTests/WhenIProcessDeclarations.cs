@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Data;
@@ -9,6 +10,7 @@ using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
 {
+    [ExcludeFromCodeCoverage]
     public class WhenIProcessDeclarations
     {
         private ProcessDeclarationsEventHandler _processDeclarationsEvent;
@@ -57,13 +59,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
             _logger.Verify(x=>x.Info("Process Declarations Called"));
         }
 
-        [TestCase(100023,0.0,false)]
-        [TestCase(900034,10.0,true)]
-        public async Task ThenLevyAddedToAccountEventIsPublishedForGreaterThanZeroLevyAmount(
-            long accountId,
-            decimal levyAmount,
-            bool eventShouldBePublished)
+        [Test]
+        public async Task ThenLevyAddedToAccountEventIsPublishedForGreaterThanZeroLevyAmount()
         {
+            long accountId = 900034;
+            decimal levyAmount = 10.0m;
+
             _dasLevyRepository
                 .Setup(
                     m => m.ProcessDeclarations(
@@ -79,7 +80,36 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
                         AccountId = accountId
                     });
 
-            var numberOfExpectedCalls = eventShouldBePublished ? Times.Once() : Times.Never();
+            _eventPublisher
+                .Verify(
+                    m =>
+                        m.Publish(
+                            It.Is<LevyAddedToAccount>(
+                                arg => arg.AccountId == accountId
+                                       && arg.Amount == levyAmount)),
+                    Times.Once);
+        }
+
+        [Test]
+        public async Task ThenLevyAddedToAccountEventIsNotPublishedForZeroLevyAmount()
+        {
+            long accountId = 900034;
+            decimal levyAmount = decimal.Zero;
+
+            _dasLevyRepository
+                .Setup(
+                    m => m.ProcessDeclarations(
+                        accountId,
+                        It.IsAny<string>()))
+                .Returns(
+                    Task.FromResult(levyAmount));
+
+            _processDeclarationsEvent
+                .Handle(
+                    new ProcessDeclarationsEvent
+                    {
+                        AccountId = accountId
+                    });
 
             _eventPublisher
                 .Verify(
@@ -88,7 +118,38 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
                             It.Is<LevyAddedToAccount>(
                                 arg => arg.AccountId == accountId
                                        && arg.Amount == levyAmount)),
-                    numberOfExpectedCalls);
+                    Times.Never);
+        }
+
+        [Test]
+        public async Task ThenLevyAddedToAccountEventIsNotPublishedForLessThanZeroLevyAmount()
+        {
+            long accountId = 900034;
+            decimal levyAmount = decimal.MinusOne;
+
+            _dasLevyRepository
+                .Setup(
+                    m => m.ProcessDeclarations(
+                        accountId,
+                        It.IsAny<string>()))
+                .Returns(
+                    Task.FromResult(levyAmount));
+
+            _processDeclarationsEvent
+                .Handle(
+                    new ProcessDeclarationsEvent
+                    {
+                        AccountId = accountId
+                    });
+
+            _eventPublisher
+                .Verify(
+                    m =>
+                        m.Publish(
+                            It.Is<LevyAddedToAccount>(
+                                arg => arg.AccountId == accountId
+                                       && arg.Amount == levyAmount)),
+                    Times.Never);
         }
     }
 }
