@@ -147,6 +147,7 @@
     <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
     <Build Include="Tables\RunOnceJob.sql" />
     <Build Include="StoredProcedures\CreateUserAccount.sql" />
+    <Build Include="StoredProcedures\GetPayeSchemesAddedByGovernmentGateway_ByAccountId.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
