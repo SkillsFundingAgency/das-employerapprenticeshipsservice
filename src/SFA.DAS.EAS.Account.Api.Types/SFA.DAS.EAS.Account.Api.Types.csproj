@@ -5,10 +5,10 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="SFA.DAS.Common.Domain">
-      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.246\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
-    </Reference>
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <PackageReference Include="SFA.DAS.Common.Domain">
+      <Version>1.4.246</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <PackageId>SFA.DAS.Account.Api.Types</PackageId>
