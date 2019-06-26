@@ -52,31 +52,29 @@
 
 @section pageSpecificJS {
 <script>
-
     $(function () {
-
         var $link = $('#other-tasks-link'),
-            $target = $('#das-dashbaord-other-tasks'),
+            $pageContent = $('.das-panels'),
+            $target = $('#das-dashboard-other-tasks'),
             activeClass = 'das-dashboard-header__tasks-link--active';
-
         $link.on('click', function (e) {
             if ($link.hasClass(activeClass)) {
                 $link.removeClass(activeClass);
-                $target.hide()
+                $target.hide();
+                $pageContent.show();
             } else {
                 $link.addClass(activeClass);
                 $target.show();
+                $pageContent.hide();
             }
             e.preventDefault();
         });
-
         $link.on('keydown', function (e) {
             if (e.which === 9 && $link.hasClass(activeClass)) {
                 $('.das-section__inner-wrap').focus();
             }
         });
-
     });
-
 </script>
+
 }
