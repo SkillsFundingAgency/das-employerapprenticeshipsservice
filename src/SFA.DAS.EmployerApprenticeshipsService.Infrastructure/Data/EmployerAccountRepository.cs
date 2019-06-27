@@ -12,6 +12,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -74,10 +75,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
             var sw = new Stopwatch();
-            AccountDetail accountDetail = null;
 
             sw.Start();
-            accountDetail = await _db.Value.Accounts
+            var accountDetail = await _db.Value.Accounts
                 .Where(ac => ac.HashedId == hashedAccountId)
                 .Select(ac => new AccountDetail
                 {
@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     PublicHashedId = ac.PublicHashedId,
                     Name = ac.Name,
                     CreatedDate = ac.CreatedDate,
-                    LevyType = ac.LevyType
+                    LevyType = (ApprenticeshipEmployerType) ac.LevyType
                 }).FirstOrDefaultAsync();
 
             if (accountDetail == null)
