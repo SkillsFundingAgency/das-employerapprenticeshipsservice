@@ -1,7 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Data;
 
@@ -41,5 +43,27 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                         m.SetAccountAsLevy(
                             _accountId));
         }
+
+        [Test]
+        public async Task Propagates_Errors()
+        {
+            _accountRepository
+                .Setup(
+                    m =>
+                        m.SetAccountAsLevy(
+                            It.IsAny<long>()))
+                .ThrowsAsync(new TestException());
+
+            Assert
+                .ThrowsAsync<TestException>(
+                    () =>
+                    _sut
+                        .Handle(
+                            new UpdateAccountToLevy(_accountId)));
+        }
+    }
+
+    public class TestException : Exception
+    {
     }
 }
