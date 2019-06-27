@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
@@ -87,10 +88,10 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@LevyStatus", true, DbType.Boolean);
+            parameters.Add("@LevyType", ApprenticeshipEmployerType.NonLevy, DbType.Byte);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[UpdateAccount_SetAccountLevyStatus]",
+                sql: "[employer_account].[UpdateAccount_SetAccountLevyType]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);

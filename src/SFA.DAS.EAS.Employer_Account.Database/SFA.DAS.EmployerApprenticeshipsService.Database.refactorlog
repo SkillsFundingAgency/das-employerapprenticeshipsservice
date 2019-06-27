@@ -104,4 +104,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[Role]" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="cdf2da7a-0b18-49e3-9bd9-50880bdf5f9b" ChangeDateTime="06/27/2019 09:46:19">
+    <Property Name="ElementName" Value="[employer_account].[Account].[HasLevy]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[employer_account].[Account]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="LevyType" />
+  </Operation>
 </Operations>
