@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     PublicHashedId = ac.PublicHashedId,
                     Name = ac.Name,
                     CreatedDate = ac.CreatedDate,
-                    HasLevy = ac.HasLevy
+                    LevyType = ac.LevyType
                 }).FirstOrDefaultAsync();
 
             if (accountDetail == null)

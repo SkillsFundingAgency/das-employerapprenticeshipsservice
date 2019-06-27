@@ -6,7 +6,7 @@
 	[CreatedDate] DATETIME NOT NULL,
 	[ModifiedDate] DATETIME NULL, 
     [PublicHashedId] NVARCHAR(100) NULL, 
-    [HasLevy] BIT NOT NULL DEFAULT 0
+    [LevyType] TINYINT NOT NULL DEFAULT 0
 )
 GO
 
