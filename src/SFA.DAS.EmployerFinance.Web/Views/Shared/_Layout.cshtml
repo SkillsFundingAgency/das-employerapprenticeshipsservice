@@ -1,8 +1,6 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
-@using SFA.DAS.EmployerFinance.Web.Extensions
-@using SFA.DAS.Extensions
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -99,22 +97,18 @@
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
 </head>
 <body id="@ViewBag.PageID">
-
     <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
-
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
-
     <div id="skiplink-container">
         <div>
             <a href="#content" class="skiplink">Skip to main content</a>
         </div>
     </div>
-
     <!--[if lt IE 8]>
         <div id="unsupported-browser-message" aria-hidden="true">
             <p>
@@ -122,17 +116,14 @@
             </p>
         </div>
     <![endif]-->
-
     <div id="global-cookie-message">
         <p>
             GOV.UK uses cookies to make the site simpler. <a href="@Url.Action("Privacy", "Home")">Find out more about cookies</a>
         </p>
     </div>
-
     <div id="svg-defs" aria-hidden="true">
         @Html.Partial("_SVGSprite")
     </div>
-
     <header role="banner" id="global-header" class="with-proposition">
         <div class="header-wrapper">
             <div class="header-global">
@@ -168,7 +159,7 @@
                                         <li>
                                             <a href="@Url.EmployerAccountsAction("service/accounts", false)" role="menuitem" class="sub-menu-item">Your accounts</a>
                                         </li>
-                                        @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
+                                        @if (ViewBag.HideNav == null || !ViewBag.HideNav)
                                         {
                                             <li>
                                                 @*<a href="@Url.Action("RenameAccount", "EmployerAccount")" role="menuitem" class="sub-menu-item">Rename account</a>*@
@@ -181,7 +172,7 @@
                                         <li>
                                             <a href="@UserLinksViewModel.ChangeEmailLink" class="sub-menu-item">Change your email address</a>
                                         </li>
-                                        @if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
+                                        @if (ViewBag.HideNav == null || !ViewBag.HideNav)
                                         {
                                             <li>
                                                 <a href="@Url.EmployerAccountsAction("settings/notifications", false)" class="sub-menu-item">Notification settings</a>
@@ -209,11 +200,11 @@
         </div>
         <!--/floating-menu-holder-->
     }
-
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
         var controllerString = ViewContext.RouteData.Values["Controller"].ToString();
-        if (!DynamicExtensions.ParseHideNavFromViewBag(ViewBag))
+
+        if (ViewBag.HideNav == null || !ViewBag.HideNav)
         {
             <div class="header-organisation" role="navigation">
                 <nav class="header-inner">
@@ -246,15 +237,10 @@
         }
     }
     <main role="main" id="content">
-
         @RenderSection("breadcrumb", false)
-
         @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
-
         @RenderBody()
-
     </main>
-
     <footer class="group js-footer" id="footer" role="contentinfo">
         <div class="footer-wrapper">
             <div class="footer-meta">
@@ -287,17 +273,13 @@
         </div>
     </footer>
     <div id="global-app-error" class="app-error hidden"></div>
-
     @Scripts.Render("~/bundles/sfajs")
-
     @RenderSection("pageSpecificJS", false)
-
     @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {
         <div class="about">
             Environment: @SystemDetailsViewModel.EnvironmentName ● Version: @SystemDetailsViewModel.VersionNumber
         </div>
     }
-
 </body>
 </html>
