@@ -1,7 +1,7 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<SelectOrganisationAddressViewModel>
 @{
-    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null;
+    var hasHashedOrganisationId = ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null;
     ViewBag.Title = "Select address";
     ViewBag.PageID = "select-organisation-address";
 
@@ -13,7 +13,7 @@
     else
     {
         ViewBag.Section = "organisations";
-        ViewBag.HideNav = "true";
+        ViewBag.HideNav = true;
     }
 
     var noAddressesFound = string.Empty;

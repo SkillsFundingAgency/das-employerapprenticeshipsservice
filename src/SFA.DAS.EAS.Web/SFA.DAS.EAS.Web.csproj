@@ -525,7 +525,6 @@
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
-    <Compile Include="Extensions\DynamicExtentions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
@@ -560,7 +559,6 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
