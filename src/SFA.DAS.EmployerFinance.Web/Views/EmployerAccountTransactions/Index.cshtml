@@ -27,6 +27,70 @@
             <div class="data data--current">
                 <dl class="transfer-funds">
                     <dt>
+                        Funds available to spend for the next 12 months
+                    </dt>
+                    @{
+                        var availabledFunds = Model.Data.AvailableFunds.ToString("C0", culture);
+                        var availabledFundsClass = string.Empty;
+
+                        if (availabledFunds.Length > 8)
+                        {
+                            availabledFundsClass = "long";
+                        }
+                        if (availabledFunds.Length > 10)
+                        {
+                            availabledFundsClass = "longer";
+                        }
+                    }
+                    <dd class="@availabledFundsClass">@availabledFunds</dd>
+                </dl>
+            </div>
+            <div class="data data--current">
+                <dl class="transfer-funds">
+                    <dt>
+                        Total funding expected in the next 12 months
+                    </dt>
+                    @{
+                        var expectedFunding = Model.Data.FundingExpected.ToString("C0", culture);
+                        var expectedFundingClass = string.Empty;
+
+                        if (expectedFunding.Length > 8)
+                        {
+                            expectedFundingClass = "long";
+                        }
+                        if (expectedFunding.Length > 10)
+                        {
+                            expectedFundingClass = "longer";
+                        }
+                    }
+                    <dd class="@expectedFundingClass">@expectedFunding</dd>
+                </dl>
+            </div>
+            <div class="data data--current">
+                <dl class="transfer-funds">
+                    <dt>
+                        Payments committed in the next 12 months
+                    </dt>
+                    @{
+                        var projectedSpend = Model.Data.ProjectedSpend.ToString("C0", culture);
+                        var projectedSpendClass = string.Empty;
+
+                        if (projectedSpend.Length > 8)
+                        {
+                            projectedSpendClass = "long";
+                        }
+                        if (projectedSpend.Length > 10)
+                        {
+                            projectedSpendClass = "longer";
+                        }
+                    }
+                    <dd class="@projectedSpendClass">@projectedSpend</dd>
+                </dl>
+            </div>
+
+            <div class="data data--current">
+                <dl class="transfer-funds">
+                    <dt>
                         Current funds
                     </dt>
                     @{
@@ -66,6 +130,7 @@
                     <dd class="@totalSpendClass">@totalSpend</dd>
                 </dl>
             </div>
+
             @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiringFunds > 0 && Model.Data.ExpiryDate.HasValue)
             {
                 <div class="data data--long data--expired">
