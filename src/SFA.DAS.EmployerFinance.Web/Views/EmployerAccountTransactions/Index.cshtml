@@ -22,11 +22,37 @@
 
 <div class="grid-row">
     <div class="column-one-third">
-        <div class="finance-figure finance-figure--future" aria-labelledby="lbl-estimated-future-funding">&pound;123,456,789</div>
+        @{
+            var expected = Model.Data.FundingExpected.ToString("C0", culture);
+            var expectedClass = string.Empty;
+
+            if (expected.Length > 8)
+            {
+                expectedClass = "long";
+            }
+            if (expected.Length > 10)
+            {
+                expectedClass = "longer";
+            }
+        }
+        <div class="finance-figure finance-figure--future @expectedClass" aria-labelledby="lbl-estimated-future-funding">@expected</div>
         <p class="finance-figure__label" id="lbl-estimated-future-funding">Estimated total funding for the next 12 months (based on current payments)</p>
     </div>
     <div class="column-one-third">
-        <div class="finance-figure finance-figure--planned" aria-labelledby="lbl-estimated-spending">&pound;123,456,789</div>
+        @{
+            var estimatedSpending = Model.Data.ProjectedSpend.ToString("C0", culture);
+            var estimatedSpendingClass = string.Empty;
+
+            if (estimatedSpending.Length > 8)
+            {
+                estimatedSpendingClass = "long";
+            }
+            if (estimatedSpending.Length > 10)
+            {
+                estimatedSpendingClass = "longer";
+            }
+        }
+        <div class="finance-figure finance-figure--planned @estimatedSpendingClass" aria-labelledby="lbl-estimated-spending">@estimatedSpending</div>
         <p class="finance-figure__label" id="lbl-estimated-spending">Estimated planned spending for the next 12 months</p>
     </div>
 </div>
@@ -48,11 +74,24 @@
                 balanceClass = "longer";
             }
         }
-        <div class="finance-figure finance-figure--current @balanceClass" aria-labelledby="lbl-current-funds">@balance</div>
+        <div class="finance-figure @balanceClass" aria-labelledby="lbl-current-funds">@balance</div>
         <p class="finance-figure__label" id="lbl-current-funds">Current funds</p>
     </div>
     <div class="column-one-third">
-        <div class="finance-figure" aria-labelledby="lbl-current-spent-funds">&pound;123,456,789</div>
+        @{
+            var currentSpend = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+            var currentSpendClass = string.Empty;
+
+            if (currentSpend.Length > 8)
+            {
+                currentSpendClass = "long";
+            }
+            if (currentSpend.Length > 10)
+            {
+                currentSpendClass = "longer";
+            }
+        }
+        <div class="finance-figure @currentSpendClass" aria-labelledby="lbl-current-spent-funds">@currentSpend</div>
         <p class="finance-figure__label" id="lbl-current-spent-funds">Funds spent in the last 12 months</p>
     </div>
      @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiringFunds > 0 && Model.Data.ExpiryDate.HasValue)
@@ -63,11 +102,11 @@
 
             var expiringFundsClass = string.Empty;
 
-            if (balance.Length > 8)
+            if (expiringFunds.Length > 8)
             {
                 expiringFundsClass = "long";
             }
-            if (balance.Length > 10)
+            if (expiringFunds.Length > 10)
             {
                 expiringFundsClass = "longer";
             }
