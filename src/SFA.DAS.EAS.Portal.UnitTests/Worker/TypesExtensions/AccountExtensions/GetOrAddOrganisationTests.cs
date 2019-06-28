@@ -1,6 +1,6 @@
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
+using SFA.DAS.EAS.Portal.TypesExtensions;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
