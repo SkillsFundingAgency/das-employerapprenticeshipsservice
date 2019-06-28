@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Factories;
+﻿using System.Net;
+using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
 using StructureMap;
@@ -11,7 +12,8 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             For<IAddressLookupService>().Use<AddressLookupService>();
             For<IRestClientFactory>().Use<RestClientFactory>();
-            For<IRestServiceFactory>().Use<RestServiceFactory>();
+            For<IRestServiceFactory>().Use<RestServiceFactory>();         
+            For<IHttpServiceFactory>().Use<HttpServiceFactory>();
         }
     }
 }

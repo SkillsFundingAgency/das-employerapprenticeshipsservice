@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
         internal bool IsLegalEntityAlreadyAddedToAccount(List<AccountSpecificLegalEntity> accountLegalEntities, string organisationName, string organisationCode, OrganisationType organisationType)
         {
-            if (organisationType == OrganisationType.Charities || organisationType == OrganisationType.CompaniesHouse)
+            if (organisationType == OrganisationType.Charities || organisationType == OrganisationType.CompaniesHouse || organisationType == OrganisationType.PensionsRegulator)
             {
                 return accountLegalEntities.Any(x => x.Code.Equals(organisationCode.Trim(), StringComparison.CurrentCultureIgnoreCase) && x.Source == organisationType);
             }

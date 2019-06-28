@@ -19,9 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerAccountsConfiguration _configuration;       
-        private const int NotUsedServiceBeforeOption = 1;
-        private const int UsedServiceBeforeOption = 2;
-
+      
         public HomeController(IAuthenticationService owinWrapper, 
             HomeOrchestrator homeOrchestrator,
             EmployerAccountsConfiguration configuration,
@@ -77,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(accounts);
                 }
 
-                return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
+                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
             }
 
             var model = new
@@ -95,49 +93,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
-        }
-
-        [HttpGet]
-        [Route("usedServiceBefore")]
-        public ActionResult UsedServiceBefore()
-        {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("usedServiceBefore")]
-        public ActionResult UsedServiceBefore(int? choice)
-        {
-            switch (choice ?? 0)
-            {
-                case NotUsedServiceBeforeOption: return RedirectToAction(ControllerConstants.RegisterUserActionName);
-                case UsedServiceBeforeOption: return RedirectToAction(ControllerConstants.SignInActionName);
-                default:
-                {
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                        ErrorMessage = "You must select an option to continue."
-                    };
-
-                    return View(model); //No option entered
-                }
-            }
-        }
-
-        [HttpGet]
-        [Route("setupAccount")]
-        public async Task<ActionResult> SetupAccount()
-        {        
-            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            return View(accounts);
-        }
-  
+        }     
+     
         [HttpGet]
         [Route("register")]
         public ActionResult RegisterUser()
@@ -154,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> HandleNewRegistration()
         {
             await OwinWrapper.UpdateClaims();
-            return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
+            return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [Authorize]

@@ -17,10 +17,12 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string EmployerProjectionsBaseUrl { get; set; }
         public string EmployerRecruitBaseUrl { get; set; }
         public string ReservationsBaseUrl { get; set; }
+        public string EmployerFavouritesBaseUrl { get; set; }
         public string ProviderRelationshipsBaseUrl { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
+        public PensionRegulatorConfiguration PensionRegulatorApi { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;

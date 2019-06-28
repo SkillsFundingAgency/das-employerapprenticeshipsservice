@@ -29,8 +29,7 @@ namespace SFA.DAS.EAS.Portal.Worker.Startup
                         .UseErrorQueue()
                         .UseInstallers()
                         .UseLicense(serviceBusConfiguration.NServiceBusLicense)
-                        .UseMessageConventions()
-                        .UseDasMessageConventions()
+                        .UsePortalMessageConventions()
                         .UseNewtonsoftJsonSerializer()
                         .UseNLogFactory()
                         .UseServiceCollection(services);

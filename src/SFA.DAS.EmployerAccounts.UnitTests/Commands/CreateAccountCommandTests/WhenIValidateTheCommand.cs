@@ -131,5 +131,19 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             //Assert
             Assert.IsFalse(actual.IsValid());
         }
+
+        [Test]
+        public async Task ThenShouldFailValidationIfIsAPensionsRegulatorOrganisationAndHasNoOrganisationReferenceNumber()
+        {
+            //Arrange
+            _createAccountCommand.OrganisationType = OrganisationType.PensionsRegulator;
+            _createAccountCommand.OrganisationReferenceNumber = null;
+
+            //Act
+            var actual = await _createCommandValidator.ValidateAsync(_createAccountCommand);
+
+            //Assert
+            Assert.IsFalse(actual.IsValid());
+        }
     }
 }
