@@ -71,14 +71,14 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.43" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.205" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.658</Version>
+      <Version>1.6.946</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.56651" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
@@ -125,6 +125,7 @@
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
+    <Compile Include="Controllers\SearchPensionRegulatorController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -176,15 +177,16 @@
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
+    <Compile Include="Orchestrators\SearchPensionRegulatorOrchestrator.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="Validation\AddLegalEntityViewModelValidator.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
+    <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />
     <Compile Include="ViewModels\AccountDashboardViewModel.cs" />
@@ -193,7 +195,6 @@
     <Compile Include="ViewModels\PayeSchemeDetailViewModel.cs" />
     <Compile Include="ViewModels\PayeSchemeNextStepsViewModel.cs" />
     <Compile Include="ViewModels\AccountViewModel.cs" />
-    <Compile Include="ViewModels\AddLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\AddNewPayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
@@ -230,6 +231,8 @@
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
+    <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationViewModel.cs" />
     <Compile Include="ViewModels\SelectOrganisationAddressViewModel.cs" />
@@ -699,9 +702,7 @@
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
     <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
-    <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
-    <Content Include="Views\Shared\_PayeNotFound.cshtml" />
     <Content Include="Views\EmployerAccount\GetApprenticeshipFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Index.cshtml" />
     <Content Include="Views\Shared\_Layout_v2.cshtml" />
@@ -711,18 +712,24 @@
     <Content Include="Views\EmployerTeam\V2\Row2Panel1.cshtml" />
     <Content Include="Views\EmployerTeam\V2\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissions.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\SavedProviders.cshtml" />
     <Content Include="Views\EmployerTeam\V2\AccountSettings.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CheckFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissionsDenied.cshtml" />
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
     <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\FinancialTransactions.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ApprenticeshipDetails.cshtml" />
     <Content Include="Views\EmployerTeam\V2\SearchBar.cshtml" />
     <Content Include="Views\EmployerTeam\V2\MostActiveLinks.cshtml" />
     <Content Include="Views\EmployerTeam\V2\PrePayeRecruitment.cshtml" />
     <Content Include="Views\EmployerTeam\V2\AddPaye.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\OtherTasksPanel.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\SingleProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\ProviderPermissionsMultiple.cshtml" />
+    <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
+    <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

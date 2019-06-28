@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError("UserId", "No UserId supplied");
 
-            if ((item.OrganisationType == OrganisationType.CompaniesHouse || item.OrganisationType == OrganisationType.Charities) &&
+            if ((item.OrganisationType == OrganisationType.CompaniesHouse || item.OrganisationType == OrganisationType.Charities || item.OrganisationType == OrganisationType.PensionsRegulator) &&
                 string.IsNullOrWhiteSpace(item.OrganisationReferenceNumber))
                 validationResult.AddError(nameof(item.OrganisationReferenceNumber), "No organisation reference number supplied");
 

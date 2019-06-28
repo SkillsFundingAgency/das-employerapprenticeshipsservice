@@ -15,15 +15,18 @@
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core" Version="2.3.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.8" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.2" />
-    <PackageReference Include="NLog.Schema" Version="4.6.3" />
+    <PackageReference Include="NLog.Schema" Version="4.6.4" />
     <PackageReference Include="NServiceBus" Version="7.1.7" />
     <PackageReference Include="NServiceBus.MSDependencyInjection" Version="0.1.4" />
     <PackageReference Include="Scrutor" Version="3.0.2" />
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="2.1.1395" />
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="2.1.1494" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="10.0.1" />
+    <PackageReference Include="SFA.DAS.ProviderRelationships.Messages" Version="3.0.2" />
+    <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.174" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Portal.Client\SFA.DAS.EAS.Portal.Client.csproj" />
     <ProjectReference Include="..\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj" />
   </ItemGroup>
   <ItemGroup>
