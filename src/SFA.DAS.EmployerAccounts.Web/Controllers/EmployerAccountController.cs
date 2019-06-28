@@ -188,22 +188,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             switch (choice ?? 0)
             {
-                case AddPayeLater:
-                {
-                    var request = new CreateUserAccountViewModel
-                    {
-                        UserId = GetUserId(),
-                        OrganisationName = "MY ACCOUNT"
-                    };
-
-                    var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
-                    var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
-                    _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
-                    if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
-                        return Redirect(returnUrlCookie.Value);
-
-                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
-                }
+                case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
                 case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
                 default:
                 {
@@ -216,6 +201,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(model);
                 }
             }
+        }
+
+        [HttpGet]
+        [Route("skipRegistration")]
+        public async Task<ActionResult> SkipRegistration()
+        {
+            var request = new CreateUserAccountViewModel
+            {
+                UserId = GetUserId(),
+                OrganisationName = "MY ACCOUNT"
+            };
+
+            var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
+            var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+            _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                return Redirect(returnUrlCookie.Value);
+
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
         }
 
         [HttpGet]
@@ -345,14 +349,40 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("amendOrganisation")]
         public ActionResult AmendOrganisation()
         {
-            var employerAccountOrganisationData = _employerAccountOrchestrator.GetCookieData().EmployerAccountOrganisationData;
+            var employerAccountData = _employerAccountOrchestrator.GetCookieData();
 
-            if (employerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
+            if (employerAccountData.EmployerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountData.EmployerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
             {
+                if (!string.IsNullOrWhiteSpace(employerAccountData.EmployerAccountPayeRefData.AORN))
+                {
+                    return RedirectToAction(
+                        ControllerConstants.SearchUsingAornActionName,
+                        ControllerConstants.SearchPensionRegulatorControllerName,
+                        new
+                        {
+                            Aorn = employerAccountData.EmployerAccountPayeRefData.AORN,
+                            payeRef = employerAccountData.EmployerAccountPayeRefData.PayeReference
+                        });
+                }
+
                 return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
             }
 
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+        }
+
+        [HttpGet]
+        [Route("amendPaye")]
+        public ActionResult AmendPaye()
+        {
+            var employerAccountPayeData = _employerAccountOrchestrator.GetCookieData().EmployerAccountPayeRefData;
+
+            if (!string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
+            {
+                return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
+            }
+
+            return RedirectToAction(ControllerConstants.GatewayInformActionName);
         }
 
         private string GetUserId()

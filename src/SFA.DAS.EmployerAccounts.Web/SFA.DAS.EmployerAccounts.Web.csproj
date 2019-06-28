@@ -81,7 +81,7 @@
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.0.57835" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.56651" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
@@ -234,6 +234,7 @@
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationViewModel.cs" />
@@ -704,9 +705,7 @@
     <Content Include="Views\EmployerAccountPaye\Index.cshtml" />
     <Content Include="Views\EmployerAccountPaye\NextSteps.cshtml" />
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
-    <Content Include="Views\Shared\GatewayInform.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
-    <Content Include="Views\Shared\_PayeNotFound.cshtml" />
     <Content Include="Views\EmployerAccount\GetApprenticeshipFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Index.cshtml" />
     <Content Include="Views\Shared\_Layout_v2.cshtml" />
@@ -732,6 +731,8 @@
     <Content Include="Views\EmployerTeam\V2\SingleProvider.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissionsMultiple.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
+    <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
+    <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

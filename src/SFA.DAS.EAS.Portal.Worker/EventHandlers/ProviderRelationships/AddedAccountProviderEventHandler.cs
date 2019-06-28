@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Worker.TypesExtensions;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 using SFA.DAS.Providers.Api.Client;
 
@@ -51,7 +52,7 @@ namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships
             var providerTask = _providerApiClient.GetAsync(addedAccountProviderEvent.ProviderUkprn);
             var accountDocument = await GetOrCreateAccountDocument(addedAccountProviderEvent.AccountId, cancellationToken);
             
-            var (accountProvider,_) = GetOrAddProvider(accountDocument, addedAccountProviderEvent.ProviderUkprn);
+            var accountProvider = accountDocument.Account.GetOrAddProvider(addedAccountProviderEvent.ProviderUkprn);
 
             var provider = await providerTask;
             var address = provider.Addresses.FirstOrDefault(a => a.ContactType == "PRIMARY")
