@@ -589,6 +589,7 @@
     <Content Include="src\sass\_type.scss" />
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Shared\BadRequest.cshtml" />
+    <Content Include="src\sass\_finance.scss" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

@@ -5,13 +5,14 @@ namespace SFA.DAS.EAS.Portal.Client.Types
 {
     public class Cohort
     {
-        [JsonConstructor]
         public Cohort()
         {
             Apprenticeships = new List<Apprenticeship>();
         }
         [JsonProperty("id")]
         public string Id { get; set; }
+        [JsonProperty("isApproved")]
+        public bool IsApproved { get; set; }
         [JsonProperty("reference")]
         public string Reference { get; set; }
         [JsonProperty("apprenticeships")]

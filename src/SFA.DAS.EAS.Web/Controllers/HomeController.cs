@@ -33,13 +33,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("whatYoullNeed")]
-        public ActionResult WhatYoullNeed()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/whatYoullNeed", false));
-        }
-
-        [HttpGet]
         [Route("register")]
         public ActionResult RegisterUser()
         {

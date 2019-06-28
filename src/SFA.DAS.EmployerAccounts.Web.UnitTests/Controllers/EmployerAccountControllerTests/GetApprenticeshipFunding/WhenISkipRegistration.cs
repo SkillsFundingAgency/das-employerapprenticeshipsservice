@@ -29,6 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         private OrchestratorResponse<EmployerAccountViewModel> _response;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string HashedAccountId = "ABC123";
+        private const string ExpectedUserId = "USER123";
 
         [SetUp]
         public void Arrange()
@@ -37,7 +38,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();       
+            _owinWrapper = new Mock<IAuthenticationService>();
+            _owinWrapper.Setup(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName)).Returns(ExpectedUserId);
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();  
@@ -51,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Status = HttpStatusCode.OK
             };
 
-            _orchestrator.Setup(x => x.CreateUserAccount(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
+            _orchestrator.Setup(x => x.CreateMinimalUserAccountForSkipJourney(It.IsAny<CreateUserAccountViewModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);        
 
             _employerAccountController = new EmployerAccountController(
@@ -70,25 +72,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenIShouldGoToTheHomePage()
+        public async Task ThenIShouldGoToSkipRegistration()
         {
             //Act
             var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.IndexActionName, result.RouteValues["Action"]);
-            Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.RouteValues["Controller"]);
-        }
-
-        [Test]
-        public async Task ThenIShouldGetBackTheAccountId()
-        {
-            //Act
-            var result = await _employerAccountController.GetApprenticeshipFunding(1) as RedirectToRouteResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual(HashedAccountId, result.RouteValues["HashedAccountId"]);
+            Assert.AreEqual(ControllerConstants.SkipRegistrationActionName, result.RouteValues["Action"]);
         }
     }
 }
