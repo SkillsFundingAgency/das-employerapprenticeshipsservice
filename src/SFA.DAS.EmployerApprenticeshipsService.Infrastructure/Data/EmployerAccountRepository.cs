@@ -86,7 +86,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     PublicHashedId = ac.PublicHashedId,
                     Name = ac.Name,
                     CreatedDate = ac.CreatedDate,
-                    LevyType = (ApprenticeshipEmployerType) ac.LevyType
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType) ac.ApprenticeshipEmployerType
                 }).FirstOrDefaultAsync();
 
             if (accountDetail == null)

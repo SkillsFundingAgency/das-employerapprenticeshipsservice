@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public virtual string PublicHashedId { get; set; }
         public virtual Role role { get; set; }
         public string RoleName => (role).ToString();
-        public virtual short LevyType { get; set; }
+        public virtual byte ApprenticeshipEmployerType { get; set; }
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
 
