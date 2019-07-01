@@ -88,10 +88,10 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@LevyType", ApprenticeshipEmployerType.NonLevy, DbType.Byte);
+            parameters.Add("@ApprenticeshipEmployerType", ApprenticeshipEmployerType.NonLevy, DbType.Byte);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[UpdateAccount_SetAccountLevyType]",
+                sql: "[employer_account].[UpdateAccount_SetAccountApprenticeshipEmployerType]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
