@@ -74,7 +74,7 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.205" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.246" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
       <Version>1.6.946</Version>
     </PackageReference>
