@@ -32,6 +32,8 @@ namespace SFA.DAS.EmployerFinance.Events.ProcessDeclaration
             _logger.Info("Process Declarations Called");
 
             if (levyTransactionTotalAmount > decimal.Zero)
+            {
+                await
                 _eventPublisher
                     .Publish(
                         new LevyAddedToAccount
@@ -39,6 +41,7 @@ namespace SFA.DAS.EmployerFinance.Events.ProcessDeclaration
                             AccountId = notification.AccountId,
                             Amount = levyTransactionTotalAmount
                         });
+            }
         }
     }
 }
