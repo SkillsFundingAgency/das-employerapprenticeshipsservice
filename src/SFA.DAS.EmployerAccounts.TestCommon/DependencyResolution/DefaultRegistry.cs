@@ -3,13 +3,13 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Authentication;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.Events.Api.Client;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Notifications.Api.Client;
 using StructureMap;
 using SFA.DAS.HashingService;
-using SFA.DAS.Hashing;
 using SFA.DAS.Messaging.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.TestCommon.DependencyResolution
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.TestCommon.DependencyResolution
             For<ILog>().Use(Mock.Of<ILog>());
             For<IMessagePublisher>().Use(messagePublisher.Object);
             For<INotificationsApi>().Use(() => Mock.Of<INotificationsApi>());
-            For<IPublicHashingService>().Use(x => new PublicHashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg"));
+            For<IPublicHashingService>().Use(x => new HashingService.HashingService("BCDEFGHIJKLMMOPQRSTUVWXYZ", "haShStRiNg") as IPublicHashingService);
         }
     }
 }
