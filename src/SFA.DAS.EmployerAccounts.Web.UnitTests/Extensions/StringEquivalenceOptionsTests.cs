@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.Extensions
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
     [TestFixture]
     public class StringEquivalenceOptionsTests
