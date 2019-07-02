@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
 using BoDi;
 using Moq;
@@ -9,7 +10,6 @@ using SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
-using SFA.DAS.Extensions;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NLog;
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                     .UseAzureServiceBusTransport()
                     .UseErrorQueue()
                     .UseInstallers()
-                    .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
+                    .UseLicense(WebUtility.HtmlDecode(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense))
                     .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
                     .UseNewtonsoftJsonSerializer()
                     .UseNLogFactory()
@@ -112,7 +112,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
 
                 _container.GetInstance<ILog>().Info("Endpoint Started.");
-
             }
             catch (Exception e)
             {

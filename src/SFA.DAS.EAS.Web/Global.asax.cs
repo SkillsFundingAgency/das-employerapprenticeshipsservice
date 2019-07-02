@@ -23,7 +23,6 @@ using System.Web.Routing;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.NServiceBus;
 using SFA.DAS.EAS.Web.App_Start;
-using SFA.DAS.Extensions;
 using SFA.DAS.Logging;
 using SFA.DAS.Audit.Client;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -93,7 +92,7 @@ namespace SFA.DAS.EAS.Web
         {
             var exception = Server.GetLastError();
 
-            if (exception is HttpException httpException && httpException.GetHttpCode() == (int)HttpStatusCode.NotFound)
+            if (exception is HttpException httpException && httpException.GetHttpCode() == (int) HttpStatusCode.NotFound)
             {
                 return;
             }
@@ -135,7 +134,7 @@ namespace SFA.DAS.EAS.Web
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
-                .UseLicense(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
