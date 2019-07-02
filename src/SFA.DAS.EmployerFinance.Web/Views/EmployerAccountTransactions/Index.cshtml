@@ -79,7 +79,7 @@
     </div>
     <div class="column-one-third">
         @{
-            var currentSpend = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+            var currentSpend = Model.Data.TotalSpendForLastYear.ToString("C0", culture);
             var currentSpendClass = string.Empty;
 
             if (currentSpend.Length > 8)
