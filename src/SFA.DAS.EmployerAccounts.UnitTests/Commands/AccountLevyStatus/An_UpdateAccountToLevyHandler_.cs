@@ -43,6 +43,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
         [Test]
         public async Task Updates_Account_To_Be_Levy()
         {
+            await
             _sut
                 .Handle(
                     _updateCommand);
@@ -75,6 +76,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
         [Test]
         public async Task Informs_That_Account_Is_To_Be_Updated()
         {
+            await
             _sut
                 .Handle(
                     _updateCommand);
@@ -88,6 +90,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
         [Test]
         public async Task Informs_That_Account_Has_Been_Updated_On_Successful_Completion()
         {
+            await
             _sut
                 .Handle(
                     _updateCommand);
@@ -108,9 +111,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AccountLevyStatus
                             It.IsAny<long>()))
                 .Throws<TestException>();
 
-            _sut
-                .Handle(
-                    _updateCommand);
+            try
+            {
+                await
+                    _sut
+                        .Handle(
+                            _updateCommand);
+            }
+            catch (Exception)
+            {
+            }
 
             _logger
                 .Verify(
