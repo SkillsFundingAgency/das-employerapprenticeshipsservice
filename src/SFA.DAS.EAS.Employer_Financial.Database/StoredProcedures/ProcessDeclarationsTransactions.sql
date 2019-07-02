@@ -43,7 +43,12 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 
 -- Create Declarations
 
+DECLARE @updatedAccountTransactions table(
+AccountId BIGINT,
+Amount decimal(18,4))
+
 INSERT INTO [employer_financial].TransactionLine
+OUTPUT INSERTED.Amount INTO @updatedAccountTransactions
 select mainUpdate.* from
 	(
 	select 
@@ -100,3 +105,6 @@ select mainUpdate.* from
 	EXCEPT
 		select SubmissionId from [employer_financial].TransactionLine where TransactionType = 1
 	) dervx on dervx.SubmissionId = mainUpdate.SubmissionId
+
+	SELECT SUM(Amount)
+	FROM @updatedAccountTransactions

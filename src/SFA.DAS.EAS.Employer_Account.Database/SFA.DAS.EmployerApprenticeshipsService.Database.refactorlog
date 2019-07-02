@@ -104,18 +104,18 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="[Role]" />
   </Operation>
-  <Operation Name="Rename Refactor" Key="8fda4f8c-3580-4d04-886e-4df269ae3448" ChangeDateTime="06/27/2019 08:59:07">
+  <Operation Name="Rename Refactor" Key="cdf2da7a-0b18-49e3-9bd9-50880bdf5f9b" ChangeDateTime="06/27/2019 09:46:19">
     <Property Name="ElementName" Value="[employer_account].[Account].[HasLevy]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[employer_account].[Account]" />
     <Property Name="ParentElementType" Value="SqlTable" />
-    <Property Name="NewName" Value="LevyStatus" />
+    <Property Name="NewName" Value="LevyType" />
   </Operation>
-  <Operation Name="Rename Refactor" Key="68697f6e-a6e1-45c4-a792-900388b2f209" ChangeDateTime="06/27/2019 09:02:23">
-    <Property Name="ElementName" Value="[employer_account].[Account].[LevyStatus]" />
+  <Operation Name="Rename Refactor" Key="ef3b85f3-92cd-439c-be7e-fb051d08c9cc" ChangeDateTime="07/01/2019 16:13:27">
+    <Property Name="ElementName" Value="[employer_account].[Account].[LevyType]" />
     <Property Name="ElementType" Value="SqlSimpleColumn" />
     <Property Name="ParentElementName" Value="[employer_account].[Account]" />
     <Property Name="ParentElementType" Value="SqlTable" />
-    <Property Name="NewName" Value="LevyType" />
+    <Property Name="NewName" Value="ApprenticeshipEmployerType" />
   </Operation>
 </Operations>
