@@ -65,22 +65,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
             long accountId = 900034;
             decimal levyAmount = 10.0m;
 
-            _dasLevyRepository
-                .Setup(
-                    m => m.ProcessDeclarations(
-                        accountId,
-                        It.IsAny<string>()))
-                .Returns(
-                    Task.FromResult(levyAmount));
+            await
+                SetupRepositoryAndHandleMessage(
+                    accountId,
+                    levyAmount);
 
-            _processDeclarationsEvent
-                .Handle(
-                    new ProcessDeclarationsEvent
-                    {
-                        AccountId = accountId
-                    });
-
-            _eventPublisher
+                _eventPublisher
                 .Verify(
                     m =>
                         m.Publish(
@@ -96,20 +86,10 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
             long accountId = 900034;
             decimal levyAmount = decimal.Zero;
 
-            _dasLevyRepository
-                .Setup(
-                    m => m.ProcessDeclarations(
-                        accountId,
-                        It.IsAny<string>()))
-                .Returns(
-                    Task.FromResult(levyAmount));
-
-            _processDeclarationsEvent
-                .Handle(
-                    new ProcessDeclarationsEvent
-                    {
-                        AccountId = accountId
-                    });
+            await
+            SetupRepositoryAndHandleMessage(
+                accountId,
+                levyAmount);
 
             _eventPublisher
                 .Verify(
@@ -127,6 +107,23 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
             long accountId = 900034;
             decimal levyAmount = decimal.MinusOne;
 
+            await
+                SetupRepositoryAndHandleMessage(
+                    accountId,
+                    levyAmount);
+
+            _eventPublisher
+                .Verify(
+                       m =>
+                        m.Publish(
+                            It.Is<LevyAddedToAccount>(
+                                arg => arg.AccountId == accountId
+                                       && arg.Amount == levyAmount)),
+                    Times.Never);
+        }
+
+        private async Task SetupRepositoryAndHandleMessage(long accountId, decimal levyAmount)
+        {
             _dasLevyRepository
                 .Setup(
                     m => m.ProcessDeclarations(
@@ -135,21 +132,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
                 .Returns(
                     Task.FromResult(levyAmount));
 
+            await
             _processDeclarationsEvent
                 .Handle(
                     new ProcessDeclarationsEvent
                     {
                         AccountId = accountId
                     });
-
-            _eventPublisher
-                .Verify(
-                    m =>
-                        m.Publish(
-                            It.Is<LevyAddedToAccount>(
-                                arg => arg.AccountId == accountId
-                                       && arg.Amount == levyAmount)),
-                    Times.Never);
         }
     }
 }
