@@ -11,7 +11,7 @@ namespace SFA.DAS.EAS.Domain.Data.Repositories
     public interface IAccountRepository
     {
         Task AddPayeToAccount(Paye payeScheme);
-        Task<CreateAccountResult>  CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector);
+        Task<CreateAccountResult>  CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector, string aorn);
         Task<EmployerAgreementView> CreateLegalEntityWithAgreement(CreateLegalEntityWithAgreementParams createParams);
         Task<AccountStats> GetAccountStats(long accountId);
         Task<List<PayeView>> GetPayeSchemesByAccountId(long accountId);
