@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
         [Test]
         public Task Execute_WhenProviderApiReturnsProviderAndAccountDoesNotContainProvider_ThenAccountDocumentIsSavedWithNewProvider()
         {
-            return TestAsync(f => f.EventHandlerTestsFixture.ArrangeEmptyAccountDocument(Fix.AccountId),
+            return TestAsync(f => f.ArrangeEmptyAccountDocument(Fix.AccountId),
                 f => f.Handle(), f => f.VerifyAccountDocumentSavedWithProviderWithPrimaryAddress());
         }
 

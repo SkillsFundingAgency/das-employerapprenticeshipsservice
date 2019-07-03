@@ -69,7 +69,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
         public const long AccountLegalEntityId = 456L;
         public const string ProviderCommitmentsApiExceptionMessage = "Test message";
 
-        //todo: direct to fixture?
         public CohortApprovalRequestedByProvider Message
         {
             get => EventHandlerTestsFixture.Message;
