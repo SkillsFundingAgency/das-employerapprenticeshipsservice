@@ -5,7 +5,6 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.Extensions;
 using SFA.DAS.Logging;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NLog;
@@ -57,7 +56,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
             WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
 
-            var container = StructuremapMvc.StructureMapDependencyScope.Container;
             ViewEngines.Engines.Clear();
             ViewEngines.Engines.Add(new NewHomepageViewEngine());
 
@@ -91,6 +89,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             StartServiceBusEndpoint();
         }
+
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             new HttpContextPolicyProvider(new List<IHttpContextPolicy> { new ResponseHeaderRestrictionPolicy() })
@@ -106,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         {
             var exception = Server.GetLastError();
 
-            if (exception is HttpException httpException && httpException.GetHttpCode() == (int)HttpStatusCode.NotFound)
+            if (exception is HttpException httpException && httpException.GetHttpCode() == (int) HttpStatusCode.NotFound)
             {
                 return;
             }
@@ -143,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
                 .UseErrorQueue()
                 .UseInstallers()
-                .UseLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()

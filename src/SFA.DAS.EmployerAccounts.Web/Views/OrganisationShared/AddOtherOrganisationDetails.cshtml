@@ -5,8 +5,7 @@
     ViewBag.Title = "Enter your organisation name";
     ViewBag.Section = "organisations";
 
-    var hasHashedOrganisationId = this.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null;
-    
+    var hasHashedOrganisationId = ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName] != null; 
     ViewBag.HideNav = hasHashedOrganisationId == false;
 }
 

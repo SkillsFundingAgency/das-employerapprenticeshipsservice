@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Net;
 using Microsoft.Azure.WebJobs;
 using NServiceBus;
 using System.Threading;
@@ -8,7 +9,6 @@ using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution;
-using SFA.DAS.Extensions;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
@@ -47,15 +47,14 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
                 .UseErrorQueue()
                 .UseInstallers()
-                .UseLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
                 .UseOutbox()
                 .UseStructureMapBuilder(container)
                 .UseUnitOfWork();
-
-            
+       
             var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
             while (!cancellationToken.IsCancellationRequested)

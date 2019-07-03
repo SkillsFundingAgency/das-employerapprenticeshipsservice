@@ -14,13 +14,11 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
-using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.Hashing;
 using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
