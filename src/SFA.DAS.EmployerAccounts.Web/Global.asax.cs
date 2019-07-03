@@ -69,6 +69,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 };
             });
 
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
             var environmentService = container.GetInstance<IEnvironmentService>();
 
             if (environmentService.IsCurrent(DasEnv.LOCAL))
