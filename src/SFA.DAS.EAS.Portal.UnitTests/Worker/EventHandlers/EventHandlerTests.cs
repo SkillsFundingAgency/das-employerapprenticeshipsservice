@@ -33,8 +33,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
 
     public class EventHandlerTestsFixture
     {
-        public object Message { get; set; }
-        public object ExpectedMessage { get; set; }
+        public class TestMessage
+        {
+            public Guid Id;
+        }
+        
+        public TestMessage Message { get; set; }
+        public TestMessage ExpectedMessage { get; set; }
         public IHandleMessages<object> Handler { get; set; }
         public string MessageId { get; set; }
         public Mock<IMessageContextInitialisation> MessageContextInitialisation { get; set; }
@@ -45,7 +50,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public EventHandlerTestsFixture()
         {
             var fixture = new Fixture();
-            Message = new object();
+            Message = fixture.Create<TestMessage>();
 
             MessageContextInitialisation = new Mock<IMessageContextInitialisation>();
             
@@ -77,8 +82,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public void VerifyCommandExecutedWithUnchangedEvent()
         {
             EventHandlerPartTwo.Verify(eh => eh.Handle(
-                    //todo: need to check correct object is passed, create dummy message?
-                    It.IsAny<object>(), //e => e.IsEqual(ExpectedMessage).Item1),
+                    It.Is<TestMessage>(e => e.IsEqual(ExpectedMessage).Item1),
                     It.IsAny<CancellationToken>()),
                 Times.Once);
         }
