@@ -3,7 +3,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.TypesExtensions;
 using SFA.DAS.Testing;
 
-namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
+namespace SFA.DAS.EAS.Portal.UnitTests.Portal.TypesExtensions.AccountExtensions
 {
     [TestFixture, Parallelizable]
     public class GetOrAddProviderTests: FluentTest<GetOrAddProviderTestsFixture>
