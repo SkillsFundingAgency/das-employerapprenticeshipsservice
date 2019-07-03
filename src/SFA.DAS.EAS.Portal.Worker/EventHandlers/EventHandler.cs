@@ -1,10 +1,8 @@
-//using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
 using SFA.DAS.EAS.Portal.Application.EventHandlers;
 using SFA.DAS.EAS.Portal.Application.Services;
-//using SFA.DAS.EAS.Portal.Client.Database.Models;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
 {
