@@ -1,10 +1,8 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 using Newtonsoft.Json;
-using SFA.DAS.Configuration;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
@@ -27,12 +25,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
                         : JsonConvert.DeserializeObject<T>(value);
                 }
             }
-        }
-
-        public virtual T GetDataFromTableStorage()
-        {
-            //return ConfigurationHelper.GetConfiguration<T>(ConfigurationName);
-            throw new NotImplementedException("Removed this method only used in legacy web app"); //todo tidy this up
         }
 
         public async Task<MemoryStream> StreamDataFromBlobStorage(string containerName, string blobName)
