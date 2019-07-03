@@ -29,8 +29,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
         public EventHandlerTestsFixture(bool constructHandler = true)
         {
             Fixture = new Fixture();
-            //todo: doesn't belong in common
-            Fixture.Customize<Cohort>(co => co.With(x => x.IsApproved, false));
 
             Message = Fixture.Create<TEvent>();
 
