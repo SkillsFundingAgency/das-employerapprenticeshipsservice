@@ -25,7 +25,6 @@ namespace SFA.DAS.EAS.Portal.Application.Services
             return await Get(id, cancellationToken) ?? new AccountDocument(id);
         }
 
-        
         public Task Save(AccountDocument account, CancellationToken cancellationToken = default)
         {
             if (account.IsNew)
