@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
+    <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
+  </ItemGroup>
+
+</Project>

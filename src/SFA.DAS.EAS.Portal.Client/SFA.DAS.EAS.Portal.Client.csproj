@@ -19,8 +19,12 @@
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
       <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
-      <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
       <PackageReference Include="StructureMap" Version="4.7.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SFA.DAS.EAS.DasRecruitService\SFA.DAS.EAS.DasRecruitService.csproj" />
+      <ProjectReference Include="..\SFA.DAS.EAS.Portal.Infrastructure\SFA.DAS.EAS.Portal.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
