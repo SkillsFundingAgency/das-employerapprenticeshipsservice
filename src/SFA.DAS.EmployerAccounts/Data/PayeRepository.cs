@@ -43,6 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
             parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
             parameters.Add("@employerRefName", payeScheme.RefName, DbType.String);
+            parameters.Add("@aorn", payeScheme.Aorn, DbType.String);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[AddPayeToAccount]",
