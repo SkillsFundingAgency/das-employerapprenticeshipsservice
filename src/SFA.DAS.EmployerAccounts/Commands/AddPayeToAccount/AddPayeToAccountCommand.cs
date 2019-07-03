@@ -10,5 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
         public string AccessToken { get; set; }
         public string HashedAccountId { get; set; }
         public string EmprefName { get; set; }
+        public string Aorn { get; set; }
     }
 }

@@ -13,8 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
-using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
