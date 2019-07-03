@@ -14,6 +14,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
     [TestFixture, Parallelizable]
     public class CohortApprovedByEmployerEventHandlerTests : FluentTest<CohortApprovedByEmployerEventHandlerTestsFixture>
     {
+        //todo: test coverage a bit thin
+        
         [Test]
         public Task Handle_WhenAccountDoesContainOrganisationAndCohort_ThenAccountDocumentIsSavedWithUpdatedCohort()
         {
