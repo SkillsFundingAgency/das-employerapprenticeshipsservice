@@ -20,9 +20,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
         public TEvent Message { get; set; }
         public TEvent OriginalMessage { get; set; }
         public IEventHandler<TEvent> Handler { get; set; }
-//        public string MessageId { get; set; }
-        //public Mock<IMessageContextInitialisation> MessageContextInitialisation { get; set; }
-        //public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
         public Mock<IAccountDocumentService> AccountDocumentService { get; set; }
         public AccountDocument AccountDocument { get; set; }
         public AccountDocument OriginalAccountDocument { get; set; }
@@ -36,16 +33,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
             Fixture.Customize<Cohort>(co => co.With(x => x.IsApproved, false));
 
             Message = Fixture.Create<TEvent>();
-
-//            MessageContextInitialisation = new Mock<IMessageContextInitialisation>();
-            
-//            MessageId = Fixture.Create<string>();
-//            MessageHandlerContext = new Mock<IMessageHandlerContext>();
-//            MessageHandlerContext.Setup(c => c.MessageId).Returns(MessageId);
-
-//            var messageHeaders = new Mock<IReadOnlyDictionary<string, string>>();
-//            messageHeaders.SetupGet(c => c["NServiceBus.TimeSent"]).Returns(DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss:ffffff Z", CultureInfo.InvariantCulture));
-//            MessageHandlerContext.Setup(c => c.MessageHeaders).Returns(messageHeaders.Object);
 
             AccountDocumentService = new Mock<IAccountDocumentService>();
             
@@ -101,11 +88,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
             return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, Logger.Object);
         }
 
-//        public void VerifyMessageContextIsInitialised()
-//        {
-//            MessageContextInitialisation.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
-//        }
-        
         public Account GetExpectedAccount(long accountId)
         {
             if (OriginalAccountDocument == null)

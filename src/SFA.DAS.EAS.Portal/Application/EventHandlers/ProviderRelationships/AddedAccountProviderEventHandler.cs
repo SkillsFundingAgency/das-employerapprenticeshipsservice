@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Portal.Application.EventHandlers.Reservations;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.TypesExtensions;
 using SFA.DAS.ProviderRelationships.Messages.Events;
@@ -13,12 +12,12 @@ namespace SFA.DAS.EAS.Portal.Application.EventHandlers.ProviderRelationships
     public class AddedAccountProviderEventHandler : IEventHandler<AddedAccountProviderEvent>
     {
         private readonly IAccountDocumentService _accountDocumentService;
-        private readonly ILogger<ReservationCreatedEventHandler> _logger;
+        private readonly ILogger<AddedAccountProviderEventHandler> _logger;
         private readonly IProviderApiClient _providerApiClient;
 
         public AddedAccountProviderEventHandler(
                 IAccountDocumentService accountDocumentService,
-                ILogger<ReservationCreatedEventHandler> logger,
+                ILogger<AddedAccountProviderEventHandler> logger,
                 IProviderApiClient providerApiClient)
         {
             _accountDocumentService = accountDocumentService;
