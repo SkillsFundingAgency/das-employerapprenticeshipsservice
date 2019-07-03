@@ -2,7 +2,7 @@
 @{ViewBag.PageID = "page-paye-scheme-ways-to-add"; }
 @{ViewBag.Title = "Ways to add your PAYE scheme"; }
 @{ViewBag.Section = "paye";}
-@{ViewBag.HideNav = "true"; }
+@{ViewBag.HideNav = true; }
 @{
     ViewBag.GaData.Vpv = "/accounts/schemes/ways-to-add";
     var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "hidden";
@@ -39,6 +39,16 @@
                         I want to use my account office reference number and employer PAYE scheme reference
                     </label>
                 </fieldset>
+                <p>
+                    <div class="notice">
+                        <i class="icon icon-important">
+                            <span class="visuallyhidden">Warning</span>
+                        </i>
+                        <strong class="bold-small">
+                            Before you continue, you must make sure you have authority to add PAYE schemes to the account for this organisation.
+                        </strong>
+                    </div>
+                </p>
             </div>
             <div class="form-group">
                 <button class="button" type="submit" id="submit-how-to-add-payescheme">Continue</button>
