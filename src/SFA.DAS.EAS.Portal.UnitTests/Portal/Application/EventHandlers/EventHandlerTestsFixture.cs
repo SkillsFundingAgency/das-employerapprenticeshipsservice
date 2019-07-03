@@ -55,11 +55,21 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
                 Handler = ConstructHandler();
         }
 
+        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeAccountDoesNotExist(long accountId)
+        {
+            AccountDocument = new AccountDocument(accountId);
+            
+            AccountDocumentService.Setup(s => s.GetOrCreate(accountId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(AccountDocument);
+
+            return this;
+        }
+
         public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeEmptyAccountDocument(long accountId)
         {
             AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {accountId} }}}}");
 
-            AccountDocumentService.Setup(s => s.Get(accountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.GetOrCreate(accountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }

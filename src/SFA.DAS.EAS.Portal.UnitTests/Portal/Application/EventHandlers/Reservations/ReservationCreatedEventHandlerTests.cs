@@ -20,7 +20,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
         [Test]
         public Task Handle_WhenAccountDoesNotExist_ThenAccountDocumentIsSavedWithNewReservation()
         {
-            return TestAsync(f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
+            return TestAsync(f => f.ArrangeAccountDoesNotExist(f.Message.AccountId), f => f.Handle(),
+                f => f.VerifyAccountDocumentSavedWithReservation());
         }
 
         [Test]
@@ -67,6 +68,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
             Message.AccountLegalEntityId = AccountLegalEntityId;
         }
 
+        public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDoesNotExist(long accountId)
+        {
+            EventHandlerTestsFixture.ArrangeAccountDoesNotExist(accountId);
+
+            return this;
+        }
+        
         public ReservationCreatedEventHandlerTestsFixture ArrangeEmptyAccountDocument(long accountId)
         {
             EventHandlerTestsFixture.ArrangeEmptyAccountDocument(accountId);
@@ -81,7 +89,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
             organisation.Reservations = new List<Reservation>();
             
             EventHandlerTestsFixture.AccountDocumentService.Setup(
-                s => s.Get(Message.AccountId, It.IsAny<CancellationToken>()))
+                s => s.GetOrCreate(Message.AccountId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
             
             return this;
@@ -93,7 +101,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
 
             organisation.Reservations.RandomElement().Id = ReservationId;
             
-            EventHandlerTestsFixture.AccountDocumentService.Setup(s => s.Get(
+            EventHandlerTestsFixture.AccountDocumentService.Setup(s => s.GetOrCreate(
                 Message.AccountId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
             
