@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using NLog;
 using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
 using SFA.DAS.Http;
@@ -30,7 +28,7 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
 
         public async Task<VacanciesSummary> GetVacanciesSummary(long accountId)
         {
-            _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
+            _logger.Info($"Getting Vacancies Summary for account ID: {accountId}");
 
             var vacanciesSummaryUrl = $"/api/vacancies/?employerAccountId={accountId}&pageSize=25&pageNo=1";
 
@@ -47,22 +45,22 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
                 switch (ex.StatusCode)
                 {
                     case 400:
-                        _logger.LogError(ex, $"Bad request sent to recruit API for account ID: {accountId}");
+                        _logger.Error(ex, $"Bad request sent to recruit API for account ID: {accountId}");
                         break;
                     case 404:
-                        _logger.LogError(ex,$"Resource not found - recruit API for account ID: {accountId}");
+                        _logger.Error(ex,$"Resource not found - recruit API for account ID: {accountId}");
                         break;
                     case 408:
-                        _logger.LogError(ex, $"Request sent to recruit API for account ID: {accountId} timed out");
+                        _logger.Error(ex, $"Request sent to recruit API for account ID: {accountId} timed out");
                         break;
                     case 429:
-                        _logger.LogError(ex, $"Too many requests sent to recruit API for account ID: {accountId}");
+                        _logger.Error(ex, $"Too many requests sent to recruit API for account ID: {accountId}");
                         break;
                     case 500:
-                        _logger.LogError(ex, $"Recruit API reported internal Server error for account ID: {accountId}");
+                        _logger.Error(ex, $"Recruit API reported internal Server error for account ID: {accountId}");
                         break;
                     case 503:
-                        _logger.LogError(ex, "Recruit API is unavailable");
+                        _logger.Error(ex, "Recruit API is unavailable");
                         break;
 
                     default: throw;
