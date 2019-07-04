@@ -362,9 +362,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                //if (model.AccountViewModel.Organisations?.Any(o => o.Vacancies.Any()))
-                //var vacancies = model.AccountViewModel.Organisations.SelectMany(o => o.Vacancies);
-                //var numVacancies = vacancies.Count();
+                //var numVacancies = model.AccountViewModel.Vacancies.Count();
                 var numVacancies = 0;
                 switch (numVacancies)
                 {
