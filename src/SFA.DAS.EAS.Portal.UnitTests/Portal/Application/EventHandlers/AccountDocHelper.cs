@@ -1,46 +1,29 @@
-using System;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 using AutoFixture;
-using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.EAS.Portal.Application.EventHandlers;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
 {
-    public class EventHandlerTestsFixture<TEvent, TEventHandler>
-        where TEventHandler : IEventHandler<TEvent>
+    public class AccountDocHelper
     {
-        public TEvent Message { get; set; }
-        public TEvent OriginalMessage { get; set; }
-        public IEventHandler<TEvent> Handler { get; set; }
         public Mock<IAccountDocumentService> AccountDocumentService { get; set; }
         public AccountDocument AccountDocument { get; set; }
         public AccountDocument OriginalAccountDocument { get; set; }
-        public Mock<ILogger<TEventHandler>> Logger { get; set; }
         public Fixture Fixture { get; set; }
         
-        public EventHandlerTestsFixture(bool constructHandler = true)
+        public AccountDocHelper()
         {
             Fixture = new Fixture();
-
-            Message = Fixture.Create<TEvent>();
-
             AccountDocumentService = new Mock<IAccountDocumentService>();
-            
-            Logger = new Mock<ILogger<TEventHandler>>();
-            
-            if (constructHandler)
-                Handler = ConstructHandler();
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeAccountDoesNotExist(long accountId)
+        public AccountDocHelper ArrangeAccountDoesNotExist(long accountId)
         {
             AccountDocument = new AccountDocument(accountId);
             
@@ -50,7 +33,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
             return this;
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeEmptyAccountDocument(long accountId)
+        public AccountDocHelper ArrangeEmptyAccountDocument(long accountId)
         {
             AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {accountId} }}}}");
 
@@ -72,18 +55,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
             organisation.AccountLegalEntityId = accountLegalEntityId;
 
             return organisation;
-        }
-        
-        public Task Handle()
-        {
-            OriginalMessage = Message.Clone();
-            OriginalAccountDocument = AccountDocument.Clone();
-            return Handler.Handle(Message);
-        }
-
-        private TEventHandler ConstructHandler()
-        {
-            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, Logger.Object);
         }
 
         public Account GetExpectedAccount(long accountId)

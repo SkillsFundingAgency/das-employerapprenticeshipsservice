@@ -46,38 +46,36 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
         }
     }
 
-    public class ReservationCreatedEventHandlerTestsFixture
+    public class ReservationCreatedEventHandlerTestsFixture : EventHandlerBaseTestFixture<ReservationCreatedEvent, ReservationCreatedEventHandler>
     {
-        public EventHandlerTestsFixture<ReservationCreatedEvent, ReservationCreatedEventHandler> EventHandlerTestsFixture { get; set; }
+        public AccountDocHelper AccountDocHelper { get; set; }
 
         public const long AccountLegalEntityId = 456L;
         public Guid ReservationId = Guid.NewGuid();
 
-        public ReservationCreatedEvent Message
-        {
-            get => EventHandlerTestsFixture.Message;
-            set => EventHandlerTestsFixture.Message = value;
-        }
-
         public ReservationCreatedEventHandlerTestsFixture()
         {
-            EventHandlerTestsFixture = new EventHandlerTestsFixture<ReservationCreatedEvent, ReservationCreatedEventHandler>();
+            AccountDocHelper = new AccountDocHelper();
             
             //todo: let test use fixture generated?
             Message.Id = ReservationId;
             Message.AccountLegalEntityId = AccountLegalEntityId;
+
+            Handler = new ReservationCreatedEventHandler(
+                AccountDocHelper.AccountDocumentService.Object, 
+                Logger.Object);
         }
 
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDoesNotExist(long accountId)
         {
-            EventHandlerTestsFixture.ArrangeAccountDoesNotExist(accountId);
+            AccountDocHelper.ArrangeAccountDoesNotExist(accountId);
 
             return this;
         }
         
         public ReservationCreatedEventHandlerTestsFixture ArrangeEmptyAccountDocument(long accountId)
         {
-            EventHandlerTestsFixture.ArrangeEmptyAccountDocument(accountId);
+            AccountDocHelper.ArrangeEmptyAccountDocument(accountId);
 
             return this;
         }
@@ -85,62 +83,63 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
         //todo: move to base
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
-            var organisation = EventHandlerTestsFixture.SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
+            var organisation = AccountDocHelper.SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
             organisation.Reservations = new List<Reservation>();
             
-            EventHandlerTestsFixture.AccountDocumentService.Setup(
+            AccountDocHelper.AccountDocumentService.Setup(
                 s => s.GetOrCreate(Message.AccountId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
+                .ReturnsAsync(AccountDocHelper.AccountDocument);
             
             return this;
         }
         
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsReservation()
         {
-            var organisation = EventHandlerTestsFixture.SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
+            var organisation = AccountDocHelper.SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
 
             organisation.Reservations.RandomElement().Id = ReservationId;
             
-            EventHandlerTestsFixture.AccountDocumentService.Setup(s => s.GetOrCreate(
+            AccountDocHelper.AccountDocumentService.Setup(s => s.GetOrCreate(
                 Message.AccountId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
+                .ReturnsAsync(AccountDocHelper.AccountDocument);
             
             return this;
         }
         
-        public Task Handle()
-        {
-            return EventHandlerTestsFixture.Handle();
-        }
-        
         public void VerifyAccountDocumentSavedWithReservation()
         {
-            EventHandlerTestsFixture.AccountDocumentService.Verify(s => s.Save(
+            AccountDocHelper.AccountDocumentService.Verify(s => s.Save(
                 It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()),
                 Times.Once);
         }
         
         private bool AccountIsAsExpected(AccountDocument document)
         {
-            var expectedAccount = EventHandlerTestsFixture.GetExpectedAccount(EventHandlerTestsFixture.OriginalMessage.AccountId);
+            var expectedAccount = AccountDocHelper.GetExpectedAccount(OriginalMessage.AccountId);
             var expectedReservation = GetExpectedReservation(
-                EventHandlerTestsFixture.GetExpectedOrganisation(
-                    expectedAccount, AccountLegalEntityId, EventHandlerTestsFixture.OriginalMessage.AccountLegalEntityName));
+                AccountDocHelper.GetExpectedOrganisation(
+                    expectedAccount, AccountLegalEntityId, OriginalMessage.AccountLegalEntityName));
 
             expectedReservation.Id = ReservationId;
-            expectedReservation.CourseCode = EventHandlerTestsFixture.OriginalMessage.CourseId;
-            expectedReservation.CourseName = EventHandlerTestsFixture.OriginalMessage.CourseName;
-            expectedReservation.StartDate = EventHandlerTestsFixture.OriginalMessage.StartDate;
-            expectedReservation.EndDate = EventHandlerTestsFixture.OriginalMessage.EndDate;
+            expectedReservation.CourseCode = OriginalMessage.CourseId;
+            expectedReservation.CourseName = OriginalMessage.CourseName;
+            expectedReservation.StartDate = OriginalMessage.StartDate;
+            expectedReservation.EndDate = OriginalMessage.EndDate;
 
-            return EventHandlerTestsFixture.AccountIsAsExpected(expectedAccount, document);
+            return AccountDocHelper.AccountIsAsExpected(expectedAccount, document);
+        }
+
+        public override Task Handle()
+        {
+            AccountDocHelper.OriginalAccountDocument = AccountDocHelper.AccountDocument.Clone();
+            return base.Handle();
         }
 
         private Reservation GetExpectedReservation(Organisation expectedOrganisation)
         {
             Reservation expectedReservation;
-            if (EventHandlerTestsFixture.OriginalAccountDocument == null
-                || !EventHandlerTestsFixture.OriginalAccountDocument.Account.Organisations.Any())
+            if (AccountDocHelper.OriginalAccountDocument == null
+                || !AccountDocHelper.OriginalAccountDocument.Account.Organisations.Any())
             {
                 //todo: AddNewReservation()?
                 expectedReservation = new Reservation();

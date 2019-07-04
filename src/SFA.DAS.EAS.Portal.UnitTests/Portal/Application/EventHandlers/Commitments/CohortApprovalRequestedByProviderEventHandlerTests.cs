@@ -58,9 +58,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
         }
     }
 
-    public class CohortApprovalRequestedByProviderEventHandlerTestsFixture
+    public class CohortApprovalRequestedByProviderEventHandlerTestsFixture : EventHandlerBaseTestFixture<CohortApprovalRequestedByProvider, CohortApprovalRequestedByProviderEventHandler>
     {
-        public EventHandlerTestsFixture<CohortApprovalRequestedByProvider, CohortApprovalRequestedByProviderEventHandler> EventHandlerTestsFixture { get; set; }
+        public AccountDocHelper AccountDocHelper { get; set; }
 
         public Mock<IProviderCommitmentsApi> ProviderCommitmentsApi { get; set; }
         public Mock<IHashingService> HashingService { get; set; }
@@ -69,21 +69,15 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
         public const long AccountLegalEntityId = 456L;
         public const string ProviderCommitmentsApiExceptionMessage = "Test message";
 
-        public CohortApprovalRequestedByProvider Message
-        {
-            get => EventHandlerTestsFixture.Message;
-            set => EventHandlerTestsFixture.Message = value;
-        }
-
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture()
         {
-            EventHandlerTestsFixture = new EventHandlerTestsFixture<CohortApprovalRequestedByProvider, CohortApprovalRequestedByProviderEventHandler>(false);
+            AccountDocHelper = new AccountDocHelper();
 
-            Commitment = EventHandlerTestsFixture.Fixture.Create<CommitmentView>();
+            Commitment = AccountDocHelper.Fixture.Create<CommitmentView>();
             
             ProviderCommitmentsApi = new Mock<IProviderCommitmentsApi>();
             ProviderCommitmentsApi
-                .Setup(m => m.GetProviderCommitment(EventHandlerTestsFixture.Message.ProviderId, EventHandlerTestsFixture.Message.CommitmentId))
+                .Setup(m => m.GetProviderCommitment(Message.ProviderId, Message.CommitmentId))
                 .ReturnsAsync(Commitment);
 
             HashingService = new Mock<IHashingService>();
@@ -91,36 +85,37 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
                 .Setup(m => m.DecodeValue(Commitment.AccountLegalEntityPublicHashedId))
                 .Returns(AccountLegalEntityId);                    
             
-            EventHandlerTestsFixture.Handler = new CohortApprovalRequestedByProviderEventHandler(
-                EventHandlerTestsFixture.AccountDocumentService.Object,
-                EventHandlerTestsFixture.Logger.Object,
+            
+            Handler = new CohortApprovalRequestedByProviderEventHandler(
+                AccountDocHelper.AccountDocumentService.Object,
+                Logger.Object,
                 ProviderCommitmentsApi.Object,
                 HashingService.Object);
         }
         
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeAccountDoesNotExist(long accountId)
         {
-            EventHandlerTestsFixture.ArrangeAccountDoesNotExist(accountId);
+            AccountDocHelper.ArrangeAccountDoesNotExist(accountId);
 
             return this;
         }
 
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeEmptyAccountDocument(long accountId)
         {
-            EventHandlerTestsFixture.ArrangeEmptyAccountDocument(accountId);
+            AccountDocHelper.ArrangeEmptyAccountDocument(accountId);
 
             return this;
         }
 
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
-            var organisation = EventHandlerTestsFixture.SetUpAccountDocumentWithOrganisation(
-                EventHandlerTestsFixture.Message.AccountId, AccountLegalEntityId);
+            var organisation = AccountDocHelper.SetUpAccountDocumentWithOrganisation(
+                Message.AccountId, AccountLegalEntityId);
             organisation.Cohorts = new List<Cohort>();
             
-            EventHandlerTestsFixture.AccountDocumentService.Setup(s => 
-                s.GetOrCreate(EventHandlerTestsFixture.Message.AccountId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
+            AccountDocHelper.AccountDocumentService.Setup(s => 
+                s.GetOrCreate(Message.AccountId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(AccountDocHelper.AccountDocument);
             
             return this;
         }
@@ -128,7 +123,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeProviderCommitmentApiThrowsException()
         {
             ProviderCommitmentsApi.Setup(c => c.GetProviderCommitment(
-                    EventHandlerTestsFixture.Message.ProviderId, EventHandlerTestsFixture.Message.CommitmentId))
+                    Message.ProviderId, Message.CommitmentId))
                 .ThrowsAsync(new Exception(ProviderCommitmentsApiExceptionMessage));
             
             return this;
@@ -136,11 +131,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
 
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeAccountDocumentContainsCohort()
         {
-            var organisation = EventHandlerTestsFixture.SetUpAccountDocumentWithOrganisation(
-                EventHandlerTestsFixture.Message.AccountId, AccountLegalEntityId);
+            var organisation = AccountDocHelper.SetUpAccountDocumentWithOrganisation(
+                Message.AccountId, AccountLegalEntityId);
 
             var cohort = organisation.Cohorts.RandomElement();
-            cohort.Id = EventHandlerTestsFixture.Message.CommitmentId.ToString();
+            cohort.Id = Message.CommitmentId.ToString();
             cohort.Reference = Commitment.Reference;
             cohort.Apprenticeships = cohort.Apprenticeships.Zip(Commitment.Apprenticeships,
                 (accountDocumentApprenticeship, apiApprenticeship) =>
@@ -149,37 +144,37 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
                     return accountDocumentApprenticeship;
                 }).ToList();
             
-            EventHandlerTestsFixture.AccountDocumentService.Setup(s => 
-                s.GetOrCreate(EventHandlerTestsFixture.Message.AccountId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
+            AccountDocHelper.AccountDocumentService.Setup(s => 
+                s.GetOrCreate(Message.AccountId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(AccountDocHelper.AccountDocument);
             
             return this;
         }
 
-        public Task Handle()
+        public override Task Handle()
         {
             ExpectedCommitment = Commitment.Clone();
-
-            return EventHandlerTestsFixture.Handle();
+            AccountDocHelper.OriginalAccountDocument = AccountDocHelper.AccountDocument.Clone();
+            return base.Handle();
         }
         
         public void VerifyAccountDocumentSavedWithCohort()
         {
-            EventHandlerTestsFixture.AccountDocumentService.Verify(
+            AccountDocHelper.AccountDocumentService.Verify(
                 s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()),
                 Times.Once);
         }
         
         private bool AccountIsAsExpected(AccountDocument document)
         {
-            var expectedAccount = EventHandlerTestsFixture.GetExpectedAccount(EventHandlerTestsFixture.OriginalMessage.AccountId);
-            var expectedOrganisation = EventHandlerTestsFixture.GetExpectedOrganisation(
+            var expectedAccount = AccountDocHelper.GetExpectedAccount(OriginalMessage.AccountId);
+            var expectedOrganisation = AccountDocHelper.GetExpectedOrganisation(
                 expectedAccount, AccountLegalEntityId, ExpectedCommitment.LegalEntityName);
             var expectedCohort = GetExpectedCohort(expectedOrganisation);
 
             expectedCohort.Reference = ExpectedCommitment.Reference;
 
-            bool accountIsAsExpected = EventHandlerTestsFixture.AccountIsAsExpected(expectedAccount, document);
+            bool accountIsAsExpected = AccountDocHelper.AccountIsAsExpected(expectedAccount, document);
 
             // this is a workaround for a bug in CompareNetObjects, where it believes equal apprenticeships are not equal
             // so we catch that case with this fluent assertion (and we exclude Apprenticeships from the CompareNetObjects comparison)
@@ -187,18 +182,18 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
             
             return accountIsAsExpected;
         }
-        
+
         private Cohort GetExpectedCohort(Organisation expectedOrganisation)
         {
             Cohort expectedCohort;
-            if (EventHandlerTestsFixture.OriginalAccountDocument == null
-                || !EventHandlerTestsFixture.OriginalAccountDocument.Account.Organisations.Any())
+            if (AccountDocHelper.OriginalAccountDocument == null
+                || !AccountDocHelper.OriginalAccountDocument.Account.Organisations.Any())
             {
                 //todo: AddNewCohort()?
                 expectedCohort = new Cohort
                 {
                     //todo: id should be long
-                    Id = EventHandlerTestsFixture.OriginalMessage.CommitmentId.ToString(),
+                    Id = OriginalMessage.CommitmentId.ToString(),
                     Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
                         new Apprenticeship
                         {
@@ -217,12 +212,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
             }
             
             expectedCohort = expectedOrganisation.Cohorts.SingleOrDefault(r => 
-                r.Id == EventHandlerTestsFixture.OriginalMessage.CommitmentId.ToString());
+                r.Id == OriginalMessage.CommitmentId.ToString());
             if (expectedCohort == null)
             {
                 expectedCohort = new Cohort
                 {
-                    Id = EventHandlerTestsFixture.OriginalMessage.CommitmentId.ToString(),
+                    Id = OriginalMessage.CommitmentId.ToString(),
                     Apprenticeships = ExpectedCommitment.Apprenticeships.Select(ea =>
                         new Apprenticeship
                         {
