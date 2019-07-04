@@ -54,10 +54,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
+            var hasPayeScheme = HasPayeScheme(response.Data);
+            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId); //, hasPayeScheme);
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
@@ -362,10 +363,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
-            if (!HasPayeScheme(model))
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
+            if (HasPayeScheme(model))
             {
-                viewModel.ViewName = "PrePayeRecruitment";
+                //if (model.AccountViewModel.Organisations?.Any(o => o.Vacancies.Any()))
+                //var vacancies = model.AccountViewModel.Organisations.SelectMany(o => o.Vacancies);
+                //var numVacancies = vacancies.Count();
+                var numVacancies = 0;
+                switch (numVacancies)
+                {
+                    case 0:
+                        viewModel.ViewName = "CreateVacancy";
+                        break;
+                    case 1:
+                        viewModel.ViewName = "NotImplemented";
+                        break;
+                    default:
+                        viewModel.ViewName = "NotImplemented";
+                        break;
+                }
             }
             return PartialView(viewModel);
         }
