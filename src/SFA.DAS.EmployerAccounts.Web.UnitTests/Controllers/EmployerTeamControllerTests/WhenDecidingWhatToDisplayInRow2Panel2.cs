@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -85,6 +84,32 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.IsAssignableFrom<PanelViewModel<AccountDashboardViewModel>>(result.Model);
             var resultModel = result.Model as PanelViewModel<AccountDashboardViewModel>;
             Assert.AreEqual("CreateVacancy", resultModel.ViewName);
+        }
+
+        [Test, Ignore("need new portal client")]
+        public void AndAccountHasPayeSchemeAndHasMoreThanOneVacancyThenMultipleVacanciesPanelIsSelected()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1,
+                AccountViewModel = new Account
+                {
+                    //Vacancies = new List<Vacancy>
+                    //{
+                    //    new Vacancy(), new Vacancy()
+                    //}
+                }
+            };
+
+            //Act
+            var result = _controller.Row2Panel2(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsAssignableFrom<PanelViewModel<AccountDashboardViewModel>>(result.Model);
+            var resultModel = result.Model as PanelViewModel<AccountDashboardViewModel>;
+            Assert.AreEqual("MultipleVacancies", resultModel.ViewName);
         }
     }
 }
