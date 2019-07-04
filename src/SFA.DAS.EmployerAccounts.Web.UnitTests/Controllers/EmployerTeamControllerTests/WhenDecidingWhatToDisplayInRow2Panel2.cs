@@ -1,9 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -63,6 +65,54 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.IsAssignableFrom<PanelViewModel<AccountDashboardViewModel>>(result.Model);
             var resultModel = result.Model as PanelViewModel<AccountDashboardViewModel>;
             Assert.AreEqual("PrePayeRecruitment", resultModel.ViewName);
+        }
+
+        [Test]
+        public void AndAccountHasPayeSchemeAndHasNoOrganisationThenCreateVacancyPanelIsSelected()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1,
+                AccountViewModel = new Account
+                {
+                }
+            };
+
+            //Act
+            var result = _controller.Row2Panel2(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsAssignableFrom<PanelViewModel<AccountDashboardViewModel>>(result.Model);
+            var resultModel = result.Model as PanelViewModel<AccountDashboardViewModel>;
+            Assert.AreEqual("CreateVacancy", resultModel.ViewName);
+        }
+
+        [Test]
+        public void AndAccountHasPayeSchemeAndHasOrganisationAndHasNoVacanciesThenCreateVacancyPanelIsSelected()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1,
+                AccountViewModel = new Account
+                {
+                    Organisations = new List<Organisation>
+                    {
+                        new Organisation()
+                    }
+                }
+            };
+
+            //Act
+            var result = _controller.Row2Panel2(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsAssignableFrom<PanelViewModel<AccountDashboardViewModel>>(result.Model);
+            var resultModel = result.Model as PanelViewModel<AccountDashboardViewModel>;
+            Assert.AreEqual("CreateVacancy", resultModel.ViewName);
         }
     }
 }
