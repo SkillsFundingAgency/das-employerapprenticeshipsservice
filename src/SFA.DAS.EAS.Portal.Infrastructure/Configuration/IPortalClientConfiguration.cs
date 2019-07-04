@@ -1,6 +1,4 @@
-using SFA.DAS.EAS.DasRecruitService;
-
-namespace SFA.DAS.EAS.Portal.Client.Configuration
+namespace SFA.DAS.EAS.Portal.Infrastructure.Configuration
 {
     public interface IPortalClientConfiguration
     {

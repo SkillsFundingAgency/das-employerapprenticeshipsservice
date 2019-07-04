@@ -27,9 +27,8 @@ namespace SFA.DAS.EAS.Portal.Client.Application.Queries
                 .ConfigureAwait(false);
             if (getRecruit)
             {
-                var vacanciesSummary = _dasRecruitService.GetVacanciesSummary(document.AccountId,
-                    document.Account.Organisations.First().AccountLegalEntityId,
-                    document.Account.Providers.First().Ukprn);
+                var vacanciesSummary = _dasRecruitService.GetVacanciesSummary(document.AccountId);
+                
             }
 
             return document?.Account;

@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
+﻿using SFA.DAS.Http;
 
-namespace SFA.DAS.EAS.DasRecruitService
+namespace SFA.DAS.EAS.Portal.Infrastructure.Configuration
 {
     public class RecruitApiClientConfiguration: IJwtClientConfiguration
     {

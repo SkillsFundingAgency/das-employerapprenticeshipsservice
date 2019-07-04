@@ -15,9 +15,9 @@ namespace SFA.DAS.EAS.Portal.Client
             _getAccountQuery = container.GetInstance<GetAccountQuery>();
         }
         
-        public Task<Account> GetAccount(long accountId, CancellationToken cancellationToken = default)
+        public Task<Account> GetAccount(long accountId, bool getRecruitment, CancellationToken cancellationToken = default)
         {
-            return _getAccountQuery.Get(accountId, cancellationToken);
+            return _getAccountQuery.Get(accountId, getRecruitment, cancellationToken);
         }
     }
 }

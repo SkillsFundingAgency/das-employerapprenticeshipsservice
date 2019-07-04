@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.EAS.Portal.Client.Configuration;
 using SFA.DAS.EAS.Portal.Configuration;
 using SFA.DAS.EAS.Portal.Database;
+using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
 
 namespace SFA.DAS.EAS.Portal.Worker.Startup
 {

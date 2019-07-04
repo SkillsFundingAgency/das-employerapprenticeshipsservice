@@ -1,6 +1,7 @@
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.CosmosDb;
 using SFA.DAS.EAS.Portal.Client.Configuration;
+using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap

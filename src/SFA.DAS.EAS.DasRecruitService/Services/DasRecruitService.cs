@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.DasRecruitService.Models;
+using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 
@@ -25,11 +26,11 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
                 .Build();
         }
 
-        public async Task<VacanciesSummary> GetVacanciesSummary(long accountId, long legalEntityId, long ukprn)
+        public async Task<VacanciesSummary> GetVacanciesSummary(long accountId)
         {
             _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
 
-            var vacanciesSummaryUrl = $"/api/vacancies/?employerAccountId={accountId}&legalEntityId={legalEntityId}&ukprn={ukprn}&pageSize=25&pageNo=1";
+            var vacanciesSummaryUrl = $"/api/vacancies/?employerAccountId={accountId}&pageSize=25&pageNo=1";
 
             try
             {

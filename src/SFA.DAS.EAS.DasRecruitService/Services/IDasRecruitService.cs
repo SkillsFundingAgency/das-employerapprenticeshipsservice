@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
 {
     public interface IDasRecruitService
     {
-        Task<VacanciesSummary> GetVacanciesSummary(long accountId, long legalEntityId, long ukprn);
+        Task<VacanciesSummary> GetVacanciesSummary(long accountId);
     }
 }
