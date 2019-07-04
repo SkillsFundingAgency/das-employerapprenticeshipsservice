@@ -6,14 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Portal.Infrastructure\SFA.DAS.EAS.Portal.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="NLog"/>
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using NLog;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
 using SFA.DAS.Http;
@@ -13,10 +13,10 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
     {
         private readonly HttpClient _httpClient;
         private readonly RecruitApiClientConfiguration _apiClientConfiguration;
-        private readonly ILogger _logger;
+        private readonly ILog _logger;
 
         public DasRecruitService(RecruitApiClientConfiguration apiClientConfiguration,
-            ILogger logger)
+            ILog logger)
         {
             _apiClientConfiguration = apiClientConfiguration;
             _logger = logger;
