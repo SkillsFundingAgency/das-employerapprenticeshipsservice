@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
+using AutoFixture.Kernel;
 using FluentAssertions;
+using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
@@ -36,7 +38,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
             SetMutateProperty = setMutateProperty;
 
             Fixture = new Fixture();
+            Fixture.Customizations.Add(new TypeRelay(typeof(IVacancy), typeof(Vacancy)));
+            Fixture.Customize<Account>(co => co.Without(x => x.Vacancies));
             Account = Fixture.Create<Account>();
+            
             Account.Deleted = null;
             EntityKey = Fixture.Create<TKey>();
         }

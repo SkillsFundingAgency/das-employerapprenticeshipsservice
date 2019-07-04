@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -68,6 +70,46 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
 
                 return null;
             }
+        }
+
+        public IVacancy MapToVacancy(VacancySummary vacancySummary)
+        {
+            return new Vacancy
+            {
+                ClosingDate = vacancySummary.ClosingDate.Value,
+                NumberOfApplications = vacancySummary.NoOfNewApplications+vacancySummary.NoOfSuccessfulApplications+vacancySummary.NoOfUnsuccessfulApplications,
+                Reference = vacancySummary.VacancyReference.Value,
+                Status = StringToStatus(vacancySummary.Status),
+                Title = vacancySummary.Title,
+                TrainingTitle =  vacancySummary.TrainingTitle
+            };
+        }
+
+        private VacancyStatus StringToStatus(string statusString)
+        {
+            VacancyStatus status;
+            switch (statusString)
+            {
+                case "Live":
+                    status = VacancyStatus.Live;
+                    break;
+                case "Closed":
+                    status = VacancyStatus.Closed;
+                    break;
+                case "Draft":
+                    status = VacancyStatus.Draft;
+                    break;
+                case "PendingReview":
+                    status = VacancyStatus.PendingReview;
+                    break;
+                case "Rejected":
+                    status = VacancyStatus.Rejected;
+                    break;
+                default:
+                    status = VacancyStatus.None;
+                    break;
+            }
+            return status;
         }
     }
 

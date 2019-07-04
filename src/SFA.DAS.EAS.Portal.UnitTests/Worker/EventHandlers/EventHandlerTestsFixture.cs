@@ -5,11 +5,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
+using AutoFixture.Kernel;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
 using NServiceBus;
 using NUnit.Framework;
+using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
@@ -35,6 +37,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         {
             Fixture = new Fixture();
             Fixture.Customize<Cohort>(co => co.With(x => x.IsApproved, false));
+            Fixture.Customizations.Add(new TypeRelay(typeof(IVacancy),typeof(Vacancy)));
+            Fixture.Customize<Account>(co => co.Without(x => x.Vacancies));
 
             Message = Fixture.Create<TEvent>();
 

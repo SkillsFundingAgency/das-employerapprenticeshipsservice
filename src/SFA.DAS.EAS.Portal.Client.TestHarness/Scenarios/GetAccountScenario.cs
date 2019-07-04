@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios
         {
             const long accountId = 1L;
 
-            return await _portalClient.GetAccount(accountId);
+            return await _portalClient.GetAccount(accountId,false);
         }
     }
 }

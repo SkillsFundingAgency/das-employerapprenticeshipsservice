@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SFA.DAS.EAS.DasRecruitService.Models;
 
-namespace SFA.DAS.EAS.Portal.Client.Types
+namespace SFA.DAS.EAS.DasRecruitService.Models
 {
-    class Vacancy : IVacancy
+    public class Vacancy : IVacancy
     {
         public string Title { get; set; }
         public long Reference { get; set; }
