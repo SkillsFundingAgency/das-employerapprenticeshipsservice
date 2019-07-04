@@ -10,6 +10,7 @@ namespace SFA.DAS.EAS.DasRecruitService.Models
         DateTime ClosingDate { get; set; }
         string TrainingTitle { get; set; }
         int NumberOfApplications { get; set; }
+        string ManageVacancyUrl { get; set; }
     }
 
     public enum VacancyStatus

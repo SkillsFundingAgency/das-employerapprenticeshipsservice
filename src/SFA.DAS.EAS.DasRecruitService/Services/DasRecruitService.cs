@@ -79,7 +79,8 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
                 Reference = vacancySummary.VacancyReference.Value,
                 Status = StringToStatus(vacancySummary.Status),
                 Title = vacancySummary.Title,
-                TrainingTitle =  vacancySummary.TrainingTitle
+                TrainingTitle =  vacancySummary.TrainingTitle,
+                ManageVacancyUrl = vacancySummary.RaaManageVacancyUrl
             };
         }
 

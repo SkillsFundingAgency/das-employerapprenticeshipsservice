@@ -13,5 +13,6 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         public DateTime ClosingDate { get; set; }
         public string TrainingTitle { get; set; }
         public int NumberOfApplications { get; set; }
+        public string ManageVacancyUrl { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace SFA.DAS.EAS.DasRecruitService.Models
         public DateTime ClosingDate { get; set; }
         public string TrainingTitle { get; set; }
         public int NumberOfApplications { get; set; }
+        public string ManageVacancyUrl { get; set; }
     }
 }
