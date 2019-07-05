@@ -1,6 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Target Name="PrePackage" BeforeTargets="BuildPackage">
     <PropertyGroup>
+      <BuildCommand>$(BuildCommand) -IncludeReferencedProjects</BuildCommand>
+    </PropertyGroup>
+  </Target>
+
+  <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
