@@ -77,10 +77,11 @@ namespace SFA.DAS.EAS.DasRecruitService.UnitTests
         public async Task WhenClientIsCalledAndGetRecruitIsTrue_ThenRecruitApiIsCalled()
         {
             //Act
-            await _accountQuery.Get(1, true);
+            var accountId = 1;
+            await _accountQuery.Get(accountId, true);
 
             //Assert
-            _dasRecruitService.Verify(x => x.GetVacanciesSummary(1),Times.Once);
+            _dasRecruitService.Verify(x => x.GetVacanciesSummary(accountId),Times.Once);
         }
     }
 }

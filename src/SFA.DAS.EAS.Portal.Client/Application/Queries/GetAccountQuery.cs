@@ -27,13 +27,13 @@ namespace SFA.DAS.EAS.Portal.Client.Application.Queries
             if (getRecruit)
             {
                 var vacanciesSummary = await _dasRecruitService.GetVacanciesSummary(accountId);
-                document.Account.Vacancies = vacanciesSummary.Vacancies.Select(map).ToList();
+                document.Account.Vacancies = vacanciesSummary.Vacancies.Select(Map).ToList();
             }
 
             return document?.Account;
         }
 
-        private Vacancy map(VacancySummary summary)
+        private Vacancy Map(VacancySummary summary)
         {
             return new Vacancy
             {
