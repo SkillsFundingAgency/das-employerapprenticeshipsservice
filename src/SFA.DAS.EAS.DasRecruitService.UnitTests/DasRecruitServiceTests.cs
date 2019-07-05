@@ -11,6 +11,7 @@ using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Client.Application.Queries;
 using SFA.DAS.EAS.Portal.Client.Data;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
 
 namespace SFA.DAS.EAS.DasRecruitService.UnitTests
@@ -52,7 +53,8 @@ namespace SFA.DAS.EAS.DasRecruitService.UnitTests
                         NoOfSuccessfulApplications = 1,
                         VacancyReference = 1000004431,
                         Title = "Seafarer apprenticeship",
-                        RaaManageVacancyUrl = "https://recruit.apprenticeships.education.gov.uk/12345678/vacancies/eb0d5d5b-6cb9-469e-9423-bdc9db1ef5b9/manage/",
+                        RaaManageVacancyUrl =
+                            "https://recruit.apprenticeships.education.gov.uk/12345678/vacancies/eb0d5d5b-6cb9-469e-9423-bdc9db1ef5b9/manage/",
                         StartDate = DateTime.Parse("10-11-2019 00:00:00")
                     }
                 },
@@ -68,8 +70,9 @@ namespace SFA.DAS.EAS.DasRecruitService.UnitTests
             _dasRecruitService.Setup(x => x.GetVacanciesSummary(It.IsAny<long>()))
                 .ReturnsAsync(_vancanciesSummaryResult);
             _accountsRepoMock = new Mock<IAccountsReadOnlyRepository>();
-            _accountQuery = new GetAccountQuery(_accountsRepoMock.Object,_dasRecruitService.Object);
-            _accountsRepoMock.Setup(x => x.GetAccountDocumentById(It.IsAny<long>(),CancellationToken.None)).ReturnsAsync(_testAccountDocument);
+            _accountQuery = new GetAccountQuery(_accountsRepoMock.Object, _dasRecruitService.Object);
+            _accountsRepoMock.Setup(x => x.GetAccountDocumentById(It.IsAny<long>(), CancellationToken.None))
+                .ReturnsAsync(_testAccountDocument);
 
         }
 
@@ -81,7 +84,34 @@ namespace SFA.DAS.EAS.DasRecruitService.UnitTests
             await _accountQuery.Get(accountId, true);
 
             //Assert
-            _dasRecruitService.Verify(x => x.GetVacanciesSummary(accountId),Times.Once);
+            _dasRecruitService.Verify(x => x.GetVacanciesSummary(accountId), Times.Once);
+        }
+
+        [Test]
+        public async Task WhenRecruitApiIsCalled_ThenDataIsConvertedCorrectly()
+        {
+            //Assign
+            var expectedVacancy = new Vacancy
+            {
+                ClosingDate = DateTime.Parse("10-10-2020 00:00:00"),
+                ManageVacancyUrl =
+                    "https://recruit.apprenticeships.education.gov.uk/12345678/vacancies/eb0d5d5b-6cb9-469e-9423-bdc9db1ef5b9/manage/",
+                NumberOfApplications = 1,
+                Reference = 1000004431,
+                Status = VacancyStatus.Live,
+                Title = "Seafarer apprenticeship",
+                TrainingTitle = "Able seafarer (deck)"
+            };
+            
+
+            //Act
+            var result = await _accountQuery.Get(1, true);
+
+            //Assert
+            result.Vacancies.Should().AllBeEquivalentTo(expectedVacancy);
+
         }
     }
+
 }
+
