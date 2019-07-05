@@ -22,9 +22,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		PortalDevNotes.md = PortalDevNotes.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.DasRecruitService", "SFA.DAS.EAS.DasRecruitService\SFA.DAS.EAS.DasRecruitService.csproj", "{12030ADE-E272-4A12-B75E-FB8D8FAC1178}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.DasRecruitService", "SFA.DAS.EAS.DasRecruitService\SFA.DAS.EAS.DasRecruitService.csproj", "{12030ADE-E272-4A12-B75E-FB8D8FAC1178}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Portal.Infrastructure", "SFA.DAS.EAS.Portal.Infrastructure\SFA.DAS.EAS.Portal.Infrastructure.csproj", "{A6321AF2-38C1-43F1-982F-3AE12F46F6DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EAS.Portal.Infrastructure", "SFA.DAS.EAS.Portal.Infrastructure\SFA.DAS.EAS.Portal.Infrastructure.csproj", "{A6321AF2-38C1-43F1-982F-3AE12F46F6DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.DasRecruitService.UnitTests", "SFA.DAS.EAS.DasRecruitService.UnitTests\SFA.DAS.EAS.DasRecruitService.UnitTests.csproj", "{C317DEDE-EFAF-4386-8BBC-9EB1AA6ADE2E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,6 +66,10 @@ Global
 		{A6321AF2-38C1-43F1-982F-3AE12F46F6DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A6321AF2-38C1-43F1-982F-3AE12F46F6DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6321AF2-38C1-43F1-982F-3AE12F46F6DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C317DEDE-EFAF-4386-8BBC-9EB1AA6ADE2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C317DEDE-EFAF-4386-8BBC-9EB1AA6ADE2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C317DEDE-EFAF-4386-8BBC-9EB1AA6ADE2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C317DEDE-EFAF-4386-8BBC-9EB1AA6ADE2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -72,6 +78,7 @@ Global
 		{5C0D78C0-2B64-4436-B426-AEE9A84575AD} = {175EEDEC-1526-4A58-9748-22F9EB19A55B}
 		{C7F0BC47-D04F-4CFA-BAF1-88C21724ECD0} = {175EEDEC-1526-4A58-9748-22F9EB19A55B}
 		{F9467CAA-389C-41D6-BDF8-8658A07917D4} = {175EEDEC-1526-4A58-9748-22F9EB19A55B}
+		{C317DEDE-EFAF-4386-8BBC-9EB1AA6ADE2E} = {175EEDEC-1526-4A58-9748-22F9EB19A55B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B54B6334-C0EB-4640-BB1B-A3B2AA9CEC9F}

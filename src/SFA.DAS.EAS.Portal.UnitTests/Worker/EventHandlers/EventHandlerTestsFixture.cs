@@ -37,7 +37,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         {
             Fixture = new Fixture();
             Fixture.Customize<Cohort>(co => co.With(x => x.IsApproved, false));
-            Fixture.Customizations.Add(new TypeRelay(typeof(IVacancy),typeof(Vacancy)));
             Fixture.Customize<Account>(co => co.Without(x => x.Vacancies));
 
             Message = Fixture.Create<TEvent>();

@@ -30,15 +30,12 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
         {
             _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
 
-            var vacanciesSummaryUrl = $"/api/vacancies/?employerAccountId={accountId}&pageSize=25&pageNo=1";
+            var vacanciesSummaryUrl = _apiClientConfiguration.ApiBaseUrl + $"/api/vacancies/?employerAccountId={accountId}&pageSize=1000";
 
             try
             {
-                var vacanciesSummaryResult =
-                    await _httpClient.GetStringAsync(vacanciesSummaryUrl);
-
-                var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(vacanciesSummaryResult);
-                return vacanciesSummary;
+                var vsJson = await _httpClient.GetStringAsync(vacanciesSummaryUrl);
+                return JsonConvert.DeserializeObject<VacanciesSummary>(vsJson);
             }
             catch (HttpException ex)
             {
@@ -68,47 +65,6 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
 
                 return null;
             }
-        }
-
-        public IVacancy MapToVacancy(VacancySummary vacancySummary)
-        {
-            return new Vacancy
-            {
-                ClosingDate = vacancySummary.ClosingDate.Value,
-                NumberOfApplications = vacancySummary.NoOfNewApplications+vacancySummary.NoOfSuccessfulApplications+vacancySummary.NoOfUnsuccessfulApplications,
-                Reference = vacancySummary.VacancyReference.Value,
-                Status = StringToStatus(vacancySummary.Status),
-                Title = vacancySummary.Title,
-                TrainingTitle =  vacancySummary.TrainingTitle,
-                ManageVacancyUrl = vacancySummary.RaaManageVacancyUrl
-            };
-        }
-
-        private VacancyStatus StringToStatus(string statusString)
-        {
-            VacancyStatus status;
-            switch (statusString)
-            {
-                case "Live":
-                    status = VacancyStatus.Live;
-                    break;
-                case "Closed":
-                    status = VacancyStatus.Closed;
-                    break;
-                case "Draft":
-                    status = VacancyStatus.Draft;
-                    break;
-                case "PendingReview":
-                    status = VacancyStatus.PendingReview;
-                    break;
-                case "Rejected":
-                    status = VacancyStatus.Rejected;
-                    break;
-                default:
-                    status = VacancyStatus.None;
-                    break;
-            }
-            return status;
         }
     }
 

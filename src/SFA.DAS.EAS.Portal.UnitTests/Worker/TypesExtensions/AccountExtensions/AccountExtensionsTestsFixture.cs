@@ -38,7 +38,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
             SetMutateProperty = setMutateProperty;
 
             Fixture = new Fixture();
-            Fixture.Customizations.Add(new TypeRelay(typeof(IVacancy), typeof(Vacancy)));
             Fixture.Customize<Account>(co => co.Without(x => x.Vacancies));
             Account = Fixture.Create<Account>();
             
