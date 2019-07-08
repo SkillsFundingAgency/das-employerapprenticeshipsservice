@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
     {
         private readonly HttpClient _httpClient;
         private readonly ILogger<DasRecruitService> _logger;
+        private readonly Type _vacancyStatusType;
 
         public DasRecruitService(
             IRecruitApiHttpClientFactory recruitApiHttpClientFactory,
@@ -27,6 +28,7 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
             //todo: think through lifetimes
             _httpClient = recruitApiHttpClientFactory.CreateHttpClient();
             _logger = logger;
+            _vacancyStatusType = typeof(VacancyStatus);
         }
 
         public async Task<IEnumerable<Vacancy>> GetVacancies(
@@ -63,42 +65,12 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
             {
                 ClosingDate = summary.ClosingDate,
                 ManageVacancyUrl = summary.RaaManageVacancyUrl,
-                NumberOfApplications = summary.NoOfNewApplications+summary.NoOfSuccessfulApplications+summary.NoOfUnsuccessfulApplications,
+                NumberOfApplications = summary.NoOfNewApplications + summary.NoOfSuccessfulApplications + summary.NoOfUnsuccessfulApplications,
                 Reference = summary.VacancyReference,
-                Status = StringToStatus(summary.Status),
+                Status = (VacancyStatus)Enum.Parse(_vacancyStatusType, summary.Status, true),
                 Title = summary.Title,
                 TrainingTitle = summary.TrainingTitle
             };
-        }
-
-        //todo: no need for all this
-        private VacancyStatus StringToStatus(string summaryStatus)
-        {
-            var status = VacancyStatus.None;
-
-            switch (summaryStatus)
-            {
-                case "Live":
-                    status = VacancyStatus.Live;
-                    break;
-                case "Closed":
-                    status = VacancyStatus.Closed;
-                    break;
-                case "Rejected":
-                    status = VacancyStatus.Rejected;
-                    break;
-                case "Draft":
-                    status = VacancyStatus.Draft;
-                    break;
-                case "PendingReview":
-                    status = VacancyStatus.PendingReview;
-                    break;
-                default:
-                    status = VacancyStatus.None;
-                    break;
-            }
-
-            return status;
         }
     }
 }
