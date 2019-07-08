@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SFA.DAS.EmployerFinance.Models.HmrcLevy
+namespace SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy
 {
     public class HmrcTokenResponse
     {

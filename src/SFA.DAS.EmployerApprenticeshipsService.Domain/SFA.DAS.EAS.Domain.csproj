@@ -349,7 +349,6 @@
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
-    <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Models\AccountTeam\Invitation.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
@@ -367,15 +366,6 @@
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
-    <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
-    <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
-    <Compile Include="Models\HmrcLevy\Employer.cs" />
-    <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />
-    <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
-    <Compile Include="Models\HmrcLevy\HmrcTokenResponse.cs" />
-    <Compile Include="Models\HmrcLevy\Link.cs" />
-    <Compile Include="Models\HmrcLevy\Links.cs" />
-    <Compile Include="Models\HmrcLevy\Name.cs" />
     <Compile Include="Models\Levy\DasDeclaration.cs" />
     <Compile Include="Models\Levy\DasDeclarations.cs" />
     <Compile Include="Models\Levy\DasEnglishFraction.cs" />

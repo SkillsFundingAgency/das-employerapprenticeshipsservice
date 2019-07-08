@@ -12,8 +12,8 @@ using SFA.DAS.ExecutionPolicies;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services

@@ -359,10 +359,6 @@
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetAccountTeamMembers\WhenIGetUserAccounts.cs" />
-    <Compile Include="Queries\GetGatewayInformationTests\WhenGettingGatewayQuery.cs" />
-    <Compile Include="Queries\GetGatewayTokenTests\WhenGettingTokenResponseFromHmrc.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformationTests\WhenRequestingEmployerInformation.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformationTests\WhenValidatingTheRequest.cs" />
     <Compile Include="Queries\GetPostcodeAddressTests\WhenIGetAddressesFromAPostcode.cs" />
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIGetPreviousTransactionsCount.cs" />
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIValidateTheRequest.cs" />

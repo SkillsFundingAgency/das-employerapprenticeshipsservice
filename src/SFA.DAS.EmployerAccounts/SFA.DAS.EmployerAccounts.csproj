@@ -7,13 +7,6 @@
 
   <ItemGroup>
     <Compile Remove="Interfaces\IDistributedLockProvider.cs" />
-    <Compile Remove="Models\HmrcLevy\Employer.cs" />
-    <Compile Remove="Models\HmrcLevy\EmployerLevyData.cs" />
-    <Compile Remove="Models\HmrcLevy\EmpRefLevyInformation.cs" />
-    <Compile Remove="Models\HmrcLevy\LevyDeclarations.cs" />
-    <Compile Remove="Models\HmrcLevy\Link.cs" />
-    <Compile Remove="Models\HmrcLevy\Links.cs" />
-    <Compile Remove="Models\HmrcLevy\Name.cs" />
     <Compile Remove="Services\AzureDistributedLockProvider.cs" />
   </ItemGroup>
 
@@ -62,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
