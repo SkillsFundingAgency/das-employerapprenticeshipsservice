@@ -416,10 +416,6 @@
       <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
       <Name>SFA.DAS.EmployerAccounts.Messages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
-      <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
-      <Name>SFA.DAS.EmployerAccounts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
       <Project>{c15dec5c-666d-4cb2-968e-a273eb60d15e}</Project>
       <Name>SFA.DAS.EmployerFinance.Messages</Name>
