@@ -23,12 +23,13 @@ namespace SFA.DAS.EAS.Portal.Client
         public async Task<Account> GetAccount(long accountId, bool hasPayeScheme, CancellationToken cancellationToken = default)
         {
             var vacanciesTask = hasPayeScheme ? 
-                _dasRecruitService.GetVacancies(accountId) : null;
+                _dasRecruitService.GetVacancies(accountId, 2, cancellationToken) : null;
 
             var account = await _getAccountQuery.Get(accountId, cancellationToken);
 
             if (hasPayeScheme)
             {
+                //todo: better to have flag/enum saying none/single/multiple vacancies and have a single instance?
                 var vacancies = await vacanciesTask;
                 account.Vacancies = vacancies.ToList();
             }

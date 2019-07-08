@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.Http;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
-//using Microsoft.AspNetCore.WebUtilities;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
@@ -47,9 +46,6 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                     throw new RestHttpClientException(response, content);
-
-                // not worth adding another dependency on Microsoft.AspNet.WebApi.Client for this 1 method
-                //var vacanciesSummary = await response.Content.ReadAsAsync<VacanciesSummary>(cancellationToken).ConfigureAwait(false);
 
                 var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(content);
                 return vacanciesSummary.Vacancies.Select(Map);
