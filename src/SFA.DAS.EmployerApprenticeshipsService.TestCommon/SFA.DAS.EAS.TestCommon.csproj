@@ -280,7 +280,6 @@
     <Compile Include="DbCleanup\IUpdateTransactionLine.cs" />
     <Compile Include="DbCleanup\UpdateTransactionLine.cs" />
     <Compile Include="DbSetStub.cs" />
-    <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
     <Compile Include="EmployerAgreementBuilder.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
     <Compile Include="FluentTest.cs" />
