@@ -1,11 +1,10 @@
 using System.Linq;
-using SFA.DAS.CosmosDb;
-using SFA.DAS.EAS.DasRecruitService.Services;
 using SFA.DAS.EAS.Portal.Client.Data;
 using SFA.DAS.EAS.Portal.Client.Types;
 using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.DasRecruitService.Models;
+using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
+using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
 
 namespace SFA.DAS.EAS.Portal.Client.Application.Queries
 {
@@ -47,6 +46,7 @@ namespace SFA.DAS.EAS.Portal.Client.Application.Queries
             };
         }
 
+        //todo: no need for all this
         private VacancyStatus StringToStatus(string summaryStatus)
         {
             var status = VacancyStatus.None;

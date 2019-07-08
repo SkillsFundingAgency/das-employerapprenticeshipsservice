@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace SFA.DAS.EAS.DasRecruitService.Models
+namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models
 {
     public class VacancySummary
     {

@@ -1,6 +1,7 @@
-﻿using SFA.DAS.Http;
+﻿//todo: use resthttpclient
+using SFA.DAS.Http;
 
-namespace SFA.DAS.EAS.Portal.Infrastructure.Configuration
+namespace SFA.DAS.EAS.Portal.Client.Configuration
 {
     public class RecruitApiClientConfiguration: IJwtClientConfiguration
     {

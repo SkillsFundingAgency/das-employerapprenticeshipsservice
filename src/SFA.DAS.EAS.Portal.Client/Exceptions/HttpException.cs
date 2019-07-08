@@ -1,7 +1,8 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.DasRecruitService
+namespace SFA.DAS.EAS.Portal.Client.Exceptions
 {
+    //todo: use existing, or custom
     public class HttpException : Exception
     {
         public HttpException(int statusCode, string message, Exception innerException)

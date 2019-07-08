@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using SFA.DAS.EAS.DasRecruitService.Models;
 
 namespace SFA.DAS.EAS.Portal.Client.Types
 {

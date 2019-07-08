@@ -11,7 +11,6 @@ using Moq;
 using Newtonsoft.Json;
 using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;

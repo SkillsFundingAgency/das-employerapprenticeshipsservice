@@ -13,4 +13,8 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Portal.Infrastructure\SFA.DAS.EAS.Portal.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services" />
+  </ItemGroup>
+
 </Project>

@@ -2,7 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.EAS.Portal.Configuration;
-using ConfigurationKeys = SFA.DAS.EAS.Portal.Infrastructure.Configuration.ConfigurationKeys;
+using ConfigurationKeys = SFA.DAS.EAS.Portal.Client.Configuration.ConfigurationKeys;
 
 namespace SFA.DAS.EAS.Portal.Client.TestHarness.Startup
 {

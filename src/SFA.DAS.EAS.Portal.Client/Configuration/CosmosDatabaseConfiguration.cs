@@ -1,6 +1,6 @@
 using SFA.DAS.CosmosDb;
 
-namespace SFA.DAS.EAS.Portal.Infrastructure.Configuration
+namespace SFA.DAS.EAS.Portal.Client.Configuration
 {
     public class CosmosDatabaseConfiguration : ICosmosDbConfiguration
     {

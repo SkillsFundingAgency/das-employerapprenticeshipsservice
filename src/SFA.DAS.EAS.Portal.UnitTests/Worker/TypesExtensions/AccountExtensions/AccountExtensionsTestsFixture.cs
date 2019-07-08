@@ -4,7 +4,6 @@ using System.Linq;
 using AutoFixture;
 using AutoFixture.Kernel;
 using FluentAssertions;
-using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions

@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.DasRecruitService.Models;
 using SFA.DAS.EAS.Portal.Client.Application.Queries;
 using SFA.DAS.EAS.Portal.Client.Data;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
+using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
 
-namespace SFA.DAS.EAS.DasRecruitService.UnitTests
+namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
 {
     public class DasRecruitServiceTests
     {
         private readonly GetAccountQuery _accountQuery;
         private readonly Mock<IAccountsReadOnlyRepository> _accountsRepoMock;
-        private readonly Mock<Services.IDasRecruitService> _dasRecruitService;
+        private readonly Mock<IDasRecruitService> _dasRecruitService;
         private readonly AccountDocument _testAccountDocument;
         private VacanciesSummary _vancanciesSummaryResult;
 
@@ -66,7 +64,7 @@ namespace SFA.DAS.EAS.DasRecruitService.UnitTests
 
             _testAccountDocument = new AccountDocument(1);
 
-            _dasRecruitService = new Mock<Services.IDasRecruitService>();
+            _dasRecruitService = new Mock<IDasRecruitService>();
             _dasRecruitService.Setup(x => x.GetVacanciesSummary(It.IsAny<long>()))
                 .ReturnsAsync(_vancanciesSummaryResult);
             _accountsRepoMock = new Mock<IAccountsReadOnlyRepository>();

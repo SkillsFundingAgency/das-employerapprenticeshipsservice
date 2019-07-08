@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SFA.DAS.EAS.DasRecruitService.Models;
-using SFA.DAS.EAS.Portal.Infrastructure.Configuration;
+using SFA.DAS.EAS.Portal.Client.Exceptions;
+using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
+using RecruitApiClientConfiguration = SFA.DAS.EAS.Portal.Client.Configuration.RecruitApiClientConfiguration;
 
-namespace SFA.DAS.EAS.DasRecruitService.Services
+namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
     public class DasRecruitService : IDasRecruitService
     {
@@ -67,6 +68,4 @@ namespace SFA.DAS.EAS.DasRecruitService.Services
             }
         }
     }
-
-    
 }

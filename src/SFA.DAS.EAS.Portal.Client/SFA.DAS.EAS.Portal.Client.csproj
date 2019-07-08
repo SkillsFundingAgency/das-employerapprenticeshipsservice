@@ -1,11 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Target Name="PrePackage" BeforeTargets="BuildPackage">
-    <PropertyGroup>
-      <BuildCommand>$(BuildCommand) -IncludeReferencedProjects</BuildCommand>
-    </PropertyGroup>
-  </Target>
-
   <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
@@ -23,14 +17,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="2.2.0" />
       <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
       <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+      <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
+      <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
       <PackageReference Include="StructureMap" Version="4.7.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\SFA.DAS.EAS.DasRecruitService\SFA.DAS.EAS.DasRecruitService.csproj" />
-      <ProjectReference Include="..\SFA.DAS.EAS.Portal.Infrastructure\SFA.DAS.EAS.Portal.Infrastructure.csproj" />
     </ItemGroup>
 
 </Project>
