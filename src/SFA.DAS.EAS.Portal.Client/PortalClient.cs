@@ -19,7 +19,6 @@ namespace SFA.DAS.EAS.Portal.Client
             _dasRecruitService = container.GetInstance<IDasRecruitService>();
         }
         
-        //todo: rename to haspayescheme in case want to reuse flag for other optimisations
         public async Task<Account> GetAccount(long accountId, bool hasPayeScheme, CancellationToken cancellationToken = default)
         {
             var vacanciesTask = hasPayeScheme ? 
