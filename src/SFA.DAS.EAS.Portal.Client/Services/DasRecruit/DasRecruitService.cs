@@ -17,10 +17,11 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
     {
         private readonly HttpClient _httpClient;
         private readonly RecruitApiClientConfiguration _apiClientConfiguration;
-        private readonly ILogger _logger;
+        private readonly ILogger<DasRecruitService> _logger;
 
-        public DasRecruitService(RecruitApiClientConfiguration apiClientConfiguration,
-            ILogger logger)
+        public DasRecruitService(
+            RecruitApiClientConfiguration apiClientConfiguration,
+            ILogger<DasRecruitService> logger)
         {
             _apiClientConfiguration = apiClientConfiguration;
             _logger = logger;
