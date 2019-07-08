@@ -21,5 +21,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos
         public string Sector { get; set; }
         public bool NewSearch { get; set; }
         public short Source { get; set; }
+        public string Aorn { get; set; }
     }
 }

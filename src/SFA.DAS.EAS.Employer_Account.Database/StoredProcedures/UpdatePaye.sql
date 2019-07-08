@@ -2,7 +2,8 @@
 	@employerRef NVARCHAR(16),
 	@accessToken VARCHAR(50),
 	@refreshToken VARCHAR(50),
-	@employerRefName VARCHAR(500) NULL
+	@employerRefName VARCHAR(500) NULL,
+	@aorn VARCHAR(50) NULL
 AS
 BEGIN
 	UPDATE 
@@ -10,7 +11,8 @@ BEGIN
 	SET 
 		AccessToken = @accessToken, 
 		RefreshToken = @refreshToken,
-		Name = @employerRefName
+		Name = @employerRefName,
+		Aorn = @aorn
 	WHERE 
 		Ref = @employerRef
 

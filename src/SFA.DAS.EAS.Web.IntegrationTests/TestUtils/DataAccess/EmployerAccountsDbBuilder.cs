@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Adapters;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
@@ -76,7 +76,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
                 input.EmployerRefName,
                 input.Source,
                 input.PublicSectorDataSource,
-                input.Sector);
+                input.Sector,
+                input.Aorn);
 
             var output = new EmployerAccountOutput
             {
