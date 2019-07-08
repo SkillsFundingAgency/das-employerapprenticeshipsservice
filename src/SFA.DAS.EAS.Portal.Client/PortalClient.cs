@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Portal.Client.Application.Queries;
+using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
 using SFA.DAS.EAS.Portal.Client.Types;
 using StructureMap;
 
@@ -9,15 +11,31 @@ namespace SFA.DAS.EAS.Portal.Client
     public class PortalClient : IPortalClient
     {
         private readonly GetAccountQuery _getAccountQuery;
-
+        private readonly IDasRecruitService _dasRecruitService;
+        
         public PortalClient(IContainer container)
         {
+            //todo: had level of indirection so GetAccountQuery could be internal (its currently public)
+            // is it better to have internal, or be explicit about dependencies - deps are added by client code, so make internal again
             _getAccountQuery = container.GetInstance<GetAccountQuery>();
+            _dasRecruitService = container.GetInstance<IDasRecruitService>();
         }
         
-        public Task<Account> GetAccount(long accountId, bool getRecruitment, CancellationToken cancellationToken = default)
+        //todo: rename to haspayescheme in case want to reuse flag for other optimisations
+        public async Task<Account> GetAccount(long accountId, bool hasPayeScheme, CancellationToken cancellationToken = default)
         {
-            return _getAccountQuery.Get(accountId, getRecruitment, cancellationToken);
+            var vacanciesTask = hasPayeScheme ? 
+                _dasRecruitService.GetVacancies(accountId) : null;
+
+            var account = await _getAccountQuery.Get(accountId, cancellationToken);
+
+            if (hasPayeScheme)
+            {
+                var vacancies = await vacanciesTask;
+                account.Vacancies = vacancies.ToList();
+            }
+
+            return account;
         }
     }
 }

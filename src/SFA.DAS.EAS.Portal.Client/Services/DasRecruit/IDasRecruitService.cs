@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
     public interface IDasRecruitService
     {
-        Task<VacanciesSummary> GetVacanciesSummary(long accountId);
+        Task<IEnumerable<Vacancy>> GetVacancies(long accountId);
     }
 }

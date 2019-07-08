@@ -1,9 +1,12 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.Exceptions;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
+using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using RecruitApiClientConfiguration = SFA.DAS.EAS.Portal.Client.Configuration.RecruitApiClientConfiguration;
@@ -27,7 +30,7 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
                 .Build();
         }
 
-        public async Task<VacanciesSummary> GetVacanciesSummary(long accountId)
+        public async Task<IEnumerable<Vacancy>> GetVacancies(long accountId)
         {
             _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
 
@@ -36,10 +39,12 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
             try
             {
                 var vsJson = await _httpClient.GetStringAsync(vacanciesSummaryUrl);
-                return JsonConvert.DeserializeObject<VacanciesSummary>(vsJson);
+                var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(vsJson);
+                return vacanciesSummary.Vacancies.Select(Map);
             }
             catch (HttpException ex)
             {
+                //todo: we don't want all this!
                 switch (ex.StatusCode)
                 {
                     case 400:
@@ -66,6 +71,50 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 
                 return null;
             }
+        }
+        
+        private Vacancy Map(VacancySummary summary)
+        {
+            return new Vacancy
+            {
+                ClosingDate = summary.ClosingDate,
+                ManageVacancyUrl = summary.RaaManageVacancyUrl,
+                NumberOfApplications = summary.NoOfNewApplications+summary.NoOfSuccessfulApplications+summary.NoOfUnsuccessfulApplications,
+                Reference = summary.VacancyReference,
+                Status = StringToStatus(summary.Status),
+                Title = summary.Title,
+                TrainingTitle = summary.TrainingTitle
+            };
+        }
+
+        //todo: no need for all this
+        private VacancyStatus StringToStatus(string summaryStatus)
+        {
+            var status = VacancyStatus.None;
+
+            switch (summaryStatus)
+            {
+                case "Live":
+                    status = VacancyStatus.Live;
+                    break;
+                case "Closed":
+                    status = VacancyStatus.Closed;
+                    break;
+                case "Rejected":
+                    status = VacancyStatus.Rejected;
+                    break;
+                case "Draft":
+                    status = VacancyStatus.Draft;
+                    break;
+                case "PendingReview":
+                    status = VacancyStatus.PendingReview;
+                    break;
+                default:
+                    status = VacancyStatus.None;
+                    break;
+            }
+
+            return status;
         }
     }
 }
