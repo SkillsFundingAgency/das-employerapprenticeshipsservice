@@ -20,9 +20,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
     internal class DasRecruitServiceTests : FluentTest<DasRecruitServiceTestsFixture>
     {
         [Test]
-        public Task GetVacancies_X_y()
+        public Task GetVacancies_WhenSingleVacancyIsReturnedByApi_ThenCorrectlyMappedVacancyIsReturned()
         {
-            return TestAsync(f => f.ArrangeApiReturnsOk(), f => f.GetVacancies(), (f, r) => r.Should());
+            return TestAsync(f => f.ArrangeApiReturnsOk(), f => f.GetVacancies(), (f, r) => f.AssertVacancies(r));
         }
     }
 
@@ -75,6 +75,23 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
         {
             const long accountId = 123L;
             return await DasRecruitService.GetVacancies(accountId);
+        }
+
+        public void AssertVacancies(IEnumerable<Vacancy> vacancies)
+        {
+            vacancies.Should().BeEquivalentTo(new List<Vacancy>
+            {
+                new Vacancy
+                {
+                    Title = "Seafarer apprenticeship",
+                    Reference = 1000004431L,
+                    Status = VacancyStatus.Live,
+                    ClosingDate = new DateTime(2020, 10, 10), 
+                    TrainingTitle = "Able seafarer (deck)",
+                    NumberOfApplications = 1,
+                    ManageVacancyUrl = "https://recruit.apprenticeships.education.gov.uk/12345678/vacancies/eb0d5d5b-6cb9-469e-9423-bdc9db1ef5b9/manage/"
+                }
+            });
         }
     }
 }
