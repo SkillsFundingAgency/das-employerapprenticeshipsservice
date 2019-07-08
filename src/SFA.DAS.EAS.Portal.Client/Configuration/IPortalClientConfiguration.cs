@@ -5,6 +5,6 @@ namespace SFA.DAS.EAS.Portal.Client.Configuration
     {
         CosmosDatabaseConfiguration CosmosDatabase { get; }
 
-        RecruitApiClientConfiguration RecruitApiConfiguration { get; }
+        RecruitApiClientConfiguration RecruitApiClientConfiguration { get; }
     }
 }

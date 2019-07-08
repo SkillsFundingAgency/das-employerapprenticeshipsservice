@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Portal.Client.Http
         {
             var httpClient = new HttpClientBuilder()
                 .WithDefaultHeaders()
-                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(_recruitApiClientConfig))
+                .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(_recruitApiClientConfig))
                 .Build();
 
             httpClient.BaseAddress = new Uri(_recruitApiClientConfig.ApiBaseUrl);

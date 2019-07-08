@@ -11,6 +11,9 @@ using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
+    /// <summary>
+    /// https://skillsfundingagency.atlassian.net/wiki/spaces/RAAV2/pages/200245289/Environments
+    /// </summary>
     internal class DasRecruitService : IDasRecruitService
     {
         private readonly HttpClient _httpClient;
