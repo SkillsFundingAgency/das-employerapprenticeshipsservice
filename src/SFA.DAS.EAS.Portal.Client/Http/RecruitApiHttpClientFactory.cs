@@ -6,7 +6,7 @@ using SFA.DAS.Http.TokenGenerators;
 
 namespace SFA.DAS.EAS.Portal.Client.Http
 {
-    public class RecruitApiHttpClientFactory //: IHttpClientFactory
+    public class RecruitApiHttpClientFactory : IRecruitApiHttpClientFactory
     {
         private readonly RecruitApiClientConfiguration _recruitApiClientConfig;
 

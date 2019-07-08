@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using SFA.DAS.EAS.Portal.Client.Exceptions;
 using SFA.DAS.EAS.Portal.Client.Http;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
+//using Microsoft.AspNetCore.WebUtilities;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
@@ -20,7 +22,7 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
         private readonly ILogger<DasRecruitService> _logger;
 
         public DasRecruitService(
-            RecruitApiHttpClientFactory recruitApiHttpClientFactory,
+            IRecruitApiHttpClientFactory recruitApiHttpClientFactory,
             ILogger<DasRecruitService> logger)
         {
             //todo: think through lifetimes
@@ -28,47 +30,33 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Vacancy>> GetVacancies(long accountId, int maxVacanciesToGet = int.MaxValue)
+        public async Task<IEnumerable<Vacancy>> GetVacancies(
+            long accountId,
+            int maxVacanciesToGet = int.MaxValue,
+            CancellationToken cancellationToken = default)
         {
             _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
 
             //todo: we only need a max of 2 vacancies at the minute, as if there are >1, we don't show any details
             // but we do need to know that there is >1
-            var vacanciesSummaryUrl = $"/api/vacancies/?employerAccountId={accountId}&pageSize={maxVacanciesToGet}";
+            string vacanciesSummaryUri = $"/api/vacancies/?employerAccountId={accountId}&pageSize={maxVacanciesToGet}";
 
             try
             {
-                var vsJson = await _httpClient.GetStringAsync(vacanciesSummaryUrl);
-                var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(vsJson);
+                var response = await _httpClient.GetAsync(vacanciesSummaryUri, cancellationToken).ConfigureAwait(false);
+                var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if (!response.IsSuccessStatusCode)
+                    throw new RestHttpClientException(response, content);
+
+                // not worth adding another dependency on Microsoft.AspNet.WebApi.Client for this 1 method
+                //var vacanciesSummary = await response.Content.ReadAsAsync<VacanciesSummary>(cancellationToken).ConfigureAwait(false);
+
+                var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(content);
                 return vacanciesSummary.Vacancies.Select(Map);
             }
-            catch (HttpException ex)
+            catch (Exception ex)
             {
-                //todo: we don't want all this! consumer all errors. use generic error text
-                switch (ex.StatusCode)
-                {
-                    case 400:
-                        _logger.LogError(ex, $"Bad request sent to recruit API for account ID: {accountId}");
-                        break;
-                    case 404:
-                        _logger.LogError(ex,$"Resource not found - recruit API for account ID: {accountId}");
-                        break;
-                    case 408:
-                        _logger.LogError(ex, $"Request sent to recruit API for account ID: {accountId} timed out");
-                        break;
-                    case 429:
-                        _logger.LogError(ex, $"Too many requests sent to recruit API for account ID: {accountId}");
-                        break;
-                    case 500:
-                        _logger.LogError(ex, $"Recruit API reported internal Server error for account ID: {accountId}");
-                        break;
-                    case 503:
-                        _logger.LogError(ex, "Recruit API is unavailable");
-                        break;
-
-                    default: throw;
-                }
-
+                _logger.LogWarning($"Ignoring failed call to recruit API: {ex}");
                 return null;
             }
         }

@@ -1,3 +1,4 @@
+using SFA.DAS.EAS.Portal.Client.Http;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
 using StructureMap;
 
@@ -7,7 +8,7 @@ namespace SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap
     {
         public RecruitApiRegistry()
         {
-            //For<RecruitApiHttpClientFactory>().Use<RecruitApiHttpClientFactory>();
+            For<IRecruitApiHttpClientFactory>().Use<RecruitApiHttpClientFactory>();
             For<IDasRecruitService>().Use<DasRecruitService>();
         }
     }
