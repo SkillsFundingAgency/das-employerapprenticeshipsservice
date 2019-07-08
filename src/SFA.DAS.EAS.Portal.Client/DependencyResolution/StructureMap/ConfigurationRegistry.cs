@@ -14,7 +14,10 @@ namespace SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap
             For<IPortalClientConfiguration>().Use(
                 c => c.GetInstance<IAutoConfigurationService>()
                     .Get<PortalClientConfiguration>(ConfigurationKeys.PortalClient)).Singleton();
-            For<ICosmosDbConfiguration>().Use(c => c.GetInstance<IPortalClientConfiguration>().CosmosDatabase).Singleton();
+            For<ICosmosDbConfiguration>()
+                .Use(c => c.GetInstance<IPortalClientConfiguration>().CosmosDatabase).Singleton();
+            For<RecruitApiClientConfiguration>()
+                .Use(c => c.GetInstance<IPortalClientConfiguration>().RecruitApiConfiguration).Singleton();
         }
     }
 }

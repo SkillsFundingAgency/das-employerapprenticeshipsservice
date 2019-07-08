@@ -5,37 +5,33 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.Exceptions;
+using SFA.DAS.EAS.Portal.Client.Http;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
-using RecruitApiClientConfiguration = SFA.DAS.EAS.Portal.Client.Configuration.RecruitApiClientConfiguration;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
     internal class DasRecruitService : IDasRecruitService
     {
         private readonly HttpClient _httpClient;
-        private readonly RecruitApiClientConfiguration _apiClientConfiguration;
         private readonly ILogger<DasRecruitService> _logger;
 
         public DasRecruitService(
-            RecruitApiClientConfiguration apiClientConfiguration,
+            RecruitApiHttpClientFactory recruitApiHttpClientFactory,
             ILogger<DasRecruitService> logger)
         {
-            _apiClientConfiguration = apiClientConfiguration;
+            //todo: think through lifetimes
+            _httpClient = recruitApiHttpClientFactory.CreateHttpClient();
             _logger = logger;
-            _httpClient = new HttpClientBuilder()
-                .WithDefaultHeaders()
-                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(_apiClientConfiguration))
-                .Build();
         }
 
-        public async Task<IEnumerable<Vacancy>> GetVacancies(long accountId)
+        public async Task<IEnumerable<Vacancy>> GetVacancies(long accountId, int maxVacanciesToGet = int.MaxValue)
         {
             _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
 
-            var vacanciesSummaryUrl = _apiClientConfiguration.ApiBaseUrl + $"/api/vacancies/?employerAccountId={accountId}&pageSize=1000";
+            //todo: we only need a max of 2 vacancies at the minute, as if there are >1, we don't show any details
+            // but we do need to know that there is >1
+            var vacanciesSummaryUrl = $"/api/vacancies/?employerAccountId={accountId}&pageSize={maxVacanciesToGet}";
 
             try
             {
@@ -45,7 +41,7 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
             }
             catch (HttpException ex)
             {
-                //todo: we don't want all this!
+                //todo: we don't want all this! consumer all errors. use generic error text
                 switch (ex.StatusCode)
                 {
                     case 400:

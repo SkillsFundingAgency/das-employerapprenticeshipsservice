@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
     internal interface IDasRecruitService
     {
-        Task<IEnumerable<Vacancy>> GetVacancies(long accountId);
+        Task<IEnumerable<Vacancy>> GetVacancies(long accountId, int maxVacanciesToGet = int.MaxValue);
     }
 }
