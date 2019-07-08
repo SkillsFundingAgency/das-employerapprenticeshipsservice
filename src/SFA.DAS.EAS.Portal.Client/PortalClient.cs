@@ -15,8 +15,6 @@ namespace SFA.DAS.EAS.Portal.Client
         
         public PortalClient(IContainer container)
         {
-            //todo: had level of indirection so GetAccountQuery could be internal (its currently public)
-            // is it better to have internal, or be explicit about dependencies - deps are added by client code, so make internal again
             _getAccountQuery = container.GetInstance<GetAccountQuery>();
             _dasRecruitService = container.GetInstance<IDasRecruitService>();
         }

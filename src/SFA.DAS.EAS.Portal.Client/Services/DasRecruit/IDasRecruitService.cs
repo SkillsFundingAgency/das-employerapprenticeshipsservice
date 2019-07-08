@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
-    public interface IDasRecruitService
+    internal interface IDasRecruitService
     {
         Task<IEnumerable<Vacancy>> GetVacancies(long accountId);
     }

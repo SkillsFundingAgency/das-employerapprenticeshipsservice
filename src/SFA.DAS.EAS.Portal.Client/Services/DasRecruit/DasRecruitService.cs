@@ -13,7 +13,7 @@ using RecruitApiClientConfiguration = SFA.DAS.EAS.Portal.Client.Configuration.Re
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
-    public class DasRecruitService : IDasRecruitService
+    internal class DasRecruitService : IDasRecruitService
     {
         private readonly HttpClient _httpClient;
         private readonly RecruitApiClientConfiguration _apiClientConfiguration;
