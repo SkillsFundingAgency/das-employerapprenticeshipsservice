@@ -146,6 +146,10 @@
       <Project>{9A31DB97-209C-48EF-AE2A-B4A4F761F670}</Project>
       <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>

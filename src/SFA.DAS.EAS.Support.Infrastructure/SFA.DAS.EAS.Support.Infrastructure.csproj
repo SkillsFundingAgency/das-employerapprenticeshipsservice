@@ -129,6 +129,10 @@
       <Project>{99F6DD4A-CD1C-4D45-A2C9-ED2F89D1FB84}</Project>
       <Name>SFA.DAS.EAS.Support.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
