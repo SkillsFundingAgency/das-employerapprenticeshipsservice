@@ -29,7 +29,7 @@ AS
   GROUP BY 
 		tl.DateCreated, 
 		tl.AccountId, 
-		tl.UKPRN, 
+		tl.UKPRN,
 		tl.SfaCoInvestmentAmount, 
 		tl.EmployerCoInvestmentAmount, 
 		tl.TransactionType, 

@@ -19,8 +19,7 @@ using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments.Cohort
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Commitments
 {
-    [TestFixture]
-    [Parallelizable]
+    [TestFixture, Parallelizable]
     public class CohortApprovalRequestedByProviderEventHandlerTests : FluentTest<CohortApprovalRequestedByProviderEventHandlerTestsFixture>
     {
         [Test]

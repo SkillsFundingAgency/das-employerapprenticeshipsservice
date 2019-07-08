@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using SFA.DAS.Hashing;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.Authorization.WebApi

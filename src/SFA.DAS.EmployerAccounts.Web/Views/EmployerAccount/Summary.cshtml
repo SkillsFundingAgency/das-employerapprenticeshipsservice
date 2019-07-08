@@ -4,7 +4,7 @@
 
 @{ViewBag.PageID = "page-onboard-paye-check-details"; }
 @{ViewBag.Title = "Check Details"; }
-@{ViewBag.HideNav = "true"; }
+@{ViewBag.HideNav = true; }
 @{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";}
 
 <div class="grid-row">
@@ -37,7 +37,7 @@
             {
                 <tr>
                     <th scope="row">                       
-                        if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
+                        @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
                         {
                             <span>Companies House number</span>
                         }
@@ -48,6 +48,20 @@
                     </th>
                     <td colspan="2">                      
                         <span>@Model.Data.OrganisationReferenceNumber</span>                
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Data.AORN))
+            {
+                <tr>
+                    <th scope="row">
+                        Account office reference number
+                    </th>
+                    <td>
+                        @Model.Data.AORN
+                    </td>
+                    <td class="link-right">
+                        <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)">Change</a>
                     </td>
                 </tr>
             }
@@ -65,7 +79,7 @@
                     </dl>
                 </td>
                 <td class="link-right">
-                    <a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Change</a>
+                    <a href="@Url.Action(ControllerConstants.AmendPayeActionName, ControllerConstants.EmployerAccountControllerName)">Change</a>
                 </td>
             </tr>
         </table>
