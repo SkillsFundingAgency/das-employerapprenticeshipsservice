@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -11,11 +11,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
-using System;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -57,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId, false);
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
@@ -366,6 +362,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (!HasPayeScheme(model))
             {
                 viewModel.ViewName = "PrePayeRecruitment";
+            }           
+
+            if(model.HasSingleDraftVacancy || model.HasSinglePendingReviewVacancy || model.HasSingleClosedVacancy)
+            {
+                viewModel.ViewName = "VacancyStatus";
             }
             return PartialView(viewModel);
         }
@@ -437,6 +438,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyStatus(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

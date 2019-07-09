@@ -76,7 +76,7 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.205" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.946</Version>
+      <Version>1.6.1236</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
@@ -734,6 +734,7 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\VacancyStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
