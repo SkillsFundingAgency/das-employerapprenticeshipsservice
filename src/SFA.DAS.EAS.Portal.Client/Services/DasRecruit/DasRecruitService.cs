@@ -38,12 +38,11 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
         {
             _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
 
-            //todo: we only need a max of 2 vacancies at the minute, as if there are >1, we don't show any details
-            // but we do need to know that there is >1
             string vacanciesSummaryUri = $"/api/vacancies/?employerAccountId={accountId}&pageSize={maxVacanciesToGet}";
 
             try
             {
+                //todo: set timeout property, so we don't end up delaying the rendering of the homepage for a misbehaving api
                 var response = await _httpClient.GetAsync(vacanciesSummaryUri, cancellationToken).ConfigureAwait(false);
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)

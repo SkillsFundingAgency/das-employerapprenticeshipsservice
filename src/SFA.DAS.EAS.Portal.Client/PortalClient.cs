@@ -10,12 +10,12 @@ namespace SFA.DAS.EAS.Portal.Client
 {
     public class PortalClient : IPortalClient
     {
-        private readonly GetAccountQuery _getAccountQuery;
+        private readonly IGetAccountQuery _getAccountQuery;
         private readonly IDasRecruitService _dasRecruitService;
         
         public PortalClient(IContainer container)
         {
-            _getAccountQuery = container.GetInstance<GetAccountQuery>();
+            _getAccountQuery = container.GetInstance<IGetAccountQuery>();
             _dasRecruitService = container.GetInstance<IDasRecruitService>();
         }
         

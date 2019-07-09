@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Application.Queries
 {
-    internal class GetAccountQuery
+    internal class GetAccountQuery : IGetAccountQuery
     {
         private readonly IAccountsReadOnlyRepository _accountsReadOnlyRepository;
 
