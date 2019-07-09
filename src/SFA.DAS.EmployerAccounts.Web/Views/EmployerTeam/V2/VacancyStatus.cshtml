@@ -1,0 +1,35 @@
+﻿
+@using SFA.DAS.EAS.Portal.Client.Types;
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+@{
+    Vacancy vacancy = null;
+
+    var actionLinkText = "";
+    int? numberOfApplications = null;
+       
+    if (Model.HasSinglePendingReviewVacancy)
+    {
+        vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.PendingReview);
+        actionLinkText = "Preview vacancy";
+    };
+}
+<h3 class="das-panel__heading">Your vacancy</h3>
+<p>@vacancy.TrainingTitle</p>
+<p class="govuk-caption-m">VAC @vacancy.Reference</p>
+<dl class="das-definition-list das-definition-list--table">
+    <dt class="das-definition-list__title">Closing date</dt>
+    <dd class="das-definition-list__definition">@(vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormat() : "-")</dd>
+
+    @{ if (numberOfApplications.HasValue)
+        {
+            <dt class="das-definition-list__title">Applications</dt>
+            <dd class="das-definition-list__definition">@numberOfApplications.Value</dd>
+        }
+    }
+
+    <dt class="das-definition-list__title">Status</dt>
+    <dd class="das-definition-list__definition">@vacancy.Status</dd>
+</dl>
+<p><a href="@Url.EmployerRecruitAction(vacancy.ManageVacancyUrl)" class="govuk-link">@actionLinkText</a></p>
+<p><a href="@Url.EmployerRecruitAction("create-vacancy/")" class="govuk-link">Create a vacancy</a></p>
+
