@@ -10,7 +10,6 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         {
             Organisations = new List<Organisation>();
             Providers = new List<Provider>();
-            Vacancies = new List<Vacancy>();
         }
 
         [JsonProperty("id")]
@@ -20,7 +19,9 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         [JsonProperty("providers")]
         public ICollection<Provider> Providers { get; set; }
         [JsonIgnore]
-        public ICollection<Vacancy> Vacancies { get; set; }
+        public Cardinality? VacancyCardinality { get; set; }
+        [JsonIgnore]
+        public Vacancy SingleVacancy { get; set; }
         [JsonProperty("deleted")]
         public DateTime? Deleted { get; set; }
     }

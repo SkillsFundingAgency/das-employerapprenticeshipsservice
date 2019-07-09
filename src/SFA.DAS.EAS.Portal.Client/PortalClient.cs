@@ -21,16 +21,32 @@ namespace SFA.DAS.EAS.Portal.Client
         
         public async Task<Account> GetAccount(long accountId, bool hasPayeScheme, CancellationToken cancellationToken = default)
         {
+            // we potentially map 1 more vacancy tha necessary, but it keeps the code clean
             var vacanciesTask = hasPayeScheme ? 
                 _dasRecruitService.GetVacancies(accountId, 2, cancellationToken) : null;
 
             var account = await _getAccountQuery.Get(accountId, cancellationToken);
 
-            if (hasPayeScheme)
+            if (!hasPayeScheme)
+                return account;
+            
+            var vacancies = await vacanciesTask;
+            if (vacancies == null)
+                return account;
+            
+            var vacanciesCount = vacancies.Count();
+            switch (vacanciesCount)
             {
-                //todo: better to have flag/enum saying none/single/multiple vacancies and have a single instance?
-                var vacancies = await vacanciesTask;
-                account.Vacancies = vacancies.ToList();
+                case 0:
+                    account.VacancyCardinality = Cardinality.None;
+                    break;
+                case 1:
+                    account.VacancyCardinality = Cardinality.One;
+                    account.SingleVacancy = vacancies.Single();
+                    break;
+                default:
+                    account.VacancyCardinality = Cardinality.Many;
+                    break;
             }
 
             return account;

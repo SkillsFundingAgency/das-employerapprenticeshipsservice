@@ -37,7 +37,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
             SetMutateProperty = setMutateProperty;
 
             Fixture = new Fixture();
-            Fixture.Customize<Account>(co => co.Without(x => x.Vacancies));
+            Fixture.Customize<Account>(a => a
+                .Without(ac => ac.VacancyCardinality)
+                .Without(ac => ac.SingleVacancy));
             Account = Fixture.Create<Account>();
             
             Account.Deleted = null;

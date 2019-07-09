@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
-using AutoFixture.Kernel;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
@@ -35,8 +34,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         public EventHandlerTestsFixture(bool constructHandler = true)
         {
             Fixture = new Fixture();
-            Fixture.Customize<Cohort>(co => co.With(x => x.IsApproved, false));
-            Fixture.Customize<Account>(co => co.Without(x => x.Vacancies));
+            Fixture.Customize<Account>(a => a
+                .Without(ac => ac.VacancyCardinality)
+                .Without(ac => ac.SingleVacancy));
 
             Message = Fixture.Create<TEvent>();
 
