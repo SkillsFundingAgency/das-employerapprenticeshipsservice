@@ -4,8 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client.Http;
@@ -29,22 +27,19 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
     internal class DasRecruitServiceTestsFixture
     {
         public DasRecruitService DasRecruitService { get; set; }
-        public ILogger<DasRecruitService> Logger { get; set; }
         public Mock<IRecruitApiHttpClientFactory> RecruitApiHttpClientFactory { get; set; }
         public FakeHttpMessageHandler HttpMessageHandler { get; set; }
         public HttpClient HttpClient { get; set; }
         
         public DasRecruitServiceTestsFixture()
         {
-            Logger = new NullLogger<DasRecruitService>();
-
             HttpMessageHandler = new FakeHttpMessageHandler();
             HttpClient = new HttpClient(HttpMessageHandler) { BaseAddress = new Uri("https://example.com") };
 
             RecruitApiHttpClientFactory = new Mock<IRecruitApiHttpClientFactory>();
             RecruitApiHttpClientFactory.Setup(f => f.CreateHttpClient()).Returns(HttpClient);
             
-            DasRecruitService = new DasRecruitService(RecruitApiHttpClientFactory.Object, Logger);
+            DasRecruitService = new DasRecruitService(RecruitApiHttpClientFactory.Object);
         }
 
         public DasRecruitServiceTestsFixture ArrangeApiReturnsOk()

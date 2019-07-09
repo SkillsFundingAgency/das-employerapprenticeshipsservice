@@ -1,6 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoFixture;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client;
@@ -31,49 +34,50 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         }
 
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQueryFails_ThenVacancyCardinalityIsNotSet()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallFails_ThenVacancyCardinalityIsNotSet()
         {
             return TestAsync(f => f.GetAccount(), (f, r) => f.AssertVacancyCardinalityIsNotSet(r));
         }
 
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQueryFails_ThenSingleVacancyIsNotSet()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallFails_ThenSingleVacancyIsNotSet()
         {
             return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsNotSet(r));
         }
 
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsNoVacancies_ThenVacancyCardinalityIsSetToNone()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenVacancyCardinalityIsSetToNone()
         {
-            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertVacancyCardinalityIsSet(Cardinality.None));
+            return TestAsync(f => f.GetAccount(),
+                (f, r) => f.AssertVacancyCardinalityIsSet(r, Cardinality.None));
         }
 
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsNoVacancies_ThenSingleVacancyIsNotSet()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenSingleVacancyIsNotSet()
         {
             return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsNotSet(r));
         }
         
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsOneVacancies_ThenVacancyCardinalityIsSetToOne()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenVacancyCardinalityIsSetToOne()
         {
-            return TestAsync(f => f.GetAccount(),  (f, r) => f.AssertVacancyCardinalityIsSet(Cardinality.One));
+            return TestAsync(f => f.GetAccount(),  (f, r) => f.AssertVacancyCardinalityIsSet(r, Cardinality.One));
         }
 
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsOneVacancies_ThenSingleVacancyIsSetCorrectly()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenSingleVacancyIsSetCorrectly()
         {
             return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsSetCorrectly(r));
         }
 
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsTwoVacancies_ThenVacancyCardinalityIsSetToMany()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsTwoVacancies_ThenVacancyCardinalityIsSetToMany()
         {
-            return TestAsync(f => f.GetAccount(),  (f, r) => f.AssertVacancyCardinalityIsSet(Cardinality.Many));
+            return TestAsync(f => f.GetAccount(),  (f, r) => f.AssertVacancyCardinalityIsSet(r, Cardinality.Many));
         }
 
         [Test]
-        public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsTwoVacancies_ThenSingleVacancyIsNotSet()
+        public Task GetAccount_WhenHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsTwoVacancies_ThenSingleVacancyIsNotSet()
         {
             return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsNotSet(r));
         }
@@ -87,15 +91,16 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         Mock<IDasRecruitService> MockDasRecruitService { get; set; } = new Mock<IDasRecruitService>();
         bool HasPayeScheme { get; set; } = true;
         Account Account { get; set; }
+        Vacancy Vacancy { get; set; }
         IEnumerable<Vacancy> Vacancies { get; set; }
         const long AccountId = 999L;
         
         public PortalClientTestsFixture()
         {
+            Vacancy = new Fixture().Create<Vacancy>();
+            
             MockGetAccountQuery.Setup(q => q.Get(AccountId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Account);
-            MockDasRecruitService.Setup(s => s.GetVacancies(AccountId, 2, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(Vacancies);
             
             MockContainer.Setup(c => c.GetInstance<IGetAccountQuery>())
                 .Returns(MockGetAccountQuery.Object);
@@ -112,45 +117,68 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             return this;
         }
         
-        public PortalClientTestsFixture ArrangeQueryFails()
+        public PortalClientTestsFixture ArrangeRecruitApiCallFails()
         {
+            Vacancies = null;
+
             return this;
         }
 
-        public PortalClientTestsFixture ArrangeQuerySucceedsAndReturnsNoVacancies()
+        //todo: ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(int numberOfVacancies)?
+        public PortalClientTestsFixture ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies()
         {
+            Vacancies = Enumerable.Empty<Vacancy>();
+
             return this;
         }
         
-        public PortalClientTestsFixture ArrangeQuerySucceedsAndReturnsOneVacancy()
+        public PortalClientTestsFixture ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy()
         {
+            Vacancies = Enumerable.Repeat(Vacancy, 1);
+
             return this;
         }
 
-        public PortalClientTestsFixture ArrangeQuerySucceedsAndReturnsTwoVacancies()
+        public PortalClientTestsFixture ArrangeRecruitApiCallSucceedsAndReturnsTwoVacancies()
         {
+            Vacancies = Enumerable.Repeat(Vacancy, 2);
+
             return this;
         }
 
         public async Task<Account> GetAccount()
         {
+            // arrange
+            MockDasRecruitService.Setup(s => s.GetVacancies(AccountId, 2, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Vacancies);
+
+            // act
             return await PortalClient.GetAccount(AccountId, HasPayeScheme);
         }
 
         public void AssertVacancyCardinalityIsNotSet(Account account)
         {
+            account.Should().NotBeNull();
+            account.VacancyCardinality.Should().BeNull();
         }
 
-        public void AssertVacancyCardinalityIsSet(Cardinality expectedCardinality)
+        public void AssertVacancyCardinalityIsSet(Account account, Cardinality expectedCardinality)
         {
+            account.Should().NotBeNull();
+            account.VacancyCardinality.Should().Be(expectedCardinality);
         }
         
         public void AssertSingleVacancyIsNotSet(Account account)
         {
+            account.Should().NotBeNull();
+            account.SingleVacancy.Should().BeNull();
         }
 
         public void AssertSingleVacancyIsSetCorrectly(Account account)
         {
+            account.Should().NotBeNull();
+            account.SingleVacancy.Should().NotBeNull();
+            //account.SingleVacancy.Should().Be(new );
         }
     }
 }

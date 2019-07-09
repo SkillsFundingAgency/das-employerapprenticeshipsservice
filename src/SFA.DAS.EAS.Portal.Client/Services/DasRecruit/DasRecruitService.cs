@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.Http;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
@@ -18,16 +17,13 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
     internal class DasRecruitService : IDasRecruitService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILogger<DasRecruitService> _logger;
         private readonly Type _vacancyStatusType;
 
-        public DasRecruitService(
-            IRecruitApiHttpClientFactory recruitApiHttpClientFactory,
-            ILogger<DasRecruitService> logger)
+        //todo: add eas compatible logging
+        public DasRecruitService(IRecruitApiHttpClientFactory recruitApiHttpClientFactory)
         {
             //todo: think through lifetimes
             _httpClient = recruitApiHttpClientFactory.CreateHttpClient();
-            _logger = logger;
             _vacancyStatusType = typeof(VacancyStatus);
         }
 
@@ -36,7 +32,7 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
             int maxVacanciesToGet = int.MaxValue,
             CancellationToken cancellationToken = default)
         {
-            _logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
+            //_logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
 
             string vacanciesSummaryUri = $"/api/vacancies/?employerAccountId={accountId}&pageSize={maxVacanciesToGet}";
 
@@ -51,9 +47,9 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
                 var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(content);
                 return vacanciesSummary.Vacancies.Select(Map);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogWarning($"Ignoring failed call to recruit API: {ex}");
+                //_logger.LogWarning($"Ignoring failed call to recruit API: {ex}");
                 return null;
             }
         }
