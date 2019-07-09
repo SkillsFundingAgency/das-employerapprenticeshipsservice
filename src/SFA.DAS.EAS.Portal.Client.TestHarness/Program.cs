@@ -2,13 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using KellermanSoftware.CompareNetObjects;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.TestHarness.DependencyResolution;
 using SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios;
-using SFA.DAS.EAS.Portal.Client.TestHarness.Startup;
-using SFA.DAS.EAS.Portal.Startup;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Portal.Client.TestHarness
@@ -17,11 +13,10 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
     {
         public static async Task Main(string[] args)
         {
-            using (var host = CreateHostBuilder(args).Build())
+            IContainer container = null;
+            using (container = IoC.Initialize())
             {
-                await host.StartAsync();
-
-                var getAccount = host.Services.GetService<GetAccountScenario>();
+                var getAccount = container.GetInstance<GetAccountScenario>();
                 
                 var accountTasks = Enumerable.Range(0, 9)
                     .AsParallel()
@@ -42,17 +37,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
                     if (!comparisonResult.AreEqual)
                         Console.WriteLine($"Not all accounts are identical: {comparisonResult.DifferencesString}");
                 }
-                
-                await host.StopAsync();
-            }            
+            }
         }
-
-        private static IHostBuilder CreateHostBuilder(string[] args) =>
-            new HostBuilder()
-                .ConfigurePortalClientConfiguration(args)
-                .UseDasEnvironment()
-                .UseStructureMap()
-                .ConfigureServices(s => s.AddTransient<GetAccountScenario, GetAccountScenario>())
-                .ConfigureContainer<Registry>(IoC.Initialize);
     }
 }
