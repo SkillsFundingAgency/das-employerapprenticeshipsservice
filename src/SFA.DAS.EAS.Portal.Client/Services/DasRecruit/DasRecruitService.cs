@@ -41,7 +41,6 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 
             try
             {
-                //todo: set timeout property, so we don't end up delaying the rendering of the homepage for a misbehaving api
                 var response = await _httpClient.GetAsync(vacanciesSummaryUri, cancellationToken).ConfigureAwait(false);
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
