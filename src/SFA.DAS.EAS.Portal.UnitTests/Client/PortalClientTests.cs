@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,72 +20,74 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         [Test]
         public Task GetAccount_WhenHasNoPayeScheme_ThenVacancyCardinalityIsNotSet()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.ArrangeHasNoPayeScheme(), f => f.GetAccount(),
+                (f, r) => f.AssertVacancyCardinalityIsNotSet(r));
         }
 
         [Test]
         public Task GetAccount_WhenHasNoPayeScheme_ThenSingleVacancyIsNotSet()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsNotSet(r));
         }
 
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQueryFails_ThenVacancyCardinalityIsNotSet()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertVacancyCardinalityIsNotSet(r));
         }
 
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQueryFails_ThenSingleVacancyIsNotSet()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsNotSet(r));
         }
 
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsNoVacancies_ThenVacancyCardinalityIsSetToNone()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertVacancyCardinalityIsSet(Cardinality.None));
         }
 
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsNoVacancies_ThenSingleVacancyIsNotSet()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsNotSet(r));
         }
         
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsOneVacancies_ThenVacancyCardinalityIsSetToOne()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(),  (f, r) => f.AssertVacancyCardinalityIsSet(Cardinality.One));
         }
 
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsOneVacancies_ThenSingleVacancyIsSetCorrectly()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsSetCorrectly(r));
         }
 
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsTwoVacancies_ThenVacancyCardinalityIsSetToMany()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(),  (f, r) => f.AssertVacancyCardinalityIsSet(Cardinality.Many));
         }
 
         [Test]
         public Task GetAccount_WhenHasPayeSchemeAndQuerySucceedsAndReturnsTwoVacancies_ThenSingleVacancyIsNotSet()
         {
-            return TestAsync(f => f.GetAccount());
+            return TestAsync(f => f.GetAccount(), (f, r) => f.AssertSingleVacancyIsNotSet(r));
         }
     }
 
     public class PortalClientTestsFixture
     {
-        PortalClient PortalClient { get; }
-        Mock<IContainer> MockContainer { get; } = new Mock<IContainer>();
-        private Mock<IGetAccountQuery> MockGetAccountQuery { get; } = new Mock<IGetAccountQuery>();
-        Mock<IDasRecruitService> MockDasRecruitService { get; } = new Mock<IDasRecruitService>();
-        Account Account { get; }
-        IEnumerable<Vacancy> Vacancies { get; }
+        PortalClient PortalClient { get; set; }
+        Mock<IContainer> MockContainer { get; set; } = new Mock<IContainer>();
+        Mock<IGetAccountQuery> MockGetAccountQuery { get; set; } = new Mock<IGetAccountQuery>();
+        Mock<IDasRecruitService> MockDasRecruitService { get; set; } = new Mock<IDasRecruitService>();
+        bool HasPayeScheme { get; set; } = true;
+        Account Account { get; set; }
+        IEnumerable<Vacancy> Vacancies { get; set; }
         const long AccountId = 999L;
         
         public PortalClientTestsFixture()
@@ -104,6 +105,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             PortalClient = new PortalClient(MockContainer.Object);
         }
 
+        public PortalClientTestsFixture ArrangeHasNoPayeScheme()
+        {
+            HasPayeScheme = false;
+            
+            return this;
+        }
+        
         public PortalClientTestsFixture ArrangeQueryFails()
         {
             return this;
@@ -124,9 +132,25 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             return this;
         }
 
-        public Account GetAccount()
+        public async Task<Account> GetAccount()
         {
-            throw new NotImplementedException();
+            return await PortalClient.GetAccount(AccountId, HasPayeScheme);
+        }
+
+        public void AssertVacancyCardinalityIsNotSet(Account account)
+        {
+        }
+
+        public void AssertVacancyCardinalityIsSet(Cardinality expectedCardinality)
+        {
+        }
+        
+        public void AssertSingleVacancyIsNotSet(Account account)
+        {
+        }
+
+        public void AssertSingleVacancyIsSetCorrectly(Account account)
+        {
         }
     }
 }
