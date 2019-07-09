@@ -68,6 +68,9 @@
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.EmployerAccounts.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EmployerAccounts.Api.Types.1.6.1254\lib\netstandard2.0\SFA.DAS.EmployerAccounts.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.183\lib\netstandard2.0\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
@@ -145,10 +148,6 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj">
       <Project>{9A31DB97-209C-48EF-AE2A-B4A4F761F670}</Project>
       <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
-      <Project>{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}</Project>
-      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
