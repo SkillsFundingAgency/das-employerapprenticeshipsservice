@@ -21,7 +21,17 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
         [Test]
         public Task GetVacancies_WhenSingleVacancyIsReturnedByApi_ThenCorrectlyMappedVacancyIsReturned()
         {
-            return TestAsync(f => f.ArrangeApiReturnsOk(), f => f.GetVacancies(), (f, r) => f.AssertVacancies(r));
+            return TestAsync(f => f.ArrangeApiReturnsOk(),
+                f => f.GetVacancies(),
+                (f, r) => f.AssertVacancies(r));
+        }
+
+        [Test]
+        public Task GetVacancies_WhenApiReturnsAnError_ThenNullIsReturned()
+        {
+            return TestAsync(f => f.ArrangeApiReturnsInternalServerError(),
+                f => f.GetVacancies(),
+                (f, r) => f.AssertNullReturned(r));
         }
     }
 
@@ -91,6 +101,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
                     ManageVacancyUrl = "https://recruit.apprenticeships.education.gov.uk/12345678/vacancies/eb0d5d5b-6cb9-469e-9423-bdc9db1ef5b9/manage/"
                 }
             });
+        }
+
+        public void AssertNullReturned(IEnumerable<Vacancy> vacancies)
+        {
+            vacancies.Should().BeNull();
         }
     }
 }
