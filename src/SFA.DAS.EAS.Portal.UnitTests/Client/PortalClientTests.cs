@@ -19,8 +19,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
     [TestFixture, Parallelizable]
     public class PortalClientTests : FluentTest<PortalClientTestsFixture>
     {
-        //todo: account related tests, ie. account returned, account not returned
-        
         [Test]
         public Task GetAccount_WhenHasNoPayeScheme_ThenVacancyCardinalityIsNotSet()
         {

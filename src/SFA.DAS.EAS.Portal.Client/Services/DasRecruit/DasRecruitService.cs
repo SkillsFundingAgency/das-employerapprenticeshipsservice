@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.Http;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
@@ -16,12 +17,14 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
     /// </summary>
     internal class DasRecruitService : IDasRecruitService
     {
+        private readonly ILog _log;
         private readonly HttpClient _httpClient;
         private readonly Type _vacancyStatusType;
 
         //todo: add eas compatible logging
-        public DasRecruitService(IRecruitApiHttpClientFactory recruitApiHttpClientFactory)
+        public DasRecruitService(IRecruitApiHttpClientFactory recruitApiHttpClientFactory, ILog log)
         {
+            _log = log;
             //todo: think through lifetimes
             _httpClient = recruitApiHttpClientFactory.CreateHttpClient();
             _vacancyStatusType = typeof(VacancyStatus);
@@ -32,7 +35,7 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
             int maxVacanciesToGet = int.MaxValue,
             CancellationToken cancellationToken = default)
         {
-            //_logger.LogInformation($"Getting Vacancies Summary for account ID: {accountId}");
+            _log.Info($"Getting max {maxVacanciesToGet} VacanciesSummary for account ID {accountId}");
 
             string vacanciesSummaryUri = $"/api/vacancies/?employerAccountId={accountId}&pageSize={maxVacanciesToGet}";
 
@@ -47,9 +50,9 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
                 var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(content);
                 return vacanciesSummary.Vacancies.Select(Map);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //_logger.LogWarning($"Ignoring failed call to recruit API: {ex}");
+                _log.Warn($"Ignoring failed call to recruit API: {ex}");
                 return null;
             }
         }

@@ -10,6 +10,7 @@ using SFA.DAS.EAS.Portal.Client.Http;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.UnitTests.Fakes;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
@@ -30,6 +31,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
         public Mock<IRecruitApiHttpClientFactory> RecruitApiHttpClientFactory { get; set; }
         public FakeHttpMessageHandler HttpMessageHandler { get; set; }
         public HttpClient HttpClient { get; set; }
+        public Mock<ILog> Log { get; set; }
         
         public DasRecruitServiceTestsFixture()
         {
@@ -38,8 +40,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
 
             RecruitApiHttpClientFactory = new Mock<IRecruitApiHttpClientFactory>();
             RecruitApiHttpClientFactory.Setup(f => f.CreateHttpClient()).Returns(HttpClient);
-            
-            DasRecruitService = new DasRecruitService(RecruitApiHttpClientFactory.Object);
+
+            Log = new Mock<ILog>();
+
+            DasRecruitService = new DasRecruitService(RecruitApiHttpClientFactory.Object, Log.Object);
         }
 
         public DasRecruitServiceTestsFixture ArrangeApiReturnsOk()
