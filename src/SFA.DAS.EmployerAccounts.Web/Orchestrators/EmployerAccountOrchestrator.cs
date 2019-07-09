@@ -204,7 +204,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 RefreshToken = model.RefreshToken,
                 Empref = model.PayeReference,
                 ExternalUserId = model.UserId,
-                EmprefName = model.EmployerRefName
+                EmprefName = model.EmployerRefName,
+                Aorn = model.Aorn
             });
         }
 
@@ -226,7 +227,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     OrganisationStatus = model.OrganisationStatus,
                     EmployerRefName = model.EmployerRefName,
                     PublicSectorDataSource = model.PublicSectorDataSource,
-                    Sector = model.Sector
+                    Sector = model.Sector,
+                    Aorn = model.Aorn
                 });
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>

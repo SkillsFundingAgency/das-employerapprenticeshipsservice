@@ -10,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -18,16 +17,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly HomeOrchestrator _homeOrchestrator;
-        private readonly EmployerAccountsConfiguration _configuration;       
+        private readonly EmployerAccountsConfiguration _configuration;
       
         public HomeController(IAuthenticationService owinWrapper, 
-            HomeOrchestrator homeOrchestrator,
+            HomeOrchestrator homeOrchestrator,        
             EmployerAccountsConfiguration configuration,
             IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _homeOrchestrator = homeOrchestrator;
+            _homeOrchestrator = homeOrchestrator;          
             _configuration = configuration;         
         }
 
@@ -37,10 +36,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index()
         {           
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 await OwinWrapper.UpdateClaims();
+
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
+
                 var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
+
                 if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
@@ -59,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                     if (account != null)
                     {
-                        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId});
+                        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
                     }
                 }
 
