@@ -8,6 +8,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.DependencyResolution
         public static void Initialize(Registry registry)
         {
             registry.IncludeRegistry<PortalClientRegistry>();
+            registry.IncludeRegistry<LoggerRegistry>();
         }
     }
 }
