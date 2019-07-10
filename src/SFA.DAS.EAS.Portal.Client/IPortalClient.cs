@@ -6,6 +6,7 @@ namespace SFA.DAS.EAS.Portal.Client
 {
     public interface IPortalClient
     {
-        Task<Account> GetAccount(long accountId, bool hasPayeScheme, CancellationToken cancellationToken = default);
+        Task<Account> GetAccount(long accountId, string publicHashedAccountId,
+            bool hasPayeScheme, CancellationToken cancellationToken = default);
     }
 }

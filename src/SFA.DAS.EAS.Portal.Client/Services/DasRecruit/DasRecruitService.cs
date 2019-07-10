@@ -31,13 +31,13 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
         }
 
         public async Task<IEnumerable<Vacancy>> GetVacancies(
-            long accountId,
+            string publicHashedAccountId,
             int maxVacanciesToGet = int.MaxValue,
             CancellationToken cancellationToken = default)
         {
-            _log.Info($"Getting max {maxVacanciesToGet} VacanciesSummary for account ID {accountId}");
+            _log.Info($"Getting max {maxVacanciesToGet} VacanciesSummary for account ID {publicHashedAccountId}");
 
-            string vacanciesSummaryUri = $"/api/vacancies/?employerAccountId={accountId}&pageSize={maxVacanciesToGet}";
+            string vacanciesSummaryUri = $"/api/vacancies/?employerAccountId={publicHashedAccountId}&pageSize={maxVacanciesToGet}";
 
             try
             {

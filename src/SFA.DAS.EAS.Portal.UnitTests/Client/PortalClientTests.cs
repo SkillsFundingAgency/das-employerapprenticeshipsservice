@@ -105,7 +105,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         Vacancy OriginalVacancy { get; set; }
         IEnumerable<Vacancy> Vacancies { get; set; }
         const long AccountId = 999L;
-        
+        const string PublicHashedAccountId = "HASH12";
+
         public PortalClientTestsFixture()
         {
             Vacancy = new Fixture().Create<Vacancy>();
@@ -162,13 +163,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         public async Task<Account> GetAccount()
         {
             // arrange
-            MockDasRecruitService.Setup(s => s.GetVacancies(AccountId, 2, It.IsAny<CancellationToken>()))
+            MockDasRecruitService.Setup(s => s.GetVacancies(PublicHashedAccountId,2, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Vacancies);
 
             OriginalVacancy = Vacancy.Clone();
 
             // act
-            return await PortalClient.GetAccount(AccountId, HasPayeScheme);
+            return await PortalClient.GetAccount(AccountId, PublicHashedAccountId, HasPayeScheme);
         }
 
         public void AssertVacancyCardinalityIsNotSet(Account account)

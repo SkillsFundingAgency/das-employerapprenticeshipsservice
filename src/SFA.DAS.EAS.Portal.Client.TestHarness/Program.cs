@@ -17,26 +17,27 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
             using (container = IoC.Initialize())
             {
                 var getAccount = container.GetInstance<GetAccountScenario>();
+                var firstAccount = await getAccount.Run();
                 
-                var accountTasks = Enumerable.Range(0, 9)
-                    .AsParallel()
-                    .Select(n => getAccount.Run());
-
-                var accounts = await Task.WhenAll(accountTasks);
-
-                var firstAccount = accounts.First();
+//                var accountTasks = Enumerable.Range(0, 9)
+//                    .AsParallel()
+//                    .Select(n => getAccount.Run());
+//
+//                var accounts = await Task.WhenAll(accountTasks);
+//
+//                var firstAccount = accounts.First();
 
                 // display account
                 Console.WriteLine(JsonConvert.SerializeObject(firstAccount));
                 
                 // assert all are identical
-                var compareLogic = new CompareLogic(new ComparisonConfig {MaxDifferences = 100});
-                foreach (var account in accounts.Skip(1))
-                {
-                    var comparisonResult = compareLogic.Compare(firstAccount, account);
-                    if (!comparisonResult.AreEqual)
-                        Console.WriteLine($"Not all accounts are identical: {comparisonResult.DifferencesString}");
-                }
+//                var compareLogic = new CompareLogic(new ComparisonConfig {MaxDifferences = 100});
+//                foreach (var account in accounts.Skip(1))
+//                {
+//                    var comparisonResult = compareLogic.Compare(firstAccount, account);
+//                    if (!comparisonResult.AreEqual)
+//                        Console.WriteLine($"Not all accounts are identical: {comparisonResult.DifferencesString}");
+//                }
             }
         }
     }

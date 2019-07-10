@@ -12,14 +12,4 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         public int NumberOfApplications { get; set; }
         public string ManageVacancyUrl { get; set; }
     }
-
-    public enum VacancyStatus
-    {
-        None,
-        Live,
-        Draft,
-        Closed,
-        PendingReview,
-        Rejected
-    }
 }
