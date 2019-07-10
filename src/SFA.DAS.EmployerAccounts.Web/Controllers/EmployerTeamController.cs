@@ -365,6 +365,9 @@ using System.Linq;
             {
                 switch (model.AccountViewModel.VacancyCardinality)
                 {
+                    case null:
+                        viewModel.ViewName = "VacancyServiceDown";
+                        break;
                     case Cardinality.None:
                         viewModel.ViewName = "CreateVacancy";
                         break;
@@ -440,6 +443,12 @@ using System.Linq;
 
         [ChildActionOnly]
         public ActionResult FundingComplete(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyServiceDown(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
