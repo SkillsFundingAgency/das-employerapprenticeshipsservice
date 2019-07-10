@@ -361,7 +361,6 @@
     <Compile Include="Services\AuditService.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CommitmentService.cs" />
-    <Compile Include="Services\CompaniesHouseEmployerVerificationService.cs" />
     <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
     <Compile Include="Services\ExcelService.cs" />
@@ -374,6 +373,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
+      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>

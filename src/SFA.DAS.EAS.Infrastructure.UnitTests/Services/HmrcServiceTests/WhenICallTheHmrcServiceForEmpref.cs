@@ -3,13 +3,14 @@ using HMRC.ESFA.Levy.Api.Client;
 using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
 using SFA.DAS.Http;
+using EmployerApprenticeshipsServiceConfiguration = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -25,37 +26,34 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
         private HmrcService _hmrcService;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
+        private HmrcConfiguration _configuration;
         private Mock<ITokenServiceApiClient> _tokenService;
 
         [SetUp]
         public void Arrange()
         {
-            _configuration = new EmployerApprenticeshipsServiceConfiguration
+            _configuration = new HmrcConfiguration
             {
-                Hmrc = new HmrcConfiguration
-                {
-                    BaseUrl = ExpectedBaseUrl,
-                    ClientId = ExpectedClientId,
-                    Scope = ExpectedScope,
-                    ClientSecret = ExpectedClientSecret
-                }
+                BaseUrl = ExpectedBaseUrl,
+                ClientId = ExpectedClientId,
+                Scope = ExpectedScope,
+                ClientSecret = ExpectedClientSecret
             };
-            
+
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
 
             _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
             _apprenticeshipLevyApiClient.Setup(x => x.GetEmployerDetails(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new EmpRefLevyInformation
                 {
-                    Employer = new Employer {Name = new Name {EmprefAssociatedName = ExpectedName}},
+                    Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedName } },
                     Links = new Links()
                 });
 
             _tokenService = new Mock<ITokenServiceApiClient>();
             _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAuthToken });
 
-            _hmrcService = new HmrcService( _configuration, _httpClientWrapper.Object, _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(),null,null, new Mock<ILog>().Object);
+            _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object, _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(), null, null, new Mock<ILog>().Object);
         }
 
         [Test]
@@ -68,7 +66,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             //Act
             var actual = await _hmrcService.GetEmprefInformation(authToken, empRef);
             Assert.IsAssignableFrom<EmpRefLevyInformation>(actual);
-            Assert.AreEqual(ExpectedName,actual.Employer.Name.EmprefAssociatedName);
+            Assert.AreEqual(ExpectedName, actual.Employer.Name.EmprefAssociatedName);
         }
     }
 }

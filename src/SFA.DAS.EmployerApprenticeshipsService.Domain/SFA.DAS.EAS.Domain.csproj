@@ -301,6 +301,7 @@
     <Compile Include="Models\EmployerAgreement\EmployerAgreementTemplate.cs" />
     <Compile Include="Models\EmployerAgreement\EmployerAgreementView.cs" />
     <Compile Include="Models\EmployerAgreement\SignEmployerAgreement.cs" />
+    <Compile Include="Models\Employer\Address.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\ExpiredFunds\ExpiredFundTransactionLine.cs" />
     <Compile Include="Models\Organisation\AccountLegalEntityModel.cs" />
@@ -314,7 +315,6 @@
     <Compile Include="Configuration\ClaimIdentifierConfiguration.cs" />
     <Compile Include="Configuration\CompaniesHouseConfiguration.cs" />
     <Compile Include="Configuration\EmployerApprenticeshipsServiceConfiguration.cs" />
-    <Compile Include="Configuration\HmrcConfiguration.cs" />
     <Compile Include="Configuration\IdentityServerConfiguration.cs" />
     <Compile Include="Configuration\LevyDeclarationProviderConfiguration.cs" />
     <Compile Include="Configuration\PaymentProviderConfiguration.cs" />
@@ -333,7 +333,6 @@
     <Compile Include="Data\Repositories\IMembershipRepository.cs" />
     <Compile Include="Data\Repositories\IUserAccountRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
-    <Compile Include="Models\Employer\EmployerInformation.cs" />
     <Compile Include="Models\Account\Account.cs" />
     <Compile Include="Models\Account\AccountBalance.cs" />
     <Compile Include="Models\Account\Accounts.cs" />
@@ -347,9 +346,7 @@
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
-    <Compile Include="Interfaces\IEmployerVerificationService.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
-    <Compile Include="Interfaces\IHmrcService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Models\AccountTeam\Invitation.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
@@ -367,15 +364,6 @@
     <Compile Include="Models\Payments\PaymentTransactionLine.cs" />
     <Compile Include="Models\Payments\PaymentDetails.cs" />
     <Compile Include="Models\HmrcEmployer\EmprefDiscovery.cs" />
-    <Compile Include="Models\HmrcLevy\EmployerLevyData.cs" />
-    <Compile Include="Models\HmrcLevy\LevyDeclarations.cs" />
-    <Compile Include="Models\HmrcLevy\Employer.cs" />
-    <Compile Include="Models\HmrcLevy\EmpRefLevyInformation.cs" />
-    <Compile Include="Models\HmrcLevy\EnglishFractionDeclarations.cs" />
-    <Compile Include="Models\HmrcLevy\HmrcTokenResponse.cs" />
-    <Compile Include="Models\HmrcLevy\Link.cs" />
-    <Compile Include="Models\HmrcLevy\Links.cs" />
-    <Compile Include="Models\HmrcLevy\Name.cs" />
     <Compile Include="Models\Levy\DasDeclaration.cs" />
     <Compile Include="Models\Levy\DasDeclarations.cs" />
     <Compile Include="Models\Levy\DasEnglishFraction.cs" />
@@ -415,6 +403,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
+      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
+      <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Messages</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
       <Project>{c15dec5c-666d-4cb2-968e-a273eb60d15e}</Project>
       <Name>SFA.DAS.EmployerFinance.Messages</Name>

@@ -348,7 +348,6 @@
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
-    <Compile Include="DependencyResolution\ApprenticeshipLevyRegistry.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
@@ -526,19 +525,6 @@
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountValidator.cs" />
-    <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationQueryHandler.cs" />
-    <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationRequest.cs" />
-    <Compile Include="Queries\GetEmployerInformation\GetEmployerInformationResponse.cs" />
-    <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationHandler.cs" />
-    <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationRequest.cs" />
-    <Compile Include="Queries\GetGatewayInformation\GetGatewayInformationResponse.cs" />
-    <Compile Include="Queries\GetGatewayToken\GetGatewayTokenHandler.cs" />
-    <Compile Include="Queries\GetGatewayToken\GetGatewayTokenQuery.cs" />
-    <Compile Include="Queries\GetGatewayToken\GetGatewayTokenQueryResponse.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationHandler.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationValidator.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationQuery.cs" />
-    <Compile Include="Queries\GetHmrcEmployerInformation\GetHmrcEmployerInformationResponse.cs" />
     <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementResponse.cs" />
     <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateQueryHandler.cs" />
     <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateRequest.cs" />

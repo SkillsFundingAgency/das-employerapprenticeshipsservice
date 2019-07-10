@@ -67,7 +67,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@employerRefName", employerRefName, DbType.String);
             parameters.Add("@status", companyStatus);
             parameters.Add("@source", source);
-            parameters.Add("@publicSectorDataSource", publicSectorDataSource);
+            parameters.Add("@publicSectorDataSource", publicSectorDataSource); 
             parameters.Add("@sector", sector, DbType.String);
             parameters.Add("@aorn", aorn, DbType.String);
 
