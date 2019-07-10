@@ -7,27 +7,28 @@
     var actionLinkText = "";
     int? numberOfApplications = null;
 
-    if (Model.HasSingleDraftVacancy)
+    if (Model.HasSingleClosedVacancy)
     {
-        vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.Draft);
-        actionLinkText = "Edit and submit vacancy";
+        vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.Closed);
+        actionLinkText = "Manage vacancy";
+        numberOfApplications = vacancy.NumberOfApplications;
     };
 }
 <h3 class="das-panel__heading">Your vacancy</h3>
 <p>@vacancy.TrainingTitle</p>
 <p class="govuk-caption-m">VAC @vacancy.Reference</p>
 <dl class="das-definition-list das-definition-list--table">
-    <dt class="das-definition-list__title">Closing date</dt>
+    <dt class="das-definition-list__title">Closing date:</dt>
     <dd class="das-definition-list__definition">@(vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormat() : "-")</dd>
 
     @{ if (numberOfApplications.HasValue)
         {
-            <dt class="das-definition-list__title">Applications</dt>
+            <dt class="das-definition-list__title">Applications:</dt>
             <dd class="das-definition-list__definition">@numberOfApplications.Value</dd>
         }
     }
 
-    <dt class="das-definition-list__title">Status</dt>
+    <dt class="das-definition-list__title">Status:</dt>
     <dd class="das-definition-list__definition">@vacancy.Status</dd>
 </dl>
 <p><a href="@Url.EmployerRecruitAction(vacancy.ManageVacancyUrl)" class="govuk-link">@actionLinkText</a></p>
