@@ -14,22 +14,22 @@
     };
 }
 <h3 class="das-panel__heading">Your vacancy</h3>
-<p>@vacancy.TrainingTitle</p>
-<p class="govuk-caption-m">VAC @vacancy.Reference</p>
-<dl class="das-definition-list das-definition-list--table">
-    <dt class="das-definition-list__title">Closing date:</dt>
+<p>@vacancy.TrainingTitle <span class="das-!-display--block das-text--muted">VAC @vacancy.Reference</span></p>
+<dl class="das-definition-list das-definition-list--inline">
+    <dt class="das-definition-list__title">Closing date</dt>
     <dd class="das-definition-list__definition">@(vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormat() : "-")</dd>
 
     @{ if (numberOfApplications.HasValue)
         {
-            <dt class="das-definition-list__title">Applications:</dt>
+            <dt class="das-definition-list__title">Applications</dt>
             <dd class="das-definition-list__definition">@numberOfApplications.Value</dd>
         }
     }
 
-    <dt class="das-definition-list__title">Status:</dt>
+    <dt class="das-definition-list__title">Status</dt>
     <dd class="das-definition-list__definition">@vacancy.Status</dd>
 </dl>
-<p><a href="@Url.EmployerRecruitAction(vacancy.ManageVacancyUrl)" class="govuk-link">@actionLinkText</a></p>
-<p><a href="@Url.EmployerRecruitAction("create-vacancy/")" class="govuk-link">Create a vacancy</a></p>
-
+<ul class="govuk-list">
+    <li><a href="@Url.EmployerRecruitAction(vacancy.ManageVacancyUrl)" class="govuk-link govuk-link--no-visited-state">@actionLinkText</a> </li>
+    <li><a href="@Url.EmployerRecruitAction("create-vacancy/")" class="govuk-link govuk-link--no-visited-state">Create a vacancy</a> </li>
+</ul>
