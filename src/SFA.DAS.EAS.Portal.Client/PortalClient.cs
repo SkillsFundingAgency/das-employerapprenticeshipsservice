@@ -23,13 +23,14 @@ namespace SFA.DAS.EAS.Portal.Client
         public async Task<Account> GetAccount(long accountId, string publicHashedAccountId,
             bool hasPayeScheme, CancellationToken cancellationToken = default)
         {
-            // we potentially map 1 more vacancy tha necessary, but it keeps the code clean
+            // we potentially map 1 more vacancy than necessary, but it keeps the code clean
             var vacanciesTask = hasPayeScheme ? 
                 _dasRecruitService.GetVacancies(publicHashedAccountId, 2, cancellationToken) : null;
 
             var account = await _getAccountQuery.Get(accountId, cancellationToken);
 
-            if (!hasPayeScheme)
+            // at a later date, we might want to create an empty account doc and add the vacancy details to it, but for now, let's keep it simple
+            if (!hasPayeScheme || account == null)
                 return account;
             
             var vacancies = await vacanciesTask;
