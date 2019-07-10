@@ -21,7 +21,6 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
         private readonly HttpClient _httpClient;
         private readonly Type _vacancyStatusType;
 
-        //todo: add eas compatible logging
         public DasRecruitService(IRecruitApiHttpClientFactory recruitApiHttpClientFactory, ILog log)
         {
             _log = log;
