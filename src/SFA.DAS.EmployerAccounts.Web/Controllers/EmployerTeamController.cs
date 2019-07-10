@@ -55,6 +55,7 @@ using System.Linq;
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
+                //todo: we need to properly handle the case when there isn't an account document because no events for the account have been processed yet
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId, hashedAccountId, hasPayeScheme);
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
@@ -363,7 +364,7 @@ using System.Linq;
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                switch (model.AccountViewModel.VacancyCardinality)
+                switch (model.AccountViewModel?.VacancyCardinality)
                 {
                     case null:
                         viewModel.ViewName = "VacancyServiceDown";
