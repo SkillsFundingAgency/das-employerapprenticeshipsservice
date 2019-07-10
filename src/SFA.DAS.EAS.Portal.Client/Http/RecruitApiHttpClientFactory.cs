@@ -25,8 +25,8 @@ namespace SFA.DAS.EAS.Portal.Client.Http
             httpClient.BaseAddress = new Uri(_recruitApiClientConfig.ApiBaseUrl);
 
             // set timeout, so we don't end up delaying the rendering of the homepage for a misbehaving api
-            httpClient.Timeout = TimeSpan.FromSeconds(3);
-            
+            httpClient.Timeout = TimeSpan.Parse(_recruitApiClientConfig.TimeoutTimeSpan);
+
             return httpClient;
         }
     }
