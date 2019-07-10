@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
-using SFA.DAS.EAS.Web.Extensions;
+﻿using SFA.DAS.EAS.Web.Extensions;
 using System;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
@@ -42,7 +41,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
-        public ActionResult TransferDetail(GetTransferTransactionDetailsQuery query)
+        public ActionResult TransferDetail()
         {
             return Redirect(Url.EmployerFinanceAction($"finance/transfer/details{Request?.Url?.Query}"));
         }

@@ -372,7 +372,6 @@
     <Compile Include="Queries\GetTeamMembers\WhenIGetTeamMembers.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetTransferConnectionsTests\WhenIGetTransferConnections.cs" />
-    <Compile Include="Queries\GetTransferTransactionDetailsTests\WhenIGetsTransferTransactionDetails.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
