@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration;
 using SFA.DAS.EAS.Application.Services;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
@@ -12,12 +13,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
     {
         private DasLevyService _dasLevyService;
         private Mock<IMediator> _mediator;
+        private Mock<ITransactionRepository> _transactionRepoMock;
       
 
         [SetUp]
         public void Arrange()
         {
-
+            _transactionRepoMock = new Mock<ITransactionRepository>();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetLastLevyDeclarationQuery>()))
                      .ReturnsAsync(new GetLastLevyDeclarationResponse()
@@ -28,7 +30,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
                         }
                      });
 
-            _dasLevyService = new DasLevyService(_mediator.Object);
+            _dasLevyService = new DasLevyService(_mediator.Object, _transactionRepoMock.Object);
         }
 
         [Test]

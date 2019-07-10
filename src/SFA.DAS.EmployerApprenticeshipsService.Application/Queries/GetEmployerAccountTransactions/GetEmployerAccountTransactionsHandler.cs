@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
-using SFA.DAS.Hashing;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -68,7 +68,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             foreach (var transaction in transactions)
             {
-                GenerateTransactionDescription(transaction);
+                await GenerateTransactionDescription(transaction);
             }
 
             PopulateTransferPublicHashedIds(transactions);
@@ -87,7 +87,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             return toDate;
         }
 
-        private void GenerateTransactionDescription(TransactionLine transaction)
+        private async Task GenerateTransactionDescription(TransactionLine transaction)
         {
             if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
             {
@@ -97,7 +97,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 var paymentTransaction = (PaymentTransactionLine)transaction;
 
-                transaction.Description = GetPaymentTransactionDescription(paymentTransaction);
+                transaction.Description = await GetPaymentTransactionDescription(paymentTransaction);
             }
             else if (transaction.GetType() == typeof(ExpiredFundTransactionLine))
             {
@@ -118,10 +118,23 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
         }
 
-        private string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
+        private async Task<string> GetPaymentTransactionDescription(PaymentTransactionLine transaction)
         {
             var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
-            return $"{transactionPrefix}{transaction.ProviderName}";
+
+            try
+            {
+                var ukprn = Convert.ToInt32(transaction.UkPrn);
+                var providerName = await _dasLevyService.GetProviderName(ukprn, transaction.AccountId, transaction.PeriodEnd);
+                if (providerName != null)
+                    return $"{transactionPrefix}{providerName}";
+            }
+            catch (Exception ex)
+            {
+                _logger.Info($"Provider not found for UkPrn:{transaction.UkPrn} - {ex.Message}");
+            }
+
+            return $"{transactionPrefix}Training provider - name not recognised";
 
         }
 
