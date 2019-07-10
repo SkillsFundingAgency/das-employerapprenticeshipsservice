@@ -4,7 +4,7 @@ using SFA.DAS.EmployerAccounts.Events.Messages;
 using SFA.DAS.Messaging.Interfaces;
 using RefreshPaymentDataCompletedEvent = SFA.DAS.EmployerFinance.Messages.Events.RefreshPaymentDataCompletedEvent;
 
-namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers.EmployerFinance
 {
     public class RefreshPaymentDataCompletedEventHandler : IHandleMessages<RefreshPaymentDataCompletedEvent>
     {
