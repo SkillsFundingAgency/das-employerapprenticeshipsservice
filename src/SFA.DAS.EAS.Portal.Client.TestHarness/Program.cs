@@ -17,7 +17,6 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
             using (container = IoC.Initialize())
             {
                 var getAccount = container.GetInstance<GetAccountScenario>();
-                //Console.WriteLine(JsonConvert.SerializeObject(await getAccount.Run()));
                 
                 var accountTasks = Enumerable.Range(0, 9)
                     .AsParallel()
@@ -28,6 +27,8 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
                 var firstAccount = accounts.First();
 
                 // display account
+                //todo: need to serialize vacancies properties
+                //? => https://mariusschulz.com/blog/conditionally-serializing-fields-and-properties-with-jsonnet
                 Console.WriteLine(JsonConvert.SerializeObject(firstAccount));
                 
                 // assert all are identical
