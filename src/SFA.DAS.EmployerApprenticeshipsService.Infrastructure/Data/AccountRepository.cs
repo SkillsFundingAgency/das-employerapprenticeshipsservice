@@ -69,7 +69,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@source", source);
             parameters.Add("@publicSectorDataSource", publicSectorDataSource);
             parameters.Add("@sector", sector, DbType.String);
-            parameters.Add("@aorn", sector, DbType.String);
+            parameters.Add("@aorn", aorn, DbType.String);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateAccount]",

@@ -63,6 +63,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
             var account = _fixture
                 .Build<EmployerAccountInput>()
                 .With(input => input.UserId, () => currentUser.UserOutput.UserId)
+                .With(input => input.Aorn, _fixture.Create<string>().Substring(0, 25))
                 .Create();
 
             var accountSetup = new EmployerAccountSetup
