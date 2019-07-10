@@ -70,6 +70,9 @@
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.EmployerAccounts.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EmployerAccounts.Api.Types.1.6.1254\lib\netstandard2.0\SFA.DAS.EmployerAccounts.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.183\lib\netstandard2.0\SFA.DAS.HashingService.dll</HintPath>
     </Reference>

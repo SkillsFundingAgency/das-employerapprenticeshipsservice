@@ -4,11 +4,11 @@ using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
-using SFA.DAS.EAS.Domain.Models.Account;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
 {
     [TestFixture]
     public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
