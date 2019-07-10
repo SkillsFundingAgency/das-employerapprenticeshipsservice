@@ -12,8 +12,9 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 using System.Linq;
+ using SFA.DAS.EAS.Portal.Client.Types;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
@@ -54,7 +55,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId); //, hasPayeScheme);
+                //todo: we need to properly handle the case when there isn't an account document because no events for the account have been processed yet
+                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId, hashedAccountId, hasPayeScheme);
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
@@ -362,14 +364,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                //var numVacancies = model.AccountViewModel.Vacancies.Count();
-                var numVacancies = 0;
-                switch (numVacancies)
+                switch (model.AccountViewModel?.VacancyCardinality)
                 {
-                    case 0:
+                    case null:
+                        viewModel.ViewName = "VacancyServiceDown";
+                        break;
+                    case Cardinality.None:
                         viewModel.ViewName = "CreateVacancy";
                         break;
-                    case 1:
+                    case Cardinality.One:
                         viewModel.ViewName = "NotImplemented";
                         break;
                     default:
@@ -441,6 +444,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult FundingComplete(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyServiceDown(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
