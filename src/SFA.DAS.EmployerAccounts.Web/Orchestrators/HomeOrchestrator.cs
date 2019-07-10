@@ -16,7 +16,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         //Required for running tests
         public HomeOrchestrator()
         {
-
         }
 
         public HomeOrchestrator(IMediator mediator)
@@ -24,21 +23,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _mediator = mediator;
         }
 
-        public virtual async Task<ViewModels.SignInUserViewModel> GetUsers()
+        public virtual async Task<SignInUserViewModel> GetUsers()
         {
             var actual = await _mediator.SendAsync(new GetUsersQuery());
 
-            return new ViewModels.SignInUserViewModel
+            return new SignInUserViewModel
             {
                 AvailableUsers = actual.Users.Select(x =>
-                                                new UserViewModel
-                                                {
-                                                    Id = x.Id,
-                                                    UserRef = x.UserRef,
-                                                    Email = x.Email,
-                                                    FirstName = x.FirstName,
-                                                    LastName = x.LastName,
-                                                }).ToList()
+                    new UserViewModel
+                    {
+                        Id = x.Id,
+                        UserRef = x.UserRef,
+                        Email = x.Email,
+                        FirstName = x.FirstName,
+                        LastName = x.LastName,
+                    }).ToList()
             };
         }
 
