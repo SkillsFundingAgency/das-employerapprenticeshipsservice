@@ -17,6 +17,7 @@
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Apprenticeships.Api.Client" Version="0.11.98" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="2.1.716" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="2.1.716" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.205" />

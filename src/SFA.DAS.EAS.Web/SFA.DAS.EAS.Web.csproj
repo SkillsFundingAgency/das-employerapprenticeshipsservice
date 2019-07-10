@@ -254,6 +254,9 @@
       <HintPath>..\packages\SFA.DAS.Audit.Client.1.0.0.20553\lib\net45\SFA.DAS.Audit.Types.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Authentication, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Authentication.1.0.2\lib\netstandard2.0\SFA.DAS.Authentication.dll</HintPath>
     </Reference>
@@ -525,7 +528,6 @@
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
@@ -536,7 +538,6 @@
     <Compile Include="ViewModels\DismissTaskViewModel.cs" />
     <Compile Include="ViewModels\EnvironmentDetailsViewModel.cs" />
     <Compile Include="ViewModels\Interfaces\IPaginationViewModel.cs" />
-    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAgreementController.cs" />
@@ -993,7 +994,6 @@
     <Content Include="src\sass\_icons.scss" />
     <Content Include="src\govuk_elements\sass\elements\forms\_form-multiple-choice.scss" />
     <Content Include="src\sass\_tasks.scss" />
-    <Content Include="Views\Shared\GoogleAnalyticsInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
