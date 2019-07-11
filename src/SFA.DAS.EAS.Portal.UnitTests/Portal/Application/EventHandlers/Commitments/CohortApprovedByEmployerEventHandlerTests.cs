@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
 
     public class CohortApprovedByEmployerEventHandlerTestsFixture
     {
-        public EventHandlerTestsFixture<CohortApprovedByEmployer, CohortApprovedByEmployerEventHandler> EventHandlerTestsFixture { get; set; }
+        public AccountEventHandlerTestHelper<CohortApprovedByEmployer, CohortApprovedByEmployerEventHandler> Helper { get; set; }
 
         public CommitmentView Commitment { get; set; }
         public CommitmentView ExpectedCommitment { get; set; }
@@ -34,19 +34,19 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
 
         public CohortApprovedByEmployerEventHandlerTestsFixture()
         {
-            EventHandlerTestsFixture = new EventHandlerTestsFixture<CohortApprovedByEmployer, CohortApprovedByEmployerEventHandler>();
+            Helper = new AccountEventHandlerTestHelper<CohortApprovedByEmployer, CohortApprovedByEmployerEventHandler>();
         }
 
         public CohortApprovedByEmployerEventHandlerTestsFixture ArrangeAccountDocumentContainsCohort()
         {
-            var organisation = EventHandlerTestsFixture.SetUpAccountDocumentWithOrganisation(
-                EventHandlerTestsFixture.Message.AccountId, AccountLegalEntityId);
+            var organisation = Helper.SetUpAccountDocumentWithOrganisation(
+                Helper.Message.AccountId, AccountLegalEntityId);
 
-            organisation.Cohorts.RandomElement().Id = EventHandlerTestsFixture.Message.CommitmentId.ToString();
+            organisation.Cohorts.RandomElement().Id = Helper.Message.CommitmentId.ToString();
             
-            EventHandlerTestsFixture.AccountDocumentService.Setup(s => s.GetOrCreate(
-                EventHandlerTestsFixture.Message.AccountId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
+            Helper.AccountDocumentService.Setup(s => s.GetOrCreate(
+                Helper.Message.AccountId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Helper.AccountDocument);
             
             return this;
         }
@@ -55,12 +55,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
         {
             ExpectedCommitment = Commitment.Clone();
 
-            return EventHandlerTestsFixture.Handle();
+            return Helper.Handle();
         }
         
         public CohortApprovedByEmployerEventHandlerTestsFixture VerifyAccountDocumentSavedWithCohortApproved()
         {
-            EventHandlerTestsFixture.AccountDocumentService.Verify(
+            Helper.AccountDocumentService.Verify(
                 s => s.Save(It.Is<AccountDocument>(d => CohortIsSetToApproved(d)),It.IsAny<CancellationToken>()),
                 Times.Once);
             
@@ -70,7 +70,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
         private bool CohortIsSetToApproved(AccountDocument document)
         {
             return document.Account.Organisations.SelectMany(org => org.Cohorts)
-                .Single(co => co.Id == EventHandlerTestsFixture.Message.CommitmentId.ToString()).IsApproved;
+                .Single(co => co.Id == Helper.Message.CommitmentId.ToString()).IsApproved;
         }
     }
 }

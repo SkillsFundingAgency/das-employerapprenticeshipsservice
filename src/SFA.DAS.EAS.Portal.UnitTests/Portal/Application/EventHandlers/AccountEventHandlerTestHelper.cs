@@ -14,7 +14,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
 {
-    public class EventHandlerTestsFixture<TEvent, TEventHandler>
+    public class AccountEventHandlerTestHelper<TEvent, TEventHandler>
         where TEventHandler : IEventHandler<TEvent>
     {
         public TEvent Message { get; set; }
@@ -26,7 +26,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
         public Mock<ILogger<TEventHandler>> Logger { get; set; }
         public Fixture Fixture { get; set; }
         
-        public EventHandlerTestsFixture(bool constructHandler = true)
+        public AccountEventHandlerTestHelper(bool constructHandler = true)
         {
             Fixture = new Fixture();
 
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
                 Handler = ConstructHandler();
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeAccountDoesNotExist(long accountId)
+        public AccountEventHandlerTestHelper<TEvent, TEventHandler> ArrangeAccountDoesNotExist(long accountId)
         {
             AccountDocument = new AccountDocument(accountId);
             
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
             return this;
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeEmptyAccountDocument(long accountId)
+        public AccountEventHandlerTestHelper<TEvent, TEventHandler> ArrangeEmptyAccountDocument(long accountId)
         {
             AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {accountId} }}}}");
 

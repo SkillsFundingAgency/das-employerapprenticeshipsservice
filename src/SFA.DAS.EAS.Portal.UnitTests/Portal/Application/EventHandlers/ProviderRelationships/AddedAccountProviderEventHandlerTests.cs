@@ -72,7 +72,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
 
     public class AddedAccountProviderEventHandlerTestsFixture
     {
-        public EventHandlerTestsFixture<AddedAccountProviderEvent, AddedAccountProviderEventHandler> EventHandlerTestsFixture { get; set; }
+        public AccountEventHandlerTestHelper<AddedAccountProviderEvent, AddedAccountProviderEventHandler> Helper { get; set; }
 
         public Mock<IProviderApiClient> ProviderApiClient { get; set; }
         public ApiProvider Provider { get; set; }
@@ -82,35 +82,35 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
         
         public AddedAccountProviderEventHandlerTestsFixture()
         {
-            EventHandlerTestsFixture = new EventHandlerTestsFixture<AddedAccountProviderEvent, AddedAccountProviderEventHandler>(false);
+            Helper = new AccountEventHandlerTestHelper<AddedAccountProviderEvent, AddedAccountProviderEventHandler>(false);
             
-            Provider = EventHandlerTestsFixture.Fixture.Create<ApiProvider>();
+            Provider = Helper.Fixture.Create<ApiProvider>();
             Provider.Addresses.RandomElement().ContactType = "PRIMARY";
 
             ProviderApiClient = new Mock<IProviderApiClient>();
-            ProviderApiClient.Setup(c => c.GetAsync(EventHandlerTestsFixture.Message.ProviderUkprn))
+            ProviderApiClient.Setup(c => c.GetAsync(Helper.Message.ProviderUkprn))
                 .ReturnsAsync(Provider);
             
-            EventHandlerTestsFixture.Handler = new AddedAccountProviderEventHandler(
-                EventHandlerTestsFixture.AccountDocumentService.Object,
-                EventHandlerTestsFixture.Logger.Object,
+            Helper.Handler = new AddedAccountProviderEventHandler(
+                Helper.AccountDocumentService.Object,
+                Helper.Logger.Object,
                 ProviderApiClient.Object);
             
-            EventHandlerTestsFixture.Message = new AddedAccountProviderEvent(
-                1, AccountId, EventHandlerTestsFixture.Message.ProviderUkprn,
+            Helper.Message = new AddedAccountProviderEvent(
+                1, AccountId, Helper.Message.ProviderUkprn,
                 Guid.NewGuid(), DateTime.UtcNow);
         }
         
         public AddedAccountProviderEventHandlerTestsFixture ArrangeAccountDoesNotExist(long accountId)
         {
-            EventHandlerTestsFixture.ArrangeAccountDoesNotExist(accountId);
+            Helper.ArrangeAccountDoesNotExist(accountId);
 
             return this;
         }
         
         public AddedAccountProviderEventHandlerTestsFixture ArrangeEmptyAccountDocument(long accountId)
         {
-            EventHandlerTestsFixture.ArrangeEmptyAccountDocument(accountId);
+            Helper.ArrangeEmptyAccountDocument(accountId);
 
             return this;
         }
@@ -119,23 +119,23 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
         {
             //note customization will stay in fixture
             long uniqueUkprnAddition = 0;
-            EventHandlerTestsFixture.Fixture.Customize<PortalProvider>(
+            Helper.Fixture.Customize<PortalProvider>(
                 p => p.With(pr => pr.Ukprn,
-                    () => EventHandlerTestsFixture.Message.ProviderUkprn + ++uniqueUkprnAddition));
+                    () => Helper.Message.ProviderUkprn + ++uniqueUkprnAddition));
             
-            EventHandlerTestsFixture.AccountDocument = EventHandlerTestsFixture.Fixture.Create<AccountDocument>();
+            Helper.AccountDocument = Helper.Fixture.Create<AccountDocument>();
 
-            EventHandlerTestsFixture.AccountDocument.Account.Providers.RandomElement().Ukprn = 
-                EventHandlerTestsFixture.Message.ProviderUkprn;
+            Helper.AccountDocument.Account.Providers.RandomElement().Ukprn = 
+                Helper.Message.ProviderUkprn;
 
-            EventHandlerTestsFixture.AccountDocument.Account.Id = AccountId;
+            Helper.AccountDocument.Account.Id = AccountId;
             
-            EventHandlerTestsFixture.AccountDocument.Deleted = null;
-            EventHandlerTestsFixture.AccountDocument.Account.Deleted = null;
+            Helper.AccountDocument.Deleted = null;
+            Helper.AccountDocument.Account.Deleted = null;
             
-            EventHandlerTestsFixture.AccountDocumentService.Setup(
+            Helper.AccountDocumentService.Setup(
                 s => s.GetOrCreate(AccountId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(EventHandlerTestsFixture.AccountDocument);
+                .ReturnsAsync(Helper.AccountDocument);
             
             return this;
         }
@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
         
         public AddedAccountProviderEventHandlerTestsFixture ArrangeProviderApiThrowsException()
         {
-            ProviderApiClient.Setup(c => c.GetAsync(EventHandlerTestsFixture.Message.ProviderUkprn))
+            ProviderApiClient.Setup(c => c.GetAsync(Helper.Message.ProviderUkprn))
                 .ThrowsAsync(new EntityNotFoundException(ProviderApiExceptionMessage, null));
             
             return this;
@@ -171,7 +171,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
         {
             ExpectedProvider = Provider.Clone();
 
-            return EventHandlerTestsFixture.Handle();
+            return Helper.Handle();
         }
         
         public void VerifyAccountDocumentSavedWithProviderWithPrimaryAddress()
@@ -205,7 +205,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
         
         public void VerifyAccountDocumentSavedWithProvider(Action<PortalProvider> mutateExpectedProvider = null)
         {
-            EventHandlerTestsFixture.AccountDocumentService.Verify(
+            Helper.AccountDocumentService.Verify(
                 s => s.Save(It.Is<AccountDocument>(
                     d => AccountIsAsExpected(d, mutateExpectedProvider)),
                     It.IsAny<CancellationToken>()), Times.Once);
@@ -213,8 +213,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
 
         public bool AccountIsAsExpected(AccountDocument document, Action<PortalProvider> mutateExpectedProvider = null)
         {
-            var expectedAccount = EventHandlerTestsFixture.GetExpectedAccount(EventHandlerTestsFixture.OriginalMessage.AccountId);
-            var expectedProvider = GetExpectedProvider(expectedAccount, EventHandlerTestsFixture.OriginalMessage.ProviderUkprn);
+            var expectedAccount = Helper.GetExpectedAccount(Helper.OriginalMessage.AccountId);
+            var expectedProvider = GetExpectedProvider(expectedAccount, Helper.OriginalMessage.ProviderUkprn);
 
             expectedProvider.Name = ExpectedProvider.ProviderName;
             expectedProvider.Email = ExpectedProvider.Email;
@@ -222,13 +222,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Provider
 
             mutateExpectedProvider?.Invoke(expectedProvider);
 
-            return EventHandlerTestsFixture.AccountIsAsExpected(expectedAccount, document);
+            return Helper.AccountIsAsExpected(expectedAccount, document);
         }
         
         public Provider GetExpectedProvider(Account expectedAccount, long ukprn)
         {
-            if (EventHandlerTestsFixture.OriginalAccountDocument != null
-                && EventHandlerTestsFixture.OriginalAccountDocument.Account.Providers.Any())
+            if (Helper.OriginalAccountDocument != null
+                && Helper.OriginalAccountDocument.Account.Providers.Any())
             {
                 return expectedAccount.Providers.Single(o => o.Ukprn == ukprn);
             }
