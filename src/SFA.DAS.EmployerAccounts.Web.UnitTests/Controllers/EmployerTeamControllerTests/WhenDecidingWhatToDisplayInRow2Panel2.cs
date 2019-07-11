@@ -86,7 +86,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual("VacancyServiceDown", resultModel.ViewName);
         }
 
-    [Test]
+        [Test]
         public void AndAccountHasPayeSchemeAndHasNoVacancyThenCreateVacancyPanelIsSelected()
         {
             // Arrange
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual("CreateVacancy", resultModel.ViewName);
         }
 
-        [Test, Ignore("need new portal client")]
+        [Test]
         public void AndAccountHasPayeSchemeAndHasMoreThanOneVacancyThenMultipleVacanciesPanelIsSelected()
         {
             // Arrange
@@ -118,10 +118,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 AccountViewModel = new Account
                 {
-                    //Vacancies = new List<Vacancy>
-                    //{
-                    //    new Vacancy(), new Vacancy()
-                    //}
+                    VacancyCardinality = Cardinality.Many
                 }
             };
 
