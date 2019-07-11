@@ -407,10 +407,6 @@
       <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
       <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
-      <Project>{2035D46A-422F-438C-A460-39E60A9F6EAD}</Project>
-      <Name>SFA.DAS.EmployerAccounts.Messages</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
       <Project>{c15dec5c-666d-4cb2-968e-a273eb60d15e}</Project>
       <Name>SFA.DAS.EmployerFinance.Messages</Name>
