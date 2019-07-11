@@ -67,13 +67,36 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void AndAccountHasPayeSchemeAndHasNoVacancyThenCreateVacancyPanelIsSelected()
+        public void AndAccountHasPayeSchemeAndHasVacancyInfoIsUnavailableThenVacancyServiceDownPanelIsSelected()
         {
             // Arrange
             var model = new AccountDashboardViewModel
             {
                 PayeSchemeCount = 1,
                 AccountViewModel = new Account()
+            };
+
+            //Act
+            var result = _controller.Row2Panel2(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsAssignableFrom<PanelViewModel<AccountDashboardViewModel>>(result.Model);
+            var resultModel = result.Model as PanelViewModel<AccountDashboardViewModel>;
+            Assert.AreEqual("VacancyServiceDown", resultModel.ViewName);
+        }
+
+    [Test]
+        public void AndAccountHasPayeSchemeAndHasNoVacancyThenCreateVacancyPanelIsSelected()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1,
+                AccountViewModel = new Account
+                {
+                    VacancyCardinality = Cardinality.None
+                }
             };
 
             //Act
