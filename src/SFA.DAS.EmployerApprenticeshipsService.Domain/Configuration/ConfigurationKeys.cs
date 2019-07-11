@@ -12,5 +12,6 @@
         public const string CommitmentsApiClient = "SFA.DAS.CommitmentsAPI";
         public const string Features = "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
         public const string TokenServiceApi = "SFA.DAS.TokenServiceApiClient";
+        public const string AuditApi = "SFA.DAS.AuditApiClient";
     }
 }
