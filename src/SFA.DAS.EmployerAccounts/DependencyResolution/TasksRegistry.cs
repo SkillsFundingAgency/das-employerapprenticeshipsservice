@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public TasksRegistry()
         {
-            For<ITaskApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ITaskApiConfiguration>(ConfigurationKeys.TasksApi)).Singleton();
+            For<ITaskApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<TaskApiConfiguration>(ConfigurationKeys.TasksApi)).Singleton();
 
             For<ITaskService>().Use<TaskService>();
         }
