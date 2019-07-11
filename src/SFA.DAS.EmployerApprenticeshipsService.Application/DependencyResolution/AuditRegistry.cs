@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
                     ? new StubAuditApiClient() as IAuditApiClient
                     : new AuditApiClient(c.GetInstance<IAuditApiConfiguration>()) as IAuditApiClient);
 
-            For<IAuditApiConfiguration>().Use(c => c.GetInstance<AuditApiClientConfiguration>());
+            For<IAuditApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<AuditApiClientConfiguration>(ConfigurationKeys.AuditApi)).Singleton();
             For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
         }
     }
