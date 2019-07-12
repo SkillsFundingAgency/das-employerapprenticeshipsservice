@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Queries.GetLastLevyDeclaration;
-using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetHMRCLevyDeclaration
 {
