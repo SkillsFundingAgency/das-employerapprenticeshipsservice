@@ -373,7 +373,7 @@ using System.Linq;
                         viewModel.ViewName = "CreateVacancy";
                         break;
                     case Cardinality.One:
-                        viewModel.ViewName = "NotImplemented";
+                        viewModel.ViewName = "VacancyStatus";
                         break;
                     default:
                         viewModel.ViewName = "MultipleVacancies";
@@ -456,6 +456,12 @@ using System.Linq;
 
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyStatus(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
