@@ -193,6 +193,7 @@
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\ExampleScenario.sql" />
     <None Include="Scripts\Manual\GenerateTestData\ReadMe.md" />
+    <None Include="Scripts\Manual\AML-3730-levy-non-levy-flag-backfill-script.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
