@@ -11,6 +11,7 @@ using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EAS.Portal.Client.Application.Queries;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.Encoding;
 using SFA.DAS.Testing;
 using StructureMap;
 
@@ -130,6 +131,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
     {
         PortalClient PortalClient { get; set; }
         Mock<IContainer> MockContainer { get; set; } = new Mock<IContainer>();
+        private Mock<IEncodingService> MockEncodingService { get; set; } = new Mock<IEncodingService>();
         Mock<IGetAccountQuery> MockGetAccountQuery { get; set; } = new Mock<IGetAccountQuery>();
         Mock<IDasRecruitService> MockDasRecruitService { get; set; } = new Mock<IDasRecruitService>();
         AccountState AccountState { get; set; }
@@ -150,8 +152,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 .Returns(MockGetAccountQuery.Object);
             MockContainer.Setup(c => c.GetInstance<IDasRecruitService>())
                 .Returns(MockDasRecruitService.Object);
+
+            MockEncodingService.Setup(s => s.Decode(PublicHashedAccountId, EncodingType.PublicAccountId))
+                .Returns(AccountId);
             
-            PortalClient = new PortalClient(MockContainer.Object);
+            PortalClient = new PortalClient(MockContainer.Object, MockEncodingService.Object);
         }
 
         public PortalClientTestsFixture ArrangeAccountExists()
@@ -222,7 +227,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             OriginalVacancy = Vacancy.Clone();
 
             // act
-            return await PortalClient.GetAccount(AccountId, PublicHashedAccountId, AccountState);
+            return await PortalClient.GetAccount(PublicHashedAccountId, AccountState);
         }
 
         public void AssertNullIsReturned(Account account)
