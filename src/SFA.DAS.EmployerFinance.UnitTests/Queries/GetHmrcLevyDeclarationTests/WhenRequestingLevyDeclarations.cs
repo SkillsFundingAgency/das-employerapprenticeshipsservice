@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Queries.GetHMRCLevyDeclaration;
 using SFA.DAS.EmployerFinance.Queries.GetLastLevyDeclaration;
-using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.EmployerFinance.UnitTests.ObjectMothers;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetHmrcLevyDeclarationTests

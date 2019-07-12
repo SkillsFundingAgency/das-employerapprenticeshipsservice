@@ -13,20 +13,20 @@
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
 {
     using TechTalk.SpecFlow;
-
-
+    
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("TechTalk.SpecFlow", "2.4.0.0")]
     [System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [NUnit.Framework.TestFixtureAttribute()]
     [NUnit.Framework.DescriptionAttribute("Late Accounts Feature")]
     public partial class LateAccountsFeatureFeature
     {
-
+        
         private TechTalk.SpecFlow.ITestRunner testRunner;
-
+        
 #line 1 "Late-accounts.feature"
 #line hidden
-
+        
         [NUnit.Framework.OneTimeSetUpAttribute()]
         public virtual void FeatureSetup()
         {
@@ -34,41 +34,41 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
             TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "Late Accounts Feature", null, ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
-
+        
         [NUnit.Framework.OneTimeTearDownAttribute()]
         public virtual void FeatureTearDown()
         {
             testRunner.OnFeatureEnd();
             testRunner = null;
         }
-
+        
         [NUnit.Framework.SetUpAttribute()]
         public virtual void TestInitialize()
         {
         }
-
+        
         [NUnit.Framework.TearDownAttribute()]
         public virtual void ScenarioTearDown()
         {
             testRunner.OnScenarioEnd();
         }
-
+        
         public virtual void ScenarioInitialize(TechTalk.SpecFlow.ScenarioInfo scenarioInfo)
         {
             testRunner.OnScenarioInitialize(scenarioInfo);
             testRunner.ScenarioContext.ScenarioContainer.RegisterInstanceAs<NUnit.Framework.TestContext>(NUnit.Framework.TestContext.CurrentContext);
         }
-
+        
         public virtual void ScenarioStart()
         {
             testRunner.OnScenarioStart();
         }
-
+        
         public virtual void ScenarioCleanup()
         {
             testRunner.CollectScenarioErrors();
         }
-
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC sub" +
             "missions no older than 12 months old - excludes 1 HMRC submission")]
@@ -77,11 +77,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("1 - Account is opened on the 23 MAY 2017 and after only added valid PAYE HMRC sub" +
                     "missions no older than 12 months old - excludes 1 HMRC submission", null, ((string[])(null)));
 #line 3
-            this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 4
-            testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
-                               " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table6 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -182,20 +182,20 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "1",
                         "2018-05-19"});
 #line 5
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table6, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table6, "And ");
 #line 20
-            testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 21
-            testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
-                               "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 22
-            testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 23
-            testRunner.And("we should see a level 1 screen with a balance of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 1 screen with a balance of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
-
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("2 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
             "o older than 12 months old - excludes 2 HMRC submissions")]
@@ -204,11 +204,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("2 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
                     "o older than 12 months old - excludes 2 HMRC submissions", null, ((string[])(null)));
 #line 25
-            this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 26
-            testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
-                               " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table7 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -281,20 +281,20 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "1",
                         "2018-05-19"});
 #line 27
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table7, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table7, "And ");
 #line 38
-            testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 39
-            testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
-                               "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 40
-            testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 41
-            testRunner.And("we should see a level 1 screen with a balance of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 1 screen with a balance of 13200 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
-
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
             "o older than 12 months old - no HMRC submissions older than 12 months")]
@@ -303,11 +303,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("3 - Account is opened on the 22 MAY 2017 and after only added valid submissions n" +
                     "o older than 12 months old - no HMRC submissions older than 12 months", null, ((string[])(null)));
 #line 44
-            this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 45
-            testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
-                               " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table8 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -408,20 +408,20 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "1",
                         "2018-05-19"});
 #line 46
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table8, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table8, "And ");
 #line 61
-            testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 62
-            testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
-                               "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 63
-            testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 64
-            testRunner.And("we should see a level 1 screen with a balance of 14300 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 1 screen with a balance of 14300 on the 5/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
-
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("4 - An End-of-year-adjustment is for a period older than 12 months and one younge" +
             "r than 12 months is in submissions of a newly added PAYE scheme - excludes 1 HMR" +
@@ -432,11 +432,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                     "r than 12 months is in submissions of a newly added PAYE scheme - excludes 1 HMR" +
                     "C submission", null, ((string[])(null)));
 #line 66
-            this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 67
-            testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
-                               " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table9 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -663,20 +663,20 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "2019-05-19",
                         "1"});
 #line 68
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table9, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table9, "And ");
 #line 97
-            testRunner.When("we refresh levy data for paye scheme on the 5/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 5/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 98
-            testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
-                               "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 99
-            testRunner.Then("we should see a level 1 screen with a levy declared of 550 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a levy declared of 550 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 100
-            testRunner.And("we should see a level 1 screen with a balance of 12650 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 1 screen with a balance of 12650 on the 05/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
-
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("5 - A PAYE being used to create a new account has been in a different account wit" +
             "hin the 12 month limit - excludes 4 HMRC submissions from a previous account")]
@@ -685,11 +685,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("5 - A PAYE being used to create a new account has been in a different account wit" +
                     "hin the 12 month limit - excludes 4 HMRC submissions from a previous account", null, ((string[])(null)));
 #line 103
-            this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 104
-            testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
-                               " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table10 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -732,11 +732,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "2018-03-19",
                         "0"});
 #line 105
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table10, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table10, "And ");
 #line 111
-            testRunner.And("we refresh levy data for paye scheme on the 03/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we refresh levy data for paye scheme on the 03/2018", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 112
-            testRunner.And("Another account is opened and associated with the paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("Another account is opened and associated with the paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table11 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -843,20 +843,20 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "2019-02-19",
                         "0"});
 #line 113
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table11, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table11, "And ");
 #line 127
-            testRunner.When("we refresh levy data for paye scheme on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 128
-            testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
-                               "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 129
-            testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 130
-            testRunner.And("we should see a level 1 screen with a balance of 12650 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 1 screen with a balance of 12650 on the 02/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
-
+        
         [NUnit.Framework.TestAttribute()]
         [NUnit.Framework.DescriptionAttribute("6 - A PAYE being used to create a new account has been in a different account lon" +
             "ger ago than the 12 month limit and the new account includes end of year adjustm" +
@@ -868,11 +868,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                     "ents within that time limit and ignores one outside the limit -", "\t\texcludes 13 HMRC submissions including an end of year adjustment relating to a " +
                     "period older than 12 months. ", ((string[])(null)));
 #line 132
-            this.ScenarioInitialize(scenarioInfo);
+this.ScenarioInitialize(scenarioInfo);
             this.ScenarioStart();
 #line 134
-            testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
-                               " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
+ testRunner.Given("An employer is adding a PAYE which has submissions older than the 12 month expiry" +
+                    " rule limit", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
             TechTalk.SpecFlow.Table table12 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -931,11 +931,11 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "2017-09-19",
                         "0"});
 #line 135
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table12, "And ");
+ testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table12, "And ");
 #line 143
-            testRunner.And("we refresh levy data for paye scheme on the 09/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we refresh levy data for paye scheme on the 09/2017", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 144
-            testRunner.And("Another account is opened and associated with the paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("Another account is opened and associated with the paye scheme", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             TechTalk.SpecFlow.Table table13 = new TechTalk.SpecFlow.Table(new string[] {
                         "Id",
@@ -1106,16 +1106,16 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Features
                         "2019-03-19",
                         "1"});
 #line 145
-            testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table13, "And ");
+    testRunner.And("Hmrc return the following submissions for paye scheme", ((string)(null)), table13, "And ");
 #line 167
-            testRunner.When("we refresh levy data for paye scheme on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
+ testRunner.When("we refresh levy data for paye scheme on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line 168
-            testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
-                            "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+    testRunner.And("all the transaction lines in this scenario have had their transaction date update" +
+                    "d to their created date", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line 169
-            testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("we should see a level 1 screen with a levy declared of 1100 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line 170
-            testRunner.And("we should see a level 1 screen with a balance of 13750 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
+ testRunner.And("we should see a level 1 screen with a balance of 13750 on the 03/2019", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");
 #line hidden
             this.ScenarioCleanup();
         }
