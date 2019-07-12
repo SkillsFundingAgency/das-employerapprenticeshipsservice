@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios
             const long accountId = 1L;
             const string publicHashedAccountId = "VJ467D";
 
-            return await _portalClient.GetAccount(accountId,publicHashedAccountId, true);
+            return await _portalClient.GetAccount(accountId, publicHashedAccountId, AccountState.HasPayeScheme);
         }
     }
 }

@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         Mock<IContainer> MockContainer { get; set; } = new Mock<IContainer>();
         Mock<IGetAccountQuery> MockGetAccountQuery { get; set; } = new Mock<IGetAccountQuery>();
         Mock<IDasRecruitService> MockDasRecruitService { get; set; } = new Mock<IDasRecruitService>();
-        bool HasPayeScheme { get; set; } = true;
+        AccountState AccountState { get; set; }
         Account Account { get; set; }
         Vacancy Vacancy { get; set; }
         Vacancy OriginalVacancy { get; set; }
@@ -172,14 +172,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
         public PortalClientTestsFixture ArrangeHasPayeScheme()
         {
-            HasPayeScheme = true;
+            AccountState |= AccountState.HasPayeScheme;
             
             return this;
         }
         
         public PortalClientTestsFixture ArrangeHasNoPayeScheme()
         {
-            HasPayeScheme = false;
+            AccountState &= ~AccountState.HasPayeScheme;
             
             return this;
         }
@@ -222,7 +222,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             OriginalVacancy = Vacancy.Clone();
 
             // act
-            return await PortalClient.GetAccount(AccountId, PublicHashedAccountId, HasPayeScheme);
+            return await PortalClient.GetAccount(AccountId, PublicHashedAccountId, AccountState);
         }
 
         public void AssertNullIsReturned(Account account)

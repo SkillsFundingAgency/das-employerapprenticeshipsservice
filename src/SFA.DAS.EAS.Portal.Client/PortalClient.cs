@@ -21,8 +21,10 @@ namespace SFA.DAS.EAS.Portal.Client
         
         //todo: might be better to just accept publicHashedAccountId, and decode it here
         public async Task<Account> GetAccount(long accountId, string publicHashedAccountId,
-            bool hasPayeScheme, CancellationToken cancellationToken = default)
+            AccountState accountState, CancellationToken cancellationToken = default)
         {
+            var hasPayeScheme = (accountState & AccountState.HasPayeScheme) == AccountState.HasPayeScheme;
+
             // we potentially map 1 more vacancy than necessary, but it keeps the code clean
             var vacanciesTask = hasPayeScheme ? 
                 _dasRecruitService.GetVacancies(publicHashedAccountId, 2, cancellationToken) : null;
