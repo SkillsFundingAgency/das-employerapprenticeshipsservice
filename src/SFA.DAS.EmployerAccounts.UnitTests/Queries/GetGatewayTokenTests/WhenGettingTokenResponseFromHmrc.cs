@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetGatewayTokenTests
