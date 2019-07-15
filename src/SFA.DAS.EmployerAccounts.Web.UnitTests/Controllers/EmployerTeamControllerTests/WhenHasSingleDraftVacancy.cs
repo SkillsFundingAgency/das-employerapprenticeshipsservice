@@ -50,11 +50,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenTheVacancyStatusViewIsReturned()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.AgreementsToSign = false;
+            var model = new AccountDashboardViewModel
+            {
+                AccountViewModel = new Model.Account()
+            };
 
-            model.AccountViewModel = new Model.Account();
             model.AccountViewModel.Vacancies.Add(new Model.Vacancy { Status = Model.VacancyStatus.Draft });
 
             //Act
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("VacancyStatus", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("VacancyStatus", (result.Model as PanelViewModel<AccountDashboardViewModel>).ViewName);
         }
     }
 }
