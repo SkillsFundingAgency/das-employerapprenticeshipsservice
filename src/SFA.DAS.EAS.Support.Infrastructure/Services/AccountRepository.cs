@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Core.Services;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
