@@ -159,8 +159,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\WhenIGetAnEmploymentStatusAgreementDescription.cs" />
-    <Compile Include="Models\AccountTests.cs" />
-    <Compile Include="Models\TransferConnectionInvitationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

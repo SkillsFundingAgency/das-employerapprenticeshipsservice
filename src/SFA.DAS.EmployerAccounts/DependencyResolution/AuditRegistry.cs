@@ -1,5 +1,5 @@
 ﻿using SFA.DAS.Audit.Client;
-using SFA.DAS.Configuration;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using StructureMap;
 
@@ -9,18 +9,15 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public AuditRegistry()
         {
-            For<AuditApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<AuditApiClientConfiguration>("SFA.DAS.AuditApiClient")).Singleton();
 
-            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
-            {
-                For<IAuditApiClient>().Use<StubAuditApiClient>();
-            }
-            else
-            {
-                For<IAuditApiClient>().Use<AuditApiClient>();
-            }
 
-            For<IAuditApiConfiguration>().Use(c => c.GetInstance<AuditApiClientConfiguration>());
+            For<IAuditApiClient>().Use(c =>
+                c.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL)
+                    ? new StubAuditApiClient() as IAuditApiClient
+                    : new AuditApiClient(c.GetInstance<IAuditApiConfiguration>()) as IAuditApiClient);
+
+            For<IAuditApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<AuditApiClientConfiguration>(ConfigurationKeys.AuditApi)).Singleton();
+
             For<IAuditMessageFactory>().Use<AuditMessageFactory>().Singleton();
         }
     }
