@@ -43,8 +43,7 @@ namespace SFA.DAS.EAS.Portal.Client
             if (vacancies == null)
                 return account;
             
-            var vacanciesCount = vacancies.Count();
-            switch (vacanciesCount)
+            switch (vacancies.Count())
             {
                 case 0:
                     account.VacancyCardinality = Cardinality.None;
