@@ -1,23 +1,15 @@
-﻿using SFA.DAS.EAS.Application.Queries.GetTransferTransactionDetails;
-using SFA.DAS.EAS.Web.Extensions;
+﻿using SFA.DAS.EAS.Web.Extensions;
 using System;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.Validation.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAccountTransactionsController: BaseController
+    public class EmployerAccountTransactionsController: Controller
     {
-        public EmployerAccountTransactionsController(IAuthenticationService owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-        }
-
         [Route("finance")]
         [Route("balance")]
         public ActionResult Index(string hashedAccountId)
@@ -42,7 +34,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         [Route("finance/transfer/details")]
         [Route("balance/transfer/details")]
-        public ActionResult TransferDetail(GetTransferTransactionDetailsQuery query)
+        public ActionResult TransferDetail()
         {
             return Redirect(Url.EmployerFinanceAction($"finance/transfer/details{Request?.Url?.Query}"));
         }

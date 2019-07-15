@@ -5,7 +5,7 @@ using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
