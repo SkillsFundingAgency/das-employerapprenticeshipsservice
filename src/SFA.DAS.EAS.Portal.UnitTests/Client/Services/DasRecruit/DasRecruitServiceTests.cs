@@ -82,8 +82,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
         
         public async Task<IEnumerable<Vacancy>> GetVacancies()
         {
-            const string publicHashedAccountId = "HASHAI";
-            return await DasRecruitService.GetVacancies(publicHashedAccountId);
+            const string hashedAccountId = "HASHAI";
+            return await DasRecruitService.GetVacancies(hashedAccountId);
         }
 
         public void AssertVacancies(IEnumerable<Vacancy> vacancies)

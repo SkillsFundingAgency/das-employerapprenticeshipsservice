@@ -140,7 +140,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         Vacancy OriginalVacancy { get; set; }
         IEnumerable<Vacancy> Vacancies { get; set; }
         const long AccountId = 999L;
-        const string PublicHashedAccountId = "HASH12";
+        const string HashedAccountId = "HASH12";
 
         public PortalClientTestsFixture()
         {
@@ -153,7 +153,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             MockContainer.Setup(c => c.GetInstance<IDasRecruitService>())
                 .Returns(MockDasRecruitService.Object);
 
-            MockEncodingService.Setup(s => s.Decode(PublicHashedAccountId, EncodingType.PublicAccountId))
+            MockEncodingService.Setup(s => s.Decode(HashedAccountId, EncodingType.AccountId))
                 .Returns(AccountId);
             
             PortalClient = new PortalClient(MockContainer.Object, MockEncodingService.Object);
@@ -221,13 +221,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         public async Task<Account> GetAccount()
         {
             // arrange
-            MockDasRecruitService.Setup(s => s.GetVacancies(PublicHashedAccountId,2, It.IsAny<CancellationToken>()))
+            MockDasRecruitService.Setup(s => s.GetVacancies(HashedAccountId,2, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Vacancies);
 
             OriginalVacancy = Vacancy.Clone();
 
             // act
-            return await PortalClient.GetAccount(PublicHashedAccountId, AccountState);
+            return await PortalClient.GetAccount(HashedAccountId, AccountState);
         }
 
         public void AssertNullIsReturned(Account account)

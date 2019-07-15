@@ -22,17 +22,17 @@ namespace SFA.DAS.EAS.Portal.Client
             _dasRecruitService = container.GetInstance<IDasRecruitService>();
         }
         
-        public async Task<Account> GetAccount(string publicHashedAccountId,
+        public async Task<Account> GetAccount(string hashedAccountId,
             AccountState accountState, CancellationToken cancellationToken = default)
         {
             var hasPayeScheme = (accountState & AccountState.HasPayeScheme) == AccountState.HasPayeScheme;
 
             // we potentially map 1 more vacancy than necessary, but it keeps the code clean
             var vacanciesTask = hasPayeScheme ? 
-                _dasRecruitService.GetVacancies(publicHashedAccountId, 2, cancellationToken) : null;
+                _dasRecruitService.GetVacancies(hashedAccountId, 2, cancellationToken) : null;
 
             // might have been better to key doc on the public hashed account id
-            var accountId = _encodingService.Decode(publicHashedAccountId, EncodingType.PublicAccountId);
+            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
             var account = await _getAccountQuery.Get(accountId, cancellationToken);
 
             // at a later date, we might want to create an empty account doc and add the vacancy details to it, but for now, let's keep it simple
