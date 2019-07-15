@@ -28,8 +28,6 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             public string ClientToken { get; set; }
         }
         
-        //todo: as we're not in the client, we could/should use RestHttpClient here instead
-        // and there is no direct nuget reference to the SFA.DAS.Http package in this project
         private static HttpClient GetHttpClient(IServiceProvider provider)
         {
             var config = provider.GetService<CommitmentsApiClientConfiguration>();
