@@ -6,11 +6,11 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
-using SFA.DAS.Hashing;
 using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
@@ -59,6 +59,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.SendTransferConnectionInvit
             _db.Setup(d => d.Accounts).Returns(_accountsDbSet);
             _db.Setup(d => d.TransferConnectionInvitations).Returns(_transferConnectionInvitationsDbSet);
             _publicHashingService.Setup(h => h.DecodeValue(_receiverAccount.PublicHashedId)).Returns(_receiverAccount.Id);
+
+            var outParam = _receiverAccount.Id;
+
+            _publicHashingService.Setup(
+                    h => h.TryDecodeValue(
+                        _receiverAccount.PublicHashedId,
+                        out outParam))
+                .Returns(true);
 
             _handler = new SendTransferConnectionInvitationQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _publicHashingService.Object);
 

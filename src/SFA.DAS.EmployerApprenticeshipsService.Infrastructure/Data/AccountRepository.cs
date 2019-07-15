@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Hashing;
+using SFA.DAS.EAS.Infrastructure.MarkerInterfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -67,9 +67,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@employerRefName", employerRefName, DbType.String);
             parameters.Add("@status", companyStatus);
             parameters.Add("@source", source);
-            parameters.Add("@publicSectorDataSource", publicSectorDataSource);
+            parameters.Add("@publicSectorDataSource", publicSectorDataSource); 
             parameters.Add("@sector", sector, DbType.String);
-            parameters.Add("@aorn", sector, DbType.String);
+            parameters.Add("@aorn", aorn, DbType.String);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateAccount]",

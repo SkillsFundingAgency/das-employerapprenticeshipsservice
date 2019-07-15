@@ -14,7 +14,10 @@
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
+    <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+    <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.32" />
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.890" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
@@ -27,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
   </ItemGroup>

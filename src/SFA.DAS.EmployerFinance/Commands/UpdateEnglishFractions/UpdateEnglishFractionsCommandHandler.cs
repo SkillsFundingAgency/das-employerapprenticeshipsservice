@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Levy;
-using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions

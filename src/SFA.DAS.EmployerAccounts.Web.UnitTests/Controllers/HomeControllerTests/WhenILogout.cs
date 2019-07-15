@@ -11,7 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
     public class WhenILogout
     {
         private Mock<IAuthenticationService> _owinWrapper;
-        private HomeController _homeController;
         private Mock<EmployerAccountsConfiguration> _configuration;      
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -24,8 +23,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
-            var _homeController = new HomeController(
-                _owinWrapper.Object, null, _configuration.Object, _userViewTestingService.Object, 
+            var homeController = new HomeController(
+                _owinWrapper.Object, 
+                null,               
+                _configuration.Object, 
+                _userViewTestingService.Object, 
                 _flashMessage.Object);
         }
     }
