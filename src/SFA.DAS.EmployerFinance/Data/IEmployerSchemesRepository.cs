@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerFinance.Data
     public interface IEmployerSchemesRepository
     {
         Task<PayeSchemes> GetSchemesByEmployerId(long employerId);
+        Task<PayeSchemes> GetGovernmentGatewayOnlySchemesByEmployerId(long employerId);
     }
 }
