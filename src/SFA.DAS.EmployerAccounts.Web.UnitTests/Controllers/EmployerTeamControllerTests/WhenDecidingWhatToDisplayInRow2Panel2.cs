@@ -9,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
@@ -24,7 +23,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
         private Mock<IPortalClient> _mockPortalClient;
-        private Mock<IHashingService> _mockHashingService;
 
         [SetUp]
         public void Arrange()
@@ -35,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             _mockPortalClient = new Mock<IPortalClient>();
-            _mockHashingService = new Mock<IHashingService>();
 
             _controller = new EmployerTeamController(
                 _mockAuthenticationService.Object,
@@ -43,8 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 _mockMultiVariantTestingService.Object,
                 _mockCookieStorageService.Object,
                 _mockEmployerTeamOrchestrator.Object,
-                _mockPortalClient.Object,
-                _mockHashingService.Object);
+                _mockPortalClient.Object);
         }
 
         [Test]

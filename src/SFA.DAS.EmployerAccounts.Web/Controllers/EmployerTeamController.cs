@@ -9,10 +9,9 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 using System.Linq;
- using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EAS.Portal.Client.Types;
 
  namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -22,7 +21,6 @@ using System.Linq;
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
-        private readonly IHashingService _hashingService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -37,13 +35,11 @@ using System.Linq;
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
-            IHashingService hashingService)
+            IPortalClient portalClient)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
-            _hashingService = hashingService;
         }
 
         [HttpGet]
@@ -54,9 +50,8 @@ using System.Linq;
             var hasPayeScheme = HasPayeScheme(response.Data);
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
-                var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 //todo: we need to properly handle the case when there isn't an account document because no events for the account have been processed yet
-                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId, hashedAccountId, hasPayeScheme);
+                response.Data.AccountViewModel = await _portalClient.GetAccount(hashedAccountId, hasPayeScheme?AccountState.HasPayeScheme:AccountState.None);
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
