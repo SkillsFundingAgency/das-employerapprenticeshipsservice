@@ -19,5 +19,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
         public string OrganisationStatus { get; set; }
         public string EmployerRefName { get; set; }
         public string Sector { get; set; }
+        public string Aorn { get; set; }
     }
 }

@@ -76,7 +76,8 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
                 input.EmployerRefName,
                 input.Source,
                 input.PublicSectorDataSource,
-                input.Sector);
+                input.Sector,
+                input.Aorn);
 
             var output = new EmployerAccountOutput
             {

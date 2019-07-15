@@ -10,6 +10,7 @@ using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models.ExpiredFunds;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
@@ -28,6 +29,27 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             return RunAsync(f => f.Handle(),
                 f => f.MockExpiredFundsRepository.Verify(x =>
                     x.Create(f.ExpectedAccountId, It.Is<IEnumerable<ExpiredFund>>(ex => f.AreExpiredFundsEqual(ex, f.ExpiredFunds)), f.Now), Times.Once));
+        }
+
+        [Test]
+        public Task Handle_WhenHandlingExpireAccountFundsCommandAndAccountFundsAreExpired_ThenShouldPublishAccountFundsExpiredEvent()
+        {
+            return RunAsync(f => f.Handle(), f => f.VerifyAccountFundsExpiredEventPublished());
+        }
+
+        [Test]
+        public Task Handle_WhenHandlingExpireAccountFundsCommandAndNoAccountFundsAreExpired_ThenShouldNotPublishAccountFundsExpiredEvent()
+        {
+            return RunAsync(f => f.ArrangeNoExpiringFunds(), f => f.Handle(),
+                f => f.VerifyAccountFundsExpiredEventNotPublished());
+        }
+
+        [Test]
+        //todo: better names
+        public Task Handle_WhenHandlingExpireAccountFundsCommandAndNoAccountExpiredFundsAreReturned_ThenShouldNotPublishAccountFundsExpiredEvent()
+        {
+            return RunAsync(f => f.ArrangeNoExpiringFundsReturned(), f => f.Handle(),
+                f => f.VerifyAccountFundsExpiredEventNotPublished());
         }
     }
 
@@ -60,7 +82,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             Now = DateTime.UtcNow;
             NextMonth = Now.AddMonths(1);
             MessageHandlerContext = new Mock<IMessageHandlerContext>();
-            ExpectedAccountId = 112;
+            ExpectedAccountId = 112L;
             Command = new ExpireAccountFundsCommand{ AccountId = ExpectedAccountId };
             FundsIn = new List<LevyFundsIn>
             {
@@ -113,9 +135,44 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             Handler = new ExpireAccountFundsCommandHandler(MockCurrentDateTime.Object, MockLevyFundsInRepository.Object, MockPaymentFundsOutRepository.Object, MockExpiredFunds.Object, MockExpiredFundsRepository.Object, MockLogger.Object, EmployerFinanceConfiguration);
         }
 
+        public void ArrangeNoExpiringFunds()
+        {
+            MockExpiredFunds.Setup(x => x.GetExpiringFunds(
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fi => AreFundsInEqual(FundsIn, fi)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fo => AreFundsOutEqual(FundsOut, fo)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(ex => AreExpiredFundsEqual(ExistingExpiredFunds, ex)),
+                FundsExpiryPeriod)).Returns(new Dictionary<CalendarPeriod, decimal>
+            {
+                { new CalendarPeriod(2018, 03), 0m },
+                { new CalendarPeriod(2018, 04), 0m }
+            });
+        }
+
+        public void ArrangeNoExpiringFundsReturned()
+        {
+            MockExpiredFunds.Setup(x => x.GetExpiringFunds(
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fi => AreFundsInEqual(FundsIn, fi)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(fo => AreFundsOutEqual(FundsOut, fo)),
+                It.Is<Dictionary<CalendarPeriod, decimal>>(ex => AreExpiredFundsEqual(ExistingExpiredFunds, ex)),
+                FundsExpiryPeriod)).Returns(new Dictionary<CalendarPeriod, decimal>());
+        }
+
         public Task Handle()
         {
             return Handler.Handle(Command, MessageHandlerContext.Object);
+        }
+
+        public void VerifyAccountFundsExpiredEventPublished()
+        {
+            MessageHandlerContext.Verify(c => 
+                c.Publish(It.Is<AccountFundsExpiredEvent>(e => e.AccountId == ExpectedAccountId), It.IsAny<PublishOptions>()),
+                Times.Once);
+        }
+
+        public void VerifyAccountFundsExpiredEventNotPublished()
+        {
+            MessageHandlerContext.Verify(c =>  c.Publish(It.IsAny<AccountFundsExpiredEvent>(), It.IsAny<PublishOptions>()),
+                Times.Never);
         }
 
         public bool AreFundsInEqual(IEnumerable<LevyFundsIn> fundsInList, IDictionary<CalendarPeriod, decimal> expiredFundsDictionary)
