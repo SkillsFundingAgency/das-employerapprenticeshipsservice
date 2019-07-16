@@ -10,10 +10,10 @@ namespace SFA.DAS.EAS.Portal.Client
         /// Get the account details required to render the homepage.
         /// </summary>
         /// <param name="hashedAccountId">The (non-public) hashed account id.</param>
-        /// <param name="accountState">The current state of the account. Set all flags that apply.</param>
+        /// <param name="maxNumberOfVacancies">The maximum number of vacancies to return.</param>
         /// <param name="cancellationToken">An optional cancellation token.</param>
         /// <returns></returns>
-        Task<Account> GetAccount(string hashedAccountId, AccountState accountState,
+        Task<Account> GetAccount(string hashedAccountId, int maxNumberOfVacancies,
             CancellationToken cancellationToken = default);
     }
 }

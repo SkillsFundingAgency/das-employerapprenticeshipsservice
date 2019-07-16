@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,41 +23,26 @@ namespace SFA.DAS.EAS.Portal.Client
             _dasRecruitService = container.GetInstance<IDasRecruitService>();
         }
         
-        public async Task<Account> GetAccount(string hashedAccountId,
-            AccountState accountState, CancellationToken cancellationToken = default)
+        public async Task<Account> GetAccount(string hashedAccountId, int maxNumberOfVacancies,
+            CancellationToken cancellationToken = default)
         {
-            var hasPayeScheme = (accountState & AccountState.HasPayeScheme) == AccountState.HasPayeScheme;
+            if (string.IsNullOrEmpty(hashedAccountId))
+                throw new ArgumentException($"Missing {nameof(hashedAccountId)}");
 
-            // we potentially map 1 more vacancy than necessary, but it keeps the code clean
-            var vacanciesTask = hasPayeScheme ? 
-                _dasRecruitService.GetVacancies(hashedAccountId, 2, cancellationToken) : null;
+            if (maxNumberOfVacancies < 0)
+                throw new ArgumentOutOfRangeException(nameof(maxNumberOfVacancies));
+
+            var vacanciesTask = maxNumberOfVacancies > 0 ?
+                _dasRecruitService.GetVacancies(hashedAccountId, maxNumberOfVacancies, cancellationToken) : null;
 
             // might have been better to key doc on the public hashed account id
             var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
             var account = await _accountsReadOnlyRepository.Get(accountId, cancellationToken);
 
             // at a later date, we might want to create an empty account doc and add the vacancy details to it, but for now, let's keep it simple
-            if (!hasPayeScheme || account == null)
-                return account;
+            if (vacanciesTask != null && account != null)
+                account.Vacancies = (await vacanciesTask).ToList();
             
-            var vacancies = await vacanciesTask;
-            if (vacancies == null)
-                return account;
-            
-            switch (vacancies.Count())
-            {
-                case 0:
-                    account.VacancyCardinality = Cardinality.None;
-                    break;
-                case 1:
-                    account.VacancyCardinality = Cardinality.One;
-                    account.SingleVacancy = vacancies.Single();
-                    break;
-                default:
-                    account.VacancyCardinality = Cardinality.Many;
-                    break;
-            }
-
             return account;
         }
     }

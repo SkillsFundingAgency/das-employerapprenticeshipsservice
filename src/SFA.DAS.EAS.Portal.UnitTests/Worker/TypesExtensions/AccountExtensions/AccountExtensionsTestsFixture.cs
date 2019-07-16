@@ -38,8 +38,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
 
             Fixture = new Fixture();
             Fixture.Customize<Account>(a => a
-                .Without(ac => ac.VacancyCardinality)
-                .Without(ac => ac.SingleVacancy));
+                .Without(ac => ac.Vacancies));
             Account = Fixture.Create<Account>();
             
             Account.Deleted = null;

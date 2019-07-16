@@ -35,8 +35,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
         {
             Fixture = new Fixture();
             Fixture.Customize<Account>(a => a
-                .Without(ac => ac.VacancyCardinality)
-                .Without(ac => ac.SingleVacancy));
+                .Without(ac => ac.Vacancies));
 
             Message = Fixture.Create<TEvent>();
 
