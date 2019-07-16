@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
 
             Fixture = new Fixture();
             Fixture.Customize<Account>(a => a
+                .Without(ac => ac.VacanciesRetrieved)
                 .Without(ac => ac.Vacancies));
             Account = Fixture.Create<Account>();
             

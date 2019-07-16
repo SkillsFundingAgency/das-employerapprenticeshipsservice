@@ -20,6 +20,8 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         [JsonProperty("providers")]
         public ICollection<Provider> Providers { get; set; }
         [JsonIgnore]
+        public bool VacanciesRetrieved { get; set; }
+        [JsonIgnore]
         public ICollection<Vacancy> Vacancies { get; set; }
         [JsonProperty("deleted")]
         public DateTime? Deleted { get; set; }

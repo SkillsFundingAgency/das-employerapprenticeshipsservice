@@ -41,8 +41,15 @@ namespace SFA.DAS.EAS.Portal.Client
 
             // at a later date, we might want to create an empty account doc and add the vacancy details to it, but for now, let's keep it simple
             if (vacanciesTask != null && account != null)
-                account.Vacancies = (await vacanciesTask).ToList();
-            
+            {
+                var vacancies = await vacanciesTask;
+                if (vacancies != null)
+                {
+                    account.VacanciesRetrieved = true;
+                    account.Vacancies = (await vacanciesTask).ToList();
+                }
+            }
+
             return account;
         }
     }
