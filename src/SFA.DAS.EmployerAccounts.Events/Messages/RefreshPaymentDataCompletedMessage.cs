@@ -5,7 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
     [MessageGroup("paymentdataimport_completed")]
-    [Obsolete("Please use RefreshPaymentDataCompletedEvent from EmployerFinance")]
     public class RefreshPaymentDataCompletedMessage : AccountMessageBase
     {
         public string PayrollPeriod { get; set; }

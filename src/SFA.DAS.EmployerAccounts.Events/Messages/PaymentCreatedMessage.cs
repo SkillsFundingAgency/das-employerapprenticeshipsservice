@@ -5,7 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
     [MessageGroup("payment_created")]
-    [Obsolete("Please use CreatedPaymentEvent from EmployerFinance")]
     public class PaymentCreatedMessage : AccountMessageBase
     {
         public decimal Amount { get; protected set; }

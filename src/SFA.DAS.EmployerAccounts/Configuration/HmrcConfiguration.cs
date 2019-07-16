@@ -1,8 +1,6 @@
-﻿using SFA.DAS.EAS.Infrastructure.Interfaces.Configuration;
-
-namespace SFA.DAS.EmployerAccounts.Configuration
+﻿namespace SFA.DAS.EmployerAccounts.Configuration
 {
-    public class HmrcConfiguration : IHmrcConfiguration
+    public class HmrcConfiguration
     {
         public string BaseUrl { get; set; }
         public string ClientId { get; set; }

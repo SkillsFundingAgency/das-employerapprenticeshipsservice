@@ -1,12 +1,22 @@
 ﻿using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAccountPayeController : Controller
+    public class EmployerAccountPayeController : BaseController
     {
+        public EmployerAccountPayeController(
+            IAuthenticationService owinWrapper, 
+            IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+        }
 
         [HttpGet]
         [Route("schemes")]

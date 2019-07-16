@@ -5,6 +5,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
 {
     public interface IMultiVariantTestingService
     {
+        MultiVariantViewLookup GetMultiVariantViews();
         string GetRandomViewNameToShow(List<ViewAccess> views);
     }
 }
