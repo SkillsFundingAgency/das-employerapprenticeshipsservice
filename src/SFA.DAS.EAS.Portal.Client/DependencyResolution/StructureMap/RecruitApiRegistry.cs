@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap
         public RecruitApiRegistry()
         {
             For<IRecruitApiHttpClientFactory>().Use<RecruitApiHttpClientFactory>();
-            For<IDasRecruitService>().Use<DasRecruitService>();
+            For<IDasRecruitService>().Use<DasRecruitService>().Singleton();
         }
     }
 }

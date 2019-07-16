@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness
             {
                 var getAccount = container.GetInstance<GetAccountScenario>();
                 
-                var accountTasks = Enumerable.Range(0, 9)
+                var accountTasks = Enumerable.Range(0, 20)
                     .AsParallel()
                     .Select(n => getAccount.Run());
 

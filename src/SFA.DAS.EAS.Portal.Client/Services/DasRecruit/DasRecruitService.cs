@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -24,7 +25,6 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
         public DasRecruitService(IRecruitApiHttpClientFactory recruitApiHttpClientFactory, ILog log)
         {
             _log = log;
-            //todo: think through lifetimes
             _httpClient = recruitApiHttpClientFactory.CreateHttpClient();
             _vacancyStatusType = typeof(VacancyStatus);
         }
@@ -40,7 +40,12 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 
             try
             {
+                var stopWatch = new Stopwatch();
+                stopWatch.Start();
                 var response = await _httpClient.GetAsync(vacanciesSummaryUri, cancellationToken).ConfigureAwait(false);
+                // log when we get the response, which will help inform a sensible timeout value
+                // (the recruit api in test is taking up to 3.5 seconds, which really slows down the homepage rendering :-( )
+                _log.Info($"Received {(int)response.StatusCode} response in {stopWatch.Elapsed}");
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                     throw new RestHttpClientException(response, content);
