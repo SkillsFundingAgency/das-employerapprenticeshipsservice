@@ -8,7 +8,7 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client;
-using SFA.DAS.EAS.Portal.Client.Application.Queries;
+using SFA.DAS.EAS.Portal.Client.Data;
 using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.Encoding;
@@ -132,7 +132,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         PortalClient PortalClient { get; set; }
         Mock<IContainer> MockContainer { get; set; } = new Mock<IContainer>();
         private Mock<IEncodingService> MockEncodingService { get; set; } = new Mock<IEncodingService>();
-        Mock<IGetAccountQuery> MockGetAccountQuery { get; set; } = new Mock<IGetAccountQuery>();
+        Mock<IAccountsReadOnlyRepository> MockAccountsReadOnlyRepository { get; set; } = new Mock<IAccountsReadOnlyRepository>();
         Mock<IDasRecruitService> MockDasRecruitService { get; set; } = new Mock<IDasRecruitService>();
         AccountState AccountState { get; set; }
         Account Account { get; set; }
@@ -148,8 +148,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             
             Account = JsonConvert.DeserializeObject<Account>($"{{\"Id\": {AccountId} }}");
 
-            MockContainer.Setup(c => c.GetInstance<IGetAccountQuery>())
-                .Returns(MockGetAccountQuery.Object);
+            MockContainer.Setup(c => c.GetInstance<IAccountsReadOnlyRepository>())
+                .Returns(MockAccountsReadOnlyRepository.Object);
             MockContainer.Setup(c => c.GetInstance<IDasRecruitService>())
                 .Returns(MockDasRecruitService.Object);
 
@@ -161,7 +161,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
         public PortalClientTestsFixture ArrangeAccountExists()
         {
-            MockGetAccountQuery.Setup(q => q.Get(AccountId, It.IsAny<CancellationToken>()))
+            MockAccountsReadOnlyRepository.Setup(q => q.Get(AccountId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Account);
             
             return this;
@@ -169,7 +169,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
         public PortalClientTestsFixture ArrangeAccountDoesNotExist()
         {
-            MockGetAccountQuery.Setup(q => q.Get(AccountId, It.IsAny<CancellationToken>()))
+            MockAccountsReadOnlyRepository.Setup(q => q.Get(AccountId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(default(Account));
             
             return this;

@@ -9,7 +9,6 @@ namespace SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap
         {
             IncludeRegistry<AutoConfigurationRegistry>();
             IncludeRegistry<ConfigurationRegistry>();
-            IncludeRegistry<ApplicationRegistry>();
             IncludeRegistry<ReadStoreDataRegistry>();
             IncludeRegistry<EncodingRegistry>();
             IncludeRegistry<RecruitApiRegistry>();
