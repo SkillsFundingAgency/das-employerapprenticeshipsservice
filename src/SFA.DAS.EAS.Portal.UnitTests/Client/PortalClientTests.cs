@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -26,7 +27,31 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
     {
         //todo: tests for null/empty hashedAccountId
         //todo: tests for <0 maxNumberOfVacancies, 1, 2, max int
-        
+
+        [Test]
+        public Task GetAccount_WhenGetAccountParameterIsNull_ThenArgumentNullExceptionIsThrown()
+        {
+            return TestExceptionAsync(f => f.ArrangeGetAccountParameterIsNull(),
+                f => f.GetAccount(),
+                (f, r) => r.Should().Throw<ArgumentNullException>());
+        }
+
+        [Test]
+        public Task GetAccount_WhenHashedAccountIdIsNull_ThenArgumentExceptionIsThrown()
+        {
+            return TestExceptionAsync(f => f.ArrangeHashedAccountIdIsNull(),
+                f => f.GetAccount(),
+                (f, r) => r.Should().Throw<ArgumentException>());
+        }
+
+        [Test]
+        public Task GetAccount_WhenMaxNumberOfVacanciesIsNegative_ThenArgumentOutOfRangeExceptionIsThrown()
+        {
+            return TestExceptionAsync(f => f.ArrangeMaxNumberOfVacanciesIsNegative(),
+                f => f.GetAccount(),
+                (f, r) => r.Should().Throw<ArgumentOutOfRangeException>());
+        }
+
         [Test]
         public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2_ThenNullIsReturned()
         {
@@ -152,7 +177,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         IEnumerable<Vacancy> Vacancies { get; set; }
         const long AccountId = 999L;
         const string HashedAccountId = "HASH12";
-        int MaxNumberOfVacancies;
+        GetAccountParameters GetAccountParameters { get; set; } = new GetAccountParameters
+        {
+            HashedAccountId = HashedAccountId
+        };
 
         public PortalClientTestsFixture()
         {
@@ -171,6 +199,27 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             PortalClient = new PortalClient(MockContainer.Object, MockEncodingService.Object);
         }
 
+        public PortalClientTestsFixture ArrangeGetAccountParameterIsNull()
+        {
+            GetAccountParameters = null;
+
+            return this;
+        }
+
+        public PortalClientTestsFixture ArrangeHashedAccountIdIsNull()
+        {
+            GetAccountParameters.HashedAccountId = null;
+
+            return this;
+        }
+
+        public PortalClientTestsFixture ArrangeMaxNumberOfVacanciesIsNegative()
+        {
+            GetAccountParameters.MaxNumberOfVacancies = -1;
+
+            return this;
+        }
+        
         public PortalClientTestsFixture ArrangeAccountExists()
         {
             MockAccountsReadOnlyRepository.Setup(q => q.Get(AccountId, It.IsAny<CancellationToken>()))
@@ -189,7 +238,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
         public PortalClientTestsFixture ArrangeMaxNumberOfVacancies(int maxNumberOfVacancies)
         {
-            MaxNumberOfVacancies = maxNumberOfVacancies;
+            GetAccountParameters.MaxNumberOfVacancies = maxNumberOfVacancies;
 
             return this;
         }
@@ -232,11 +281,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             OriginalVacancy = Vacancy.Clone();
 
             // act
-            return await PortalClient.GetAccount(new GetAccountParameters
-            {
-                HashedAccountId = HashedAccountId,
-                MaxNumberOfVacancies = MaxNumberOfVacancies
-            });
+            return await PortalClient.GetAccount(GetAccountParameters);
         }
 
         public void AssertNullIsReturned(Account account)
