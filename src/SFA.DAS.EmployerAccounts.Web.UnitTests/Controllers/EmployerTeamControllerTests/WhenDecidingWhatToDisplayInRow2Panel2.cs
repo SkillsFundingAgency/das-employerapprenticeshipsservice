@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -62,11 +63,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual("PrePayeRecruitment", resultModel.ViewName);
         }
 
-        [TestCase("VacancyServiceDown", null)]
-        [TestCase("CreateVacancy", Cardinality.None)]
-        [TestCase("VacancyStatus", Cardinality.One)]
-        [TestCase("MultipleVacancies", Cardinality.Many)]
-        public void AndAccountHasPayeSchemeThenCorrectVacancyPanelIsSelected(string expectedViewName, Cardinality? vacancyCardinality)
+        [TestCase("VacancyServiceDown", false, 0)]
+        [TestCase("CreateVacancy", true, 0)]
+        [TestCase("VacancyStatus", true, 1)]
+        [TestCase("MultipleVacancies", true, 2)]
+        public void AndAccountHasPayeSchemeThenCorrectVacancyPanelIsSelected(string expectedViewName, bool vacanciesRetrieved, int numVacancies)
         {
             // Arrange
             var model = new AccountDashboardViewModel
@@ -74,7 +75,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 AccountViewModel = new Account
                 {
-                    VacancyCardinality = vacancyCardinality
+                    VacanciesRetrieved = vacanciesRetrieved,
+                    Vacancies = Enumerable.Repeat(new Vacancy(), numVacancies).ToList()
                 }
             };
 

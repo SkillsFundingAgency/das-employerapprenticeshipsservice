@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -12,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models.Portal;
 
  namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -51,7 +53,11 @@ using SFA.DAS.EAS.Portal.Client.Types;
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 //todo: we need to properly handle the case when there isn't an account document because no events for the account have been processed yet
-                response.Data.AccountViewModel = await _portalClient.GetAccount(hashedAccountId, hasPayeScheme?AccountState.HasPayeScheme:AccountState.None);
+                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
+                {
+                    HashedAccountId = hashedAccountId,
+                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
+                });
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
@@ -359,20 +365,24 @@ using SFA.DAS.EAS.Portal.Client.Types;
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                switch (model.AccountViewModel?.VacancyCardinality)
+                if (model.AccountViewModel?.VacanciesRetrieved == false)
                 {
-                    case null:
-                        viewModel.ViewName = "VacancyServiceDown";
-                        break;
-                    case Cardinality.None:
-                        viewModel.ViewName = "CreateVacancy";
-                        break;
-                    case Cardinality.One:
-                        viewModel.ViewName = "VacancyStatus";
-                        break;
-                    default:
-                        viewModel.ViewName = "MultipleVacancies";
-                        break;
+                    viewModel.ViewName = "VacancyServiceDown";
+                }
+                else
+                {
+                    switch (model.AccountViewModel?.GetVacancyCardinality())
+                    {
+                        case Cardinality.None:
+                            viewModel.ViewName = "CreateVacancy";
+                            break;
+                        case Cardinality.One:
+                            viewModel.ViewName = "VacancyStatus";
+                            break;
+                        default:
+                            viewModel.ViewName = "MultipleVacancies";
+                            break;
+                    }
                 }
             }
             return PartialView(viewModel);
