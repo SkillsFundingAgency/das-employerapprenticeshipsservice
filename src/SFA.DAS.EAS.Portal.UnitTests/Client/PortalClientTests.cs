@@ -25,9 +25,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
     [TestFixture, Parallelizable]
     public class PortalClientTests : FluentTest<PortalClientTestsFixture>
     {
-        //todo: tests for null/empty hashedAccountId
         //todo: tests for <0 maxNumberOfVacancies, 1, 2, max int
 
+        #region Argument Guards
+        
         [Test]
         public Task GetAccount_WhenGetAccountParameterIsNull_ThenArgumentNullExceptionIsThrown()
         {
@@ -52,6 +53,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 (f, r) => r.Should().Throw<ArgumentOutOfRangeException>());
         }
 
+        #endregion Argument Guards
+
+        #region Account Does Not Exist
+        
         [Test]
         public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2_ThenNullIsReturned()
         {
@@ -78,6 +83,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 (f, r) => f.AssertNullIsReturned(r));
         }
 
+        #endregion Account Does Not Exist
+
+        #region Account Does Exist
+        
+        #region Max Vacancies Is 0
+        
         [Test]
         public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs0_ThenNoVacanciesAreReturned()
         {
@@ -86,6 +97,20 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 (f, r) => f.AssertNoVacanciesAreReturned(r));
         }
 
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs0_ThenVacanciesRetrievedIsSet()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(0),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsSet(r));
+        }
+        
+        #endregion Max Vacancies Is 0
+
+        #region Max Vacancies Is > 0
+        
+        #region Recruit Api Call Fails
+        
         [Test]
         public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallFails_ThenNoVacanciesAreReturned()
         {
@@ -103,6 +128,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 f => f.GetAccount(),
                 (f, r) => f.AssertVacanciesRetrievedIsNotSet(r));
         }
+
+        #endregion Recruit Api Call Fails
+
+        #endregion Max Vacancies Is > 0
 
 //        [Test]
 //        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallFails_ThenSingleVacancyIsNotSet()
@@ -162,6 +191,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 //                f => f.GetAccount(),
 //                (f, r) => f.AssertSingleVacancyIsNotSet(r));
 //        }
+
+        #endregion Account Does Exist
     }
 
     public class PortalClientTestsFixture

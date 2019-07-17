@@ -51,6 +51,10 @@ namespace SFA.DAS.EAS.Portal.Client
                     account.Vacancies = vacancies.ToList();
                 }
             }
+            else if (parameters.MaxNumberOfVacancies == 0)
+            {
+                account.VacanciesRetrieved = true;
+            }
 
             return account;
         }
