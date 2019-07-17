@@ -232,7 +232,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             OriginalVacancy = Vacancy.Clone();
 
             // act
-            return await PortalClient.GetAccount(HashedAccountId, MaxNumberOfVacancies);
+            return await PortalClient.GetAccount(new GetAccountParameters
+            {
+                HashedAccountId = HashedAccountId,
+                MaxNumberOfVacancies = MaxNumberOfVacancies
+            });
         }
 
         public void AssertNullIsReturned(Account account)

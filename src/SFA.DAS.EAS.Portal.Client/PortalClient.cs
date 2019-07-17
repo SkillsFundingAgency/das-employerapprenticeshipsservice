@@ -23,20 +23,22 @@ namespace SFA.DAS.EAS.Portal.Client
             _dasRecruitService = container.GetInstance<IDasRecruitService>();
         }
         
-        public async Task<Account> GetAccount(string hashedAccountId, int maxNumberOfVacancies,
-            CancellationToken cancellationToken = default)
+        public async Task<Account> GetAccount(GetAccountParameters parameters, CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(hashedAccountId))
-                throw new ArgumentException($"Missing {nameof(hashedAccountId)}");
+            if (parameters == null)
+                throw new ArgumentNullException(nameof(parameters));
 
-            if (maxNumberOfVacancies < 0)
-                throw new ArgumentOutOfRangeException(nameof(maxNumberOfVacancies));
+            if (string.IsNullOrEmpty(parameters.HashedAccountId))
+                throw new ArgumentException($"Missing {nameof(parameters.HashedAccountId)}");
 
-            var vacanciesTask = maxNumberOfVacancies > 0 ?
-                _dasRecruitService.GetVacancies(hashedAccountId, maxNumberOfVacancies, cancellationToken) : null;
+            if (parameters.MaxNumberOfVacancies < 0)
+                throw new ArgumentOutOfRangeException(nameof(parameters.MaxNumberOfVacancies));
+
+            var vacanciesTask = parameters.MaxNumberOfVacancies > 0 ?
+                _dasRecruitService.GetVacancies(parameters.HashedAccountId, parameters.MaxNumberOfVacancies, cancellationToken) : null;
 
             // might have been better to key doc on the public hashed account id
-            var accountId = _encodingService.Decode(hashedAccountId, EncodingType.AccountId);
+            var accountId = _encodingService.Decode(parameters.HashedAccountId, EncodingType.AccountId);
             var account = await _accountsReadOnlyRepository.Get(accountId, cancellationToken);
 
             // at a later date, we might want to create an empty account doc and add the vacancy details to it, but for now, let's keep it simple

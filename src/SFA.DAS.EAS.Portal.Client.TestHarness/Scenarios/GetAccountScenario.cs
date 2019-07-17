@@ -16,7 +16,11 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.Scenarios
         {
             const string hashedAccountId = "VJ467D";
 
-            return await _portalClient.GetAccount(hashedAccountId, 2);
+            return await _portalClient.GetAccount(new GetAccountParameters
+                {
+                    HashedAccountId = hashedAccountId, 
+                    MaxNumberOfVacancies = 2
+                });
         }
     }
 }
