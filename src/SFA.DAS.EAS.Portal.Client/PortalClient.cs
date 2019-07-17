@@ -46,7 +46,7 @@ namespace SFA.DAS.EAS.Portal.Client
                 if (vacancies != null)
                 {
                     account.VacanciesRetrieved = true;
-                    account.Vacancies = (await vacanciesTask).ToList();
+                    account.Vacancies = vacancies.ToList();
                 }
             }
 

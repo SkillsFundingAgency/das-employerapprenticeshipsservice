@@ -61,15 +61,24 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 (f, r) => f.AssertNoVacanciesAreReturned(r));
         }
 
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallFails_ThenVacancyCardinalityIsNotSet()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-//                    .ArrangeHasPayeScheme().ArrangeRecruitApiCallFails(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertVacancyCardinalityIsNotSet(r));
-//        }
-//
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallFails_ThenNoVacanciesAreReturned()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallFails(),
+                f => f.GetAccount(),
+                (f, r) => f.AssertNoVacanciesAreReturned(r));
+        }
+
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallFails_ThenVacanciesRetrievedIsNotSet()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallFails(),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsNotSet(r));
+        }
+
 //        [Test]
 //        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallFails_ThenSingleVacancyIsNotSet()
 //        {
