@@ -150,23 +150,25 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 f => f.GetAccount(),
                 (f, r) => f.AssertVacanciesRetrievedIsSet(r));
         }
-        
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenVacancyCardinalityIsSetToOne()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeHasPayeScheme().ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertVacancyCardinalityIsSet(r, Cardinality.One));
-//        }
-//
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenSingleVacancyIsSetCorrectly()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeHasPayeScheme().ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertSingleVacancyIsSetCorrectly(r));
-//        }
-//
+
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancy_ThenOneCorrectlyPopulatedVacancyIsReturned()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy(),
+                f => f.GetAccount(),
+                (f, r) => f.AssertOneCorrectlyPopulatedVacancyIsReturned(r));
+        }
+
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancy_ThenVacanciesRetrievedIsSet()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy(),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsSet(r));
+        }
+
 //        [Test]
 //        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsTwoVacancies_ThenVacancyCardinalityIsSetToMany()
 //        {
@@ -316,6 +318,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             account.Vacancies.Should().BeEmpty();
         }
 
+        public void AssertOneCorrectlyPopulatedVacancyIsReturned(Account account)
+        {
+            account.Should().NotBeNull();
+            account.Vacancies.Should().NotBeNull();
+            account.Vacancies.Should().BeEquivalentTo(OriginalVacancy);
+        }
+        
         public void AssertVacanciesRetrievedIsSet(Account account)
         {
             account.Should().NotBeNull();
