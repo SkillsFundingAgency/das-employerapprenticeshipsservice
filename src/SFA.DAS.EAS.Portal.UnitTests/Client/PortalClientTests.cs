@@ -133,33 +133,24 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
         #endregion Max Vacancies Is > 0
 
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallFails_ThenSingleVacancyIsNotSet()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-//                    .ArrangeHasPayeScheme().ArrangeRecruitApiCallFails(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertSingleVacancyIsNotSet(r));
-//        }
-//
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenVacancyCardinalityIsSetToNone()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-//                    .ArrangeHasPayeScheme().ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertVacancyCardinalityIsSet(r, Cardinality.None));
-//        }
-//
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenSingleVacancyIsNotSet()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-//                    .ArrangeHasPayeScheme().ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertSingleVacancyIsNotSet(r));
-//        }
-//        
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenNoVacanciesAreReturned()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies(),
+                f => f.GetAccount(),
+                (f, r) => f.AssertNoVacanciesAreReturned(r));
+        }
+
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenVacanciesRetrievedIsSet()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies(),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsSet(r));
+        }
+        
 //        [Test]
 //        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenVacancyCardinalityIsSetToOne()
 //        {
