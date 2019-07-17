@@ -16,8 +16,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+ using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
@@ -26,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IHashingService _hashingService;
+        private readonly ILog _logger;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -41,12 +43,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
             IPortalClient portalClient,
-            IHashingService hashingService)
+            IHashingService hashingService,
+            ILog logger)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
             _hashingService = hashingService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -54,7 +58,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
+
+            bool useHomePage;
+
+            try
+            {
+                useHomePage = FeatureToggles.Features.HomePage.Enabled ||
+                              !HasPayeScheme(response.Data) && !HasOrganisation(response.Data);
+            }
+            catch (Exception e)
+            {
+                _logger.Error(e, "Error when evaluating whether to use home page. Defaulting to using home page.");
+                useHomePage = true;
+            }
+
+            if (useHomePage)
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
