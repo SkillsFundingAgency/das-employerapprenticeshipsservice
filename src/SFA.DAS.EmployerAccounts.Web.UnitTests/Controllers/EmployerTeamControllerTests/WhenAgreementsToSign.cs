@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.HashingService;
 using System.Web.Mvc;
+using SFA.DAS.NLog.Logger;
 using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
@@ -24,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
         private Mock<IPortalClient> mockPortalClient;
         private Mock<IHashingService> mockHashingService;
+        private Mock<ILog> mockLog;
 
         [SetUp]
         public void Arrange()
@@ -35,6 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
             mockHashingService = new Mock<IHashingService>();
+            mockLog = new Mock<ILog>();
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
@@ -43,7 +46,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
                 mockPortalClient.Object,
-                mockHashingService.Object);
+                mockHashingService.Object,
+                mockLog.Object);
         }
 
         [Test]
