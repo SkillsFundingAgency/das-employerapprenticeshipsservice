@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models.Portal;
 
  namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -372,10 +373,10 @@ using SFA.DAS.EAS.Portal.Client.Types;
                 {
                     switch (model.AccountViewModel?.GetVacancyCardinality())
                     {
-                        case EmployerAccounts.Models.Portal.Cardinality.None:
+                        case Cardinality.None:
                             viewModel.ViewName = "CreateVacancy";
                             break;
-                        case EmployerAccounts.Models.Portal.Cardinality.One:
+                        case Cardinality.One:
                             viewModel.ViewName = "NotImplemented";
                             break;
                         default:
