@@ -16,7 +16,6 @@ using SFA.DAS.Encoding;
 using SFA.DAS.Testing;
 using StructureMap;
 
-//todo: update tests for new client
 namespace SFA.DAS.EAS.Portal.UnitTests.Client
 {
     /// <summary>
@@ -25,8 +24,6 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
     [TestFixture, Parallelizable]
     public class PortalClientTests : FluentTest<PortalClientTestsFixture>
     {
-        //todo: tests for <0 maxNumberOfVacancies, 1, 2, max int
-
         #region Argument Guards
         
         [Test]
@@ -69,7 +66,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenNullIsReturned()
         {
             return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
-                    .ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies(),
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(0),
                 f => f.GetAccount(),
                 (f, r) => f.AssertNullIsReturned(r));
         }
@@ -78,7 +75,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenNullIsReturned()
         {
             return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
-                    .ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy(),
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(1),
                 f => f.GetAccount(),
                 (f, r) => f.AssertNullIsReturned(r));
         }
@@ -131,13 +128,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
         #endregion Recruit Api Call Fails
 
-        #endregion Max Vacancies Is > 0
+        #region Recruit Api Call Succeeds
 
         [Test]
         public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenNoVacanciesAreReturned()
         {
             return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-                    .ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies(),
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(0),
                 f => f.GetAccount(),
                 (f, r) => f.AssertNoVacanciesAreReturned(r));
         }
@@ -146,7 +143,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenVacanciesRetrievedIsSet()
         {
             return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-                    .ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies(),
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(0),
                 f => f.GetAccount(),
                 (f, r) => f.AssertVacanciesRetrievedIsSet(r));
         }
@@ -155,7 +152,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancy_ThenOneCorrectlyPopulatedVacancyIsReturned()
         {
             return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-                    .ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy(),
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(1),
                 f => f.GetAccount(),
                 (f, r) => f.AssertOneCorrectlyPopulatedVacancyIsReturned(r));
         }
@@ -164,26 +161,32 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancy_ThenVacanciesRetrievedIsSet()
         {
             return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
-                    .ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy(),
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(1),
                 f => f.GetAccount(),
                 (f, r) => f.AssertVacanciesRetrievedIsSet(r));
         }
 
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsTwoVacancies_ThenVacancyCardinalityIsSetToMany()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeHasPayeScheme().ArrangeRecruitApiCallSucceedsAndReturnsTwoVacancies(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertVacancyCardinalityIsSet(r, Cardinality.Many));
-//        }
-//
-//        [Test]
-//        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndHasPayeSchemeAndRecruitApiCallSucceedsAndReturnsTwoVacancies_ThenSingleVacancyIsNotSet()
-//        {
-//            return TestAsync(f => f.ArrangeAccountExists().ArrangeHasPayeScheme().ArrangeRecruitApiCallSucceedsAndReturnsTwoVacancies(),
-//                f => f.GetAccount(),
-//                (f, r) => f.AssertSingleVacancyIsNotSet(r));
-//        }
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsTwoVacancies_ThenTwoCorrectlyPopulatedVacanciesAreReturned()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(2),
+                f => f.GetAccount(),
+                (f, r) => f.AssertTwoCorrectlyPopulatedVacanciesAreReturned(r));
+        }
+
+        [Test]
+        public Task GetAccount_WhenAccountExistsAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsTwoVacancies_ThenVacanciesRetrievedIsSet()
+        {
+            return TestAsync(f => f.ArrangeAccountExists().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(2),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsSet(r));
+        }
+        
+        #endregion Recruit Api Call Succeeds
+        
+        #endregion Max Vacancies Is > 0
 
         #endregion Account Does Exist
     }
@@ -274,24 +277,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             return this;
         }
 
-        //todo: ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(int numberOfVacancies)?
-        public PortalClientTestsFixture ArrangeRecruitApiCallSucceedsAndReturnsNoVacancies()
+        public PortalClientTestsFixture ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(int numVacancies)
         {
-            Vacancies = Enumerable.Empty<Vacancy>();
-
-            return this;
-        }
-        
-        public PortalClientTestsFixture ArrangeRecruitApiCallSucceedsAndReturnsOneVacancy()
-        {
-            Vacancies = Enumerable.Repeat(Vacancy, 1);
-
-            return this;
-        }
-
-        public PortalClientTestsFixture ArrangeRecruitApiCallSucceedsAndReturnsTwoVacancies()
-        {
-            Vacancies = Enumerable.Repeat(Vacancy, 2);
+            Vacancies = Enumerable.Repeat(Vacancy, numVacancies);
 
             return this;
         }
@@ -324,6 +312,13 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             account.Vacancies.Should().NotBeNull();
             account.Vacancies.Should().BeEquivalentTo(OriginalVacancy);
         }
+
+        public void AssertTwoCorrectlyPopulatedVacanciesAreReturned(Account account)
+        {
+            account.Should().NotBeNull();
+            account.Vacancies.Should().NotBeNull();
+            account.Vacancies.Should().BeEquivalentTo(Enumerable.Repeat(Vacancy, 2));
+        }
         
         public void AssertVacanciesRetrievedIsSet(Account account)
         {
@@ -336,30 +331,5 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
             account.Should().NotBeNull();
             account.VacanciesRetrieved.Should().BeFalse();
         }
-
-//        public void AssertVacancyCardinalityIsNotSet(Account account)
-//        {
-//            account.Should().NotBeNull();
-//            account.VacancyCardinality.Should().BeNull();
-//        }
-//
-//        public void AssertVacancyCardinalityIsSet(Account account, Cardinality expectedCardinality)
-//        {
-//            account.Should().NotBeNull();
-//            account.VacancyCardinality.Should().Be(expectedCardinality);
-//        }
-//        
-//        public void AssertSingleVacancyIsNotSet(Account account)
-//        {
-//            account.Should().NotBeNull();
-//            account.SingleVacancy.Should().BeNull();
-//        }
-//
-//        public void AssertSingleVacancyIsSetCorrectly(Account account)
-//        {
-//            account.Should().NotBeNull();
-//            account.SingleVacancy.Should().NotBeNull();
-//            account.SingleVacancy.Should().BeEquivalentTo(OriginalVacancy);
-//        }
     }
 }
