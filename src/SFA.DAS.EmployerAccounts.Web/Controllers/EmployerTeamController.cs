@@ -364,13 +364,13 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                if (model.AccountViewModel?.VacanciesRetrieved == false)
+                if (model.AccountViewModel == null || model.AccountViewModel.VacanciesRetrieved == false)
                 {
                     viewModel.ViewName = "VacancyServiceDown";
                 }
                 else
                 {
-                    switch (model.AccountViewModel?.GetVacancyCardinality())
+                    switch (model.AccountViewModel.GetVacancyCardinality())
                     {
                         case Cardinality.None:
                             viewModel.ViewName = "CreateVacancy";
