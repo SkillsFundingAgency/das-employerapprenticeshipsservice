@@ -52,7 +52,6 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
             var hasPayeScheme = HasPayeScheme(response.Data);
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
-                //todo: we need to properly handle the case when there isn't an account document because no events for the account have been processed yet
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {
                     HashedAccountId = hashedAccountId,
