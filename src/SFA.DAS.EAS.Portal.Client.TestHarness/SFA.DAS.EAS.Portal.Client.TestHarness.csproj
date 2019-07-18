@@ -8,8 +8,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="CompareNETObjects" Version="4.59.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.2.0" />
+      <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
       <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
       <PackageReference Include="StructureMap.Microsoft.DependencyInjection" Version="2.0.0" />
     </ItemGroup>

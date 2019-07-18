@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Hashing;
+using SFA.DAS.EAS.Infrastructure.MarkerInterfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
             parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
             parameters.Add("@employerRefName", payeScheme.RefName, DbType.String);
+            parameters.Add("@aorn", payeScheme.Aorn, DbType.String);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[AddPayeToAccount]",
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector)
+        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector, string aorn)
         {
             var parameters = new DynamicParameters();
 
@@ -66,8 +67,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@employerRefName", employerRefName, DbType.String);
             parameters.Add("@status", companyStatus);
             parameters.Add("@source", source);
-            parameters.Add("@publicSectorDataSource", publicSectorDataSource);
+            parameters.Add("@publicSectorDataSource", publicSectorDataSource); 
             parameters.Add("@sector", sector, DbType.String);
+            parameters.Add("@aorn", aorn, DbType.String);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateAccount]",

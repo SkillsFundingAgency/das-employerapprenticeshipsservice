@@ -55,7 +55,8 @@ namespace SFA.DAS.EAS.Application.Mappings
                 .ForMember(d => d.Source, o => o.MapFrom(l =>
                     l.LegalEntity.Source == OrganisationType.CompaniesHouse ? "Companies House" :
                     l.LegalEntity.Source == OrganisationType.Charities ? "Charities" :
-                    l.LegalEntity.Source == OrganisationType.PublicBodies ? "Public Bodies" : "Other"))
+                    l.LegalEntity.Source == OrganisationType.PublicBodies ? "Public Bodies" :
+                    l.LegalEntity.Source == OrganisationType.PensionsRegulator ? "Pensions Regulator" : "Other"))
                 .ForMember(d => d.SourceNumeric, o => o.MapFrom(l => (short) l.LegalEntity.Source))
                 .ForMember(d => d.AgreementSignedByName, o => o.Ignore())
                 .ForMember(d => d.AgreementSignedDate, o => o.Ignore())

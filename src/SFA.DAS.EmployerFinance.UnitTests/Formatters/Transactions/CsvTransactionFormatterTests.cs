@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
                 Assert.AreEqual((i * 1000).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[4]); // LevyDeclared
                 Assert.AreEqual((i * 10).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[5]);
                 Assert.AreEqual((i * 100).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[6]);
-                Assert.AreEqual($"{TrainingProviderPrefix}{i}", dataRow[7]);
+                Assert.AreEqual($"\"{TrainingProviderPrefix}{i}\"", dataRow[7]);
                 Assert.AreEqual($"{UlnPrefix}{i}", dataRow[8]);
                 Assert.AreEqual($"{ApprenticePrefix}{i}", dataRow[9]);
                 Assert.AreEqual($"{ApprenticeTrainingCoursePrefix}{i}", dataRow[10]);

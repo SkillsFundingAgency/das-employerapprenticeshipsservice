@@ -17,18 +17,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class HomeController : BaseController
     {
         private readonly HomeOrchestrator _homeOrchestrator;
-        private readonly EmployerAccountsConfiguration _configuration;       
-        private const int NotUsedServiceBeforeOption = 1;
-        private const int UsedServiceBeforeOption = 2;
-
+        private readonly EmployerAccountsConfiguration _configuration;
+      
         public HomeController(IAuthenticationService owinWrapper, 
-            HomeOrchestrator homeOrchestrator,
+            HomeOrchestrator homeOrchestrator,        
             EmployerAccountsConfiguration configuration,
             IMultiVariantTestingService multiVariantTestingService, 
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _homeOrchestrator = homeOrchestrator;
+            _homeOrchestrator = homeOrchestrator;          
             _configuration = configuration;         
         }
 
@@ -38,10 +36,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index()
         {           
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 await OwinWrapper.UpdateClaims();
+
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
+
                 var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
+
                 if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
                     return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
@@ -60,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                     if (account != null)
                     {
-                        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId});
+                        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
                     }
                 }
 
@@ -76,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(accounts);
                 }
 
-                return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
+                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
             }
 
             var model = new
@@ -94,49 +102,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
-        }
-
-        [HttpGet]
-        [Route("usedServiceBefore")]
-        public ActionResult UsedServiceBefore()
-        {
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("usedServiceBefore")]
-        public ActionResult UsedServiceBefore(int? choice)
-        {
-            switch (choice ?? 0)
-            {
-                case NotUsedServiceBeforeOption: return RedirectToAction(ControllerConstants.RegisterUserActionName);
-                case UsedServiceBeforeOption: return RedirectToAction(ControllerConstants.SignInActionName);
-                default:
-                {
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                        ErrorMessage = "You must select an option to continue."
-                    };
-
-                    return View(model); //No option entered
-                }
-            }
-        }
-
-        [HttpGet]
-        [Route("setupAccount")]
-        public async Task<ActionResult> SetupAccount()
-        {        
-            var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            return View(accounts);
-        }
-  
+        }     
+     
         [HttpGet]
         [Route("register")]
         public ActionResult RegisterUser()
@@ -153,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> HandleNewRegistration()
         {
             await OwinWrapper.UpdateClaims();
-            return RedirectToAction(ControllerConstants.GetGovernmentFundingActionName, ControllerConstants.EmployerAccountControllerName);
+            return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [Authorize]

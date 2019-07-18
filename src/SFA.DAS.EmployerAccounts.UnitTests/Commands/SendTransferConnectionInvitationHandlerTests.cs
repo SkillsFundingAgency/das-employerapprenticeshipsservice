@@ -4,13 +4,13 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Models.Transfers;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
-using SFA.DAS.Hashing;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
