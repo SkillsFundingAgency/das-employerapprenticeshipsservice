@@ -1,5 +1,4 @@
-﻿using SFA.DAS.AutoConfiguration;
-using SFA.DAS.EAS.Domain.Configuration;
+﻿using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.Tasks.API.Client;
@@ -11,7 +10,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public TasksRegistry()
         {
-            For<ITaskApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<TaskApiConfiguration>(ConfigurationKeys.TaskApi)).Singleton();
+            For<ITaskApiConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<TaskApiConfiguration>("SFA.DAS.Tasks.Api")).Singleton();
             For<ITaskService>().Use<TaskService>();
         }
     }

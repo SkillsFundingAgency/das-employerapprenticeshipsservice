@@ -5,7 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Events.Messages
 {
     [Serializable]
     [MessageGroup("levydataimport_completed")]
-    [Obsolete("Please use RefreshEmployerLevyDataCompletedEvent from EmployerFinance")]
     public class RefreshEmployerLevyDataCompletedMessage : AccountMessageBase
     { 
         /// <summary>
