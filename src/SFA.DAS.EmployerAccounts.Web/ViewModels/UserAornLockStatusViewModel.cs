@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerAccounts.Models.UserProfile
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class UserAornPayeStatus
+    public class UserAornLockStatusViewModel
     {
         public bool IsLocked { get; set; }
         public DateTime? BeginTime { get; set; }

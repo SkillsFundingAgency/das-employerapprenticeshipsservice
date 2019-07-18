@@ -186,6 +186,7 @@
     <Compile Include="Orchestrators\SearchPensionRegulatorOrchestrator.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
+    <Compile Include="Orchestrators\UserAornLockOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
     <Compile Include="ViewModels\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
+    <Compile Include="ViewModels\UserAornLockStatusViewModel.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />

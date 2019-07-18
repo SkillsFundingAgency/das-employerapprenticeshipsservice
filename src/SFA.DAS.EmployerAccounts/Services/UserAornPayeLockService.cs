@@ -7,7 +7,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
-    public class UserAornPayeLockService
+    public class UserAornPayeLockService : IUserAornPayeLockService
     {
         private readonly IUserRepository _userRepository;
         private readonly UserAornPayeLockConfiguration _configuration;
@@ -33,7 +33,9 @@ namespace SFA.DAS.EmployerAccounts.Services
             {
                 return new UserAornPayeStatus
                 {
-                    IsLocked = false
+                    IsLocked = false,
+                    RemainingAttempts = _configuration.NumberOfPermittedAttempts - 
+                                        attempts.Count(a => (DateTime.Now - a).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes)
                 };
             }
 
@@ -41,7 +43,8 @@ namespace SFA.DAS.EmployerAccounts.Services
             {
                 IsLocked = true,
                 BeginTime = attempts.First(),
-                EndTime = attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes)
+                EndTime = attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes),
+                RemainingAttempts = 0
             };
         }
     }

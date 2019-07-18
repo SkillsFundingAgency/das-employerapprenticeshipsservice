@@ -19,19 +19,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts")]
     public class SearchPensionRegulatorController : BaseController
     {
-        private readonly SearchPensionRegulatorOrchestrator _orchestrator;   
+        private readonly SearchPensionRegulatorOrchestrator _searchPensionRegulatorOrchestrator;
+        private readonly UserAornLockOrchestrator _userAornLockOrchestrator;
         private readonly IMediator _mediatr;
         private const int OrgNotListed = 0;
 
         public SearchPensionRegulatorController(
             IAuthenticationService owinWrapper,
-            SearchPensionRegulatorOrchestrator orchestrator,
+            SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
+            UserAornLockOrchestrator userAornLockOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,          
             IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _orchestrator = orchestrator;         
+            _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
+            _userAornLockOrchestrator = userAornLockOrchestrator;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
         }
        
@@ -39,14 +42,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("pensionregulator", Order = 1)]
         public async Task<ActionResult> SearchPensionRegulator(string hashedAccountId)
         {
-            var payeRef = _orchestrator.GetCookieData().EmployerAccountPayeRefData.PayeReference;
+            var payeRef = _searchPensionRegulatorOrchestrator.GetCookieData().EmployerAccountPayeRefData.PayeReference;
            
             if (string.IsNullOrEmpty(payeRef))
             {
                 return RedirectToAction(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName);
             }
 
-            var model = await _orchestrator.SearchPensionRegulator(payeRef);
+            var model = await _searchPensionRegulatorOrchestrator.SearchPensionRegulator(payeRef);
             model.Data.IsExistingAccount = !string.IsNullOrEmpty(hashedAccountId);
 
             switch (model.Data.Results.Count)
@@ -126,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [NonAction]
         private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
-            var model = await _orchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
+            var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
             switch (model.Data.Results.Count)
             {
