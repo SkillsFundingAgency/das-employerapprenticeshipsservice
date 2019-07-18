@@ -29,8 +29,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, _homeOrchestrator.Object, _configuration.Object, 
-                _userViewTestingService.Object,_flashMessage.Object);
+                _owinWrapper.Object, 
+                _homeOrchestrator.Object, 
+                _configuration.Object, 
+                _userViewTestingService.Object,
+                _flashMessage.Object);
         }
 
         [Test]
@@ -43,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsNotNull(actual);
             var actualRedirectResult = actual as RedirectToRouteResult;
             Assert.IsNotNull(actualRedirectResult);
-            Assert.AreEqual("Index",actualRedirectResult.RouteValues["Action"]);
+            Assert.AreEqual("Index", actualRedirectResult.RouteValues["Action"]);
         }
     }
 }

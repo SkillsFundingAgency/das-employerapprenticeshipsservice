@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
                     {
                         Accounts = new Accounts<Account>
                         {
-                            AccountList = new List<Account> {new Account()}
+                            AccountList = new List<Account> { new Account() }
                         }
                     }
                 });
@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
                     BaseAddress = "http://test",
                     ChangePasswordLink = "123",
                     ChangeEmailLink = "123",
-                    ClaimIdentifierConfiguration = new ClaimIdentifierConfiguration {ClaimsBaseUrl = "http://claims.test/"}
+                    ClaimIdentifierConfiguration = new ClaimIdentifierConfiguration { ClaimsBaseUrl = "http://claims.test/" }
                 },
                 EmployerPortalBaseUrl = "https://localhost"
             };
@@ -71,12 +71,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             _userTestingService = new Mock<IMultiVariantTestingService>();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, _homeOrchestrator.Object, _configuration, 
-                _userTestingService.Object, _flashMessage.Object)
+                _owinWrapper.Object, 
+                _homeOrchestrator.Object,      
+                _configuration, 
+                _userTestingService.Object, 
+                _flashMessage.Object)
             {
                 Url = new UrlHelper()
             };
-
         }
 
         [Test]
