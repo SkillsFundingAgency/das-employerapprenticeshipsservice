@@ -1,11 +1,22 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    public class OrganisationSharedController : Controller
+    public class OrganisationSharedController : BaseController
     {
+        public OrganisationSharedController(IAuthenticationService owinWrapper,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
+
+        {
+        }
+
         [HttpGet]
         [Route("accounts/{HashedAccountId}/organisations/custom/add", Order = 0)]
         [Route("accounts/organisations/custom/add", Order = 1)]

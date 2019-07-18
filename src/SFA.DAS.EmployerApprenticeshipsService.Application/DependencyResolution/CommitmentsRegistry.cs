@@ -7,7 +7,7 @@ using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using StructureMap;
 using System.Net.Http;
-using SFA.DAS.AutoConfiguration;
+using SFA.DAS.Configuration;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
 {
@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public CommitmentsRegistry()
         {
-            For<CommitmentsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<CommitmentsApiClientConfiguration>(ConfigurationKeys.CommitmentsApiClient)).Singleton();
+            For<CommitmentsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<CommitmentsApiClientConfiguration>("SFA.DAS.CommitmentsAPI")).Singleton();
             For<ICommitmentsApiClientConfiguration>().Use(c => c.GetInstance<CommitmentsApiClientConfiguration>());
             For<IEmployerCommitmentApi>().Use<EmployerCommitmentApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
             For<IValidationApi>().Use<ValidationApi>();

@@ -1,9 +1,9 @@
 ﻿using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Jobs.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Jobs.StartupJobs;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
 
 namespace SFA.DAS.EmployerAccounts.Jobs
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
             {
                 var startup = container.GetInstance<EndpointStartup>();
                 var config = new JobHostConfiguration { JobActivator = new StructureMapJobActivator(container) };
-                var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
+                var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
 
                 if (isDevelopment)
                 {
