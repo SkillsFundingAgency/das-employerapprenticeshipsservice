@@ -52,7 +52,6 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
             var hasPayeScheme = HasPayeScheme(response.Data);
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
-                //todo: we need to properly handle the case when there isn't an account document because no events for the account have been processed yet
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {
                     HashedAccountId = hashedAccountId,
@@ -365,13 +364,13 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                if (model.AccountViewModel?.VacanciesRetrieved == false)
+                if (model.AccountViewModel == null || model.AccountViewModel.VacanciesRetrieved == false)
                 {
-                    viewModel.ViewName = "VacancyServiceDown";
+                    viewModel.ViewName = "MultipleVacancies";
                 }
                 else
                 {
-                    switch (model.AccountViewModel?.GetVacancyCardinality())
+                    switch (model.AccountViewModel.GetVacancyCardinality())
                     {
                         case Cardinality.None:
                             viewModel.ViewName = "CreateVacancy";
@@ -449,12 +448,6 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
 
         [ChildActionOnly]
         public ActionResult FundingComplete(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyServiceDown(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

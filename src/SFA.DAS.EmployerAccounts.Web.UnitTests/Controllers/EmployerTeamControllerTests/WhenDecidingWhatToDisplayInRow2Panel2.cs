@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual("PrePayeRecruitment", resultModel.ViewName);
         }
 
-        [TestCase("VacancyServiceDown", false, 0)]
+        [TestCase("MultipleVacancies", false, 0)]
         [TestCase("CreateVacancy", true, 0)]
         [TestCase("VacancyStatus", true, 1)]
         [TestCase("MultipleVacancies", true, 2)]
