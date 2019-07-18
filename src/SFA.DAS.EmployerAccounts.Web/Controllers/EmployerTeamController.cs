@@ -364,13 +364,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                if (model.HasSingleDraftVacancy || model.HasSinglePendingReviewVacancy || model.HasSingleClosedVacancy)
-                {
-                    viewModel.ViewName = "VacancyStatus";
-                }
-                else if (model.AccountViewModel == null || model.AccountViewModel.VacanciesRetrieved == false)
+                if (model.AccountViewModel == null || model.AccountViewModel.VacanciesRetrieved == false)
                 {
                     viewModel.ViewName = "VacancyServiceDown";
+                }
+                else if (model.HasSingleDraftVacancy || model.HasSinglePendingReviewVacancy || model.HasSingleClosedVacancy)
+                {
+                    viewModel.ViewName = "VacancyStatus";
                 }
                 else
                 {
