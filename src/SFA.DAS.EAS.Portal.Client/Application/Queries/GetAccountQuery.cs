@@ -6,7 +6,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Application.Queries
 {
-    internal class GetAccountQuery
+    internal class GetAccountQuery : IGetAccountQuery
     {
         private readonly IAccountsReadOnlyRepository _accountsReadOnlyRepository;
 
@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Portal.Client.Application.Queries
             var document = await _accountsReadOnlyRepository.CreateQuery()
                 .FirstOrDefaultAsync( a => a.Deleted == null && a.AccountId == accountId, cancellationToken)
                 .ConfigureAwait(false);
-                        
+
             return document?.Account;
         }
     }

@@ -18,6 +18,10 @@ namespace SFA.DAS.EAS.Portal.Client.Types
         public ICollection<Organisation> Organisations { get; set; }
         [JsonProperty("providers")]
         public ICollection<Provider> Providers { get; set; }
+        [JsonIgnore]
+        public Cardinality? VacancyCardinality { get; set; }
+        [JsonIgnore]
+        public Vacancy SingleVacancy { get; set; }
         [JsonProperty("deleted")]
         public DateTime? Deleted { get; set; }
     }
