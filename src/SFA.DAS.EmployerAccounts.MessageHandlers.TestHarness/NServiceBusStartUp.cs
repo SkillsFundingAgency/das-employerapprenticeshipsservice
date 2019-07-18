@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness
         public async Task StartAsync()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
-                .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
+                .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(_employerAccountsConfiguration.NServiceBusLicense))

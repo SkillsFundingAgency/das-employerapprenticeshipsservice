@@ -1,12 +1,28 @@
-﻿using System.Web.Mvc;
+﻿using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.ViewModels;
+using System;
+using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
-    public class EmployerAgreementController : Controller
-    { 
+    public class EmployerAgreementController : BaseController
+    {
+       
+        public EmployerAgreementController(IAuthenticationService owinWrapper,
+            IAuthorizationService authorization,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+            if (owinWrapper == null)
+                throw new ArgumentNullException(nameof(owinWrapper));
+        }
+
         [HttpGet]
         [Route("agreements")]
         public ActionResult Index()

@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Aspose.Pdf;
 using Aspose.Pdf.Text;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
 
@@ -15,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         public override string ConfigurationName => "legal-agreements";
         public sealed override ILog Logger { get; set; }
 
-        public PdfService(ILog logger, IAutoConfigurationService autoConfigurationService) : base(autoConfigurationService)
+        public PdfService(ILog logger)
         {
             Logger = logger;
         }

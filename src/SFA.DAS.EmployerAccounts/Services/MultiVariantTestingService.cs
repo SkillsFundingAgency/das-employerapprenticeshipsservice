@@ -5,7 +5,8 @@ using SFA.DAS.NLog.Logger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using SFA.DAS.AutoConfiguration;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -15,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         public override string ConfigurationName => "SFA.DAS.EmployerApprenticeshipsService.MultiVariantTesting";
         public sealed override ILog Logger { get; set; }
 
-        public MultiVariantTestingService(IInProcessCache inProcessCache, ILog logger, IAutoConfigurationService autoConfigurationService) : base(autoConfigurationService)
+        public MultiVariantTestingService(IInProcessCache inProcessCache, ILog logger)
         {
             _inProcessCache = inProcessCache;
             Logger = logger;

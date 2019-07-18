@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Queries.GetEnglishFractionsUpdateRequired;
+using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEnglishFractionsUpdateRequired
 {

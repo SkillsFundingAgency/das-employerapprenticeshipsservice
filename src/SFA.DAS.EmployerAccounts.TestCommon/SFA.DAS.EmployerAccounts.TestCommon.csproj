@@ -243,6 +243,9 @@
     <Compile Include="DbCleanup\IUpdateTransactionLine.cs" />
     <Compile Include="DbCleanup\UpdateTransactionLine.cs" />
     <Compile Include="DbSetStub.cs" />
+    <Compile Include="DependencyResolution\DefaultRegistry.cs" />
+    <Compile Include="DependencyResolution\IoC.cs" />
+    <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
     <Compile Include="EmployerAgreementBuilder.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
     <Compile Include="FluentTest.cs" />
@@ -254,6 +257,7 @@
     <Compile Include="ObjectMothers\FrameworkObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationSourceDataObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationViewsObjectMother.cs" />
+    <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
     <Compile Include="ObjectMothers\MessageObjectMother.cs" />
     <Compile Include="ObjectMothers\StandardObjectMother.cs" />
     <Compile Include="ObjectMothers\TransactionLineObjectMother.cs" />
@@ -266,10 +270,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
-      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
-      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
       <Name>SFA.DAS.EmployerAccounts</Name>

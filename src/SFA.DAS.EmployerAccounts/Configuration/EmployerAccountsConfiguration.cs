@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
