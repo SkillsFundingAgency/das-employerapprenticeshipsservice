@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetEnglishFractionsUpdateRequired
 {
