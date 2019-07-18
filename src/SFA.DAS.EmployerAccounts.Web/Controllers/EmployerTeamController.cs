@@ -5,14 +5,15 @@ using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models.Portal;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -22,7 +23,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
-        private readonly IHashingService _hashingService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -37,13 +37,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
-            IHashingService hashingService)
+            IPortalClient portalClient)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
-            _hashingService = hashingService;
         }
 
         [HttpGet]
@@ -52,10 +50,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var response = await GetAccountInformation(hashedAccountId);
             var hasPayeScheme = HasPayeScheme(response.Data);
-
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
+            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
-                var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {
                     HashedAccountId = hashedAccountId,
@@ -365,15 +361,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
-            if (!HasPayeScheme(model))
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
+            if (HasPayeScheme(model))
             {
-                viewModel.ViewName = "PrePayeRecruitment";
-            }           
-
-            if(model.HasSingleDraftVacancy || model.HasSinglePendingReviewVacancy || model.HasSingleClosedVacancy)
-            {
-                viewModel.ViewName = "VacancyStatus";
+                if (model.HasSingleDraftVacancy || model.HasSinglePendingReviewVacancy || model.HasSingleClosedVacancy)
+                {
+                    viewModel.ViewName = "VacancyStatus";
+                }
+                else if (model.AccountViewModel == null || model.AccountViewModel.VacanciesRetrieved == false)
+                {
+                    viewModel.ViewName = "VacancyServiceDown";
+                }
+                else
+                {
+                    switch (model.AccountViewModel.GetVacancyCardinality())
+                    {
+                        case Cardinality.None:
+                            viewModel.ViewName = "CreateVacancy";
+                            break;
+                        case Cardinality.One:
+                            viewModel.ViewName = "NotImplemented";
+                            break;
+                        default:
+                            viewModel.ViewName = "NotImplemented";
+                            break;
+                    }
+                }
             }
             return PartialView(viewModel);
         }
@@ -439,6 +452,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult FundingComplete(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyServiceDown(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
