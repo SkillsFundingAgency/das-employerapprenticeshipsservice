@@ -11,9 +11,9 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public ApprenticeshipLevyRegistry()
         {
-            For<IApprenticeshipLevyApiClient>().Use<ApprenticeshipLevyApiClient>().Ctor<HttpClient>().Is(
-                c => new HttpClient { BaseAddress = new Uri(c.GetInstance<EmployerAccountsConfiguration>().Hmrc.BaseUrl) }
-            );
+            var config = ConfigurationHelper.GetConfiguration<EmployerAccountsConfiguration>(Constants.ServiceName);
+            var httpClient = new HttpClient {BaseAddress = new Uri(config.Hmrc.BaseUrl)};
+            For<IApprenticeshipLevyApiClient>().Use<ApprenticeshipLevyApiClient>().Ctor<HttpClient>().Is(httpClient);
         }
 
     }
