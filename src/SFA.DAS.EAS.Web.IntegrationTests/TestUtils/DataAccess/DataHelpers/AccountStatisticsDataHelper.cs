@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dapper;
 using Moq;
+using SFA.DAS.Configuration;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.MarkerInterfaces;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Testing.Helpers;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
         
         public AccountStatisticsDataHelper()
         {
-            _configuration = ConfigurationTestHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
+            _configuration = ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
         }
 
         public async Task<StatisticsViewModel> GetStatistics()

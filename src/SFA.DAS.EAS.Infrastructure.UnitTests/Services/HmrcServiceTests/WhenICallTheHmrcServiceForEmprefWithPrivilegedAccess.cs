@@ -3,14 +3,13 @@ using HMRC.ESFA.Levy.Api.Client;
 using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
 using SFA.DAS.Http;
-using EmployerApprenticeshipsServiceConfiguration = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -26,18 +25,21 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
         private HmrcService _hmrcService;
-        private HmrcConfiguration _configuration;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private Mock<ITokenServiceApiClient> _tokenService;
 
         [SetUp]
         public void Arrange()
         {
-            _configuration = new HmrcConfiguration
+            _configuration = new EmployerApprenticeshipsServiceConfiguration
             {
-                BaseUrl = ExpectedBaseUrl,
-                ClientId = ExpectedClientId,
-                Scope = ExpectedScope,
-                ClientSecret = ExpectedClientSecret
+                Hmrc = new HmrcConfiguration
+                {
+                    BaseUrl = ExpectedBaseUrl,
+                    ClientId = ExpectedClientId,
+                    Scope = ExpectedScope,
+                    ClientSecret = ExpectedClientSecret
+                }
             };
 
             _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
@@ -46,7 +48,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             _apprenticeshipLevyApiClient.Setup(x => x.GetEmployerDetails(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new EmpRefLevyInformation
                 {
-                    Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedName } },
+                    Employer = new Employer {Name = new Name {EmprefAssociatedName = ExpectedName}},
                     Links = new Links()
                 });
 

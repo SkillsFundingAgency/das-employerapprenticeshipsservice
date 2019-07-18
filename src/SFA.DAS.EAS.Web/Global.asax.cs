@@ -27,14 +27,14 @@ using SFA.DAS.Logging;
 using SFA.DAS.Audit.Client;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights;
-using SFA.DAS.AutoConfiguration;
+using SFA.DAS.Configuration;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
-using StructureMap;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -73,27 +73,13 @@ namespace SFA.DAS.EAS.Web
                 };
             });
 
-            var container = StructuremapMvc.StructureMapDependencyScope.Container;
-
-            var environmentService = container.GetInstance<IEnvironmentService>();
-
-            if (environmentService.IsCurrent(DasEnv.LOCAL))
+            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
             {
-                SystemDetailsViewModel.EnvironmentName = DasEnv.LOCAL.ToString();
-                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-            if (environmentService.IsCurrent(DasEnv.AT))
-            {
-                SystemDetailsViewModel.EnvironmentName = DasEnv.AT.ToString();
-                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-            if (environmentService.IsCurrent(DasEnv.TEST))
-            {
-                SystemDetailsViewModel.EnvironmentName = DasEnv.TEST.ToString();
+                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironment.ToString();
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 
-            StartServiceBusEndpoint(container);
+            StartServiceBusEndpoint();
         }
 
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
@@ -140,10 +126,12 @@ namespace SFA.DAS.EAS.Web
             StopServiceBusEndpoint();
         }
 
-        private void StartServiceBusEndpoint(IContainer container)
+        private void StartServiceBusEndpoint()
         {
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString, container)
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense))

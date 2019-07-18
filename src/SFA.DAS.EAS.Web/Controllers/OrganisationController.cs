@@ -1,13 +1,24 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
+using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/organisations")]
-    public class OrganisationController : Controller
+    public class OrganisationController : BaseController
     {
+        public OrganisationController(
+            IAuthenticationService owinWrapper,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("confirm")]
