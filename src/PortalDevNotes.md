@@ -13,8 +13,11 @@
 
 ## Todo
 
-* as part of 409 release, will have to manually reformat existing documents due to schema change:
-Providers has moved from under organisations to under account
+* our configed salt for decoding the hash of the public account legal entity id is fae3#l%V*wGe,
+ but that salt isn't in the config for any other service!
+ sfa.das.encoding uses a different salt for public account legal entity id.
+ get to the bottom of the discrepancy, and either use sfa.das.encoding with their salt
+ or extend sfa.das.encoding with the 2nd? public salt!!!
 
 * ask devops to have separate build & release for portal solution
 
@@ -31,8 +34,6 @@ we can probably leave as is, as the webjob is idempotent, but we could clean it 
 [05/13/2019 13:01:29 > 04c320: INFO] 2019-05-13 13:01:29.8007 [INFO] [Function.CreateReadStoreDatabase.User] - 645de859-b46f-4b8b-8d80-694f64232464: Create database returned OK 
 [05/13/2019 13:01:29 > 04c320: INFO] 2019-05-13 13:01:29.9726 [INFO] [Function.CreateReadStoreDatabase.User] - 645de859-b46f-4b8b-8d80-694f64232464: Create document collection returned OK 
 [05/13/2019 13:01:30 > 04c320: INFO] 2019-05-13 13:01:30.0250 [INFO] [Function.CreateReadStoreDatabase] - Executed 'CreateReadStoreDatabaseJob.CreateReadStoreDatabase' (Succeeded, Id=645de859-b46f-4b8b-8d80-694f64232464) 
-
-* create readme.md for portal
 
 * it would be better to have a webjob to periodically clean-up processed messages
 
