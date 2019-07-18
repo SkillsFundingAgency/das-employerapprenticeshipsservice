@@ -366,7 +366,7 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
             {
                 if (model.AccountViewModel == null || model.AccountViewModel.VacanciesRetrieved == false)
                 {
-                    viewModel.ViewName = "VacancyServiceDown";
+                    viewModel.ViewName = "MultipleVacancies";
                 }
                 else
                 {
@@ -448,12 +448,6 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
 
         [ChildActionOnly]
         public ActionResult FundingComplete(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyServiceDown(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
