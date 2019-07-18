@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class TransactionViewModel : IAccountResource
+    public class TransactionViewModel
     {
         public string Description { get; set; }
         public TransactionItemType TransactionType { get; set; }

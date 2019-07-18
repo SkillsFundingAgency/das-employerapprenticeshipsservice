@@ -40,6 +40,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _currentDateTime = currentDateTime;
         }
 
+        //Needed for tests
+        protected EmployerTeamOrchestrator()
+        {
+        }
+
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
         {
             var response = await GetTeamMembers(hashedAccountId, externalUserId);

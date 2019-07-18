@@ -32,8 +32,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _configuration = new EmployerAccountsConfiguration();
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration, 
-               _userViewTestingService.Object,_flashMessage.Object)
+            _homeController = new HomeController(
+                _owinWrapper.Object, 
+                _homeOrchestrator.Object,              
+                _configuration, 
+                _userViewTestingService.Object,
+                _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object
             };
@@ -60,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             await _homeController.HandleEmailChanged(true);
 
             //Assert
-            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.Headline.Equals("You've changed your email")),It.IsAny<string>(),1),Times.Never);
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.Headline.Equals("You've changed your email")), It.IsAny<string>(), 1), Times.Never);
             _owinWrapper.Verify(x => x.UpdateClaims(), Times.Never);
         }
 
@@ -76,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
-        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToGetGovernmentFunding()
+        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToIndex()
         {
             //Act
             var actual = await _homeController.HandleNewRegistration();
@@ -86,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             Assert.IsAssignableFrom<RedirectToRouteResult>(actual);
             var actualRedirect = actual as RedirectToRouteResult;
             Assert.IsNotNull(actualRedirect);
-            Assert.AreEqual("GetGovernmentFunding", actualRedirect.RouteValues["action"]);
+            Assert.AreEqual("Index", actualRedirect.RouteValues["action"]);
         }
 
         [Test]
@@ -107,8 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             _owinWrapper.Verify(x => x.UpdateClaims(), Times.Once);
-            _homeOrchestrator.Verify(x=>x.SaveUpdatedIdentityAttributes(expectedId,expectedEmail,expectedFirstName,expectedLastName));
-
+            _homeOrchestrator.Verify(x => x.SaveUpdatedIdentityAttributes(expectedId, expectedEmail, expectedFirstName, expectedLastName));
         }
     }
 }

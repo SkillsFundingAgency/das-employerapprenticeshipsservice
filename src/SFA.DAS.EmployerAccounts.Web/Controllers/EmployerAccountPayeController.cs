@@ -9,13 +9,17 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
-    [RoutePrefix("accounts/{HashedAccountId}")]
+    [AuthoriseActiveUser]
+    [RoutePrefix("accounts")]
     public class EmployerAccountPayeController : BaseController
     {
+        private const int AddPayeUsingGovernmentGateway = 1;
+        private const int AddPayeUsingAorn = 2;
+
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
 
         public EmployerAccountPayeController(
@@ -32,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes")]
+        [Route("{HashedAccountId}/schemes")]
         public async Task<ActionResult> Index(string hashedAccountId)
         {
             var model = await _employerAccountPayeOrchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
@@ -47,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes/next")]
+        [Route("{HashedAccountId}/schemes/next")]
         public async Task<ActionResult> NextSteps(string hashedAccountId)
         {
             var model = await _employerAccountPayeOrchestrator.GetNextStepsViewModel(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName), hashedAccountId);
@@ -59,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("schemes/next")]
+        [Route("{HashedAccountId}/schemes/next")]
         public ActionResult NextSteps(int? choice)
         {
             switch (choice ?? 0)
@@ -78,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes/{empRef}/details")]
+        [Route("{HashedAccountId}/schemes/{empRef}/details")]
         public async Task<ActionResult> Details(string hashedAccountId, string empRef)
         {
             empRef = empRef.FormatPayeFromUrl();
@@ -89,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes/gatewayInform")]
+        [Route("{HashedAccountId}/schemes/gatewayInform")]
         public async Task<ActionResult> GatewayInform(string hashedAccountId)
         {
             var response = await _employerAccountPayeOrchestrator.CheckUserIsOwner(
@@ -102,7 +106,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes/gateway")]
+        [Route("{HashedAccountId}/schemes/gateway")]
         public async Task<ActionResult> GetGateway(string hashedAccountId)
         {
             var url = await _employerAccountPayeOrchestrator.GetGatewayUrl(
@@ -116,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes/confirm")]
+        [Route("{HashedAccountId}/schemes/confirm")]
         public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId)
         {
             var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(
@@ -139,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("schemes/confirm")]
+        [Route("{HashedAccountId}/schemes/confirm")]
         public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId, AddNewPayeSchemeViewModel model)
         {
             var result = await _employerAccountPayeOrchestrator.AddPayeSchemeToAccount(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
@@ -164,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes/{empRef}/remove")]
+        [Route("{HashedAccountId}/schemes/{empRef}/remove")]
         public async Task<ActionResult> Remove(string hashedAccountId, string empRef)
         {
             var model = await _employerAccountPayeOrchestrator.GetRemovePayeSchemeModel(new RemovePayeSchemeViewModel
@@ -179,7 +183,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("schemes/remove")]
+        [Route("{HashedAccountId}/schemes/remove")]
         public async Task<ActionResult> RemovePaye(string hashedAccountId, RemovePayeSchemeViewModel model)
         {
             model.UserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
@@ -209,6 +213,42 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             AddFlashMessageToCookie(flashMessage);
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { model.HashedAccountId });
+        }
+
+        [HttpGet]
+        [Route("schemes/waysToAdd")]
+        public ViewResult WaysToAdd()
+        {
+            var model = new
+            {
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("schemes/waysToAdd")]
+        public ActionResult WaysToAdd(int? choice)
+        {
+            switch (choice ?? 0)
+            {
+                case AddPayeUsingGovernmentGateway:
+                    return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
+                case AddPayeUsingAorn:
+                    return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+                default:
+                {
+                    ViewBag.InError = true;
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                    };
+
+                    return View(model);
+                }
+            }
         }
     }
 }

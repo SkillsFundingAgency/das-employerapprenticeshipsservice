@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using System;
+using System.Linq;
+using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -11,9 +13,13 @@ using SFA.DAS.Validation;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
+using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateUserAccount;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -117,25 +123,112 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateAccount(CreateAccountViewModel viewModel, HttpContextBase context)
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateOrUpdateAccount(CreateAccountModel model, HttpContextBase context)
+        {
+            if (string.IsNullOrWhiteSpace(model?.HashedAccountId?.Value))
+            {
+                return await CreateNewAccount(model);
+            }
+
+            return await UpdateExistingAccount(model);
+        }
+
+        private async Task<OrchestratorResponse<EmployerAgreementViewModel>> UpdateExistingAccount(CreateAccountModel model)
+        {
+            try
+            {
+                await AddPayeToExistingAccount(model);
+
+                await AddLegalEntityToExistingAccount(model);
+
+                await UpdateAccountNameToLegalEntityName(model);
+
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Data = new EmployerAgreementViewModel
+                    {
+                        EmployerAgreement = new EmployerAgreementView
+                        {
+                            HashedAccountId = model.HashedAccountId.Value
+                        }
+                    },
+                    Status = HttpStatusCode.OK
+                };
+            }
+            catch (Exception e)
+            {
+                _logger.Info($"Create Account Validation Error: {e.Message}");
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Data = new EmployerAgreementViewModel(),
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e,
+                    FlashMessage = new FlashMessageViewModel()
+                };
+            }
+        }
+
+        private async Task UpdateAccountNameToLegalEntityName(CreateAccountModel model)
+        {
+            await _mediator.SendAsync(new RenameEmployerAccountCommand
+            {
+                HashedAccountId = model.HashedAccountId.Value,
+                ExternalUserId = model.UserId,
+                NewName = model.OrganisationName
+            });
+        }
+
+        private async Task AddLegalEntityToExistingAccount(CreateAccountModel model)
+        {
+            await Mediator.SendAsync(new CreateLegalEntityCommand
+            {
+                HashedAccountId = model.HashedAccountId.Value,
+                Code = model.OrganisationReferenceNumber,
+                DateOfIncorporation = model.OrganisationDateOfInception,
+                Status = model.OrganisationStatus,
+                Source = model.OrganisationType,
+                PublicSectorDataSource = Convert.ToByte(model.PublicSectorDataSource),
+                Sector = model.Sector,
+                Name = model.OrganisationName,
+                Address = model.OrganisationAddress,
+                ExternalUserId = model.UserId
+            });
+        }
+
+        private async Task AddPayeToExistingAccount(CreateAccountModel model)
+        {
+            await Mediator.SendAsync(new AddPayeToAccountCommand
+            {
+                HashedAccountId = model.HashedAccountId.Value,
+                AccessToken = model.AccessToken,
+                RefreshToken = model.RefreshToken,
+                Empref = model.PayeReference,
+                ExternalUserId = model.UserId,
+                EmprefName = model.EmployerRefName,
+                Aorn = model.Aorn
+            });
+        }
+
+        private async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateNewAccount(CreateAccountModel model)
         {
             try
             {
                 var result = await Mediator.SendAsync(new CreateAccountCommand
                 {
-                    ExternalUserId = viewModel.UserId,
-                    OrganisationType = viewModel.OrganisationType,
-                    OrganisationName = viewModel.OrganisationName,
-                    OrganisationReferenceNumber = viewModel.OrganisationReferenceNumber,
-                    OrganisationAddress = viewModel.OrganisationAddress,
-                    OrganisationDateOfInception = viewModel.OrganisationDateOfInception,
-                    PayeReference = viewModel.PayeReference,
-                    AccessToken = viewModel.AccessToken,
-                    RefreshToken = viewModel.RefreshToken,
-                    OrganisationStatus = viewModel.OrganisationStatus,
-                    EmployerRefName = viewModel.EmployerRefName,
-                    PublicSectorDataSource = viewModel.PublicSectorDataSource,
-                    Sector = viewModel.Sector
+                    ExternalUserId = model.UserId,
+                    OrganisationType = model.OrganisationType,
+                    OrganisationName = model.OrganisationName,
+                    OrganisationReferenceNumber = model.OrganisationReferenceNumber,
+                    OrganisationAddress = model.OrganisationAddress,
+                    OrganisationDateOfInception = model.OrganisationDateOfInception,
+                    PayeReference = model.PayeReference,
+                    AccessToken = model.AccessToken,
+                    RefreshToken = model.RefreshToken,
+                    OrganisationStatus = model.OrganisationStatus,
+                    EmployerRefName = model.EmployerRefName,
+                    PublicSectorDataSource = model.PublicSectorDataSource,
+                    Sector = model.Sector,
+                    Aorn = model.Aorn
                 });
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>
@@ -163,10 +256,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<EmployerAccountViewModel>> CreateUserAccount(CreateUserAccountViewModel viewModel, HttpContextBase context)
+        public virtual async Task<OrchestratorResponse<EmployerAccountViewModel>> CreateMinimalUserAccountForSkipJourney(CreateUserAccountViewModel viewModel, HttpContextBase context)
         {
             try
             {
+                var existingUserAccounts =
+                    await Mediator.SendAsync(new GetUserAccountsQuery { UserRef = viewModel.UserId });
+
+                if (existingUserAccounts?.Accounts?.AccountList?.Any() == true)
+                    return new OrchestratorResponse<EmployerAccountViewModel>
+                    {
+                        Data = new EmployerAccountViewModel
+                        {
+                            HashedId = existingUserAccounts.Accounts.AccountList.First().HashedId
+                        },
+                        Status = HttpStatusCode.OK
+                    };
+
                 var result = await Mediator.SendAsync(new CreateUserAccountCommand
                 {
                     ExternalUserId = viewModel.UserId,
@@ -203,7 +309,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
                 OrganisationName = enteredData.EmployerAccountOrganisationData.OrganisationName,
-                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress,
+                RegisteredAddress = enteredData.EmployerAccountOrganisationData.OrganisationRegisteredAddress?.Split(','),
                 OrganisationReferenceNumber = enteredData.EmployerAccountOrganisationData.OrganisationReferenceNumber,
                 OrganisationDateOfInception = enteredData.EmployerAccountOrganisationData.OrganisationDateOfInception,
                 PayeReference = enteredData.EmployerAccountPayeRefData.PayeReference,
@@ -212,7 +318,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OrganisationStatus = enteredData.EmployerAccountOrganisationData.OrganisationStatus,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
                 Sector = enteredData.EmployerAccountOrganisationData.Sector,
-                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch
+                NewSearch = enteredData.EmployerAccountOrganisationData.NewSearch,
+                AORN = enteredData.EmployerAccountPayeRefData.AORN
             };
 
             return new OrchestratorResponse<SummaryViewModel>

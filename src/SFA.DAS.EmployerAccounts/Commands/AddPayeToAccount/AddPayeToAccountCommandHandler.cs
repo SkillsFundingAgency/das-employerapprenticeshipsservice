@@ -6,7 +6,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Events;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
@@ -65,7 +64,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
                         RefreshToken = message.RefreshToken,
                         AccountId = accountId,
                         EmpRef = message.Empref,
-                        RefName = message.EmprefName
+                        RefName = message.EmprefName, 
+                        Aorn = message.Aorn
                     }
                 );
 
@@ -134,7 +134,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
                         PropertyUpdate.FromString("Ref", message.Empref),
                         PropertyUpdate.FromString("AccessToken", message.AccessToken),
                         PropertyUpdate.FromString("RefreshToken", message.RefreshToken),
-                        PropertyUpdate.FromString("Name", message.EmprefName)
+                        PropertyUpdate.FromString("Name", message.EmprefName),
+                        PropertyUpdate.FromString("Aorn", message.Aorn)
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = accountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "Paye", Id = message.Empref }

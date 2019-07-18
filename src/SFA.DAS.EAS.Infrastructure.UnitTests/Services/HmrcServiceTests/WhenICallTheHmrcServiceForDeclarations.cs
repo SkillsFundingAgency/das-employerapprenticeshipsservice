@@ -6,16 +6,17 @@ using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.ActiveDirectory;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
+using EmployerApprenticeshipsServiceConfiguration = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
-    
+
     class WhenICallTheHmrcServiceForDeclarations
     {
         private const string ExpectedBaseUrl = "http://hmrcbase.gov.uk/auth/";
@@ -27,7 +28,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private const string EmpRef = "111/ABC";
 
         private HmrcService _hmrcService;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
+        private HmrcConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
         private Mock<ITokenServiceApiClient> _tokenService;
@@ -37,9 +38,8 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         [SetUp]
         public void Arrange()
         {
-            _configuration = new EmployerApprenticeshipsServiceConfiguration
-            {
-                Hmrc = new HmrcConfiguration
+            _configuration =
+                new HmrcConfiguration
                 {
                     BaseUrl = ExpectedBaseUrl,
                     ClientId = ExpectedClientId,
@@ -52,8 +52,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
                     AzureResourceId = "Resource1",
                     AzureTenant = "test",
                     UseHiDataFeed = false
-                }
-            };
+                };
 
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
 
@@ -64,15 +63,15 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 
             _azureAdAuthService = new Mock<IAzureAdAuthenticationService>();
             _azureAdAuthService.Setup(x =>
-                    x.GetAuthenticationResult(_configuration.Hmrc.AzureClientId, _configuration.Hmrc.AzureAppKey,
-                        _configuration.Hmrc.AzureResourceId, _configuration.Hmrc.AzureTenant))
-                .ReturnsAsync( ExpectedAuthToken);
+                    x.GetAuthenticationResult(_configuration.AzureClientId, _configuration.AzureAppKey,
+                        _configuration.AzureResourceId, _configuration.AzureTenant))
+                .ReturnsAsync(ExpectedAuthToken);
 
             _hmrcService = new HmrcService(_configuration, _httpClientWrapper.Object,
                 _apprenticeshipLevyApiClient.Object, _tokenService.Object, new NoopExecutionPolicy(), null,
                 _azureAdAuthService.Object, new Mock<ILog>().Object);
         }
-        
+
         [Test]
         public async Task ThenIShouldGetBackDeclarationsForAGivenEmpRef()
         {
@@ -98,7 +97,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         public async Task ThenTheDateFromIsAddedToTheRequestIfPopulated()
         {
             //Arrange
-            var expectedDate = new DateTime(2017,04,01);
+            var expectedDate = new DateTime(2017, 04, 01);
 
             //Act
             await _hmrcService.GetLevyDeclarations(EmpRef, expectedDate);
@@ -139,15 +138,15 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         public async Task ThenIfTheConfigurationIsSetToUseTheMiDataThenTheAzureAuthServiceIsCalled()
         {
             //Arrange
-            _configuration.Hmrc.UseHiDataFeed = true;
+            _configuration.UseHiDataFeed = true;
 
 
             //Act
             await _hmrcService.GetLevyDeclarations(EmpRef);
 
             //Assert
-            _tokenService.Verify(x=>x.GetPrivilegedAccessTokenAsync(),Times.Never);
-            _azureAdAuthService.Verify(x=>x.GetAuthenticationResult(_configuration.Hmrc.ClientId, _configuration.Hmrc.AzureAppKey,_configuration.Hmrc.AzureResourceId,_configuration.Hmrc.AzureTenant),Times.Once);
+            _tokenService.Verify(x => x.GetPrivilegedAccessTokenAsync(), Times.Never);
+            _azureAdAuthService.Verify(x => x.GetAuthenticationResult(_configuration.ClientId, _configuration.AzureAppKey, _configuration.AzureResourceId, _configuration.AzureTenant), Times.Once);
         }
     }
 }

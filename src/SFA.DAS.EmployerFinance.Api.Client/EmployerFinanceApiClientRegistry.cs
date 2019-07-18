@@ -1,4 +1,5 @@
-﻿using StructureMap;
+﻿using SFA.DAS.AutoConfiguration;
+using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.Client
 {
@@ -6,7 +7,7 @@ namespace SFA.DAS.EmployerFinance.Api.Client
     {
         public EmployerFinanceApiClientRegistry()
         {
-            For<EmployerFinanceApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerFinanceApiClientConfiguration>("SFA.DAS.EmployerFinance.Api.Client")).Singleton();
+            For<EmployerFinanceApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceApiClientConfiguration>("SFA.DAS.EmployerFinance.Api.Client")).Singleton();
             For<IEmployerFinanceApiClient>().Use<EmployerFinanceApiClient>();
         }
     }

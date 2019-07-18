@@ -5,7 +5,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpsertRegisteredUserTests
@@ -14,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpsertRegisteredUserTests
     {
         private Mock<IValidator<UpsertRegisteredUserCommand>> _validator;
         private Mock<IUserAccountRepository> _userRepository;
+        private Mock<IEventPublisher> _eventPublisher;
         private UpsertRegisteredUserCommandHandler _handler;
         private UpsertRegisteredUserCommand _command;
 
@@ -25,8 +28,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpsertRegisteredUserTests
                 .Returns(new ValidationResult());
 
             _userRepository = new Mock<IUserAccountRepository>();
+            _eventPublisher = new Mock<IEventPublisher>();
 
-            _handler = new UpsertRegisteredUserCommandHandler(_validator.Object, _userRepository.Object);
+            _handler = new UpsertRegisteredUserCommandHandler(_validator.Object, _userRepository.Object, _eventPublisher.Object);
 
             _command = new UpsertRegisteredUserCommand
             {
@@ -59,6 +63,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UpsertRegisteredUserTests
                                                                && u.UserRef == _command.UserRef
                                                                && u.FirstName == _command.FirstName
                                                                && u.LastName == _command.LastName)), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenItShouldPublishAnEventToReportTheUpsert()
+        {
+            await _handler.Handle(_command);
+
+            _eventPublisher.Verify(x => x.Publish(It.Is<UpsertedUserEvent>(y => y.UserRef == _command.UserRef)));
         }
     }
 }

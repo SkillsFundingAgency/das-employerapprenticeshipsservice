@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationTests
         }
 
         [Test]
-        public void ThenTrueIsRetrunedWhenAllFieldsArePopulated()
+        public void ThenTrueIsReturnedWhenAllFieldsArePopulated()
         {
             //Act
             var actual = _validator.Validate(new GetOrganisationsRequest {SearchTerm = "Test Company"});

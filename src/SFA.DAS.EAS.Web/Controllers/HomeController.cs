@@ -1,21 +1,12 @@
 ﻿using SFA.DAS.EmployerUsers.WebClientComponents;
 using System.Web.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Web.Extensions;
-using SFA.DAS.EAS.Web.ViewModels;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [RoutePrefix("service")]
-    public class HomeController : BaseController
+    public class HomeController : Controller
     {
-        public HomeController(IAuthenticationService owinWrapper,
-            IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage)
-            : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-        }
-
         [Route("~/")]
         [Route]
         [Route("Index")]
@@ -30,20 +21,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult ViewAccounts()
         {
             return Redirect(Url.EmployerAccountsAction("service/accounts", false));
-        }
-
-        [HttpGet]
-        [Route("usedServiceBefore")]
-        public ActionResult UsedServiceBefore()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/usedServiceBefore", false));
-        }
-
-        [HttpGet]
-        [Route("whatYoullNeed")]
-        public ActionResult WhatYoullNeed()
-        {
-            return Redirect(Url.EmployerAccountsAction("service/whatYoullNeed", false));
         }
 
         [HttpGet]
@@ -88,12 +65,6 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult SignOut()
         {
             return Redirect(Url.EmployerAccountsAction("service/signOut", false));
-        }
-
-        [Route("SignOutCleanup")]
-        public void SignOutCleanup()
-        {
-            OwinWrapper.SignOutUser();
         }
 
         [HttpGet]
