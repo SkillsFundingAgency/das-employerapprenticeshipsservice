@@ -326,6 +326,7 @@
     <Content Include="dist\javascripts\govuk-template.js" />
     <Content Include="dist\javascripts\ie.js" />
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
+    <Content Include="dist\javascripts\legal\legal-agreement.css" />
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
