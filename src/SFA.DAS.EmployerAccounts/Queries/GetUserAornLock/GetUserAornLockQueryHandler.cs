@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUserAornLock
 
         public async Task<GetUserAornLockResponse> Handle(GetUserAornLockRequest message)
         {
-            var status = await _userAornPayeLockService.UserAornPayeStatus(message.userRef);
+            var status = await _userAornPayeLockService.UserAornPayeStatus(message.UserRef);
             return new GetUserAornLockResponse { UserAornStatus = status };
         }
     }

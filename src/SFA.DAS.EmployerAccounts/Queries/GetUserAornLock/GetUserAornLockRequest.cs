@@ -7,9 +7,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUserAornLock
     {
         public GetUserAornLockRequest(string userRef)
         {
-            this.userRef = Guid.Parse(userRef);
+            UserRef = Guid.Parse(userRef);
         }
 
-        public Guid userRef { get; }
+        public Guid UserRef { get; }
     }
 }

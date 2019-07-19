@@ -2,6 +2,7 @@
 using AutoMapper;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
+using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -31,6 +32,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 Data = _mapper.Map<UserAornLockStatusViewModel>(response.UserAornStatus)
             };
-        }     
+        }
+
+        public virtual async Task UpdateUserAornLockStatus(string userRef, bool success)
+        {
+            await _mediator.SendAsync(new UpdateUserAornLockRequest(userRef, success));
+        }
     }
 }
