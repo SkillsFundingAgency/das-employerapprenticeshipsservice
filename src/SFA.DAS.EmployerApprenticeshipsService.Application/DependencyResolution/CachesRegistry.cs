@@ -1,4 +1,7 @@
-﻿using Microsoft.Azure;
+﻿using System;
+using Microsoft.Azure;
+using SFA.DAS.Activities.Configuration;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Caches;
 using SFA.DAS.Configuration;
 using StructureMap;
@@ -9,16 +12,10 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public CachesRegistry()
         {
-            For<IInProcessCache>().Use<InProcessCache>().Singleton();
-
-            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
-            {
-                For<IDistributedCache>().Use<LocalDevCache>().Singleton();
-            }
-            else
-            {
-                For<IDistributedCache>().Use<RedisCache>(() => new RedisCache(CloudConfigurationManager.GetSetting("RedisConnection"))).Singleton();
-            }
+            For<IDistributedCache>().Use(c => c.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL)
+                ? new LocalDevCache() as IDistributedCache
+                : new RedisCache(CloudConfigurationManager.GetSetting("RedisConnection")) as
+                    IDistributedCache).Singleton();
         }
     }
 }
