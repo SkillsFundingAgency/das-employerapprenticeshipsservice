@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -34,7 +35,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         [Route("Index")]
         public async Task<ActionResult> Index()
-        {           
+        {
+            //return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = "HASH" });
+            //return RedirectToAction("Index", "EmployerAgreement");
+            return RedirectToAction("LegalAgreement", "EmployerAgreement", new RouteValueDictionary(){ { "HashedAccountId", "HASH" } });
+
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             if (!string.IsNullOrWhiteSpace(userId))

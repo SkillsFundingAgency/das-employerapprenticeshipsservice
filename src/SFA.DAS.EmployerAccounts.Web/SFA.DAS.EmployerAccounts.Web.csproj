@@ -189,6 +189,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
+    <Compile Include="ViewModels\LegalAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />
@@ -316,6 +317,8 @@
     <Content Include="dist\images\pub-cover-html.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
+    <Content Include="dist\css\accordion.css" />
+    <Content Include="dist\javascripts\accordion.js" />
     <Content Include="dist\javascripts\app.js" />
     <Content Include="dist\javascripts\apprentice\dropdown.js" />
     <Content Include="dist\javascripts\apprentice\select2.min.js" />
@@ -734,6 +737,7 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
+    <Content Include="Views\EmployerAgreement\LegalAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">

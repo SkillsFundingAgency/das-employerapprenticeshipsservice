@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
+    //[Authorize] TODO DON'T LEAVE THIS LIKE THIS
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
@@ -73,7 +73,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var model = new OrchestratorResponse<LegalAgreementViewModel>();
             return View(model);
-
         }
 
 

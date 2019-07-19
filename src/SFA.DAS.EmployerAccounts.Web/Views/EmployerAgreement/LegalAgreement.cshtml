@@ -10,12 +10,52 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/about-your-agreement/agreement-about";
 }
 
+<script type="text/javascript" src="@Url.Content("../../dist/javascripts/jquery-1.11.0.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("../../dist/javascripts/accordion.js")"></script>
+<link href="@Url.Content("../../dist/css/accordion.css")" rel="stylesheet" type="text/css" />
+
+<div>
+    <h1 class="heading-xlarge">Agreement between ASSURANCE AEROSPACE LTD and the Education and Skills Funding Agency (ESFA)</h1>
+    <p>We updated the agreement on 1 May 2018.</p>
+    <h3 class="heading-medium">Key features of the agreement</h3>
+    <p>ASSURANCE AEROSPACE LTD must:</p>
+    <ul class="list list-bullet">
+        <li>only use the funding in their apprenticeship service account to train and assess apprentices</li>
+        <li>have a ‘contract for services’ with their training providers</li>
+        <li>follow the apprenticeship funding rules</li>
+    </ul>
+    <p>The ESFA can:</p>
+    <ul class="list list-bullet">
+        <li>suspend payments, recover funds or close ASSURANCE AEROSPACE LTD’s account if ASSURANCE AEROSPACE LTD breaks the agreement</li>
+        <li>change the terms of the agreement and any part of the apprenticeship service</li>
+    </ul>
+    <h3 class="heading-medium">The full agreement</h3>
+    <div class="js-hidden" data-module="accordion-with-descriptions">
+        <div class="subsection-wrapper">
+            <div class="subsection js-subsection">
+                <div class="subsection__header">
+                    <h2 class="subsection__title">ESFA employer agreement</h2>
+                </div>
+                <div class="subsection__content js-subsection-content" id="subsection_content_0">
+                    <ul class="subsection__list">
+                        <li class="subsection__list-item">
+                            <a href="#1">List item one</a>
+                        </li>
+                        <li class="subsection__list-item">
+                            <a href="#1">List item two</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div>
 
 
-        @*<div class="govuk-width-container">
+    @*<div class="govuk-width-container">
             <main class="govuk-main-wrapper govuk-main-wrapper--l">
 
                 <div class="govuk-grid-row">
@@ -538,7 +578,7 @@
                 </form>
             </div>
         </div>*@
-    </div>
+</div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
