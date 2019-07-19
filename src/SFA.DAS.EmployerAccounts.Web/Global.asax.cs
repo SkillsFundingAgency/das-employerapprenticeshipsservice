@@ -21,15 +21,16 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using SFA.DAS.Configuration;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.UnitOfWork.NServiceBus;
+using Environment = SFA.DAS.Configuration.Environment;
 using System.Configuration;
 using Microsoft.ApplicationInsights.Extensibility;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Audit.Client.Web;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 
@@ -69,22 +70,9 @@ namespace SFA.DAS.EmployerAccounts.Web
                 };
             });
 
-            var container = StructuremapMvc.StructureMapDependencyScope.Container;
-            var environmentService = container.GetInstance<IEnvironmentService>();
-
-            if (environmentService.IsCurrent(DasEnv.LOCAL))
+            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
             {
-                SystemDetailsViewModel.EnvironmentName = DasEnv.LOCAL.ToString();
-                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-            if (environmentService.IsCurrent(DasEnv.AT))
-            {
-                SystemDetailsViewModel.EnvironmentName = DasEnv.AT.ToString();
-                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            }
-            if (environmentService.IsCurrent(DasEnv.TEST))
-            {
-                SystemDetailsViewModel.EnvironmentName = DasEnv.TEST.ToString();
+                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironment.ToString();
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 
@@ -140,7 +128,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))

@@ -277,6 +277,9 @@
   <ItemGroup>
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheLatestActivitiesPage.cs" />
     <Compile Include="Controllers\ActivitiesControllerTests\WhenIViewTheActivitiesPage.cs" />
+    <Compile Include="Controllers\BaseControllerTests\WhenOnActionExecuting.cs" />
+    <Compile Include="Controllers\BaseControllerTests\WhenReturningView.cs" />
+    <Compile Include="Controllers\BaseControllerTests\WhenStoringFlashMessages.cs" />
     <Compile Include="Controllers\ControllerTestBase.cs" />
     <Compile Include="Helpers\AccountTaskHelperTests\WhenIGetAPriority.cs" />
     <Compile Include="Mappings\WhenAutoMapping.cs" />
