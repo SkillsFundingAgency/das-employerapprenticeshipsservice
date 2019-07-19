@@ -67,6 +67,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return View(model);
 
         }
+        [HttpGet]
+        [Route("legal-agreement")]
+        public async Task<ActionResult> LegalAgreement()
+        {
+            var model = new OrchestratorResponse<LegalAgreementViewModel>();
+            return View(model);
+
+        }
+
 
         [HttpGet]
         [Route("agreements/{agreementId}/details")]
