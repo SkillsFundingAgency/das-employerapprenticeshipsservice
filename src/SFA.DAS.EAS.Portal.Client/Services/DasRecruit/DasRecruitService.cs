@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,6 +48,10 @@ namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
                 // (the recruit api in test is taking up to 3.5 seconds, which really slows down the homepage rendering :-( )
                 _log.Info($"Received {(int)response.StatusCode} response in {stopWatch.Elapsed}");
                 var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                    return Enumerable.Empty<Vacancy>();
+                
                 if (!response.IsSuccessStatusCode)
                     throw new RestHttpClientException(response, content);
 
