@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
@@ -22,6 +23,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly SearchPensionRegulatorOrchestrator _orchestrator;   
         private readonly IMediator _mediatr;
         private const int OrgNotListed = 0;
+        private Regex _aornRegex = new Regex("^[A-Z0-9]{13}$");
+        private Regex _payeRegex = new Regex("^[0-9]{3}/?[A-Z0-9]{7}$");
 
         public SearchPensionRegulatorController(
             IAuthenticationService owinWrapper,
@@ -113,7 +116,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("pensionregulator/aorn")]
         public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
-            ValidateSearchPensionRegulatorByAornViewModel(viewModel);
+            ValidateAndFormatSearchPensionRegulatorByAornViewModel(viewModel);
 
             if (!viewModel.Valid)
             {
@@ -145,17 +148,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
         }
 
-        private void ValidateSearchPensionRegulatorByAornViewModel(SearchPensionRegulatorByAornViewModel viewModel)
+        private void ValidateAndFormatSearchPensionRegulatorByAornViewModel(SearchPensionRegulatorByAornViewModel viewModel)
         {
             var errors = new Dictionary<string, string>();
+
+            viewModel.Aorn = viewModel.Aorn.ToUpper().Trim();
+            viewModel.PayeRef = viewModel.PayeRef.ToUpper().Trim();
+
             if (string.IsNullOrWhiteSpace(viewModel.Aorn))
             {
                 errors.Add(nameof(viewModel.Aorn), "Enter your reference number to continue");
+            }
+            else if (!_aornRegex.IsMatch(viewModel.Aorn.ToUpper().Trim()))
+            {
+                errors.Add(nameof(viewModel.Aorn), "Enter an accounts office reference number number in the correct format");
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.PayeRef))
             {
                 errors.Add(nameof(viewModel.PayeRef), "Enter your PAYE scheme to continue");
+            }
+            else if (!_payeRegex.IsMatch(viewModel.PayeRef))
+            {
+                errors.Add(nameof(viewModel.PayeRef), "Enter a PAYE scheme number number in the correct format");
+            }
+            else if(viewModel.PayeRef[3] != '/')
+            {
+                viewModel.PayeRef = viewModel.PayeRef.Insert(3, "/");
             }
 
             viewModel.AddErrorsFromDictionary(errors);

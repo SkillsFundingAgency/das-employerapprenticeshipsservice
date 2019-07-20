@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByAorn
 {
     [TestFixture]
-    class WhenIDontProvideAnAorn
+    class WhenIDontProvideAValidAorn
     {
         private SearchPensionRegulatorController _controller;
         
@@ -32,12 +32,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         [Test]
         public async Task ThenAnErrorIsDisplayed()
         {
-            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "", PayeRef = "000/EDDEFDS" });
+            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "SDCXDD", PayeRef = "000/EDDEFDS" });
             var viewResponse = (ViewResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
             var viewModel = viewResponse.Model as SearchPensionRegulatorByAornViewModel;
-            Assert.AreEqual("Enter your reference number to continue", viewModel.AornError);
+            Assert.AreEqual("Enter an accounts office reference number number in the correct format", viewModel.AornError);
         }
     }
 }
