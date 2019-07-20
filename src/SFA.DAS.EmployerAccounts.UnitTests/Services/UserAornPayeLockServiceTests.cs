@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services
 {
@@ -119,6 +119,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         [Test]
         public void ItShouldReturnTheCorrectAornLockStatus([ValueSource("TestData")] TestData testData)
         {
+            var logger = Mock.Of<ILog>();
             var userRepo = new Mock<IUserRepository>();
             userRepo.Setup(x => x.GetAornPayeQueryAttempts(It.IsAny<Guid>())).ReturnsAsync(testData.Attempts.ToList());
 
@@ -132,7 +133,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 }
             };
 
-            var service = new UserAornPayeLockService(userRepo.Object, config);
+            var service = new UserAornPayeLockService(userRepo.Object, config, logger);
             var result = service.UserAornPayeStatus(It.IsAny<Guid>()).Result;
           
             Assert.AreEqual(result.RemainingAttempts, testData.Expected.RemainingAttempts);

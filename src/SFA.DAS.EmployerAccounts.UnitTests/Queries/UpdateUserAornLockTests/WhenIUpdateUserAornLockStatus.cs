@@ -3,10 +3,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
-using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
-using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.UpdateUserAornLockTests
 {
@@ -20,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.UpdateUserAornLockTests
         public void Arrange()
         {             
             _userAornPayeLockService = new Mock<IUserAornPayeLockService>();
-            _userAornPayeLockService.Setup(x => x.UpdateUserAornPayeAttempt(It.IsAny<Guid>(), It.IsAny<bool>()));
+            _userAornPayeLockService.Setup(x => x.UpdateUserAornPayeAttempt(It.IsAny<Guid>(), It.IsAny<bool>())).ReturnsAsync(true);
 
             Query = new UpdateUserAornLockRequest(Guid.NewGuid().ToString(), true);
             RequestHandler = new UpdateUserAornLockQueryHandler(_userAornPayeLockService.Object);

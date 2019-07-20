@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -36,10 +37,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                         }
                     });
 
+            var userAornLockOrchestrator = new Mock<UserAornLockOrchestrator>();
+
+            userAornLockOrchestrator.Setup(x => x.GetUserAornLockStatus(It.IsAny<string>())).ReturnsAsync(
+                new OrchestratorResponse<UserAornPayeStatus>
+                {
+                    Data = new UserAornPayeStatus
+                    {
+                        RemainingLock = 0
+                    }
+                });
+
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
                 orchestrator.Object,
-                Mock.Of<UserAornLockOrchestrator>(),
+                userAornLockOrchestrator.Object,
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>());

@@ -34,8 +34,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _controller = new EmployerAccountPayeController(
-                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, 
-                _userViewTestingService.Object, _flashMessage.Object);
+                _owinWrapper.Object, 
+                _employerAccountPayeOrchestrator.Object,
+                Mock.Of<UserAornLockOrchestrator>(),
+                _featureToggle.Object, 
+                _userViewTestingService.Object, 
+                _flashMessage.Object);
         }
 
         [Test]

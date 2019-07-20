@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface IUserAornPayeLockService
     {
-        Task UpdateUserAornPayeAttempt(Guid userRef, bool success);
+        Task<bool> UpdateUserAornPayeAttempt(Guid userRef, bool success);
         Task<UserAornPayeStatus> UserAornPayeStatus(Guid userRef);
     }
 }

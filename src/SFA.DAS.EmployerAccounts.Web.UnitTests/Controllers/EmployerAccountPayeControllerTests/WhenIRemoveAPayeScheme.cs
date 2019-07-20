@@ -7,6 +7,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPayeControllerTests
@@ -32,8 +33,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
             _controller = new EmployerAccountPayeController(
-                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, 
-                _userViewTestingService.Object, _flashMessage.Object);
+                _owinWrapper.Object, 
+                _employerAccountPayeOrchestrator.Object,
+                Mock.Of<UserAornLockOrchestrator>(), 
+                _featureToggle.Object, 
+                _userViewTestingService.Object, 
+                _flashMessage.Object);
         }
 
         [Test]
