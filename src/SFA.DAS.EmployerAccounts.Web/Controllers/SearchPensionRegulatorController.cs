@@ -99,16 +99,29 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("pensionregulator/aorn")]
         public async Task<ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn)
         {
+            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var aornLock = await _userAornLockOrchestrator.GetUserAornLockStatus(userRef);
+
             if (!string.IsNullOrWhiteSpace(payeRef) && !string.IsNullOrWhiteSpace(aorn))
             {
                 return await PerformSearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel
                 {
                     Aorn = aorn,
-                    PayeRef = payeRef
+                    PayeRef = payeRef,
+                    IsLocked = aornLock.Data.IsLocked,
+                    RemainingAttempts = aornLock.Data.RemainingAttempts,
+                    AllowedAttempts = aornLock.Data.AllowedAttempts,
+                    RemainingLock = aornLock.Data.RemainingLock
                 });
             }
 
-            return View(ControllerConstants.SearchUsingAornViewName, new SearchPensionRegulatorByAornViewModel());
+            return View(ControllerConstants.SearchUsingAornViewName, new SearchPensionRegulatorByAornViewModel
+            {
+                IsLocked = aornLock.Data.IsLocked,
+                RemainingAttempts = aornLock.Data.RemainingAttempts,
+                AllowedAttempts = aornLock.Data.AllowedAttempts,
+                RemainingLock = aornLock.Data.RemainingLock
+            });
         }
 
         [HttpPost]
@@ -129,19 +142,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [NonAction]
         private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
+            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
             switch (model.Data.Results.Count)
             {
-                case 0: return View(ControllerConstants.SearchUsingAornViewName, viewModel);
+                case 0:
+                {
+                    await _userAornLockOrchestrator.UpdateUserAornLockStatus(userRef, false);
+
+                    var aornLock = await _userAornLockOrchestrator.GetUserAornLockStatus(userRef);
+                    viewModel.IsLocked = aornLock.Data.IsLocked;
+                    viewModel.RemainingAttempts = aornLock.Data.RemainingAttempts;
+                    viewModel.AllowedAttempts = aornLock.Data.AllowedAttempts;
+                    viewModel.RemainingLock = aornLock.Data.RemainingLock;
+
+                    return View(ControllerConstants.SearchUsingAornViewName, viewModel);
+                }
                 case 1:
                 {
+                    await _userAornLockOrchestrator.UpdateUserAornLockStatus(userRef, true);
                     await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
                 default:
                 {
+                    await _userAornLockOrchestrator.UpdateUserAornLockStatus(userRef, true);
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
                 }

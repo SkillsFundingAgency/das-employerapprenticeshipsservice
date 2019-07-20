@@ -13,7 +13,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.UpdateUserAornLockTests
     public class WhenIUpdateUserAornLockStatus 
     {
         private Mock<IUserAornPayeLockService> _userAornPayeLockService;
-
         public UpdateUserAornLockRequest Query { get; set; }
         public UpdateUserAornLockQueryHandler RequestHandler { get; set; }
        

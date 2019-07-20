@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime },
-                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 2 }
+                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 2, AllowedAttempts = 3}
             },
             new TestData
             {
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime, SeedDateTime.AddMinutes(-1) },
-                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 1 }
+                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 1, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new DateTime[] { },
-                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 3 }
+                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 3, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime.AddMinutes(-5), SeedDateTime.AddMinutes(-6), SeedDateTime.AddMinutes(-7) },
-                Expected = new UserAornPayeStatus { BeginTime = SeedDateTime.AddMinutes(-5), EndTime = SeedDateTime.AddMinutes(25), IsLocked = true, RemainingAttempts = 0 }
+                Expected = new UserAornPayeStatus { RemainingLock = 25, IsLocked = true, RemainingAttempts = 0, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime, SeedDateTime.AddMinutes(-6), SeedDateTime.AddMinutes(-10) },
-                Expected = new UserAornPayeStatus { BeginTime = SeedDateTime, EndTime = SeedDateTime.AddMinutes(30), IsLocked = true, RemainingAttempts = 0 }
+                Expected = new UserAornPayeStatus { RemainingLock = 30, IsLocked = true, RemainingAttempts = 0, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime, SeedDateTime.AddMinutes(-5), SeedDateTime.AddMinutes(-20) },
-                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 1 }
+                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 1, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime.AddMinutes(-9), SeedDateTime.AddMinutes(-10), SeedDateTime.AddMinutes(-11) },
-                Expected = new UserAornPayeStatus { BeginTime = SeedDateTime.AddMinutes(-9), EndTime = SeedDateTime.AddMinutes(21), IsLocked = true, RemainingAttempts = 0 }
+                Expected = new UserAornPayeStatus { RemainingLock = 21, IsLocked = true, RemainingAttempts = 0, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime.AddMinutes(-11), SeedDateTime.AddMinutes(-12), SeedDateTime.AddMinutes(-13) },
-                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 3 }
+                Expected = new UserAornPayeStatus { RemainingLock = 19, IsLocked = true, RemainingAttempts = 0, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime.AddMinutes(-4), SeedDateTime.AddMinutes(-11), SeedDateTime.AddMinutes(-12), SeedDateTime.AddMinutes(-13) },
-                Expected = new UserAornPayeStatus { BeginTime = SeedDateTime.AddMinutes(-4), EndTime = SeedDateTime.AddMinutes(26), IsLocked = true, RemainingAttempts = 0 }
+                Expected = new UserAornPayeStatus { RemainingLock = 26, IsLocked = true, RemainingAttempts = 0, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -104,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime, SeedDateTime.AddMinutes(-11), SeedDateTime.AddMinutes(-12), SeedDateTime.AddMinutes(-13) },
-                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 2 }
+                Expected = new UserAornPayeStatus { RemainingLock = 30, IsLocked = true, RemainingAttempts = 0, AllowedAttempts = 3 }
             },
             new TestData
             {
@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
                 PermittedAttemptsTimeSpanMinutes = 10,
                 LockoutTimeSpanMinutes = 30,
                 Attempts = new[] { SeedDateTime.AddMinutes(-1), SeedDateTime.AddMinutes(-2), SeedDateTime.AddMinutes(-13), SeedDateTime.AddMinutes(-14), SeedDateTime.AddMinutes(-15) },
-                Expected = new UserAornPayeStatus { IsLocked = false, RemainingAttempts = 1 }
+                Expected = new UserAornPayeStatus { RemainingLock = 29, IsLocked = true, RemainingAttempts = 0, AllowedAttempts = 3 }
             }
         };
      
@@ -134,10 +134,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
 
             var service = new UserAornPayeLockService(userRepo.Object, config);
             var result = service.UserAornPayeStatus(It.IsAny<Guid>()).Result;
-
-            Assert.AreEqual(result.BeginTime, testData.Expected.BeginTime);
-            Assert.AreEqual(result.EndTime, testData.Expected.EndTime);
+          
+            Assert.AreEqual(result.RemainingAttempts, testData.Expected.RemainingAttempts);
             Assert.AreEqual(result.IsLocked, testData.Expected.IsLocked);
+            Assert.AreEqual(result.RemainingLock, testData.Expected.RemainingLock);
         }
     }
 }

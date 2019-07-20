@@ -132,16 +132,13 @@ namespace SFA.DAS.EmployerAccounts.Data
         public async Task<IEnumerable<DateTime>> GetAornPayeQueryAttempts(Guid userRef)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@userRef", userRef, DbType.Guid);
+            parameters.Add("@UserRef", userRef, DbType.Guid);
 
             var query = await _db.Value.Database.Connection.QueryAsync<DateTime>(
-                sql: @"
-                    SELECT  AttemptTimeStamp
-                    FROM    [employer_account].[UserAornFailedAttempts] 
-                    WHERE   UserRef = @userRef",
+                sql: "[employer_account].[GetUserAornAttempts]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
+                commandType: CommandType.StoredProcedure);
 
             return query.ToList();
         }

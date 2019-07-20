@@ -25,26 +25,32 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<UserAornPayeStatus> UserAornPayeStatus(Guid userRef)
         {
-            var attempts = (await _userRepository.GetAornPayeQueryAttempts(userRef)).OrderByDescending(a => a.Date).ToList();
+            var lockLimit = DateTime.Now.AddMinutes(-_configuration.LockoutTimeSpanMinutes);
+            var attempts = (await _userRepository.GetAornPayeQueryAttempts(userRef)).Where(a => a > lockLimit).OrderByDescending(a => a).ToList();
 
-            if (attempts.Count < _configuration.NumberOfPermittedAttempts ||
-                attempts.First() < DateTime.Now.AddMinutes(-_configuration.PermittedAttemptsTimeSpanMinutes) ||
-                attempts.Count(a => (attempts.First() - a).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes) < _configuration.NumberOfPermittedAttempts)
+            if (attempts.Count >= _configuration.NumberOfPermittedAttempts)
             {
-                return new UserAornPayeStatus
+                for (var i = 0; i <= attempts.Count - _configuration.NumberOfPermittedAttempts; ++i)
                 {
-                    IsLocked = false,
-                    RemainingAttempts = _configuration.NumberOfPermittedAttempts - 
-                                        attempts.Count(a => (DateTime.Now - a).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes)
-                };
+                    if ((attempts[i] - attempts[i + _configuration.NumberOfPermittedAttempts - 1]).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes)
+                    {
+                        return new UserAornPayeStatus
+                        {
+                            IsLocked = true,
+                            RemainingLock = Convert.ToInt32((attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes) - DateTime.Now).TotalMinutes),
+                            RemainingAttempts = 0,
+                            AllowedAttempts = _configuration.NumberOfPermittedAttempts
+                        };
+                    }
+                }
             }
 
             return new UserAornPayeStatus
             {
-                IsLocked = true,
-                BeginTime = attempts.First(),
-                EndTime = attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes),
-                RemainingAttempts = 0
+                IsLocked = false,
+                RemainingAttempts = _configuration.NumberOfPermittedAttempts -
+                                    attempts.Count(a => (DateTime.Now - a).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes),
+                AllowedAttempts = _configuration.NumberOfPermittedAttempts
             };
         }
     }

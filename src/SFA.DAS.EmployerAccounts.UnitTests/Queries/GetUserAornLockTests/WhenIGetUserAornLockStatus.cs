@@ -14,7 +14,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserAornLockTests
     public class WhenIGetUserAornLockStatus : QueryBaseTest<GetUserAornLockQueryHandler, GetUserAornLockRequest, GetUserAornLockResponse>
     {
         private Mock<IUserAornPayeLockService> _userAornPayeLockService;
-
         public override GetUserAornLockRequest Query { get; set; }
         public override GetUserAornLockQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetUserAornLockRequest>> RequestValidator { get; set; }

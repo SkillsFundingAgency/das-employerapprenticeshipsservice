@@ -255,7 +255,6 @@
     <Compile Include="ViewModels\TransferRequestsViewModel.cs" />
     <Compile Include="ViewModels\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
-    <Compile Include="ViewModels\UserAornLockStatusViewModel.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
