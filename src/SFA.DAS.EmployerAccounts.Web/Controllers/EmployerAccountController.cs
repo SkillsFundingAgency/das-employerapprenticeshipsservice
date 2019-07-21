@@ -189,7 +189,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (choice ?? 0)
             {
                 case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
-                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
                 default:
                 {
                     var model = new
