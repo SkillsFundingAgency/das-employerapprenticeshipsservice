@@ -18,8 +18,6 @@
             <li>Government Gateway login for your PAYE scheme</li>
             <li>accounts office reference number and employer PAYE scheme reference</li>
         </ul>
-        <h2 class="heading-small">By continuing you agree to the following:</h2>
-        <div class="panel">I have the authority to add PAYE schemes to this account that are used by my organisation.</div>
         <form method="POST" action="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="how-do-you-want-to-add-paye-scheme-form">
@@ -31,14 +29,17 @@
                         </span>
                     </legend>
                     <label for="want-to-use-gov-gateway" class="block-label">
-                        <input type="radio" name="choice" id="want-to-use-gov-gateway" value="1" />
+                        <input type="radio" name="choice" id="want-to-use-gov-gateway" value="1" onclick="$('#AornFunds').addClass('hidden')"/>
                         I want to use Government Gateway
                     </label>
                     <label for="want-to-use-aorn" class="block-label">
-                        <input type="radio" name="choice" id="want-to-use-aorn" value="2" />
-                        I want to use my account office reference number and employer PAYE scheme reference
+                        <input type="radio" name="choice" id="want-to-use-aorn" value="2" onclick="$('#AornFunds').removeClass('hidden')"/>
+                        I want to use my accounts office reference number and employer PAYE scheme reference
                     </label>
                 </fieldset>
+                <div class="panel hidden" id="AornFunds">                   
+                    If you already have funds associated with your PAYE scheme, choose Government Gateway to keep access to your funds.                 
+                </div>
                 <p>
                     <div class="notice">
                         <i class="icon icon-important">
