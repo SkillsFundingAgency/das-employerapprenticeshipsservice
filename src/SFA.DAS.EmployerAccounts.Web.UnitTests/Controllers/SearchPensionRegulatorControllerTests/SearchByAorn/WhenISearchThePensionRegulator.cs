@@ -5,6 +5,9 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
+using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
@@ -13,18 +16,28 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByAorn.Given_No_Org_Was_Returned_From_Pensions_Regulator
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByAorn
 {
     [TestFixture]
-    class WhenISearchThePensionRegulator
+    class WhenISearchThePensionRegulatorWithAnInUsePAYEScheme
     {
-        private SearchPensionRegulatorController _controller;
         private const string ExpectedAorn = "aorn";
         private const string ExpectedPayeRef = "payeref";
+        private PensionRegulatorDetailsViewModel _expectedViewModel;
+        private SearchPensionRegulatorController _controller;
+        private Mock<IMediator> _mediator;
        
         [SetUp]
         public void Setup()
-        {                   
+        {
+            _expectedViewModel = new PensionRegulatorDetailsViewModel
+            {
+                ReferenceNumber = 12324456,
+                Name = "Accddf",
+                Type = OrganisationType.PensionsRegulator,
+                Address = "Address",
+                Status = "Status"
+            };
             var orchestrator = new Mock<SearchPensionRegulatorOrchestrator>();
 
             orchestrator
@@ -34,13 +47,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                     {
                         Data = new SearchPensionRegulatorResultsViewModel
                         {
-                            Results = new List<PensionRegulatorDetailsViewModel>()
+                            Results = new List<PensionRegulatorDetailsViewModel> { _expectedViewModel }
                         }
                     });
 
-            var _mediator = new Mock<IMediator>();
+            _mediator = new Mock<IMediator>();
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse());
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new PayeScheme() });
 
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
@@ -51,12 +64,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         }
 
         [Test]
-        public async Task ThenTheSearchUsingAornPageIsDisplayed()
+        public async Task ThenThePayeErrorPageIsDisplayed()
         {
             var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
-            var viewResponse = (ViewResult)response;
+            var redirectResponse = (RedirectToRouteResult) response;
 
-            Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
+            Assert.AreEqual(ControllerConstants.PayeErrorActionName, redirectResponse.RouteValues["action"].ToString());
+            Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());
         }
     }
 }

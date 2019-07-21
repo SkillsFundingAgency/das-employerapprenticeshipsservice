@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -126,13 +127,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [NonAction]
         private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
+            var schemeCheck = await _mediatr.SendAsync(new GetPayeSchemeInUseQuery { Empref = viewModel.PayeRef });
+
+            if (schemeCheck.PayeScheme != null)
+            {
+                return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName,
+                    new
+                    {
+                        NotFound = false
+                    });
+            }
+
             var model = await _orchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
             switch (model.Data.Results.Count)
             {
                 case 0: return View(ControllerConstants.SearchUsingAornViewName, viewModel);
                 case 1:
-                {
+                {                 
                     await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
