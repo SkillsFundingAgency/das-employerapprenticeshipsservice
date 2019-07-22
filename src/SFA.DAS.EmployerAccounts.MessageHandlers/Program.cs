@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
 
             var host = new JobHost(config);
 
-            host.Call(typeof(Program).GetMethod(nameof(AsyncMain)), new { isDevelopment, container });
+            host.Call(typeof(Program).GetMethod(nameof(AsyncMain)), new { isDevelopment });
             host.RunAndBlock();
         }
 
