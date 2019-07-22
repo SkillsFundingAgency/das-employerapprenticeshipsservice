@@ -474,13 +474,7 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
         {
             return PartialView(model);
         }
-
-        [ChildActionOnly]
-        public ActionResult VacancyStatus(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
+                
         [ChildActionOnly]
         public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
         {

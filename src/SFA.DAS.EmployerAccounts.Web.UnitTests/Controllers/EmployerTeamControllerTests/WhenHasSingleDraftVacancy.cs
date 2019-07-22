@@ -11,7 +11,8 @@ using System.Web.Mvc;
 using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
-{    public class WhenHasSinglePendingReviewVacancy
+{
+    public class WhenHasSingleDraftVacancy
     {
         private EmployerTeamController _controller;
 
@@ -45,19 +46,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenTheVacancyStatusViewIsReturned()
         {
             // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                AccountViewModel = new Model.Account()
-            };
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.AgreementsToSign = false;
 
-            model.AccountViewModel.Vacancies.Add(new Model.Vacancy { Status = Model.VacancyStatus.Submitted });
+            model.AccountViewModel = new Model.Account();
+            model.AccountViewModel.Vacancies.Add(new Model.Vacancy { Status = Model.VacancyStatus.Draft });
 
             //Act
             var result = _controller.Row2Panel2(model) as PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("VacancyStatus", (result.Model as PanelViewModel<AccountDashboardViewModel>).ViewName);
+            Assert.AreEqual("VacancyStatus", (result.Model as dynamic).ViewName);
         }
-    }
+    }    
 }

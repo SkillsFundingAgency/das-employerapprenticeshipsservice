@@ -5,19 +5,22 @@
 
     var actionLinkText = "";
     int? numberOfApplications = null;
+    string status = "";
 
     if (Model.HasSingleClosedVacancy)
     {
         vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.Closed);
         actionLinkText = "Manage vacancy";
         numberOfApplications = vacancy.NumberOfApplications;
+        status = "Closed";
     };
 
 
     if (Model.HasSinglePendingReviewVacancy)
     {
-        vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.PendingReview);
+        vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.Submitted);
         actionLinkText = "Preview vacancy";
+        status = "Pending review";
     };
 }
 <h3 class="das-panel__heading">Your vacancy</h3>
@@ -34,9 +37,9 @@
     }
 
     <dt class="das-definition-list__title">Status</dt>
-    <dd class="das-definition-list__definition">@vacancy.Status</dd>
+    <dd class="das-definition-list__definition">@status</dd>
 </dl>
 <ul class="govuk-list">
     <li><a href="@vacancy.ManageVacancyUrl" class="govuk-link govuk-link--no-visited-state">@actionLinkText</a> </li>
-    <li><a href="@Url.EmployerRecruitAction(" create-options/")" class="govuk-link govuk-link--no-visited-state">Create a vacancy</a> </li>
+    <li><a href="@Url.EmployerRecruitAction(" create-options/")" class="govuk-link govuk-link--no-visited-state">Create vacancy</a> </li>
 </ul>
