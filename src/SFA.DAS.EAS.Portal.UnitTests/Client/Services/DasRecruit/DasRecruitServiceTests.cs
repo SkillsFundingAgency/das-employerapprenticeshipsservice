@@ -27,6 +27,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
         }
 
         [Test]
+        public Task GetVacancies_WhenApiReturnsNotFound_ThenEmptyEnumerableIsReturned()
+        {
+            return TestAsync(f => f.ArrangeApiReturnsNotFound(),
+                f => f.GetVacancies(),
+                (f, r) => f.AssertNoVacancies(r));
+        }
+        
+        [Test]
         public Task GetVacancies_WhenApiReturnsAnError_ThenNullIsReturned()
         {
             return TestAsync(f => f.ArrangeApiReturnsInternalServerError(),
@@ -68,6 +76,18 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
             return this;
         }
 
+        public DasRecruitServiceTestsFixture ArrangeApiReturnsNotFound()
+        {
+            HttpMessageHandler.HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound)
+            {
+                Content = new StringContent("Not found"),
+                ReasonPhrase = "Not found",
+                RequestMessage = new HttpRequestMessage(HttpMethod.Get, "http://example.com")
+            };
+            
+            return this;
+        }
+        
         public DasRecruitServiceTestsFixture ArrangeApiReturnsInternalServerError()
         {
             HttpMessageHandler.HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError)
@@ -103,6 +123,11 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
             });
         }
 
+        public void AssertNoVacancies(IEnumerable<Vacancy> vacancies)
+        {
+            vacancies.Should().BeEmpty();
+        }
+        
         public void AssertNullReturned(IEnumerable<Vacancy> vacancies)
         {
             vacancies.Should().BeNull();
