@@ -6,28 +6,22 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Portal.Application.EventHandlers.Reservations;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EAS.Portal.Worker.EventHandlers.Reservations;
 using SFA.DAS.Reservations.Messages;
 using SFA.DAS.Testing;
-using Fix = SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations.ReservationCreatedEventHandlerTestsFixture;
 
-namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
+namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservations
 {
     [TestFixture, Parallelizable]
     public class ReservationCreatedEventHandlerTests : FluentTest<ReservationCreatedEventHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_WhenHandlingReservationCreatedEvent_ThenShouldInitialiseMessageContext()
-        {
-            return TestAsync(f => f.Handle(), f => f.VerifyMessageContextIsInitialised());
-        }
-        
-        [Test]
         public Task Handle_WhenAccountDoesNotExist_ThenAccountDocumentIsSavedWithNewReservation()
         {
-            return TestAsync(f => f.Handle(), f => f.VerifyAccountDocumentSavedWithReservation());
+            return TestAsync(f => f.ArrangeAccountDoesNotExist(f.Message.AccountId), f => f.Handle(),
+                f => f.VerifyAccountDocumentSavedWithReservation());
         }
 
         [Test]
@@ -52,67 +46,101 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers.Reservations
         }
     }
 
-    public class ReservationCreatedEventHandlerTestsFixture : EventHandlerTestsFixture<
-        ReservationCreatedEvent, ReservationCreatedEventHandler>
+    public class ReservationCreatedEventHandlerTestsFixture
     {
+        public AccountEventHandlerTestHelper<ReservationCreatedEvent, ReservationCreatedEventHandler> Helper { get; set; }
+
         public const long AccountLegalEntityId = 456L;
         public Guid ReservationId = Guid.NewGuid();
 
+        public ReservationCreatedEvent Message
+        {
+            get => Helper.Message;
+            set => Helper.Message = value;
+        }
+
         public ReservationCreatedEventHandlerTestsFixture()
         {
+            Helper = new AccountEventHandlerTestHelper<ReservationCreatedEvent, ReservationCreatedEventHandler>();
+            
             //todo: let test use fixture generated?
             Message.Id = ReservationId;
             Message.AccountLegalEntityId = AccountLegalEntityId;
         }
 
+        public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDoesNotExist(long accountId)
+        {
+            Helper.ArrangeAccountDoesNotExist(accountId);
+
+            return this;
+        }
+        
+        public ReservationCreatedEventHandlerTestsFixture ArrangeEmptyAccountDocument(long accountId)
+        {
+            Helper.ArrangeEmptyAccountDocument(accountId);
+
+            return this;
+        }
+        
         //todo: move to base
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsOrganisation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
+            var organisation = Helper.SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
             organisation.Reservations = new List<Reservation>();
             
-            AccountDocumentService.Setup(s => s.Get(Message.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            Helper.AccountDocumentService.Setup(
+                s => s.GetOrCreate(Message.AccountId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Helper.AccountDocument);
             
             return this;
         }
         
         public ReservationCreatedEventHandlerTestsFixture ArrangeAccountDocumentContainsReservation()
         {
-            var organisation = SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
+            var organisation = Helper.SetUpAccountDocumentWithOrganisation(Message.AccountId, AccountLegalEntityId);
 
             organisation.Reservations.RandomElement().Id = ReservationId;
             
-            AccountDocumentService.Setup(s => s.Get(Message.AccountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            Helper.AccountDocumentService.Setup(s => s.GetOrCreate(
+                Message.AccountId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(Helper.AccountDocument);
             
             return this;
         }
         
+        public Task Handle()
+        {
+            return Helper.Handle();
+        }
+        
         public void VerifyAccountDocumentSavedWithReservation()
         {
-            AccountDocumentService.Verify(
-                s => s.Save(It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()), Times.Once);
+            Helper.AccountDocumentService.Verify(s => s.Save(
+                It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()),
+                Times.Once);
         }
         
         private bool AccountIsAsExpected(AccountDocument document)
         {
-            var expectedAccount = GetExpectedAccount(OriginalMessage.AccountId);
+            var expectedAccount = Helper.GetExpectedAccount(Helper.OriginalMessage.AccountId);
             var expectedReservation = GetExpectedReservation(
-                GetExpectedOrganisation(expectedAccount, AccountLegalEntityId, OriginalMessage.AccountLegalEntityName));
+                Helper.GetExpectedOrganisation(
+                    expectedAccount, AccountLegalEntityId, Helper.OriginalMessage.AccountLegalEntityName));
 
             expectedReservation.Id = ReservationId;
-            expectedReservation.CourseCode = OriginalMessage.CourseId;
-            expectedReservation.CourseName = OriginalMessage.CourseName;
-            expectedReservation.StartDate = OriginalMessage.StartDate;
-            expectedReservation.EndDate = OriginalMessage.EndDate;
+            expectedReservation.CourseCode = Helper.OriginalMessage.CourseId;
+            expectedReservation.CourseName = Helper.OriginalMessage.CourseName;
+            expectedReservation.StartDate = Helper.OriginalMessage.StartDate;
+            expectedReservation.EndDate = Helper.OriginalMessage.EndDate;
 
-            return AccountIsAsExpected(expectedAccount, document);
+            return Helper.AccountIsAsExpected(expectedAccount, document);
         }
 
         private Reservation GetExpectedReservation(Organisation expectedOrganisation)
         {
             Reservation expectedReservation;
-            if (OriginalAccountDocument == null
-                || !OriginalAccountDocument.Account.Organisations.Any())
+            if (Helper.OriginalAccountDocument == null
+                || !Helper.OriginalAccountDocument.Account.Organisations.Any())
             {
                 //todo: AddNewReservation()?
                 expectedReservation = new Reservation();

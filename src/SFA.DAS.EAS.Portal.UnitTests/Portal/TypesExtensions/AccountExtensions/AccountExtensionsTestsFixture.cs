@@ -5,7 +5,7 @@ using AutoFixture;
 using FluentAssertions;
 using SFA.DAS.EAS.Portal.Client.Types;
 
-namespace SFA.DAS.EAS.Portal.UnitTests.Worker.TypesExtensions.AccountExtensions
+namespace SFA.DAS.EAS.Portal.UnitTests.Portal.TypesExtensions.AccountExtensions
 {
     public class AccountExtensionsTestsFixture<TFixture, TEntity, TKey, TMutateProperty> 
         where TFixture : AccountExtensionsTestsFixture<TFixture, TEntity, TKey, TMutateProperty>
