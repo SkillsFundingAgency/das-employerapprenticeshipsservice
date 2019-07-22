@@ -1,18 +1,18 @@
 ﻿using System;
 using NServiceBus;
-using SFA.DAS.AutoConfiguration;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus.AzureServiceBus;
-using StructureMap;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EmployerAccounts.Extensions
 {
     public static class EndpointConfigurationExtensions
     {
-        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder, IContainer container)
+        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder)
         {
-            var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
-
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+          
             config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
             {
                 r.RouteToEndpoint(

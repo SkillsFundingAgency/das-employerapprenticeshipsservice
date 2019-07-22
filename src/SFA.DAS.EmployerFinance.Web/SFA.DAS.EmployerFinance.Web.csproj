@@ -69,9 +69,6 @@
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
-    <PackageReference Include="SFA.DAS.AutoConfiguration">
-      <Version>2.0.1</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />

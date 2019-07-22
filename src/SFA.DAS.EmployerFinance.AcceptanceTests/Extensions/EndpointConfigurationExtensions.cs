@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.Azure;
 using NServiceBus;
+using NServiceBus.Configuration.AdvancedExtensibility;
+using SFA.DAS.Configuration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.NServiceBus.AzureServiceBus;
+using Environment = SFA.DAS.Configuration.Environment;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
@@ -14,6 +20,27 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
     {
 
         private static readonly ILog _log = new NLogLogger(typeof(EndpointConfigurationExtensions));
+
+
+
+
+        public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config,
+            Func<string> connectionStringBuilder)
+        {
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+
+            // If we use SendLocal we can use the configured queue
+            config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
+            {
+                r.RouteToEndpoint(
+                    typeof(ImportLevyDeclarationsCommand).Assembly,
+                    typeof(ImportLevyDeclarationsCommand).Namespace,
+                    "SFA.DAS.EmployerFinance.AcceptanceTests");
+            });
+
+            return config;
+        }
+
 
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config)
         {

@@ -4,7 +4,6 @@ using Microsoft.Azure.WebJobs;
 using NServiceBus;
 using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
@@ -15,7 +14,6 @@ using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
-using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers
 {
@@ -23,10 +21,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
     {
         public static void Main()
         {
-            var container = IoC.Initialize();
-
-            var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
-
+            var isDevelopment = ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local);
+            
             var config = new JobHostConfiguration();
 
             if (isDevelopment)
@@ -41,10 +37,12 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
         }
 
         [NoAutomaticTrigger]
-        public static async Task AsyncMain(CancellationToken cancellationToken, bool isDevelopment, IContainer container)
+        public static async Task AsyncMain(CancellationToken cancellationToken, bool isDevelopment)
         {
+            var container = IoC.Initialize();
+
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
