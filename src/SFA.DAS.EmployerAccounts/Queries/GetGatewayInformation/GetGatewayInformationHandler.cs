@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation
 {
