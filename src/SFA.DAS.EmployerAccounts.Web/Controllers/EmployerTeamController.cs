@@ -15,7 +15,7 @@ using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
@@ -364,14 +364,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
             if (HasPayeScheme(model))
             {
-                if (model.AccountViewModel == null || model.AccountViewModel.VacanciesRetrieved == false)
+                if (model.AccountViewModel?.VacanciesRetrieved == false)
                 {
                     viewModel.ViewName = "MultipleVacancies";
                 }
                 else
                 {
-                    switch (model.AccountViewModel.GetVacancyCardinality())
+                    switch (model.AccountViewModel?.GetVacancyCardinality())
                     {
+                        case null:
                         case Cardinality.None:
                             viewModel.ViewName = "CreateVacancy";
                             break;

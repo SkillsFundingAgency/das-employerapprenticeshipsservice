@@ -63,6 +63,25 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual("PrePayeRecruitment", resultModel.ViewName);
         }
 
+        [Test]
+        public void AndAccountHasPayeSchemeAndNoAccountDocumentThenCreateVacancyPanelIsSelected()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1,
+            };
+
+            //Act
+            var result = _controller.Row2Panel2(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsAssignableFrom<PanelViewModel<AccountDashboardViewModel>>(result.Model);
+            var resultModel = result.Model as PanelViewModel<AccountDashboardViewModel>;
+            Assert.AreEqual("CreateVacancy", resultModel.ViewName);
+        }
+
         [TestCase("MultipleVacancies", false, 0)]
         [TestCase("CreateVacancy", true, 0)]
         [TestCase("MultipleVacancies", true, 2)]
