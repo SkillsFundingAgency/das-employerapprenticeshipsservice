@@ -9,26 +9,25 @@ namespace SFA.DAS.EAS.Infrastructure.Messaging
 {
     public abstract class ServiceBusConnectionStringPolicy<T> : ConfiguredInstancePolicy where T : ITopicMessageSubscriberConfiguration
     {
-        protected readonly string ServiceName;
+        private readonly T _configuration;
 
-        protected ServiceBusConnectionStringPolicy(string serviceName)
+        protected ServiceBusConnectionStringPolicy(T configuration)
         {
-            ServiceName = serviceName;
+            _configuration = configuration;
         }
 
         protected string GetConnectionString(IConfiguredInstance instance)
         {
             var attribute = instance.PluggedType.CustomAttributes.SingleOrDefault(x => x.AttributeType == typeof(ServiceBusConnectionStringAttribute));
-            var config = ConfigurationHelper.GetConfiguration<T>(ServiceName);
 
             if (attribute == null)
             {
-                return config.MessageServiceBusConnectionString;
+                return _configuration.MessageServiceBusConnectionString;
             }
 
             var connectionStringName = attribute.ConstructorArguments.Select(a => a.Value).Cast<string>().Single();
 
-            if (!config.ServiceBusConnectionStrings.TryGetValue(connectionStringName, out var connectionString))
+            if (!_configuration.ServiceBusConnectionStrings.TryGetValue(connectionStringName, out var connectionString))
             {
                 throw new InvalidOperationException($"Cannot find service bus connection string named '{connectionStringName}' in configuration.");
             }

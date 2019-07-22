@@ -12,15 +12,16 @@ using SFA.DAS.ExecutionPolicies;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Configuration;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.Services
 {
     public class HmrcService : IHmrcService
     {
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        private readonly IHmrcConfiguration _configuration;
         private readonly IHttpClientWrapper _httpClientWrapper;
         private readonly IApprenticeshipLevyApiClient _apprenticeshipLevyApiClient;
         private readonly ITokenServiceApiClient _tokenServiceApiClient;
@@ -31,7 +32,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
 
         public HmrcService(
-            EmployerApprenticeshipsServiceConfiguration configuration,
+            IHmrcConfiguration configuration,
             IHttpClientWrapper httpClientWrapper,
             IApprenticeshipLevyApiClient apprenticeshipLevyApiClient,
             ITokenServiceApiClient tokenServiceApiClient, 
@@ -49,7 +50,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             _azureAdAuthenticationService = azureAdAuthenticationService;
             _log = log;
 
-            _httpClientWrapper.BaseUrl = _configuration.Hmrc.BaseUrl;
+            _httpClientWrapper.BaseUrl = _configuration.BaseUrl;
             _httpClientWrapper.AuthScheme = "Bearer";
             _httpClientWrapper.MediaTypeWithQualityHeaderValueList = new List<MediaTypeWithQualityHeaderValue> { new MediaTypeWithQualityHeaderValue("application/vnd.hmrc.1.0+json") };
         }
@@ -57,7 +58,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
         public string GenerateAuthRedirectUrl(string redirectUrl)
         {
             var urlFriendlyRedirectUrl = HttpUtility.UrlEncode(redirectUrl);
-            return $"{_configuration.Hmrc.BaseUrl}oauth/authorize?response_type=code&client_id={_configuration.Hmrc.ClientId}&scope={_configuration.Hmrc.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
+            return $"{_configuration.BaseUrl}oauth/authorize?response_type=code&client_id={_configuration.ClientId}&scope={_configuration.Scope}&redirect_uri={urlFriendlyRedirectUrl}";
         }
 
         public async Task<HmrcTokenResponse> GetAuthenticationToken(string redirectUrl, string accessCode)
@@ -66,8 +67,8 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             {
                 var requestParams = new
                 {
-                    client_secret = _configuration.Hmrc.ClientSecret,
-                    client_id = _configuration.Hmrc.ClientId,
+                    client_secret = _configuration.ClientSecret,
+                    client_id = _configuration.ClientId,
                     grant_type = "authorization_code",
                     redirect_uri = redirectUrl,
                     code = accessCode
@@ -167,12 +168,12 @@ namespace SFA.DAS.EAS.Infrastructure.Services
 
         public async Task<string> GetOgdAccessToken()
         {
-            if (_configuration.Hmrc.UseHiDataFeed)
+            if (_configuration.UseHiDataFeed)
             {
                 var accessToken =
-                    await _azureAdAuthenticationService.GetAuthenticationResult(_configuration.Hmrc.ClientId,
-                            _configuration.Hmrc.AzureAppKey, _configuration.Hmrc.AzureResourceId,
-                            _configuration.Hmrc.AzureTenant);
+                    await _azureAdAuthenticationService.GetAuthenticationResult(_configuration.ClientId,
+                            _configuration.AzureAppKey, _configuration.AzureResourceId,
+                            _configuration.AzureTenant);
 
                 return accessToken;
             }
