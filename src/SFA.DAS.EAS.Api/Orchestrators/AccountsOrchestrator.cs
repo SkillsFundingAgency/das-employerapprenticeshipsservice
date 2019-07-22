@@ -203,7 +203,8 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 OwnerEmail = accountResult.Account.OwnerEmail,
                 DasAccountName = accountResult.Account.Name,
                 LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() })),
-                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x }))
+                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x })),
+                AccountAgreementType = GetAgreementType(accountResult)
             };
 
             return accountDetailViewModel;
@@ -228,6 +229,15 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             });
 
             return transferAllowanceResult.TransferAllowance;
+        }
+
+        private static string GetAgreementType(GetEmployerAccountByHashedIdResponse accountResult)
+        {
+            var agreementTypeGroup = accountResult.Account.AccountAgreementTypes?
+                .GroupBy(x => x)
+            ;
+
+            return agreementTypeGroup?.Count() > 1 ? "Inconsistent" : agreementTypeGroup?.FirstOrDefault()?.Key;
         }
     }
 }
