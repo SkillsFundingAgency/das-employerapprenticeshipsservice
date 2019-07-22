@@ -2,6 +2,11 @@ using System;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
+    public enum ApprenticeshipEmployerType
+    {
+        Levy, NonLevy
+    }
+
     public class AccountDetailViewModel
     {
         public long AccountId { get; set; }
@@ -9,6 +14,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string PublicHashedAccountId { get; set; }
         public string DasAccountName { get; set; }
         public DateTime DateRegistered { get; set; }
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
         public string OwnerEmail { get; set; }
         public ResourceList LegalEntities { get; set; }
         public ResourceList PayeSchemes { get; set; }
