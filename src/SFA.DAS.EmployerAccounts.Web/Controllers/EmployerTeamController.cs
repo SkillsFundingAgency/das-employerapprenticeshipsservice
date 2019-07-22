@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -368,6 +368,10 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
                 {
                     viewModel.ViewName = "MultipleVacancies";
                 }
+                else if (model.HasSingleDraftVacancy || model.HasSinglePendingReviewVacancy || model.HasSingleClosedVacancy)
+                {
+                    viewModel.ViewName = "VacancyStatus";
+                }
                 else
                 {
                     switch (model.AccountViewModel?.GetVacancyCardinality())
@@ -467,6 +471,12 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
 
         [ChildActionOnly]
         public ActionResult MultipleVacancies(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyStatus(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

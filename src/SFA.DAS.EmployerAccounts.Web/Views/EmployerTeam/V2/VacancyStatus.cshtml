@@ -1,24 +1,36 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+﻿
+@using SFA.DAS.EAS.Portal.Client.Types;
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
-
 @{
-    var vacancy = Model.AccountViewModel.SingleVacancy;
+    Vacancy vacancy = null;
+
+    var actionLinkText = "";
+    int? numberOfApplications = null;
+
+    if (Model.HasSingleClosedVacancy)
+    {
+        vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.Closed);
+        actionLinkText = "Manage vacancy";
+        numberOfApplications = vacancy.NumberOfApplications;
+    };
 }
-
 <h3 class="das-panel__heading">Your vacancy</h3>
-<p>@vacancy.TrainingTitle <span class="das-!-display--block das-text--muted">VAC@(vacancy.Reference)</span></p>
+<p>@vacancy.TrainingTitle <span class="das-!-display--block das-text--muted">VAC @vacancy.Reference</span></p>
 <dl class="das-definition-list das-definition-list--inline">
-
     <dt class="das-definition-list__title">Closing date</dt>
     <dd class="das-definition-list__definition">@(vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-")</dd>
 
-       <dt class="das-definition-list__title">Applications</dt>
-       <dd class="das-definition-list__definition">@vacancy.NumberOfApplications</dd>
+    @{ if (numberOfApplications.HasValue)
+        {
+            <dt class="das-definition-list__title">Applications</dt>
+            <dd class="das-definition-list__definition">@numberOfApplications.Value</dd>
+        }
+    }
 
     <dt class="das-definition-list__title">Status</dt>
     <dd class="das-definition-list__definition">@vacancy.Status</dd>
 </dl>
 <ul class="govuk-list">
-    <li><a href="@vacancy.ManageVacancyUrl" class="govuk-link govuk-link--no-visited-state">Manage vacancy</a></li>
-    <li><a href="@Url.EmployerRecruitAction("create-options/")" class="govuk-link govuk-link--no-visited-state">Create a vacancy</a></li>
+    <li><a href="@vacancy.ManageVacancyUrl" class="govuk-link govuk-link--no-visited-state">@actionLinkText</a> </li>
+    <li><a href="@Url.EmployerRecruitAction("create-options/")" class="govuk-link govuk-link--no-visited-state">Create a vacancy</a> </li>
 </ul>
