@@ -48,10 +48,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel
             {
-                AccountViewModel = new Model.Account()
+                AccountViewModel = new Model.Account(),
+                PayeSchemeCount = 1
             };
 
             model.AccountViewModel.Vacancies.Add(new Model.Vacancy { Status = Model.VacancyStatus.Draft });
+            model.AccountViewModel.VacanciesRetrieved = true;
 
             //Act
             var result = _controller.Row2Panel2(model) as PartialViewResult;
