@@ -7,14 +7,15 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.TestCommon.Extensions;
 using SFA.DAS.EAS.TestCommon.ObjectMothers;
+using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.NLog.Logger;
+using AggregationData = SFA.DAS.EmployerFinance.Models.Transaction.AggregationData;
+using TransactionLine = SFA.DAS.EmployerFinance.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsControllerTests
 {
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var month = 3;
             var transactionsResponse = new GetEmployerAccountTransactionsResponse
             {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() }.ToArray() },
                 AccountHasPreviousTransactions = false
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
@@ -69,7 +70,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var month = 3;
             var transactionsResponse = new GetEmployerAccountTransactionsResponse
             {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() }.ToArray() },
                 AccountHasPreviousTransactions = false
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == month))).ReturnsAsync(transactionsResponse);
@@ -93,7 +94,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var month = 1;
             var transactionsResponse = new GetEmployerAccountTransactionsResponse
             {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() }.ToArray() },
                 AccountHasPreviousTransactions = true,
                 Year = year,
                 Month = month
@@ -116,7 +117,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var year = 2017;
             var transactionsResponse = new GetEmployerAccountTransactionsResponse
             {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() }.ToArray() },
                 AccountHasPreviousTransactions = false
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);
@@ -142,7 +143,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var levyTransaction = TransactionLineObjectMother.Create();
             var transactionsResponse = new GetEmployerAccountTransactionsResponse
             {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { levyTransaction } },
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { levyTransaction }.ToArray() },
                 AccountHasPreviousTransactions = false,
                 Year = year,
                 Month = month
@@ -168,7 +169,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountTransactionsContr
             var hashedAccountId = "ABC123";
             var transactionsResponse = new GetEmployerAccountTransactionsResponse
             {
-                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() } },
+                Data = new AggregationData { TransactionLines = new List<TransactionLine> { TransactionLineObjectMother.Create() }.ToArray() },
                 AccountHasPreviousTransactions = false
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountTransactionsQuery>(q => q.HashedAccountId == hashedAccountId && q.Year == DateTime.Now.Year && q.Month == DateTime.Now.Month))).ReturnsAsync(transactionsResponse);

@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests
                     ClassTypesToIgnore = new List<Type>() {typeof(Apprenticeship)}
                 })
                 .Compare(expected, source);
-            return (comparisonResult.AreEqual,comparisonResult.DifferencesString);
+            return (comparisonResult.AreEqual, comparisonResult.DifferencesString);
         }
         
         /// <summary>

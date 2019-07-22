@@ -195,7 +195,6 @@
     <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTransactionsForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
-    <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetAPayeScheme.cs" />
     <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
     <Compile Include="Controllers\LegalEntitiesControllerTests\LegalEntitiesControllerTests.cs" />
@@ -239,6 +238,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05D7C094-E2C9-4CCD-B0D7-85D263254B26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
       <Project>{8DD6E754-567C-46E3-A071-B1049380EA6C}</Project>

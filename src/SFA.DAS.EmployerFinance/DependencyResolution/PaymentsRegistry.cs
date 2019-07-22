@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Configuration;
+﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.Provider.Events.Api.Client;
 using StructureMap;
@@ -10,7 +10,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         public PaymentsRegistry()
         {
             For<IPaymentsEventsApiConfiguration>().Use(c => c.GetInstance<PaymentsApiClientConfiguration>());
-            For<PaymentsApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<PaymentsApiClientConfiguration>("SFA.DAS.PaymentsAPI")).Singleton();
+            For<PaymentsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<PaymentsApiClientConfiguration>(ConfigurationKeys.PaymentsApiClient)).Singleton();
         }
     }
 }

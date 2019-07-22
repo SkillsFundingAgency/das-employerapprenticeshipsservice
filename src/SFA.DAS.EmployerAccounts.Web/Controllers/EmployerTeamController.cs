@@ -15,7 +15,7 @@ using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 
-namespace SFA.DAS.EmployerAccounts.Web.Controllers
+ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]

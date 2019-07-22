@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class LegalEntityViewModel : IAccountResource
+    public class LegalEntityViewModel
     {
         public List<AgreementViewModel> Agreements { get; set; }
         public string Code { get; set; }
