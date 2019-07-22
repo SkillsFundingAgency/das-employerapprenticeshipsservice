@@ -12,7 +12,7 @@ using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
-    public class WhenHasSingleDraftVacancy
+    public class WhenHasSingleClosedVacancy
     {
         private EmployerTeamController _controller;
 
@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 AccountViewModel = new Model.Account()
             };
 
-            model.AccountViewModel.Vacancies.Add(new Model.Vacancy { Status = Model.VacancyStatus.Draft });
+            model.AccountViewModel.Vacancies.Add(new Model.Vacancy { Status = Model.VacancyStatus.Closed });
 
             //Act
             var result = _controller.Row2Panel2(model) as PartialViewResult;

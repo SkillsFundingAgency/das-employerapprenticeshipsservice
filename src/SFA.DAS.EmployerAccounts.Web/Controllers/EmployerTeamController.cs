@@ -368,10 +368,6 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
                 {
                     viewModel.ViewName = "MultipleVacancies";
                 }
-                else if (model.HasSingleDraftVacancy || model.HasSinglePendingReviewVacancy || model.HasSingleClosedVacancy)
-                {
-                    viewModel.ViewName = "VacancyStatus";
-                }
                 else
                 {
                     switch (model.AccountViewModel?.GetVacancyCardinality())
