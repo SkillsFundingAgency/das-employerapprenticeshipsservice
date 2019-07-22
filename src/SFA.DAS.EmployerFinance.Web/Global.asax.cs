@@ -14,15 +14,15 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using SFA.DAS.Configuration;
-using Environment = SFA.DAS.Configuration.Environment;
 using Microsoft.ApplicationInsights.Extensibility;
 using System.Configuration;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Startup;
+using SFA.DAS.EmployerFinance.Web.App_Start;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -55,9 +55,23 @@ namespace SFA.DAS.EmployerFinance.Web
                 };
             });
 
-            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+
+            var environmentService = container.GetInstance<IEnvironmentService>();
+
+            if (environmentService.IsCurrent(DasEnv.LOCAL))
             {
-                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironment.ToString();
+                SystemDetailsViewModel.EnvironmentName = DasEnv.LOCAL.ToString();
+                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+            if (environmentService.IsCurrent(DasEnv.AT))
+            {
+                SystemDetailsViewModel.EnvironmentName = DasEnv.AT.ToString();
+                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+            if (environmentService.IsCurrent(DasEnv.TEST))
+            {
+                SystemDetailsViewModel.EnvironmentName = DasEnv.TEST.ToString();
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 

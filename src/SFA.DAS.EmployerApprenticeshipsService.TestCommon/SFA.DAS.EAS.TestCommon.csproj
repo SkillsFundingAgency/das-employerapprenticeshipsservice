@@ -280,7 +280,6 @@
     <Compile Include="DbCleanup\IUpdateTransactionLine.cs" />
     <Compile Include="DbCleanup\UpdateTransactionLine.cs" />
     <Compile Include="DbSetStub.cs" />
-    <Compile Include="DependencyResolution\LevyWorkerDefaultRegistry.cs" />
     <Compile Include="EmployerAgreementBuilder.cs" />
     <Compile Include="Extensions\DateTimeExtention.cs" />
     <Compile Include="FluentTest.cs" />
@@ -291,7 +290,6 @@
     <Compile Include="ObjectMothers\FrameworkObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationSourceDataObjectMother.cs" />
     <Compile Include="ObjectMothers\LevyDeclarationViewsObjectMother.cs" />
-    <Compile Include="ObjectMothers\EnglishFractionObjectMother.cs" />
     <Compile Include="ObjectMothers\MessageObjectMother.cs" />
     <Compile Include="ObjectMothers\StandardObjectMother.cs" />
     <Compile Include="ObjectMothers\TransactionLineObjectMother.cs" />
@@ -315,6 +313,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
       <Project>{8DD6E754-567C-46E3-A071-B1049380EA6C}</Project>
