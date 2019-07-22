@@ -43,9 +43,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 
 -- Create Declarations
 
-DECLARE @updatedAccountTransactions table(
-AccountId BIGINT,
-Amount decimal(18,4))
+DECLARE @updatedAccountTransactions table(Amount decimal(18,4))
 
 INSERT INTO [employer_financial].TransactionLine
 OUTPUT INSERTED.Amount INTO @updatedAccountTransactions
