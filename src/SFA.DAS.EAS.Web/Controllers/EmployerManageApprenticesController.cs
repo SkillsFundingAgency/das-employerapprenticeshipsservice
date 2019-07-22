@@ -1,13 +1,28 @@
 ﻿using System.Web.Mvc;
+
+using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Web.ViewModels;
 using Microsoft.Azure;
+using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{hashedAccountId}/apprentices/manage")]
-    public class EmployerManageApprenticesController : Controller
+    public class EmployerManageApprenticesController : BaseController
     {
+
+        public EmployerManageApprenticesController(
+            IAuthenticationService owinWrapper,
+            IAuthorizationService authorization,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
+                : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+        }
+
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]

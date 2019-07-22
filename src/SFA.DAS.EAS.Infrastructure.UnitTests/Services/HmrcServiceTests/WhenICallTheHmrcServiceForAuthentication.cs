@@ -5,12 +5,14 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
+using SFA.DAS.Validation;
+using SFA.DAS.EAS.Domain.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
+using System.Threading.Tasks;
+using System.Web;
 using SFA.DAS.Http;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
@@ -18,7 +20,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
     public class WhenICallTheHmrcServiceForAuthentication
     {
         private HmrcService _hmrcService;
-        private HmrcConfiguration _configuration;
+        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private string ExpectedBaseUrl = "http://hmrcbase.gov.uk/";
         private string ExpectedClientId = "654321";
         private string ExpectedOgdClientId = "123456789";
@@ -32,13 +34,16 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         [SetUp]
         public void Arrange()
         {
-            _configuration = new HmrcConfiguration
+            _configuration = new EmployerApprenticeshipsServiceConfiguration
+            {
+                Hmrc = new HmrcConfiguration
                 {
                     BaseUrl = ExpectedBaseUrl,
                     ClientId = ExpectedClientId,
                     OgdClientId = ExpectedOgdClientId,
                     Scope = ExpectedScope,
                     ClientSecret = ExpectedClientSecret
+                }
             };
 
             _httpClientWrapper = new Mock<IHttpClientWrapper>();

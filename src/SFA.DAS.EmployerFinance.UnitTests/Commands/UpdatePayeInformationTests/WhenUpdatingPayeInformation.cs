@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Paye;
+using SFA.DAS.EmployerFinance.Services;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
 {
