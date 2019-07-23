@@ -363,6 +363,11 @@ using SFA.DAS.Validation;
             {
                 viewModel.ViewName = "PrePayeRecruitment";
             }
+            if (model.AgreementsToSign)
+            {
+                viewModel.ViewName = "PreAgreementRecruitment";
+            }
+
             return PartialView(viewModel);
         }
 
@@ -433,6 +438,12 @@ using SFA.DAS.Validation;
 
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult PreAgreementRecruitment(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
