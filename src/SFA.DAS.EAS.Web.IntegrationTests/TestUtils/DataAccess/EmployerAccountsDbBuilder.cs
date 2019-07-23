@@ -65,19 +65,19 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
         {
             var createResult = await DependentRepositories.AccountRepository.CreateAccount(
                 input.UserId(),
-                input.OrganisationReferenceNumber(),
-                input.OrganisationName(),
+                input.OrganisationReferenceNumber,
+                input.OrganisationName,
                 input.OrganisationRegisteredAddress,
                 input.OrganisationDateOfInception,
-                input.PayeReference(),
+                input.PayeReference,
                 input.AccessToken,
                 input.RefreshToken,
-                input.OrganisationStatus(),
+                input.OrganisationStatus,
                 input.EmployerRefName,
                 input.Source,
                 input.PublicSectorDataSource,
-                input.Sector(),
-                input.Aorn());
+                input.Sector,
+                input.Aorn);
 
             var output = new EmployerAccountOutput
             {

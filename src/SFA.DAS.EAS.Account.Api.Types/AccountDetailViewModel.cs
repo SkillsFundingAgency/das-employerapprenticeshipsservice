@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class AccountDetailViewModel : IAccountResource
+    public class AccountDetailViewModel
     {
         public long AccountId { get; set; }
         public string HashedAccountId { get; set; }

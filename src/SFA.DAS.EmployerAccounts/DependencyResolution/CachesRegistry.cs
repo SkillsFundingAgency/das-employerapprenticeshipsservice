@@ -1,4 +1,5 @@
-﻿using SFA.DAS.Caches;
+﻿using SFA.DAS.AutoConfiguration;
+using SFA.DAS.Caches;
 using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using StructureMap;
@@ -11,15 +12,10 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             For<IInProcessCache>().Use<InProcessCache>().Singleton();
 
-            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
-            {
-                For<IDistributedCache>().Use<LocalDevCache>().Singleton();
-            }
-            else
-            {
-                For<IDistributedCache>().Use(c =>
-                    new RedisCache(c.GetInstance<EmployerAccountsConfiguration>().RedisConnectionString)).Singleton();
-            }
+            For<IDistributedCache>().Use(c => c.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL)
+                    ? new LocalDevCache() as IDistributedCache
+                    : new RedisCache(c.GetInstance<EmployerAccountsConfiguration>().RedisConnectionString) as
+                        IDistributedCache).Singleton();
         }
     }
 }
