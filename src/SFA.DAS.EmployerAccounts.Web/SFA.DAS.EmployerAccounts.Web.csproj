@@ -739,6 +739,10 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
+      <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
       <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
       <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
