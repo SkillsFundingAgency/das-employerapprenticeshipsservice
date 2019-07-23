@@ -63,6 +63,11 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
             var account = _fixture
                 .Build<EmployerAccountInput>()
                 .With(input => input.UserId, () => currentUser.UserOutput.UserId)
+                .With(input => input.OrganisationReferenceNumber, () => $"OrganisationReferenceNumber{Guid.NewGuid()}".Substring(0, 50))
+                .With(input => input.PayeReference, () => $"PayeRef{Guid.NewGuid()}".Substring(0, 16))
+                .With(input => input.OrganisationStatus, () => $"OrganisationStatus{Guid.NewGuid()}".Substring(0, 50))
+                .With(input => input.OrganisationName, () => $"OrganisationName{Guid.NewGuid()}".Substring(0, 50))
+                .With(input => input.Sector, () => $"Aorn{Guid.NewGuid()}".Substring(0, 25))
                 .Create();
 
             var accountSetup = new EmployerAccountSetup
