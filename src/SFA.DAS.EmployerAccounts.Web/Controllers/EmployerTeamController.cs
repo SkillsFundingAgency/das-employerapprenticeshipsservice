@@ -50,7 +50,7 @@ using SFA.DAS.Validation;
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
+            if (DisplayNewHomepage(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
@@ -482,14 +482,21 @@ using SFA.DAS.Validation;
             return response;
         }
 
-        private bool HasPayeScheme(AccountDashboardViewModel data)
+        private bool HasPayeScheme(AccountDashboardViewModel accountViewModel)
         {
-            return data.PayeSchemeCount > 0;
+            return accountViewModel.PayeSchemeCount > 0;
         }
 
-        private bool HasOrganisation(AccountDashboardViewModel data)
+        private bool HasOrganisation(AccountDashboardViewModel accountViewModel)
         {
-            return data.OrgainsationCount > 0;
+            return accountViewModel.OrganisationCount > 0;
+        }
+
+        private bool DisplayNewHomepage(AccountDashboardViewModel accountViewModel)
+        {
+            return FeatureToggles.Features.HomePage.Enabled
+                || (!HasPayeScheme(accountViewModel) && !HasOrganisation(accountViewModel))
+                || accountViewModel.AgreementsToSign;
         }
     }
 }
