@@ -28,6 +28,13 @@
         actionLinkText = "Edit and submit vacancy";
         status = "Draft";
     };
+
+    if (Model.HasSingleRejectedVacancy)
+    {
+        vacancy = Model.AccountViewModel.Vacancies.First(v => v.Status == VacancyStatus.Referred);
+        actionLinkText = "Edit and re-submit vacancy";
+        status = "Rejected";
+    };
 }
 <h3 class="das-panel__heading">Your vacancy</h3>
 <p>@vacancy.TrainingTitle <span class="das-!-display--block das-text--muted">@("VAC" + vacancy.Reference)</span></p>
