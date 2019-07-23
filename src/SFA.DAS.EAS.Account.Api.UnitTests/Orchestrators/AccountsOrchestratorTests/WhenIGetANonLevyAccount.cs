@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
-    internal class WhenIGetANonLevyAccount
+    internal class WhenIGetANonLevyAccount : AccountsOrchestratorTestsBase
     {
         private AccountsOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
@@ -112,21 +112,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 
             //Assert
             Assert.AreEqual(agreementType, result.Data.AccountAgreementType);
-        }
-
-        private IMapper ConfigureMapper()
-        {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
-                .GetTypes()
-                .Where(t => typeof(Profile).IsAssignableFrom(t))
-                .Select(t => (Profile)Activator.CreateInstance(t));
-
-            var config = new MapperConfiguration(c =>
-            {
-                profiles.ForEach(c.AddProfile);
-            });
-
-            return config.CreateMapper();
         }
     }
 }
