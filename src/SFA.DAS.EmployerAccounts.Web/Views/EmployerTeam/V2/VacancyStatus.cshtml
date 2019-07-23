@@ -2,7 +2,7 @@
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 @{
-    var vacancy = Model.AccountViewModel.SingleVacancy;
+    var vacancy = Model.AccountViewModel.Vacancies.First();
 }
 
 <h3 class="das-panel__heading">Your vacancy</h3>
