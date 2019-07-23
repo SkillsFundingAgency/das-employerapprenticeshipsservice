@@ -169,8 +169,8 @@
     <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.205.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.205\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.246.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.246\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.53229\lib\net45\SFA.DAS.Configuration.dll</HintPath>
@@ -346,8 +346,6 @@
     <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByIdRequest.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIGetEmployerTransactions.cs" />
-    <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAgreementTemplateTests\WhenIRequestTheLatestEmployerAgreementTemplate.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIGetEnglishFractions.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIValidateTheQuery.cs" />

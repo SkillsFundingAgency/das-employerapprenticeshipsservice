@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using SFA.DAS.EAS.Domain.Models.Transaction;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 
 namespace SFA.DAS.EAS.TestCommon.ObjectMothers
 {
