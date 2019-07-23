@@ -743,6 +743,10 @@
       <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Client</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
+      <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
       <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
       <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>

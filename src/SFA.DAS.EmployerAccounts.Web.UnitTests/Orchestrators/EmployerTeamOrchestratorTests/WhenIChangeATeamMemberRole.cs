@@ -6,6 +6,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
@@ -17,14 +18,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
     class WhenIChangeATeamMemberRole
     {
         private Mock<IMediator> _mediator;
+        private Mock<IAccountApiClient> _accountApiClient;
         private EmployerTeamOrchestrator _orchestrator;
-        
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>());
+            _accountApiClient = new Mock<IAccountApiClient>();
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object);
         }
 
         [Test]

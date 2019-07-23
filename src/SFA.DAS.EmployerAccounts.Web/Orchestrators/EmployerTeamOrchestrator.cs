@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
@@ -32,12 +34,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly IAccountApiClient _accountApiClient;
 
-        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime)
+        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
+            _accountApiClient = accountApiClient;
         }
 
         //Needed for tests
@@ -137,6 +141,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
+                var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
+
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
@@ -163,7 +169,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -198,8 +204,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     RequiresAgreementSigning = pendingAgreements.Count(),
                     AgreementsToSign = pendingAgreements.Count() > 0,
                     SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
-                    PendingAgreements = pendingAgreements
+                    PendingAgreements = pendingAgreements,
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true)
                 };
+
+                //viewModel.Account.ApprenticeshipEmployerType = apiGetAccountTask.Result.ApprenticeshipEmployerType;
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
                 {
