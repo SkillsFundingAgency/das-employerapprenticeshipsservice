@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("ProviderPermissionsDenied", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("ProviderPermissionsDenied", (result.Model as PanelViewModel<AccountDashboardViewModel>).ViewName);
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("PreAgreementRecruitment", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("PreAgreementRecruitment", (result.Model as PanelViewModel<AccountDashboardViewModel>).ViewName);
         }
     }
 }
