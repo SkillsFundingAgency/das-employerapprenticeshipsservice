@@ -237,7 +237,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     {
                         EmployerAgreement = new EmployerAgreementView
                         {
-                            HashedAccountId = result.HashedAccountId
+                            HashedAccountId = result.HashedAccountId,
+                            HashedAgreementId = result.HashedAccountLegalEntityId
                         }
                     },
                     Status = HttpStatusCode.OK

@@ -3,5 +3,6 @@
     public class CreateAccountCommandResponse
     {
         public string HashedAccountId{ get; set; }
+        public string HashedAccountLegalEntityId { get; set; }
     }
 }

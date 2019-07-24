@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
 
             await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
 
-            await _accountRepository.UpdateAccountLegalEntityPublicHashedId(createAccountResult.AccountLegalEntityId);
+            var accountLegalEntityPublicHashedId = await _accountRepository.UpdateAccountLegalEntityPublicHashedId(createAccountResult.AccountLegalEntityId);
 
             await SetAccountLegalEntityAgreementStatus(createAccountResult.AccountId, createAccountResult.LegalEntityId);
 
@@ -106,9 +106,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             await PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId,
                 createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, externalUserId);
 
+
             return new CreateAccountCommandResponse
             {
-                HashedAccountId = hashedAccountId
+                HashedAccountId = hashedAccountId,
+                HashedAccountLegalEntityId = accountLegalEntityPublicHashedId
             };
         }
 
