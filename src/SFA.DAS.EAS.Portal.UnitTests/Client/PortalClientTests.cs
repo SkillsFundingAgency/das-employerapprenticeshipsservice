@@ -53,6 +53,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         #endregion Argument Guards
 
         #region Account Does Not Exist
+
+        [Test]
+        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs0_ThenNullIsReturned()
+        {
+            return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(0),
+                f => f.GetAccount(),
+                (f, r) => f.AssertNullIsReturned(r));
+        }
         
         [Test]
         public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallFails_ThenNoVacanciesAreReturned()
