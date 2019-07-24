@@ -4,12 +4,19 @@ using Newtonsoft.Json;
 using SFA.DAS.NLog.Logger;
 using System.IO;
 using System.Threading.Tasks;
-using SFA.DAS.Configuration;
+using SFA.DAS.AutoConfiguration;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
     public abstract class AzureServiceBase<T>
     {
+        private readonly IAutoConfigurationService _autoConfigurationService;
+
+        protected AzureServiceBase(IAutoConfigurationService autoConfigurationService)
+        {
+            _autoConfigurationService = autoConfigurationService;
+        }
+
         public abstract string ConfigurationName { get; }
         public abstract ILog Logger { get; set; }
 
@@ -30,12 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public virtual T GetDataFromTableStorage()
         {
-            return ConfigurationHelper.GetConfiguration<T>(ConfigurationName);
-        }
-
-        public Task<T> GetDataFromTableStorageAsync()
-        {
-            return ConfigurationHelper.GetConfigurationAsync<T>(ConfigurationName);
+            return _autoConfigurationService.Get<T>(ConfigurationName);
         }
 
         public async Task<MemoryStream> StreamDataFromBlobStorage(string containerName, string blobName)

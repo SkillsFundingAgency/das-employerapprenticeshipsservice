@@ -1,7 +1,7 @@
 ﻿using Microsoft.Azure.WebJobs;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Configuration;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
 
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Jobs
                 var loggerFactory = container.GetInstance<ILoggerFactory>();
                 var startup = container.GetInstance<IStartup>();
 
-                if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local))
+                if (container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL))
                 {
                     config.UseDevelopmentSettings();
                 }
