@@ -81,10 +81,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
 
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
             var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
+            var hashedAccountLegalEntityId = _hashingService.HashValue(createAccountResult.AccountLegalEntityId);
 
             await _accountRepository.UpdateAccountHashedIds(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId);
 
-            var accountLegalEntityPublicHashedId = await _accountRepository.UpdateAccountLegalEntityPublicHashedId(createAccountResult.AccountLegalEntityId);
+            await _accountRepository.UpdateAccountLegalEntityPublicHashedId(createAccountResult.AccountLegalEntityId);
 
             await SetAccountLegalEntityAgreementStatus(createAccountResult.AccountId, createAccountResult.LegalEntityId);
 
@@ -110,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             return new CreateAccountCommandResponse
             {
                 HashedAccountId = hashedAccountId,
-                HashedAccountLegalEntityId = accountLegalEntityPublicHashedId
+                HashedAccountLegalEntityId = hashedAccountLegalEntityId
             };
         }
 
