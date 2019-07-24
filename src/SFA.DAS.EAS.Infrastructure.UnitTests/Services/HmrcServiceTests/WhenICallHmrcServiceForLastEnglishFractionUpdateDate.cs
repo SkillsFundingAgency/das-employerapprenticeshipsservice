@@ -4,14 +4,15 @@ using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Caches;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Services;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
 using SFA.DAS.Http;
+using EmployerApprenticeshipsServiceConfiguration = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -24,7 +25,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         private const string ExpectedAccessCode = "789654321AGFVD";
 
         private HmrcService _hmrcService;
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
+        private HmrcConfiguration _configuration;
         private Mock<IHttpClientWrapper> _httpClientWrapper;
         private Mock<IApprenticeshipLevyApiClient> _apprenticeshipLevyApiClient;
 
@@ -34,23 +35,20 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         [SetUp]
         public void Arrange()
         {
-            _configuration = new EmployerApprenticeshipsServiceConfiguration
+            _configuration = new HmrcConfiguration
             {
-                Hmrc = new HmrcConfiguration
-                {
-                    BaseUrl = ExpectedBaseUrl,
-                    ClientId = ExpectedClientId,
-                    Scope = ExpectedScope,
-                    ClientSecret = ExpectedClientSecret,
-                    ServerToken = "token1234"
-                }
+                BaseUrl = ExpectedBaseUrl,
+                ClientId = ExpectedClientId,
+                Scope = ExpectedScope,
+                ClientSecret = ExpectedClientSecret,
+                ServerToken = "token1234"
             };
-            
+
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
             _apprenticeshipLevyApiClient = new Mock<IApprenticeshipLevyApiClient>();
 
             _tokenService = new Mock<ITokenServiceApiClient>();
-            _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken {AccessCode = ExpectedAccessCode});
+            _tokenService.Setup(x => x.GetPrivilegedAccessTokenAsync()).ReturnsAsync(new PrivilegedAccessToken { AccessCode = ExpectedAccessCode });
 
             _cacheProvider = new Mock<IInProcessCache>();
             _cacheProvider.SetupSequence(c => c.Get<DateTime?>("HmrcFractionLastCalculatedDate"))
@@ -67,7 +65,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         {
             //Assign
             var updateDate = DateTime.Now;
-            
+
             _apprenticeshipLevyApiClient.Setup(x => x.GetLastEnglishFractionUpdate(It.IsAny<string>()))
                 .ReturnsAsync(updateDate);
 

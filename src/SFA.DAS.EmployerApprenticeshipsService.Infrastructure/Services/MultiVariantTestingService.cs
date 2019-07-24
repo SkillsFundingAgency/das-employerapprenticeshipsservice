@@ -20,22 +20,6 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             Logger = logger;
         }
 
-        public MultiVariantViewLookup GetMultiVariantViews()
-        {
-            var views = _inProcessCache.Get<MultiVariantViewLookup>(nameof(MultiVariantViewLookup));
-
-            if (views == null)
-            {
-                views = GetDataFromTableStorage();
-                if (views.Data != null && views.Data.Any())
-                {
-                    _inProcessCache.Set(nameof(MultiVariantViewLookup),views,new TimeSpan(0,30,0));
-                }
-            }
-
-            return views;
-        }
-
         public string GetRandomViewNameToShow(List<ViewAccess> views)
         {
             if (views.Count == 1)
