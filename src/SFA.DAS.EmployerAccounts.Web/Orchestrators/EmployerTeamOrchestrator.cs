@@ -208,6 +208,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true)
                 };
 
+                //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead
                 //viewModel.Account.ApprenticeshipEmployerType = apiGetAccountTask.Result.ApprenticeshipEmployerType;
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
