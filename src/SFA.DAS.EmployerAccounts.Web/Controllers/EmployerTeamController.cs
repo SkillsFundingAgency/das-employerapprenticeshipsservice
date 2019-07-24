@@ -470,14 +470,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 TrainingTitle = vacancy.TrainingTitle,
                 ClosingDateText = vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-",
                 ManageVacancyLinkUrl = vacancy.ManageVacancyUrl,
-                Reference = "VAC" + vacancy.Reference
+                ManageVacancyLinkText = "Manage vacancy",
+                Reference = "VAC" + vacancy.Reference,
+                Status = vacancy.Status.ToString()
             };
 
             switch(vacancy.Status)
             {
-                case EAS.Portal.Client.Types.VacancyStatus.Closed:
-                    viewModel.ManageVacancyLinkText = "Manage vacancy";
-                    viewModel.Status = "Closed";
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:                    
                     viewModel.NumberOfApplications = vacancy.NumberOfApplications;
                     break;
 
@@ -488,7 +488,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 case EAS.Portal.Client.Types.VacancyStatus.Draft:
                     viewModel.ManageVacancyLinkText = "Edit and submit vacancy";
-                    viewModel.Status = "Draft";
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Referred:
@@ -497,8 +496,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Live:
-                    viewModel.ManageVacancyLinkText = "Manage vacancy";
-                    viewModel.Status = "Live";
                     viewModel.NumberOfApplications = vacancy.NumberOfApplications;
                     break;
 
