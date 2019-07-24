@@ -55,29 +55,57 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         #region Account Does Not Exist
         
         [Test]
-        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2_ThenNullIsReturned()
+        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallFails_ThenNoVacanciesAreReturned()
         {
-            return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2),
+            return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallFails(),
                 f => f.GetAccount(),
-                (f, r) => f.AssertNullIsReturned(r));
+                (f, r) => f.AssertNoVacanciesAreReturned(r));
         }
 
         [Test]
-        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenNullIsReturned()
+        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallFails_ThenVacanciesRetrievedIsNotSet()
+        {
+            return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallFails(),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsNotSet(r));
+        }
+
+        [Test]
+        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenNoVacanciesAreReturned()
         {
             return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
                     .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(0),
                 f => f.GetAccount(),
-                (f, r) => f.AssertNullIsReturned(r));
+                (f, r) => f.AssertNoVacanciesAreReturned(r));
         }
 
         [Test]
-        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenNullIsReturned()
+        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsNoVacancies_ThenVacanciesRetrievedIsSet()
+        {
+            return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(0),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsSet(r));
+        }
+        
+        [Test]
+        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenOneCorrectlyPopulatedVacancyIsReturned()
         {
             return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
                     .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(1),
                 f => f.GetAccount(),
-                (f, r) => f.AssertNullIsReturned(r));
+                (f, r) => f.AssertOneCorrectlyPopulatedVacancyIsReturned(r));
+        }
+
+        [Test]
+        public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallSucceedsAndReturnsOneVacancies_ThenVacanciesRetrievedIsSet()
+        {
+            return TestAsync(f => f.ArrangeAccountDoesNotExist().ArrangeMaxNumberOfVacancies(2)
+                    .ArrangeRecruitApiCallSucceedsAndReturnsNumberOfVacancies(1),
+                f => f.GetAccount(),
+                (f, r) => f.AssertVacanciesRetrievedIsSet(r));
         }
 
         #endregion Account Does Not Exist

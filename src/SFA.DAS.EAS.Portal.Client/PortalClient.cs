@@ -41,9 +41,11 @@ namespace SFA.DAS.EAS.Portal.Client
             var accountId = _encodingService.Decode(parameters.HashedAccountId, EncodingType.AccountId);
             var account = await _accountsReadOnlyRepository.Get(accountId, cancellationToken);
 
-            // at a later date, we might want to create an empty account doc and add the vacancy details to it, but for now, let's keep it simple
-            if (vacanciesTask != null && account != null)
+            if (vacanciesTask != null)
             {
+                if (account == null)
+                    account = new Account();
+
                 var vacancies = await vacanciesTask;
                 if (vacancies != null)
                 {
@@ -51,7 +53,7 @@ namespace SFA.DAS.EAS.Portal.Client
                     account.Vacancies = vacancies.ToList();
                 }
             }
-            else if (parameters.MaxNumberOfVacancies == 0)
+            else
             {
                 account.VacanciesRetrieved = true;
             }
