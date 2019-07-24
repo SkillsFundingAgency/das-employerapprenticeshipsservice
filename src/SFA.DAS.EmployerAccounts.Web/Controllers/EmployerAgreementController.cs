@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    //[Authorize] TODO DON'T LEAVE THIS LIKE THIS
+    [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
@@ -67,13 +67,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return View(model);
 
         }
-        [HttpGet]
-        [Route("legal-agreement")]
-        public async Task<ActionResult> LegalAgreement()
-        {
-            var model = new OrchestratorResponse<LegalAgreementViewModel>();
-            return View(model);
-        }
 
 
         [HttpGet]
@@ -117,7 +110,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementId, string hashedAccountId)
         {
-            //this
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(agreement);
