@@ -54,6 +54,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
         #region Account Does Not Exist
 
+        #region Max Vacancies Is 0
+
         [Test]
         public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs0_ThenNullIsReturned()
         {
@@ -61,6 +63,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 f => f.GetAccount(),
                 (f, r) => f.AssertNullIsReturned(r));
         }
+        
+        #endregion Max Vacancies Is 0
+        
+        #region Max Vacancies Is > 0
         
         [Test]
         public Task GetAccount_WhenAccountDoesNotExistAndMaxVacanciesIs2AndRecruitApiCallFails_ThenNoVacanciesAreReturned()
@@ -116,6 +122,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
                 (f, r) => f.AssertVacanciesRetrievedIsSet(r));
         }
 
+        #endregion Max Vacancies Is > 0
+        
         #endregion Account Does Not Exist
 
         #region Account Does Exist
