@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             //return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = "HASH" });
             //return RedirectToAction("Index", "EmployerAgreement");
-            return RedirectToAction("LegalAgreement", "EmployerAgreement", new RouteValueDictionary(){ { "HashedAccountId", "HASH" } });
+            //return RedirectToAction("LegalAgreement", "EmployerAgreement", new RouteValueDictionary(){ { "HashedAccountId", "HASH" } });
 
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 

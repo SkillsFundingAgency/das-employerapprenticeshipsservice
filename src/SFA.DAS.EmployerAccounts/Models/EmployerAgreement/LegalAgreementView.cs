@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Models.EmployerAgreement
 {
     public class LegalAgreementView
     {
-
+        
     }
 }

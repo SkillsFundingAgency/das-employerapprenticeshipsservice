@@ -16,7 +16,7 @@
 <link href="@Url.Content("../../dist/css/legal/legal-agreement.css")" rel="stylesheet" type="text/css" />
 
 <div>
-    <h1 class="heading-xlarge">Agreement between ASSURANCE AEROSPACE LTD and the Education and Skills Funding Agency (ESFA)</h1>
+    <h1 class="heading-xlarge">Agreement between @Model.Data.//here and the Education and Skills Funding Agency (ESFA)</h1>
     <p>We updated the agreement on 1 May 2018.</p>
     <h3 class="heading-medium">Key features of the agreement</h3>
     <p>ASSURANCE AEROSPACE LTD must:</p>
@@ -41,17 +41,12 @@
                     <article class="agreement">
                         <header style="background-color: #fff; padding-left:0; margin-bottom:0">
                             <div class="headings">
-                                <div class="agreement-title">
-                                    <p class="context" style="color:#000">For the provision of apprenticeship training</p>
-                                </div>
+                                <p class="context" style="color:#000">For the provision of apprenticeship training</p>
                                 <p class="updated" style="color:#000">1 May 2018</p>
                             </div>
                             <nav id="contents">
                                 <h2 class="govuk-heading-m">Contents</h2>
                                 <div class="contents">
-
-                                    <!--                 <a href="#background" style="color:#000" class="background">Background</a>
-                                    -->
                                     <ol class="dinosaurs">
                                         <li><a href="#background">Background </a></li>
                                         <li><a href="#1">Definitions and Interpretation </a></li>
@@ -409,6 +404,33 @@
                 </div>
             </div>
         </div>
+    </div>
+    <br />
+    <div class="notice">
+        <i class="icon icon-important">
+            <span class="visually-hidden">Warning</span>
+        </i>
+        <strong class="bold-small">
+            The agreement is legally binding. If ASSURANCE AEROSPACE LTD breaks it, we could close their account and stop them running apprenticeships.
+        </strong>
+    </div>
+    <div class="form-group">
+        <fieldset>
+
+            <legend>
+                <h1 class="heading-medium">Do you accept the agreement?</h1>
+            </legend>
+
+            <div class="multiple-choice">
+                <input id="agreementSign-1" type="radio" name="agreementSign" value="yesSign">
+                <label for="agreementSign-1">Yes, I have read the agreement and accept it</label>
+            </div>
+            <div class="multiple-choice">
+                <input id="agreementSign-2" type="radio" name="agreementSign" value="noSignLater">
+                <label for="agreementSign-2">I’ll review it later</label>
+            </div>
+
+        </fieldset>
     </div>
 </div>
 

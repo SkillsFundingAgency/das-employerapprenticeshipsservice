@@ -3144,8 +3144,7 @@ table.responsive tr, table.responsive--desktop tr {
     font-weight: bold; }
   .agreement ol a {
     font-weight: normal;
-    color: white;
-    text-decoration: none; }
+      text-decoration: none; }
     .agreement ol a:hover, .agreement ol a:focus, .agreement ol a:active {
       text-decoration: underline; }
   @media (min-width: 641px) {
@@ -3275,7 +3274,7 @@ table.responsive tr, table.responsive--desktop tr {
     left: 0; }
     @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
       .legal-warning .icon {
-        background-image: url("/public/images/../../dist/images/icon-important-2x.png");
+        background-image: url("../images/icon-important-2x.png");
         background-size: 100%; } }
 
 /* PDF */
