@@ -496,6 +496,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     viewModel.Status = "Rejected";
                     break;
 
+                case EAS.Portal.Client.Types.VacancyStatus.Live:
+                    viewModel.ManageVacancyLinkText = "Manage vacancy";
+                    viewModel.Status = "Live";
+                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
+                    break;
+
                 default:
                     break;
             }

@@ -48,6 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         [TestCase(VacancyStatus.Submitted, "Pending review", "Preview vacancy", null)]
         [TestCase(VacancyStatus.Draft, "Draft", "Edit and submit vacancy", null)]
         [TestCase(VacancyStatus.Referred, "Rejected", "Edit and re-submit vacancy", null)]
+        [TestCase(VacancyStatus.Live, "Live", "Manage vacancy", 20)]
         public void ThenTheModelContainsTheExpectedDataForTheVacancyStatus(VacancyStatus vacancyStatus, string status, string linkText, int? numberOfAplications)
         {
             // Arrange
