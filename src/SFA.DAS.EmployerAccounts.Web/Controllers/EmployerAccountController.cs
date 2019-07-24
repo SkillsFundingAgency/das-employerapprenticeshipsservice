@@ -298,6 +298,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
                 return Redirect(returnUrlCookie.Value);
 
+            //this to legal agree
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
         }
 
