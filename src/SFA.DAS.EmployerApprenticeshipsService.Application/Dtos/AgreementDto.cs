@@ -20,5 +20,6 @@ namespace SFA.DAS.EAS.Application.Dtos
         public AgreementTemplateDto Template { get; set; }
         public int TemplateId { get; set; }
         public string HashedLegalEntityId { get; set; }
+        public string AgreementType { get; set; }
     }
 }
