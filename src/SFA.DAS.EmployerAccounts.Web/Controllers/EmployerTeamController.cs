@@ -14,8 +14,9 @@ using SFA.DAS.Validation;
 using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Portal;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
- namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
@@ -462,7 +463,44 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
         [ChildActionOnly]
         public ActionResult VacancyStatus(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            Vacancy vacancy = model.AccountViewModel.Vacancies.First();
+
+            var viewModel = new VacancyStatusViewModel
+            {
+                TrainingTitle = vacancy.TrainingTitle,
+                ClosingDateText = vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-",
+                ManageVacancyLinkUrl = vacancy.ManageVacancyUrl,
+                Reference = "VAC" + vacancy.Reference
+            };
+
+            switch(vacancy.Status)
+            {
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:
+                    viewModel.ManageVacancyLinkText = "Manage vacancy";
+                    viewModel.Status = "Closed";
+                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Submitted:
+                    viewModel.ManageVacancyLinkText = "Preview vacancy";
+                    viewModel.Status = "Pending review";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Draft:
+                    viewModel.ManageVacancyLinkText = "Edit and submit vacancy";
+                    viewModel.Status = "Draft";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Referred:
+                    viewModel.ManageVacancyLinkText = "Edit and re-submit vacancy";
+                    viewModel.Status = "Rejected";
+                    break;
+
+                default:
+                    break;
+            }
+
+            return PartialView(viewModel);
         }
 
         [ChildActionOnly]

@@ -37,9 +37,5 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Count > 0;
         public bool HasSingleProvider => AccountViewModel?.Providers?.Count == 1;
         public bool HasMultipleProviders => AccountViewModel?.Providers?.Count > 1;
-        public bool HasSingleDraftVacancy => AccountViewModel?.Vacancies?.Count(v => v.Status == VacancyStatus.Draft) == 1;
-        public bool HasSinglePendingReviewVacancy => AccountViewModel?.Vacancies?.Count(v => v.Status == VacancyStatus.Submitted) == 1;
-        public bool HasSingleClosedVacancy => AccountViewModel?.Vacancies?.Count(v => v.Status == VacancyStatus.Closed) == 1;
-        public bool HasSingleRejectedVacancy => AccountViewModel?.Vacancies?.Count(v => v.Status == VacancyStatus.Referred) == 1;
     }
 }
