@@ -10,7 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class AccountDashboardViewModel
     {
-        //this already contains ApprenticeshipEmployerType
         public EmployerAccounts.Models.Account.Account Account { get; set; }
         public string EmployerAccountType { get; set; }
         public string HashedAccountId { get; set; }
