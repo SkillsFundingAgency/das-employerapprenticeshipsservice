@@ -4,6 +4,7 @@ using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Web.Controllers;
 using SFA.DAS.EmployerFinance.Web.Logging;
@@ -45,6 +46,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
         {
             For<EmployerAccountTransactionsOrchestrator>().Use(c => new EmployerAccountTransactionsOrchestrator(
                 c.GetInstance<IAccountApiClient>(),
+                c.GetInstance<EmployerAccountsConfiguration>(),
                 c.GetInstance<IMediator>(),
                 c.GetInstance<ICurrentDateTime>(), c.GetInstance<ILog>()));
         }

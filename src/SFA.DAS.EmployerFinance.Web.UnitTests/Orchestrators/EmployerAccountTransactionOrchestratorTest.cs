@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 using TransactionLine = SFA.DAS.EmployerFinance.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
@@ -27,6 +28,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private const long AccountId = 1234;
 
         private Mock<IAccountApiClient> _accountApiClient;
+        private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private GetEmployerAccountResponse _response;
@@ -59,7 +61,9 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             SetupGetTransactionsResponse(2017, 5);
 
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
+            _employerAccountsConfiguration = new EmployerAccountsConfiguration();
+
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _employerAccountsConfiguration, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
         [TestCase(2, 2017)]

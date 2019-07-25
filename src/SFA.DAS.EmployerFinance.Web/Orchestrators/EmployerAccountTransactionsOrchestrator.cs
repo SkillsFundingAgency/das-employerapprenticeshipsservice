@@ -9,7 +9,6 @@ using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransact
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
-using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -17,8 +16,8 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
@@ -28,6 +27,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         private readonly ICurrentDateTime _currentTime;
         private readonly ILog _logger;
         private readonly IAccountApiClient _accountApiClient;
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
         private readonly IMediator _mediator;
 
         protected EmployerAccountTransactionsOrchestrator()
@@ -35,9 +35,15 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         }
 
-        public EmployerAccountTransactionsOrchestrator(IAccountApiClient accountApiClient, IMediator mediator, ICurrentDateTime currentTime, ILog logger)
+        public EmployerAccountTransactionsOrchestrator(
+            IAccountApiClient accountApiClient,
+            EmployerAccountsConfiguration employerAccountsConfiguration, 
+            IMediator mediator,
+            ICurrentDateTime currentTime,
+            ILog logger)
         {
             _accountApiClient = accountApiClient;
+            _employerAccountsConfiguration = employerAccountsConfiguration;
             _mediator = mediator;
             _currentTime = currentTime;
             _logger = logger;
@@ -45,19 +51,17 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> Index(GetAccountFinanceOverviewQuery query)
         {
-            //todo: re-direct Non-levy EOI employers to ‘your funding reservation’ 
-
             var accountTask = _accountApiClient.GetAccount(query.AccountHashedId);
             var getAccountFinanceOverviewTask = _mediator.SendAsync(query);
 
             var account = await accountTask;
 
-            var nonLevyAndExpressionOfInterestAccount = account.AccountAgreementType.Contains("Non-Levy.EOI");
-            if (nonLevyAndExpressionOfInterestAccount)
+            var nonLevyAndExpressionOfInterestAccount = account.AccountAgreementType?.Contains("Non-Levy.EOI");
+            if (nonLevyAndExpressionOfInterestAccount == true)
             {
                 return new OrchestratorResponse<FinanceDashboardViewModel>
                 {
-                    RedirectUrl = new UrlHelper().ReservationsAction("reservations/manage")
+                    RedirectUrl = $"{_employerAccountsConfiguration.ReservationsBaseUrl}/accounts/{query.AccountHashedId}/reservations/manage"
                 };
             }
 
