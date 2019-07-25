@@ -17,6 +17,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -24,6 +26,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
     {
         private readonly ICurrentDateTime _currentTime;
         private readonly ILog _logger;
+        private readonly IAccountApiClient _accountApiClient;
         private readonly IMediator _mediator;
 
         protected EmployerAccountTransactionsOrchestrator()
@@ -31,11 +34,32 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         }
 
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime, ILog logger)
+        public EmployerAccountTransactionsOrchestrator(IAccountApiClient accountApiClient, IMediator mediator, ICurrentDateTime currentTime, ILog logger)
         {
+            _accountApiClient = accountApiClient;
             _mediator = mediator;
             _currentTime = currentTime;
             _logger = logger;
+        }
+
+        public async Task<OrchestratorResponse<FinanceDashboardViewModel>> Index(GetAccountFinanceOverviewQuery query)
+        {
+            //todo: re-direct Non-levy EOI employers to ‘your funding reservation’ 
+
+            var response = await _mediator.SendAsync(query);
+
+            var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
+            {
+                Data = new FinanceDashboardViewModel
+                {
+                    AccountHashedId = query.AccountHashedId,
+                    CurrentLevyFunds = response.CurrentFunds,
+                    ExpiringFunds = response.ExpiringFundsAmount,
+                    ExpiryDate = response.ExpiringFundsExpiryDate
+                }
+            };
+
+            return viewModel;
         }
 
         public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(

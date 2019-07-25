@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
@@ -27,6 +28,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private Mock<ICurrentDateTime> _currentTime;
         private Mock<IHashingService> _hashingService;
 
+        private Mock<IAccountApiClient> _accountApiClient;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private FindAccountProviderPaymentsResponse _response;
@@ -34,6 +36,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         [SetUp]
         public void Arrange()
         {
+            _accountApiClient = new Mock<IAccountApiClient>();
             _mediator = new Mock<IMediator>();
             _currentTime = new Mock<ICurrentDateTime>();
             _hashingService = new Mock<IHashingService>();
@@ -54,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
             _orchestrator =
-                new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, Mock.Of<ILog>());
+                new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
         private Expression<Func<IMediator, Task<FindAccountProviderPaymentsResponse>>> AssertExpressionValidation()

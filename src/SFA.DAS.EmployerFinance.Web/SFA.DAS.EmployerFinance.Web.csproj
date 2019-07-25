@@ -96,6 +96,10 @@
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
+      <Project>{0F0122D6-36F6-4D6C-856E-3DAAE1B13464}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Client</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
       <Project>{aa299f18-d0ca-43a2-ae4d-54cb6c48ea70}</Project>
       <Name>SFA.DAS.EmployerFinance.Api.Client</Name>

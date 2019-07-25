@@ -31,7 +31,10 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         public EmployerAccountTransactionsController(
             IAuthenticationService owinWrapper,
-            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMapper mapper, IMediator mediator, ILog logger)
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator,
+            IMapper mapper,
+            IMediator mediator,
+            ILog logger)
         : base(owinWrapper)
         {
             _owinWrapper = owinWrapper;
@@ -55,20 +58,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("balance")]
         public async Task<ActionResult> Index(GetAccountFinanceOverviewQuery query)
         {
-            //todo: re-direct Non-levy EOI employers to ‘your funding reservation’ 
-
-            var response = await _mediator.SendAsync(query);
-
-            var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
-            {
-                Data = new FinanceDashboardViewModel
-                {
-                    AccountHashedId = query.AccountHashedId,
-                    CurrentLevyFunds = response.CurrentFunds,
-                    ExpiringFunds = response.ExpiringFundsAmount,
-                    ExpiryDate = response.ExpiringFundsExpiryDate
-                }
-            };
+            var viewModel = await _accountTransactionsOrchestrator.Index(query);
 
             return View(viewModel);
         }
