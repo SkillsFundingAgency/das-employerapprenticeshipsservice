@@ -191,7 +191,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Sector = model.Sector,
                 Name = model.OrganisationName,
                 Address = model.OrganisationAddress,
-                ExternalUserId = model.UserId
+                ExternalUserId = model.UserId,
+                Eoi = model.Eoi
             });
         }
 
@@ -228,7 +229,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     EmployerRefName = model.EmployerRefName,
                     PublicSectorDataSource = model.PublicSectorDataSource,
                     Sector = model.Sector,
-                    Aorn = model.Aorn
+                    Aorn = model.Aorn, 
+                    Eoi = model.Eoi
                 });
 
                 return new OrchestratorResponse<EmployerAgreementViewModel>

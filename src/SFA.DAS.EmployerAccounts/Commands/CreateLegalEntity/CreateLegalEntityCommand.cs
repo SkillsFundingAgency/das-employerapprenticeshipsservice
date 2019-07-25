@@ -22,5 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
         public DateTime SignedDate { get; set; }
 
         public string ExternalUserId { get; set; }
+        public bool Eoi { get; set; }
     }
 }

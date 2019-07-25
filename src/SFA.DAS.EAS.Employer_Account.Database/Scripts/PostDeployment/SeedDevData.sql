@@ -43,6 +43,7 @@
 					@legalEntityId=@legalEntityId OUTPUT, 
 					@employerAgreementId=@employerAgreementId OUTPUT,
 					@sector=null,
+					@eoi=0,
 					@accountLegalEntityId=@accountLegalEntityId OUTPUT,
 					@accountLegalEntityCreated=@accountLegalEntityCreated OUTPUT
 

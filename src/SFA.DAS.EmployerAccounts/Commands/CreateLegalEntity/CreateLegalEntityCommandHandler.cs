@@ -93,7 +93,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 PublicSectorDataSource = message.PublicSectorDataSource,
                 Source = message.Source,
                 Address = message.Address,
-                Sector = message.Sector
+                Sector = message.Sector,
+                Eoi = message.Eoi
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);

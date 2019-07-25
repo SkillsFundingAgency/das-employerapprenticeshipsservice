@@ -69,7 +69,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Sector = request.Sector,
                 Name = request.Name,
                 Address = request.Address,
-                ExternalUserId = request.ExternalUserId
+                ExternalUserId = request.ExternalUserId,
+                Eoi = request.Eoi
             });
 
             return new OrchestratorResponse<EmployerAgreementViewModel>

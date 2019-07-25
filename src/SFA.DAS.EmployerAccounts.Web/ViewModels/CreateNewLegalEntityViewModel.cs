@@ -1,4 +1,5 @@
 ﻿using System;
+using Nest;
 using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
@@ -15,5 +16,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public OrganisationType Source { get; set; }
         public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
+        public bool Eoi { get; set; }
     }
 }

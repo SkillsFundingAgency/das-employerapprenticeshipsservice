@@ -20,5 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Models
         public string Sector { get; set; }
         public HashedAccountIdModel HashedAccountId { get; set; }
         public string Aorn { get; set; }
+        public bool Eoi { get; set; }
     }
 }

@@ -19,13 +19,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class OrganisationController : BaseController
     {
         private readonly OrganisationOrchestrator _orchestrator;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IMapper _mapper;
         private readonly ILog _logger;
 
         public OrganisationController(
             IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
-            IAuthorizationService authorization,
+            IAuthorizationService authorizationService,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,
@@ -35,6 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _orchestrator = orchestrator;
             _mapper = mapper;
             _logger = logger;
+            _authorizationService = authorizationService;
         }
 
 
@@ -83,7 +85,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
                 Source = organisationType,
                 PublicSectorDataSource = publicSectorDataSource,
-                Sector = sector
+                Sector = sector,
+                Eoi = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest)
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);

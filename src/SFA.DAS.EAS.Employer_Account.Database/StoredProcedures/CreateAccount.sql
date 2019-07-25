@@ -18,7 +18,8 @@
 	@publicSectorDataSource TINYINT,
 	@employerRefName varchar(500) null,
 	@sector NVARCHAR(100),
-	@aorn VARCHAR(50) 
+	@aorn VARCHAR(50),
+	@eoi BIT
 )
 AS
 BEGIN
@@ -39,6 +40,7 @@ BEGIN
 		@source = @source,
 		@publicSectorDataSource = @publicSectorDataSource,
 		@sector = @sector,
+		@eoi = @eoi,
 		@legalEntityId = @legalEntityId OUTPUT,
 		@employerAgreementId = @employerAgreementId OUTPUT,
 		@accountLegalentityId = @accountLegalentityId OUTPUT,

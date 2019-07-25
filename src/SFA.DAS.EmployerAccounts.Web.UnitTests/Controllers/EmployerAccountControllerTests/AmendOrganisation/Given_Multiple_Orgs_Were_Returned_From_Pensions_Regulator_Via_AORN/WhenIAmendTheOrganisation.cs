@@ -4,6 +4,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -39,7 +40,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>(),
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-                Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
+                Mock.Of<IAuthorizationService>());
         }
 
         [Test]
