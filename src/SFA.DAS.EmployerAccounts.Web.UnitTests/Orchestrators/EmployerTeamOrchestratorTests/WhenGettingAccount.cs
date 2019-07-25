@@ -7,6 +7,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -128,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _accountApiClient = new Mock<IAccountApiClient>();
-            _accountApiClient.Setup(c => c.GetAccount(It.IsAny<string>())).ReturnsAsync(new AccountDetailViewModel
+            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
                 {ApprenticeshipEmployerType = "Levy"});
 
             _mapper = new Mock<IMapper>();
@@ -234,6 +235,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.AreEqual(3, actual.Data.SignedAgreementCount);
             Assert.AreEqual(4, actual.Data.RequiresAgreementSigning);
+        }
+
+        [TestCase(ApprenticeshipEmployerType.Levy, "Levy")]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, "NonLevy")]
+        public async Task ThenShouldReturnCorrectApprenticeshipEmployerTypeFromAccountApi(ApprenticeshipEmployerType expectedApprenticeshipEmployerType, string apiApprenticeshipEmployerType)
+        {
+            //Arrange
+            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
+                { ApprenticeshipEmployerType = apiApprenticeshipEmployerType });
+
+            //Act
+            var model = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(expectedApprenticeshipEmployerType, model.Data.ApprenticeshipEmployerType);
         }
     }
 }

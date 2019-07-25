@@ -205,6 +205,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 DasAccountName = accountResult.Account.Name,
                 LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() })),
                 PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x })),
+                ApprenticeshipEmployerType = accountResult.Account.ApprenticeshipEmployerType.ToString(),
                 AccountAgreementType = GetAgreementType(accountResult)
             };
 
