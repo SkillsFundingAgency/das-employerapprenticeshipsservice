@@ -41,5 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool HasMultipleProviders => AccountViewModel?.Providers?.Count > 1;
         // already returned in Account.ApprenticeshipEmployerType, but we want to transition to calling the api, rather than going direct to the db
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
+        public AgreementInfoViewModel AgreementInfo { get; set; }
+        
     }
 }   

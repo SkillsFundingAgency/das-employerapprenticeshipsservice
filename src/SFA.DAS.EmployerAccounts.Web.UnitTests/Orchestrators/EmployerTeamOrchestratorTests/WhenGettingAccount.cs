@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -33,7 +34,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
         private Mock<IAccountApiClient> _accountApiClient;
- 		private List<AccountTask> _tasks;
+        private Mock<IMapper> _mapper;
+        private List<AccountTask> _tasks;
         private AccountTask _testTask;
         [SetUp]
         public void Arrange()
@@ -129,7 +131,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _accountApiClient.Setup(c => c.GetAccount(It.IsAny<string>())).ReturnsAsync(new AccountDetailViewModel
                 {ApprenticeshipEmployerType = "Levy"});
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object);
+            _mapper = new Mock<IMapper>();
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object);
         }
         
         [Test]

@@ -50,7 +50,7 @@ using SFA.DAS.Validation;
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
+            /*if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
             {
                 var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
                 response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
@@ -62,7 +62,7 @@ using SFA.DAS.Validation;
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
 
                 return View("v2/Index", "_Layout_v2", response);
-            }
+            }*/
             return View(response);
 
         }

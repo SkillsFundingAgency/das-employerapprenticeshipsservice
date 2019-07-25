@@ -27,21 +27,26 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
+using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Types.Models.Agreement;
+using AutoMapper;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
-{
+{   
     public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
+        private readonly IMapper _mapper;        
 
-        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient)
+        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient, IMapper mapper)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
+            _mapper = mapper;
         }
 
         //Needed for tests
@@ -186,6 +191,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
+                var accountDetailViewModel = apiGetAccountTask.Result;
 
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -205,7 +211,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     AgreementsToSign = pendingAgreements.Count() > 0,
                     SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
-                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true)
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true),
+                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel)
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
@@ -235,6 +242,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
+
+        
 
         public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
         {
@@ -548,6 +557,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Status = teamMember.Status,
                 ExpiryDate = teamMember.ExpiryDate
             };
-        }
+        }       
     }
 }
