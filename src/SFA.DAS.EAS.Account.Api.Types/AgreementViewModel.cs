@@ -9,5 +9,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string SignedByName { get; set; }
         public EmployerAgreementStatus Status { get; set; }
         public int TemplateVersionNumber { get; set; }
+        public string AgreementType { get; set; }
     }
 }
