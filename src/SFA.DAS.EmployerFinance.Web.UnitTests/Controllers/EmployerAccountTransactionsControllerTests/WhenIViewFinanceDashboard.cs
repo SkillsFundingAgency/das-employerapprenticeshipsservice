@@ -14,6 +14,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
+    //todo: take a closer look at these tests, now the work is delegated to the orchestrator
     public class WhenIViewFinanceDashboard
     {
         private const string ExpectedHashedAccountId = "ABC123";
@@ -47,6 +48,16 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
             };
 
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
+            _orchestrator.Setup(o => o.Index(It.IsAny<GetAccountFinanceOverviewQuery>()))
+                .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
+                {
+                    Data = new FinanceDashboardViewModel
+                    {
+                        AccountHashedId = ExpectedHashedAccountId,
+                        CurrentLevyFunds = ExpectedCurrentFunds
+                    }
+                });
+
             _owinWrapper = new Mock<IAuthenticationService>();
             _mediator = new Mock<IMediator>();
 

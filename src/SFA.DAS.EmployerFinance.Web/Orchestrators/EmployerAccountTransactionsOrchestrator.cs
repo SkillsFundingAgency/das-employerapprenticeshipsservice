@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             _logger = logger;
         }
 
-        public async Task<OrchestratorResponse<FinanceDashboardViewModel>> Index(GetAccountFinanceOverviewQuery query)
+        public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> Index(GetAccountFinanceOverviewQuery query)
         {
             //todo: re-direct Non-levy EOI employers to ‘your funding reservation’ 
 
