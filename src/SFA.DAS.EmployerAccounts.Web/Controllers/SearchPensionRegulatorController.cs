@@ -161,7 +161,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else if (!_aornRegex.IsMatch(viewModel.Aorn.ToUpper().Trim()))
             {
-                errors.Add(nameof(viewModel.Aorn), "Enter an accounts office reference number number in the correct format");
+                errors.Add(nameof(viewModel.Aorn), "Enter an accounts office reference number in the correct format");
             }
 
             if (string.IsNullOrWhiteSpace(viewModel.PayeRef))
@@ -170,7 +170,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else if (!_payeRegex.IsMatch(viewModel.PayeRef))
             {
-                errors.Add(nameof(viewModel.PayeRef), "Enter a PAYE scheme number number in the correct format");
+                errors.Add(nameof(viewModel.PayeRef), "Enter a PAYE scheme number in the correct format");
             }
             else if(viewModel.PayeRef[3] != '/')
             {
