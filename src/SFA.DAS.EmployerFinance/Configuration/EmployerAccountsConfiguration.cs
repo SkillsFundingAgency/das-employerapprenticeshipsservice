@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Configuration
@@ -17,5 +18,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string PublicAllowedHashstringCharacters { get; set; }
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
+        public AccountApiConfiguration AccountApi { get; set; }
     }
 }
