@@ -9,6 +9,7 @@ using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransact
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -16,6 +17,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 
@@ -55,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 return new OrchestratorResponse<FinanceDashboardViewModel>
                 {
-                    RedirectUrl = "todo:"
+                    RedirectUrl = new UrlHelper().ReservationsAction("reservations/manage")
                 };
             }
 
