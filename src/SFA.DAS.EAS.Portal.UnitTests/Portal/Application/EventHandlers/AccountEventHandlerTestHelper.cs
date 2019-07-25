@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,46 +6,31 @@ using AutoFixture;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
-using NServiceBus;
 using NUnit.Framework;
+using SFA.DAS.EAS.Portal.Application.EventHandlers;
 using SFA.DAS.EAS.Portal.Application.Services;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 
-namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
+namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
 {
-    public class EventHandlerTestsFixture<TEvent, TEventHandler>
-        where TEventHandler : IHandleMessages<TEvent>
+    public class AccountEventHandlerTestHelper<TEvent, TEventHandler>
+        where TEventHandler : IEventHandler<TEvent>
     {
         public TEvent Message { get; set; }
         public TEvent OriginalMessage { get; set; }
-        public IHandleMessages<TEvent> Handler { get; set; }
-        public string MessageId { get; set; }
-        public Mock<IMessageContextInitialisation> MessageContextInitialisation { get; set; }
-        public Mock<IMessageHandlerContext> MessageHandlerContext { get; set; }
+        public IEventHandler<TEvent> Handler { get; set; }
         public Mock<IAccountDocumentService> AccountDocumentService { get; set; }
         public AccountDocument AccountDocument { get; set; }
         public AccountDocument OriginalAccountDocument { get; set; }
         public Mock<ILogger<TEventHandler>> Logger { get; set; }
         public Fixture Fixture { get; set; }
         
-        public EventHandlerTestsFixture(bool constructHandler = true)
+        public AccountEventHandlerTestHelper(bool constructHandler = true)
         {
             Fixture = new Fixture();
-            Fixture.Customize<Cohort>(co => co.With(x => x.IsApproved, false));
 
             Message = Fixture.Create<TEvent>();
-
-            MessageContextInitialisation = new Mock<IMessageContextInitialisation>();
-            
-            MessageId = Fixture.Create<string>();
-            // nservicebus's TestableMessageHandlerContext is available, but we don't need it yet
-            MessageHandlerContext = new Mock<IMessageHandlerContext>();
-            MessageHandlerContext.Setup(c => c.MessageId).Returns(MessageId);
-
-            var messageHeaders = new Mock<IReadOnlyDictionary<string, string>>();
-            messageHeaders.SetupGet(c => c["NServiceBus.TimeSent"]).Returns(DateTime.Now.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss:ffffff Z", CultureInfo.InvariantCulture));
-            MessageHandlerContext.Setup(c => c.MessageHeaders).Returns(messageHeaders.Object);
 
             AccountDocumentService = new Mock<IAccountDocumentService>();
             
@@ -57,16 +40,26 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
                 Handler = ConstructHandler();
         }
 
-        public EventHandlerTestsFixture<TEvent, TEventHandler> ArrangeEmptyAccountDocument(long accountId)
+        public AccountEventHandlerTestHelper<TEvent, TEventHandler> ArrangeAccountDoesNotExist(long accountId)
+        {
+            AccountDocument = new AccountDocument(accountId);
+            
+            AccountDocumentService.Setup(s => s.GetOrCreate(accountId, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(AccountDocument);
+
+            return this;
+        }
+
+        public AccountEventHandlerTestHelper<TEvent, TEventHandler> ArrangeEmptyAccountDocument(long accountId)
         {
             AccountDocument = JsonConvert.DeserializeObject<AccountDocument>($"{{\"Account\": {{\"Id\": {accountId} }}}}");
 
-            AccountDocumentService.Setup(s => s.Get(accountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
+            AccountDocumentService.Setup(s => s.GetOrCreate(accountId, It.IsAny<CancellationToken>())).ReturnsAsync(AccountDocument);
             
             return this;
         }
         
-        protected Organisation SetUpAccountDocumentWithOrganisation(long accountId, long accountLegalEntityId)
+        public Organisation SetUpAccountDocumentWithOrganisation(long accountId, long accountLegalEntityId)
         {
             AccountDocument = Fixture.Create<AccountDocument>();
 
@@ -81,24 +74,19 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             return organisation;
         }
         
-        public virtual Task Handle()
+        public Task Handle()
         {
             OriginalMessage = Message.Clone();
             OriginalAccountDocument = AccountDocument.Clone();
-            return Handler.Handle(Message, MessageHandlerContext.Object);
+            return Handler.Handle(Message);
         }
 
         private TEventHandler ConstructHandler()
         {
-            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, MessageContextInitialisation.Object, Logger.Object);
+            return (TEventHandler)Activator.CreateInstance(typeof(TEventHandler), AccountDocumentService.Object, Logger.Object);
         }
 
-        public void VerifyMessageContextIsInitialised()
-        {
-            MessageContextInitialisation.Verify(mc => mc.Initialise(MessageHandlerContext.Object), Times.Once);
-        }
-        
-        protected Account GetExpectedAccount(long accountId)
+        public Account GetExpectedAccount(long accountId)
         {
             if (OriginalAccountDocument == null)
             {
@@ -110,7 +98,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             return OriginalAccountDocument.Account;
         }
 
-        protected Organisation GetExpectedOrganisation(Account expectedAccount, long accountLegalEntityId, string accountLegalEntityName)
+        public Organisation GetExpectedOrganisation(Account expectedAccount, long accountLegalEntityId, string accountLegalEntityName)
         {
             if (OriginalAccountDocument != null && OriginalAccountDocument.Account.Organisations.Any())
                 return expectedAccount.Organisations.Single(o => o.AccountLegalEntityId == accountLegalEntityId);
@@ -125,7 +113,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers
             return expectedOrganisation;
         }
         
-        protected bool AccountIsAsExpected(Account expectedAccount, AccountDocument savedAccountDocument)
+        public bool AccountIsAsExpected(Account expectedAccount, AccountDocument savedAccountDocument)
         {
             if (savedAccountDocument?.Account == null)
                 return false;

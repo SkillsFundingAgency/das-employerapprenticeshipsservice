@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 
-namespace SFA.DAS.EAS.Portal.Worker.TypesExtensions
+namespace SFA.DAS.EAS.Portal.TypesExtensions
 {
     public static class OrganisationExtensions
     {
