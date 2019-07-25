@@ -50,6 +50,16 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
             var account = await accountTask;
 
+            // let's hope we don't add a bourgeoisie agreement
+            var expressionOfInterestAccount = account.AccountAgreementType.Contains("EOI");
+            if (expressionOfInterestAccount)
+            {
+                return new OrchestratorResponse<FinanceDashboardViewModel>
+                {
+                    RedirectUrl = "todo:"
+                };
+            }
+
             var getAccountFinanceOverview = await getAccountFinanceOverviewTask;
 
             var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
