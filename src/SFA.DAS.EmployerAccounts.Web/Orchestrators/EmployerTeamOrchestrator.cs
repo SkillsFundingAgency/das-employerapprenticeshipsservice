@@ -28,7 +28,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EmployerAccounts.Types.Models.Agreement;
 using AutoMapper;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
