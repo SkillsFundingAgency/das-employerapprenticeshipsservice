@@ -15,5 +15,6 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public List<long> LegalEntities { get; set; } = new List<long>();
         public List<string> PayeSchemes { get; set; } = new List<string>();
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
+        public List<string> AccountAgreementTypes { get; set; }
     }
 }

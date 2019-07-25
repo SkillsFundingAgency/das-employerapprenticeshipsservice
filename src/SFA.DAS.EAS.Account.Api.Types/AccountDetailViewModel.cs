@@ -30,5 +30,8 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string DasAccountId => HashedAccountId;
 
         public string ApprenticeshipEmployerType { get; set; }
+
+        public string AccountAgreementType { get; set; }
+
     }
 }
