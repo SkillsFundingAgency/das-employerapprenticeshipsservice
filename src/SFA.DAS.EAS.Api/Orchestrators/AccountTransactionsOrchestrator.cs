@@ -4,11 +4,10 @@ using System.Web.Http.Routing;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactionSummary;
+using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EAS.Domain.Models.Transaction;
-using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.NLog.Logger;
 using TransactionItemType = SFA.DAS.EAS.Account.Api.Types.TransactionItemType;
-using FinanceTransactionLine = SFA.DAS.EmployerFinance.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
@@ -70,7 +69,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             };
         }
 
-        private TransactionViewModel ConvertToTransactionViewModel(string hashedAccountId, FinanceTransactionLine transactionLine, UrlHelper urlHelper)
+        private TransactionViewModel ConvertToTransactionViewModel(string hashedAccountId, TransactionLine transactionLine, UrlHelper urlHelper)
         {
             var viewModel = new TransactionViewModel
             {
@@ -83,7 +82,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 TransactionDate = transactionLine.TransactionDate
             };
 
-            if (transactionLine.TransactionType == EmployerFinance.Models.Transaction.TransactionItemType.Declaration)
+            if (transactionLine.TransactionType == Domain.Models.Transaction.TransactionItemType.Declaration)
             {
                 viewModel.ResourceUri = urlHelper.Route("GetLevyForPeriod", new { hashedAccountId, payrollYear = transactionLine.PayrollYear, payrollMonth = transactionLine.PayrollMonth });
             }
