@@ -23,6 +23,9 @@
         "accountsCosmosDbName": {
             "type": "string"
         },
+        "ipRangeFilter" : {
+            "type": "string"
+        },
         "aseHostingEnvironmentName": {
             "type": "string",
             "defaultValue": ""
@@ -339,6 +342,9 @@
                     },
                     "defaultConsistencyLevel": {
                         "value": "Strong"
+                    },
+                    "ipRangeFilter": {
+                        "value": "[parameters('ipRangeFilter')]"
                     }
                 }
             }

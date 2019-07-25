@@ -25,7 +25,10 @@
         },
         "workerAppServicePlanInstances": {
             "type": "int"
-        }
+        },
+        "ipRangeFilter" : {
+            "type": "string"
+        },
     },
     "variables": {
         "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
@@ -208,6 +211,9 @@
                     },
                     "defaultConsistencyLevel": {
                         "value": "Strong"
+                    },
+                    "ipRangeFilter": {
+                        "value": "[parameters('ipRangeFilter')]"
                     }
                 }
             }
