@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class ResourceList : List<ResourceViewModel>
+    public class ResourceList : List<ResourceViewModel>, IAccountResource
     {
         public ResourceList(IEnumerable<ResourceViewModel> resources)
         {
