@@ -21,11 +21,11 @@
             "type": "string"
         },
         "accountsCosmosDbName": {
-            "type": "string",
-            "defaultValue": ""
+            "type": "string"
         },
         "ipRangeFilter" : {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "aseHostingEnvironmentName": {
             "type": "string",
