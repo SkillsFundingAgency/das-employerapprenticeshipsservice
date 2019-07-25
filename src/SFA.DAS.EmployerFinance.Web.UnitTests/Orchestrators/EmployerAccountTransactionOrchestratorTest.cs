@@ -15,8 +15,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
+using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
 using TransactionLine = SFA.DAS.EmployerFinance.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
@@ -64,6 +68,31 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _employerAccountsConfiguration = new EmployerAccountsConfiguration();
 
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _employerAccountsConfiguration, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
+        }
+
+        [Test]
+        public async Task AndAccountAgreementTypeIsNonLevyEoiThenRedirectUrlShouldPointToYourFundingReservationsPage()
+        {
+            //Arrange
+            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
+                .ReturnsAsync(new AccountDetailViewModel
+                {
+                    AccountAgreementType = "Non-Levy.EOI.1"
+                });
+
+            var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
+            {
+                AccountHashedId = HashedAccountId
+            };
+
+            _employerAccountsConfiguration.ReservationsBaseUrl = "http://example.com";
+
+            //Act
+            var response = await _orchestrator.Index(getAccountFinanceOverviewQuery);
+
+            //Assert
+            response.Should().NotBeNull();
+            response.RedirectUrl.Should().Be($"http://example.com/accounts/{HashedAccountId}/reservations/manage");
         }
 
         [TestCase(2, 2017)]

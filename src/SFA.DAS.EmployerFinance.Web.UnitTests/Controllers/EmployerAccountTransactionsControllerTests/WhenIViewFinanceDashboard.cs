@@ -63,9 +63,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
 
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(() => _response);
 
-            //todo: this. shame the original non-view support was reviewed away :-(
-            //            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-
             _controller = new EmployerAccountTransactionsController(
                 _owinWrapper.Object,
                 _orchestrator.Object,
