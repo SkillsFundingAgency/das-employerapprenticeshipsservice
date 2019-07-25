@@ -16,8 +16,9 @@ namespace SFA.DAS.EAS.Web.Mappings
                 .ForMember(dest => dest.LegalEntitySource, opt => opt.MapFrom(src => src.LegalEntity.Source))
                 .ForMember(dest => dest.TemplatePartialViewName, opt => opt.MapFrom(src => src.Template.PartialViewName))
                 .ForMember(dest => dest.AccountLegalEntityId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityId))
-                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId));
-
+                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId))
+                .ForMember(dest => dest.AgreementType, opt => opt.MapFrom(src => src.AgreementType))
+                ;
         }
     }
 }
