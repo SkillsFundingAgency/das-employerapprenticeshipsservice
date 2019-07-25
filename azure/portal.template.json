@@ -27,8 +27,9 @@
             "type": "int"
         },
         "ipRangeFilter" : {
-            "type": "string"
-        },
+            "type": "string",
+            "defaultValue": ""
+        }
     },
     "variables": {
         "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",

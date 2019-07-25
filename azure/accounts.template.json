@@ -21,7 +21,8 @@
             "type": "string"
         },
         "accountsCosmosDbName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "ipRangeFilter" : {
             "type": "string"
