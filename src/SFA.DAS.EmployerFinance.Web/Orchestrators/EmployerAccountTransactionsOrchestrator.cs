@@ -50,9 +50,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
             var account = await accountTask;
 
-            // let's hope we don't add a bourgeoisie agreement
-            var expressionOfInterestAccount = account.AccountAgreementType.Contains("EOI");
-            if (expressionOfInterestAccount)
+            var nonLevyAndExpressionOfInterestAccount = account.AccountAgreementType.Contains("Non-Levy.EOI");
+            if (nonLevyAndExpressionOfInterestAccount)
             {
                 return new OrchestratorResponse<FinanceDashboardViewModel>
                 {
