@@ -1,4 +1,5 @@
 using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
@@ -30,5 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
 
         public string AccountAgreementType { get; set; }
 
+
+        public string ApprenticeshipEmployerType { get; set; }
     }
 }

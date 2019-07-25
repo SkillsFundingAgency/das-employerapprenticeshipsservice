@@ -6,6 +6,8 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -30,6 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private EmployerTeamOrchestrator _orchestrator;
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
+        private Mock<IAccountApiClient> _accountApiClient;
  		private List<AccountTask> _tasks;
         private AccountTask _testTask;
         [SetUp]
@@ -122,7 +125,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             
             _currentDateTime = new Mock<ICurrentDateTime>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object);
+            _accountApiClient = new Mock<IAccountApiClient>();
+            _accountApiClient.Setup(c => c.GetAccount(It.IsAny<string>())).ReturnsAsync(new AccountDetailViewModel
+                {ApprenticeshipEmployerType = "Levy"});
+
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object);
         }
         
         [Test]
