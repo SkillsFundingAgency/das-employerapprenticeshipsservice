@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
 
             Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
             var viewModel = viewResponse.Model as SearchPensionRegulatorByAornViewModel;
-            Assert.AreEqual("Enter an accounts office reference number number in the correct format", viewModel.AornError);
+            Assert.AreEqual("Enter an accounts office reference number in the correct format", viewModel.AornError);
         }
     }
 }
