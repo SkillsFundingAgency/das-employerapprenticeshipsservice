@@ -13,7 +13,6 @@ using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -46,16 +45,21 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             //todo: re-direct Non-levy EOI employers to ‘your funding reservation’ 
 
-            var response = await _mediator.SendAsync(query);
+            var accountTask = _accountApiClient.GetAccount(query.AccountHashedId);
+            var getAccountFinanceOverviewTask = _mediator.SendAsync(query);
+
+            var account = await accountTask;
+
+            var getAccountFinanceOverview = await getAccountFinanceOverviewTask;
 
             var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
             {
                 Data = new FinanceDashboardViewModel
                 {
                     AccountHashedId = query.AccountHashedId,
-                    CurrentLevyFunds = response.CurrentFunds,
-                    ExpiringFunds = response.ExpiringFundsAmount,
-                    ExpiryDate = response.ExpiringFundsExpiryDate
+                    CurrentLevyFunds = getAccountFinanceOverview.CurrentFunds,
+                    ExpiringFunds = getAccountFinanceOverview.ExpiringFundsAmount,
+                    ExpiryDate = getAccountFinanceOverview.ExpiringFundsExpiryDate
                 }
             };
 
