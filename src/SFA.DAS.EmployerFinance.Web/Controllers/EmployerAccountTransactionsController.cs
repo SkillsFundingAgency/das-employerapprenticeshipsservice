@@ -12,10 +12,8 @@ using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
-using System.Net;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
-using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
@@ -57,6 +55,8 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("balance")]
         public async Task<ActionResult> Index(GetAccountFinanceOverviewQuery query)
         {
+            //todo: re-direct Non-levy EOI employers to ‘your funding reservation’ 
+
             var response = await _mediator.SendAsync(query);
 
             var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
