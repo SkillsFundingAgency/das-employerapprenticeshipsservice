@@ -132,8 +132,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("agreements/{agreementId}/sign")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
+        public async Task<ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
         {
+            if(choice != 2)
+                RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
 
 
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
@@ -164,7 +166,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     flashMessage.Headline = "All agreements signed";
                     flashMessage.Message = "You've successfully signed all of your organisation agreements.";
-                    result = RedirectToAction(ControllerConstants.NextStepsActionName);
+                    result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 }
 
                 AddFlashMessageToCookie(flashMessage);
@@ -305,5 +307,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
         }
+
+        
     }
 }

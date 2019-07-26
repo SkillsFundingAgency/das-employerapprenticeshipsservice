@@ -1,4 +1,5 @@
-﻿
+﻿@model EmployerAgreementViewModel
+
 <script type="text/javascript" src="@Url.Content("../../../../dist/javascripts/jquery-1.11.0.min.js")"></script>
 <script type="text/javascript" src="@Url.Content("../../../../dist/javascripts/accordion.js")"></script>
 <link href="@Url.Content("../../../../dist/css/accordion.css")" rel="stylesheet" type="text/css" />
@@ -395,14 +396,16 @@
         </div>
     </div>
     <br />
-    <div class="notice">
-        <i class="icon icon-important">
-            <span class="visually-hidden">Warning</span>
-        </i>
-        <strong class="bold-small">
-            The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaks it, we could close their account and stop them running apprenticeships.
-        </strong>
-    </div>
+<div class="notice">
+    <i class="icon icon-important">
+        <span class="visually-hidden">Warning</span>
+    </i>
+    <strong class="bold-small">
+        The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaks it, we could close their account and stop them running apprenticeships.
+    </strong>
+</div>
+<form method="post" action="@Url.Action("Sign", "EmployerAgreement")">
+    @Html.AntiForgeryToken()
     <div class="form-group">
         <fieldset>
 
@@ -410,18 +413,31 @@
                 <h1 class="heading-medium">Do you accept the agreement?</h1>
             </legend>
 
-            <div class="multiple-choice">
-                <input id="agreementSign-1" type="radio" name="agreementSign" value="yesSign">
-                <label for="agreementSign-1">Yes, I have read the agreement and accept it</label>
-            </div>
-            <div class="multiple-choice">
-                <input id="agreementSign-2" type="radio" name="agreementSign" value="noSignLater">
-                <label for="agreementSign-2">I’ll review it later</label>
-            </div>
+            @*<div class="multiple-choice">
+                    <input id="agreementSign-1" type="radio" name="agreementSign" value="1">
+
+                    @Html.RadioButtonFor(model => model.SignAgreement, true, new { @id = "agreementSign-1" })*
+                    <label for="agreementSign-1">Yes, I have read the agreement and accept it</label>
+                </div>
+                <div class="multiple-choice">
+                    <input id="agreementSign-2" type="radio" name="agreementSign" value="0">
+
+                    @Html.RadioButtonFor(model => model.SignAgreement, false, new { @id = "agreementSign-2" })*
+                    <label for="agreementSign-2">I’ll review it later</label>
+                </div>*@
+            <label for="want-to-sign" class="block-label">
+                <input type="radio" name="choice" id="want-to-sign" value="2" />
+                Yes, I have read the agreement and accept it
+            </label>
+            <label for="do-not-want-to-sign" class="block-label">
+                <input type="radio" name="choice" id="do-not-want-to-sign" value="1" />
+                I’ll review it later
+            </label>
 
         </fieldset>
         <br />
         <input class="button" type="submit" value="Continue" />
     </div>
+</form>
 </div>
 
