@@ -15,14 +15,16 @@
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
             <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
-            About your Mou
+            About this document
         </h1>
 
-        MOU
-              
+        <p>This document details our requirements of your organisation during the Expression of Interest testing period, by signing it you are agreeing to comply with them.</p>
+        <p>This is not a contract, but the ESFA expects that when you have signed it, you will comply with its terms.</p>
+        <p>You’ll need to have authority from your organisation before you sign this.</p>
+
         <form method="get" action="@Url.Action(ControllerConstants.SignAgreementActionName ,ControllerConstants.EmployerAgreementControllerName)">
             @Html.AntiForgeryToken()
-            <input class="button" type="submit" value="Continue to your Mou" />
+            <input class="button" type="submit" value="Continue to the document" />
         </form>
     </div>
 </div>
