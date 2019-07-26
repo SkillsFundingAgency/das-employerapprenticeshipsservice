@@ -71,7 +71,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         }
 
         [Test]
-        public async Task AndAccountAgreementTypeIsNonLevyEoiThenRedirectUrlShouldPointToYourFundingReservationsPage()
+        public async Task AndAccountAgreementTypeIsNonLevyEoiThenRedirectUrlShouldBeSetToYourFundingReservationsPage()
         {
             //Arrange
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
@@ -93,6 +93,35 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             //Assert
             response.Should().NotBeNull();
             response.RedirectUrl.Should().Be($"http://example.com/accounts/{HashedAccountId}/reservations/manage");
+        }
+
+        [TestCase(null)]
+        [TestCase("Levy.1")]
+        public async Task AndAccountAgreementTypeIsNotNonLevyEoiThenRedirectUrlShouldBeNull(string accountAgreementType)
+        {
+            //Arrange
+            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
+                .ReturnsAsync(new AccountDetailViewModel
+                {
+                    AccountAgreementType = accountAgreementType
+                });
+
+            var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
+            {
+                AccountHashedId = HashedAccountId
+            };
+
+            _employerAccountsConfiguration.ReservationsBaseUrl = "http://example.com";
+
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetAccountFinanceOverviewQuery>()))
+                .ReturnsAsync(new GetAccountFinanceOverviewResponse());
+
+            //Act
+            var response = await _orchestrator.Index(getAccountFinanceOverviewQuery);
+
+            //Assert
+            response.Should().NotBeNull();
+            response.RedirectUrl.Should().BeNull();
         }
 
         [TestCase(2, 2017)]
