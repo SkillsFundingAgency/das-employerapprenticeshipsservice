@@ -123,5 +123,15 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
             Assert.AreEqual(redirectUrl, redirectResult.Url);
             Assert.IsFalse(redirectResult.Permanent);
         }
+
+        [Test]
+        public async Task ThenRedirectResultIsNotReturnedWhenOrchestratorDoesNotRequestARedirect()
+        {
+            //Act
+            var result = await _controller.Index(_query);
+
+            //Assert
+            Assert.IsNotInstanceOf<RedirectResult>(result);
+        }
     }
 }
