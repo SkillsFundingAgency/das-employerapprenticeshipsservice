@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
 using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
+using SFA.DAS.EAS.Application.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -127,6 +128,20 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return new OrchestratorResponse<AccountDetailViewModel> { Data = viewModel };
         }
 
+        public async Task<OrchestratorResponse<PayeSchemeViewModel>> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+        {
+            _logger.Info($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
+
+            var payeSchemeResult = await _mediator.SendAsync(new GetPayeSchemeByRefQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
+            if (payeSchemeResult.PayeScheme == null)
+            {
+                return new OrchestratorResponse<PayeSchemeViewModel> { Data = null };
+            }
+
+            var viewModel = ConvertPayeSchemeToViewModel(hashedAccountId, payeSchemeResult);
+            return new OrchestratorResponse<PayeSchemeViewModel> { Data = viewModel };
+        }
+
         public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(long accountId)
         {
             var hashedAccountId = _hashingService.HashValue(accountId);
@@ -192,6 +207,20 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             };
         }
 
+        private PayeSchemeViewModel ConvertPayeSchemeToViewModel(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
+        {
+            var payeSchemeViewModel = new PayeSchemeViewModel
+            {
+                DasAccountId = hashedAccountId,
+                Name = payeSchemeResult.PayeScheme.Name,
+                Ref = payeSchemeResult.PayeScheme.Ref,
+                AddedDate = payeSchemeResult.PayeScheme.AddedDate,
+                RemovedDate = payeSchemeResult.PayeScheme.RemovedDate
+            };
+
+            return payeSchemeViewModel;
+        }
+
         private static AccountDetailViewModel ConvertAccountDetailToViewModel(GetEmployerAccountByHashedIdResponse accountResult)
         {
             var accountDetailViewModel = new AccountDetailViewModel
@@ -203,7 +232,8 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 OwnerEmail = accountResult.Account.OwnerEmail,
                 DasAccountName = accountResult.Account.Name,
                 LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() })),
-                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x }))
+                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x })),
+                AccountAgreementType = GetAgreementType(accountResult)
             };
 
             return accountDetailViewModel;
@@ -228,6 +258,15 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             });
 
             return transferAllowanceResult.TransferAllowance;
+        }
+
+        private static string GetAgreementType(GetEmployerAccountByHashedIdResponse accountResult)
+        {
+            var agreementTypeGroup = accountResult.Account.AccountAgreementTypes?
+                .GroupBy(x => x)
+            ;
+
+            return agreementTypeGroup?.Count() > 1 ? "Inconsistent" : agreementTypeGroup?.FirstOrDefault()?.Key;
         }
     }
 }
