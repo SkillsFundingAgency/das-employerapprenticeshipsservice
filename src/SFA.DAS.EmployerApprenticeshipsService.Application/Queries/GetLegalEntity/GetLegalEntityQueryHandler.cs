@@ -36,6 +36,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
                 })
                 .SingleOrDefaultAsync();
 
+            // TODO: The template version number can now be the same across agreement types so this logic may fail
             var latestAgreement = legalEntity?.Agreements
                 .OrderByDescending(a => a.TemplateVersionNumber)
                 .FirstOrDefault();

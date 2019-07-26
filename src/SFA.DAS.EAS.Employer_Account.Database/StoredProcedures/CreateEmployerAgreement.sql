@@ -10,6 +10,7 @@ BEGIN
 	BEGIN
 		SELECT TOP 1 @templateId = Id
 		FROM [employer_account].[EmployerAgreementTemplate]
+		WHERE AgreementType = 'Levy'
 		ORDER BY VersionNumber DESC
 	END
 
