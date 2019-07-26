@@ -44,13 +44,15 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             var currentBalance = await GetAccountBalance(query.AccountId.Value);
             var earliestFundsToExpireTask = GetExpiringFunds(query.AccountId.Value);
             var projectedCalculations = await _dasForecastingService.GetProjectedCalculations(query.AccountId.Value);
+            var totalSpendForLastYear = await GetTotalSpendForLastYear(query.AccountId.Value);
 
             var response = new GetAccountFinanceOverviewResponse
             {
                 AccountId = query.AccountId.Value,
                 CurrentFunds = currentBalance,
                 FundsIn = projectedCalculations?.FundsIn ?? 0,
-                FundsOut = projectedCalculations?.FundsOut ?? 0
+                FundsOut = projectedCalculations?.FundsOut ?? 0,
+                TotalSpendForLastYear = totalSpendForLastYear
             };
 
             var earliestFundsToExpire = await earliestFundsToExpireTask;
@@ -89,6 +91,11 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 
                 throw;
             }
+        }
+
+        private async Task<decimal> GetTotalSpendForLastYear(long accountId)
+        {
+            return await _levyService.GetTotalSpendForLastYear(accountId);
         }
     }
 }
