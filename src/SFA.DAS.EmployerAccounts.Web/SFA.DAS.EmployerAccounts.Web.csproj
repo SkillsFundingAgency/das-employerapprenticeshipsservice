@@ -736,6 +736,7 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
+    <Content Include="Views\EmployerAgreement\SignAgreement2.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
