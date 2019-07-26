@@ -60,6 +60,9 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         {
             var viewModel = await _accountTransactionsOrchestrator.Index(query);
 
+            if (viewModel.RedirectUrl != null)
+                return Redirect(viewModel.RedirectUrl);
+
             return View(viewModel);
         }
 
