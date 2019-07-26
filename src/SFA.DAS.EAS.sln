@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28822.285
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.EAS.Support.CloudService", "SFA.DAS.EAS.Support.CloudService\SFA.DAS.EAS.Support.CloudService.ccproj", "{E33EAE3E-3261-4031-B074-2F80FBD5588B}"
 EndProject
@@ -549,7 +549,6 @@ Global
 		{91342D1E-1DFC-45F0-8B20-BAAE1FFD16E8} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F} = {29FCFFB5-8496-46A7-BD41-889814DB9439}
-		{7F8328C4-476F-41B1-9C99-BBDF724CA4DA} = {A177AC61-DF6E-4A04-8EFE-1E7004277669}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7BB69664-F8C0-4231-9940-51CE90904197}

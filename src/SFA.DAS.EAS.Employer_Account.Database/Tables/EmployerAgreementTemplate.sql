@@ -3,7 +3,8 @@
     [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [PartialViewName] NVARCHAR(50) NOT NULL,
     [CreatedDate] DATETIME NOT NULL, 
-    [VersionNumber] INT NOT NULL
+    [VersionNumber] INT NOT NULL,
+	[AgreementType] NVARCHAR(50) NOT NULL DEFAULT('Levy')
 )
 GO
 
