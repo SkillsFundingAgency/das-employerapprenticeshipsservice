@@ -17,6 +17,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="2.1.1507" />
     <PackageReference Include="SFA.DAS.Testing" Version="3.0.121" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" >
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>

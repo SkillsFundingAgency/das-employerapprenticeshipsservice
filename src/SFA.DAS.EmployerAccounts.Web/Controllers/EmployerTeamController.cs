@@ -5,13 +5,15 @@ using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
- using System.Linq;
+using System.Linq;
+using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models.Portal;
 
  namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -21,7 +23,6 @@ using SFA.DAS.Validation;
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
-        private readonly IHashingService _hashingService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -36,13 +37,11 @@ using SFA.DAS.Validation;
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
-            IHashingService hashingService)
+            IPortalClient portalClient)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
-            _hashingService = hashingService;
         }
 
         [HttpGet]
@@ -50,10 +49,14 @@ using SFA.DAS.Validation;
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
+            var hasPayeScheme = HasPayeScheme(response.Data);
+            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
-                var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
+                {
+                    HashedAccountId = hashedAccountId,
+                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
+                });
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
@@ -358,10 +361,29 @@ using SFA.DAS.Validation;
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
-            if (!HasPayeScheme(model))
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
+            if (HasPayeScheme(model))
             {
-                viewModel.ViewName = "PrePayeRecruitment";
+                if (model.AccountViewModel?.VacanciesRetrieved == false)
+                {
+                    viewModel.ViewName = "MultipleVacancies";
+                }
+                else
+                {
+                    switch (model.AccountViewModel?.GetVacancyCardinality())
+                    {
+                        case null:
+                        case Cardinality.None:
+                            viewModel.ViewName = "CreateVacancy";
+                            break;
+                        case Cardinality.One:
+                            viewModel.ViewName = "NotImplemented";
+                            break;
+                        default:
+                            viewModel.ViewName = "MultipleVacancies";
+                            break;
+                    }
+                }
             }
             return PartialView(viewModel);
         }
@@ -433,6 +455,12 @@ using SFA.DAS.Validation;
 
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult MultipleVacancies(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

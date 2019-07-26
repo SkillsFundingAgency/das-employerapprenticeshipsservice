@@ -5,9 +5,14 @@ namespace SFA.DAS.EAS.Portal.Client.TestHarness.DependencyResolution
 {
     public static class IoC
     {
-        public static void Initialize(Registry registry)
+        public static IContainer Initialize()
         {
-            registry.IncludeRegistry<PortalClientRegistry>();
+            return new Container(c =>
+            {
+                c.AddRegistry<PortalClientRegistry>();
+                c.AddRegistry<LoggerRegistry>();
+                c.AddRegistry<ScenariosRegistry>();
+            });
         }
     }
 }

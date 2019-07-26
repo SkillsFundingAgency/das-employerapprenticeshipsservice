@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
 
         public async Task Run()
         {
-            const long accountId = 1L;
+            const long accountId = 27446L;
             const long accountLegalEntityId1 = 1L;
             const string legalEntityName1 = "Fishy Fingers Ltd";
             const long accountLegalEntityId2 = 8008135L;

@@ -29,6 +29,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers
         public AccountEventHandlerTestHelper(bool constructHandler = true)
         {
             Fixture = new Fixture();
+            Fixture.Customize<Account>(a => a
+                .Without(ac => ac.VacanciesRetrieved)
+                .Without(ac => ac.Vacancies));
 
             Message = Fixture.Create<TEvent>();
 
