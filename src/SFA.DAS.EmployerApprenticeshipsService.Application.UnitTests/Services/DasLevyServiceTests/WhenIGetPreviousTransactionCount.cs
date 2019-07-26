@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransactionsCount;
 using SFA.DAS.EAS.Application.Services;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
 {
@@ -13,16 +14,18 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
         private const int TransactionCount = 2;
 
         private Mock<IMediator> _mediator;
+        private Mock<ITransactionRepository> _transactionRepoMock;
         private DasLevyService _dasLevyService;
         
         [SetUp]
         public void Arrange()
         {
+            _transactionRepoMock = new Mock<ITransactionRepository>();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetPreviousTransactionsCountRequest>()))
                 .ReturnsAsync(new GetPreviousTransactionsCountResponse { Count = TransactionCount });
 
-            _dasLevyService = new DasLevyService(_mediator.Object);
+            _dasLevyService = new DasLevyService(_mediator.Object, _transactionRepoMock.Object);
         }
 
         [Test]
