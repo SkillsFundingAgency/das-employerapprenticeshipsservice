@@ -14,88 +14,30 @@
     var now = DateTime.UtcNow.ToGmtStandardTime();
 }
 
+
+
+<h1 class="heading-xlarge">Finance</h1>
+
+<h2 class="heading-medium">Projections</h2>
+
 <div class="grid-row">
-    <div class="column-full">
-        <h1 class="heading-xlarge">
-            Finance
-        </h1>
+    <div class="column-one-third">
+        <div class="finance-figure finance-figure--future" aria-labelledby="lbl-estimated-future-funding">&pound;123,456,789</div>
+        <p class="finance-figure__label" id="lbl-estimated-future-funding">Estimated total funding for the next 12 months (based on current payments)</p>
+    </div>
+    <div class="column-one-third">
+        <div class="finance-figure finance-figure--planned" aria-labelledby="lbl-estimated-spending">&pound;123,456,789</div>
+        <p class="finance-figure__label" id="lbl-estimated-spending">Estimated planned spending for the next 12 months</p>
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-full">
-        <div class="data-wrap">
-            <div class="data data--current">
-                <dl class="transfer-funds">
-                    <dt>
-                        Funds available to spend for the next 12 months
-                    </dt>
-                    @{
-                        var availabledFunds = Model.Data.AvailableFunds.ToString("C0", culture);
-                        var availabledFundsClass = string.Empty;
 
-                        if (availabledFunds.Length > 8)
-                        {
-                            availabledFundsClass = "long";
-                        }
-                        if (availabledFunds.Length > 10)
-                        {
-                            availabledFundsClass = "longer";
-                        }
-                    }
-                    <dd class="@availabledFundsClass">@availabledFunds</dd>
-                </dl>
-            </div>
-            <div class="data data--current">
-                <dl class="transfer-funds">
-                    <dt>
-                        Total funding expected in the next 12 months
-                    </dt>
-                    @{
-                        var expectedFunding = Model.Data.FundingExpected.ToString("C0", culture);
-                        var expectedFundingClass = string.Empty;
+<h2 class="heading-medium">Current</h2>
 
-                        if (expectedFunding.Length > 8)
-                        {
-                            expectedFundingClass = "long";
-                        }
-                        if (expectedFunding.Length > 10)
-                        {
-                            expectedFundingClass = "longer";
-                        }
-                    }
-                    <dd class="@expectedFundingClass">@expectedFunding</dd>
-                </dl>
-            </div>
-            <div class="data data--current">
-                <dl class="transfer-funds">
-                    <dt>
-                        Payments committed in the next 12 months
-                    </dt>
-                    @{
-                        var projectedSpend = Model.Data.ProjectedSpend.ToString("C0", culture);
-                        var projectedSpendClass = string.Empty;
-
-                        if (projectedSpend.Length > 8)
-                        {
-                            projectedSpendClass = "long";
-                        }
-                        if (projectedSpend.Length > 10)
-                        {
-                            projectedSpendClass = "longer";
-                        }
-                    }
-                    <dd class="@projectedSpendClass">@projectedSpend</dd>
-                </dl>
-            </div>
-
-            <div class="data data--current">
-                <dl class="transfer-funds">
-                    <dt>
-                        Current funds
-                    </dt>
-                    @{
-                        var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
-                        var balanceClass = string.Empty;
+<div class="grid-row current-funds">
+    <div class="column-one-third">
+        @{
+            var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+            var balanceClass = string.Empty;
 
                         if (balance.Length > 8)
                         {
@@ -123,57 +65,73 @@
                         @{
                             var expiringFunds = Model.Data.ExpiringFunds.Value.ToString("C0", culture);
 
-                            var expiringFundsClass = string.Empty;
+            var expiringFundsClass = string.Empty;
 
-                            if (balance.Length > 8)
-                            {
-                                expiringFundsClass = "long";
-                            }
-                            if (balance.Length > 10)
-                            {
-                                expiringFundsClass = "longer";
-                            }
-                        }
-                        <dd class="@expiringFundsClass">@expiringFunds</dd>
-                    </dl>
-                </div>
+            if (balance.Length > 8)
+            {
+                expiringFundsClass = "long";
             }
-        </div>
+            if (balance.Length > 10)
+            {
+                expiringFundsClass = "longer";
+            }
+        }
+        <div class="finance-figure finance-figure--expiring @expiringFundsClass" aria-labelledby="lbl-current-funds-expiring">@expiringFunds</div>
+        @{
+            var expiryDate = Model.Data.ExpiryDate.Value.ToString("MMMM yyyy");
+        }
+        <p class="finance-figure__label" id="lbl-current-funds-expiring">Current funds due to expire in @expiryDate</p>
     </div>
+     }
 </div>
+
+<div class="panel panel-border-wide">
+    <p>This is a new feature &mdash; your <a href="FEEDBACK-LINK" target="_blank" title="Link to a feedback survey, opens in a new window">feedback</a> will help us improve it. </p>
+</div>
+
+<hr>
+
 <div class="grid-row">
     <div class="column-half">
-        <h2 class="heading-medium"><a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId, year = now.Year, month = now.Month })">
+        <h2 class="heading-medium">
+            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId, year = now.Year, month = now.Month })">
                 View transactions
-            </a></h2>
+            </a>
+        </h2>
         <p>View payments made into and out of your apprenticeship service account. </p>
     </div>
     <div class="column-half">
-        <h2 class="heading-medium"><a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId })">
+        <h2 class="heading-medium">
+            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId })">
                 Download transactions
-            </a></h2>
+            </a>
+        </h2>
         <p>Download your financial transactions within a specific date range. </p>
     </div>
     @if (Html.IsAuthorized(FeatureType.Projections))
     {
         <div class="column-half">
-            <h2 class="heading-medium"><a title="Funding projection" href="@Url.EmployerProjectionsAction("forecasting/projections")">
+            <h2 class="heading-medium">
+                <a title="Funding projection" href="@Url.EmployerProjectionsAction("forecasting/projections")">
                     Funding projection
-                </a></h2>
+                </a>
+            </h2>
             <p>View funding projection to plan your future spending. </p>
         </div>
     }
     <div class="column-half">
-        <h2 class="heading-medium"><a title="Manage transfers" href="@Url.EmployerAccountsAction("transfers")">
+        <h2 class="heading-medium">
+            <a title="Manage transfers" href="@Url.EmployerAccountsAction("transfers")">
                 Transfers
-            </a></h2>
+            </a>
+        </h2>
         <p>Connect with other employers and send or receive transfer funds. </p>
     </div>
 </div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">         
+        <ol role="navigation">
             <li><a href="@Url.EmployerAccountsAction("teams")">Home</a></li>
             <li>@ViewBag.Title</li>
         </ol>
