@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountPayeSchemesContro
             HashingService = new Mock<IHashingService>();
             Configuration = new EmployerApprenticeshipsServiceConfiguration();
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
-            Controller = new AccountPayeSchemesController(orchestrator, Configuration);
+            Controller = new AccountPayeSchemesController(orchestrator);
 
             UrlHelper = new Mock<UrlHelper>();
             Controller.Url = UrlHelper.Object;

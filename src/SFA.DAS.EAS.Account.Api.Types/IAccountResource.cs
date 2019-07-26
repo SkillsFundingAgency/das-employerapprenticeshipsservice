@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.EmployerAccounts.Api.Types
+﻿namespace SFA.DAS.EAS.Account.Api.Types
 {
     public interface IAccountResource
     {
