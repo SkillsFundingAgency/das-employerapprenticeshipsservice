@@ -20,5 +20,7 @@ namespace SFA.DAS.EAS.Domain.Interfaces
         Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef);
 
         Task<int> GetPreviousAccountTransaction(long AccountId, DateTime FromDate);
+
+        Task<string> GetProviderName(int ukprn, long accountId, string periodEnd);
     }
 }

@@ -129,7 +129,7 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<List<ResourceViewModel>>(json);
         }
 
-        public async Task<T> GetResource<T>(string uri)
+        public async Task<T> GetResource<T>(string uri) where T : IAccountResource
         {
             var absoluteUri = new Uri(new Uri(GetBaseUrl()), uri);
             var json = await _httpClient.GetAsync(absoluteUri.ToString());

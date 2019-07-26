@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
 using SFA.DAS.EAS.Application.Services;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Levy;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
@@ -13,14 +14,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
     {
         private Mock<IMediator> _mediator;
         private DasLevyService _dasLevyService;
+        private Mock<ITransactionRepository> _transactionRepoMock;
 
         [SetUp]
         public void Arrange()
         {
+            _transactionRepoMock = new Mock<ITransactionRepository>();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEnglishFractionDetailByEmpRefQuery>())).ReturnsAsync(new GetEnglishFractionDetailResposne() { FractionDetail = new List<DasEnglishFraction> { new DasEnglishFraction() } });
 
-            _dasLevyService = new DasLevyService(_mediator.Object);
+            _dasLevyService = new DasLevyService(_mediator.Object, _transactionRepoMock.Object);
         }
 
         [Test]
