@@ -17,18 +17,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
     public class WhenIViewFinanceDashboard
     {
         private const string ExpectedHashedAccountId = "ABC123";
-        private const long ExpectedAccountId = 12;
         private const decimal ExpectedCurrentFunds = 123.45M;
-        private const decimal ExpectedExpiringFundsAmount = 20.34M;
         
-        private readonly DateTime _expectedExpiringFundsExpiryDate = DateTime.Now.AddMonths(2);
-
         private EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IMediator> _mediator;
         private GetAccountFinanceOverviewQuery _query;
-        private GetAccountFinanceOverviewResponse _response;
         
         [SetUp]
         public void Arrange()
@@ -36,14 +29,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
             _query = new GetAccountFinanceOverviewQuery
             {
                 AccountHashedId = ExpectedHashedAccountId
-            };
-
-            _response = new GetAccountFinanceOverviewResponse
-            {
-                AccountId = ExpectedAccountId,
-                CurrentFunds = ExpectedCurrentFunds,
-                ExpiringFundsExpiryDate = _expectedExpiringFundsExpiryDate,
-                ExpiringFundsAmount = ExpectedExpiringFundsAmount
             };
 
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
@@ -57,16 +42,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
                     }
                 });
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            _mediator = new Mock<IMediator>();
-
-            _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(() => _response);
-
             _controller = new EmployerAccountTransactionsController(
-                _owinWrapper.Object,
+                Mock.Of<IAuthenticationService>(),
                 _orchestrator.Object,
                 Mock.Of<IMapper>(),
-                _mediator.Object,
+                Mock.Of<IMediator>(),
                 Mock.Of<ILog>());
         }
 
