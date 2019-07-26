@@ -5,6 +5,7 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountTransactions
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetEnglishFrationDetail;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetLastLevyDeclaration;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetPreviousTransactionsCount;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Levy;
@@ -19,10 +20,12 @@ namespace SFA.DAS.EAS.Application.Services
     public class DasLevyService : IDasLevyService
     {
         private readonly IMediator _mediator;
+        private readonly ITransactionRepository _transactionRepository;
 
-        public DasLevyService(IMediator mediator)
+        public DasLevyService(IMediator mediator, ITransactionRepository transactionRepository)
         {
             _mediator = mediator;
+            _transactionRepository = transactionRepository;
         }
 
         public async Task<ICollection<TransactionLine>> GetAccountTransactionsByDateRange(long accountId, DateTime fromDate, DateTime toDate)
@@ -88,6 +91,11 @@ namespace SFA.DAS.EAS.Application.Services
             });
 
             return result.Transaction;
+        }
+
+        public Task<string> GetProviderName(int ukprn, long accountId, string periodEnd)
+        {
+            return _transactionRepository.GetProviderName(ukprn, accountId, periodEnd);
         }
     }
 }
