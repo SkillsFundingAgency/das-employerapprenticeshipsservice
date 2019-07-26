@@ -14,7 +14,6 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTransactionsControllerTests
 {
-    //todo: take a closer look at these tests, now the work is delegated to the orchestrator
     public class WhenIViewFinanceDashboard
     {
         private const string ExpectedHashedAccountId = "ABC123";
@@ -101,6 +100,28 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
             Assert.IsNotNull(model);
             Assert.IsNotNull(model.Data);
             Assert.AreEqual(ExpectedCurrentFunds, model.Data.CurrentLevyFunds);
+        }
+
+        [Test]
+        public async Task ThenCorrectRedirectResultIsReturnedWhenOrchestratorRequestARedirect()
+        {
+            //Arrange
+            const string redirectUrl = "http://example.com";
+
+            _orchestrator.Setup(o => o.Index(It.IsAny<GetAccountFinanceOverviewQuery>()))
+                .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
+                {
+                    RedirectUrl = redirectUrl
+                });
+
+            //Act
+            var result = await _controller.Index(_query);
+
+            //Assert
+            var redirectResult = result as RedirectResult;
+            Assert.IsNotNull(redirectResult);
+            Assert.AreEqual(redirectUrl, redirectResult.Url);
+            Assert.IsFalse(redirectResult.Permanent);
         }
     }
 }
