@@ -300,7 +300,7 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public Task<string> UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId)
+        public Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId)
         {
             return UpdateAccountLegalEntityPublicHashedIdInternal(_db.Value.Database.Connection, _db.Value.Database.CurrentTransaction.UnderlyingTransaction, accountLegalEntityId);
         }
@@ -321,7 +321,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             return query.ToArray();
         }
 
-        private Task<string> UpdateAccountLegalEntityPublicHashedIdInternal(IDbConnection connection, IDbTransaction transaction, long accountLegalEntityId)
+        private Task UpdateAccountLegalEntityPublicHashedIdInternal(IDbConnection connection, IDbTransaction transaction, long accountLegalEntityId)
         {
             var parameters = new DynamicParameters();
 
@@ -330,13 +330,11 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@AccountLegalEntityId", accountLegalEntityId, DbType.Int64);
             parameters.Add("@PublicHashedId", publicHash, DbType.String);
 
-            connection.ExecuteAsync(
+            return connection.ExecuteAsync(
                 sql: "[employer_account].[UpdateAccountLegalEntity_SetPublicHashedId]",
                 param: parameters,
                 transaction: transaction,
                 commandType: CommandType.StoredProcedure);
-
-            return Task.FromResult(publicHash);
         }
 
         public Task UpdateLegalEntityDetailsForAccount(long accountId, long legalEntityId, string address, string name)
