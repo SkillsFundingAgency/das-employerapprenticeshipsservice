@@ -22,8 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
-
-
         public EmployerAgreementController(IAuthenticationService owinWrapper,
             EmployerAgreementOrchestrator orchestrator,
             IAuthorizationService authorization,
@@ -52,7 +50,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
-
             var model = await _orchestrator.Get(hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
@@ -65,7 +62,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ViewBag.ShowConfirmation = agreementSigned && model.Data.EmployerAgreementsData.HasPendingAgreements;
 
             return View(model);
-
         }
 
         [HttpGet]
@@ -102,17 +98,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
 
-            return RedirectToAction("AboutYourAgreement", new {agreementId = hashedAgreementId});
+            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementId, string hashedAccountId)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId,
+            var agreement = await _orchestrator.GetById(
+                agreementId, 
+                hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            return View(agreement);
 
+            return View(agreement.Data.EmployerAgreement.TemplateAgreementType == "Levy" 
+                ? ControllerConstants.AboutYourAgreementViewName 
+                : ControllerConstants.AboutYourMouViewName, agreement);
         }
 
         [HttpGet]
@@ -125,7 +125,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = _mapper.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response);
 
             return View(viewModel);
-
         }
 
         [HttpPost]
@@ -133,8 +132,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId)
         {
-
-
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow,
@@ -222,6 +219,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(model); //No option entered
             }
         }
+
         [HttpGet]
         [Route("agreements/{agreementId}/agreement-pdf")]
         public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
@@ -250,7 +248,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return new FileStreamResult(stream.Data.PdfStream, ControllerConstants.PdfContentTypeName);
-
         }
 
         [HttpGet]
@@ -276,9 +273,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return View(model);
-
         }
-
 
 
         [HttpPost]
@@ -287,7 +282,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
 
         {
-
             var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             if (response.Status == HttpStatusCode.OK)
@@ -296,6 +290,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
             }
+
             if (response.Status == HttpStatusCode.BadRequest)
             {
                 AddFlashMessageToCookie(response.FlashMessage);

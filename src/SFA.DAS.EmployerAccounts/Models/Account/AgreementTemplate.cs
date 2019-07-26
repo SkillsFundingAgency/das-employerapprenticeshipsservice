@@ -10,5 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public virtual DateTime? CreatedDate { get; set; }
         public virtual string PartialViewName { get; set; }
         public virtual int VersionNumber { get; set; }
+        public virtual string AgreementType { get; set; }
     }
 }

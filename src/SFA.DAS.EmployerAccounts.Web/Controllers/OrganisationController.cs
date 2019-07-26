@@ -126,7 +126,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             switch (nextStep)
             {
-                case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreement, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
+                case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
 
                 case "teamMembers": return RedirectToAction(ControllerConstants.ViewTeamActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
 

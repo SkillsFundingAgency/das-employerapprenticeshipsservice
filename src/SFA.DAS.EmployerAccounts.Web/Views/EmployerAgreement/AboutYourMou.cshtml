@@ -1,0 +1,36 @@
+﻿@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.Mvc
+@using SFA.DAS.EmployerAccounts.Web.Helpers
+
+@model OrchestratorResponse<EmployerAgreementViewModel>
+
+@{
+    ViewBag.PageID = "mou-about";
+    ViewBag.Title = "About your MoU";
+    ViewBag.Section = "organisations";
+    ViewBag.GaData.Vpv = "/accounts/agreements/about-your-mou/mou-about";
+}
+
+<div class="grid-row header-index">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">
+            <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
+            About your Mou
+        </h1>
+
+        MOU
+              
+        <form method="get" action="@Url.Action(ControllerConstants.SignAgreementActionName ,ControllerConstants.EmployerAgreementControllerName)">
+            @Html.AntiForgeryToken()
+            <input class="button" type="submit" value="Continue to your Mou" />
+        </form>
+    </div>
+</div>
+
+@section breadcrumb {
+    <div class="breadcrumbs">
+        <ol role="navigation">
+            <li><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)" class="back-link">Back to your organisations</a></li>
+        </ol>
+    </div>
+}
