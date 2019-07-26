@@ -25,6 +25,10 @@
         },
         "workerAppServicePlanInstances": {
             "type": "int"
+        },
+        "ipRangeFilter" : {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
@@ -208,6 +212,9 @@
                     },
                     "defaultConsistencyLevel": {
                         "value": "Strong"
+                    },
+                    "ipRangeFilter": {
+                        "value": "[parameters('ipRangeFilter')]"
                     }
                 }
             }
