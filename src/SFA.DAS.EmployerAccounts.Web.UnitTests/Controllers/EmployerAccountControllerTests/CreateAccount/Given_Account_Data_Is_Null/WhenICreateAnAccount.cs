@@ -74,8 +74,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 _flashMessage.Object,
                 Mock.Of<IMediator>(),
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-                Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-                Mock.Of<IAuthorizationService>())
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>())
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

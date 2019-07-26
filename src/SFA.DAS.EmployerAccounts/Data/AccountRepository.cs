@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models;
@@ -19,12 +20,18 @@ namespace SFA.DAS.EmployerAccounts.Data
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
+        private readonly IAuthorizationService _authorizationService;
 
-        public AccountRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db, IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
+        public AccountRepository(
+            EmployerAccountsConfiguration configuration, 
+            ILog logger, Lazy<EmployerAccountsDbContext> db, 
+            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
+            IAuthorizationService authorizationService)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
             _accountLegalEntityHashingService = accountLegalEntityHashingService;
+            _authorizationService = authorizationService;
         }
 
         public Task AddPayeToAccount(Paye payeScheme)
@@ -90,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@publicSectorDataSource", publicSectorDataSource);
             parameters.Add("@sector", sector, DbType.String);
             parameters.Add("@aorn", aorn, DbType.String);
-            parameters.Add("@eoi", eoi, DbType.Boolean);
+            parameters.Add("@eoi", _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest), DbType.Boolean);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateAccount]",
@@ -126,7 +133,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@source", createParams.Source, DbType.Int16);
             parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource, DbType.Int16);
             parameters.Add("@sector", createParams.Sector, DbType.String);
-            parameters.Add("@eoi", createParams.Eoi, DbType.Boolean);
+            parameters.Add("@eoi", _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest), DbType.Boolean);
             parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output);
             parameters.Add("@accountLegalEntityCreated", null, DbType.Boolean, ParameterDirection.Output);
 

@@ -40,8 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>(),
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-                Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-                Mock.Of<IAuthorizationService>());
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
         }
 
         [Test]

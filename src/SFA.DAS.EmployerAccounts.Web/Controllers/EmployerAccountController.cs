@@ -31,7 +31,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
         private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
-        private readonly IAuthorizationService _authorizationService;
         private readonly string _hashedAccountIdCookieName;
         private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
@@ -42,8 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediatr,
             ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
-            ICookieStorageService<HashedAccountIdModel> accountCookieStorage,
-            IAuthorizationService authorizationService)
+            ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
@@ -52,7 +50,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _returnUrlCookieStorageService = returnUrlCookieStorageService;
             _accountCookieStorage = accountCookieStorage;
             _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
-            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -280,8 +277,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
                 Sector = enteredData.EmployerAccountOrganisationData.Sector,
                 HashedAccountId = _accountCookieStorage.Get(_hashedAccountIdCookieName),
-                Aorn = enteredData.EmployerAccountPayeRefData.AORN,
-                Eoi = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest)
+                Aorn = enteredData.EmployerAccountPayeRefData.AORN
             };
 
             var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(request, HttpContext);

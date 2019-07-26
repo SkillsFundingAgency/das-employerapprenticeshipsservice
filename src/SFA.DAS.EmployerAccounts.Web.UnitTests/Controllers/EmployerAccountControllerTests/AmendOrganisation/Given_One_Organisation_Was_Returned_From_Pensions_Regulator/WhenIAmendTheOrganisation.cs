@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             {
                 EmployerAccountOrganisationData = new EmployerAccountOrganisationData { OrganisationType = OrganisationType.PensionsRegulator, PensionsRegulatorReturnedMultipleResults = false }
             });
-            
+
             _employerAccountController = new EmployerAccountController(
                 Mock.Of<IAuthenticationService>(),
                 orchestrator.Object,
@@ -39,8 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>(),
                 Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
-                Mock.Of<ICookieStorageService<HashedAccountIdModel>>(),
-                Mock.Of<IAuthorizationService>());
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
         }
 
         [Test]
