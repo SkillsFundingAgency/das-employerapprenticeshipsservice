@@ -16,6 +16,5 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public OrganisationType Source { get; set; }
         public byte? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
-        public bool Eoi { get; set; }
     }
 }

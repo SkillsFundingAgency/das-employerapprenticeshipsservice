@@ -37,6 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IEventPublisher _eventPublisher;
+        private readonly IAuthorizationService _authorizationService;
 
         public CreateAccountCommandHandler(
             IAccountRepository accountRepository,
@@ -49,7 +50,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             IAccountEventFactory accountEventFactory,
             IMembershipRepository membershipRepository,
             IEmployerAgreementRepository employerAgreementRepository,
-            IEventPublisher eventPublisher)
+            IEventPublisher eventPublisher,
+            IAuthorizationService authorizationService)
         {
             _accountRepository = accountRepository;
             _mediator = mediator;
@@ -62,6 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
             _eventPublisher = eventPublisher;
+            _authorizationService = authorizationService;
         }
 
         public async Task<CreateAccountCommandResponse> Handle(CreateAccountCommand message)
@@ -75,9 +78,27 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             if (string.IsNullOrEmpty(message.OrganisationReferenceNumber))
             {
                 message.OrganisationReferenceNumber = Guid.NewGuid().ToString();
-            }
+            }         
 
-            var createAccountResult = await _accountRepository.CreateAccount(userResponse.User.Id, message.OrganisationReferenceNumber, message.OrganisationName, message.OrganisationAddress, message.OrganisationDateOfInception, message.PayeReference, message.AccessToken, message.RefreshToken, message.OrganisationStatus, message.EmployerRefName, (short)message.OrganisationType, message.PublicSectorDataSource, message.Sector, message.Aorn, message.Eoi);
+            var createAccountResult = await _accountRepository.CreateAccount(new CreateAccountParams
+            {
+                UserId = userResponse.User.Id,
+                EmployerNumber = message.OrganisationReferenceNumber,
+                EmployerName = message.OrganisationName,
+                EmployerRegisteredAddress = message.OrganisationAddress,
+                EmployerDateOfIncorporation = message.OrganisationDateOfInception,
+                EmployerRef = message.PayeReference,
+                AccessToken = message.AccessToken,
+                RefreshToken = message.RefreshToken,
+                CompanyStatus = message.OrganisationStatus,
+                EmployerRefName = message.EmployerRefName,
+                Source = (short) message.OrganisationType,
+                PublicSectorDataSource = message.PublicSectorDataSource,
+                Sector = message.Sector,
+                Aorn = message.Aorn,
+                Eoi = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest)
+            });   
+            
 
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
             var publicHashedAccountId = _publicHashingService.HashValue(createAccountResult.AccountId);
@@ -131,7 +152,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             });
         }
 
-        private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName,string organisationReferenceNumber, string organisationAddress, OrganisationType organisationType, string userName, Guid userRef)
+        private Task PublishLegalEntityAddedMessage(long accountId, long legalEntityId, long employerAgreementId, long accountLegalEntityId, string organisationName, string organisationReferenceNumber, string organisationAddress, OrganisationType organisationType, string userName, Guid userRef)
         {
             var accountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(accountLegalEntityId);
 
@@ -148,7 +169,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 Created = DateTime.UtcNow,
                 OrganisationReferenceNumber = organisationReferenceNumber,
                 OrganisationAddress = organisationAddress,
-                OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType)organisationType
+                OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType) organisationType
             });
         }
 

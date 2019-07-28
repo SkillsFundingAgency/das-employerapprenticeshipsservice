@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
-
+        private readonly IAuthorizationService _authorizationService;
         private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
@@ -50,7 +51,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
             IAgreementService agreementService,
             IEmployerAgreementRepository employerAgreementRepository,
-            IValidator<CreateLegalEntityCommand> validator)
+            IValidator<CreateLegalEntityCommand> validator,
+            IAuthorizationService authorizationService)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
@@ -63,17 +65,18 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             _agreementService = agreementService;
             _employerAgreementRepository = employerAgreementRepository;
             _validator = validator;
+            _authorizationService = authorizationService;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
         {
-
             var validationResult = await _validator.ValidateAsync(message);
 
             if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
+
             if (validationResult.IsUnauthorized)
             {
                 throw new UnauthorizedAccessException();
@@ -93,7 +96,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 PublicSectorDataSource = message.PublicSectorDataSource,
                 Source = message.Source,
                 Address = message.Address,
-                Sector = message.Sector
+                Sector = message.Sector,
+                Eoi = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest)
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
@@ -138,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 Created = DateTime.UtcNow,
                 OrganisationReferenceNumber = organisationReferenceNumber,
                 OrganisationAddress = organisationAddress,
-                OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType)organisationType
+                OrganisationType = (SFA.DAS.EmployerAccounts.Types.Models.OrganisationType) organisationType
             });
         }
 
@@ -158,9 +162,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 
         private Task NotifyLegalEntityCreated(string hashedAccountId, long legalEntityId)
         {
-            var legalEntityEvent = _legalEntityEventFactory.CreateLegalEntityCreatedEvent(
-                                            hashedAccountId, legalEntityId);
-
+            var legalEntityEvent = _legalEntityEventFactory.CreateLegalEntityCreatedEvent(hashedAccountId, legalEntityId);
             var genericEvent = _genericEventFactory.Create(legalEntityEvent);
 
             return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
@@ -181,14 +183,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                     Description = $"User {owner.Email} added legal entity {agreementView.LegalEntityId} to account {owner.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-                        new PropertyUpdate {PropertyName = "AccountId", NewValue = agreementView.AccountId.ToString()},
-                        new PropertyUpdate {PropertyName = "Id", NewValue = agreementView.LegalEntityId.ToString()},
-                        new PropertyUpdate {PropertyName = "Name", NewValue = agreementView.LegalEntityName},
-                        new PropertyUpdate {PropertyName = "Code", NewValue = agreementView.LegalEntityCode},
-                        new PropertyUpdate {PropertyName = "Source", NewValue = agreementView.LegalEntitySource.ToString()},
-                        new PropertyUpdate {PropertyName = "Status", NewValue = agreementView.LegalEntityStatus},
-                        new PropertyUpdate {PropertyName = "Address", NewValue = agreementView.LegalEntityAddress},
-                        new PropertyUpdate {PropertyName = "DateOfInception", NewValue = agreementView.LegalEntityInceptionDate.GetDateString("G")},
+                        new PropertyUpdate { PropertyName = "AccountId", NewValue = agreementView.AccountId.ToString() },
+                        new PropertyUpdate { PropertyName = "Id", NewValue = agreementView.LegalEntityId.ToString() },
+                        new PropertyUpdate { PropertyName = "Name", NewValue = agreementView.LegalEntityName },
+                        new PropertyUpdate { PropertyName = "Code", NewValue = agreementView.LegalEntityCode },
+                        new PropertyUpdate { PropertyName = "Source", NewValue = agreementView.LegalEntitySource.ToString() },
+                        new PropertyUpdate { PropertyName = "Status", NewValue = agreementView.LegalEntityStatus },
+                        new PropertyUpdate { PropertyName = "Address", NewValue = agreementView.LegalEntityAddress },
+                        new PropertyUpdate { PropertyName = "DateOfInception", NewValue = agreementView.LegalEntityInceptionDate.GetDateString("G") },
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "LegalEntity", Id = agreementView.LegalEntityId.ToString() }
@@ -203,9 +205,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                     Description = $"User {owner.Email} added signed agreement {agreementView.Id} to account {owner.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
-                        new PropertyUpdate {PropertyName = "AccountId", NewValue = agreementView.AccountId.ToString()},
-                        new PropertyUpdate {PropertyName = "SignedDate", NewValue = agreementView.SignedDate.GetDateString("G")},
-                        new PropertyUpdate {PropertyName = "SignedBy", NewValue = $"{owner.FirstName} {owner.LastName}"}
+                        new PropertyUpdate { PropertyName = "AccountId", NewValue = agreementView.AccountId.ToString() },
+                        new PropertyUpdate { PropertyName = "SignedDate", NewValue = agreementView.SignedDate.GetDateString("G") },
+                        new PropertyUpdate { PropertyName = "SignedBy", NewValue = $"{owner.FirstName} {owner.LastName}" }
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = agreementView.AccountId.ToString(), Type = "Account" } },
                     AffectedEntity = new Entity { Type = "EmployerAgreement", Id = agreementView.Id.ToString() }

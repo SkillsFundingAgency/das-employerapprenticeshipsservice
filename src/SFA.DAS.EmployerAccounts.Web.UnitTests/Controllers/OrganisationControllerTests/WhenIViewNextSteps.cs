@@ -3,7 +3,6 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -14,11 +13,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
 {
     class WhenIViewNextSteps
     {
-
         private OrganisationController _controller;
         private Mock<OrganisationOrchestrator> _orchestrator;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _featureToggle;
+        private Mock<IAuthenticationService> _owinWrapper;     
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
@@ -28,8 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
         public void Arrange()
         {
             _orchestrator = new Mock<OrganisationOrchestrator>();
-            _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IAuthorizationService>();
+            _owinWrapper = new Mock<IAuthenticationService>();         
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -38,8 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
 
             _controller = new OrganisationController(
                 _owinWrapper.Object,
-                _orchestrator.Object,
-                _featureToggle.Object,
+                _orchestrator.Object,              
                 _userViewTestingService.Object,
                 _mapper.Object,
                 _logger.Object,
@@ -56,10 +51,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
 
             _owinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(userId);
             _orchestrator.Setup(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                         .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
-                         {
-                             Data = new OrganisationAddedNextStepsViewModel { ShowWizard = true }
-                         });
+                .ReturnsAsync(new OrchestratorResponse<OrganisationAddedNextStepsViewModel>
+                {
+                    Data = new OrganisationAddedNextStepsViewModel { ShowWizard = true }
+                });
 
             //Act
             var result = _controller.OrganisationAddedNextSteps("test", hashedAccountId, hashedAgreementId).Result as ViewResult;
@@ -95,6 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
             Assert.IsTrue(model.Data.ShowWizard);
             _orchestrator.Verify(x => x.GetOrganisationAddedNextStepViewModel(It.IsAny<string>(), userId, hashedAccountId, hashedAgreementId), Times.Once);
         }
+
         [Test]
         public void ThenIShouldBeToldIfTheUserCanStillSeeTheUserWizardWhenIMakeAnIncorrectStepSelection()
         {

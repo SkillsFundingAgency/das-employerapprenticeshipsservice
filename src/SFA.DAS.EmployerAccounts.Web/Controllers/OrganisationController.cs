@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -18,15 +17,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/organisations")]
     public class OrganisationController : BaseController
     {
-        private readonly OrganisationOrchestrator _orchestrator;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly OrganisationOrchestrator _orchestrator;     
         private readonly IMapper _mapper;
         private readonly ILog _logger;
 
         public OrganisationController(
             IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
-            IAuthorizationService authorizationService,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,
@@ -36,10 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _orchestrator = orchestrator;
             _mapper = mapper;
             _logger = logger;
-            _authorizationService = authorizationService;
         }
-
-
 
         [HttpGet]
         [Route("nextStep")]
@@ -85,8 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 LegalEntityStatus = string.IsNullOrWhiteSpace(legalEntityStatus) ? null : legalEntityStatus,
                 Source = organisationType,
                 PublicSectorDataSource = publicSectorDataSource,
-                Sector = sector,
-                Eoi = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest)
+                Sector = sector
             };
 
             var response = await _orchestrator.CreateLegalEntity(request);
@@ -116,7 +109,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     organisationName = name,
                     hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
                 });
-
         }
 
         [HttpPost]
@@ -192,7 +184,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 case "incorrectDetails":
                     return View("ReviewIncorrectDetails", new IncorrectOrganisationDetailsViewModel { DataSourceFriendlyName = dataSourceFriendlyName });
-
             }
 
             return RedirectToAction("Details", "EmployerAgreement");
