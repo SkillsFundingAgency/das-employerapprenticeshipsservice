@@ -27,5 +27,8 @@ namespace SFA.DAS.EAS.Account.Api.Types
 
         [Obsolete]
         public string DasAccountId => HashedAccountId;
+
+        public string AccountAgreementType { get; set; }
+
     }
 }

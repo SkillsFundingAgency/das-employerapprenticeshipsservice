@@ -114,6 +114,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 .Select(ale => ale.LegalEntityId)
                 .ToListAsync();
 
+
+            var templateIds = await _db.Value.Agreements
+                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId))
+                .Select(x => x.TemplateId)
+                .ToListAsync()
+                .ConfigureAwait(false)
+            ;
+
+            accountDetail.AccountAgreementTypes = await _db.Value.AgreementTemplates
+                .Where(x => templateIds.Contains(x.Id))
+                .Select(x => x.AgreementType)
+                .ToListAsync()
+                .ConfigureAwait(false)
+            ;
+
             sw.Stop();
             _logger.Debug($"Fetched account with {accountDetail.LegalEntities.Count} legal entities and {accountDetail.PayeSchemes.Count} PAYE schemes in {sw.ElapsedMilliseconds} msecs");
 

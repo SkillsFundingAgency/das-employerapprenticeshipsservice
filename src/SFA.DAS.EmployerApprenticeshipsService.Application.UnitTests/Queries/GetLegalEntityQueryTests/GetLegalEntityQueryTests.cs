@@ -27,7 +27,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
                     r2.LegalEntity.Agreements.Count == 2 &&
                     r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == Account.Api.Types.EmployerAgreementStatus.Signed) &&
                     r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == Account.Api.Types.EmployerAgreementStatus.Pending) &&
-                    r2.LegalEntity.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Pending));
+                    r2.LegalEntity.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Pending &&
+                    r2.LegalEntity.Agreements.Any(a => a.AgreementType == f.LegalEntity.AccountLegalEntities.First().Agreements.First().Template.AgreementType)
+                ));
         }
     }
 
@@ -157,7 +159,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
             {
                 Template = new AgreementTemplate
                 {
-                    VersionNumber = versionNumber
+                    VersionNumber = versionNumber,
+                    AgreementType = "Levy"
                 },
                 StatusId = status
             };

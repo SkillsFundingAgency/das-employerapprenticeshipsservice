@@ -195,7 +195,6 @@
     <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTransactionsForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
-    <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetAPayeScheme.cs" />
     <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
     <Compile Include="Controllers\LegalEntitiesControllerTests\LegalEntitiesControllerTests.cs" />
@@ -203,7 +202,10 @@
     <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="Controllers\TransferConnectionsControllerTests\WhenIGetTransferConnections.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetALevyAccount.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetANonLevyAccount.cs" />
     <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
