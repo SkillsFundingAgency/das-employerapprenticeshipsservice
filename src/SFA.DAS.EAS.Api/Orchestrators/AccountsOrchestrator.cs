@@ -260,13 +260,17 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return transferAllowanceResult.TransferAllowance;
         }
 
-        private static string GetAgreementType(GetEmployerAccountByHashedIdResponse accountResult)
+        private static AccountAgreementType GetAgreementType(GetEmployerAccountByHashedIdResponse accountResult)
         {
             var agreementTypeGroup = accountResult.Account.AccountAgreementTypes?
-                .GroupBy(x => x)
-            ;
+                .GroupBy(x => x);
 
-            return agreementTypeGroup?.Count() > 1 ? "Inconsistent" : agreementTypeGroup?.FirstOrDefault()?.Key;
+            if (agreementTypeGroup == null || !agreementTypeGroup.Any())
+            {
+                return AccountAgreementType.Unknown;
+            }
+
+            return agreementTypeGroup?.Count() > 1 ? AccountAgreementType.Inconsistent : (AccountAgreementType)Enum.Parse(typeof(AccountAgreementType), agreementTypeGroup?.FirstOrDefault()?.Key.ToString());
         }
     }
 }

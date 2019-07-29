@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Domain.Models.Account
 {
@@ -13,6 +14,6 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public string OwnerEmail { get; set; }
         public List<long> LegalEntities { get; set; } = new List<long>();
         public List<string> PayeSchemes { get; set; } = new List<string>();
-        public List<string> AccountAgreementTypes { get; set; }
+        public List<AgreementType> AccountAgreementTypes { get; set; }
     }
 }
