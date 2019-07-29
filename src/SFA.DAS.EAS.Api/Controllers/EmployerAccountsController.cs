@@ -73,8 +73,6 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         }
 
 
-
-
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]

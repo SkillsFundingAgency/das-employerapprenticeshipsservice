@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
@@ -233,7 +234,8 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 DasAccountName = accountResult.Account.Name,
                 LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() })),
                 PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x })),
-                AccountAgreementType = GetAgreementType(accountResult)
+                ApprenticeshipEmployerType = accountResult.Account.ApprenticeshipEmployerType.ToString(),
+				AccountAgreementType = GetAgreementType(accountResult)
             };
 
             return accountDetailViewModel;

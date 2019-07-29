@@ -9,6 +9,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
@@ -82,5 +83,18 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
         }
 
+        public Task SetAccountAsLevy(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@ApprenticeshipEmployerType", ApprenticeshipEmployerType.Levy, DbType.Byte);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpdateAccount_SetAccountApprenticeshipEmployerType]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }
