@@ -19,6 +19,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         public virtual Role Role { get; set; }
         public string RoleName => ((Role)Role).ToString();
+        public virtual short ApprenticeshipEmployerType { get; set; }
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
     }
 }
