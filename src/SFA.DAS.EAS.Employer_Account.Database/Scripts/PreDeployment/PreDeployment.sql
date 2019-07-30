@@ -17,4 +17,5 @@ BEGIN
 	:r .\AML-2381-DeleteDuplicateUserAccountSettings.sql
 	:r .\AML-2119-BackupAgreementDetails.sql
 	:r .\AML-2434-DeleteOrphanedUserAccountSettings.sql
+	:r .\AML-3784-AgreementTypeChanges.sql
 END

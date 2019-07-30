@@ -5,7 +5,8 @@
     [Name] NVARCHAR(100) NOT NULL ,
 	[CreatedDate] DATETIME NOT NULL,
 	[ModifiedDate] DATETIME NULL, 
-    [PublicHashedId] NVARCHAR(100) NULL
+    [PublicHashedId] NVARCHAR(100) NULL, 
+    [ApprenticeshipEmployerType] TINYINT NOT NULL DEFAULT 0
 )
 GO
 
