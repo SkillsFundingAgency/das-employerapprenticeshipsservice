@@ -295,7 +295,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 assert: (fixtures, actualResult) =>
                 {
                     Assert.IsNotNull(actualResult);
-                    Assert.AreEqual(actualResult.ViewName, "AboutYourMou");
+                    Assert.AreEqual(actualResult.ViewName, "AboutYourDocument");
                 });
         }
     }
