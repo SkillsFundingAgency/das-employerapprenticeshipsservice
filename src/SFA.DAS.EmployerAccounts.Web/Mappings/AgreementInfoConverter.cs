@@ -18,16 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
             {
                 Type = (AgreementType)Enum.Parse(typeof(AgreementType), strings[0], true)
             };
-
-            if (strings.Count() > 1)
-            {
-                newAgreementInfo.Phase = new AgreementPhase
-                {
-                    Type = (PhaseType)Enum.Parse(typeof(PhaseType), strings[1], true),
-                    Version = strings.Count() == 3 ? System.Convert.ToInt32(strings[2]) : 0
-                };
-            }
-
+       
             return newAgreementInfo;
         }
     }

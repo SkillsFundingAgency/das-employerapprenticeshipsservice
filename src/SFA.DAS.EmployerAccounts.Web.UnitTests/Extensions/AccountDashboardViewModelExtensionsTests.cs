@@ -9,36 +9,26 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
     [TestFixture]
     public class AccountDashboardViewModelExtensionsTests
     {
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.NonLevy, PhaseType.EOI, false)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.NonLevy, PhaseType.Default, true)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Levy, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Levy, PhaseType.Default, true)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, PhaseType.Default, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NonLevy, PhaseType.EOI, false)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NonLevy, PhaseType.Default, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, PhaseType.Default, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, PhaseType.Default, true)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.NoneLevyExpressionOfInterest, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Levy, true)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Unknown, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NoneLevyExpressionOfInterest, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, true)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Unknown, false)]
         public void ShowManageYourLevyLink_GivenValues_ReturnsExpectedResult(
             ApprenticeshipEmployerType apprenticeshipEmployerType,
             AgreementType agreementType,
-            PhaseType phaseType,
             bool expectedValue)
         {
-
             // Arrange
             var model = new AccountDashboardViewModel
             {
                 ApprenticeshipEmployerType = apprenticeshipEmployerType,
                 AgreementInfo = new AgreementInfoViewModel
                 {
-                    Type = agreementType,
-                    Phase = new AgreementPhase
-                    {
-                        Type = phaseType
-                    }
+                    Type = agreementType
                 }
             };
 
@@ -49,22 +39,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             Assert.AreEqual(expectedValue, result);
         }
 
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.NonLevy, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.NonLevy, PhaseType.Default, false)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Levy, PhaseType.EOI, false)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Levy, PhaseType.Default, false)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, PhaseType.EOI, false)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, PhaseType.Default, false)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NonLevy, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NonLevy, PhaseType.Default, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, PhaseType.Default, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, PhaseType.EOI, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, PhaseType.Default, true)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.NoneLevyExpressionOfInterest, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Levy, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Unknown, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NoneLevyExpressionOfInterest, true)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Unknown, false)]
         public void ShowYourFundingReservationsLink_GivenValues_ReturnsExpectedResult(
            ApprenticeshipEmployerType apprenticeshipEmployerType,
            AgreementType agreementType,
-           PhaseType phaseType,
            bool expectedValue)
         {
             // Arrange
@@ -73,11 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
                 ApprenticeshipEmployerType = apprenticeshipEmployerType,
                 AgreementInfo = new AgreementInfoViewModel
                 {
-                    Type = agreementType,
-                    Phase = new AgreementPhase
-                    {
-                        Type = phaseType
-                    }
+                    Type = agreementType
                 }
             };
 

@@ -8,19 +8,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     {
         public static bool ShowManageYourLevyLink(this AccountDashboardViewModel model)
         {
-            if((model.AgreementInfo.Type == AgreementType.NonLevy && model.AgreementInfo.Phase?.Type == PhaseType.EOI))
+            if(model.AgreementInfo.Type == AgreementType.Levy)
             {
-                return false;
+                return true;
             }
 
-            return true;
+            return false;
         }
 
         public static bool ShowYourFundingReservationsLink(this AccountDashboardViewModel model)
         {
-            if(
-                model.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy || 
-                (model.AgreementInfo.Type == AgreementType.NonLevy && model.AgreementInfo.Phase?.Type == PhaseType.EOI))
+            if(model.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy && model.AgreementInfo.Type == AgreementType.NoneLevyExpressionOfInterest)
             {
                 return true;
             }

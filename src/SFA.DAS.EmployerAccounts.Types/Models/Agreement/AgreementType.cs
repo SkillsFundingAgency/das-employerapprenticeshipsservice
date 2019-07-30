@@ -2,8 +2,9 @@
 {
     public enum AgreementType
     {
-        Inconsistent,
-        NonLevy,
-        Levy
+        Levy = 0,
+        NoneLevyExpressionOfInterest = 1,
+        Inconsistent = 2,
+        Unknown = 3
     }
 }
