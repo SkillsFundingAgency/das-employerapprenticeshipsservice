@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return View(agreement.Data.EmployerAgreement.TemplateAgreementType == AgreementType.Levy
                 ? ControllerConstants.AboutYourAgreementViewName 
-                : ControllerConstants.AboutYourMouViewName, agreement);
+                : ControllerConstants.AboutYourDocumentViewName, agreement);
         }
 
         [HttpGet]
