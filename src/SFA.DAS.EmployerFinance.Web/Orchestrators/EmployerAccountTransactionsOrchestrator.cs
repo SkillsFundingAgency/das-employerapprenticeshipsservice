@@ -17,8 +17,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
+using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
+using TransactionViewModel = SFA.DAS.EmployerFinance.Web.ViewModels.TransactionViewModel;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -56,8 +59,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
             var account = await accountTask;
 
-            var nonLevyAndExpressionOfInterestAccount = account.AccountAgreementType?.Contains("Non-Levy.EOI");
-            if (nonLevyAndExpressionOfInterestAccount == true)
+            if (account.AccountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest)
             {
                 return new OrchestratorResponse<FinanceDashboardViewModel>
                 {

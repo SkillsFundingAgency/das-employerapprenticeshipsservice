@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
                 .ReturnsAsync(new AccountDetailViewModel
                 {
-                    AccountAgreementType = "Non-Levy.EOI.1"
+                    AccountAgreementType = AccountAgreementType.NonLevyExpressionOfInterest
                 });
 
             var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
@@ -95,9 +95,10 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             response.RedirectUrl.Should().Be($"http://example.com/accounts/{HashedAccountId}/reservations/manage");
         }
 
-        [TestCase(null)]
-        [TestCase("Levy.1")]
-        public async Task AndAccountAgreementTypeIsNotNonLevyEoiThenRedirectUrlShouldBeNull(string accountAgreementType)
+        [TestCase(AccountAgreementType.Unknown)]
+        [TestCase(AccountAgreementType.Inconsistent)]
+        [TestCase(AccountAgreementType.Levy)]
+        public async Task AndAccountAgreementTypeIsNotNonLevyEoiThenRedirectUrlShouldBeNull(AccountAgreementType accountAgreementType)
         {
             //Arrange
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
