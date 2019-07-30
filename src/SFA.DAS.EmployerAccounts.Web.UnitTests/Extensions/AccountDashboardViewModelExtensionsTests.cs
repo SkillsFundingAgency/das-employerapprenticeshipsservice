@@ -11,12 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
     {
         [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.NoneLevyExpressionOfInterest, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Levy, true)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, false)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Unknown, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, true)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Unknown, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NoneLevyExpressionOfInterest, false)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, false)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Unknown, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, true)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Unknown, true)]
         public void ShowManageYourLevyLink_GivenValues_ReturnsExpectedResult(
             ApprenticeshipEmployerType apprenticeshipEmployerType,
             AgreementType agreementType,
@@ -44,9 +44,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Inconsistent, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AgreementType.Unknown, false)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.NoneLevyExpressionOfInterest, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, false)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, false)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Unknown, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Levy, true)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Inconsistent, true)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AgreementType.Unknown, true)]
         public void ShowYourFundingReservationsLink_GivenValues_ReturnsExpectedResult(
            ApprenticeshipEmployerType apprenticeshipEmployerType,
            AgreementType agreementType,

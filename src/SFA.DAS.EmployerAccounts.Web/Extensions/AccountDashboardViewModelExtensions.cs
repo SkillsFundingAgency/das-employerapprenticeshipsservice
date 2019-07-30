@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     {
         public static bool ShowManageYourLevyLink(this AccountDashboardViewModel model)
         {
-            if(model.AgreementInfo.Type == AgreementType.Levy)
+            if (model.AgreementInfo.Type != AgreementType.NoneLevyExpressionOfInterest)
             {
                 return true;
             }
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         public static bool ShowYourFundingReservationsLink(this AccountDashboardViewModel model)
         {
-            if(model.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy && model.AgreementInfo.Type == AgreementType.NoneLevyExpressionOfInterest)
+            if(model.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
             {
                 return true;
             }
