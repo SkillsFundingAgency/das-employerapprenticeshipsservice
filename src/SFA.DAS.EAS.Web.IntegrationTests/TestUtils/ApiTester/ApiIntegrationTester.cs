@@ -98,7 +98,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
                 await initialiseAction(builder);
                 builder.CommitTransaction();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 builder.RollbackTransaction();
                 throw;

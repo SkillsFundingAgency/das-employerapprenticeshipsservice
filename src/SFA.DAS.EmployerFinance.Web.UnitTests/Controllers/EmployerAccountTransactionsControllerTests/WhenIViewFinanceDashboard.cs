@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
@@ -17,18 +16,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
     public class WhenIViewFinanceDashboard
     {
         private const string ExpectedHashedAccountId = "ABC123";
-        private const long ExpectedAccountId = 12;
         private const decimal ExpectedCurrentFunds = 123.45M;
-        private const decimal ExpectedExpiringFundsAmount = 20.34M;
         
-        private readonly DateTime _expectedExpiringFundsExpiryDate = DateTime.Now.AddMonths(2);
-
         private EmployerAccountTransactionsController _controller;
         private Mock<EmployerAccountTransactionsOrchestrator> _orchestrator;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IMediator> _mediator;
         private GetAccountFinanceOverviewQuery _query;
-        private GetAccountFinanceOverviewResponse _response;
         
         [SetUp]
         public void Arrange()
@@ -38,25 +30,22 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
                 AccountHashedId = ExpectedHashedAccountId
             };
 
-            _response = new GetAccountFinanceOverviewResponse
-            {
-                AccountId = ExpectedAccountId,
-                CurrentFunds = ExpectedCurrentFunds,
-                ExpiringFundsExpiryDate = _expectedExpiringFundsExpiryDate,
-                ExpiringFundsAmount = ExpectedExpiringFundsAmount
-            };
-
             _orchestrator = new Mock<EmployerAccountTransactionsOrchestrator>();
-            _owinWrapper = new Mock<IAuthenticationService>();
-            _mediator = new Mock<IMediator>();
-
-            _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(() => _response);
+            _orchestrator.Setup(o => o.Index(It.IsAny<GetAccountFinanceOverviewQuery>()))
+                .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
+                {
+                    Data = new FinanceDashboardViewModel
+                    {
+                        AccountHashedId = ExpectedHashedAccountId,
+                        CurrentLevyFunds = ExpectedCurrentFunds
+                    }
+                });
 
             _controller = new EmployerAccountTransactionsController(
-                _owinWrapper.Object,
+                Mock.Of<IAuthenticationService>(),
                 _orchestrator.Object,
                 Mock.Of<IMapper>(),
-                _mediator.Object,
+                Mock.Of<IMediator>(),
                 Mock.Of<ILog>());
         }
 
@@ -90,6 +79,38 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Controllers.EmployerAccountTrans
             Assert.IsNotNull(model);
             Assert.IsNotNull(model.Data);
             Assert.AreEqual(ExpectedCurrentFunds, model.Data.CurrentLevyFunds);
+        }
+
+        [Test]
+        public async Task ThenCorrectRedirectResultIsReturnedWhenOrchestratorRequestARedirect()
+        {
+            //Arrange
+            const string redirectUrl = "http://example.com";
+
+            _orchestrator.Setup(o => o.Index(It.IsAny<GetAccountFinanceOverviewQuery>()))
+                .ReturnsAsync(new OrchestratorResponse<FinanceDashboardViewModel>
+                {
+                    RedirectUrl = redirectUrl
+                });
+
+            //Act
+            var result = await _controller.Index(_query);
+
+            //Assert
+            var redirectResult = result as RedirectResult;
+            Assert.IsNotNull(redirectResult);
+            Assert.AreEqual(redirectUrl, redirectResult.Url);
+            Assert.IsFalse(redirectResult.Permanent);
+        }
+
+        [Test]
+        public async Task ThenRedirectResultIsNotReturnedWhenOrchestratorDoesNotRequestARedirect()
+        {
+            //Act
+            var result = await _controller.Index(_query);
+
+            //Assert
+            Assert.IsNotInstanceOf<RedirectResult>(result);
         }
     }
 }

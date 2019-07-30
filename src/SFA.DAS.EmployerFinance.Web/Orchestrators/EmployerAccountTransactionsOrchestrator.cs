@@ -13,10 +13,15 @@ using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
+using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
+using TransactionViewModel = SFA.DAS.EmployerFinance.Web.ViewModels.TransactionViewModel;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
@@ -24,6 +29,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
     {
         private readonly ICurrentDateTime _currentTime;
         private readonly ILog _logger;
+        private readonly IAccountApiClient _accountApiClient;
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
         private readonly IMediator _mediator;
 
         protected EmployerAccountTransactionsOrchestrator()
@@ -31,11 +38,53 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         }
 
-        public EmployerAccountTransactionsOrchestrator(IMediator mediator, ICurrentDateTime currentTime, ILog logger)
+        public EmployerAccountTransactionsOrchestrator(
+            IAccountApiClient accountApiClient,
+            EmployerAccountsConfiguration employerAccountsConfiguration, 
+            IMediator mediator,
+            ICurrentDateTime currentTime,
+            ILog logger)
         {
+            _accountApiClient = accountApiClient;
+            _employerAccountsConfiguration = employerAccountsConfiguration;
             _mediator = mediator;
             _currentTime = currentTime;
             _logger = logger;
+        }
+
+        public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> Index(GetAccountFinanceOverviewQuery query)
+        {
+            var accountTask = _accountApiClient.GetAccount(query.AccountHashedId);
+            var getAccountFinanceOverviewTask = _mediator.SendAsync(query);
+
+            var account = await accountTask;
+
+            if (account.AccountAgreementType == AccountAgreementType.NoneLevyExpressionOfInterest)
+            {
+                return new OrchestratorResponse<FinanceDashboardViewModel>
+                {
+                    RedirectUrl = $"{_employerAccountsConfiguration.ReservationsBaseUrl}/accounts/{query.AccountHashedId}/reservations/manage"
+                };
+            }
+
+            var getAccountFinanceOverview = await getAccountFinanceOverviewTask;
+
+            var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
+            {
+                Data = new FinanceDashboardViewModel
+                {
+                    AccountHashedId = query.AccountHashedId,
+                    CurrentLevyFunds = getAccountFinanceOverview.CurrentFunds,
+                    ExpiringFunds = getAccountFinanceOverview.ExpiringFundsAmount,
+                    ExpiryDate = getAccountFinanceOverview.ExpiringFundsExpiryDate,
+                    TotalSpendForLastYear = getAccountFinanceOverview.TotalSpendForLastYear,
+                    FundingExpected = getAccountFinanceOverview.FundsIn,
+                    AvailableFunds = getAccountFinanceOverview.FundsIn - getAccountFinanceOverview.FundsOut,
+                    ProjectedSpend = getAccountFinanceOverview.FundsOut
+                }
+            };
+
+            return viewModel;
         }
 
         public async Task<OrchestratorResponse<PaymentTransactionViewModel>> FindAccountPaymentTransactions(

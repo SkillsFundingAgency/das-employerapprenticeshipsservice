@@ -52,40 +52,6 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.ToList();
         }
 
-        public Task CreateEmployerAgreementTemplate(string templateRef, string text)
-        {
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@ref", templateRef, DbType.String);
-            parameters.Add("@text", text, DbType.String);
-            
-            return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[CreateEmployerAgreementTemplate]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
-        }
-
-        public async Task<long> CreateEmployerAgreeement(int templateId, long accountId, long legalEntityId)
-        {
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
-            parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@templateId", templateId, DbType.Int32);
-            parameters.Add("@employerAgreementId", templateId, DbType.Int64, ParameterDirection.InputOutput);
-
-            await _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[CreateEmployerAgreement]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
-
-            var newAgreementId = parameters.Get<long>("@employerAgreementId");
-
-            return newAgreementId;
-        }
-
         public async Task<EmployerAgreementView> GetEmployerAgreement(long agreementId)
         {
             var parameters = new DynamicParameters();
@@ -115,31 +81,6 @@ namespace SFA.DAS.EmployerAccounts.Data
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
-        }
-
-        public async Task<EmployerAgreementTemplate> GetEmployerAgreementTemplate(int templateId)
-        {
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@templateId", templateId, DbType.Int32);
-
-            var result = await _db.Value.Database.Connection.QueryAsync<EmployerAgreementTemplate>(
-                sql: "SELECT * FROM [employer_account].[EmployerAgreementTemplate] WHERE Id = @templateId;",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
-
-            return result.SingleOrDefault();
-        }
-
-        public async Task<EmployerAgreementTemplate> GetLatestAgreementTemplate()
-        {
-            var result = await _db.Value.Database.Connection.QueryAsync<EmployerAgreementTemplate>(
-                sql: "SELECT TOP(1) * FROM [employer_account].[EmployerAgreementTemplate] ORDER BY VersionNumber DESC;",
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
-
-            return result.FirstOrDefault();
         }
 
         public Task RemoveLegalEntityFromAccount(long agreementId)

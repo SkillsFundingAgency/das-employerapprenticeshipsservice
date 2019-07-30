@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using System.Collections.Generic;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -43,9 +44,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             {
                 Account = new AccountDetail
                 {
-                    AccountAgreementTypes = new List<string>()
+                    AccountAgreementTypes = new List<AgreementType>()
                     {
-                        "Levy"
+                        AgreementType.Levy
                     }
                 }
             };
@@ -73,14 +74,14 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         public async Task ThenResponseShouldHaveAccountAgreementTypeSetToLevy()
         {
             //Arrange
-            string agreementType = "Levy";
+            AgreementType agreementType = AgreementType.Levy;
             const string hashedAgreementId = "ABC123";
 
             //Act
             var result = await _orchestrator.GetAccount(hashedAgreementId);
 
             //Assert
-            Assert.AreEqual(agreementType, result.Data.AccountAgreementType);
+            Assert.AreEqual(agreementType.ToString(), result.Data.AccountAgreementType.ToString());
         }        
     }
 }

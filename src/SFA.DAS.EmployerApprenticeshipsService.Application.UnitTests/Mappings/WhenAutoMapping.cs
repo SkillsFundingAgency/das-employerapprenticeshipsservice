@@ -14,7 +14,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Mappings
             {
                 c.AddProfile<AccountMappings>();
                 c.AddProfile<AgreementMappings>();
-                c.AddProfile<EmploymentAgreementStatusMappings>();
                 c.AddProfile<LegalEntityMappings>();
                 c.AddProfile<MembershipMappings>();
                 c.AddProfile<TransferConnectionInvitationMappings>();

@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -160,7 +161,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
                 Template = new AgreementTemplate
                 {
                     VersionNumber = versionNumber,
-                    AgreementType = "Levy"
+                    AgreementType = AgreementType.Levy
                 },
                 StatusId = status
             };
