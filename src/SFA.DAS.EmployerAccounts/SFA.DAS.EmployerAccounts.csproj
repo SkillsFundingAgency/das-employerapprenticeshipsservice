@@ -24,7 +24,7 @@
     <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.246" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.272" />
     <PackageReference Include="SFA.DAS.EntityFramework" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.890" />
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client" Version="1.1.74" />
