@@ -68,40 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     Assert.IsNotNull(actualModel);
                     Assert.IsNotNull(actualModel.FlashMessage);
                 });
-        }
-
-        //[Test]
-        //public Task RemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToRemoveTheOrg()
-        //{
-        //    return RunAsync(
-        //        arrange: fixtures => fixtures.Orchestrator
-        //                                .Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId))
-        //                                .ReturnsAsync(new OrchestratorResponse<bool> { Status = HttpStatusCode.OK, FlashMessage = new FlashMessageViewModel() }),
-        //        act: fixtures => fixtures.RemoveOrganisation(),
-        //        assert: (fixtures, result) => fixtures.Orchestrator
-        //                .Verify(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId), Times.Once)
-        //        );
-        //}
-
-        //[TestCase(HttpStatusCode.Accepted, "Index", 0)]
-        //[TestCase(HttpStatusCode.BadRequest, "ConfirmRemoveOrganisation", 1)]
-        //[TestCase(HttpStatusCode.OK, "Index", 1)]
-        //public Task RemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheActionRedirectsToTheCorrectViewWhenRemovingTheOrg(HttpStatusCode code, string viewName, int isFlashPopulated)
-        //{
-        //    return RunAsync(
-        //        arrange: fixtures => fixtures.Orchestrator
-        //            .Setup(x => x.RemoveLegalAgreement(It.IsAny<ConfirmLegalAgreementToRemoveViewModel>(), fixtures.UserId))
-        //            .ReturnsAsync(new OrchestratorResponse<bool> { Status = code, FlashMessage = new FlashMessageViewModel() }),
-        //        act: fixtures => fixtures.RemoveOrganisation(),
-        //        assert: (fixtures, actualResult) =>
-        //        {
-        //            Assert.IsNotNull(actualResult);
-        //            var redirectResult = actualResult as RedirectToRouteResult;
-        //            Assert.IsNotNull(redirectResult);
-        //            Assert.AreEqual(viewName, redirectResult.RouteValues["Action"]);
-        //            fixtures.FlashMessage.Verify(x => x.Create(It.IsAny<FlashMessageViewModel>(), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Exactly(isFlashPopulated));
-        //        });
-        //}    
+        }    
 
         [Test]
         public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
@@ -149,53 +116,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     Assert.AreEqual(result.RouteValues["agreementId"], fixtures.HashedAgreementId);
                 });
         }
-
-        //[Test]
-        //public Task ThenIShouldSeeAllAgreementsIfIHaveMoreThanASingleUnsignedAgreement()
-        //{
-        //    return RunAsync(
-        //        arrange: fixtures =>
-        //        {
-        //            fixtures.Orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
-        //                .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
-        //                {
-        //                    Data = new EmployerAgreementListViewModel
-        //                    {
-        //                        EmployerAgreementsData =
-        //                            new GetAccountEmployerAgreementsResponse
-        //                            {
-        //                                EmployerAgreements = new List<EmployerAgreementStatusDto>
-        //                                {
-        //                                    new EmployerAgreementStatusDto
-        //                                    {
-        //                                        Pending = new PendingEmployerAgreementDetailsDto
-        //                                        {
-        //                                            HashedAgreementId = "GHJ356"
-        //                                        }
-        //                                    },
-        //                                    new EmployerAgreementStatusDto
-        //                                    {
-        //                                        Pending = new PendingEmployerAgreementDetailsDto
-        //                                        {
-        //                                            HashedAgreementId = "JH4545"
-        //                                        }
-        //                                    }
-        //                                }
-        //                            }
-        //                    }
-        //                });
-        //        },
-        //        act: fixtures => fixtures.ViewUnsignedAgreements(),
-        //        assert: (fixtures, actualResult) =>
-        //        {
-        //            fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-        //            fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
-        //            Assert.IsNotNull(actualResult);
-        //            Assert.AreEqual(actualResult.RouteValues["action"], "Index");
-        //        }
-        //    );
-        //}
-
+        
         [Test]
         public Task ViewAgreementToSign_ShouldReturnAgreements()
         {
@@ -248,9 +169,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             public const string HashedAgreementId = "789UHY";
         }
 
-        public string HashedAccountId => EmployerAgreementControllerTestFixtures.Constants.HashedAccountId;
-        public string UserId => EmployerAgreementControllerTestFixtures.Constants.UserId;
-        public string HashedAgreementId => EmployerAgreementControllerTestFixtures.Constants.HashedAgreementId;
+        public string HashedAccountId => Constants.HashedAccountId;
+        public string UserId => Constants.UserId;
+        public string HashedAgreementId => Constants.HashedAgreementId;
 
         public GetEmployerAgreementRequest GetAgreementRequest { get; }
 
@@ -266,7 +187,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             };
 
             Mediator.Setup(x => x.SendAsync(GetAgreementRequest))
-                    .ReturnsAsync(response);
+                .ReturnsAsync(response);
 
             Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response))
                 .Returns(GetAgreementToSignViewModel);
@@ -299,15 +220,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             var controller = CreateController();
             return controller.ConfirmRemoveOrganisation(HashedAgreementId, HashedAccountId);
         }
-
-        //public Task<ActionResult> RemoveOrganisation()
-        //{
-        //    var controller = CreateController();
-        //    return controller.RemoveOrganisation(HashedAgreementId, HashedAccountId, new ConfirmLegalAgreementToRemoveViewModel
-        //    {
-
-        //    });
-        //}      
 
         public async Task<RedirectToRouteResult> ViewUnsignedAgreements()
         {

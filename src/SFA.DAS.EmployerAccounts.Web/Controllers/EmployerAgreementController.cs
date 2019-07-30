@@ -18,11 +18,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
+        private const int ReviewAgreementLater = 2;
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
-
-
 
         public EmployerAgreementController(IAuthenticationService owinWrapper,
             EmployerAgreementOrchestrator orchestrator,
@@ -33,11 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMapper mapper)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            if (owinWrapper == null)
-                throw new ArgumentNullException(nameof(owinWrapper));
-            if (orchestrator == null)
-                throw new ArgumentNullException(nameof(orchestrator));
-
             _orchestrator = orchestrator;
             _mediator = mediator;
             _mapper = mapper;
@@ -47,14 +41,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
         }
 
-
         [HttpGet]
         [Route("agreements")]
         public async Task<ActionResult> Index(string hashedAccountId, bool agreementSigned = false)
         {
-
-            var model = await _orchestrator.Get(hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var model = await _orchestrator.Get(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
             if (flashMessage != null)
@@ -65,17 +56,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ViewBag.ShowConfirmation = agreementSigned && model.Data.EmployerAgreementsData.HasPendingAgreements;
 
             return View(model);
-
         }
-
 
         [HttpGet]
         [Route("agreements/{agreementId}/details")]
         public async Task<ActionResult> Details(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var agreement = await _orchestrator.GetById(
+                agreementId, 
+                hashedAccountId,
+                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
+            );
+
             return View(agreement);
         }
 
@@ -84,8 +77,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> View(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var agreement = await _orchestrator.GetById(
+                agreementId, 
+                hashedAccountId,
+                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
+            );
 
             return View(agreement.Data);
         }
@@ -94,27 +90,29 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements/unsigned/view")]
         public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
         {
-            var agreements = await _orchestrator.Get(hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
+            var agreements = await _orchestrator.Get(
+                hashedAccountId,
+                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
+            );
 
             var unsignedAgreements = agreements.Data.EmployerAgreementsData.TryGetSinglePendingAgreement();
-
-            if (unsignedAgreements == null)
-                return RedirectToAction("Index");
+            if (unsignedAgreements == null) return RedirectToAction(ControllerConstants.IndexActionName);
 
             var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
-
-            return RedirectToAction("AboutYourAgreement", new {agreementId = hashedAgreementId});
+            return RedirectToAction(ControllerConstants.AboutYourAgreement, new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]
         [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementId, string hashedAccountId)
         {
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            return View(agreement);
+            var agreement = await _orchestrator.GetById(
+                agreementId, 
+                hashedAccountId,
+                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
+            );
 
+            return View(agreement);
         }
 
         [HttpGet]
@@ -134,7 +132,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
         {
-            if (choice != 2)
+            if (choice != ReviewAgreementLater)
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
             }
@@ -209,7 +207,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return new FileStreamResult(stream.Data.PdfStream, ControllerConstants.PdfContentTypeName);
-
         }
 
         [HttpGet]
@@ -217,7 +214,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
         {
             var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
             return View(model);
         }
 
@@ -235,10 +231,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return View(model);
-
         }
-
-
 
         [HttpPost]
         [Route("agreements/remove/{agreementId}")]
@@ -246,7 +239,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
 
         {
-
             var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             if (response.Status == HttpStatusCode.OK)
@@ -255,6 +247,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
             }
+
             if (response.Status == HttpStatusCode.BadRequest)
             {
                 AddFlashMessageToCookie(response.FlashMessage);
@@ -263,7 +256,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
         }
-
-        
     }
 }
