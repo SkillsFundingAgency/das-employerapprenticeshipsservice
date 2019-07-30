@@ -1,5 +1,4 @@
 using System;
-using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
