@@ -101,46 +101,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         //            Assert.AreEqual(viewName, redirectResult.RouteValues["Action"]);
         //            fixtures.FlashMessage.Verify(x => x.Create(It.IsAny<FlashMessageViewModel>(), "sfa-das-employerapprenticeshipsservice-flashmessage", 1), Times.Exactly(isFlashPopulated));
         //        });
-        //}
-
-        [Test]
-        public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenViewingNextSteps()
-        {
-            return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
-                    fixtures.Orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(true);
-                },
-                act: fixtures => fixtures.NextSteps(),
-                assert: (fixtures, actualResult) =>
-                {
-                    Assert.IsNotNull(actualResult);
-                    Assert.IsTrue(actualResult.Data.UserShownWizard);
-                    fixtures.Orchestrator.Verify(x => x.UserShownWizard(fixtures.UserId, fixtures.HashedAccountId), Times.Once);
-                }
-            );
-        }
-
-        [Test]
-        public Task NextSteps_WhenIViewNextSteps_ThenShouldShowIfUserCanSeeWizardWhenSelectingIncorrectChoiceForNextSteps()
-        {
-            return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
-                    fixtures.Orchestrator.Setup(x => x.UserShownWizard(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(true);
-                },
-                act: fixtures => fixtures.NextSteps(),
-                assert: (fixtures, actualResult) =>
-                {
-                    Assert.IsNotNull(actualResult);
-                    Assert.IsTrue(actualResult.Data.UserShownWizard);
-                    fixtures.Orchestrator.Verify(x => x.UserShownWizard(fixtures.UserId, fixtures.HashedAccountId), Times.Once);
-                });
-        }
+        //}    
 
         [Test]
         public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
@@ -346,15 +307,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         //    {
 
         //    });
-        //}
-
-        public async Task<OrchestratorResponse<EmployerAgreementNextStepsViewModel>> NextSteps()
-        {
-            var controller = CreateController();
-            var result = await controller.NextSteps(HashedAccountId) as ViewResult;
-            var model = result?.Model as OrchestratorResponse<EmployerAgreementNextStepsViewModel>;
-            return model;
-        }
+        //}      
 
         public async Task<RedirectToRouteResult> ViewUnsignedAgreements()
         {
