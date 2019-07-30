@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 PublicSectorDataSource = message.PublicSectorDataSource,
                 Sector = message.Sector,
                 Aorn = message.Aorn,
-                Eoi = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest)
+                AgreementType = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest) ? AgreementType.NoneLevyExpressionOfInterest : AgreementType.Levy
             });   
             
 

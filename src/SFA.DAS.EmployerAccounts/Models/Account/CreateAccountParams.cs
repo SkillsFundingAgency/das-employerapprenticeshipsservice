@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Models.Account
 {
@@ -18,6 +19,6 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public short? PublicSectorDataSource { get; set; }
         public string Sector { get; set; }
         public string Aorn { get; set; }
-        public bool Eoi { get; set; }
+        public AgreementType AgreementType { get; set; }
     }
 }

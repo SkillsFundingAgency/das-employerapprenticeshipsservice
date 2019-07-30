@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         private Mock<IEmployerAgreementRepository> _mockEmployerAgreementRepository;
         private Mock<IAuthorizationService> _mockAuthorizationService;
         private TestableEventPublisher _eventPublisher;
-        
+
         private const long ExpectedAccountId = 12343322;
         private const long ExpectedLegalEntityId = 2222;
         private const long ExpectedEmployerAgreementId = 864;
@@ -166,18 +166,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         [Test]
         public void ThenTheValidatorIsCalledAndAInvalidRequestExceptionIsThrownWhenInvalid()
         {
+            var command = new CreateAccountCommand();
+
             //Assert
-            _validator.Setup(x => x.ValidateAsync(It.IsAny<CreateAccountCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
+            _validator.Setup(x => x.ValidateAsync(command)).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new CreateAccountCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(command));
 
             //Assert
-            _validator.Verify(x => x.ValidateAsync(It.IsAny<CreateAccountCommand>()), Times.Once);
+            _validator.Verify(x => x.ValidateAsync(command), Times.Once);
         }
 
-        [Test]
-        public async Task WillCallRepositoryToCreateNewAccount()
+        [TestCase(true, AgreementType.NoneLevyExpressionOfInterest)]
+        [TestCase(false, AgreementType.Levy)]
+        public async Task WillCreateNewAccountWithCorrectAgreementType(bool eoiWhitelisted, AgreementType agreementType)
         {
             const int accountId = 23;
 
@@ -197,6 +200,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                 Aorn = "Aorn"
             };
 
+            _mockAuthorizationService.Setup(x => x.IsAuthorized(FeatureType.ExpressionOfInterest)).Returns(eoiWhitelisted);
+
             _accountRepository.Setup(x => x.CreateAccount(It.IsAny<CreateAccountParams>())).ReturnsAsync(new CreateAccountResult { AccountId = accountId, LegalEntityId = 0L, EmployerAgreementId = 0L });
 
             var expectedHashedAccountId = "DJRR4359";
@@ -207,7 +212,22 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
 
             await _handler.Handle(cmd);
 
-            _accountRepository.Verify(x => x.CreateAccount(It.IsAny<CreateAccountParams>()));         
+            _accountRepository.Verify(x => x.CreateAccount(It.Is<CreateAccountParams>(y =>
+                    y.EmployerNumber == cmd.OrganisationReferenceNumber &&
+                    y.EmployerName == cmd.OrganisationName &&
+                    y.EmployerRegisteredAddress == cmd.OrganisationAddress &&
+                    y.EmployerDateOfIncorporation == cmd.OrganisationDateOfInception &&
+                    y.EmployerRef == cmd.PayeReference &&
+                    y.AccessToken == cmd.AccessToken &&
+                    y.RefreshToken == cmd.RefreshToken &&
+                    y.CompanyStatus == cmd.OrganisationStatus &&
+                    y.EmployerRefName == cmd.EmployerRefName &&
+                    y.Source == (short)cmd.OrganisationType &&
+                    y.PublicSectorDataSource == cmd.PublicSectorDataSource &&
+                    y.Sector == cmd.Sector &&
+                    y.Aorn == cmd.Aorn &&
+                    y.AgreementType == agreementType
+                )));
         }
 
         [Test]
@@ -310,9 +330,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             //Arrange
             var createAccountCommand = new CreateAccountCommand
             {
-                PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active",
-                OrganisationName = organisationName, ExternalUserId = _user.Ref.ToString(),
-                OrganisationType = inputOrganisationType, OrganisationReferenceNumber = ExpectedOrganisationReferenceNumber,
+                PayeReference = "123EDC",
+                AccessToken = "123rd",
+                RefreshToken = "45YT",
+                OrganisationStatus = "active",
+                OrganisationName = organisationName,
+                ExternalUserId = _user.Ref.ToString(),
+                OrganisationType = inputOrganisationType,
+                OrganisationReferenceNumber = ExpectedOrganisationReferenceNumber,
                 OrganisationAddress = ExpectedOrganisationAddress
             };
 
