@@ -1,12 +1,9 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using MediatR;
 using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
@@ -27,11 +24,14 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
-using SFA.DAS.EAS.Account.Api.Types;
-using AutoMapper;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
-{   
+{
     public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
