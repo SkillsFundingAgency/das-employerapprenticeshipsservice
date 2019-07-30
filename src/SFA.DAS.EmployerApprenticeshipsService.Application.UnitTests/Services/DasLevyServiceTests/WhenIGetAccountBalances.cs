@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Services;
+using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
@@ -12,15 +13,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Services.DasLevyServiceTests
     public class WhenIGetAccountBalances
     {
         private Mock<IMediator> _mediator;
+        private Mock<ITransactionRepository> _transactionRepoMock;
         private DasLevyService _dasLevyService;
 
         [SetUp]
         public void Arrange()
         {
+            _transactionRepoMock = new Mock<ITransactionRepository>();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(new GetAccountBalancesResponse { Accounts = new List<AccountBalance> { new AccountBalance() } });
 
-            _dasLevyService = new DasLevyService(_mediator.Object);
+            _dasLevyService = new DasLevyService(_mediator.Object, _transactionRepoMock.Object);
         }
 
         [Test]

@@ -2,11 +2,12 @@
 using System.Data.Common;
 using System.Data.SqlClient;
 using Moq;
-using SFA.DAS.Configuration;
+using SFA.DAS.AutoConfiguration.DependencyResolution;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Testing.Helpers;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
@@ -16,10 +17,10 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
     /// </summary>
     static class TestSetupIoC
     {
-        private static readonly Lazy<EmployerApprenticeshipsServiceConfiguration> LazyAccountConfiguration = 
+        private static readonly Lazy<EmployerApprenticeshipsServiceConfiguration> LazyAccountConfiguration =
             new Lazy<EmployerApprenticeshipsServiceConfiguration>(GetAccountConfiguration);
 
-        private static readonly Lazy<LevyDeclarationProviderConfiguration> LazyFinanceConfiguration = 
+        private static readonly Lazy<LevyDeclarationProviderConfiguration> LazyFinanceConfiguration =
             new Lazy<LevyDeclarationProviderConfiguration>(GetFinanceConfiguration);
 
         public static IContainer CreateIoC()
@@ -41,6 +42,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
             config.AddRegistry<ConfigurationRegistry>();
             config.AddRegistry<HashingRegistry>();
             config.AddRegistry<RepositoriesRegistry>();
+            config.AddRegistry<AutoConfigurationRegistry>();
 
             var accountConfiguration = LazyAccountConfiguration.Value;
             var dbContext = new EmployerAccountsDbContext(accountConfiguration.DatabaseConnectionString);
@@ -60,12 +62,12 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester
 
         private static EmployerApprenticeshipsServiceConfiguration GetAccountConfiguration()
         {
-            return ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Domain.Constants.ServiceName);
+            return ConfigurationTestHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Domain.Constants.ServiceName);
         }
 
         private static LevyDeclarationProviderConfiguration GetFinanceConfiguration()
         {
-            return ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider");
+            return ConfigurationTestHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider");
         }
     }
 }

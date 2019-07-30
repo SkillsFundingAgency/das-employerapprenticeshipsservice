@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Configuration;
+﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.EAS.Infrastructure.Services;
@@ -12,7 +12,7 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         public ReferenceDataRegistry()
         {
             For<IReferenceDataApiConfiguration>().Use(c => c.GetInstance<ReferenceDataApiClientConfiguration>());
-            For<ReferenceDataApiClientConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<ReferenceDataApiClientConfiguration>("SFA.DAS.ReferenceDataApiClient")).Singleton();
+            For<ReferenceDataApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ReferenceDataApiClientConfiguration>(ConfigurationKeys.ReferenceDataApi)).Singleton();
             For<IReferenceDataService>().Use<ReferenceDataService>().Singleton();
         }
     }

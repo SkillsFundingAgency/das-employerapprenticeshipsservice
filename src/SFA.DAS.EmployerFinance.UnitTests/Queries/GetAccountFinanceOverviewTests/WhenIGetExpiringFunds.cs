@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
+using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
@@ -17,6 +18,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
     {
         private const long ExpectedAccountId = 20;
         private const long ExpectedBalance = 2000;
+        private const decimal ExpectedFundsIn = 1234.56M;
+        private const decimal ExpectedFundsOut = 789.01M;
 
         private DateTime _now;
         private GetAccountFinanceOverviewQueryHandler _handler;
@@ -27,6 +30,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         private Mock<IValidator<GetAccountFinanceOverviewQuery>> _validator;
         private GetAccountFinanceOverviewQuery _query;
         private ExpiringAccountFunds _expiringFunds;
+        private ProjectedCalculation _projectedCalculation;
 
         [SetUp]
         public void Setup()
@@ -50,9 +54,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
                 }
             };
 
+            _projectedCalculation = new ProjectedCalculation
+            {
+                AccountId = ExpectedAccountId,
+                FundsIn = ExpectedFundsIn,
+                FundsOut = ExpectedFundsOut,
+                NumberOfMonths = 12
+            };
+
             _handler = new GetAccountFinanceOverviewQueryHandler(_currentDateTime.Object, _dasForecastingService.Object,_levyService.Object, _validator.Object, _logger.Object);
             _currentDateTime.Setup(d => d.Now).Returns(_now);
             _dasForecastingService.Setup(s => s.GetExpiringAccountFunds(ExpectedAccountId)).ReturnsAsync(_expiringFunds);
+            _dasForecastingService.Setup(s => s.GetProjectedCalculations(ExpectedAccountId)).ReturnsAsync(_projectedCalculation);
             _levyService.Setup(s => s.GetAccountBalance(ExpectedAccountId)).ReturnsAsync(ExpectedBalance);
             _validator.Setup(v => v.ValidateAsync(_query))
                 .ReturnsAsync(new ValidationResult{ValidationDictionary = new Dictionary<string, string>()});
@@ -164,14 +177,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         }
 
         [Test]
-        public async Task ThenIfValidationFailsAnExceptionIsThrown()
+        public void ThenIfValidationFailsAnExceptionIsThrown()
         {
             _validator.Setup(v => v.ValidateAsync(_query)).ReturnsAsync(new ValidationResult
             {
-                ValidationDictionary = new Dictionary<string, string> {{"Test Error", "Error"}}
+                ValidationDictionary = new Dictionary<string, string> { { "Test Error", "Error" } }
             });
 
-           Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_query));
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_query));
         }
     }
 }

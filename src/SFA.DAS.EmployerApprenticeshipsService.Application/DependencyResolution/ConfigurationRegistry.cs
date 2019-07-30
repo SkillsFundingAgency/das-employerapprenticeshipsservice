@@ -1,5 +1,4 @@
-﻿using SFA.DAS.Configuration;
-using SFA.DAS.EAS.Domain;
+﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EAS.Domain.Configuration;
 using StructureMap;
 
@@ -9,9 +8,9 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
     {
         public ConfigurationRegistry()
         {
-            For<EmployerApprenticeshipsServiceConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(Constants.ServiceName)).Singleton();
-            For<LevyDeclarationProviderConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<LevyDeclarationProviderConfiguration>("SFA.DAS.LevyAggregationProvider")).Singleton();
-            For<PaymentProviderConfiguration>().Use(() => ConfigurationHelper.GetConfiguration<PaymentProviderConfiguration>("SFA.DAS.PaymentProvider")).Singleton();
+            For<EmployerApprenticeshipsServiceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerApprenticeshipsServiceConfiguration>(ConfigurationKeys.EmployerApprenticeshipsService)).Singleton();
+            For<LevyDeclarationProviderConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<LevyDeclarationProviderConfiguration>(ConfigurationKeys.LevyDeclarationProvider)).Singleton();
+            For<PaymentProviderConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<PaymentProviderConfiguration>(ConfigurationKeys.PaymentProvider)).Singleton();
         }
     }
 }

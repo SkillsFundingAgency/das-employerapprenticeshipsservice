@@ -4464,3 +4464,32 @@ tr.total td {
   padding: 35px 50px; }
   .flash-card .button-link {
     margin-left: 25px; }
+
+.finance-figure {
+  border: 1px solid #bfc1c3;
+  border-left-width: 10px;
+  line-height: 1;
+  padding: 17px 10px 13px;
+  font-size: 30px; }
+
+.finance-figure--future {
+  border-left-color: #005ea5; }
+
+.finance-figure--planned {
+  border-left-color: #2b8cc4; }
+
+.finance-figure--expiring {
+  border-left-color: #b10e1e; }
+
+.finance-figure__label {
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 30px; }
+
+.current-funds {
+  margin-bottom: 40px; }
+  .current-funds .finance-figure {
+    background: #f8f8f8;
+    font-size: 24px; }
+  .current-funds .finance-figure__label {
+    font-size: 16px; }

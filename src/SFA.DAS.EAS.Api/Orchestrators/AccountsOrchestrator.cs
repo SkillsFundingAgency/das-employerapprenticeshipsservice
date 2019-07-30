@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
@@ -232,7 +233,9 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 OwnerEmail = accountResult.Account.OwnerEmail,
                 DasAccountName = accountResult.Account.Name,
                 LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new ResourceViewModel { Id = x.ToString() })),
-                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x }))
+                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new ResourceViewModel { Id = x })),
+                ApprenticeshipEmployerType = accountResult.Account.ApprenticeshipEmployerType.ToString(),
+				AccountAgreementType = GetAgreementType(accountResult)
             };
 
             return accountDetailViewModel;
@@ -257,6 +260,15 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             });
 
             return transferAllowanceResult.TransferAllowance;
+        }
+
+        private static string GetAgreementType(GetEmployerAccountByHashedIdResponse accountResult)
+        {
+            var agreementTypeGroup = accountResult.Account.AccountAgreementTypes?
+                .GroupBy(x => x)
+            ;
+
+            return agreementTypeGroup?.Count() > 1 ? "Inconsistent" : agreementTypeGroup?.FirstOrDefault()?.Key;
         }
     }
 }
