@@ -86,7 +86,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            return View(agreement);
+
+            return View(agreement.Data);
         }
 
         [HttpGet]
@@ -126,7 +127,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = _mapper.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response);
 
             return View(viewModel);
-
         }
 
         [HttpPost]
@@ -134,14 +134,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
         {
-            if(choice != 2)
-                RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
-
+            if (choice != 2)
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
+            }
 
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
-            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow,
-                agreement.Data.EmployerAgreement.LegalEntityName);
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -155,12 +155,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (response.Data.HasFurtherPendingAgreements)
                 {
-                    flashMessage.Message =
-                        "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
+                    flashMessage.Message = "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
 
-                    result = RedirectToAction(ControllerConstants.IndexActionName,
+                    result = RedirectToAction(
+                        ControllerConstants.IndexActionName,
                         ControllerConstants.EmployerAgreementControllerName,
-                        new { hashedAccountId, agreementSigned = true });
+                        new { hashedAccountId, agreementSigned = true }
+                    );
                 }
                 else
                 {
@@ -174,57 +175,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return result;
             }
 
-
             agreement.Exception = response.Exception;
             agreement.Status = response.Status;
 
             return View(ControllerConstants.SignAgreementViewName, agreement.Data);
         }
-
-        [HttpGet]
-        [Route("agreements/{agreementId}/next")]
-        public async Task<ActionResult> NextSteps(string hashedAccountId)
-        {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
-
-            var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
-            {
-                FlashMessage = GetFlashMessageViewModelFromCookie(),
-                Data = new EmployerAgreementNextStepsViewModel { UserShownWizard = userShownWizard }
-            };
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("agreements/{agreementId}/next")]
-        public async Task<ActionResult> NextSteps(int? choice, string hashedAccountId)
-        {
-            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
-            var userShownWizard = await _orchestrator.UserShownWizard(userId, hashedAccountId);
-
-            switch (choice ?? 0)
-            {
-                case 1: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName);
-                case 2: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.TransfersControllerName);
-                case 3: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
-                default:
-                    var model = new OrchestratorResponse<EmployerAgreementNextStepsViewModel>
-                    {
-                        FlashMessage = GetFlashMessageViewModelFromCookie(),
-                        Data = new EmployerAgreementNextStepsViewModel
-                        {
-                            ErrorMessage = "You must select an option to continue.",
-                            UserShownWizard = userShownWizard
-                        }
-                    };
-                    return View(model); //No option entered
-            }
-        }
+      
         [HttpGet]
         [Route("agreements/{agreementId}/agreement-pdf")]
         public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
