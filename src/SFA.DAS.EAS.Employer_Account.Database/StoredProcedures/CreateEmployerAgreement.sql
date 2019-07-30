@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [employer_account].[CreateEmployerAgreement]
 	@accountLegalEntityId BIGINT,
 	@templateId INT = NULL,
-	@eoi BIT,
+	@agreementType TINYINT,
 	@employerAgreementId BIGINT OUTPUT
 AS
 BEGIN	
@@ -11,7 +11,7 @@ BEGIN
 	BEGIN
 		SELECT TOP 1 @templateId = Id
 		FROM [employer_account].[EmployerAgreementTemplate]
-		WHERE AgreementType LIKE CASE @eoi WHEN 0 THEN 'Levy' ELSE 'NonLevy.EOI%' END
+		WHERE AgreementType = @agreementType
 		ORDER BY VersionNumber DESC
 	END
 

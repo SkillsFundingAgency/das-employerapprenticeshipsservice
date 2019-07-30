@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@source", createParams.Source, DbType.Int16);
             parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource, DbType.Int16);
             parameters.Add("@sector", createParams.Sector, DbType.String);
-            parameters.Add("@eoi", createParams.Eoi, DbType.Boolean);
+            parameters.Add("@agreementType", createParams.AgreementType, DbType.Int16);
             parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output);
             parameters.Add("@accountLegalEntityCreated", null, DbType.Boolean, ParameterDirection.Output);
 

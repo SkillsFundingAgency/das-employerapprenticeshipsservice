@@ -19,7 +19,7 @@
 	@employerRefName varchar(500) null,
 	@sector NVARCHAR(100),
 	@aorn VARCHAR(50),
-	@eoi BIT
+	@agreementType TINYINT
 )
 AS
 BEGIN
@@ -40,7 +40,7 @@ BEGIN
 		@source = @source,
 		@publicSectorDataSource = @publicSectorDataSource,
 		@sector = @sector,
-		@eoi = @eoi,
+		@agreementType = @agreementType,
 		@legalEntityId = @legalEntityId OUTPUT,
 		@employerAgreementId = @employerAgreementId OUTPUT,
 		@accountLegalentityId = @accountLegalentityId OUTPUT,
