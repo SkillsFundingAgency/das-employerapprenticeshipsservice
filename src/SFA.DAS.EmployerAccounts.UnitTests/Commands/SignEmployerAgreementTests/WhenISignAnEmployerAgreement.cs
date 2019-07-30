@@ -7,6 +7,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Data;
@@ -48,6 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         private const long LegalEntityId = 111333;
         private const string OrganisationName = "Foo";
         private const string HashedLegalEntityId = "2635JHG";
+        private const AgreementType AgreementType = Common.Domain.Types.AgreementType.NoneLevyExpressionOfInterest;
 
         [SetUp]
         public void Setup()
@@ -75,7 +77,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             {
                 HashedAgreementId = "124GHJG",
                 LegalEntityId = LegalEntityId,
-                LegalEntityName = OrganisationName
+                LegalEntityName = OrganisationName,
+                AgreementType = AgreementType
             };
 
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
@@ -217,6 +220,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             message.CohortCreated.Should().BeTrue();
             message.UserName.Should().Be(_owner.FullName());
             message.UserRef.Should().Be(_owner.UserRef);
+            message.AgreementType.Should().Be(AgreementType);
         }
 
         [Test]
@@ -241,7 +245,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             message.CohortCreated.Should().BeFalse();
             message.UserName.Should().Be(_owner.FullName());
             message.UserRef.Should().Be(_owner.UserRef);
-
+            message.AgreementType.Should().Be(AgreementType);
         }
 
         [Test]
