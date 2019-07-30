@@ -737,7 +737,7 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
-    <Content Include="Views\EmployerAgreement\AboutYourMou.cshtml" />
+    <Content Include="Views\EmployerAgreement\AboutYourDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
