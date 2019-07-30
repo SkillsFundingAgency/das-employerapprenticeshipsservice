@@ -74,7 +74,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     AccountHashedId = query.AccountHashedId,
                     CurrentLevyFunds = getAccountFinanceOverview.CurrentFunds,
                     ExpiringFunds = getAccountFinanceOverview.ExpiringFundsAmount,
-                    ExpiryDate = getAccountFinanceOverview.ExpiringFundsExpiryDate
+                    ExpiryDate = getAccountFinanceOverview.ExpiringFundsExpiryDate,
+                    TotalSpendForLastYear = getAccountFinanceOverview.TotalSpendForLastYear,
+                    FundingExpected = getAccountFinanceOverview.FundsIn,
+                    AvailableFunds = getAccountFinanceOverview.FundsIn - getAccountFinanceOverview.FundsOut,
+                    ProjectedSpend = getAccountFinanceOverview.FundsOut
                 }
             };
 
