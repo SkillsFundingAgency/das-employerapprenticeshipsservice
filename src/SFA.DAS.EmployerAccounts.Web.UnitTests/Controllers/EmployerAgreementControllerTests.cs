@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -258,7 +259,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                             {
                                 EmployerAgreement = new EmployerAgreementView
                                 {
-                                    TemplateAgreementType = "Levy"
+                                    TemplateAgreementType = AgreementType.Levy
                                 }
                             }
                         });
@@ -285,7 +286,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                             {
                                 EmployerAgreement = new EmployerAgreementView
                                 {
-                                    TemplateAgreementType = "NonLevy.EOI"
+                                    TemplateAgreementType = AgreementType.NoneLevyExpressionOfInterest
                                 }
                             }
                         });

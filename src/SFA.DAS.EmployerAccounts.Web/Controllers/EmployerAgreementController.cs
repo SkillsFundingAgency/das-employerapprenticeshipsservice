@@ -8,6 +8,7 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -110,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(agreement.Data.EmployerAgreement.TemplateAgreementType == "Levy" 
+            return View(agreement.Data.EmployerAgreement.TemplateAgreementType == AgreementType.Levy
                 ? ControllerConstants.AboutYourAgreementViewName 
                 : ControllerConstants.AboutYourMouViewName, agreement);
         }
