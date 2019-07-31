@@ -18,8 +18,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
     [TestFixture]
     class WhenISearchThePensionRegulator
     {
-        private const string ExpectedAorn = "aorn";
-        private const string ExpectedPayeRef = "payeref";
+        private const string ExpectedAorn = "0123456789ABC";
+        private const string ExpectedPayeRef = "000/1234567";
         private SearchPensionRegulatorController _controller;
         private SearchPensionRegulatorResultsViewModel _expectedData;
         private Mock<IMediator> _mediator;
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                     {
                         EmployerAccountPayeRefData = new EmployerAccountPayeRefData
                         {
-                            PayeReference = "PayeRef"
+                            PayeReference = "000/1234567"
                         }
                     });
 
