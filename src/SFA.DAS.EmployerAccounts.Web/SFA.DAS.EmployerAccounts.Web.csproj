@@ -346,6 +346,7 @@
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
+    <Content Include="App_Data\.keep" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -765,9 +766,7 @@
       <Name>SFA.DAS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
