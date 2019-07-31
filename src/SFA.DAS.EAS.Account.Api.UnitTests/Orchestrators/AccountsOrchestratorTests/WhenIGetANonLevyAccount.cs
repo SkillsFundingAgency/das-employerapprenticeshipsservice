@@ -4,6 +4,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
@@ -16,6 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
@@ -57,14 +59,14 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         public async Task ThenResponseShouldHaveAccountAgreementTypeSetToNonLevy()
         {
             //Arrange
-            string agreementType = "NonLevy.EOI";
+            AgreementType agreementType = AgreementType.NoneLevyExpressionOfInterest;
             const string hashedAgreementId = "ABC123";
 
             var response = new GetEmployerAccountByHashedIdResponse
             {
                 Account = new AccountDetail
                 {
-                    AccountAgreementTypes = new List<string>
+                    AccountAgreementTypes = new List<AgreementType>
                     {
                         agreementType,
                         agreementType
@@ -81,23 +83,23 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             var result = await _orchestrator.GetAccount(hashedAgreementId);
 
             //Assert
-            Assert.AreEqual(agreementType, result.Data.AccountAgreementType);
+            Assert.AreEqual(agreementType.ToString(), result.Data.AccountAgreementType.ToString());
         }
 
         [Test]
         public async Task ThenResponseShouldHaveAccountAgreementTypeSetToInconsistent()
         {
             //Arrange
-            string agreementType = "Inconsistent";
+            AccountAgreementType agreementType = AccountAgreementType.Inconsistent;
             const string hashedAgreementId = "ABC123";
             var response = new GetEmployerAccountByHashedIdResponse
             {
                 Account = new AccountDetail
                 {
-                    AccountAgreementTypes = new List<string>
+                    AccountAgreementTypes = new List<AgreementType>
                     {
-                        "Levy",
-                        "NonLevy.EOI"
+                        AgreementType.Levy,
+                        AgreementType.NoneLevyExpressionOfInterest
                     }
                 }
             };
@@ -111,7 +113,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             var result = await _orchestrator.GetAccount(hashedAgreementId);
 
             //Assert
-            Assert.AreEqual(agreementType, result.Data.AccountAgreementType);
+            Assert.AreEqual(agreementType.ToString(), result.Data.AccountAgreementType.ToString());
         }
     }
 }
