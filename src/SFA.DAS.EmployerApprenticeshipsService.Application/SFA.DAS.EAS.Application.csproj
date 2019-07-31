@@ -165,8 +165,8 @@
     <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.205.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.205\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.272.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.272\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Configuration, Version=1.0.0.53229, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.1.0.0.53229\lib\net45\SFA.DAS.Configuration.dll</HintPath>
@@ -340,6 +340,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions\AddressExtensions.cs" />
+    <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="MarkerInterfaces\IPublicHashingService.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
@@ -370,12 +371,6 @@
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\TokenServiceRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
-    <Compile Include="Dtos\AgreementTemplateDto.cs" />
-    <Compile Include="Dtos\EmployerAgreement\EmployerAgreementDetailsDto.cs" />
-    <Compile Include="Dtos\AgreementDto.cs" />
-    <Compile Include="Dtos\EmployerAgreement\EmployerAgreementStatusDto.cs" />
-    <Compile Include="Dtos\EmployerAgreement\PendingEmployerAgreementDetailsDto.cs" />
-    <Compile Include="Dtos\EmployerAgreement\SignedEmployerAgreementDetailsDto.cs" />
     <Compile Include="Dtos\AccountSpecificLegalEntityDto.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
@@ -385,10 +380,7 @@
     <Compile Include="Queries\GetStatistics\GetStatisticsQuery.cs" />
     <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
-    <Compile Include="Mappings\AgreementMappings.cs" />
-    <Compile Include="Mappings\EmploymentAgreementStatusMappings.cs" />
     <Compile Include="Mappings\LegalEntityMappings.cs" />
-    <Compile Include="Queries\Extensions\EmployerAgreementsStatusDtoExtensions.cs" />
     <Compile Include="Queries\Extensions\QueryExtensions.cs" />
     <Compile Include="Queries\GetLegalEntity\GetLegalEntityQuery.cs" />
     <Compile Include="Queries\GetLegalEntity\GetLegalEntityQueryHandler.cs" />
@@ -472,10 +464,6 @@
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQuery.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesQueryHandler.cs" />
     <Compile Include="Queries\GetLatestActivities\GetLatestActivitiesResponse.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsRequest.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsResponse.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreements\GetAccountEmployerAgreementsValidator.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsHandler.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsQuery.cs" />
     <Compile Include="Queries\GetAccountStats\GetAccountStatsQueryValidator.cs" />
@@ -529,13 +517,6 @@
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
     <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountValidator.cs" />
-    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementResponse.cs" />
-    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateQueryHandler.cs" />
-    <Compile Include="Queries\GetLatestAccountAgreementTemplate\GetLatestAccountAgreementTemplateRequest.cs" />
-    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementResponse.cs" />
-    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateQueryHandler.cs" />
-    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequest.cs" />
-    <Compile Include="Queries\GetLatestEmployerAgreementTemplate\GetLatestEmployerAgreementTemplateRequestValidator.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationRequest.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />

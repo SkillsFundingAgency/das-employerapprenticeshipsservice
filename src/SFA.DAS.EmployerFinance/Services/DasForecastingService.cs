@@ -4,6 +4,8 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Http;
+using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
+using System;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -32,8 +34,36 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             _logger.Info($"Getting expiring funds for account ID: {accountId}");
 
-            var expiredFundsUrl = $"/api/accounts/{accountId}/AccountProjection/expiring-funds";
+            return await CallAuthService<ExpiringAccountFunds>(
+                accountId,
+                (ex) =>
+                {
+                    if (ex is ResourceNotFoundException)
+                    {
+                        _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
+                    }
+                }
+                );
+        }
 
+        public async Task<ProjectedCalculation> GetProjectedCalculations(long accountId)
+        {
+            _logger.Info($"Getting projected calculations for account ID: {accountId}");
+
+            return await CallAuthService<ProjectedCalculation>(
+                accountId,
+                (ex) =>
+                {
+                    if (ex is ResourceNotFoundException)
+                    {
+                        _logger.Error(ex, $"Could not find projected calculations for account ID: {accountId} when calling forecast API");
+                    }
+                }
+                );
+        }
+
+        private async Task<T> CallAuthService<T>(long accountId, Action<Exception> OnError = null)
+        {
             var accessToken = await _azureAdAuthService.GetAuthenticationResult(
                 _apiClientConfiguration.ClientId,
                 _apiClientConfiguration.ClientSecret,
@@ -42,37 +72,56 @@ namespace SFA.DAS.EmployerFinance.Services
 
             try
             {
-                var accountExpiredFunds =
-                    await _httpClient.Get<ExpiringAccountFunds>(accessToken, expiredFundsUrl);
-
-                return accountExpiredFunds;
+                return await _httpClient.Get<T>(accessToken, GetUrl(typeof(T), accountId));
             }
             catch (ResourceNotFoundException ex)
             {
-                _logger.Error(ex, $"Could not find expired funds for account ID: {accountId} when calling forecast API");
-                
-                return null;
+                OnError?.Invoke(ex);
+                _logger.Error(ex, $"ResourceNotFoundException returned from forecast API for account ID: {accountId}");                
+                return default(T);
             }
             catch (HttpException ex)
             {
+                OnError?.Invoke(ex);
+
                 switch (ex.StatusCode)
                 {
-                    case 400 : _logger.Error(ex, $"Bad request sent to forecast API for account ID: {accountId}");
+                    case 400:
+                        _logger.Error(ex, $"Bad request sent to forecast API for account ID: {accountId}");
                         break;
-                    case 408 : _logger.Error(ex, $"Request sent to forecast API for account ID: {accountId} timed out");
+                    case 408:
+                        _logger.Error(ex, $"Request sent to forecast API for account ID: {accountId} timed out");
                         break;
-                    case 429 : _logger.Error(ex, $"To many requests sent to forecast API for account ID: {accountId}");
+                    case 429:
+                        _logger.Error(ex, $"To many requests sent to forecast API for account ID: {accountId}");
                         break;
-                    case 500 : _logger.Error(ex, $"Forecast API reported internal Server error for account ID: {accountId}");
+                    case 500:
+                        _logger.Error(ex, $"Forecast API reported internal Server error for account ID: {accountId}");
                         break;
-                    case 503 : _logger.Error(ex, "Forecast API is unavailable");
+                    case 503:
+                        _logger.Error(ex, "Forecast API is unavailable");
                         break;
 
                     default: throw;
                 }
 
-                return null;
+                return default(T);
             }
+        }
+
+        private string GetUrl(Type type, long accountId)
+        {
+            string url = $"/api/accounts/{accountId}/AccountProjection/";
+            if (type.IsAssignableFrom(typeof(ProjectedCalculation)))
+            {
+                url = url + "projected-summary";
+            };
+            if (type.IsAssignableFrom(typeof(ExpiringAccountFunds)))
+            {
+                url = url + "expiring-funds";
+            };
+
+            return url;
         }
     }
 }

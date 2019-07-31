@@ -150,6 +150,7 @@
     <Build Include="Tables\UserAornFailedAttempts.sql" />
     <Build Include="StoredProcedures\UpdateUserAornAttempts.sql" />
     <Build Include="StoredProcedures\GetUserAornAttempts.sql" />
+    <None Include="Scripts\PreDeployment\AML-3784-AgreementTypeChanges.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />

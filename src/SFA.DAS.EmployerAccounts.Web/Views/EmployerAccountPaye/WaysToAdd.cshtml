@@ -19,8 +19,6 @@
             <li>Government Gateway login for your PAYE scheme</li>
             <li>accounts office reference number and employer PAYE scheme reference</li>
         </ul>
-        <h2 class="heading-small">By continuing you agree to the following:</h2>
-        <div class="panel">I have the authority to add PAYE schemes to this account that are used by my organisation.</div>
         <form method="POST" action="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="how-do-you-want-to-add-paye-scheme-form">
