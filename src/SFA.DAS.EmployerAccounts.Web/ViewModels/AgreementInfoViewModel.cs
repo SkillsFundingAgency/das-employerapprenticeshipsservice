@@ -1,9 +1,9 @@
-﻿using SFA.DAS.EmployerAccounts.Types.Models.Agreement;
+﻿using SFA.DAS.EAS.Account.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class AgreementInfoViewModel
     {
-        public AgreementType Type { get; set; }
+        public AccountAgreementType Type { get; set; }
     }
 }

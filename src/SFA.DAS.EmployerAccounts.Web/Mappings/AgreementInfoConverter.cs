@@ -1,8 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EmployerAccounts.Types.Models.Agreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings
 {
@@ -12,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
         {
             var newAgreementInfo = new AgreementInfoViewModel
             {
-                Type = (AgreementType)Enum.Parse(typeof(AgreementType), source.AccountAgreementType.ToString(), true)
+                Type = (AccountAgreementType)Enum.Parse(typeof(AccountAgreementType), source.AccountAgreementType.ToString(), true)
             };
        
             return newAgreementInfo;

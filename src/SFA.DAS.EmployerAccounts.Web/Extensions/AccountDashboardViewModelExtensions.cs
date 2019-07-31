@@ -1,7 +1,6 @@
 ﻿using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Types.Models.Agreement;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using AgreementType = SFA.DAS.EmployerAccounts.Types.Models.Agreement.AgreementType;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -9,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     {
         public static bool ShowManageYourLevyLink(this AccountDashboardViewModel model)
         {
-            if (model.AgreementInfo.Type != AgreementType.NoneLevyExpressionOfInterest)
+            if (model.AgreementInfo.Type != AccountAgreementType.NoneLevyExpressionOfInterest)
             {
                 return true;
             }
