@@ -467,7 +467,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var viewModel = new VacancyStatusViewModel
             {
-                TrainingTitle = vacancy.TrainingTitle,
+                VacancyTitle = vacancy.Title,
                 ClosingDateText = vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-",
                 ManageVacancyLinkUrl = vacancy.ManageVacancyUrl,
                 ManageVacancyLinkText = "Manage vacancy",

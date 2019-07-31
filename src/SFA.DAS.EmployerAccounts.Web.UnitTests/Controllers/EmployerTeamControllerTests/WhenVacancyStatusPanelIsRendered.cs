@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenTheModelContainsTheExpectedDataForTheVacancyStatus(VacancyStatus vacancyStatus, string status, string linkText, int? numberOfAplications)
         {
             // Arrange
-            var trainingTitle = Guid.NewGuid().ToString();
+            var vacancyTitle = Guid.NewGuid().ToString();
             DateTime closingdate = DateTime.Now;
             string manageVacancyLinkUrl = $"http://{Guid.NewGuid().ToString()}";
             long reference = 12345;
@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             var testVacancy = new Model.Vacancy
             {
-                TrainingTitle = trainingTitle,
+                Title = vacancyTitle,
                 Status = vacancyStatus,
                 ClosingDate = closingdate,
                 ManageVacancyUrl = manageVacancyLinkUrl,
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(trainingTitle, result.TrainingTitle);
+            Assert.AreEqual(vacancyTitle, result.VacancyTitle);
             Assert.AreEqual(closingdate.ToString("d MMMM yyyy"), result.ClosingDateText);
             Assert.AreEqual(manageVacancyLinkUrl, result.ManageVacancyLinkUrl);
             Assert.AreEqual(linkText, result.ManageVacancyLinkText);

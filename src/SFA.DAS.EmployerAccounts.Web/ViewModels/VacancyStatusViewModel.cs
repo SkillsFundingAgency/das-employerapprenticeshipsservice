@@ -2,7 +2,7 @@
 {
     public class VacancyStatusViewModel
     {
-        public string TrainingTitle { get; set; }
+        public string VacancyTitle { get; set; }
         public string Status { get; set; }
         public int? NumberOfApplications { get; set; }
         public string Reference { get; set; }
