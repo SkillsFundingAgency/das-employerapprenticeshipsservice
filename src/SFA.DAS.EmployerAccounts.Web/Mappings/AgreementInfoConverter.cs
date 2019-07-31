@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
         {
             var newAgreementInfo = new AgreementInfoViewModel
             {
-                Type = (AccountAgreementType)Enum.Parse(typeof(AccountAgreementType), source.AccountAgreementType.ToString(), true)
+                Type = source.AccountAgreementType
             };
        
             return newAgreementInfo;
