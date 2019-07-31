@@ -1,8 +1,10 @@
 ﻿@using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
+@using SFA.DAS.Common.Domain.Types
 @using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @using SFA.DAS.Tasks.API.Types.Enums
+@using SFA.DAS.EmployerAccounts.Web.Extensions
 
 @model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
 
@@ -83,14 +85,21 @@ else
                     </div>
                 </div>
                 <div class="cards">
-                    <div class="card">
-                        <h3 class="heading-medium"><a href="@Url.ReservationsAction("reservations/manage")">Manage your funds</a></h3>
-                        <p>Reserve and manage funding.</p>
-                    </div>
-                    <div class="card">
-                        <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Manage your levy</a></h3>
-                        <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
-                    </div>
+                    @if (Model.Data.ShowYourFundingReservationsLink())
+                    {
+                        <div class="card">
+                            <h3 class="heading-medium"><a href="@Url.ReservationsAction("reservations/manage")">Your funding reservations</a></h3>
+                            <p>Reserve and manage funding.</p>
+                        </div>
+                    }
+
+                    @if (Model.Data.ShowManageYourLevyLink())
+                    {
+                        <div class="card">
+                            <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction(" finance")">Your finances</a></h3>
+                            <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
+                        </div>
+                    }
                 </div>
             </section>
 
