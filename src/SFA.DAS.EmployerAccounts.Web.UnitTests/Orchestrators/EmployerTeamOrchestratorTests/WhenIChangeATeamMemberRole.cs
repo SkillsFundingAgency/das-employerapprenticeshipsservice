@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -19,6 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
     {
         private Mock<IMediator> _mediator;
         private Mock<IAccountApiClient> _accountApiClient;
+        private Mock<IMapper> _mapper;
         private EmployerTeamOrchestrator _orchestrator;
 
         [SetUp]
@@ -26,8 +28,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             _mediator = new Mock<IMediator>();
             _accountApiClient = new Mock<IAccountApiClient>();
+            _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object);
         }
 
         [Test]
