@@ -42,24 +42,27 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
             }
            
             var currentBalance = await GetAccountBalance(query.AccountId.Value);
-            var earliestFundsToExpire = await GetExpiringFunds(query.AccountId.Value);
+            var earliestFundsToExpireTask = GetExpiringFunds(query.AccountId.Value);
+            var projectedCalculations = await _dasForecastingService.GetProjectedCalculations(query.AccountId.Value);
+            var totalSpendForLastYear = await GetTotalSpendForLastYear(query.AccountId.Value);
 
-            if (earliestFundsToExpire == null)
-            {
-                return new GetAccountFinanceOverviewResponse
-                {
-                    AccountId = query.AccountId.Value,
-                    CurrentFunds = currentBalance
-                };
-            }
-
-            return new GetAccountFinanceOverviewResponse
+            var response = new GetAccountFinanceOverviewResponse
             {
                 AccountId = query.AccountId.Value,
                 CurrentFunds = currentBalance,
-                ExpiringFundsExpiryDate = earliestFundsToExpire.PayrollDate,
-                ExpiringFundsAmount = earliestFundsToExpire.Amount
+                FundsIn = projectedCalculations?.FundsIn ?? 0,
+                FundsOut = projectedCalculations?.FundsOut ?? 0,
+                TotalSpendForLastYear = totalSpendForLastYear
             };
+
+            var earliestFundsToExpire = await earliestFundsToExpireTask;
+            if (earliestFundsToExpire != null)
+            {
+                response.ExpiringFundsExpiryDate = earliestFundsToExpire.PayrollDate;
+                response.ExpiringFundsAmount = earliestFundsToExpire.Amount;
+            }
+
+            return response;
         }
 
         private async Task<ExpiringFunds> GetExpiringFunds(long accountId)
@@ -88,6 +91,11 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 
                 throw;
             }
+        }
+
+        private async Task<decimal> GetTotalSpendForLastYear(long accountId)
+        {
+            return await _levyService.GetTotalSpendForLastYear(accountId);
         }
     }
 }

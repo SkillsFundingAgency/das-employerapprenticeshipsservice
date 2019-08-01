@@ -1,24 +1,22 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
-
-@{
-    var vacancy = Model.AccountViewModel.Vacancies.First();
-}
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyStatusViewModel
 
 <h3 class="das-panel__heading">Your vacancy</h3>
-<p>@vacancy.TrainingTitle <span class="das-!-display--block das-text--muted">VAC@(vacancy.Reference)</span></p>
+<p>@Model.VacancyTitle <span class="das-!-display--block das-text--muted">@Model.Reference</span></p>
 <dl class="das-definition-list das-definition-list--inline">
-
     <dt class="das-definition-list__title">Closing date</dt>
-    <dd class="das-definition-list__definition">@(vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-")</dd>
+    <dd class="das-definition-list__definition">@Model.ClosingDateText</dd>
 
-       <dt class="das-definition-list__title">Applications</dt>
-       <dd class="das-definition-list__definition">@vacancy.NumberOfApplications</dd>
+    @{ if (Model.NumberOfApplications.HasValue)
+        {
+            <dt class="das-definition-list__title">Applications</dt>
+            <dd class="das-definition-list__definition">@Model.NumberOfApplications.Value</dd>
+        }
+    }
 
     <dt class="das-definition-list__title">Status</dt>
-    <dd class="das-definition-list__definition">@vacancy.Status</dd>
+    <dd class="das-definition-list__definition">@Model.Status</dd>
 </dl>
 <ul class="govuk-list">
-    <li><a href="@vacancy.ManageVacancyUrl" class="govuk-link govuk-link--no-visited-state">Manage vacancy</a></li>
-    <li><a href="@Url.EmployerRecruitAction("create-options/")" class="govuk-link govuk-link--no-visited-state">Create a vacancy</a></li>
+    <li><a href="@Model.ManageVacancyLinkUrl" class="govuk-link govuk-link--no-visited-state">@Model.ManageVacancyLinkText</a> </li>
+    <li><a href="@Url.EmployerRecruitAction("create-options/")" class="govuk-link govuk-link--no-visited-state">Create vacancy</a> </li>
 </ul>

@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -14,8 +14,9 @@ using SFA.DAS.Validation;
 using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Portal;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
- namespace SFA.DAS.EmployerAccounts.Web.Controllers
+namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [Authorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
@@ -462,7 +463,47 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
         [ChildActionOnly]
         public ActionResult VacancyStatus(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            Vacancy vacancy = model.AccountViewModel.Vacancies.First();
+
+            var viewModel = new VacancyStatusViewModel
+            {
+                VacancyTitle = vacancy.Title,
+                ClosingDateText = vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-",
+                ManageVacancyLinkUrl = vacancy.ManageVacancyUrl,
+                ManageVacancyLinkText = "Manage vacancy",
+                Reference = "VAC" + vacancy.Reference,
+                Status = vacancy.Status.ToString()
+            };
+
+            switch(vacancy.Status)
+            {
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:                    
+                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Submitted:
+                    viewModel.ManageVacancyLinkText = "Preview vacancy";
+                    viewModel.Status = "Pending review";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Draft:
+                    viewModel.ManageVacancyLinkText = "Edit and submit vacancy";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Referred:
+                    viewModel.ManageVacancyLinkText = "Edit and re-submit vacancy";
+                    viewModel.Status = "Rejected";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Live:
+                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
+                    break;
+
+                default:
+                    break;
+            }
+
+            return PartialView(viewModel);
         }
 
         [ChildActionOnly]
@@ -470,7 +511,7 @@ using SFA.DAS.EmployerAccounts.Models.Portal;
         {
             return PartialView(model);
         }
-
+                
         [ChildActionOnly]
         public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
         {

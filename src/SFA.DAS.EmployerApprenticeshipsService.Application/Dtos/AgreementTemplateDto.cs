@@ -8,5 +8,6 @@ namespace SFA.DAS.EAS.Application.Dtos
         public DateTime? CreatedDate { get; set; }
         public string PartialViewName { get; set; }
         public int VersionNumber { get; set; }
+        public string AgreementType { get; set; }
     }
 }

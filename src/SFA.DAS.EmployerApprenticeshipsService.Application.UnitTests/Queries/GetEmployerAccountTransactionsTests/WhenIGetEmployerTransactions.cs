@@ -1,20 +1,20 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Application.MarkerInterfaces;
-using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
@@ -221,6 +221,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                 ProviderName = "test"
             };
 
+            _dasLevyService
+                .Setup(mock => mock.GetProviderName((int)transaction.UkPrn, It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(transaction.ProviderName);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<TransactionLine>
@@ -242,7 +245,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromSFAPayment()
         {
             //Arrange
-            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -250,6 +252,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                 SfaCoInvestmentAmount = 123.45M,
                 ProviderName = "test"
             };
+
+            _dasLevyService
+                .Setup(mock => mock.GetProviderName((int)transaction.UkPrn, It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(transaction.ProviderName);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<TransactionLine>
@@ -263,7 +269,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual($"Co-investment - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual($"Co-investment - {transaction.ProviderName}", actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 
@@ -271,7 +277,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromEmployerPayment()
         {
             //Arrange
-            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var providerName = "test";
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
@@ -281,7 +287,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
                 ProviderName = "test"
             };
 
-
+            _dasLevyService
+                .Setup(mock => mock.GetProviderName((int)transaction.UkPrn, It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(providerName);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<TransactionLine>
@@ -295,7 +303,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual($"Co-investment - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual($"Co-investment - {providerName}", actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 

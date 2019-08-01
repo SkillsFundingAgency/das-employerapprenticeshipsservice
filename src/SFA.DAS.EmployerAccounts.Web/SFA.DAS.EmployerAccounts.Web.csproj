@@ -77,7 +77,7 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.205" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.272" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
       <Version>1.6.1469</Version>
     </PackageReference>
@@ -260,6 +260,7 @@
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\VacancyStatusViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -737,8 +738,8 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\MultipleVacancies.cshtml" />
     <Content Include="Views\EmployerTeam\V2\VacancyStatus.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\MultipleVacancies.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">

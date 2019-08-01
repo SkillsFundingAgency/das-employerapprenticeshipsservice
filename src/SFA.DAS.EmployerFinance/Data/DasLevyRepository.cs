@@ -206,7 +206,7 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.SingleOrDefault();
         }
 
-        public Task ProcessDeclarations(long accountId, string empRef)
+        public Task<decimal> ProcessDeclarations(long accountId, string empRef)
         {
             var parameters = new DynamicParameters();
 
@@ -215,7 +215,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@currentDate", _currentDateTime.Now, DbType.DateTime);
             parameters.Add("@expiryPeriod", _configuration.FundsExpiryPeriod, DbType.Int32);
 
-            return _db.Value.Database.Connection.ExecuteAsync(
+            return _db.Value.Database.Connection.QuerySingleAsync<decimal>(
                 sql: "[employer_financial].[ProcessDeclarationsTransactions]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
