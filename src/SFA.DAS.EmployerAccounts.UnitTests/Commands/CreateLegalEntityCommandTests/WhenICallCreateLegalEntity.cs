@@ -39,7 +39,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
         private Mock<IEventPublisher> _eventPublisher;
-        private Mock<IAuthorizationService> _authorizationService;
 
         private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
@@ -49,7 +48,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             _accountRepository = new Mock<IAccountRepository>();
             _membershipRepository = new Mock<IMembershipRepository>();
             _mediator = new Mock<IMediator>();
-            _authorizationService = new Mock<IAuthorizationService>();
 
             _owner = new MembershipView
             {
@@ -128,7 +126,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 _agreementService.Object,
                 _employerAgreementRepository.Object,
                 _validator.Object,
-                _authorizationService.Object
+                Mock.Of<IAuthorizationService>()
             );
         }
 
