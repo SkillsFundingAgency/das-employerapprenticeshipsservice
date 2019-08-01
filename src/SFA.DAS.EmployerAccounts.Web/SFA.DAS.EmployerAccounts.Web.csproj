@@ -739,6 +739,8 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="Views\Shared\_NonLevy_Agreement_V1.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v2_body.cshtml" />
+    <Content Include="Views\Shared\_NonLevy_Agreement_V1_body.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
