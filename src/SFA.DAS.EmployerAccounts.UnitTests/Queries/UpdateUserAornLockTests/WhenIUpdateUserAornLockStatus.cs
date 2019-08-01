@@ -15,16 +15,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.UpdateUserAornLockTests
        
         [SetUp]
         public void Arrange()
-        {             
+        {
             _userAornPayeLockService = new Mock<IUserAornPayeLockService>();
-            _userAornPayeLockService.Setup(x => x.UpdateUserAornPayeAttempt(It.IsAny<Guid>(), It.IsAny<bool>())).ReturnsAsync(true);
+            _userAornPayeLockService.Setup(x => x.UpdateUserAornPayeAttempt("UserRef", true)).ReturnsAsync(true);
 
-            Query = new UpdateUserAornLockRequest(Guid.NewGuid().ToString(), true);
+            Query = new UpdateUserAornLockRequest
+            {
+                UserRef = "UserRef",
+                Success = true
+            };
+
             RequestHandler = new UpdateUserAornLockQueryHandler(_userAornPayeLockService.Object);
         }
 
         [Test]
-        public async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
+        public async Task ThenThePayeAttemptIsUpdated()
         {
             //Act
             await RequestHandler.Handle(Query);

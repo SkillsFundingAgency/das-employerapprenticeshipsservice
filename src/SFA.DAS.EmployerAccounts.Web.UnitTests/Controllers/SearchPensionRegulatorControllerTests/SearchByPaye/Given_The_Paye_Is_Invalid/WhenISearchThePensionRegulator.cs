@@ -51,7 +51,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
                 orchestrator.Object,
-                Mock.Of<UserAornLockOrchestrator>(),
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>());
@@ -61,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenTheGatewayInformPageIsDisplayed()
         {
             var response = await _controller.SearchPensionRegulator(It.IsAny<string>());
-            var redirectResponse = (RedirectToRouteResult)response;
+            var redirectResponse = (RedirectToRouteResult) response;
 
             Assert.AreEqual(ControllerConstants.GatewayViewName, redirectResponse.RouteValues["action"].ToString());
             Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());

@@ -2,9 +2,11 @@
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Web.Mvc;
+using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -20,18 +22,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private const int AddPayeUsingAorn = 2;
 
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
-        private readonly UserAornLockOrchestrator _userAornLockOrchestrator;
+        private readonly IMediator _mediatr;
 
         public EmployerAccountPayeController(
             IAuthenticationService owinWrapper,
             EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
-            UserAornLockOrchestrator userAornLockOrchestrator,
             IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IMediator mediatr) : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
-            _userAornLockOrchestrator = userAornLockOrchestrator;
+            _mediatr = mediatr;
         }
 
         [HttpGet]
@@ -220,14 +222,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ViewResult> WaysToAdd()
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var aornLock = await _userAornLockOrchestrator.GetUserAornLockStatus(userRef);
+            var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+            {
+                UserRef = userRef
+            });
 
             var model = new
             {
                 HideHeaderSignInLink = true,
             };
 
-            ViewBag.AornLock = aornLock.Data.RemainingLock;
+            ViewBag.AornLock = aornLock.UserAornStatus.RemainingLock;
             return View(model);
         }
 
@@ -245,10 +250,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 default:
                 {
                     var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-                    var aornLock = await _userAornLockOrchestrator.GetUserAornLockStatus(userRef);
+                    var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+                    {
+                        UserRef = userRef
+                    });
 
                     ViewBag.InError = true;
-                    ViewBag.AornLock = aornLock.Data.RemainingLock;
+                    ViewBag.AornLock = aornLock.UserAornStatus.RemainingLock;
 
                     var model = new
                     {

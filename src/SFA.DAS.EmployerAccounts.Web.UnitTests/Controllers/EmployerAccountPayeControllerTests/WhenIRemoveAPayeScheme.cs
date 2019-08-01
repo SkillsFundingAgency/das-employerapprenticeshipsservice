@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -20,6 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
         private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
+        private Mock<IMediator> _mediator;
 
         [SetUp]
         public void Arrange()
@@ -31,14 +33,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+            _mediator = new Mock<IMediator>();
 
             _controller = new EmployerAccountPayeController(
                 _owinWrapper.Object, 
-                _employerAccountPayeOrchestrator.Object,
-                Mock.Of<UserAornLockOrchestrator>(), 
+                _employerAccountPayeOrchestrator.Object,            
                 _featureToggle.Object, 
                 _userViewTestingService.Object, 
-                _flashMessage.Object);
+                _flashMessage.Object,
+                _mediator.Object);
         }
 
         [Test]

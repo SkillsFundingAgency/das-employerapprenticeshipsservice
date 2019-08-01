@@ -129,10 +129,10 @@ namespace SFA.DAS.EmployerAccounts.Data
             };
         }
 
-        public async Task<IEnumerable<DateTime>> GetAornPayeQueryAttempts(Guid userRef)
+        public async Task<IEnumerable<DateTime>> GetAornPayeQueryAttempts(string userRef)
         {
             var parameters = new DynamicParameters();
-            parameters.Add("@UserRef", userRef, DbType.Guid);
+            parameters.Add("@UserRef", new Guid(userRef), DbType.Guid);
 
             var query = await _db.Value.Database.Connection.QueryAsync<DateTime>(
                 sql: "[employer_account].[GetUserAornAttempts]",
@@ -143,12 +143,12 @@ namespace SFA.DAS.EmployerAccounts.Data
             return query.ToList();
         }
 
-        public Task UpdateAornPayeQueryAttempt(Guid userRef, bool success)
+        public Task UpdateAornPayeQueryAttempt(string userRef, bool success)
         {
             var parameters = new DynamicParameters();
 
-            parameters.Add("@UserRef", userRef, DbType.Guid);
-            parameters.Add("@Suceeded", success, DbType.Boolean);
+            parameters.Add("@UserRef", new Guid(userRef), DbType.Guid);
+            parameters.Add("@Succeeded", success, DbType.Boolean);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[UpdateUserAornAttempts]",

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -17,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
     public class WhenIWantToAddAPayeScheme
     {
         private Mock<EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
-        private Mock<UserAornLockOrchestrator> _userAornLockOrchestrator;
+        private Mock<IMediator> _mediator;
         private Mock<IAuthenticationService> _owinWrapper;
         private EmployerAccountPayeController _controller;
         private Mock<IAuthorizationService> _featureToggle;
@@ -35,13 +37,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _employerAccountPayeOrchestrator = new Mock<EmployerAccountPayeOrchestrator>();
-            _userAornLockOrchestrator = new Mock<UserAornLockOrchestrator>();
+            _mediator = new Mock<IMediator>();
 
-            _userAornLockOrchestrator.Setup(x => x.GetUserAornLockStatus(It.IsAny<string>())).ReturnsAsync(
-                new OrchestratorResponse<UserAornPayeStatus>
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAornLockRequest>())).ReturnsAsync(
+                new GetUserAornLockResponse
                 {
-                    Data = new UserAornPayeStatus
-                    {
+                    UserAornStatus = new UserAornPayeStatus
+                    { 
                         RemainingLock = 0
                     }
                 });
@@ -49,10 +51,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _controller = new EmployerAccountPayeController(
                 _owinWrapper.Object, 
                 _employerAccountPayeOrchestrator.Object, 
-                _userAornLockOrchestrator.Object,
                 _featureToggle.Object, 
                 _userViewTestingService.Object, 
-                _flashMessage.Object);
+                _flashMessage.Object,
+                _mediator.Object);
         }
 
         [Test]

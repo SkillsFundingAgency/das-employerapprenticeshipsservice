@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
         Task Update(User user);
         Task Upsert(User user);
         Task<Users> GetAllUsers();
-        Task UpdateAornPayeQueryAttempt(Guid userRef, bool success);
-        Task<IEnumerable<DateTime>> GetAornPayeQueryAttempts(Guid userRef);
+        Task UpdateAornPayeQueryAttempt(string userRef, bool success);
+        Task<IEnumerable<DateTime>> GetAornPayeQueryAttempts(string userRef);
     }
 }

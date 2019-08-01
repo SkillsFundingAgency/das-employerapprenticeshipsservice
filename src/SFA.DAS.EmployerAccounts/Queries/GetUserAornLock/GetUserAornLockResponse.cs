@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
+﻿using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserAornLock
 {

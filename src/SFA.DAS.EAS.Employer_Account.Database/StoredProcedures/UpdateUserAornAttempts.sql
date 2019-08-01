@@ -1,11 +1,11 @@
 ﻿CREATE PROCEDURE [employer_account].[UpdateUserAornAttempts]
 (
 	@UserRef UNIQUEIDENTIFIER,
-	@Suceeded BIT
+	@Succeeded BIT
 )
 AS
 BEGIN
-	IF @Suceeded = 1
+	IF @Succeeded = 1
 	BEGIN
 		DELETE	uafa
 		FROM	[employer_account].[UserAornFailedAttempts] uafa

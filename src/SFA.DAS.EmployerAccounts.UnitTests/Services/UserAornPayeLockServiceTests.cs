@@ -119,9 +119,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         [Test]
         public void ItShouldReturnTheCorrectAornLockStatus([ValueSource("TestData")] TestData testData)
         {
+            var userRef = Guid.NewGuid();
             var logger = Mock.Of<ILog>();
             var userRepo = new Mock<IUserRepository>();
-            userRepo.Setup(x => x.GetAornPayeQueryAttempts(It.IsAny<Guid>())).ReturnsAsync(testData.Attempts.ToList());
+            userRepo.Setup(x => x.GetAornPayeQueryAttempts(It.IsAny<string>())).ReturnsAsync(testData.Attempts.ToList());
 
             var config = new EmployerAccountsConfiguration
             {
@@ -134,7 +135,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
             };
 
             var service = new UserAornPayeLockService(userRepo.Object, config, logger);
-            var result = service.UserAornPayeStatus(It.IsAny<Guid>()).Result;
+            var result = service.UserAornPayeStatus(userRef.ToString()).Result;
           
             Assert.AreEqual(result.RemainingAttempts, testData.Expected.RemainingAttempts);
             Assert.AreEqual(result.IsLocked, testData.Expected.IsLocked);

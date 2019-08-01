@@ -18,24 +18,18 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUserAornLockTests
         public void Arrange()
         {
             _userAornPayeLockService = new Mock<IUserAornPayeLockService>();
-            _userAornPayeLockService.Setup(x => x.UserAornPayeStatus(It.IsAny<Guid>())).ReturnsAsync(new UserAornPayeStatus());
+            _userAornPayeLockService.Setup(x => x.UserAornPayeStatus(It.IsAny<string>())).ReturnsAsync(new UserAornPayeStatus());
 
-            Query = new GetUserAornLockRequest(Guid.NewGuid().ToString());
+            Query = new GetUserAornLockRequest
+            {
+                UserRef = Guid.NewGuid().ToString()
+            };
+
             RequestHandler = new GetUserAornLockQueryHandler(_userAornPayeLockService.Object);
         }
 
         [Test]
-        public async Task ThenIfTheServiceIsCalled()
-        {
-            //Act
-            await RequestHandler.Handle(Query);
-
-            //Assert
-            _userAornPayeLockService.Verify(x => x.UserAornPayeStatus(Query.UserRef), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenTheValueIsReturnedInTheResponse()
+        public async Task ThenTheLockStatusIsReturned()
         {
             //Act
             var result = await RequestHandler.Handle(Query);

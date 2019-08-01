@@ -51,7 +51,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
                 orchestrator.Object,
-                Mock.Of<UserAornLockOrchestrator>(),
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>());

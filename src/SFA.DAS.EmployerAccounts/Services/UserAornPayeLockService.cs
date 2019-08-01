@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Configuration;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             _configuration = configuration.UserAornPayeLock;
         }
 
-        public async Task<bool> UpdateUserAornPayeAttempt(Guid userRef, bool success)
+        public async Task<bool> UpdateUserAornPayeAttempt(string userRef, bool success)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             return true;
         }
 
-        public async Task<UserAornPayeStatus> UserAornPayeStatus(Guid userRef)
+        public async Task<UserAornPayeStatus> UserAornPayeStatus(string userRef)
         {
             try
             {
@@ -48,19 +49,8 @@ namespace SFA.DAS.EmployerAccounts.Services
 
                 if (attempts.Count >= _configuration.NumberOfPermittedAttempts)
                 {
-                    for (var i = 0; i <= attempts.Count - _configuration.NumberOfPermittedAttempts; ++i)
-                    {
-                        if ((attempts[i] - attempts[i + _configuration.NumberOfPermittedAttempts - 1]).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes)
-                        {
-                            return new UserAornPayeStatus
-                            {
-                                IsLocked = true,
-                                RemainingLock = Convert.ToInt32((attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes) - DateTime.Now).TotalMinutes),
-                                RemainingAttempts = 0,
-                                AllowedAttempts = _configuration.NumberOfPermittedAttempts
-                            };
-                        }
-                    }
+                    var block = HasUserExceededMaximumAttempts(attempts);
+                    if (block != null) return block;
                 }
 
                 return new UserAornPayeStatus
@@ -82,6 +72,25 @@ namespace SFA.DAS.EmployerAccounts.Services
                     AllowedAttempts = _configuration.NumberOfPermittedAttempts
                 };
             }
+        }
+
+        private UserAornPayeStatus HasUserExceededMaximumAttempts(IList<DateTime> attempts)
+        {
+            for (var i = 0; i <= attempts.Count - _configuration.NumberOfPermittedAttempts; ++i)
+            {
+                if ((attempts[i] - attempts[i + _configuration.NumberOfPermittedAttempts - 1]).TotalMinutes <= _configuration.PermittedAttemptsTimeSpanMinutes)
+                {
+                    return new UserAornPayeStatus
+                    {
+                        IsLocked = true,
+                        RemainingLock = Convert.ToInt32((attempts.First().AddMinutes(_configuration.LockoutTimeSpanMinutes) - DateTime.Now).TotalMinutes),
+                        RemainingAttempts = 0,
+                        AllowedAttempts = _configuration.NumberOfPermittedAttempts
+                    };
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -9,6 +8,8 @@ using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
+using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -20,22 +21,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class SearchPensionRegulatorController : BaseController
     {
         private readonly SearchPensionRegulatorOrchestrator _searchPensionRegulatorOrchestrator;
-        private readonly UserAornLockOrchestrator _userAornLockOrchestrator;
         private readonly IMediator _mediatr;
         private const int OrgNotListed = 0;
 
         public SearchPensionRegulatorController(
             IAuthenticationService owinWrapper,
             SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
-            UserAornLockOrchestrator userAornLockOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,          
             IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
-            _userAornLockOrchestrator = userAornLockOrchestrator;
-            _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
+            _mediatr = mediatr;
         }
        
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
@@ -100,7 +98,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn)
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var aornLock = await _userAornLockOrchestrator.GetUserAornLockStatus(userRef);
+            var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+            {
+                UserRef = userRef
+            });       
 
             if (!string.IsNullOrWhiteSpace(payeRef) && !string.IsNullOrWhiteSpace(aorn))
             {
@@ -108,19 +109,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     Aorn = aorn,
                     PayeRef = payeRef,
-                    IsLocked = aornLock.Data.IsLocked,
-                    RemainingAttempts = aornLock.Data.RemainingAttempts,
-                    AllowedAttempts = aornLock.Data.AllowedAttempts,
-                    RemainingLock = aornLock.Data.RemainingLock
+                    IsLocked = aornLock.UserAornStatus.IsLocked,
+                    RemainingAttempts = aornLock.UserAornStatus.RemainingAttempts,
+                    AllowedAttempts = aornLock.UserAornStatus.AllowedAttempts,
+                    RemainingLock = aornLock.UserAornStatus.RemainingLock
                 });
             }
 
             return View(ControllerConstants.SearchUsingAornViewName, new SearchPensionRegulatorByAornViewModel
             {
-                IsLocked = aornLock.Data.IsLocked,
-                RemainingAttempts = aornLock.Data.RemainingAttempts,
-                AllowedAttempts = aornLock.Data.AllowedAttempts,
-                RemainingLock = aornLock.Data.RemainingLock
+                IsLocked = aornLock.UserAornStatus.IsLocked,
+                RemainingAttempts = aornLock.UserAornStatus.RemainingAttempts,
+                AllowedAttempts = aornLock.UserAornStatus.AllowedAttempts,
+                RemainingLock = aornLock.UserAornStatus.RemainingLock
             });
         }
 
@@ -139,36 +140,41 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return await PerformSearchPensionRegulatorByAorn(viewModel);
         }
 
-        [NonAction]
         private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
+            await _mediatr.SendAsync(new UpdateUserAornLockRequest
+            {
+                UserRef = userRef,
+                Success = model.Data.Results.Count > 0
+            });
+
             switch (model.Data.Results.Count)
             {
                 case 0:
-                {
-                    await _userAornLockOrchestrator.UpdateUserAornLockStatus(userRef, false);
+                {               
+                    var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+                    {
+                        UserRef = userRef
+                    });
 
-                    var aornLock = await _userAornLockOrchestrator.GetUserAornLockStatus(userRef);
-                    viewModel.IsLocked = aornLock.Data.IsLocked;
-                    viewModel.RemainingAttempts = aornLock.Data.RemainingAttempts;
-                    viewModel.AllowedAttempts = aornLock.Data.AllowedAttempts;
-                    viewModel.RemainingLock = aornLock.Data.RemainingLock;
+                    viewModel.IsLocked = aornLock.UserAornStatus.IsLocked;
+                    viewModel.RemainingAttempts = aornLock.UserAornStatus.RemainingAttempts;
+                    viewModel.AllowedAttempts = aornLock.UserAornStatus.AllowedAttempts;
+                    viewModel.RemainingLock = aornLock.UserAornStatus.RemainingLock;
 
                     return View(ControllerConstants.SearchUsingAornViewName, viewModel);
                 }
                 case 1:
                 {
-                    await _userAornLockOrchestrator.UpdateUserAornLockStatus(userRef, true);
                     await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
                 default:
                 {
-                    await _userAornLockOrchestrator.UpdateUserAornLockStatus(userRef, true);
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
                 }
@@ -211,14 +217,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         {
                             OrganisationReferenceNumber = viewModel.ReferenceNumber.ToString(),
                             OrganisationName = viewModel.Name,
-                            OrganisationType = viewModel.Type,                       
+                            OrganisationType = viewModel.Type,
                             OrganisationRegisteredAddress = viewModel.Address,
-                            OrganisationStatus = viewModel.Status ?? string.Empty,                     
+                            OrganisationStatus = viewModel.Status ?? string.Empty,
                             NewSearch = newSearch,
                             PensionsRegulatorReturnedMultipleResults = multipleResults
                         }
                     ));
             }
-        }     
+        }
     }
 }
