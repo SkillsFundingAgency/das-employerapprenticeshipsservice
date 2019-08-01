@@ -208,6 +208,7 @@
     <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetALevyAccount.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccountWithNoAgreements.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetANonLevyAccount.cs" />
     <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -218,7 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
-      <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
+      <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj">

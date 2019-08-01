@@ -313,7 +313,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mappings\WhenAutoMapping.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementTests\GetAccountEmployerAgreementTests.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandlerTests.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
@@ -326,7 +325,6 @@
     <Compile Include="Queries\GetActivitiesTests\WhenIGetActivities.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIGetAccountBalances.cs" />
     <Compile Include="Queries\GetAccountBalancesTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetAccountEmployerAgreementTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountStatsTests\WhenIGetAccountStats.cs" />
     <Compile Include="Queries\GetAccountStatsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTasksTests\WhenIGetAnAccountsTasks.cs" />
@@ -348,12 +346,10 @@
     <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIGetEmployerTransactions.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreementTemplateTests\WhenIRequestTheLatestEmployerAgreementTemplate.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIGetEnglishFractions.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetEnglishFrationDetail\WhenIGetEnglishFractionDetail.cs" />
     <Compile Include="Queries\GetEnglishFrationDetail\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetLatestAccountAgreementTemplateTests\WhenIRequestTheLatestAgreementTemplate.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
