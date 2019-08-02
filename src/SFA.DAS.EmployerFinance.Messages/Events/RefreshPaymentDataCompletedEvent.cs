@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.NServiceBus;
 
+#pragma warning disable 618
 namespace SFA.DAS.EmployerFinance.Messages.Events
 {
     public class RefreshPaymentDataCompletedEvent : Event
@@ -12,3 +13,4 @@ namespace SFA.DAS.EmployerFinance.Messages.Events
         public bool PaymentsProcessed { get; set; }
     }
 }
+#pragma warning restore 618
