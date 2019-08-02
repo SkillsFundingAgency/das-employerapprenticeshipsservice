@@ -408,7 +408,6 @@
     <Compile Include="Data\TransactionRepository.cs" />
     <Compile Include="Features\FeatureAgreementAuthorisationHandler.cs" />
     <Compile Include="Features\AgreementService.cs" />
-    <Compile Include="NServiceBus\EndpointConfigurationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />
     <Compile Include="Services\AuditService.cs" />
@@ -424,7 +423,9 @@
     <Compile Include="Services\MultiVariantTestingService.cs" />
     <Compile Include="Services\TaskService.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="NServiceBus\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
       <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>

@@ -32,6 +32,8 @@ using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
+using SFA.DAS.NServiceBus.AzureServiceBus;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -140,7 +142,11 @@ namespace SFA.DAS.EmployerAccounts.Web
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
+                .UseAzureServiceBusTransport(container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, 
+                r => r.RouteToEndpoint(
+                    typeof(ImportLevyDeclarationsCommand).Assembly,
+                    typeof(ImportLevyDeclarationsCommand).Namespace,
+                    "SFA.DAS.EmployerFinance.MessageHandlers"))
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))

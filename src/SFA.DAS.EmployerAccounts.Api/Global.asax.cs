@@ -5,7 +5,9 @@ using System.Web.Http;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.AzureServiceBus;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.SqlServer;
@@ -37,7 +39,11 @@ namespace SFA.DAS.EmployerAccounts.Api
             var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Api")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
+                .UseAzureServiceBusTransport(container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, 
+                r => r.RouteToEndpoint(
+                    typeof(ImportLevyDeclarationsCommand).Assembly,
+                    typeof(ImportLevyDeclarationsCommand).Namespace,
+                    "SFA.DAS.EmployerFinance.MessageHandlers"))
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
