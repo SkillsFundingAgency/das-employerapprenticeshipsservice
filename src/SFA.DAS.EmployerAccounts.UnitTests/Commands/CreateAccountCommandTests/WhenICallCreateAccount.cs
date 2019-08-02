@@ -150,10 +150,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         }
 
         [Test]
-        public async Task ThenTheHashedIdIsReturnedInTheResponse()
+        public async Task ThenTheHashedIdsAreReturnedInTheResponse()
         {
             //Arrange
             var createAccountCommand = new CreateAccountCommand { PayeReference = "123/abc,456/123", AccessToken = "123rd", RefreshToken = "45YT", ExternalUserId = _user.Ref.ToString() };
+            var agreementHash = "dfjngfddfgfd";
+            _hashingService.Setup(x => x.HashValue(ExpectedEmployerAgreementId)).Returns(agreementHash);
 
             //Act
             var actual = await _handler.Handle(createAccountCommand);
@@ -161,6 +163,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             //Assert
             Assert.IsAssignableFrom<CreateAccountCommandResponse>(actual);
             Assert.AreEqual(ExpectedHashString, actual.HashedAccountId);
+            Assert.AreEqual(agreementHash, actual.HashedAgreementId);
         }
 
         [Test]
