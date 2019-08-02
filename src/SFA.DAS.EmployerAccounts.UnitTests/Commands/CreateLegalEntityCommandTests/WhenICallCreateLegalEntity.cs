@@ -22,7 +22,7 @@ using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
-    public class Given_User_Is_Not_In_EIO_Whitelist
+    public class WhenICallCreateLegalEntity
     {
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IMembershipRepository> _membershipRepository;
