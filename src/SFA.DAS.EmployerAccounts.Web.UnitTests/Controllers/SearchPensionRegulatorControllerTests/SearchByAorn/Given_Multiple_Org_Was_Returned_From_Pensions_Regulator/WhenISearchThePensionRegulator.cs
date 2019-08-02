@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
     {
         private const string ExpectedAorn = "0123456789ABC";
         private const string ExpectedPayeRef = "000/1234567";
+        private readonly string _expectedId = Guid.NewGuid().ToString();
         private SearchPensionRegulatorController _controller;
         private SearchPensionRegulatorResultsViewModel _expectedData;
         private Mock<IMediator> _mediator;
