@@ -2,7 +2,9 @@
 {
     public static class ControllerConstants
     {
-        public const string AboutYourAgreement = "AboutYourAgreement";
+        public const string AboutYourAgreementActionName = "AboutYourAgreement";
+        public const string AboutYourAgreementViewName = "AboutYourAgreement";
+        public const string AboutYourDocumentViewName = "AboutYourDocument";
         public const string AccessDeniedViewName = "AccessDenied";     
         public const string AccountHashedIdRouteKeyName = "HashedAccountId";
         public const string ActionKeyName = "Action";
@@ -17,6 +19,7 @@
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
+        public const string DetailsActionName = "Details";
         public const string EmailClaimKeyName = "email";      
         public const string EmployerAccountControllerName = "EmployerAccount";
         public const string EmployerAccountTransactionsControllerName = "EmployerAccountTransactions";
@@ -32,7 +35,6 @@
         public const string GateWayResponseActionName = "GateWayResponse";
         public const string GetGatewayActionName = "GetGateway";
         public const string GetApprenticeshipFundingActionName = "GetApprenticeshipFunding";
-        public const string GetSignedPdfAgreementActionName = "GetSignedPdfAgreement";
         public const string HomeControllerName = "Home";
         public const string HelpActionName = "Help";
         public const string IndexActionName = "Index";
@@ -64,6 +66,7 @@
         public const string SearchPensionRegulatorResultsViewName = "SearchPensionRegulatorResults";
         public const string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
         public const string ServiceStartPageViewName = "ServiceStartPage";
+        public const string SignAgreementActionName = "SignAgreement";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
         public const string SignOutActionName = "SignOut";
