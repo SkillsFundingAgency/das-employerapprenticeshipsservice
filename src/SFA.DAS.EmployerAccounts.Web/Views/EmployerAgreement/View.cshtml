@@ -1,4 +1,5 @@
-﻿@model OrchestratorResponse<EmployerAgreementViewModel>
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@model EmployerAgreementViewModel
 @{
     ViewBag.PageID = "agreement-view";
     ViewBag.Title = "Agreement view";
@@ -11,7 +12,7 @@
     <div class="column-two-thirds">
 
         <h1 class="heading-xlarge">
-            <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
+            <span class="heading-secondary">@Model.EmployerAgreement.LegalEntityName</span>
             Your ESFA agreement
         </h1>
     </div>
@@ -22,19 +23,19 @@
         <table>
             <tr>
                 <th scope="row"><span class="no-wrap">Signed by:</span></th>
-                <td>@Model.Data.EmployerAgreement.SignedByName</td>
+                <td>@Model.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
                 <th scope="row"><span class="no-wrap">On behalf of:</span></th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
+                <td>@Model.EmployerAgreement.LegalEntityName</td>
             </tr>
             <tr>
                 <th scope="row">Address:</th>
-                <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
+                <td><span class="table-address">@Model.EmployerAgreement.LegalEntityAddress</span></td>
             </tr>
             <tr>
                 <th scope="row"><span class="no-wrap">Signed on:</span></th>
-                <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
+                <td>@Model.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
             </tr>
         </table>
     </div>
@@ -53,17 +54,17 @@
         </div>
     </div>
     <div class="column-two-thirds">
-        <a href="@Url.Action("GetSignedPdfAgreement", "EmployerAgreement")" target="_blank" class="download">Save this agreement as a PDF</a>
+        <a href="@Url.Action(ControllerConstants.GetSignedPdfAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" target="_blank" class="download">Save this agreement as a PDF</a>
     </div>
 </div>
 
-@Html.Partial(Model.Data.EmployerAgreement.TemplatePartialViewName)
+@Html.Partial(Model.EmployerAgreement.TemplatePartialViewName)
 
 @section breadcrumb {
     <div class="breadcrumbs">
         <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
+            <li><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">Home</a></li>
+            <li><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)">Your organisations and agreements</a></li>
             <li>Your ESFA agreement</li>
         </ol>
     </div>
