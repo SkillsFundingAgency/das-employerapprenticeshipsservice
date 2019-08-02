@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
             var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.AboutYourAgreement, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.AboutYourAgreementActionName, result.RouteValues["Action"]);
             Assert.AreEqual(ControllerConstants.EmployerAgreementControllerName, result.RouteValues["Controller"]);
         }
 

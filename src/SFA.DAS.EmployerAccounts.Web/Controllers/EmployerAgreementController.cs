@@ -99,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (unsignedAgreements == null) return RedirectToAction(ControllerConstants.IndexActionName);
 
             var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
-            return RedirectToAction(ControllerConstants.AboutYourAgreement, new { agreementId = hashedAgreementId });
+            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]
