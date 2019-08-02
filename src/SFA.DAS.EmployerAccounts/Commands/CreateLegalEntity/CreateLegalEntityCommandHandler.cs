@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
@@ -34,14 +35,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly ILegalEntityEventFactory _legalEntityEventFactory;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly IAgreementService _agreementService;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
-        public CreateLegalEntityCommandHandler(
-            IAccountRepository accountRepository,
+        public CreateLegalEntityCommandHandler(IAccountRepository accountRepository,
             IMembershipRepository membershipRepository,
             IMediator mediator,
             IGenericEventFactory genericEventFactory,
@@ -52,7 +53,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             IAgreementService agreementService,
             IEmployerAgreementRepository employerAgreementRepository,
             IValidator<CreateLegalEntityCommand> validator,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IEmployerAccountRepository employerAccountRepository)
         {
             _accountRepository = accountRepository;
             _membershipRepository = membershipRepository;
@@ -66,6 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             _employerAgreementRepository = employerAgreementRepository;
             _validator = validator;
             _authorizationService = authorizationService;
+            _employerAccountRepository = employerAccountRepository;
         }
 
         public async Task<CreateLegalEntityCommandResponse> Handle(CreateLegalEntityCommand message)
@@ -97,7 +100,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 Source = message.Source,
                 Address = message.Address,
                 Sector = message.Sector,
-                AgreementType = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest) ? AgreementType.NoneLevyExpressionOfInterest : AgreementType.Levy
+                AgreementType = UserIsWhitelistedForEOIOrThereIsAlreayAnEOIAgreementForThisAccount(owner) ? AgreementType.NoneLevyExpressionOfInterest : AgreementType.Levy
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
@@ -213,6 +216,28 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                     AffectedEntity = new Entity { Type = "EmployerAgreement", Id = agreementView.Id.ToString() }
                 }
             });
+        }
+
+        private bool UserIsWhitelistedForEOIOrThereIsAlreayAnEOIAgreementForThisAccount(
+            MembershipView accountOwner)
+        {
+            if (_authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest)) return true;
+
+            var existingAccount =
+                _employerAccountRepository
+                    .GetAccountById(
+                        accountOwner
+                            .AccountId)
+                    .Result;
+
+            if (existingAccount == null) return false;
+
+            return
+                existingAccount
+                    .AccountLegalEntities
+                    .SelectMany(ale => ale.Agreements)
+                    .Any(
+                        a => a.Template.AgreementType.Equals(AgreementType.NoneLevyExpressionOfInterest));
         }
     }
 }

@@ -126,7 +126,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 _agreementService.Object,
                 _employerAgreementRepository.Object,
                 _validator.Object,
-                Mock.Of<IAuthorizationService>()
+                Mock.Of<IAuthorizationService>(),
+                Mock.Of<IEmployerAccountRepository>()
             );
         }
 

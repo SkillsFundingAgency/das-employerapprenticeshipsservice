@@ -11,9 +11,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             [Test]
             public async Task Then_LegalEntity_Is_Created_With_Levy_Agreement()
             {
-                await _commandHandler.Handle(_command);
+                await CommandHandler.Handle(Command);
 
-                _accountRepository.Verify(
+                AccountRepository.Verify(
                     m => m.CreateLegalEntityWithAgreement(
                         It.Is<CreateLegalEntityWithAgreementParams>(
                             arg => arg.AgreementType.Equals(AgreementType.Levy))));

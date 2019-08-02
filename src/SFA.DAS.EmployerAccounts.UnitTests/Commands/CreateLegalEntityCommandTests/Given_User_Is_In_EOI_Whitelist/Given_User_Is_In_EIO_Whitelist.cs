@@ -137,7 +137,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 _agreementService.Object,
                 _employerAgreementRepository.Object,
                 _validator.Object,
-                _authorizationService.Object);
+                _authorizationService.Object,
+                Mock.Of<IEmployerAccountRepository>());
         }
 
         public class When_LegalEntity_Is_Created : Given_User_Is_In_EIO_Whitelist
