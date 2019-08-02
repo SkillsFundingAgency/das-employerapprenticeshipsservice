@@ -19,30 +19,30 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
     {
         private EmployerTeamController _controller;
 
-        private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
-        private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
-        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
-        private Mock<IPortalClient> mockPortalClient;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
+        private Mock<IAuthorizationService> _mockAuthorizationService;
+        private Mock<IMultiVariantTestingService> _mockMultiVariantTestingService;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
+        private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
+        private Mock<IPortalClient> _mockPortalClient;
 
         [SetUp]
         public void Arrange()
         {
-            mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
-            mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
-            mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            mockPortalClient = new Mock<IPortalClient>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
+            _mockAuthorizationService = new Mock<IAuthorizationService>();
+            _mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
+            _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+            _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+            _mockPortalClient = new Mock<IPortalClient>();
 
             _controller = new EmployerTeamController(
-                mockAuthenticationService.Object,
-                mockAuthorizationService.Object,
-                mockMultiVariantTestingService.Object,
-                mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object);
+                _mockAuthenticationService.Object,
+                _mockAuthorizationService.Object,
+                _mockMultiVariantTestingService.Object,
+                _mockCookieStorageService.Object,
+                _mockEmployerTeamOrchestrator.Object,
+                _mockPortalClient.Object);
         }
 
         [TestCase(VacancyStatus.Closed, "Closed",  "Manage vacancy")]
