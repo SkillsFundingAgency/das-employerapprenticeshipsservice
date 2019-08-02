@@ -477,8 +477,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             switch(vacancy.Status)
             {
-                case EAS.Portal.Client.Types.VacancyStatus.Closed:                    
-                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Submitted:
@@ -496,14 +496,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Live:
-                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
-                    break;
-
-                default:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
                     break;
             }
 
             return PartialView(viewModel);
+        }
+
+        private string ApplicationsDisplay(Vacancy vacancy)
+        {
+            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
+                ? "Advertised by employer"
+                : vacancy.NumberOfApplications.ToString();
         }
 
         [ChildActionOnly]
