@@ -27,6 +27,7 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             public string BaseUrl { get; set; }
             public string ClientToken { get; set; }
         }
+        
         private static HttpClient GetHttpClient(IServiceProvider provider)
         {
             var config = provider.GetService<CommitmentsApiClientConfiguration>();
