@@ -52,7 +52,7 @@
 					@PublicHashedId=@PublicHashedId
 
 			EXEC [employer_account].[SignEmployerAgreement] @employerAgreementId, @userId, ''Test User'', @now
-			EXEC [employer_account].[CreatePaye] @payeRef, ''accessToken'', ''refreshToken'', @payeName
+			EXEC [employer_account].[CreatePaye] @payeRef, ''accessToken'', ''refreshToken'', @payeName, null
 			EXEC [employer_account].[CreateAccountHistory] @accountId, @payeRef, @now
 		END
 	END'
