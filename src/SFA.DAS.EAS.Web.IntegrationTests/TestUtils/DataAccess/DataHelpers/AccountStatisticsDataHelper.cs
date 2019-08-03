@@ -85,7 +85,8 @@ select (
                     2,
                     1,
                     fixture.Create<string>(),
-                    fixture.Create<string>());
+                    fixture.Create<string>(),
+                    fixture.Create<bool>());
 
                 accountDbContext.Database.CurrentTransaction.Commit();
             }

@@ -5,7 +5,6 @@ using AutoMapper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -23,21 +22,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
     {
         private OrganisationController _controller;
         private Mock<OrganisationOrchestrator> _orchestrator;
-        private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _featureToggle;
+        private Mock<IAuthenticationService> _owinWrapper;      
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<IMapper> _mapper;
         private Mock<ILog> _logger;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
 
-        private const string testHashedAgreementId = "DEF456";
+        private const string TestHashedAgreementId = "DEF456";
 
         [SetUp]
         public void Arrange()
         {
             _orchestrator = new Mock<OrganisationOrchestrator>();
-            _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IAuthorizationService>();
+            _owinWrapper = new Mock<IAuthenticationService>();           
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _mapper = new Mock<IMapper>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -50,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
                     {
                         EmployerAgreement = new EmployerAgreementView
                         {
-                            HashedAgreementId = testHashedAgreementId
+                            HashedAgreementId = TestHashedAgreementId
                         }
                     }
                 });
@@ -59,8 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
 
             _controller = new OrganisationController(
                 _owinWrapper.Object,
-                _orchestrator.Object,
-                _featureToggle.Object,
+                _orchestrator.Object,           
                 _userViewTestingService.Object,
                 _mapper.Object,
                 _logger.Object,
@@ -97,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.OrganisationControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual(testHashedAgreementId, result.RouteValues["HashedAgreementId"]);
+            Assert.AreEqual(TestHashedAgreementId, result.RouteValues["HashedAgreementId"]);
         }
     }
 }

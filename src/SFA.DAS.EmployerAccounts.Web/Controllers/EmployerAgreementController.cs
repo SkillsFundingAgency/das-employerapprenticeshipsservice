@@ -8,6 +8,7 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -99,7 +100,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (unsignedAgreements == null) return RedirectToAction(ControllerConstants.IndexActionName);
 
             var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
-            return RedirectToAction(ControllerConstants.AboutYourAgreement, new { agreementId = hashedAgreementId });
+
+            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]
@@ -109,10 +111,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var agreement = await _orchestrator.GetById(
                 agreementId, 
                 hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
-            );
+                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(agreement);
+            return View(agreement.Data.EmployerAgreement.TemplateAgreementType == AgreementType.Levy
+                ? ControllerConstants.AboutYourAgreementViewName 
+                : ControllerConstants.AboutYourDocumentViewName, agreement);
         }
 
         [HttpGet]
@@ -178,7 +181,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return View(ControllerConstants.SignAgreementViewName, agreement.Data);
         }
-      
+
         [HttpGet]
         [Route("agreements/{agreementId}/agreement-pdf")]
         public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
