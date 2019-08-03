@@ -95,7 +95,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                     AccountAgreementTypes = new List<AgreementType>
                     {
                         AgreementType.Levy,
-                        AgreementType.NoneLevyExpressionOfInterest
+                        AgreementType.NonLevyExpressionOfInterest
                     }
                 }
             };

@@ -3,7 +3,7 @@
     public enum AccountAgreementType
     {
         Levy = 0,
-        NoneLevyExpressionOfInterest = 1,
+        NonLevyExpressionOfInterest = 1,
         Inconsistent = 2,
         Unknown
     }

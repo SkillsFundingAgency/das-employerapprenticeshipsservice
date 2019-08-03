@@ -31,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTest
             _hashingService = new Mock<IHashingService>();
             _agreement = new EmployerAgreementView()
             {
-                AgreementType = AgreementType.NoneLevyExpressionOfInterest
+                AgreementType = AgreementType.NonLevyExpressionOfInterest
             };
 
             RequestHandler = new GetEmployerAgreementByIdRequestHandler(

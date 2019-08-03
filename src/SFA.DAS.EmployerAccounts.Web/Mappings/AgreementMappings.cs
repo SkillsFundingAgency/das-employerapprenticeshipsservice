@@ -19,7 +19,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(dest => dest.TemplatePartialViewName, opt => opt.MapFrom(src => src.Template.PartialViewName))
                 .ForMember(dest => dest.TemplateAgreementType, opt => opt.MapFrom(src => src.Template.AgreementType))
                 .ForMember(dest => dest.AccountLegalEntityId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityId))
-                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId));
+                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId))
+                .ForMember(dest => dest.AgreementType, opts => opts.Ignore());
 
             CreateMap<GetEmployerAgreementResponse, EmployerAgreementViewModel>()
                 .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opt => opt.MapFrom(src => src.LastSignedAgreement))
