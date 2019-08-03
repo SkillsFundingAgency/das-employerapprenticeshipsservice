@@ -168,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                             {
                                 EmployerAgreement = new EmployerAgreementView
                                 {
-                                    TemplateAgreementType = AgreementType.NoneLevyExpressionOfInterest
+                                    TemplateAgreementType = AgreementType.NonLevyExpressionOfInterest
                                 }
                             }
                         });

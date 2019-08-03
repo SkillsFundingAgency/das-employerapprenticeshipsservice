@@ -181,7 +181,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _validator.Verify(x => x.ValidateAsync(command), Times.Once);
         }
 
-        [TestCase(true, AgreementType.NoneLevyExpressionOfInterest)]
+        [TestCase(true, AgreementType.NonLevyExpressionOfInterest)]
         [TestCase(false, AgreementType.Levy)]
         public async Task WillCreateNewAccountWithCorrectAgreementType(bool eoiWhitelisted, AgreementType agreementType)
         {

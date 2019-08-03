@@ -55,7 +55,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         public async Task ThenResponseShouldHaveAccountAgreementTypeSetToNonLevy()
         {
             //Arrange
-            var agreementType = AgreementType.NoneLevyExpressionOfInterest;
+            var agreementType = AgreementType.NonLevyExpressionOfInterest;
             const string hashedAgreementId = "ABC123";
 
             var response = new GetEmployerAccountByHashedIdResponse
