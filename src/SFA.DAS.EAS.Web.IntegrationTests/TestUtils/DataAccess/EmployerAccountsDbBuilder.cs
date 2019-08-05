@@ -78,7 +78,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess
                 input.PublicSectorDataSource,
                 input.Sector,
                 input.Aorn,
-                input.Eoi);
+                input.AgreementType);
 
             var output = new EmployerAccountOutput
             {
