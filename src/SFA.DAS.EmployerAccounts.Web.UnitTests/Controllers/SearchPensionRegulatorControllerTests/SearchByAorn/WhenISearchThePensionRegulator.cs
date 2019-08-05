@@ -21,8 +21,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
     [TestFixture]
     class WhenISearchThePensionRegulatorWithAnInUsePAYEScheme
     {
-        private const string ExpectedAorn = "aorn";
-        private const string ExpectedPayeRef = "payeref";
+        private const string ExpectedAorn = "1234567890123";
+        private const string ExpectedPayeRef = "123/1234567";
         private PensionRegulatorDetailsViewModel _expectedViewModel;
         private SearchPensionRegulatorController _controller;
         private Mock<IMediator> _mediator;

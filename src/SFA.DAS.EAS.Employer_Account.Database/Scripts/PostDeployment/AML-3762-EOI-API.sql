@@ -12,17 +12,24 @@ BEGIN TRY
 
 	IF NOT EXISTS(SELECT ID FROM employer_account.EmployerAgreementTemplate WHERE [AgreementType] = 1)
 	BEGIN
+		SET IDENTITY_INSERT [employer_account].[EmployerAgreementTemplate] ON
+
 		INSERT INTO employer_account.EmployerAgreementTemplate 
-				(	[PartialViewName],
+				(	
+					Id,
+					[PartialViewName],
 					[CreatedDate], 
 					[VersionNumber],
 					[AgreementType]
 				)
 
-			SELECT	'_NonLevy_Agreement_V1',
+			SELECT	3,
+					'_NonLevy_Agreement_V1',
 					GETDATE(),
 					1,
 					1
+
+		SET IDENTITY_INSERT [employer_account].[EmployerAgreementTemplate] OFF
 
 		COMMIT TRAN;
 		PRINT 'EOI EmployerAgreementTemplate entry added';

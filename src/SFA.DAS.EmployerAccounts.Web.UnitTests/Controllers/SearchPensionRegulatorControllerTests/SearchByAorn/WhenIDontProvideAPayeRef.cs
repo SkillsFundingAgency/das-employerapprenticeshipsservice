@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         [Test]
         public async Task ThenAnErrorIsDisplayed()
         {
-            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "asdfsdfg", PayeRef = "" });
+            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "1234567890ABC", PayeRef = "" });
             var viewResponse = (ViewResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);

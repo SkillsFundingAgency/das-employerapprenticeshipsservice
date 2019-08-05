@@ -39,6 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
         private Mock<IEventPublisher> _eventPublisher;
+        private Mock<IAuthorizationService> _authorizationService;
 
         private const string ExpectedAccountLegalEntityPublicHashString = "ALEPUB";
 
@@ -48,6 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             _accountRepository = new Mock<IAccountRepository>();
             _membershipRepository = new Mock<IMembershipRepository>();
             _mediator = new Mock<IMediator>();
+            _authorizationService = new Mock<IAuthorizationService>();
 
             _owner = new MembershipView
             {
@@ -88,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
-                                 .ReturnsAsync(_owner);
+                .ReturnsAsync(_owner);
 
             _accountRepository
                 .Setup(x => x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(
@@ -125,8 +127,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 _accountLegalEntityPublicHashingService.Object,
                 _agreementService.Object,
                 _employerAgreementRepository.Object,
-                _validator.Object
-                );
+                _validator.Object,
+                _authorizationService.Object
+            );
         }
 
         [Test]
@@ -147,22 +150,22 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Id") && y.NewValue.Equals(_agreementView.LegalEntityId.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_agreementView.LegalEntityName)) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Code") && y.NewValue.Equals(_agreementView.LegalEntityCode)) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Address") && y.NewValue.Equals(_agreementView.LegalEntityAddress)) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("DateOfInception") && y.NewValue.Equals(_agreementView.LegalEntityInceptionDate.Value.ToString("G"))) != null)));
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Id") && y.NewValue.Equals(_agreementView.LegalEntityId.ToString())) != null &&
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Name") && y.NewValue.Equals(_agreementView.LegalEntityName)) != null &&
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Code") && y.NewValue.Equals(_agreementView.LegalEntityCode)) != null &&
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Address") && y.NewValue.Equals(_agreementView.LegalEntityAddress)) != null &&
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("DateOfInception") && y.NewValue.Equals(_agreementView.LegalEntityInceptionDate.Value.ToString("G"))) != null)));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} added legal entity {_agreementView.LegalEntityId} to account {_agreementView.AccountId}"))));
+                c.EasAuditMessage.Description.Equals($"User {_owner.Email} added legal entity {_agreementView.LegalEntityId} to account {_agreementView.AccountId}"))));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+                c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                    c.EasAuditMessage.AffectedEntity.Id.Equals(_agreementView.LegalEntityId.ToString()) &&
-                    c.EasAuditMessage.AffectedEntity.Type.Equals("LegalEntity"))));
+                c.EasAuditMessage.AffectedEntity.Id.Equals(_agreementView.LegalEntityId.ToString()) &&
+                c.EasAuditMessage.AffectedEntity.Type.Equals("LegalEntity"))));
         }
 
         [Test]
@@ -173,19 +176,19 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("SignedDate") && y.NewValue.Equals(_agreementView.SignedDate.Value.ToString("G"))) != null &&
-                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("SignedBy") && y.NewValue.Equals($"{_owner.FirstName} {_owner.LastName}")) != null)));
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("SignedDate") && y.NewValue.Equals(_agreementView.SignedDate.Value.ToString("G"))) != null &&
+                c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("SignedBy") && y.NewValue.Equals($"{_owner.FirstName} {_owner.LastName}")) != null)));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} added signed agreement {_agreementView.Id} to account {_agreementView.AccountId}"))));
+                c.EasAuditMessage.Description.Equals($"User {_owner.Email} added signed agreement {_agreementView.Id} to account {_agreementView.AccountId}"))));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+                c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_agreementView.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
 
             _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
-                    c.EasAuditMessage.AffectedEntity.Id.Equals(_agreementView.Id.ToString()) &&
-                    c.EasAuditMessage.AffectedEntity.Type.Equals("EmployerAgreement"))));
+                c.EasAuditMessage.AffectedEntity.Id.Equals(_agreementView.Id.ToString()) &&
+                c.EasAuditMessage.AffectedEntity.Type.Equals("EmployerAgreement"))));
         }
 
         [Test]

@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -18,14 +17,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/organisations")]
     public class OrganisationController : BaseController
     {
-        private readonly OrganisationOrchestrator _orchestrator;
+        private readonly OrganisationOrchestrator _orchestrator;     
         private readonly IMapper _mapper;
         private readonly ILog _logger;
 
         public OrganisationController(
             IAuthenticationService owinWrapper,
             OrganisationOrchestrator orchestrator,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             IMapper mapper,
             ILog logger,
@@ -36,8 +34,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             _mapper = mapper;
             _logger = logger;
         }
-
-
 
         [HttpGet]
         [Route("nextStep")]
@@ -113,7 +109,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     organisationName = name,
                     hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
                 });
-
         }
 
         [HttpPost]
@@ -126,7 +121,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             switch (nextStep)
             {
-                case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreement, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
+                case "agreement": return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = hashedAgreementId });
 
                 case "teamMembers": return RedirectToAction(ControllerConstants.ViewTeamActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId });
 
@@ -189,7 +184,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 case "incorrectDetails":
                     return View("ReviewIncorrectDetails", new IncorrectOrganisationDetailsViewModel { DataSourceFriendlyName = dataSourceFriendlyName });
-
             }
 
             return RedirectToAction("Details", "EmployerAgreement");

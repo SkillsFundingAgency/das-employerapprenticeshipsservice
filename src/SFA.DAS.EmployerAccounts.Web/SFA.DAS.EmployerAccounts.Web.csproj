@@ -77,9 +77,9 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.272" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.946</Version>
+      <Version>1.6.1469</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
@@ -260,10 +260,10 @@
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\VacancyStatusViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\.keep" />
     <Content Include="dist\css\external-links\external-link-24x24.png" />
     <Content Include="dist\css\external-links\external-link-black-12x12.png" />
     <Content Include="dist\css\external-links\external-link-black-24x24.png" />
@@ -290,6 +290,7 @@
     <Content Include="dist\css\screen-ie8.css" />
     <Content Include="dist\css\screen.css" />
     <Content Include="dist\css\select2.min.css" />
+    <Content Include="dist\css\site.css" />
     <Content Include="dist\images\apple-touch-icon-120x120.png" />
     <Content Include="dist\images\apple-touch-icon-152x152.png" />
     <Content Include="dist\images\apple-touch-icon-60x60.png" />
@@ -319,6 +320,8 @@
     <Content Include="dist\images\pub-cover-html.png" />
     <Content Include="dist\images\separator-2x.png" />
     <Content Include="dist\images\separator.png" />
+    <Content Include="dist\css\accordion.css" />
+    <Content Include="dist\javascripts\accordion.js" />
     <Content Include="dist\javascripts\app.js" />
     <Content Include="dist\javascripts\apprentice\dropdown.js" />
     <Content Include="dist\javascripts\apprentice\select2.min.js" />
@@ -326,6 +329,7 @@
     <Content Include="dist\javascripts\govuk-template.js" />
     <Content Include="dist\javascripts\ie.js" />
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
+    <Content Include="dist\css\legal\legal-agreement.css" />
     <Content Include="dist\javascripts\length-limit.js" />
     <Content Include="dist\javascripts\lodash.js" />
     <Content Include="dist\javascripts\payment-order.js" />
@@ -343,6 +347,7 @@
     <Content Include="dist\css\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="dist\css\fonts\GDSTransportWebsite.eot" />
+    <Content Include="App_Data\.keep" />
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -646,7 +651,6 @@
     <Content Include="Views\Shared\NotFound.cshtml" />
     <Content Include="Views\AccessDenied\Index.cshtml" />
     <Content Include="Views\EmployerTeam\Index.cshtml" />
-    <Content Include="Views\EmployerTeam\_WelcomeWizard.cshtml" />
     <Content Include="Views\EmployerTeam\NextSteps.cshtml" />
     <Content Include="Views\EmployerTeam\Cancel.cshtml" />
     <Content Include="Views\EmployerTeam\ChangeRole.cshtml" />
@@ -691,11 +695,9 @@
     <Content Include="Views\Organisation\ReviewIncorrectDetails.cshtml" />
     <Content Include="Views\Organisation\ReviewNoChange.cshtml" />
     <Content Include="Views\EmployerAgreement\Index.cshtml" />
-    <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
-    <Content Include="Views\EmployerAgreement\NextSteps.cshtml" />
     <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
@@ -737,6 +739,13 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
+    <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
+    <Content Include="Views\Shared\_NonLevy_Agreement_V1.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v2_body.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\MultipleVacancies.cshtml" />
+    <Content Include="Views\Shared\_NonLevy_Agreement_V1_body.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\VacancyStatus.cshtml" />
+    <Content Include="Views\EmployerAgreement\AboutYourDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
