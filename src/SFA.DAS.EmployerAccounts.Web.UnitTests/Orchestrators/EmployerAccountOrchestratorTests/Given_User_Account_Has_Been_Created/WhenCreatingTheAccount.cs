@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
@@ -35,6 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _configuration = new EmployerAccountsConfiguration();
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
+            _mediator.Setup(x => x.SendAsync(It.IsAny<CreateLegalEntityCommand>())).ReturnsAsync(new CreateLegalEntityCommandResponse { AgreementView = new EmployerAgreementView() });
             _mediator.Setup(x => x.SendAsync(It.IsAny<CreateAccountCommand>()))
                      .ReturnsAsync(new CreateAccountCommandResponse()
                      {
@@ -61,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         {
             var requestModel = ArrangeModel();
 
-            await _employerAccountOrchestrator.CreateOrUpdateAccount(ArrangeModel(),
+            await _employerAccountOrchestrator.CreateOrUpdateAccount(requestModel,
                 It.IsAny<HttpContextBase>());
 
             _mediator.Verify(x => x.SendAsync(It.Is<AddPayeToAccountCommand>(
@@ -73,13 +75,25 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         public async Task Then_Legal_Entity_Is_Added_To_Existing_Account()
         {
             var requestModel = ArrangeModel();
+            var expectedHashedAgreementId = "LKJDDSF";
 
-            await _employerAccountOrchestrator.CreateOrUpdateAccount(ArrangeModel(),
-                It.IsAny<HttpContextBase>());
+            _mediator
+                .Setup(x => x.SendAsync(It.Is<CreateLegalEntityCommand>(c =>
+                    c.HashedAccountId == requestModel.HashedAccountId.Value &&
+                    c.Code == requestModel.OrganisationReferenceNumber &&
+                    c.DateOfIncorporation == requestModel.OrganisationDateOfInception &&
+                    c.Status == requestModel.OrganisationStatus &&
+                    c.Source == requestModel.OrganisationType &&
+                    c.PublicSectorDataSource == Convert.ToByte(requestModel.PublicSectorDataSource) &&
+                    c.Sector == requestModel.Sector &&
+                    c.Name == requestModel.OrganisationName &&
+                    c.Address == requestModel.OrganisationAddress &&
+                    c.ExternalUserId == requestModel.UserId)))
+            .ReturnsAsync(new CreateLegalEntityCommandResponse { AgreementView = new EmployerAgreementView { HashedAgreementId = expectedHashedAgreementId } });
 
-            _mediator.Verify(x => x.SendAsync(It.Is<CreateLegalEntityCommand>(
-                c => c.HashedAccountId.Equals(requestModel.HashedAccountId.Value)
-            )));
+            var result = await _employerAccountOrchestrator.CreateOrUpdateAccount(requestModel, It.IsAny<HttpContextBase>());
+
+            Assert.AreEqual(expectedHashedAgreementId, result.Data.EmployerAgreement.HashedAgreementId);
         }
 
         [Test]
@@ -110,7 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationStatus = "active",
                 EmployerRefName = "Scheme 1",
-                HashedAccountId = new HashedAccountIdModel { Value = "WX4LB"}
+                HashedAccountId = new HashedAccountIdModel { Value = "WX4LB" }
             };
         }
     }
