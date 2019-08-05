@@ -29,10 +29,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                 Mock.Of<IMediator>());
         }
 
-        [Test]
-        public async Task ThenAnErrorIsDisplayed()
+        [TestCase("")]
+        [TestCase(null)]
+        public async Task ThenAnErrorIsDisplayed(string aorn)
         {
-            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "", PayeRef = "000/EDDEFDS" });
+            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = aorn, PayeRef = "000/EDDEFDS" });
             var viewResponse = (ViewResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
