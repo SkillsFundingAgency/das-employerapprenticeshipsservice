@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -150,6 +151,20 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.Text);
 
             return result.SingleOrDefault();
+        }
+
+        public async Task<IEnumerable<EmployerAgreement>> GetAccountAgreements(long accountId)
+        {
+            var legalEntities = await _db.Value.AccountLegalEntities
+                .Where(ale => ale.AccountId == accountId
+                              && ale.Deleted == null
+                              && ale.Agreements.Any(ea =>
+                                  ea.StatusId == EmployerAgreementStatus.Pending ||
+                                  ea.StatusId == EmployerAgreementStatus.Signed))
+                .ToListAsync();
+
+            var agreements = legalEntities.SelectMany(x => x.Agreements).ToList();
+            return agreements;
         }
     }
 }

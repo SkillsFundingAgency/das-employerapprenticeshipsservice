@@ -65,7 +65,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             modelBuilder.Entity<AccountLegalEntity>().HasOptional(ale => ale.SignedAgreement).WithMany().HasForeignKey(ale => ale.SignedAgreementId);
             modelBuilder.Entity<AccountLegalEntity>().HasOptional(ale => ale.PendingAgreement).WithMany().HasForeignKey(ale => ale.PendingAgreementId);
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
-            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity);
+            modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity).WithMany().HasForeignKey(ea => ea.AccountLegalEntityId);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId });
             modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
