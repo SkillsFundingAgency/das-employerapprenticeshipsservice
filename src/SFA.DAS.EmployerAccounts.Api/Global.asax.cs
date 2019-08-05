@@ -39,11 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Api
             var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Api")
-                .UseAzureServiceBusTransport(container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, 
-                r => r.RouteToEndpoint(
-                    typeof(ImportLevyDeclarationsCommand).Assembly,
-                    typeof(ImportLevyDeclarationsCommand).Namespace,
-                    "SFA.DAS.EmployerFinance.MessageHandlers"))
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))

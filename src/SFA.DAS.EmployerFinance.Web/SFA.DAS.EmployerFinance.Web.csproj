@@ -78,7 +78,7 @@
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="11.0.86" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer">
-      <Version>2.0.12</Version>
+      <Version>11.0.86</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework">
@@ -88,7 +88,7 @@
       <Version>1.0.17</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus">
-      <Version>1.0.17</Version>
+      <Version>7.0.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />

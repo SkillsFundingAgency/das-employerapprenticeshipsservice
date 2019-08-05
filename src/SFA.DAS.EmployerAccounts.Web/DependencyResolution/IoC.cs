@@ -9,6 +9,8 @@ using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
 using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
 using ConfigurationRegistry = SFA.DAS.EmployerAccounts.DependencyResolution.ConfigurationRegistry;
+using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {

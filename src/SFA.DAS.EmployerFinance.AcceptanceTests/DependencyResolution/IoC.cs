@@ -4,6 +4,9 @@ using SFA.DAS.UnitOfWork;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
+using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.StructureMap;
+using SFA.DAS.UnitOfWork.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution

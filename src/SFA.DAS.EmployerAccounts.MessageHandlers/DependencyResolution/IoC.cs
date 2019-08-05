@@ -3,6 +3,7 @@ using SFA.DAS.EmployerAccounts.DependencyResolution;
 using SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
+using SFA.DAS.UnitOfWork.NServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers.DependencyResolution

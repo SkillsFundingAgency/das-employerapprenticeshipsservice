@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using NServiceBus;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Startup;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Web
 
         public async Task StartAsync()
         {
-            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;            
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString, container)
@@ -33,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Web
                 .UseNLogFactory()
                 .UseOutbox()
                 .UseStructureMapBuilder(container)
-                .UseUnitOfWork();
+                .UseUnitOfWork();            
 
             _endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 

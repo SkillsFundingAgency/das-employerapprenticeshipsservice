@@ -4,7 +4,8 @@ using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using StructureMap;
 
-namespace SFA.DAS.EmployerAccounts.Extensions
+
+namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class EndpointConfigurationExtensions
     {

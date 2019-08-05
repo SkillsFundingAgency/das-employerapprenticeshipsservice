@@ -1,5 +1,6 @@
 ﻿using System;
 using NServiceBus;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using StructureMap;
 
@@ -9,13 +10,22 @@ namespace SFA.DAS.EmployerFinance.Extensions
     {
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config, Func<string> connectionStringBuilder, IContainer container)
         {
-            NServiceBus.AzureServiceBus.EndpointConfigurationExtensions.UseAzureServiceBusTransport(config, connectionStringBuilder.Invoke(), r =>
+            var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
+
+            var settings = new Action<RoutingSettings>(
+                r => r.RouteToEndpoint(
+                        typeof(ImportLevyDeclarationsCommand).Assembly,
+                        typeof(ImportLevyDeclarationsCommand).Namespace,
+                        "SFA.DAS.EmployerFinance.MessageHandlers"));
+
+            if (isDevelopment)
             {
-                r.RouteToEndpoint(
-                    typeof(ImportLevyDeclarationsCommand).Assembly,
-                    typeof(ImportLevyDeclarationsCommand).Namespace,
-                    "SFA.DAS.EmployerFinance.MessageHandlers");
-            });
+                NServiceBus.EndpointConfigurationExtensions.UseLearningTransport(config, settings);
+            }
+            else
+            {
+                NServiceBus.AzureServiceBus.EndpointConfigurationExtensions.UseAzureServiceBusTransport(config, connectionStringBuilder.Invoke(), settings);
+            }
 
             return config;
         }

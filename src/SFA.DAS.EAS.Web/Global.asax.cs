@@ -34,8 +34,7 @@ using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
-using SFA.DAS.NServiceBus.AzureServiceBus;
-using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -144,12 +143,7 @@ namespace SFA.DAS.EAS.Web
         private void StartServiceBusEndpoint(IContainer container)
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web")
-                .UseAzureServiceBusTransport(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString, 
-                    r => r.RouteToEndpoint(
-                    typeof(ImportLevyDeclarationsCommand).Assembly,
-                    typeof(ImportLevyDeclarationsCommand).Namespace,
-                    "SFA.DAS.EmployerFinance.MessageHandlers")
-                   )
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString, container)               
                 .UseErrorQueue()
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense))

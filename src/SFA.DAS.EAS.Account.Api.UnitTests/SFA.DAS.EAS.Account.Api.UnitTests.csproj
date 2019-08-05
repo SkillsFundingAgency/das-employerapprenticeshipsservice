@@ -156,6 +156,7 @@
     </Reference>
     <Reference Include="SFA.DAS.NServiceBus, Version=11.0.86.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.NServiceBus.11.0.86\lib\net462\SFA.DAS.NServiceBus.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>

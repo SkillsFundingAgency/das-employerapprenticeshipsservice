@@ -4,6 +4,8 @@ using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
+using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
