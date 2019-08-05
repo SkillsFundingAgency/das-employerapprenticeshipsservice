@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
 
-        public async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(
+        public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> GetById(
             string agreementid, string hashedId, string externalUserId)
         {
             try

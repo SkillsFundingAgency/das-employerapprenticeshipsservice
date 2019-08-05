@@ -43,4 +43,4 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public AgreementInfoViewModel AgreementInfo { get; set; }
         
     }
-}   
+}

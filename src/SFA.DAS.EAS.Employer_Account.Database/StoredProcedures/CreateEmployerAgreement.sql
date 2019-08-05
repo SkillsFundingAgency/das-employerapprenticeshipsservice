@@ -1,6 +1,7 @@
 ﻿CREATE PROCEDURE [employer_account].[CreateEmployerAgreement]
 	@accountLegalEntityId BIGINT,
 	@templateId INT = NULL,
+	@agreementType TINYINT,
 	@employerAgreementId BIGINT OUTPUT
 AS
 BEGIN	
@@ -10,7 +11,7 @@ BEGIN
 	BEGIN
 		SELECT TOP 1 @templateId = Id
 		FROM [employer_account].[EmployerAgreementTemplate]
-		WHERE AgreementType = 0
+		WHERE AgreementType = @agreementType
 		ORDER BY VersionNumber DESC
 	END
 
