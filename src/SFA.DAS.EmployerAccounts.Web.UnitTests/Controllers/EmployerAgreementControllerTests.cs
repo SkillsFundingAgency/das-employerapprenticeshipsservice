@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -125,6 +126,75 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 assert: (fixtures, result) =>
                     Assert.AreEqual(fixtures.GetAgreementToSignViewModel, fixtures.ViewResult.Model));
         }
+
+        [Test]
+        public Task AboutYourAgreement_WhenIViewAboutYourAgreementAsLevy_ThenShouldShowTheAboutYourAgreementView()
+        {
+            return RunAsync(
+                arrange: fixtures =>
+                {
+                    fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
+                    fixtures.Orchestrator.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
+                        {
+                            Data = new EmployerAgreementViewModel
+                            {
+                                EmployerAgreement = new EmployerAgreementView
+                                {
+                                    TemplateAgreementType = AgreementType.Levy
+                                }
+                            }
+                        });
+                },
+                act: fixtures => fixtures.AboutYourAgreement(),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);                   
+                    Assert.AreEqual(actualResult.ViewName, "AboutYourAgreement");
+                });
+        }
+
+        [Test]
+        public Task AboutYourAgreement_WhenIViewAboutYourAgreementAsEoi_ThenShouldShowTheAboutYourAgreementView()
+        {
+            return RunAsync(
+                arrange: fixtures =>
+                {
+                    fixtures.OwinWrapper.Setup(x => x.GetClaimValue(@"sub")).Returns(fixtures.UserId);
+                    fixtures.Orchestrator.Setup(x => x.GetById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
+                        {
+                            Data = new EmployerAgreementViewModel
+                            {
+                                EmployerAgreement = new EmployerAgreementView
+                                {
+                                    TemplateAgreementType = AgreementType.NonLevyExpressionOfInterest
+                                }
+                            }
+                        });
+                },
+                act: fixtures => fixtures.AboutYourAgreement(),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    Assert.AreEqual(actualResult.ViewName, "AboutYourDocument");
+                });
+        }
+
+        [Test]
+        public Task ViewAgreementToSign_WhenIHaveNotSelectedAnOption_ThenAnErrorIsDisplayed()
+        {
+            return RunAsync(
+                fixtures => fixtures.WithUnsignedEmployerAgreement(),
+                fixtures => fixtures.Sign(null),
+                (fixtures, result) =>
+                {
+                    var viewResult = result as ViewResult;
+                    Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
+                    Assert.AreEqual(fixtures.GetAgreementToSignViewModel, viewResult.Model);
+                    Assert.IsTrue(((EmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
+                });
+        }
     }
 
     public class EmployerAgreementControllerTestFixtures : FluentTestFixture
@@ -192,6 +262,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response))
                 .Returns(GetAgreementToSignViewModel);
 
+            Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
+                .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
+      
             return this;
         }
 
@@ -232,6 +305,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         {
             var controller = CreateController();
             ViewResult = await controller.SignAgreement(GetAgreementRequest) as ViewResult;
+            return ViewResult;
+        }
+
+        public async Task<ActionResult> Sign(int? choice)
+        {
+            var controller = CreateController();
+            var result = await controller.Sign(HashedAgreementId, HashedAccountId, choice) as ViewResult;
+            return result;
+        }
+
+        public async Task<ViewResult> AboutYourAgreement()
+        {
+            var controller = CreateController();
+            ViewResult = await controller.AboutYourAgreement(HashedAgreementId, HashedAccountId) as ViewResult;
             return ViewResult;
         }
     }

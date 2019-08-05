@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using MediatR;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -298,7 +299,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
                 return Redirect(returnUrlCookie.Value);
 
-            return RedirectToAction(ControllerConstants.AboutYourAgreement, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
+            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
         }
 
         [HttpGet]

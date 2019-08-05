@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dapper;
 using Moq;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.UserProfile;
@@ -85,7 +86,8 @@ select (
                     2,
                     1,
                     fixture.Create<string>(),
-                    fixture.Create<string>());
+                    fixture.Create<string>(),
+                    fixture.Create<AgreementType>());
 
                 accountDbContext.Database.CurrentTransaction.Commit();
             }

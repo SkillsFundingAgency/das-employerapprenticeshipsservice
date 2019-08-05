@@ -8,6 +8,7 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -18,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
-        private const int ReviewAgreementLater = 2;
+        private const int ReviewAgreementLater = 1;
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -99,7 +100,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (unsignedAgreements == null) return RedirectToAction(ControllerConstants.IndexActionName);
 
             var hashedAgreementId = unsignedAgreements.Pending.HashedAgreementId;
-            return RedirectToAction(ControllerConstants.AboutYourAgreement, new { agreementId = hashedAgreementId });
+
+            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, new { agreementId = hashedAgreementId });
         }
 
         [HttpGet]
@@ -109,10 +111,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var agreement = await _orchestrator.GetById(
                 agreementId, 
                 hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
-            );
+                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(agreement);
+            return View(agreement.Data.EmployerAgreement.TemplateAgreementType == AgreementType.Levy
+                ? ControllerConstants.AboutYourAgreementViewName 
+                : ControllerConstants.AboutYourDocumentViewName, agreement);
         }
 
         [HttpGet]
@@ -132,13 +135,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
         {
-            if (choice != ReviewAgreementLater)
+            if (choice == ReviewAgreementLater)
             {
                 return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
             }
 
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
+
+            if (choice == null)
+            {
+                agreement.Data.NoChoiceSelected = true;
+                return View(ControllerConstants.SignAgreementViewName, agreement.Data);
+            }
+
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
 
             if (response.Status == HttpStatusCode.OK)
@@ -178,7 +188,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return View(ControllerConstants.SignAgreementViewName, agreement.Data);
         }
-      
+
         [HttpGet]
         [Route("agreements/{agreementId}/agreement-pdf")]
         public async Task<ActionResult> GetPdfAgreement(string agreementId, string hashedAccountId)
