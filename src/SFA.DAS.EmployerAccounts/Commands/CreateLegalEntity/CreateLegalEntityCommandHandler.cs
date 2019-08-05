@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 Source = message.Source,
                 Address = message.Address,
                 Sector = message.Sector,
-                AgreementType = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest) ? AgreementType.NoneLevyExpressionOfInterest : AgreementType.Levy
+                AgreementType = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest) ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Levy
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);

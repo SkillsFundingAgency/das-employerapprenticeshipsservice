@@ -168,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                             {
                                 EmployerAgreement = new EmployerAgreementView
                                 {
-                                    TemplateAgreementType = AgreementType.NoneLevyExpressionOfInterest
+                                    TemplateAgreementType = AgreementType.NonLevyExpressionOfInterest
                                 }
                             }
                         });
@@ -178,6 +178,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 {
                     Assert.IsNotNull(actualResult);
                     Assert.AreEqual(actualResult.ViewName, "AboutYourDocument");
+                });
+        }
+
+        [Test]
+        public Task ViewAgreementToSign_WhenIHaveNotSelectedAnOption_ThenAnErrorIsDisplayed()
+        {
+            return RunAsync(
+                fixtures => fixtures.WithUnsignedEmployerAgreement(),
+                fixtures => fixtures.Sign(null),
+                (fixtures, result) =>
+                {
+                    var viewResult = result as ViewResult;
+                    Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
+                    Assert.AreEqual(fixtures.GetAgreementToSignViewModel, viewResult.Model);
+                    Assert.IsTrue(((EmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
                 });
         }
     }
@@ -247,6 +262,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response))
                 .Returns(GetAgreementToSignViewModel);
 
+            Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
+                .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
+      
             return this;
         }
 
@@ -288,6 +306,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             var controller = CreateController();
             ViewResult = await controller.SignAgreement(GetAgreementRequest) as ViewResult;
             return ViewResult;
+        }
+
+        public async Task<ActionResult> Sign(int? choice)
+        {
+            var controller = CreateController();
+            var result = await controller.Sign(HashedAgreementId, HashedAccountId, choice) as ViewResult;
+            return result;
         }
 
         public async Task<ViewResult> AboutYourAgreement()
