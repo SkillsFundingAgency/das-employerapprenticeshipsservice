@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     {
         public static bool ShowManageYourLevyLink(this AccountDashboardViewModel model)
         {
-            if (model.AgreementInfo.Type != AccountAgreementType.NoneLevyExpressionOfInterest)
+            if (model.AgreementInfo.Type != AccountAgreementType.NonLevyExpressionOfInterest)
             {
                 return true;
             }

@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
             var account = await accountTask;
 
-            if (account.AccountAgreementType == AccountAgreementType.NoneLevyExpressionOfInterest)
+            if (account.AccountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest)
             {
                 return new OrchestratorResponse<FinanceDashboardViewModel>
                 {

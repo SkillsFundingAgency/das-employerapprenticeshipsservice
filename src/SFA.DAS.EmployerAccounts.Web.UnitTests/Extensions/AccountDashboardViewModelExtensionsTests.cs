@@ -9,11 +9,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
     [TestFixture]
     public class AccountDashboardViewModelExtensionsTests
     {
-        [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.NoneLevyExpressionOfInterest, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.NonLevyExpressionOfInterest, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Levy, true)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Inconsistent, true)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Unknown, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.NoneLevyExpressionOfInterest, false)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.NonLevyExpressionOfInterest, false)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Levy, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Inconsistent, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Unknown, true)]
@@ -39,11 +39,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             Assert.AreEqual(expectedValue, result);
         }
 
-        [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.NoneLevyExpressionOfInterest, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.NonLevyExpressionOfInterest, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Levy, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Inconsistent, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Unknown, false)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.NoneLevyExpressionOfInterest, true)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.NonLevyExpressionOfInterest, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Levy, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Inconsistent, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Unknown, true)]

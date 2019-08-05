@@ -77,7 +77,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
                 .ReturnsAsync(new AccountDetailViewModel
                 {
-                    AccountAgreementType = AccountAgreementType.NoneLevyExpressionOfInterest
+                    AccountAgreementType = AccountAgreementType.NonLevyExpressionOfInterest
                 });
 
             var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
