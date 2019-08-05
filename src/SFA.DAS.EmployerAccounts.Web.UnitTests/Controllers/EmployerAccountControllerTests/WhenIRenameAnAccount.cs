@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using MediatR;
+using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountControllerTests

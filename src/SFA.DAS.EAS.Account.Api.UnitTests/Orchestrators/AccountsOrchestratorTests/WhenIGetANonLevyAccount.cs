@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Castle.Core.Internal;
 using MediatR;
 using Moq;
 using NUnit.Framework;
@@ -12,10 +11,7 @@ using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 
@@ -59,7 +55,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         public async Task ThenResponseShouldHaveAccountAgreementTypeSetToNonLevy()
         {
             //Arrange
-            AgreementType agreementType = AgreementType.NoneLevyExpressionOfInterest;
+            var agreementType = AgreementType.NonLevyExpressionOfInterest;
             const string hashedAgreementId = "ABC123";
 
             var response = new GetEmployerAccountByHashedIdResponse
@@ -90,7 +86,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         public async Task ThenResponseShouldHaveAccountAgreementTypeSetToInconsistent()
         {
             //Arrange
-            AccountAgreementType agreementType = AccountAgreementType.Inconsistent;
+            var agreementType = AccountAgreementType.Inconsistent;
             const string hashedAgreementId = "ABC123";
             var response = new GetEmployerAccountByHashedIdResponse
             {
@@ -99,7 +95,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                     AccountAgreementTypes = new List<AgreementType>
                     {
                         AgreementType.Levy,
-                        AgreementType.NoneLevyExpressionOfInterest
+                        AgreementType.NonLevyExpressionOfInterest
                     }
                 }
             };
