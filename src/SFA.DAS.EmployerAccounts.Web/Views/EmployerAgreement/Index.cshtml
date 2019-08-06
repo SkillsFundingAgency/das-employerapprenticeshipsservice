@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.Authorization
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<EmployerAgreementListViewModel>
 
 @{
@@ -91,11 +92,11 @@
                     <td data-label="Action">
                         @if (employerAgreement.HasPendingAgreement)
                         {
-                            <a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
+                            <a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
                         }
                         else if (employerAgreement.HasSignedAgreement)
                         {
-                            <a href="@Url.Action("Details", "EmployerAgreement", new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
+                            <a href="@Url.Action(ControllerConstants.DetailsActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
                         }
                     </td>
                     <td data-label="Agreement ID">

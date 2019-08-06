@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -30,7 +31,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTest
             _hashingService = new Mock<IHashingService>();
             _agreement = new EmployerAgreementView()
             {
-                AgreementType = "NonLevy.EOI"
+                AgreementType = AgreementType.NonLevyExpressionOfInterest
             };
 
             RequestHandler = new GetEmployerAgreementByIdRequestHandler(
