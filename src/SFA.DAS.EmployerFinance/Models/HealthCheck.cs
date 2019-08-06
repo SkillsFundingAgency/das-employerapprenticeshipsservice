@@ -51,10 +51,10 @@ namespace SFA.DAS.EmployerFinance.Models
         {
             PublishedEvent = DateTime.UtcNow;
 
-            Publish<HealthCheckEvent>(e =>
+            Publish(() => new HealthCheckEvent
             {
-                e.Id = Id;
-                e.Created = PublishedEvent;
+                Id = Id,
+                Created = PublishedEvent
             });
         }
     }

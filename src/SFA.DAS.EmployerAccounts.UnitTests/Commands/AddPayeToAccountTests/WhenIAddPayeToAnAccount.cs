@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.EmployerAccounts.UnitTests.ObjectMothers;
 using SFA.DAS.HashingService;
+using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.Validation;
 

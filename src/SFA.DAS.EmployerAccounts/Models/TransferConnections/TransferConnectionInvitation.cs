@@ -38,26 +38,24 @@ namespace SFA.DAS.EmployerAccounts.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<SentTransferConnectionRequestEvent>(e =>
+            Publish(() => new SentTransferConnectionRequestEvent
             {
-                e.Created = now;
-                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
-                e.ReceiverAccountId = ReceiverAccount.Id;
-                e.ReceiverAccountName = ReceiverAccount.Name;
-                e.SenderAccountHashedId = SenderAccount.HashedId;
-                e.SenderAccountId = SenderAccount.Id;
-                e.SenderAccountName = SenderAccount.Name;
-                e.SentByUserId = senderUser.Id;
-                e.SentByUserName = senderUser.FullName;
-                e.SentByUserRef = senderUser.Ref;
-                e.TransferConnectionRequestId = Id;
+                Created = now,
+                ReceiverAccountHashedId = ReceiverAccount.HashedId,
+                ReceiverAccountId = ReceiverAccount.Id,
+                ReceiverAccountName = ReceiverAccount.Name,
+                SenderAccountHashedId = SenderAccount.HashedId,
+                SenderAccountId = SenderAccount.Id,
+                SenderAccountName = SenderAccount.Name,
+                SentByUserId = senderUser.Id,
+                SentByUserName = senderUser.FullName,
+                SentByUserRef = senderUser.Ref,
+                TransferConnectionRequestId = Id
             });
         }
-
         protected TransferConnectionInvitation()
         {
         }
-
         public void Approve(Account.Account approverAccount, User approverUser)
         {
             RequiresApproverAccountIsTheReceiverAccount(approverAccount);
@@ -74,20 +72,21 @@ namespace SFA.DAS.EmployerAccounts.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<ApprovedTransferConnectionRequestEvent>(e =>
+            Publish(() => new ApprovedTransferConnectionRequestEvent
             {
-                e.ApprovedByUserId = approverUser.Id;
-                e.ApprovedByUserName = approverUser.FullName;
-                e.ApprovedByUserRef = approverUser.Ref;
-                e.Created = now;
-                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
-                e.ReceiverAccountId = ReceiverAccount.Id;
-                e.ReceiverAccountName = ReceiverAccount.Name;
-                e.SenderAccountHashedId = SenderAccount.HashedId;
-                e.SenderAccountId = SenderAccount.Id;
-                e.SenderAccountName = SenderAccount.Name;
-                e.TransferConnectionRequestId = Id;
+                ApprovedByUserId = approverUser.Id,
+                ApprovedByUserName = approverUser.FullName,
+                ApprovedByUserRef = approverUser.Ref,
+                Created = now,
+                ReceiverAccountHashedId = ReceiverAccount.HashedId,
+                ReceiverAccountId = ReceiverAccount.Id,
+                ReceiverAccountName = ReceiverAccount.Name,
+                SenderAccountHashedId = SenderAccount.HashedId,
+                SenderAccountId = SenderAccount.Id,
+                SenderAccountName = SenderAccount.Name,
+                TransferConnectionRequestId = Id
             });
+            
         }
 
         public void Delete(Account.Account deleterAccount, User deleterUser)
@@ -123,21 +122,22 @@ namespace SFA.DAS.EmployerAccounts.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<DeletedTransferConnectionRequestEvent>(e =>
+            Publish(() => new DeletedTransferConnectionRequestEvent
             {
-                e.Created = now;
-                e.DeletedByAccountId = deleterAccount.Id;
-                e.DeletedByUserId = deleterUser.Id;
-                e.DeletedByUserName = deleterUser.FullName;
-                e.DeletedByUserRef = deleterUser.Ref;
-                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
-                e.ReceiverAccountId = ReceiverAccount.Id;
-                e.ReceiverAccountName = ReceiverAccount.Name;
-                e.SenderAccountHashedId = SenderAccount.HashedId;
-                e.SenderAccountId = SenderAccount.Id;
-                e.SenderAccountName = SenderAccount.Name;
-                e.TransferConnectionRequestId = Id;
+                Created = now,
+                DeletedByAccountId = deleterAccount.Id,
+                DeletedByUserId = deleterUser.Id,
+                DeletedByUserName = deleterUser.FullName,
+                DeletedByUserRef = deleterUser.Ref,
+                ReceiverAccountHashedId = ReceiverAccount.HashedId,
+                ReceiverAccountId = ReceiverAccount.Id,
+                ReceiverAccountName = ReceiverAccount.Name,
+                SenderAccountHashedId = SenderAccount.HashedId,
+                SenderAccountId = SenderAccount.Id,
+                SenderAccountName = SenderAccount.Name,
+                TransferConnectionRequestId = Id
             });
+            
         }
 
         public void Reject(Account.Account rejectorAccount, User rejectorUser)
@@ -156,20 +156,20 @@ namespace SFA.DAS.EmployerAccounts.Models.TransferConnections
                 CreatedDate = now
             });
 
-            Publish<RejectedTransferConnectionRequestEvent>(e =>
+            Publish(() => new RejectedTransferConnectionRequestEvent
             {
-                e.Created = now;
-                e.ReceiverAccountHashedId = ReceiverAccount.HashedId;
-                e.ReceiverAccountId = ReceiverAccount.Id;
-                e.ReceiverAccountName = ReceiverAccount.Name;
-                e.RejectorUserId = rejectorUser.Id;
-                e.RejectorUserName = rejectorUser.FullName;
-                e.RejectorUserRef = rejectorUser.Ref;
-                e.SenderAccountHashedId = SenderAccount.HashedId;
-                e.SenderAccountId = SenderAccount.Id;
-                e.SenderAccountName = SenderAccount.Name;
-                e.TransferConnectionRequestId = Id;
-            });
+                Created = now,
+                ReceiverAccountHashedId = ReceiverAccount.HashedId,
+                ReceiverAccountId = ReceiverAccount.Id,
+                ReceiverAccountName = ReceiverAccount.Name,
+                RejectorUserId = rejectorUser.Id,
+                RejectorUserName = rejectorUser.FullName,
+                RejectorUserRef = rejectorUser.Ref,
+                SenderAccountHashedId = SenderAccount.HashedId,
+                SenderAccountId = SenderAccount.Id,
+                SenderAccountName = SenderAccount.Name,
+                TransferConnectionRequestId = Id
+            });            
         }
 
         private void RequiresApproverAccountIsTheReceiverAccount(Account.Account approverAccount)
