@@ -50,13 +50,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            var hasPayeScheme = HasPayeScheme(response.Data);
-            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
+            if (DisplayNewHomepage(response.Data))
             {
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {
                     HashedAccountId = hashedAccountId,
-                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
+                    MaxNumberOfVacancies = HasPayeScheme(response.Data) ? 2 : 0
                 });
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
