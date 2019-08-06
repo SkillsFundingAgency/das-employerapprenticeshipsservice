@@ -53,6 +53,7 @@
     <PackageReference Include="SFA.DAS.Tasks.API.Types" Version="1.8.12" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.1.16" />
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.Validation" Version="5.1.166" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
