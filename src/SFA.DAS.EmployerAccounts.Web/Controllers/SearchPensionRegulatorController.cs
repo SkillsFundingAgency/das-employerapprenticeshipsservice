@@ -188,8 +188,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var errors = new Dictionary<string, string>();
 
-            viewModel.Aorn = viewModel.Aorn.ToUpper().Trim();
-            viewModel.PayeRef = viewModel.PayeRef.ToUpper().Trim();
+            viewModel.Aorn = viewModel.Aorn?.ToUpper().Trim();
+            viewModel.PayeRef = viewModel.PayeRef?.ToUpper().Trim();
 
             if (string.IsNullOrWhiteSpace(viewModel.Aorn))
             {

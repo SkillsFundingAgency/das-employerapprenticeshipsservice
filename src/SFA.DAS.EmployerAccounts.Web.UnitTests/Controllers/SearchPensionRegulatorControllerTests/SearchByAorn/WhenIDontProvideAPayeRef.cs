@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using Moq;
@@ -28,11 +29,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                 Mock.Of<IMediator>());
         }
 
-        [Test]
-        public async Task ThenAnErrorIsDisplayed()
+        [TestCase("")]
+        [TestCase(null)]
+        public async Task ThenAnErrorIsDisplayed(string payeRef)
         {
-            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "1234567890ABC", PayeRef = "" });
-            var viewResponse = (ViewResult) response;
+            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "1234567890ABC", PayeRef = payeRef });
+            var viewResponse = (ViewResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);
             var viewModel = viewResponse.Model as SearchPensionRegulatorByAornViewModel;
