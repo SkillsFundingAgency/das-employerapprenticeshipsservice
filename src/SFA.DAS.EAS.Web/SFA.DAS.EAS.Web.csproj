@@ -565,7 +565,6 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\EndpointConfigurationExtensions.cs" />
-    <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="Mappings\ActivityMappings.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />

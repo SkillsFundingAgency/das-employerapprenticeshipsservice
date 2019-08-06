@@ -18,8 +18,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19270-01" PrivateAssets="All" />
-    <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="11.0.86" />
   </ItemGroup>
 
