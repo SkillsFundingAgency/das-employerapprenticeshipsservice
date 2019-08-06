@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
@@ -9,5 +10,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string SignedByName { get; set; }
         public EmployerAgreementStatus Status { get; set; }
         public int TemplateVersionNumber { get; set; }
+        public AgreementType AgreementType { get; set; }
     }
 }

@@ -1,8 +1,9 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class EmployerAgreementView
+    public class EmployerAgreementView : IAccountResource
     {
         public long Id { get; set; }
         public long AccountId { get; set; }
@@ -22,5 +23,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string LegalEntityStatus { get; set; }
         public string Sector { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
+        public AgreementType AgreementType { get; set; }
     }
 }

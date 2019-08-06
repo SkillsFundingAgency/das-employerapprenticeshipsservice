@@ -12,6 +12,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -74,10 +75,9 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
             var sw = new Stopwatch();
-            AccountDetail accountDetail = null;
 
             sw.Start();
-            accountDetail = await _db.Value.Accounts
+            var accountDetail = await _db.Value.Accounts
                 .Where(ac => ac.HashedId == hashedAccountId)
                 .Select(ac => new AccountDetail
                 {
@@ -85,7 +85,8 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                     HashedId = ac.HashedId,
                     PublicHashedId = ac.PublicHashedId,
                     Name = ac.Name,
-                    CreatedDate = ac.CreatedDate
+                    CreatedDate = ac.CreatedDate,
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType) ac.ApprenticeshipEmployerType
                 }).FirstOrDefaultAsync();
 
             if (accountDetail == null)
@@ -113,6 +114,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                                     ea.StatusId == EmployerAgreementStatus.Signed))
                 .Select(ale => ale.LegalEntityId)
                 .ToListAsync();
+
+
+            var templateIds = await _db.Value.Agreements
+                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId))
+                .Select(x => x.TemplateId)
+                .ToListAsync()
+                .ConfigureAwait(false)
+            ;
+
+            accountDetail.AccountAgreementTypes = await _db.Value.AgreementTemplates
+                .Where(x => templateIds.Contains(x.Id))
+                .Select(x => x.AgreementType)
+                .ToListAsync()
+                .ConfigureAwait(false)
+            ;
 
             sw.Stop();
             _logger.Debug($"Fetched account with {accountDetail.LegalEntities.Count} legal entities and {accountDetail.PayeSchemes.Count} PAYE schemes in {sw.ElapsedMilliseconds} msecs");

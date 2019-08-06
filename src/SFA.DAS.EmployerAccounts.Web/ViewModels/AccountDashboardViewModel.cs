@@ -38,4 +38,4 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool HasSingleProvider => AccountViewModel?.Providers?.Count == 1;
         public bool HasMultipleProviders => AccountViewModel?.Providers?.Count > 1;
     }
-}   
+}

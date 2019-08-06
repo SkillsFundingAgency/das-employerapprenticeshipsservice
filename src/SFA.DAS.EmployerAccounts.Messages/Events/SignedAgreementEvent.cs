@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerAccounts.Messages.Events
@@ -12,5 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public long AgreementId { get; set; }
         public long LegalEntityId { get; set; }
         public bool CohortCreated { get; set; }
+        public AgreementType AgreementType { get; set; }
     }
 }

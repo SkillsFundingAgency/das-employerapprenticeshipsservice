@@ -6,6 +6,7 @@ using AutoMapper;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Mappings;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -27,7 +28,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
                     r2.LegalEntity.Agreements.Count == 2 &&
                     r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == Account.Api.Types.EmployerAgreementStatus.Signed) &&
                     r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == Account.Api.Types.EmployerAgreementStatus.Pending) &&
-                    r2.LegalEntity.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Pending));
+                    r2.LegalEntity.AgreementStatus == Account.Api.Types.EmployerAgreementStatus.Pending &&
+                    r2.LegalEntity.Agreements.Any(a => a.AgreementType == f.LegalEntity.AccountLegalEntities.First().Agreements.First().Template.AgreementType)
+                ));
         }
     }
 
@@ -157,7 +160,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
             {
                 Template = new AgreementTemplate
                 {
-                    VersionNumber = versionNumber
+                    VersionNumber = versionNumber,
+                    AgreementType = AgreementType.Levy
                 },
                 StatusId = status
             };

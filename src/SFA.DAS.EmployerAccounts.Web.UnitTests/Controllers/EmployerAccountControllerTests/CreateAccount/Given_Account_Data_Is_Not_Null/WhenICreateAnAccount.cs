@@ -8,6 +8,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -102,14 +103,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
         }
 
         [Test]
-        public async Task ThenIShouldGoToTheHomePage()
+        public async Task ThenIShouldGoToAboutYourAgreement()
         {
             //Act
             var result = await _employerAccountController.CreateAccount() as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.IndexActionName, result.RouteValues["Action"]);
-            Assert.AreEqual(ControllerConstants.EmployerTeamControllerName, result.RouteValues["Controller"]);
+            Assert.AreEqual(ControllerConstants.AboutYourAgreementActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.EmployerAgreementControllerName, result.RouteValues["Controller"]);
         }
 
         [Test]

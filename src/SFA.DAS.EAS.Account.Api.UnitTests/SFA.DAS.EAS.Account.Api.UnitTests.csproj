@@ -109,6 +109,9 @@
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.276.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.276\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.183\lib\netstandard2.0\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
@@ -202,7 +205,11 @@
     <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="Controllers\TransferConnectionsControllerTests\WhenIGetTransferConnections.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetALevyAccount.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccountWithNoAgreements.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetANonLevyAccount.cs" />
     <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -212,7 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
-      <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
+      <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Api\SFA.DAS.EAS.Account.Api.csproj">

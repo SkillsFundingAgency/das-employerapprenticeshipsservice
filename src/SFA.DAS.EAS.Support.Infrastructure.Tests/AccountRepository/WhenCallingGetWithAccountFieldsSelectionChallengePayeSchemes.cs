@@ -6,7 +6,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Support.Core.Models;
-using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EAS.Support.Infrastructure.Tests.AccountRepository
 {
