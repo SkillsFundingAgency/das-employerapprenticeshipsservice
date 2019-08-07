@@ -16,7 +16,7 @@
                 Sorry
             </h1>
 
-            <p>Due to incorrect attempts, this has been disabled for <strong>@Model.RemainingLock minute@(Model.RemainingLock > 1 ? "s" : "").</strong></p>
+            <p>Due to incorrect attempts, this has been disabled for <span class="bold-small">@Model.RemainingLock minute@(Model.RemainingLock > 1 ? "s" : "").</span></p>
 
             <p><a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Try adding your PAYE scheme via Government Gateway</a></p>
         }
