@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/accounts/{hashedAccountId}/payeschemes/{payeSchemeRef}");
+            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}");
         }
 
         private void CreateGetPayeSchemeLink(string hashedAccountId, ResourceViewModel payeScheme)
