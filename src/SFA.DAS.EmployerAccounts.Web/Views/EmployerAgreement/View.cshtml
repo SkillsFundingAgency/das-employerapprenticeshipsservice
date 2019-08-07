@@ -58,7 +58,14 @@
     </div>
 </div>
 
-@Html.Partial(Model.EmployerAgreement.TemplatePartialViewName)
+@if (Html.ViewExists(Model.EmployerAgreement.TemplatePartialViewName + "_body"))
+{
+    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_body");
+}
+else
+{
+    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName)
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">
