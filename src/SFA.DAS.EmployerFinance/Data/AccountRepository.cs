@@ -13,12 +13,13 @@ namespace SFA.DAS.EmployerFinance.Data
     public class AccountRepository : BaseRepository, IAccountRepository
     {
         private readonly Lazy<EmployerAccountsDbContext> _accountDb;
-        private readonly Lazy<EmployerAccountsDbContext> _financeDb;
+        private readonly Lazy<EmployerFinanceDbContext> _financeDb;
 
-        public AccountRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> accountDb, Lazy<EmployerAccountsDbContext> financeDb)
+        public AccountRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> accountDb, Lazy<EmployerFinanceDbContext> financeDb)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _accountDb = accountDb;
+            _financeDb = financeDb;
         }
 
         public async Task<string> GetAccountName(long accountId)
@@ -51,10 +52,24 @@ namespace SFA.DAS.EmployerFinance.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@id", accountId, DbType.Int64);
-            parameters.Add("@name", name, DbType.Int64);
+            parameters.Add("@name", name, DbType.String);
 
-            await _accountDb.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_finance].[CreateAccount]",
+            await _financeDb.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[CreateAccount]",
+                param: parameters,
+                transaction: _financeDb.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task RenameAccount(long accountId, string name)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@id", accountId, DbType.Int64);
+            parameters.Add("@name", name, DbType.String);
+
+            await _financeDb.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[RenameAccount]",
                 param: parameters,
                 transaction: _financeDb.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
