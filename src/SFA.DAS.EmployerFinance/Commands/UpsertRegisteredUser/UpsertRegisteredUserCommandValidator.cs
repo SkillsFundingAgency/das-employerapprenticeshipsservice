@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Validation;
+﻿using SFA.DAS.EmployerFinance.Validation;
 
 namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
 {

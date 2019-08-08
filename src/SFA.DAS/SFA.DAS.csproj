@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" Version="1.0.43" />
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="2.2.0" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory" Version="5.0.5" />
     <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" Version="3.2.3" />

@@ -74,9 +74,6 @@
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.WebApi" Version="1.0.17" />
-    <PackageReference Include="SFA.DAS.Validation.WebApi">
-      <Version>5.1.166</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
     <PackageReference Include="WebApi.StructureMap" Version="1.0.23" />
