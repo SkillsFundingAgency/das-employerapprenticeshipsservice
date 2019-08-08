@@ -225,8 +225,11 @@
     <Reference Include="SFA.DAS.UnitOfWork.SqlServer, Version=1.0.17.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.UnitOfWork.SqlServer.1.0.17\lib\netstandard2.0\SFA.DAS.UnitOfWork.SqlServer.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Validation, Version=5.1.144.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Validation.5.1.144\lib\netstandard2.0\SFA.DAS.Validation.dll</HintPath>
+    <Reference Include="SFA.DAS.Validation, Version=5.1.167.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Validation.5.1.167\lib\netstandard2.0\SFA.DAS.Validation.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Validation.WebApi, Version=5.1.167.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Validation.WebApi.5.1.167\lib\net462\SFA.DAS.Validation.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="StackExchange.Redis, Version=1.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\StackExchange.Redis.1.2.6\lib\net46\StackExchange.Redis.dll</HintPath>
