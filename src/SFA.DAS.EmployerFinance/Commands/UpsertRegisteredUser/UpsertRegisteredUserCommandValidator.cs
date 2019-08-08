@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using SFA.DAS.Validation;
+﻿using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
 {
@@ -19,11 +18,6 @@ namespace SFA.DAS.EmployerFinance.Commands.UpsertRegisteredUser
                 validationResult.AddError("LastName", "No LastName supplied");
 
             return validationResult;
-        }
-
-        public Task<ValidationResult> ValidateAsync(UpsertRegisteredUserCommand item)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
