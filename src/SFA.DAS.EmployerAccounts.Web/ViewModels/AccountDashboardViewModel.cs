@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -37,5 +38,9 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Count > 0;
         public bool HasSingleProvider => AccountViewModel?.Providers?.Count == 1;
         public bool HasMultipleProviders => AccountViewModel?.Providers?.Count > 1;
+        // already returned in Account.ApprenticeshipEmployerType, but we want to transition to calling the api, rather than going direct to the db
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
+        public AgreementInfoViewModel AgreementInfo { get; set; }
+        
     }
 }
