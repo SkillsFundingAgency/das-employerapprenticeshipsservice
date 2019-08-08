@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.572
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "SFA.DAS.EAS.Support.CloudService", "SFA.DAS.EAS.Support.CloudService\SFA.DAS.EAS.Support.CloudService.ccproj", "{E33EAE3E-3261-4031-B074-2F80FBD5588B}"
 EndProject
@@ -191,8 +191,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness", "SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness\SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.csproj", "{FE91D5DB-E66E-4335-AFEA-8441FAB23FCD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.IntegrationTests", "SFA.DAS.EmployerAccounts.IntegrationTests\SFA.DAS.EmployerAccounts.IntegrationTests.csproj", "{9845E503-8B67-4F31-B2BD-202D1EC0D98F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api.Types", "SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj", "{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.Infrastructure.Interfaces", "SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj", "{81D5350B-DE25-43C3-89EC-F60841A3F21D}"
 EndProject
@@ -483,10 +481,6 @@ Global
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9845E503-8B67-4F31-B2BD-202D1EC0D98F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F8328C4-476F-41B1-9C99-BBDF724CA4DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{81D5350B-DE25-43C3-89EC-F60841A3F21D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81D5350B-DE25-43C3-89EC-F60841A3F21D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81D5350B-DE25-43C3-89EC-F60841A3F21D}.Release|Any CPU.ActiveCfg = Release|Any CPU

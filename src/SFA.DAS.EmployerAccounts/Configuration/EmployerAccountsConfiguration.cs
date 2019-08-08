@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
@@ -34,5 +35,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ServiceBusConnectionString { get; set; }
         public string RedisConnectionString { get; set; }
         public bool CanSkipRegistrationSteps { get; set; }
+        public AccountApiConfiguration AccountApi { get; set; }
     }
 }
