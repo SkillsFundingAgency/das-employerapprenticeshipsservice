@@ -181,6 +181,8 @@
     <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllPayments.sql" />
     <Build Include="StoredProcedures\GetTotalSpendForLastYearByAccountId.sql" />
+    <Build Include="Tables\Account.sql" />
+    <Build Include="StoredProcedures\CreateAccount.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
