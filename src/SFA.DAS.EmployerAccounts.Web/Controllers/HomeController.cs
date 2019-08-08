@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("~/")]
         [Route]
         [Route("Index")]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string returnUrl = "")
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
 
-                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName); //todo here user is created in accounts db
 
                 var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
 
@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(accounts);
                 }
 
-                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
+                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName, new { returnUrl });
             }
 
             var model = new
