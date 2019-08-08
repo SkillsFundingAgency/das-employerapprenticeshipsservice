@@ -554,18 +554,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 IsApproved = cohort.IsApproved
             };
 
-            /*
-            var viewModel = new ApprenticeDetailsViewModel
-            {
-                ApprenticeName = "FirstName LastName",
-                TrainingProviderName = "TrainingProvider Name",
-                CourseName = "Apprenticeship CourseName",
-                StartDateText = DateTime.Now.ToGdsFormatWithoutDay(),
-                EndDateText = null,
-                ProposedCostText = " 12.34 excluding VAT",
-                IsApproved = true
-            };
-            */
             return PartialView(viewModel);
         }
 
