@@ -197,7 +197,7 @@
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\ExampleScenario.sql" />
     <None Include="Scripts\Manual\GenerateTestData\ReadMe.md" />
-    <None Include="Tables\AccountLegalEntity.sql" />
+    <Build Include="Tables\AccountLegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
