@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("~/")]
         [Route]
         [Route("Index")]
-        public async Task<ActionResult> Index(string returnUrl = "")
+        public async Task<ActionResult> Index()
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(accounts);
                 }
 
-                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName, new { returnUrl });
+                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
             }
 
             var model = new
