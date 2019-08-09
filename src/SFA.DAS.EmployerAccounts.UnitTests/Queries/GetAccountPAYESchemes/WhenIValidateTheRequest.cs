@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
 {
     public class WhenIValidateTheRequest
     {
-        private GetAccountPayeSchemesQueryValidator _validator;
+        private GetAccountPayeSchemesForAuthorisedUserQueryValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;
 
         [SetUp]
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
         {
             _membershipRepository = new Mock<IMembershipRepository>();
 
-            _validator = new GetAccountPayeSchemesQueryValidator(_membershipRepository.Object);
+            _validator = new GetAccountPayeSchemesForAuthorisedUserQueryValidator(_membershipRepository.Object);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = Role.Viewer });
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
         public async Task ThenTheRequestIsNotValidIfAllFieldsArentPopulatedAndTheRepositoryIsNotCalled()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesQuery());
+            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
+            var actual = await _validator.ValidateAsync(new GetAccountPayeSchemesForAuthorisedUserQuery { ExternalUserId = "123ABC", HashedAccountId = "1" });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
