@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         [Test]
         public void ThenTheReturnUrlIsStoredInTheCookieService()
         {
-            _returnUrlCookieStorageService.Verify(x => x.Create(It.Is<ReturnUrlModel>(model => model.Value == _expectedReturnUrl), "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie", It.IsAny<int>())); //"SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie"
+            _returnUrlCookieStorageService.Verify(x => x.Create(It.Is<ReturnUrlModel>(model => model.Value == _expectedReturnUrl), "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie", It.IsAny<int>()));
         }
 
         [Test]
