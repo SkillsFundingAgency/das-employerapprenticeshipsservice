@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
                 var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
 
-                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName); //todo here user is created in accounts db
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
 
                 var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
 

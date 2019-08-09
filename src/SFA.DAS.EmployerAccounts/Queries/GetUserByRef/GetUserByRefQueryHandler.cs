@@ -31,8 +31,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUserByRef
             _logger.Debug($"Getting user with ref {message.UserRef}");
 
             var user = await _repository.GetUserByRef(message.UserRef);
-            //todo issue is here - user coming back is null in save and search scenario
-            //which results in the below being true and the loop error we see
 
             if (user == null)
             {
