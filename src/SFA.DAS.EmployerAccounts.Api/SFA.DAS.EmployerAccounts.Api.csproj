@@ -60,9 +60,6 @@
       <Version>1.0.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
-    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Types">
-      <Version>1.6.1469</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
@@ -134,6 +131,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
       <Project>{98714180-addf-4ff9-b928-3e9a557ca4d5}</Project>
       <Name>SFA.DAS.EmployerAccounts.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{8057e87b-5893-45d0-93a1-6278ea8ba328}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj">
       <Project>{51f0ba52-dccd-4e6a-9f84-3bdfd501a06b}</Project>
