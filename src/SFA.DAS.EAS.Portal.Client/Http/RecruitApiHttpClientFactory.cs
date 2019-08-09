@@ -6,6 +6,7 @@ using SFA.DAS.Http.TokenGenerators;
 
 namespace SFA.DAS.EAS.Portal.Client.Http
 {
+    //todo: move to sit next to service????
     public class RecruitApiHttpClientFactory : IRecruitApiHttpClientFactory
     {
         private readonly RecruitApiClientConfiguration _recruitApiClientConfig;

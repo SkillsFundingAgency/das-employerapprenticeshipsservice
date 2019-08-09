@@ -1,0 +1,35 @@
+using System;
+using System.Net.Http;
+using SFA.DAS.EAS.Portal.Configuration;
+using SFA.DAS.Http;
+using SFA.DAS.Http.TokenGenerators;
+
+namespace SFA.DAS.EAS.Portal.Application.Services.Commitments
+{
+    //todo: decide on whether client factories belong with services or separate, and make consistent
+    // common base class, named instances??
+    public class CommitmentsApiHttpClientFactory : ICommitmentsApiHttpClientFactory
+    {
+        private readonly CommitmentsApiClientConfiguration _commitmentsApiClientConfiguration;
+
+        public CommitmentsApiHttpClientFactory(CommitmentsApiClientConfiguration commitmentsApiClientConfiguration)
+        {
+            _commitmentsApiClientConfiguration = commitmentsApiClientConfiguration;
+        }
+
+        public HttpClient CreateHttpClient()
+        {
+            var httpClient = new HttpClientBuilder()
+                .WithDefaultHeaders()
+                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(_commitmentsApiClientConfiguration))
+                .Build();
+
+            httpClient.BaseAddress = new Uri(_commitmentsApiClientConfiguration.BaseUrl);
+
+            //todo: set timeout
+            //httpClient.Timeout = TimeSpan.Parse(_recruitApiClientConfig.TimeoutTimeSpan);
+
+            return httpClient;
+        }
+    }
+}
