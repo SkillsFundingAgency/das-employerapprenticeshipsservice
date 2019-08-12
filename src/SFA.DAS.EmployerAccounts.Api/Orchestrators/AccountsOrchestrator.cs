@@ -1,6 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Models.PAYE;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.NLog.Logger;
 
@@ -29,6 +34,18 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
             var viewModel = ConvertPayeSchemeToViewModel(hashedAccountId, payeSchemeResult);
             return viewModel;
+        }
+
+        public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(string hashedAccountId)
+        {
+            return
+                (await _mediator.SendAsync(
+                    new GetAccountPayeSchemesQuery
+                    {
+                        HashedAccountId = hashedAccountId
+                    })
+                )
+                .PayeSchemes;
         }
 
         private PayeSchemeViewModel ConvertPayeSchemeToViewModel(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
 using FluentAssertions;
@@ -6,6 +8,8 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.PAYE;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
@@ -13,6 +17,63 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
     [TestFixture]
     public class WhenIGetAPayeScheme : AccountPayeSchemesControllerTests
     {
+        private string _hashedAccountId;
+        private GetAccountPayeSchemesResponse _accountResponse;
+
+        [Test]
+        public async Task ThenThePayeSchemesAreReturned()
+        {
+            _hashedAccountId = "ABC123";
+            _accountResponse = new GetAccountPayeSchemesResponse
+            {
+                PayeSchemes =
+                    new List<PayeView>
+                    {
+                        new PayeView
+                        {
+                            Ref = "ABC/123",
+                        },
+                        new PayeView
+                        {
+                            Ref = "ZZZ/999"
+                        }
+                    }
+            };
+
+            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_accountResponse);
+
+            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeOne( o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[0].Ref.Replace(@"/", "%2f")}");
+            UrlHelper.Setup(x => x.Route("GetPayeScheme", It.Is<object>(o => IsAccountPayeSchemeTwo(o)))).Returns($"/api/accounts/{_hashedAccountId}/payeschemes/{_accountResponse.PayeSchemes[1].Ref.Replace(@"/", "%2f")}");
+
+
+            var response = await Controller.GetPayeSchemes(_hashedAccountId);
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<OkNegotiatedContentResult<ResourceList>>(response);
+            var model = response as OkNegotiatedContentResult<ResourceList>;
+
+            model?.Content.Should().NotBeNull();
+
+            foreach (var payeScheme in _accountResponse.PayeSchemes)
+            {
+                var matchedScheme = model.Content.Single(x => x.Id == payeScheme.Ref);
+                matchedScheme.Href.Should().Be($"/api/accounts/{_hashedAccountId}/payeschemes/{payeScheme.Ref.Replace(@"/", "%2f")}");
+            }
+        }
+
+        [Test]
+        public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
+        {
+            var hashedAccountId = "ABC123";
+            var accountResponse = new GetAccountPayeSchemesResponse();
+
+            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId))).ReturnsAsync(accountResponse);
+
+            var response = await Controller.GetPayeSchemes(hashedAccountId);
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<NotFoundResult>(response);
+        }
         [Test]
         public async Task ThenTheAccountIsReturned()
         {
@@ -54,6 +115,21 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
 
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
+        }
+        private bool IsAccountPayeSchemeTwo(object o)
+        {
+            return IsAccountPayeSchemeInPosition(o, 1);
+        }
+        private bool IsAccountPayeSchemeOne(object o)
+        {
+            return IsAccountPayeSchemeInPosition(o, 0);
+        }
+        private bool IsAccountPayeSchemeInPosition(object o, int positionIndex)
+        {
+            return
+                o.GetPropertyValue<string>("hashedAccountId").Equals(_hashedAccountId)
+                &&
+                o.GetPropertyValue<string>("payeSchemeRef").Equals(_accountResponse.PayeSchemes[positionIndex].Ref.Replace(@"/", "%2f"));
         }
     }
 }
