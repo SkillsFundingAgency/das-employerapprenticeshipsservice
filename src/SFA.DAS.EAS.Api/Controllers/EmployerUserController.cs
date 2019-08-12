@@ -20,7 +20,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public IHttpActionResult GetUserAccounts(string userRef)
         {
-            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"api/user/{userRef}/accounts");
+            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/user/{userRef}/accounts");
         }
     }
 }
