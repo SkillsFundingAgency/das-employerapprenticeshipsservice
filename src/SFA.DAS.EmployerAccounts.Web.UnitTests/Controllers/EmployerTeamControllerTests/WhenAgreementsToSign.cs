@@ -58,26 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("ProviderPermissionsDenied", (result.Model as PanelViewModel<AccountDashboardViewModel>).ViewName);
-        }
-
-        [Test]
-        public void ThenTheVacancyPanelShowsPreAgreementView()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.AgreementsToSign = true;
-
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
-
-            //Act
-            var result = _controller.Row2Panel2(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("PreAgreementRecruitment", (result.Model as PanelViewModel<AccountDashboardViewModel>).ViewName);
+            Assert.AreEqual("ProviderPermissionsDenied", (result.Model as dynamic).ViewName);
         }
     }
 }

@@ -50,12 +50,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (DisplayNewHomepage(response.Data))
+            var hasPayeScheme = HasPayeScheme(response.Data);
+            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {
                     HashedAccountId = hashedAccountId,
-                    MaxNumberOfVacancies = HasPayeScheme(response.Data) ? 2 : 0
+                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
                 });
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
@@ -385,12 +386,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     }
                 }
             }
-
-            if (model.AgreementsToSign)
-            {
-                viewModel.ViewName = "PreAgreementRecruitment";
-            }
-
             return PartialView(viewModel);
         }
 
@@ -518,12 +513,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
                 
         [ChildActionOnly]
-        public ActionResult PreAgreementRecruitment(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
         public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
         {
             return PartialView(model);
@@ -568,21 +557,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return response;
         }
 
-        private bool HasPayeScheme(AccountDashboardViewModel accountViewModel)
+        private bool HasPayeScheme(AccountDashboardViewModel data)
         {
-            return accountViewModel.PayeSchemeCount > 0;
+            return data.PayeSchemeCount > 0;
         }
 
-        private bool HasOrganisation(AccountDashboardViewModel accountViewModel)
+        private bool HasOrganisation(AccountDashboardViewModel data)
         {
-            return accountViewModel.OrganisationCount > 0;
-        }
-
-        private bool DisplayNewHomepage(AccountDashboardViewModel accountViewModel)
-        {
-            return FeatureToggles.Features.HomePage.Enabled
-                || (!HasPayeScheme(accountViewModel) && !HasOrganisation(accountViewModel))
-                || accountViewModel.AgreementsToSign;
+            return data.OrgainsationCount > 0;
         }
     }
 }
