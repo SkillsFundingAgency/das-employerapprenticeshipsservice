@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
 using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EAS.Domain.Models.PAYE;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
 using Z.EntityFramework.Plus;
@@ -24,76 +20,30 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             return RunAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
                 .And.Match<GetFinancialStatisticsResponse>(r2 =>
                     r2.Statistics != null &&
-                    r2.Statistics.TotalAccounts == 2 &&
-                    r2.Statistics.TotalLegalEntities == 4 &&
-                    r2.Statistics.TotalPayeSchemes == 4 &&
-                    r2.Statistics.TotalAgreements == 5 &&
                     r2.Statistics.TotalPayments == 2));
         }
     }
 
     public class GetStatisticsQueryTestsFixtures : FluentTestFixture
     {
-        public List<Domain.Models.Account.Account> Accounts { get; }
-        public Mock<EmployerAccountsDbContext> AccountsDb { get; }
-        public List<EmployerAgreement> Agreements { get; set; }
         public Mock<EmployerFinanceDbContext> FinancialDb { get; }
         public GetFinancialStatisticsQueryHandler Handler { get; }
-        public List<LegalEntity> LegalEntities { get; }
-        public List<Paye> PayeSchemes { get; }
         public List<Payment> Payments { get; set; }
         public GetFinancialStatisticsQuery Query { get; }
 
         public GetStatisticsQueryTestsFixtures()
         {
-            Accounts = new List<Domain.Models.Account.Account>
-            {
-                new Domain.Models.Account.Account(),
-                new Domain.Models.Account.Account()
-            };
-
-            LegalEntities = new List<LegalEntity>
-            {
-                new LegalEntity(),
-                new LegalEntity(),
-                new LegalEntity(),
-                new LegalEntity(),
-            };
-
-            PayeSchemes = new List<Paye>
-            {
-                new Paye(),
-                new Paye(),
-                new Paye(),
-                new Paye()
-            };
-
-            Agreements = new List<EmployerAgreement>
-            {
-                new EmployerAgreement(),
-                new EmployerAgreement { StatusId = EmployerAgreementStatus.Signed },
-                new EmployerAgreement { StatusId = EmployerAgreementStatus.Signed },
-                new EmployerAgreement { StatusId = EmployerAgreementStatus.Signed },
-                new EmployerAgreement { StatusId = EmployerAgreementStatus.Signed },
-                new EmployerAgreement { StatusId = EmployerAgreementStatus.Signed }
-            };
-
             Payments = new List<Payment>
             {
                 new Payment(), 
                 new Payment()
             };
 
-            AccountsDb = new Mock<EmployerAccountsDbContext>();
             FinancialDb = new Mock<EmployerFinanceDbContext>();
 
-            AccountsDb.Setup(d => d.Accounts).Returns(new DbSetStub<Domain.Models.Account.Account>(Accounts));
-            AccountsDb.Setup(d => d.LegalEntities).Returns(new DbSetStub<LegalEntity>(LegalEntities));
-            AccountsDb.Setup(d => d.Payees).Returns(new DbSetStub<Paye>(PayeSchemes));
-            AccountsDb.Setup(d => d.Agreements).Returns(new DbSetStub<EmployerAgreement>(Agreements));
             FinancialDb.Setup(d => d.Payments).Returns(new DbSetStub<Payment>(Payments));
 
-            Handler = new GetFinancialStatisticsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => AccountsDb.Object), FinancialDb.Object);
+            Handler = new GetFinancialStatisticsQueryHandler(FinancialDb.Object);
             Query = new GetFinancialStatisticsQuery();
 
             QueryFutureManager.AllowQueryBatch = false;

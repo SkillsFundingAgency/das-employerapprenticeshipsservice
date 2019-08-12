@@ -15,23 +15,19 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         private StatisticsController _controller;
         private Mock<IMediator> _mediator;
         private GetFinancialStatisticsResponse _response;
-        private StatisticsViewModel _statistics;
+        private FinancialStatisticsViewModel _financialStatistics;
 
         [SetUp]
         public void Setup()
         {
             _mediator = new Mock<IMediator>();
 
-            _statistics = new StatisticsViewModel
+            _financialStatistics = new FinancialStatisticsViewModel
             {
-                TotalAccounts = 1,
-                TotalPayeSchemes = 2,
-                TotalLegalEntities = 3,
-                TotalAgreements = 4,
                 TotalPayments = 5
             };
 
-            _response = new GetFinancialStatisticsResponse { Statistics = _statistics };
+            _response = new GetFinancialStatisticsResponse { Statistics = _financialStatistics };
 
             _mediator.Setup(m => m.SendAsync(It.IsAny<GetFinancialStatisticsQuery>())).ReturnsAsync(_response);
 
@@ -39,12 +35,12 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
         }
 
         [Test]
-        public async Task ThenShouldReturnStatistics()
+        public async Task ThenShouldReturnFinancialStatistics()
         {
-            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<StatisticsViewModel>; ;
+            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<FinancialStatisticsViewModel>; ;
             
             Assert.That(result, Is.Not.Null);
-            Assert.That(result.Content, Is.SameAs(_statistics));
+            Assert.That(result.Content, Is.SameAs(_financialStatistics));
         }
     }
 }

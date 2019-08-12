@@ -4,6 +4,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetFinancialStatistics
 {
     public class GetFinancialStatisticsResponse
     {
-        public StatisticsViewModel Statistics { get; set; }
+        //todo: no need for this viewmodel level of indirection. its badly named also!
+        public FinancialStatisticsViewModel Statistics { get; set; }
     }
 }
