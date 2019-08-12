@@ -19,7 +19,14 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                 .ForMember(target => target.PublicHashedAccountId, opt => opt.MapFrom(src => src.PublicHashedId))
                 .ForMember(target => target.DateRegistered, opt => opt.MapFrom(src => src.CreatedDate))
                 .ForMember(target => target.DasAccountName, opt => opt.MapFrom(src => src.Name))
-                .ForAllOtherMembers(opt => opt.Ignore());
+                .ForMember(target => target.OwnerEmail, opt => opt.Ignore())
+                .ForMember(target => target.LegalEntities, opt => opt.Ignore())
+                .ForMember(target => target.PayeSchemes, opt => opt.Ignore())
+                .ForMember(target => target.Balance, opt => opt.Ignore())
+                .ForMember(target => target.TransferAllowance, opt => opt.Ignore())
+                .ForMember(target => target.RemainingTransferAllowance, opt => opt.Ignore())
+                .ForMember(target => target.StartingTransferAllowance, opt => opt.Ignore())
+                .ForMember(target => target.AccountAgreementType, opt => opt.Ignore());
         }
     }
 }
