@@ -161,7 +161,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 Severity = FlashMessageSeverityLevel.Success,
                 Headline = $"{model.PayeScheme} has been added",
-                SubMessage = $"Levy funds from {payeSchemeName} will now credit your account",
                 HiddenFlashMessageInformation = "page-paye-scheme-added"
             };
             AddFlashMessageToCookie(flashMessage);
