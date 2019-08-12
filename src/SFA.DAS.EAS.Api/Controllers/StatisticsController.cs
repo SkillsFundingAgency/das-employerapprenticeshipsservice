@@ -20,8 +20,12 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [Route("")]
         public async Task<IHttpActionResult> GetStatistics()
         {
-            var response = await _mediator.SendAsync(new GetFinancialStatisticsQuery());
-            return Ok(response.Statistics);
+            //todo: add GetStatistics call to employeraccounts api client?
+            // inject client into controller (or inject client into new statistics orchestrator, or wrap client in service and inject into orch/controller)
+
+            var financialStatisticsTask = _mediator.SendAsync(new GetFinancialStatisticsQuery());
+            var financialStatistics = await financialStatisticsTask;
+            return Ok(financialStatistics.Statistics);
         }
     }
 }
