@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
         public Task Handle_WhenIGetStatistics_ThenShouldReturnResponse()
         {
             return RunAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
-                .And.Match<GetStatisticsResponse>(r2 =>
+                .And.Match<GetFinancialStatisticsResponse>(r2 =>
                     r2.Statistics != null &&
                     r2.Statistics.TotalAccounts == 2 &&
                     r2.Statistics.TotalLegalEntities == 4 &&
@@ -38,11 +38,11 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
         public Mock<EmployerAccountsDbContext> AccountsDb { get; }
         public List<EmployerAgreement> Agreements { get; set; }
         public Mock<EmployerFinanceDbContext> FinancialDb { get; }
-        public GetStatisticsQueryHandler Handler { get; }
+        public GetFinancialStatisticsQueryHandler Handler { get; }
         public List<LegalEntity> LegalEntities { get; }
         public List<Paye> PayeSchemes { get; }
         public List<Payment> Payments { get; set; }
-        public GetStatisticsQuery Query { get; }
+        public GetFinancialStatisticsQuery Query { get; }
 
         public GetStatisticsQueryTestsFixtures()
         {
@@ -93,13 +93,13 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
             AccountsDb.Setup(d => d.Agreements).Returns(new DbSetStub<EmployerAgreement>(Agreements));
             FinancialDb.Setup(d => d.Payments).Returns(new DbSetStub<Payment>(Payments));
 
-            Handler = new GetStatisticsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => AccountsDb.Object), FinancialDb.Object);
-            Query = new GetStatisticsQuery();
+            Handler = new GetFinancialStatisticsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => AccountsDb.Object), FinancialDb.Object);
+            Query = new GetFinancialStatisticsQuery();
 
             QueryFutureManager.AllowQueryBatch = false;
         }
 
-        public async Task<GetStatisticsResponse> Handle()
+        public async Task<GetFinancialStatisticsResponse> Handle()
         {
             return await Handler.Handle(Query);
         }

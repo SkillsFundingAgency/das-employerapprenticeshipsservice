@@ -14,7 +14,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
     {
         private StatisticsController _controller;
         private Mock<IMediator> _mediator;
-        private GetStatisticsResponse _response;
+        private GetFinancialStatisticsResponse _response;
         private StatisticsViewModel _statistics;
 
         [SetUp]
@@ -31,9 +31,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
                 TotalPayments = 5
             };
 
-            _response = new GetStatisticsResponse { Statistics = _statistics };
+            _response = new GetFinancialStatisticsResponse { Statistics = _statistics };
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetStatisticsQuery>())).ReturnsAsync(_response);
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetFinancialStatisticsQuery>())).ReturnsAsync(_response);
 
             _controller = new StatisticsController(_mediator.Object);
         }

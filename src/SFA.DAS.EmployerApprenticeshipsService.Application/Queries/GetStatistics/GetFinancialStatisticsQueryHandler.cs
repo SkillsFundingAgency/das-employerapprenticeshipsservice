@@ -10,18 +10,18 @@ using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.Empl
 
 namespace SFA.DAS.EAS.Application.Queries.GetStatistics
 {
-    public class GetStatisticsQueryHandler : IAsyncRequestHandler<GetStatisticsQuery, GetStatisticsResponse>
+    public class GetFinancialStatisticsQueryHandler : IAsyncRequestHandler<GetFinancialStatisticsQuery, GetFinancialStatisticsResponse>
     {
         private readonly Lazy<EmployerAccountsDbContext> _accountDb;
         private readonly EmployerFinanceDbContext _financeDb;
 
-        public GetStatisticsQueryHandler(Lazy<EmployerAccountsDbContext> accountDb, EmployerFinanceDbContext financeDb)
+        public GetFinancialStatisticsQueryHandler(Lazy<EmployerAccountsDbContext> accountDb, EmployerFinanceDbContext financeDb)
         {
             _accountDb = accountDb;
             _financeDb = financeDb;
         }
 
-        public async Task<GetStatisticsResponse> Handle(GetStatisticsQuery message)
+        public async Task<GetFinancialStatisticsResponse> Handle(GetFinancialStatisticsQuery message)
         {
             var accountsQuery = _accountDb.Value.Accounts.FutureCount();
             var legalEntitiesQuery = _accountDb.Value.LegalEntities.FutureCount();
@@ -38,7 +38,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetStatistics
                 TotalPayments = await paymentsQuery.ValueAsync()
             };
 
-            return new GetStatisticsResponse
+            return new GetFinancialStatisticsResponse
             {
                 Statistics = statistics
             };
