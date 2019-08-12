@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity;
@@ -27,15 +29,16 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountLegalEntityTes
         public async Task ThenTheAccountLegalEntityIsCreated()
         {
             var id = 337782;
-            var deleted = false;
+            var deleted = new DateTime(2010, 01, 01);
             var pendingAgreementId = 56832;
             var signedAgreementId = 338921;
             var signedAgreementVersion = 3;
             var accountId = 10862;
+            var legalEntityId = 44893;
 
-            await _handler.Handle(new CreateAccountLegalEntityCommand(id, deleted, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId));
+            await _handler.Handle(new CreateAccountLegalEntityCommand(id, deleted, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
 
-            _accountLegalEntityRepository.Verify(x => x.CreateAccountLegalEntity(id, deleted, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId));
+            _accountLegalEntityRepository.Verify(x => x.CreateAccountLegalEntity(id, deleted, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
         }
     }
 }

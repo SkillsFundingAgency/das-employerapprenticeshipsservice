@@ -26,7 +26,8 @@ namespace SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity
                     command.PendingAgreementId,
                     command.SignedAgreementId,
                     command.SignedAgreementVersion,
-                    command.AccountId
+                    command.AccountId,
+                    command.LegalEntityId
                 );
                 _logger.Info($"Account Legal Entity {command.Id} created");
             }
