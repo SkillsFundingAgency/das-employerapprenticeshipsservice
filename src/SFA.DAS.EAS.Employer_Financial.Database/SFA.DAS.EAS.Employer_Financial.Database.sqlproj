@@ -184,6 +184,8 @@
     <Build Include="Tables\Account.sql" />
     <Build Include="StoredProcedures\CreateAccount.sql" />
     <Build Include="StoredProcedures\RenameAccount.sql" />
+    <Build Include="Tables\AccountPaye.sql" />
+    <Build Include="StoredProcedures\CreateAccountPaye.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
