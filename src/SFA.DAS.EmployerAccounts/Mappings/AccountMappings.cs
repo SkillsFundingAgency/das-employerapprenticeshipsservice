@@ -18,7 +18,8 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                 .ForMember(target => target.HashedAccountId, opt => opt.MapFrom(src => src.HashedId))
                 .ForMember(target => target.PublicHashedAccountId, opt => opt.MapFrom(src => src.PublicHashedId))
                 .ForMember(target => target.DateRegistered, opt => opt.MapFrom(src => src.CreatedDate))
-                .ForMember(target => target.DasAccountName, opt => opt.MapFrom(src => src.Name));
+                .ForMember(target => target.DasAccountName, opt => opt.MapFrom(src => src.Name))
+                .ForAllOtherMembers(opt => opt.Ignore());
         }
     }
 }
