@@ -28,7 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.StatisticsControlle
                 TotalPayeSchemes = 2,
                 TotalLegalEntities = 3,
                 TotalAgreements = 4
-                //TotalPayments = 5
             };
 
             _response = new GetStatisticsResponse { Statistics = _statistics };
