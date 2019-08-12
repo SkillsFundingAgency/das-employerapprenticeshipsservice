@@ -376,9 +376,9 @@
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
-    <Compile Include="Queries\GetStatistics\GetFinancialStatisticsQueryHandler.cs" />
-    <Compile Include="Queries\GetStatistics\GetFinancialStatisticsQuery.cs" />
-    <Compile Include="Queries\GetStatistics\GetFinancialStatisticsResponse.cs" />
+    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQueryHandler.cs" />
+    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQuery.cs" />
+    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsResponse.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\LegalEntityMappings.cs" />
     <Compile Include="Queries\Extensions\QueryExtensions.cs" />

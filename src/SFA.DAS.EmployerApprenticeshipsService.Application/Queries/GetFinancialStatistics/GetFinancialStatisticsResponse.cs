@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Account.Api.Types;
 
-namespace SFA.DAS.EAS.Application.Queries.GetStatistics
+namespace SFA.DAS.EAS.Application.Queries.GetFinancialStatistics
 {
     public class GetFinancialStatisticsResponse
     {

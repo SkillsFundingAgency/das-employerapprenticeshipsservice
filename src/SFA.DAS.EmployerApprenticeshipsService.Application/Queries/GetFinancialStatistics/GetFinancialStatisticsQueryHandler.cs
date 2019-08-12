@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EntityFramework;
