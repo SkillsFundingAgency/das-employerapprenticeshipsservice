@@ -185,6 +185,7 @@
     <Build Include="StoredProcedures\CreateAccount.sql" />
     <Build Include="StoredProcedures\RenameAccount.sql" />
     <Build Include="StoredProcedures\CreateAccountLegalEntity.sql" />
+    <Build Include="StoredProcedures\SignAccountLegalEntityAgreement.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
