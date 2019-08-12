@@ -43,6 +43,10 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
             var accounts = await _mediator.SendAsync(new GetUserAccountsQuery { UserRef = userRef });
 
+            //todo: doesn't map many fields, such as ApprenticeshipEmployerType!
+            // detangled api returns...
+            // [{"AccountId":4,"HashedAccountId":"G6M7RV","PublicHashedAccountId":"XWGMWV","DasAccountName":"PINK MOOMIN LTD","DateRegistered":"0001-01-01T00:00:00","OwnerEmail":null,"LegalEntities":null,"PayeSchemes":null,"Balance":0.0,"TransferAllowance":0.0,"RemainingTransferAllowance":0.0,"StartingTransferAllowance":0.0,"DasAccountId":"G6M7RV","AccountAgreementType":0,"ApprenticeshipEmployerType":"0"}]
+            // check original
             var viewModels = accounts.Accounts.AccountList.Select(x => _mapper.Map<AccountDetailViewModel>(x)).ToList();
 
             return viewModels;
