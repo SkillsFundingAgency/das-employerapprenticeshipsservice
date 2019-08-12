@@ -13,9 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Mappings
             CreateMap<Account, AccountContext>();
             CreateMap<Account, AccountDto>();
 
-            // tangled api has this mapping in api project itself
-            // check gets called. right place?
-            // original maps from Domain.Models.Account.Account
             CreateMap<Account, AccountDetailViewModel>()
                 .ForMember(target => target.AccountId, opt => opt.MapFrom(src => src.Id))
                 .ForMember(target => target.HashedAccountId, opt => opt.MapFrom(src => src.HashedId))
