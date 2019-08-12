@@ -149,6 +149,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
+    <Compile Include="Extensions\AccountDashboardViewModelExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="FeatureToggles\CloudConfigFeatureToggle.cs" />
@@ -166,6 +167,7 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
+    <Compile Include="Mappings\AgreementInfoConverter.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\OrganisationMappings.cs" />
@@ -191,6 +193,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
@@ -748,6 +751,14 @@
     <Content Include="Views\EmployerAgreement\AboutYourDocument.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
+      <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
+      <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
+      <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
       <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
       <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
@@ -759,6 +770,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj">
       <Project>{2035d46a-422f-438c-a460-39e60a9f6ead}</Project>
       <Name>SFA.DAS.EmployerAccounts.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj">
+      <Project>{D3AA1CAA-4367-48A2-B796-FC392B9BEC49}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{b520a3e4-8259-4309-94d4-4a99fd32d2f7}</Project>
