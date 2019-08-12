@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EAS.Account.Api.Types;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api
 {
     public class GetAccountLegalEntitiesResponse
     {

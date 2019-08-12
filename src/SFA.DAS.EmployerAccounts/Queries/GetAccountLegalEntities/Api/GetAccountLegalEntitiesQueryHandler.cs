@@ -5,12 +5,12 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EntityFramework;
 using Z.EntityFramework.Plus;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api
 {
     public class GetAccountLegalEntitiesQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesQuery, GetAccountLegalEntitiesResponse>
     {

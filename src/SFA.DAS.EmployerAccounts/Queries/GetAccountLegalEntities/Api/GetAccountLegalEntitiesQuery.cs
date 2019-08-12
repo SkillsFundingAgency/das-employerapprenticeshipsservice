@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api
 {
     public class GetAccountLegalEntitiesQuery : IAsyncRequest<GetAccountLegalEntitiesResponse>
     {
