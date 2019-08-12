@@ -27,25 +27,32 @@
             <tbody>
                 @foreach (var org in Model.Data.Agreements)
                 {
-                    <tr>
-                        <td>@org.Name</td>
-                        @if (org.CanBeRemoved)
+                <tr>
+                    <td>@org.Name</td>
+                    @if (org.CanBeRemoved)
+                    {
+                        <td><a href="@Url.Action("ConfirmRemoveOrganisation","EmployerAgreement",new {agreementId = org.HashedAgreementId})">Remove <span class="vh">@org.Name</span></a></td>
+                    }
+                    else
+                    {
+                        if (Model.Data.Agreements.Count == 1)
                         {
-                            <td><a href="@Url.Action("ConfirmRemoveOrganisation","EmployerAgreement",new {agreementId = org.HashedAgreementId})">Remove <span class="vh">@org.Name</span></a></td>
+                            <td>Can't be removed because it's the only organisation on your account.</td>
                         }
-                        else
+                        else if (org.HasVacancies)
                         {
-                            if (Model.Data.Agreements.Count == 1)
-                            {
-                                <td>Can't be removed because it's the only organisation on your account.</td>
-                            }
-                            else
-                            {
-                                <td>Can't be removed because it has ongoing apprenticeships.</td>
-                            }
+                            <td>Unable to be removed - currently has vacancies</td>
                         }
-                        
-                    </tr>
+                        else if(org.HasCommitments)
+                        {
+                            <td>Can't be removed because it has ongoing apprenticeships.</td>
+                        }
+                        else if (org.HasCommitments && org.HasVacancies)
+                        {
+                            <td>Unable to be removed - currently has vacancies and active apprenticeships</td>
+                        }
+                    }
+                </tr>
                 }
 
             

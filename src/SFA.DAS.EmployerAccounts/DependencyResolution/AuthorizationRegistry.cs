@@ -5,6 +5,8 @@ using SFA.DAS.Authorization;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Services;
+using AgreementService = SFA.DAS.EmployerAccounts.Features.AgreementService;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
@@ -14,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             For<FeaturesConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<FeaturesConfiguration>(ConfigurationKeys.Features)).Singleton();
             For<IAgreementService>().Use<AgreementService>();
+            For<IDasRecruitService>().Use<DasRecruitService>();
             For<IAuthorizationService>().Use<AuthorizationService>();
 
             For<IEnumerable<IAuthorizationHandler>>().Use(c => new List<IAuthorizationHandler>
