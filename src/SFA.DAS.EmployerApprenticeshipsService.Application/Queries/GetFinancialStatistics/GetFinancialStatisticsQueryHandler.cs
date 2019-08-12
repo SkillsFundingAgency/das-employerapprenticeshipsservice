@@ -3,13 +3,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.Infrastructure.Extensions;
 using SFA.DAS.EntityFramework;
 using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
 
-namespace SFA.DAS.EAS.Application.Queries.GetStatistics
+namespace SFA.DAS.EAS.Application.Queries.GetFinancialStatistics
 {
     public class GetFinancialStatisticsQueryHandler : IAsyncRequestHandler<GetFinancialStatisticsQuery, GetFinancialStatisticsResponse>
     {
@@ -44,5 +43,3 @@ namespace SFA.DAS.EAS.Application.Queries.GetStatistics
                 Statistics = statistics
             };
         }
-    }
-}

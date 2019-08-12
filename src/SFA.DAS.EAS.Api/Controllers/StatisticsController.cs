@@ -2,7 +2,7 @@
 using System.Web.Http;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Application.Queries.GetStatistics;
+using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {

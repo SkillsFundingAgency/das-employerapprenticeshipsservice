@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
-using SFA.DAS.EAS.Application.Queries.GetStatistics;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTests
 {
