@@ -15,6 +15,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
+using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
+using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
 using TransactionLine = SFA.DAS.EmployerFinance.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
@@ -25,6 +31,8 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private const string ExternalUser = "Test user";
         private const long AccountId = 1234;
 
+        private Mock<IAccountApiClient> _accountApiClient;
+        private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private GetEmployerAccountResponse _response;
@@ -34,6 +42,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         [SetUp]
         public void Arrange()
         {
+            _accountApiClient = new Mock<IAccountApiClient>();
             _mediator = new Mock<IMediator>();
             _currentTime = new Mock<ICurrentDateTime>();
             _hashingService = new Mock<IHashingService>();
@@ -56,10 +65,66 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             SetupGetTransactionsResponse(2017, 5);
 
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_mediator.Object, _currentTime.Object, Mock.Of<ILog>());
+            _employerAccountsConfiguration = new EmployerAccountsConfiguration();
+
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _employerAccountsConfiguration, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
         [Test]
+        public async Task AndAccountAgreementTypeIsNonLevyEoiThenRedirectUrlShouldBeSetToYourFundingReservationsPage()
+        {
+            //Arrange
+            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
+                .ReturnsAsync(new AccountDetailViewModel
+                {
+                    AccountAgreementType = AccountAgreementType.NonLevyExpressionOfInterest
+                });
+
+            var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
+            {
+                AccountHashedId = HashedAccountId
+            };
+
+            _employerAccountsConfiguration.ReservationsBaseUrl = "http://example.com";
+
+            //Act
+            var response = await _orchestrator.Index(getAccountFinanceOverviewQuery);
+
+            //Assert
+            response.Should().NotBeNull();
+            response.RedirectUrl.Should().Be($"http://example.com/accounts/{HashedAccountId}/reservations/manage");
+        }
+
+        [TestCase(AccountAgreementType.Unknown)]
+        [TestCase(AccountAgreementType.Inconsistent)]
+        [TestCase(AccountAgreementType.Levy)]
+        public async Task AndAccountAgreementTypeIsNotNonLevyEoiThenRedirectUrlShouldBeNull(AccountAgreementType accountAgreementType)
+        {
+            //Arrange
+            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
+                .ReturnsAsync(new AccountDetailViewModel
+                {
+                    AccountAgreementType = accountAgreementType
+                });
+
+            var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
+            {
+                AccountHashedId = HashedAccountId
+            };
+
+            _employerAccountsConfiguration.ReservationsBaseUrl = "http://example.com";
+
+            _mediator.Setup(m => m.SendAsync(It.IsAny<GetAccountFinanceOverviewQuery>()))
+                .ReturnsAsync(new GetAccountFinanceOverviewResponse());
+
+            //Act
+            var response = await _orchestrator.Index(getAccountFinanceOverviewQuery);
+
+            //Assert
+            response.Should().NotBeNull();
+            response.RedirectUrl.Should().BeNull();
+        }
+
         [TestCase(2, 2017)]
         [TestCase(6, 2017)]
         [TestCase(8, 2019)]
