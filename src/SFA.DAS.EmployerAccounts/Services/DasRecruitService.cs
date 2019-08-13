@@ -23,8 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             _httpClient = recruitApiHttpClientFactory.CreateHttpClient();
         }
 
-        public async Task<VacanciesSummary> GetVacanciesByLegalEntity(string hashedAccountId, long legalEntityId,
-            CancellationToken cancellationToken = default)
+        public async Task<VacanciesSummary> GetVacanciesByLegalEntity(string hashedAccountId, long legalEntityId)
         {
             _log.Info($"Getting VacanciesSummary for account ID {hashedAccountId} and legalEntityId {legalEntityId}");
 
@@ -34,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             {
                 var stopWatch = new Stopwatch();
                 stopWatch.Start();
-                var response = await _httpClient.GetAsync(vacanciesSummaryUri, cancellationToken).ConfigureAwait(false);
+                var response = await _httpClient.GetAsync(vacanciesSummaryUri).ConfigureAwait(false);
                 _log.Info($"Received {(int)response.StatusCode} response in {stopWatch.Elapsed}");
 
                 if (response.StatusCode == HttpStatusCode.NotFound)

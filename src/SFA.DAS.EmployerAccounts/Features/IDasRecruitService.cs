@@ -6,7 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Features
 {
     public interface IDasRecruitService
     {
-        Task<VacanciesSummary> GetVacanciesByLegalEntity(string hashedAccountId, long legalEntityId,
-            CancellationToken cancellationToken = default);
+        Task<VacanciesSummary> GetVacanciesByLegalEntity(string hashedAccountId, long legalEntityId);
     }
 }
