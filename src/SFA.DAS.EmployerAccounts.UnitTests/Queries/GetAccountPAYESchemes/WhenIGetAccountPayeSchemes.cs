@@ -96,11 +96,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             //Act
             await RequestHandler.Handle(Query);
 
-            //Assert
-            _accountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
+            //AssertaccountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
             _englishFractionsRepository.Verify(x => x.GetCurrentFractionForSchemes(AccountId, It.Is<IEnumerable<string>>(y => y.Single() == _payeView.Ref)), Times.Once);
         }
 
+        [Test]
+        public void ThenInvalidRequestExceptionIsThrownForInvalidAccountId()
+        {
+            _hashingService
+                .Setup(
+                    m => m.DecodeValue(It.IsAny<string>()))
+                .Throws<IndexOutOfRangeException>();
+
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));
+        }
         [Test]
         public void ThenAnUnauthorizedAccessExceptionIsThrownIfTheValidationReturnsNotAuthorized()
         {
@@ -114,7 +123,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
-
         }
 
         [Test]

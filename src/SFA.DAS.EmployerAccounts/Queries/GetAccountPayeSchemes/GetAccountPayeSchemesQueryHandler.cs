@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
@@ -42,8 +43,25 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
                 throw new UnauthorizedAccessException();
             }
             
-            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            
+            long accountId;
+
+            try
+            {
+                accountId = _hashingService.DecodeValue(message.HashedAccountId);
+
+            }
+            catch (IndexOutOfRangeException)
+            {
+                throw new InvalidRequestException(
+                    new Dictionary<string, string>
+                    {
+                        {
+                            nameof(message.HashedAccountId), "Hashed account ID cannot be decoded."
+                        }
+                    }
+                );
+            }
+
             var payeSchemes = await _payeRepository.GetPayeSchemesByAccountId(accountId);
 
             if (payeSchemes.Count == 0)
