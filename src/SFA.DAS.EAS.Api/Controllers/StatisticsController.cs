@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -10,22 +9,20 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/statistics")]
     public class StatisticsController : ApiController
     {
-        private readonly IMediator _mediator;
+        private readonly StatisticsOrchestrator _statisticsOrchestrator;
 
-        public StatisticsController(IMediator mediator)
+        public StatisticsController(StatisticsOrchestrator statisticsOrchestrator)
         {
-            _mediator = mediator;
+            _statisticsOrchestrator = statisticsOrchestrator;
         }
-        
+
         [Route("")]
         public async Task<IHttpActionResult> GetStatistics()
         {
             //todo: add GetStatistics call to employeraccounts api client?
             // inject client into controller (or inject client into new statistics orchestrator, or wrap client in service and inject into orch/controller)
 
-            var financialStatisticsTask = _mediator.SendAsync(new GetFinancialStatisticsQuery());
-            var financialStatistics = await financialStatisticsTask;
-            return Ok(financialStatistics.Statistics);
+            return Ok(await _statisticsOrchestrator.Get());
         }
     }
 }
