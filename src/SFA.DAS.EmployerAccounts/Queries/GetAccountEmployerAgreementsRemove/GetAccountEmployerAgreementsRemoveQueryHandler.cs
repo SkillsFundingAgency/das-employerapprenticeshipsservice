@@ -65,13 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
                 removeEmployerAgreementView.HashedAgreementId =
                     _hashingService.HashValue(removeEmployerAgreementView.Id);
                 removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
-
-                var legalAgreementId = _hashingService.DecodeValue(removeEmployerAgreementView.HashedAgreementId);
-
-                var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
-
-                var vacanciesSummary = await _dasRecruitService.GetVacanciesByLegalEntity(message.HashedAccountId, agreement.LegalEntityId);
-                    
+                
                 if (result.Count == 1) continue;
 
                 switch (removeEmployerAgreementView.Status)
@@ -80,23 +74,26 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
                         removeEmployerAgreementView.CanBeRemoved = true;
                         break;
                     case EmployerAgreementStatus.Signed:
+                        var legalAgreementId = _hashingService.DecodeValue(removeEmployerAgreementView.HashedAgreementId);
+
+                        var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
+
+                        var vacanciesSummary = await _dasRecruitService.GetVacanciesByLegalEntity(message.HashedAccountId, agreement.LegalEntityId);
+
                         var commitmentConnectedToEntity = commitments.FirstOrDefault(c =>
                             !string.IsNullOrEmpty(c.LegalEntityIdentifier)
                             && c.LegalEntityIdentifier.Equals(removeEmployerAgreementView.LegalEntityCode)
                             && c.LegalEntityOrganisationType == removeEmployerAgreementView.LegalEntitySource);
 
-                        if (vacanciesSummary.Vacancies.Any())
+                        removeEmployerAgreementView.HasVacancies = vacanciesSummary.Vacancies.Any();
+                        removeEmployerAgreementView.HasCommitments = commitmentConnectedToEntity != null &&
+                                                                     (commitmentConnectedToEntity.ActiveCount +
+                                                                      commitmentConnectedToEntity.PendingApprovalCount +
+                                                                      commitmentConnectedToEntity.PausedCount) != 0;
+
+                        if (removeEmployerAgreementView.HasVacancies || removeEmployerAgreementView.HasCommitments)
                         {
                             removeEmployerAgreementView.CanBeRemoved = false;
-                            removeEmployerAgreementView.HasVacancies = true;
-                        }
-                        else if (commitmentConnectedToEntity != null &&
-                            (commitmentConnectedToEntity.ActiveCount +
-                             commitmentConnectedToEntity.PendingApprovalCount +
-                             commitmentConnectedToEntity.PausedCount) != 0)
-                        {
-                            removeEmployerAgreementView.CanBeRemoved = false;
-                            removeEmployerAgreementView.HasCommitments = true;
                         }
                         else
                         {

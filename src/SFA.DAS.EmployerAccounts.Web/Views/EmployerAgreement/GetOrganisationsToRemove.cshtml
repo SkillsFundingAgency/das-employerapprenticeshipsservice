@@ -39,6 +39,10 @@
                         {
                             <td>Can't be removed because it's the only organisation on your account.</td>
                         }
+                        else if (org.HasCommitments && org.HasVacancies)
+                        {
+                            <td>Unable to be removed - currently has vacancies and active apprenticeships</td>
+                        }
                         else if (org.HasVacancies)
                         {
                             <td>Unable to be removed - currently has vacancies</td>
@@ -46,10 +50,6 @@
                         else if(org.HasCommitments)
                         {
                             <td>Can't be removed because it has ongoing apprenticeships.</td>
-                        }
-                        else if (org.HasCommitments && org.HasVacancies)
-                        {
-                            <td>Unable to be removed - currently has vacancies and active apprenticeships</td>
                         }
                     }
                 </tr>

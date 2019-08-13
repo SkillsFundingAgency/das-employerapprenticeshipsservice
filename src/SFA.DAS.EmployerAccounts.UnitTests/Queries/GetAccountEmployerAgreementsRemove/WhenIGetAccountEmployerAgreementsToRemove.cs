@@ -25,10 +25,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         private Mock<IEmployerAgreementRepository> _repository;
         private Mock<IHashingService> _hashingService;
         private Mock<IEmployerCommitmentApi> _commitmentsApi;
+        
         public override GetAccountEmployerAgreementsRemoveRequest Query { get; set; }
         public override GetAccountEmployerAgreementsRemoveQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountEmployerAgreementsRemoveRequest>> RequestValidator { get; set; }
-        public Vacancy Vacancy { get; set; }
+
+        private Vacancy Vacancy { get; set; }
+
         IEnumerable<Vacancy> Vacancies { get; set; }
         private const string ExpectedUserId = "456TGFD";
         private const string ExpectedHashedAccountId = "456TGFD";
@@ -148,6 +151,34 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
             //Act
             var actual = await RequestHandler.Handle(Query);
             Assert.AreEqual(1, actual.Agreements.Count(c=>c.CanBeRemoved));
+            _commitmentsApi.Verify(x => x.GetEmployerAccountSummary(ExpectedAccountId), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenIfTheAgreementIsSignedThenTheApiIsCheckedForActiveCommitmentsAndLegalEntitiesHasVacancies()
+        {
+            //Arrange
+            Vacancies = Enumerable.Empty<Vacancy>();
+            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
+                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary> { new ApprenticeshipStatusSummary { LegalEntityIdentifier = ExpectedLegalEntityCode, ActiveCount = 1 } });
+            _repository
+                .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
+                .ReturnsAsync(new List<RemoveEmployerAgreementView>
+                {
+                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
+                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode}
+                });
+            Vacancies = Enumerable.Repeat(Vacancy, 3);
+            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
+                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
+
+            //Act
+            var actual = await RequestHandler.Handle(Query);
+            Assert.AreEqual(1, actual.Agreements.Count(c => c.HasVacancies));
+            Assert.AreEqual(1, actual.Agreements.Count(c => c.HasCommitments));
             _commitmentsApi.Verify(x => x.GetEmployerAccountSummary(ExpectedAccountId), Times.Once);
         }
 
