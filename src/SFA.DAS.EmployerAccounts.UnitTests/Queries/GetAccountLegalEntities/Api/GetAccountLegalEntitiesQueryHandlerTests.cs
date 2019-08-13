@@ -6,15 +6,15 @@ using AutoMapper;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Mappings;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Mappings;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using Z.EntityFramework.Plus;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
 {
     [TestFixture]
     public class GetAccountLegalEntitiesQueryHandlerTests : FluentTest<GetAccountLegalEntitiesQueryHandlerTestsFixture>

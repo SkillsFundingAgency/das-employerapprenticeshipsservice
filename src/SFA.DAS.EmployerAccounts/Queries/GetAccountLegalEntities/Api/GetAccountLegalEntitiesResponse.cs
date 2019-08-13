@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EAS.Account.Api.Types;
+﻿using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api
 {

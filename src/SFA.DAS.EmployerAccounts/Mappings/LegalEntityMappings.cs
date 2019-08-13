@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -8,9 +9,6 @@ namespace SFA.DAS.EmployerAccounts.Mappings
     {
         public LegalEntityMappings()
         {
-            long accountId = 0;
-            string accountHashedId = null;
-
             CreateMap<AccountSpecificLegalEntity, AccountSpecificLegalEntityDto>()
                 .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address));
 
@@ -24,6 +22,10 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(d => d.PublicSectorDataSource, o => o.MapFrom(l => l.LegalEntity.PublicSectorDataSource))
                 .ForMember(d => d.Source, o => o.MapFrom(l => l.LegalEntity.Source))
+                .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
+                .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId));
+
+            CreateMap<AccountLegalEntity, AccountLegalEntityViewModel>()
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId));
         }

@@ -5,12 +5,12 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api;
-using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EmployerAccounts.Api.Controllers;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
+using SFA.DAS.EmployerAccounts.TestCommon;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountLegalEntitiesControllerTests
 {
     [TestFixture]
     public class AccountLegalEntitiesControllerTests : FluentTest<AccountLegalEntitiesControllerTestsFixture>
