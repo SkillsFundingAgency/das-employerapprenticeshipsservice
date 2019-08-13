@@ -34,7 +34,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         private Mock<IMediator> _mediator;
         private Mock<IGenericEventFactory> _genericEventFactory;
         private Mock<IPayeSchemeEventFactory> _payeSchemeEventFactory;
-        private Mock<IRefreshEmployerLevyService> _refreshEmployerLevyService;
 
         private const long ExpectedAccountId = 54564;
         private const string ExpectedPayeName = "Paye Scheme 1";
@@ -57,8 +56,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _payeSchemeEventFactory = new Mock<IPayeSchemeEventFactory>();
 
-            _refreshEmployerLevyService = new Mock<IRefreshEmployerLevyService>();
-
             _addPayeToAccountCommandHandler = new AddPayeToAccountCommandHandler(
                 _validator.Object,
                 _accountRepository.Object,
@@ -66,8 +63,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
                 _hashingService.Object,
                 _mediator.Object,
                 _genericEventFactory.Object,
-                _payeSchemeEventFactory.Object,
-                _refreshEmployerLevyService.Object);
+                _payeSchemeEventFactory.Object);
 
             _user = new User
             {
@@ -106,19 +102,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             //Assert
             _accountRepository.Verify(x => x.AddPayeToAccount(
                                                 AssertPayeScheme(command)), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenAMessageIsQueuedForTheRefreshEmployerLevyService()
-        {
-            //Arrange
-            var command = AddPayeToNewLegalEntityCommandObjectMother.Create();
-
-            //Act
-            await _addPayeToAccountCommandHandler.Handle(command);
-
-            //Assert
-            _refreshEmployerLevyService.Verify(x => x.QueueRefreshLevyMessage(ExpectedAccountId, command.Empref));
         }
 
         [Test]
