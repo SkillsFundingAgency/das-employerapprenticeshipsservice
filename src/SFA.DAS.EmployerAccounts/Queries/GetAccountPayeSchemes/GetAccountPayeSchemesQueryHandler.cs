@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
@@ -11,22 +12,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
 {
     public class GetAccountPayeSchemesQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>
     {
-        private readonly IPayeRepository _payeRepository;
-        private readonly IEnglishFractionRepository _englishFractionRepository;
-        private readonly IHashingService _hashingService;
         private readonly IValidator<GetAccountPayeSchemesQuery> _validator;
-
+        private IPayeSchemesService _payeSchemesService;
 
         public GetAccountPayeSchemesQueryHandler(
-            IPayeRepository payeRepository, 
-            IEnglishFractionRepository englishFractionRepository,
-            IHashingService hashingService, 
+            IPayeSchemesService payeSchemesService,
             IValidator<GetAccountPayeSchemesQuery> validator )
         {
-            _payeRepository = payeRepository ?? throw new ArgumentNullException(nameof(payeRepository));
-            _englishFractionRepository = englishFractionRepository;
-            _hashingService = hashingService;
             _validator = validator;
+            _payeSchemesService = payeSchemesService;
         }
 
         public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesQuery message)
@@ -42,41 +36,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
             {
                 throw new UnauthorizedAccessException();
             }
-            
-            long accountId;
 
-            try
-            {
-                accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-            }
-            catch (IndexOutOfRangeException)
-            {
-                throw new InvalidRequestException(
-                    new Dictionary<string, string>
-                    {
-                        {
-                            nameof(message.HashedAccountId), "Hashed account ID cannot be decoded."
-                        }
-                    }
-                );
-            }
-
-            var payeSchemes = await _payeRepository.GetPayeSchemesByAccountId(accountId);
-
-            if (payeSchemes.Count == 0)
-            {
-                return new GetAccountPayeSchemesResponse
-                {
-                    PayeSchemes = payeSchemes
-                };
-            }
-
-            var englishFractions = (await _englishFractionRepository.GetCurrentFractionForSchemes(accountId, payeSchemes.Select(x => x.Ref))).Where(x => x != null).ToList();
-            foreach (var scheme in payeSchemes)
-            {
-                scheme.EnglishFraction = englishFractions.FirstOrDefault(x => x.EmpRef == scheme.Ref);
-            }
+            var payeSchemes =
+                (await _payeSchemesService
+                    .GetPayeSchemsWithEnglishFractionForHashedAccountId(message.HashedAccountId))
+                .ToList();
 
             return new GetAccountPayeSchemesResponse
             {

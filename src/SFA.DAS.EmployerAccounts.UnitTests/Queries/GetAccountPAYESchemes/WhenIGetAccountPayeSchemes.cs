@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Levy;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
@@ -21,9 +20,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
         private PayeView _payeView;
         private DasEnglishFraction _englishFraction;
 
-        private Mock<IPayeRepository> _accountRepository;
-        private Mock<IEnglishFractionRepository> _englishFractionsRepository;
-        private Mock<IHashingService> _hashingService;
+        private Mock<IPayeSchemesService> _payeSchemesService;
+        private string _hashedAccountId;
 
         public override GetAccountPayeSchemesQuery Query { get; set; }
         public override GetAccountPayeSchemesQueryHandler RequestHandler { get; set; }
@@ -48,30 +46,25 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
                 Amount = 0.5m
             };
 
+            _payeView.EnglishFraction = _englishFraction;
+
+            _hashedAccountId = "123ABC";
             Query = new GetAccountPayeSchemesQuery()
             {
-                HashedAccountId = "123ABC",
+                HashedAccountId = _hashedAccountId,
             };
 
-            _accountRepository = new Mock<IPayeRepository>();
-            _englishFractionsRepository = new Mock<IEnglishFractionRepository>();
-            _hashingService = new Mock<IHashingService>();
+            _payeSchemesService = new Mock<IPayeSchemesService>();
 
-            _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(It.IsAny<long>())).ReturnsAsync(new List<PayeView>
-            {
-                _payeView
-            });
+            _payeSchemesService
+                .Setup(
+                    m => m.GetPayeSchemsWithEnglishFractionForHashedAccountId(_hashedAccountId)
+                )
+                .ReturnsAsync(new List<PayeView> {_payeView});
 
-            _englishFractionsRepository.Setup(x => x.GetCurrentFractionForSchemes(It.IsAny<long>(), It.IsAny<IEnumerable<string>>()))
-                                       .ReturnsAsync(new List<DasEnglishFraction> { _englishFraction });
-
-            _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>()))
-                .Returns(AccountId);
 
             RequestHandler = new GetAccountPayeSchemesQueryHandler(
-                _accountRepository.Object, 
-                _englishFractionsRepository.Object,
-                _hashingService.Object, 
+                _payeSchemesService.Object,
                 RequestValidator.Object);
         }
 
@@ -82,8 +75,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             await RequestHandler.Handle(Query);
 
             //Assert
-            _accountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
-            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForSchemes(AccountId, It.Is<IEnumerable<string>>(y => y.Single() == _payeView.Ref)), Times.Once);
+            _payeSchemesService.Verify(x => x.GetPayeSchemsWithEnglishFractionForHashedAccountId(_hashedAccountId), Times.Once);
         }
 
         [Test]
@@ -113,21 +105,5 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             Assert.AreEqual(_payeView, result.PayeSchemes.First());
             Assert.AreEqual(_englishFraction, result.PayeSchemes.First().EnglishFraction);
         }
-
-        [Test]
-        public async Task ThenIfNotSchemesCanBeFoundNoEnglishFractionsAreCollected()
-        {
-            //Arrabge
-            _accountRepository.Setup(x => x.GetPayeSchemesByAccountId(It.IsAny<long>()))
-                              .ReturnsAsync(new List<PayeView>());
-
-            //Act
-            var result = await RequestHandler.Handle(Query);
-
-            //Assert
-            Assert.IsEmpty(result.PayeSchemes);
-            _englishFractionsRepository.Verify(x => x.GetCurrentFractionForSchemes(It.IsAny<long>(), It.IsAny<IEnumerable<string>>()), Times.Never);
-        }
-        
     }
 }

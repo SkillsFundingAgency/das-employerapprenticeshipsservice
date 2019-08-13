@@ -1,21 +1,23 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
 {
     public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
     {
+        private readonly IPayeSchemesService _payeSchemesService;
         private readonly IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> _validator;
-        private readonly IMediator _mediator;
-
 
         public GetAccountPayeSchemesForAuthorisedUserQueryHandler(
-            IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> validator, IMediator mediator)
+            IPayeSchemesService payeSchemesService,
+            IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> validator)
         {
+            _payeSchemesService = payeSchemesService;
             _validator = validator;
-            _mediator = mediator;
         }
 
         public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesForAuthorisedUserQuery message)
@@ -32,11 +34,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
                 throw new UnauthorizedAccessException();
             }
 
-            return await _mediator.SendAsync(
-                new GetAccountPayeSchemesQuery
-                {
-                    HashedAccountId = message.HashedAccountId
-                });
+            var payeSchemes =
+                (await _payeSchemesService
+                    .GetPayeSchemsWithEnglishFractionForHashedAccountId(message.HashedAccountId))
+                .ToList();
+
+            return new GetAccountPayeSchemesResponse
+            {
+                PayeSchemes = payeSchemes
+            };
         }
     }
 }
