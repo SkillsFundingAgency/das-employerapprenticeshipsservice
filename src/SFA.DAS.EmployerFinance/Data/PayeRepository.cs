@@ -66,5 +66,22 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<PayeSchemes> GetGovernmentGatewayOnlySchemesByEmployerId(long employerId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", employerId, DbType.Int64);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<Paye>(
+                sql: "[employer_account].[GetPayeSchemesAddedByGovernmentGateway_ByAccountId]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return new PayeSchemes
+            {
+                SchemesList = result.ToList()
+            };
+        }
     }
 }

@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
     public class An_ImportLevyDeclarationsCommandHandler_
     {
         private ImportLevyDeclarationsCommandHandler _handler;
-        private Mock<IEmployerSchemesRepository> _schemesRepository;
+        private Mock<IPayeRepository> _payeRepository;
         private List<Account> _accounts;
 
         [SetUp]
@@ -47,16 +47,16 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                     m => m.GetAllAccounts())
                 .ReturnsAsync(_accounts);
 
-            _schemesRepository
+            _payeRepository
                 =
-                new Mock<IEmployerSchemesRepository>();
+                new Mock<IPayeRepository>();
 
             _handler
                 =
                 new ImportLevyDeclarationsCommandHandler(
                     accountsRepository.Object,
                     Mock.Of<ILog>(),
-                    _schemesRepository.Object);
+                    _payeRepository.Object);
         }
 
         [Test]
@@ -67,13 +67,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
                     new ImportLevyDeclarationsCommand(),
                     Mock.Of<IMessageHandlerContext>());
 
-            _schemesRepository
-                .Verify( 
-                    m => 
-                        m.GetSchemesByEmployerId(It.IsAny<long>()),
-                    Times.Never);
-
-            _schemesRepository
+            _payeRepository
                 .Verify(
                     m =>
                         m.GetGovernmentGatewayOnlySchemesByEmployerId(

@@ -1,9 +1,10 @@
 ﻿CREATE PROCEDURE [employer_financial].[CreateAccountPaye]
 	@accountId BIGINT,
 	@empRef NVARCHAR(16),
+	@name VARCHAR(500) NULL, 
 	@aorn VARCHAR(25) = NULL
 AS
 	INSERT INTO [employer_financial].[AccountPaye]
-		(AccountId, EmpRef, Aorn)
+		(AccountId, EmpRef, [Name], Aorn)
 	VALUES
-		(@accountId, @empRef, @aorn)
+		(@accountId, @empRef, @name, @aorn)

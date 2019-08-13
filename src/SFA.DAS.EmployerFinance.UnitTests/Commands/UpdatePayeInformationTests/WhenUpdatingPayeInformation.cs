@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
             _validator.Setup(x => x.Validate(It.IsAny<UpdatePayeInformationCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> () });
 
             _payeRepository = new Mock<IPayeRepository>();
-            _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye { EmpRef = ExpectedEmpRef });
+            _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye { Ref = ExpectedEmpRef });
 
             _hmrcService = new Mock<IHmrcService>();
             _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedEmpRef))
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
         public async Task ThenIfTheSchemeReturnedHasNoNameAssociatedWithItThenTheHmrcServiceIsCalled()
         {
             //Arrange
-            _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye {EmpRef = ExpectedEmpRef});
+            _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye {Ref = ExpectedEmpRef});
 
             //Act
             await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
         public async Task ThenIftheScehmeReturnedHasANameThenTheHmrcServiceIsNotCalled()
         {
             //Arrange
-            _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye { EmpRef = ExpectedEmpRef, RefName = "Test" });
+            _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye { Ref = ExpectedEmpRef, RefName = "Test" });
 
             //Act
             await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });

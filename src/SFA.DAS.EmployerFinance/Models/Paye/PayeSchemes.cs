@@ -4,7 +4,7 @@ namespace SFA.DAS.EmployerFinance.Models.Paye
 {
     public class PayeSchemes
     {
-        public List<PayeScheme> SchemesList { get; set; }
+        public List<Paye> SchemesList { get; set; }
 
     }
 }

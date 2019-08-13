@@ -9,5 +9,6 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<PayeSchemeView> GetPayeForAccountByRef(string hashedAccountId, string payeRef);
         Task<Paye> GetPayeSchemeByRef(string payeRef);
         Task UpdatePayeSchemeName(string payeRef, string refName);
+        Task<PayeSchemes> GetGovernmentGatewayOnlySchemesByEmployerId(long employerId);
     }
 }
