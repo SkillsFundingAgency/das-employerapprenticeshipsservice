@@ -7,7 +7,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAuthorisedUser
 {
     public class WhenIValidateTheRequest
     {

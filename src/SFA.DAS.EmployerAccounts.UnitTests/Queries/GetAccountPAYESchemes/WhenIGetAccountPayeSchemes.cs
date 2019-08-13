@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
@@ -12,9 +11,9 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAuthorisedUser
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
 {
-    class WhenIGetAccountPayeSchemes : QueryBaseTest<GetAccountPayeSchemesForAuthorisedUserQueryHandler, GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
+    class WhenIGetAccountPayeSchemes : QueryBaseTest<GetAccountPayeSchemesQueryHandler, GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>
     {
         private const long AccountId = 2;
         private static readonly DateTime UpdateDate = DateTime.Now;
@@ -26,9 +25,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
         private Mock<IEnglishFractionRepository> _englishFractionsRepository;
         private Mock<IHashingService> _hashingService;
 
-        public override GetAccountPayeSchemesForAuthorisedUserQuery Query { get; set; }
-        public override GetAccountPayeSchemesForAuthorisedUserQueryHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetAccountPayeSchemesForAuthorisedUserQuery>> RequestValidator { get; set; }
+        public override GetAccountPayeSchemesQuery Query { get; set; }
+        public override GetAccountPayeSchemesQueryHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetAccountPayeSchemesQuery>> RequestValidator { get; set; }
        
 
         [SetUp]
@@ -49,10 +48,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
                 Amount = 0.5m
             };
 
-            Query = new GetAccountPayeSchemesForAuthorisedUserQuery
+            Query = new GetAccountPayeSchemesQuery()
             {
                 HashedAccountId = "123ABC",
-                ExternalUserId = "1234"
             };
 
             _accountRepository = new Mock<IPayeRepository>();
@@ -70,24 +68,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
             _hashingService.Setup(x => x.DecodeValue(It.IsAny<string>()))
                 .Returns(AccountId);
 
-            Mock<IMediator> mockMediatr = new Mock<IMediator>();
-
-            var innerHandler = new GetAccountPayeSchemesQueryHandler(
-                _accountRepository.Object,
+            RequestHandler = new GetAccountPayeSchemesQueryHandler(
+                _accountRepository.Object, 
                 _englishFractionsRepository.Object,
-                _hashingService.Object,
-                new GetAccountPayeSchemesQueryValidator());
-
-            mockMediatr
-                .Setup(
-                    m => m.SendAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
-                .Returns((GetAccountPayeSchemesQuery query) => innerHandler.Handle(query));
-
-            RequestHandler = new GetAccountPayeSchemesForAuthorisedUserQueryHandler(
-                RequestValidator.Object,
-                mockMediatr.Object
-            );
-                
+                _hashingService.Object, 
+                RequestValidator.Object);
         }
 
         [Test]
@@ -96,25 +81,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
             //Act
             await RequestHandler.Handle(Query);
 
-            //AssertaccountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
+            //Assert
+            _accountRepository.Verify(x => x.GetPayeSchemesByAccountId(AccountId), Times.Once);
             _englishFractionsRepository.Verify(x => x.GetCurrentFractionForSchemes(AccountId, It.Is<IEnumerable<string>>(y => y.Single() == _payeView.Ref)), Times.Once);
         }
 
         [Test]
-        public void ThenInvalidRequestExceptionIsThrownForInvalidAccountId()
-        {
-            _hashingService
-                .Setup(
-                    m => m.DecodeValue(It.IsAny<string>()))
-                .Throws<IndexOutOfRangeException>();
-
-            Assert.ThrowsAsync<InvalidRequestException>(async () => await RequestHandler.Handle(Query));
-        }
-        [Test]
         public void ThenAnUnauthorizedAccessExceptionIsThrownIfTheValidationReturnsNotAuthorized()
         {
             //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesForAuthorisedUserQuery>()))
+            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
                 .ReturnsAsync(new ValidationResult
                 {
                     IsUnauthorized = true,
@@ -123,6 +99,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
 
             //Act Assert
             Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
+
         }
 
         [Test]
