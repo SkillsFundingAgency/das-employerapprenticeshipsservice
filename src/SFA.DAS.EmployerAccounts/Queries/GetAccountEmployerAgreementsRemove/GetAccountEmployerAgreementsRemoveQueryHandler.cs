@@ -66,8 +66,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
                     _hashingService.HashValue(removeEmployerAgreementView.Id);
                 removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
                 
-                if (result.Count == 1) continue;
-
                 switch (removeEmployerAgreementView.Status)
                 {
                     case EmployerAgreementStatus.Pending:
