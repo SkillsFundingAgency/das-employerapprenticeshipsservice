@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesControllerTests
 {
@@ -74,6 +75,22 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             Assert.IsNotNull(response);
             Assert.IsInstanceOf<NotFoundResult>(response);
         }
+
+        [Test]
+        public async Task AndTheAccountCannotBeDecodedThenItIsNotReturned()
+        {
+            var hashedAccountId = "ABC123";
+
+            Mediator.Setup(
+                    x => x.SendAsync(It.Is<GetAccountPayeSchemesQuery>(q => q.HashedAccountId == hashedAccountId)))
+                .Throws(new InvalidRequestException(new Dictionary<string, string>()));
+
+            var response = await Controller.GetPayeSchemes(hashedAccountId);
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<NotFoundResult>(response);
+        }
+
         [Test]
         public async Task ThenTheAccountIsReturned()
         {
