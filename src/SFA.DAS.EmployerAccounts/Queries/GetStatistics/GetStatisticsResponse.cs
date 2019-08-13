@@ -4,6 +4,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
 {
     public class GetStatisticsResponse
     {
-        public StatisticsViewModel Statistics { get; set; }
+        public Statistics Statistics { get; set; }
     }
 }

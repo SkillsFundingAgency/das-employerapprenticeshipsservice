@@ -15,14 +15,14 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.StatisticsControlle
         private StatisticsController _controller;
         private Mock<IMediator> _mediator;
         private GetStatisticsResponse _response;
-        private StatisticsViewModel _statistics;
+        private Statistics _statistics;
 
         [SetUp]
         public void Setup()
         {
             _mediator = new Mock<IMediator>();
 
-            _statistics = new StatisticsViewModel
+            _statistics = new Statistics
             {
                 TotalAccounts = 1,
                 TotalPayeSchemes = 2,
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.StatisticsControlle
         [Test]
         public async Task ThenShouldReturnStatistics()
         {
-            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<StatisticsViewModel>; ;
+            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<Statistics>; ;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(_statistics));

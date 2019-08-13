@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
             var agreementsQuery = _accountDb.Value.Agreements.Where(a => a.StatusId == EmployerAgreementStatus.Signed).FutureCount();
             //var paymentsQuery = _financeDb.Payments.FutureCount();
 
-            var statistics = new StatisticsViewModel
+            var statistics = new Statistics
             {
                 TotalAccounts = await accountsQuery.ValueAsync(),
                 TotalLegalEntities = await legalEntitiesQuery.ValueAsync(),

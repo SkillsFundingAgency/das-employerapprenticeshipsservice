@@ -19,9 +19,6 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [Route("")]
         public async Task<IHttpActionResult> GetStatistics()
         {
-            //todo: add GetStatistics call to employeraccounts api client?
-            // inject client into controller (or inject client into new statistics orchestrator, or wrap client in service and inject into orch/controller)
-
             return Ok(await _statisticsOrchestrator.Get());
         }
     }

@@ -227,6 +227,14 @@
       <Project>{40190475-1220-4cf8-8a60-223facafeda1}</Project>
       <Name>SFA.DAS.EAS.Account.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
+      <Project>{98714180-ADDF-4FF9-B928-3E9A557CA4D5}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{8057E87B-5893-45D0-93A1-6278EA8BA328}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Events\SFA.DAS.EmployerAccounts.Events.csproj">
       <Project>{0e46510c-0d06-4b63-8e17-b9037db7c7ed}</Project>
       <Name>SFA.DAS.EmployerAccounts.Events</Name>

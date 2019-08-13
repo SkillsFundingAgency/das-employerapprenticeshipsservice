@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http.Results;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
@@ -13,30 +14,38 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
     {
         private StatisticsController _controller;
         private Mock<StatisticsOrchestrator> _orchestrator;
-        private FinancialStatisticsViewModel _financialStatistics;
+        private StatisticsViewModel _statisticsViewModel;
 
         [SetUp]
         public void Setup()
         {
-            _orchestrator = new Mock<StatisticsOrchestrator>(null);
+            _orchestrator = new Mock<StatisticsOrchestrator>(null, null);
 
-            _financialStatistics = new FinancialStatisticsViewModel
+            _statisticsViewModel = new StatisticsViewModel
             {
+                TotalAccounts = 1,
+                TotalAgreements = 2,
+                TotalLegalEntities = 3,
+                TotalPayeSchemes = 4,
                 TotalPayments = 5
             };
 
-            _orchestrator.Setup(m => m.Get()).ReturnsAsync(_financialStatistics);
+            _orchestrator.Setup(m => m.Get()).ReturnsAsync(_statisticsViewModel);
 
             _controller = new StatisticsController(_orchestrator.Object);
         }
 
         [Test]
-        public async Task ThenShouldReturnFinancialStatistics()
+        public async Task ThenShouldReturnOkNegotiatedContentResultWithStatistics()
         {
-            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<FinancialStatisticsViewModel>; ;
-            
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Content, Is.SameAs(_financialStatistics));
+            var result = await _controller.GetStatistics();
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<OkNegotiatedContentResult<StatisticsViewModel>>();
+
+            var okResult = (OkNegotiatedContentResult<StatisticsViewModel>)result;
+            okResult.Content.Should().NotBeNull();
+            okResult.Content.ShouldBeEquivalentTo(_statisticsViewModel);
         }
     }
 }

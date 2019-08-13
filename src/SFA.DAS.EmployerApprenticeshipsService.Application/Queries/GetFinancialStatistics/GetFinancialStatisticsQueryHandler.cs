@@ -21,7 +21,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetFinancialStatistics
             // no need for Future when only need to make 1 trip
             return new GetFinancialStatisticsResponse
             {
-                Statistics = new FinancialStatisticsViewModel
+                Statistics = new FinancialStatistics
                 {
                     TotalPayments = await _financeDb.Payments.CountAsync()
                 }

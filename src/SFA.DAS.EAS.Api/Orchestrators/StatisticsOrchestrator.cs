@@ -2,23 +2,35 @@
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
+using SFA.DAS.EmployerAccounts.Api.Client;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
     public class StatisticsOrchestrator
     {
         private readonly IMediator _mediator;
+        private readonly IEmployerAccountsApiClient _employerAccountsApiClient;
 
-        public StatisticsOrchestrator(IMediator mediator)
+        public StatisticsOrchestrator(IMediator mediator, IEmployerAccountsApiClient employerAccountsApiClient)
         {
             _mediator = mediator;
+            _employerAccountsApiClient = employerAccountsApiClient;
         }
 
-        public virtual async Task<FinancialStatisticsViewModel> Get()
+        public virtual async Task<StatisticsViewModel> Get()
         {
-            var financialStatisticsTask = _mediator.SendAsync(new GetFinancialStatisticsQuery());
-            var financialStatistics = await financialStatisticsTask;
-            return financialStatistics.Statistics;
+            var getAccountStatisticsTask = _employerAccountsApiClient.GetStatistics();
+            var financialStatisticsQueryTask = _mediator.SendAsync(new GetFinancialStatisticsQuery());
+
+            var accountStatistics = await getAccountStatisticsTask;
+            return new StatisticsViewModel
+            {
+                TotalAccounts = accountStatistics.TotalAccounts,
+                TotalAgreements = accountStatistics.TotalAgreements,
+                TotalLegalEntities = accountStatistics.TotalLegalEntities,
+                TotalPayeSchemes = accountStatistics.TotalPayeSchemes,
+                TotalPayments = (await financialStatisticsQueryTask).Statistics.TotalPayments
+            };
         }
     }
 }
