@@ -13,16 +13,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountLegalEntityTes
     {
         private CreateAccountLegalEntityCommandHandler _handler;
         private Mock<IAccountLegalEntityRepository> _accountLegalEntityRepository;
-        private Mock<ILog> _logger;
 
         [SetUp]
         public void Arrange()
         {
             _accountLegalEntityRepository = new Mock<IAccountLegalEntityRepository>();
 
-            _logger = new Mock<ILog>();
-
-            _handler = new CreateAccountLegalEntityCommandHandler(_accountLegalEntityRepository.Object, _logger.Object);
+            _handler = new CreateAccountLegalEntityCommandHandler(_accountLegalEntityRepository.Object, Mock.Of<ILog>());
         }
 
         [Test]

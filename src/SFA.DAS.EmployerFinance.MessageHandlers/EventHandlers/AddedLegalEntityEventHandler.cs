@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 {
@@ -12,8 +9,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
     {
         public Task Handle(AddedLegalEntityEvent message, IMessageHandlerContext context)
         {
-
-            throw new NotImplementedException();
+            return context.SendLocal(new CreateAccountLegalEntityCommand(message.AccountLegalEntityId, null, null, null, null,
+                message.AccountId, message.LegalEntityId));
         }
     }
 }

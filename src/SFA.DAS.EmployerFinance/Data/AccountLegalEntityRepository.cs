@@ -18,8 +18,8 @@ namespace SFA.DAS.EmployerFinance.Data
             _db = db;
         }
 
-        public Task CreateAccountLegalEntity(long id, DateTime deleted, long pendingAgreementId, long signedAgreementId,
-            int signedAgreementVersion, long accountId, long legalEntityId)
+        public Task CreateAccountLegalEntity(long id, DateTime? deleted, long? pendingAgreementId, long? signedAgreementId,
+            int? signedAgreementVersion, long accountId, long legalEntityId)
         {
             var parameters = new DynamicParameters();
 
