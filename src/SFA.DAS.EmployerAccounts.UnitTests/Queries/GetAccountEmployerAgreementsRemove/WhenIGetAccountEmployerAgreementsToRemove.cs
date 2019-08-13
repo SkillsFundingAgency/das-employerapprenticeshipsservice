@@ -75,14 +75,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
 
             _dasRecruitService = new Mock<IDasRecruitService>();
             
-           _repository
-                .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
-                .ReturnsAsync(new List<RemoveEmployerAgreementView>
-                {
-                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
-                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode}
-                });
-
             RequestHandler = new GetAccountEmployerAgreementsRemoveQueryHandler(RequestValidator.Object, _repository.Object,_hashingService.Object, _commitmentsApi.Object, _dasRecruitService.Object);
         }
 
@@ -184,6 +176,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public async Task ThenIfTheAgreementIsSignedThenTheRecruitServiceIsCheckedForVacancies()
         {
             //Arrange
+            _repository
+                .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
+                .ReturnsAsync(new List<RemoveEmployerAgreementView>
+                {
+                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
+                    new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode}
+                });
             Vacancies = Enumerable.Repeat(Vacancy, 3);
             _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
