@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
                             removeEmployerAgreementView.CanBeRemoved = false;
                             removeEmployerAgreementView.HasVacancies = true;
                         }
-                        if (commitmentConnectedToEntity != null &&
+                        else if (commitmentConnectedToEntity != null &&
                             (commitmentConnectedToEntity.ActiveCount +
                              commitmentConnectedToEntity.PendingApprovalCount +
                              commitmentConnectedToEntity.PausedCount) != 0)

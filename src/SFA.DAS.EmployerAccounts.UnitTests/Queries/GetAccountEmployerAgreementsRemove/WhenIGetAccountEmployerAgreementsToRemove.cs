@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public override GetAccountEmployerAgreementsRemoveRequest Query { get; set; }
         public override GetAccountEmployerAgreementsRemoveQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountEmployerAgreementsRemoveRequest>> RequestValidator { get; set; }
-        Vacancy Vacancy { get; set; }
+        public Vacancy Vacancy { get; set; }
         IEnumerable<Vacancy> Vacancies { get; set; }
         private const string ExpectedUserId = "456TGFD";
         private const string ExpectedHashedAccountId = "456TGFD";
