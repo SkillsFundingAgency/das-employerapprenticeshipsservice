@@ -80,10 +80,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         [Test]
         public void ThenIfTheValidationResultIsUnauthorizedThenAnUnauthorizedAccessExceptionIsThrown()
         {
-            //Arrange
-            Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
-                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
             RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountEmployerAgreementsRemoveRequest>())).ReturnsAsync(new ValidationResult {IsUnauthorized = true});
 
             //Act Assert
@@ -93,11 +89,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
-            //Arrange
-            Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
-                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
-            //Act
+           //Act
             await RequestHandler.Handle(Query);
 
             //Assert
@@ -107,11 +99,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
-            //Arrange
-            Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
-                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
-            //Act
+           //Act
             var actual = await RequestHandler.Handle(Query);
 
             //Assert
@@ -121,10 +109,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         [Test]
         public async Task ThenIfThereIsOnlyOneResultReturnedItsCanBeRemovedValueIsSetToFalse()
         {
-            //Arrange
-            Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
-                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
             //Act
             var actual = await RequestHandler.Handle(Query);
 
@@ -136,10 +120,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         [Test]
         public async Task ThenIfThereIsOnlyOneResultReturnedTheApiIsNotCalled()
         {
-            //Arrange
-            Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
-                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
             //Act
             await RequestHandler.Handle(Query);
 
