@@ -22,8 +22,8 @@ namespace SFA.DAS.EAS.Portal.Application.Services.Commitments
         {
             _log.Info($"Getting commitment {commitmentId} for provider {providerId}");
 
-            return _restHttpClient.Get<CommitmentView>("/api/provider/{providerId}/commitments/{commitmentId}", null,
-                cancellationToken);
+            return _restHttpClient.Get<CommitmentView>("/api/provider/{providerId}/commitments/{commitmentId}",
+        null, cancellationToken);
         }
     }
 }
