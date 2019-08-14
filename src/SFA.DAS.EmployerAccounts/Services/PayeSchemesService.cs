@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Services
             try
             {
                 accountId = _hashingService.DecodeValue(hashedAccountId);
-
             }
             catch (IndexOutOfRangeException)
             {
@@ -54,13 +53,21 @@ namespace SFA.DAS.EmployerAccounts.Services
                 return payeSchemes;
             }
 
-            var englishFractions = (await _englishFractionRepository.GetCurrentFractionForSchemes(accountId, payeSchemes.Select(x => x.Ref))).Where(x => x != null).ToList();
+            await AddEnglishFractionsToPayeSchemes(accountId,
+                payeSchemes);
+
+            return payeSchemes;
+        }
+
+        private async Task AddEnglishFractionsToPayeSchemes(long accountId, List<PayeView> payeSchemes)
+        {
+            var englishFractions = (await _englishFractionRepository.GetCurrentFractionForSchemes(
+                accountId,
+                payeSchemes.Select(x => x.Ref))).Where(x => x != null).ToList();
             foreach (var scheme in payeSchemes)
             {
                 scheme.EnglishFraction = englishFractions.FirstOrDefault(x => x.EmpRef == scheme.Ref);
             }
-
-            return payeSchemes;
         }
     }
 }
