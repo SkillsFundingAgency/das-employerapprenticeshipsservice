@@ -101,5 +101,19 @@ namespace SFA.DAS.EmployerFinance.Data
                 transaction: _financeDb.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
+
+        public async Task RemovePayeScheme(long accountId, string payeRef)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@empRef", payeRef, DbType.String);
+
+            await _financeDb.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[RemoveAccountPaye]",
+                param: parameters,
+                transaction: _financeDb.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }

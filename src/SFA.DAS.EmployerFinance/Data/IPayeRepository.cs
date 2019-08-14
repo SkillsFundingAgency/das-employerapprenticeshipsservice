@@ -11,5 +11,6 @@ namespace SFA.DAS.EmployerFinance.Data
         Task UpdatePayeSchemeName(string payeRef, string refName);
         Task<PayeSchemes> GetGovernmentGatewayOnlySchemesByEmployerId(long employerId);
         Task CreatePayeScheme(Paye paye);
+        Task RemovePayeScheme(long accountId, string payeRef);
     }
 }
