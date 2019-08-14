@@ -2,6 +2,7 @@
 {
     public static class ConfigurationKeys
     {
+        public const string LevyDeclarationProvider = "SFA.DAS.LevyAggregationProvider";
         public const string EmployerAccounts = "SFA.DAS.EmployerAccounts";
         public const string Features = "SFA.DAS.EmployerApprenticeshipsService.FeaturesV2";
         public const string TokenServiceApiClient = "SFA.DAS.TokenServiceApiClient";

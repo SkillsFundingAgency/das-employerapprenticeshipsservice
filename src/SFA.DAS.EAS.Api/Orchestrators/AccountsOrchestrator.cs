@@ -5,10 +5,8 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
-using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
-using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -29,65 +27,10 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
 
         public AccountsOrchestrator(IMediator mediator, ILog logger, IMapper mapper, IHashingService hashingService)
         {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
             _hashingService = hashingService;
-        }
-
-        public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
-        {
-            _logger.Info("Getting all account balances.");
-
-            toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
-
-            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
-            var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
-            {
-                AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
-            });
-
-            var data = new List<AccountWithBalanceViewModel>();
-
-            var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
-
-            accountsResult.Accounts.ForEach(account =>
-            {
-                var accountBalanceModel = new AccountWithBalanceViewModel
-                {
-                    AccountId = account.Id,
-                    AccountName = account.Name,
-                    AccountHashId = account.HashedId,
-                    PublicAccountHashId = account.PublicHashedId,
-                    IsLevyPayer = true
-                };
-
-                if (accountBalanceHash.TryGetValue(account.Id, out var accountBalance))
-                {
-                    accountBalanceModel.Balance = accountBalance.Balance;
-                    accountBalanceModel.RemainingTransferAllowance = accountBalance.RemainingTransferAllowance;
-                    accountBalanceModel.StartingTransferAllowance = accountBalance.StartingTransferAllowance;
-                    accountBalanceModel.IsLevyPayer = accountBalance.IsLevyPayer == 1;
-                }
-
-                data.Add(accountBalanceModel);
-            });
-
-            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>> { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel> { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };
-        }
-
-        private Dictionary<long, AccountBalance> BuildAccountBalanceHash(List<AccountBalance> accountBalances)
-        {
-            var result = new Dictionary<long, AccountBalance>(accountBalances.Count);
-
-            foreach (var balance in accountBalances)
-            {
-                result.Add(balance.AccountId, balance);
-            }
-
-            return result;
         }
 
         public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(long accountId)
@@ -134,7 +77,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             var response = await GetAccountTeamMembers(hashedAccountId);
 
             return response;
-
         }
 
         public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(string hashedAccountId)

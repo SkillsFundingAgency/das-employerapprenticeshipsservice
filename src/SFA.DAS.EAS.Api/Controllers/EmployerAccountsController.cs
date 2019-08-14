@@ -1,10 +1,10 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -12,31 +12,21 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     public class EmployerAccountsController : ApiController
     {
         private readonly AccountsOrchestrator _orchestrator;
+        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public EmployerAccountsController(AccountsOrchestrator orchestrator)
+        public EmployerAccountsController(AccountsOrchestrator orchestrator, EmployerApprenticeshipsServiceConfiguration configuration)
         {
             _orchestrator = orchestrator;
+            _configuration = configuration;
         }
 
         [Route("", Name = "AccountsIndex")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]   
-        public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
+        public IHttpActionResult GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
-            var result = await _orchestrator.GetAllAccountsWithBalances(toDate, pageSize, pageNumber);
-            
-            if (result.Status == HttpStatusCode.OK)
-            {
-                result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
-                return Ok(result.Data);
-            }
-            else
-            {
-                //TODO: Handle unhappy paths.
-                return Conflict();
-            }
+            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/accounts?pagesize={pageSize}&pagenumber={pageNumber}{(string.IsNullOrWhiteSpace(toDate) ? "" : "&todate=" + toDate)}");
         }
-
 
         [Route("{hashedAccountId}", Name = "GetAccount")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]

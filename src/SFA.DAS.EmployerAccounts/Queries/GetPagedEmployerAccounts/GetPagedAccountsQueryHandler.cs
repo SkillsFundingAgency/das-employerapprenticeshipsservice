@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EmployerAccounts.Data;
 
-namespace SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts
+namespace SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts
 {
     public class GetPagedAccountsQueryHandler : IAsyncRequestHandler<GetPagedEmployerAccountsQuery, GetPagedEmployerAccountsResponse>
     {
@@ -15,9 +15,8 @@ namespace SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts
 
         public async Task<GetPagedEmployerAccountsResponse> Handle(GetPagedEmployerAccountsQuery message)
         {
-
             var accounts = await _employerAccountRepository.GetAccounts(message.ToDate, message.PageNumber, message.PageSize);
-            return new GetPagedEmployerAccountsResponse() {AccountsCount = accounts.AccountsCount, Accounts = accounts.AccountList};
+            return new GetPagedEmployerAccountsResponse() { AccountsCount = accounts.AccountsCount, Accounts = accounts.AccountList };
         }
     }
 }

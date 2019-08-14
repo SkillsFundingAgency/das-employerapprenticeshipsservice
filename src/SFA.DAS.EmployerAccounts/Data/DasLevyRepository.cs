@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.Levy;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
     public class DasLevyRepository : IDasLevyRepository
     {
         private readonly Lazy<EmployerFinanceDbContext> _db;
+        private readonly LevyDeclarationProviderConfiguration _configuration;
 
-        public DasLevyRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
+        public DasLevyRepository(LevyDeclarationProviderConfiguration configuration, Lazy<EmployerFinanceDbContext> db)
         {
             _db = db;
+            _configuration = configuration;
         }
 
         public Task<IEnumerable<DasEnglishFraction>> GetEnglishFractionHistory(long accountId, string empRef)
@@ -30,6 +33,21 @@ namespace SFA.DAS.EmployerAccounts.Data
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<List<AccountBalance>> GetAccountBalances(List<long> accountIds)
+        {
+            var accountParametersTable = new AccountIdUserTableParam(accountIds);
+
+            accountParametersTable.Add("@allowancePercentage", _configuration.TransferAllowancePercentage, DbType.Decimal);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<AccountBalance>(
+                sql: "[employer_financial].[GetAccountBalance_ByAccountIds]",
+                param: accountParametersTable,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return result.ToList();
         }
     }
 }
