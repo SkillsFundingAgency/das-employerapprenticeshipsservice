@@ -38,6 +38,7 @@ namespace SFA.DAS.EAS.Portal.Application.EventHandlers.Commitments
             var commitment = await _commitmentsService.GetProviderCommitment(
                 cohortApprovalRequestedByProvider.ProviderId, cohortApprovalRequestedByProvider.CommitmentId, cancellationToken);
             
+            //todo: most AccountLegalEntityPublicHashedId's are null in the commitments db in AT. can we rely on it coming back every time?
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
             var accountDocument = await accountDocumentTask;
