@@ -14,7 +14,6 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
 {
-    //todo: rename to just RecruitService?
     /// <summary>
     /// https://skillsfundingagency.atlassian.net/wiki/spaces/RAAV2/pages/200245289/Environments
     /// </summary>
