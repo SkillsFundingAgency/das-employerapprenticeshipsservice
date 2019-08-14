@@ -1,6 +1,6 @@
 using System;
 
-namespace SFA.DAS.EAS.Account.Api.Types
+namespace SFA.DAS.EmployerAccounts.Api.Types
 {
     public class PayeSchemeViewModel : IAccountResource
     {

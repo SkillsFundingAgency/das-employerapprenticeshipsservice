@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class TransactionsViewModel : List<TransactionViewModel>, IAccountResource
+    public class TransactionsViewModel : List<TransactionViewModel>
     {
         public int Year { get; set; }
         public int Month { get; set; }
