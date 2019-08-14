@@ -18,7 +18,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
         private static readonly DateTime UpdateDate = DateTime.Now;
 
         private PayeView _payeView;
-        private DasEnglishFraction _englishFraction;
 
         private Mock<IPayeSchemesService> _payeSchemesService;
         private string _hashedAccountId;
@@ -39,14 +38,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
                 Ref = "123/ABC"
             };
 
-            _englishFraction = new DasEnglishFraction
+            new DasEnglishFraction
             {
                 EmpRef = _payeView.Ref,
                 DateCalculated = UpdateDate,
                 Amount = 0.5m
             };
-
-            _payeView.EnglishFraction = _englishFraction;
 
             _hashedAccountId = "123ABC";
             Query = new GetAccountPayeSchemesQuery()
@@ -103,7 +100,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
             //Assert
             Assert.AreEqual(1, result.PayeSchemes.Count);
             Assert.AreEqual(_payeView, result.PayeSchemes.First());
-            Assert.AreEqual(_englishFraction, result.PayeSchemes.First().EnglishFraction);
         }
     }
 }

@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Levy;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAuthorisedUser
@@ -21,7 +18,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
         private static readonly DateTime UpdateDate = DateTime.Now;
 
         private PayeView _payeView;
-        private DasEnglishFraction _englishFraction;
         private Mock<IPayeSchemesService> _payeSchemesService;
         private string _hashedAccountId;
 
@@ -41,14 +37,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
                 Ref = "123/ABC"
             };
 
-            _englishFraction = new DasEnglishFraction
+            new DasEnglishFraction
             {
                 EmpRef = _payeView.Ref,
                 DateCalculated = UpdateDate,
                 Amount = 0.5m
             };
-
-            _payeView.EnglishFraction = _englishFraction;
 
             _hashedAccountId = "123ABC";
 
@@ -106,7 +100,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemesForAut
             //Assert
             Assert.AreEqual(1, result.PayeSchemes.Count);
             Assert.AreEqual(_payeView, result.PayeSchemes.First());
-            Assert.AreEqual(_englishFraction, result.PayeSchemes.First().EnglishFraction);
         }
     }
 }
