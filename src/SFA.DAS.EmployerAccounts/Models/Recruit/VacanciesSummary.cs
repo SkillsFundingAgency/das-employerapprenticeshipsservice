@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Portal.Client.Types;
+﻿using System;
+using System.Collections.Generic;
+//using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Models.Recruit
 {
@@ -19,5 +20,15 @@ namespace SFA.DAS.EmployerAccounts.Models.Recruit
             TotalResults = totalResults;
             TotalPages = totalPages;
         }
+    }
+
+    public class Vacancy
+    {
+        public string Title { get; set; }
+        public long? VacancyReference { get; set; }
+        public string Status { get; set; }
+        public DateTime? ClosingDate { get; set; }
+        public string TrainingTitle { get; set; }
+        public long LegalEntityId { get; set; }
     }
 }

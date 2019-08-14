@@ -8,7 +8,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
-using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -60,7 +59,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
                 .ReturnsAsync(new EmployerAgreementView
                 {
                     AccountLegalEntityId = ExpectedAccountLegalEntityId,
-                    LegalEntityId = ExpectedLegalId,
+                    LegalEntityId = ExpectedAccountLegalEntityId,
+                    Id = ExpectedLegalId,
                     LegalEntityName = ExpectedLegalEntityName,
                     Status = EmployerAgreementStatus.Signed
                 });
@@ -135,7 +135,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         {
             //Arrange
             Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
+            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedAccountLegalEntityId))
                 .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
             _commitmentsApi
                 .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
@@ -158,8 +158,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public async Task ThenIfTheAgreementIsSignedThenTheApiIsCheckedForActiveCommitmentsAndLegalEntitiesHasVacancies()
         {
             //Arrange
-            Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
+            Vacancies = Enumerable.Repeat(Vacancy, 3);
+            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedAccountLegalEntityId))
                 .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
             _commitmentsApi
                 .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
@@ -171,11 +171,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode}
                 });
-            Vacancies = Enumerable.Repeat(Vacancy, 3);
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
-                .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
-
-            //Act
+            
+           //Act
             var actual = await RequestHandler.Handle(Query);
             Assert.AreEqual(1, actual.Agreements.Count(c => c.HasVacancies));
             Assert.AreEqual(1, actual.Agreements.Count(c => c.HasCommitments));
@@ -186,6 +183,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public async Task ThenIfTheAgreementIsSignedThenTheRecruitServiceIsCheckedForVacancies()
         {
             //Arrange
+            Vacancies = Enumerable.Repeat(Vacancy, 3);
             _repository
                 .Setup(x => x.GetEmployerAgreementsToRemove(ExpectedAccountId))
                 .ReturnsAsync(new List<RemoveEmployerAgreementView>
@@ -193,15 +191,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Pending, Id = ExpectedAgreementId,LegalEntityCode = "Another Code"},
                     new RemoveEmployerAgreementView {Name = "test company", Status = EmployerAgreementStatus.Signed, Id = ExpectedAgreementId,LegalEntityCode = ExpectedLegalEntityCode}
                 });
-            Vacancies = Enumerable.Repeat(Vacancy, 3);
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
+            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedAccountLegalEntityId))
                 .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
 
             //Act
             var actual = await RequestHandler.Handle(Query);
 
             Assert.AreEqual(1, actual.Agreements.Count(c => c.HasVacancies));
-            _dasRecruitService.Verify(x=>x.GetVacanciesByLegalEntity(ExpectedHashedAccountId,ExpectedLegalId),Times.AtLeastOnce);
+            _dasRecruitService.Verify(x=>x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedAccountLegalEntityId),Times.AtLeastOnce);
         }
 
         [Test]
@@ -209,7 +206,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         {
             //Arrange
             Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
+            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedAccountLegalEntityId))
                 .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
             _commitmentsApi
                 .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
@@ -235,7 +232,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         {
             //Arrange
             Vacancies = Enumerable.Empty<Vacancy>();
-            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedLegalId))
+            _dasRecruitService.Setup(x => x.GetVacanciesByLegalEntity(ExpectedHashedAccountId, ExpectedAccountLegalEntityId))
                 .ReturnsAsync(new VacanciesSummary(Vacancies, 0, 0, 0, 0));
             _commitmentsApi
                 .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))

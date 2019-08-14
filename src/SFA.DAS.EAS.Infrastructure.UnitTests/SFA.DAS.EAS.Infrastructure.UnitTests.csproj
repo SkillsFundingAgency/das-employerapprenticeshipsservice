@@ -126,6 +126,10 @@
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SFA.DAS.EAS.Portal.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Users\Shoma.Gujjar\.nuget\packages\sfa.das.eas.portal.client\1.6.1641\lib\netstandard2.0\SFA.DAS.EAS.Portal.Client.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.Http, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.2.4\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
@@ -222,10 +226,12 @@
     <Compile Include="Extensions\ExceptionExtensionTests.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
+    <Compile Include="Fakes\FakeHttpMessageHandler.cs" />
     <Compile Include="Features\AgreementServiceTests.cs" />
     <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Authorization\AuthorizationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Features\DasRecruitServiceTest.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICallDateRange.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveNoResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveJsonResponse.cs" />
