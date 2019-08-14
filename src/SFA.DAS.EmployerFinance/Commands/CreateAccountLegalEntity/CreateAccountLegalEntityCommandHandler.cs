@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity
 {
-    public class CreateAccountLegalEntityCommandHandler
+    public class CreateAccountLegalEntityCommandHandler : AsyncRequestHandler<CreateAccountLegalEntityCommand>
     {
         private readonly IAccountLegalEntityRepository _accountLegalEntityRepository;
         private readonly ILog _logger;
@@ -16,20 +17,19 @@ namespace SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity
             _logger = logger;
         }
 
-        public async Task Handle(CreateAccountLegalEntityCommand command)
+        protected override async Task HandleCore(CreateAccountLegalEntityCommand message)
         {
             try
             {
                 await _accountLegalEntityRepository.CreateAccountLegalEntity(
-                    command.Id,
-                    command.Deleted,
-                    command.PendingAgreementId,
-                    command.SignedAgreementId,
-                    command.SignedAgreementVersion,
-                    command.AccountId,
-                    command.LegalEntityId
+                    message.Id,
+                    message.PendingAgreementId,
+                    message.SignedAgreementId,
+                    message.SignedAgreementVersion,
+                    message.AccountId,
+                    message.LegalEntityId
                 );
-                _logger.Info($"Account Legal Entity {command.Id} created");
+                _logger.Info($"Account Legal Entity {message.Id} created");
             }
             catch (Exception exception)
             {

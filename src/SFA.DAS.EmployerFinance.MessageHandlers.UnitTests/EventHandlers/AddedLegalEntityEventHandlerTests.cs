@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
@@ -18,13 +19,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         [Test]
         public Task Handle_WhenHandlingEvent_ThenShouldSendCreateAccountUserCommand()
         {
-            return RunAsync(f => f.Handler.Handle(f.Message, f.MessageHandlerContext.Object),
-                f => f.MessageHandlerContext.Verify(x => x.Send(It.Is<CreateAccountLegalEntityCommand>(p =>
+            return RunAsync(f => f.Handler.Handle(f.Message, Mock.Of<IMessageHandlerContext>()),
+                f => f.Mediator.Verify(x => x.SendAsync(It.Is<CreateAccountLegalEntityCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.LegalEntityId == f.LegalEntityId &&
                         p.Deleted == null &&
                         p.Id == f.AccountLegalEntityId
-                    ), It.IsAny<SendOptions>())));
+                    ))));
         }
     }
 
@@ -46,13 +47,11 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
 
         public DateTime Created = DateTime.Now.AddMinutes(-1);
 
-        public Mock<IMessageHandlerContext> MessageHandlerContext;
+        public Mock<IMediator> Mediator { get; set; }
         public AddedLegalEntityEventHandler Handler;
 
         public AddedLegalEntityEventHandlerTestsFixture()
         {
-            MessageHandlerContext = new Mock<IMessageHandlerContext>();
-            MessageHandlerContext.Setup(x => x.MessageId).Returns(MessageId);
 
             Message = new AddedLegalEntityEvent
             {
@@ -70,7 +69,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
                 UserName = UserName
             };
 
-            Handler = new AddedLegalEntityEventHandler();
+            Mediator = new Mock<IMediator>();
+            Handler = new AddedLegalEntityEventHandler(Mediator.Object);
         }
     }
 }

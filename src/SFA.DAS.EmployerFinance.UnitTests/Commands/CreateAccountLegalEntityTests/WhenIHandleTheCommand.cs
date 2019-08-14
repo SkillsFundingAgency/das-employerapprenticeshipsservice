@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountLegalEntityTes
 
             await _handler.Handle(new CreateAccountLegalEntityCommand(id, deleted, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
 
-            _accountLegalEntityRepository.Verify(x => x.CreateAccountLegalEntity(id, deleted, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
+            _accountLegalEntityRepository.Verify(x => x.CreateAccountLegalEntity(id, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
         }
     }
 }

@@ -5,7 +5,7 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public interface IAccountLegalEntityRepository
     {
-        Task CreateAccountLegalEntity(long id, DateTime? deleted, long? pendingAgreementId, long? signedAgreementId,
+        Task CreateAccountLegalEntity(long id, long? pendingAgreementId, long? signedAgreementId,
             int? signedAgreementVersion, long accountId, long legalEntityId);
     }
 }

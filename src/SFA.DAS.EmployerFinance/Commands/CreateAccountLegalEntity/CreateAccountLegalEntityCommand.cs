@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity
 {
     public class CreateAccountLegalEntityCommand : IAsyncRequest
-    {
+    { 
         public CreateAccountLegalEntityCommand(long id, DateTime? deleted, long? pendingAgreementId, long? signedAgreementId, int? signedAgreementVersion, long accountId, long legalEntityId)
         {
             Id = id;
