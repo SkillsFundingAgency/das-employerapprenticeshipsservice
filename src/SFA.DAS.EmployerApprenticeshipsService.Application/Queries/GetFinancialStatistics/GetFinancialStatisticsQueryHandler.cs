@@ -1,7 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Infrastructure.Data;
 
 namespace SFA.DAS.EAS.Application.Queries.GetFinancialStatistics
@@ -20,10 +19,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetFinancialStatistics
         {
             return new GetFinancialStatisticsResponse
             {
-                Statistics = new FinancialStatistics
-                {
-                    TotalPayments = await _financeDb.Payments.CountAsync()
-                }
+                TotalPayments = await _financeDb.Payments.CountAsync()
             };
         }
     }

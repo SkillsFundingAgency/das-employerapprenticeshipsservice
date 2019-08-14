@@ -18,8 +18,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
         {
             return RunAsync(f => f.Handle(), (f, r) => r.Should().NotBeNull()
                 .And.Match<GetFinancialStatisticsResponse>(r2 =>
-                    r2.Statistics != null &&
-                    r2.Statistics.TotalPayments == 2));
+                    r2.TotalPayments == 2));
         }
     }
 

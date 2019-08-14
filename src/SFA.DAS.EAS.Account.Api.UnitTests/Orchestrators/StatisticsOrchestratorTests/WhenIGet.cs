@@ -19,7 +19,6 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
         private Mock<IMediator> _mediator;
         private Mock<IEmployerAccountsApiClient> _employerAccountsApiClient;
         private GetFinancialStatisticsResponse _response;
-        private FinancialStatistics _financialStatistics;
         private Statistics _statistics; 
 
         [SetUp]
@@ -28,12 +27,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
             _mediator = new Mock<IMediator>();
             _employerAccountsApiClient = new Mock<IEmployerAccountsApiClient>();
 
-            _financialStatistics = new FinancialStatistics
-            {
-                TotalPayments = 5
-            };
-
-            _response = new GetFinancialStatisticsResponse { Statistics = _financialStatistics };
+            _response = new GetFinancialStatisticsResponse { TotalPayments = 5 };
 
             _mediator.Setup(m => m.SendAsync(It.IsAny<GetFinancialStatisticsQuery>())).ReturnsAsync(_response);
 

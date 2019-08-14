@@ -11,7 +11,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         private readonly IMediator _mediator;
         private readonly IEmployerAccountsApiClient _employerAccountsApiClient;
 
-        //todo: need to set up IReadStoreMediator for this client. stick with it?
         public StatisticsOrchestrator(IMediator mediator, IEmployerAccountsApiClient employerAccountsApiClient)
         {
             _mediator = mediator;
@@ -30,7 +29,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 TotalAgreements = accountStatistics.TotalAgreements,
                 TotalLegalEntities = accountStatistics.TotalLegalEntities,
                 TotalPayeSchemes = accountStatistics.TotalPayeSchemes,
-                TotalPayments = (await financialStatisticsQueryTask).Statistics.TotalPayments
+                TotalPayments = (await financialStatisticsQueryTask).TotalPayments
             };
         }
     }
