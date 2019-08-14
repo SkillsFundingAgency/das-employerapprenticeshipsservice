@@ -1,17 +1,17 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.Http;
-using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Portal.Application.Services.Commitments
 {
     public class CommitmentsService : ICommitmentsService
     {
-        private readonly ILog _log;
+        private readonly ILogger<CommitmentsService> _log;
         private readonly RestHttpClient _restHttpClient;
 
-        public CommitmentsService(ICommitmentsApiHttpClientFactory commitmentsApiHttpClientFactory, ILog log)
+        public CommitmentsService(ICommitmentsApiHttpClientFactory commitmentsApiHttpClientFactory, ILogger<CommitmentsService> log)
         {
             _log = log;
             _restHttpClient = new RestHttpClient(commitmentsApiHttpClientFactory.CreateHttpClient());
@@ -20,9 +20,9 @@ namespace SFA.DAS.EAS.Portal.Application.Services.Commitments
         public Task<CommitmentView> GetProviderCommitment(long providerId, long commitmentId, 
                 CancellationToken cancellationToken = default)
         {
-            _log.Info($"Getting commitment {commitmentId} for provider {providerId}");
+            _log.LogInformation($"Getting commitment {commitmentId} for provider {providerId}");
 
-            return _restHttpClient.Get<CommitmentView>("/api/provider/{providerId}/commitments/{commitmentId}",
+            return _restHttpClient.Get<CommitmentView>($"/api/provider/{providerId}/commitments/{commitmentId}",
         null, cancellationToken);
         }
     }
