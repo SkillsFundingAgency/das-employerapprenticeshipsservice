@@ -186,6 +186,7 @@
     <Build Include="StoredProcedures\RenameAccount.sql" />
     <Build Include="Tables\AccountPaye.sql" />
     <Build Include="StoredProcedures\CreateAccountPaye.sql" />
+    <Build Include="StoredProcedures\RemoveAccountPaye.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
