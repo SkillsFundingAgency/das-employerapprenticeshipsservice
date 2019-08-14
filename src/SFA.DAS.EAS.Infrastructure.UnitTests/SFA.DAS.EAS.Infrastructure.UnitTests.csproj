@@ -128,7 +128,7 @@
     </Reference>
     <Reference Include="SFA.DAS.EAS.Portal.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Users\Shoma.Gujjar\.nuget\packages\sfa.das.eas.portal.client\1.6.1641\lib\netstandard2.0\SFA.DAS.EAS.Portal.Client.dll</HintPath>
+      <HintPath>..\packages\sfa.das.eas.portal.client\1.6.1641\lib\netstandard2.0\SFA.DAS.EAS.Portal.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Http, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.2.4\lib\net45\SFA.DAS.Http.dll</HintPath>

@@ -62,7 +62,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Features
             ClosingDate = new DateTime(2020, 10, 10),
             TrainingTitle = "Able seafarer (deck)",
             LegalEntityId = LegalEntityId
-
         };
         IEnumerable<Vacancy> Vacancies { get; set; }
         public DasRecruitServiceTestsFixture()
