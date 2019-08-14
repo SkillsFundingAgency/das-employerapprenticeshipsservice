@@ -76,22 +76,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes
         }
 
         [Test]
-        public void ThenAnUnauthorizedAccessExceptionIsThrownIfTheValidationReturnsNotAuthorized()
-        {
-            //Arrange
-            RequestValidator.Setup(x => x.ValidateAsync(It.IsAny<GetAccountPayeSchemesQuery>()))
-                .ReturnsAsync(new ValidationResult
-                {
-                    IsUnauthorized = true,
-                    ValidationDictionary = new Dictionary<string, string>()
-                });
-
-            //Act Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await RequestHandler.Handle(Query));
-
-        }
-
-        [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
             //Act

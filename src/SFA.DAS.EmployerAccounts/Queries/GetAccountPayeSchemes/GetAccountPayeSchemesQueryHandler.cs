@@ -32,11 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            if (validationResult.IsUnauthorized)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             var payeSchemes =
                 (await _payeSchemesService
                     .GetPayeSchemsWithEnglishFractionForHashedAccountId(message.HashedAccountId))
