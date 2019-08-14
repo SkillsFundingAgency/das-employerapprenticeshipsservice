@@ -26,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
             var legalEntitiesQuery = _accountDb.Value.LegalEntities.FutureCount();
             var payeSchemesQuery = _accountDb.Value.Payees.FutureCount();
             var agreementsQuery = _accountDb.Value.Agreements.Where(a => a.StatusId == EmployerAgreementStatus.Signed).FutureCount();
-            //var paymentsQuery = _financeDb.Payments.FutureCount();
 
             var statistics = new Statistics
             {
@@ -34,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
                 TotalLegalEntities = await legalEntitiesQuery.ValueAsync(),
                 TotalPayeSchemes = await payeSchemesQuery.ValueAsync(),
                 TotalAgreements = await agreementsQuery.ValueAsync()
-                //TotalPayments = await paymentsQuery.ValueAsync()
             };
 
             return new GetStatisticsResponse

@@ -7,7 +7,6 @@ using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Infrastructure.Data;
 using SFA.DAS.EAS.TestCommon;
-using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
 {
@@ -45,8 +44,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
 
             Handler = new GetFinancialStatisticsQueryHandler(FinancialDb.Object);
             Query = new GetFinancialStatisticsQuery();
-
-            QueryFutureManager.AllowQueryBatch = false;
         }
 
         public async Task<GetFinancialStatisticsResponse> Handle()

@@ -18,7 +18,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetFinancialStatistics
 
         public async Task<GetFinancialStatisticsResponse> Handle(GetFinancialStatisticsQuery message)
         {
-            // no need for Future when only need to make 1 trip
             return new GetFinancialStatisticsResponse
             {
                 Statistics = new FinancialStatistics
