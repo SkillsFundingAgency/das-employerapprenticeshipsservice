@@ -21,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
 
         public async Task<GetStatisticsResponse> Handle(GetStatisticsQuery message)
         {
-            //todo: make note in pr: adds reference to infrastructure
             var accountsQuery = _accountDb.Value.Accounts.FutureCount();
             var legalEntitiesQuery = _accountDb.Value.LegalEntities.FutureCount();
             var payeSchemesQuery = _accountDb.Value.Payees.FutureCount();
