@@ -163,7 +163,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
         {
             var accountResponse = await
-                    Mediator.SendAsync(new GetEmployerAccountHashedQuery
+                    Mediator.SendAsync(new GetEmployerAccountByHashedIdForAuthorisedUserQuery
                     {
                         HashedAccountId = model.HashedAccountId,
                         UserId = model.UserId

@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public async Task<OrchestratorResponse<EmployerAccountViewModel>> GetEmployerAccount(string hashedAccountId)
         {
-            var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
+            var response = await Mediator.SendAsync(new GetEmployerAccountByHashedIdForAuthorisedUserQuery
             {
                 HashedAccountId = hashedAccountId
             });
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
         {
-            var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
+            var response = await Mediator.SendAsync(new GetEmployerAccountByHashedIdForAuthorisedUserQuery
             {
                 HashedAccountId = hashedAccountId,
                 UserId = userId
