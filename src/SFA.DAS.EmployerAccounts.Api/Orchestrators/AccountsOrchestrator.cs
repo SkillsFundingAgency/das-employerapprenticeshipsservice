@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             return viewModel;
         }
 
-        public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountViewModel>>> GetAllAccounts(string toDate, int pageSize, int pageNumber)
+        public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountViewModel>>> GetAccounts(string toDate, int pageSize, int pageNumber)
         {
             _logger.Info("Getting all accounts.");
 

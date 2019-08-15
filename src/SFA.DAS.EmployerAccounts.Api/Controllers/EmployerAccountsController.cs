@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [HttpGet]   
         public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
-            var result = await _orchestrator.GetAllAccounts(toDate, pageSize, pageNumber);
+            var result = await _orchestrator.GetAccounts(toDate, pageSize, pageNumber);
             
             if (result.Status == HttpStatusCode.OK)
             {
