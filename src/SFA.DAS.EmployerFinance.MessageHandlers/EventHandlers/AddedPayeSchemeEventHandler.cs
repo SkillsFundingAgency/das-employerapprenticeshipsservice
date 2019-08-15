@@ -19,13 +19,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
         public async Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
         {
             await _mediator.SendAsync(new CreateAccountPayeCommand(message.AccountId, message.PayeRef,message.SchemeName, message.Aorn));
-
-            await context.SendLocal(
-                new ImportAccountLevyDeclarationsCommand
-                {
-                    AccountId = message.AccountId,
-                    PayeRef = message.PayeRef,
-                });
         }
     }
 }
