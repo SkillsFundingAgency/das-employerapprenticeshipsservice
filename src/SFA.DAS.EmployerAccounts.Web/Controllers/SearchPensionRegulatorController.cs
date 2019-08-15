@@ -127,7 +127,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return await PerformSearchPensionRegulatorByAorn(viewModel);
         }
 
-        [NonAction]
         private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
             var schemeCheck = await _mediatr.SendAsync(new GetPayeSchemeInUseQuery { Empref = viewModel.PayeRef });
@@ -184,7 +183,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 errors.Add(nameof(viewModel.PayeRef), "Enter a PAYE scheme number in the correct format");
             }
-            else if(viewModel.PayeRef[3] != '/')
+            else if (viewModel.PayeRef[3] != '/')
             {
                 viewModel.PayeRef = viewModel.PayeRef.Insert(3, "/");
             }
