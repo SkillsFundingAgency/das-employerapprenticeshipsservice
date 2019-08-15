@@ -9,6 +9,7 @@
     ViewBag.Title = "About your agreement";
     ViewBag.Section = "organisations";
     ViewBag.GaData.Vpv = "/accounts/agreements/about-your-agreement/agreement-about";
+    ViewBag.HideNav = true;
 }
 
 <div class="grid-row header-index">
@@ -35,11 +36,3 @@
         </form>
     </div>
 </div>
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)" class="back-link">Back to your organisations</a></li>
-        </ol>
-    </div>
-}

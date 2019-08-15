@@ -10,7 +10,7 @@ using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_Multiple_Organisation_Was_Returned_From_Pensions_Regulator
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegulatorControllerTests.SearchByPaye.Given_Multiple_Org_Was_Returned_From_Pensions_Regulator
 {
     [TestFixture]
     class WhenISelectAnOrganisation
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
           
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
-                orchestrator.Object,
+                orchestrator.Object,              
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>());
@@ -37,8 +37,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
             {
                 Results = new List<PensionRegulatorDetailsViewModel>
                 {
-                    new PensionRegulatorDetailsViewModel {ReferenceNumber = 1},
-                    new PensionRegulatorDetailsViewModel {ReferenceNumber = 2}
+                    new PensionRegulatorDetailsViewModel { ReferenceNumber = 1 },
+                    new PensionRegulatorDetailsViewModel { ReferenceNumber = 2 }
                 },
                 SelectedOrganisation = 2
             };

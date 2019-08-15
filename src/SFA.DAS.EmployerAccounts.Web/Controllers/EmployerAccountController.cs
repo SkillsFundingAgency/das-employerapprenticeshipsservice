@@ -161,25 +161,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("getApprenticeshipFunding")]
-        public ActionResult GetApprenticeshipFunding(string returnUrl = "")
+        public ActionResult GetApprenticeshipFunding()
         {
-            _logger.Info($"Called into GetApprenticeshipFunding with returnUrl: '{returnUrl}'");
-            try
+            var model = new
             {
-                _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
+                HideHeaderSignInLink = true
+            };
 
-                var model = new
-                {
-                    HideHeaderSignInLink = true
-                };
-
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"Error processing getApprenticeshipFunding. ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
-                throw;
-            }
+            return View(model);
         }
 
         [HttpPost]
