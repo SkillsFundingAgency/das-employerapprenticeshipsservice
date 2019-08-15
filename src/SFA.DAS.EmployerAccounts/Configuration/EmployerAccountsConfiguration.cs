@@ -36,5 +36,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string RedisConnectionString { get; set; }
         public bool CanSkipRegistrationSteps { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
+		public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
     }
 }

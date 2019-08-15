@@ -1,11 +1,12 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Web.Mvc;
+using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -21,18 +22,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private const int AddPayeUsingAorn = 2;
 
         private readonly EmployerAccountPayeOrchestrator _employerAccountPayeOrchestrator;
+        private readonly IMediator _mediatr;
 
         public EmployerAccountPayeController(
-            IAuthenticationService owinWrapper, 
+            IAuthenticationService owinWrapper,
             EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
-            IAuthorizationService authorization, 
+            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            IMediator mediatr) : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            if (owinWrapper == null)
-                throw new ArgumentNullException(nameof(owinWrapper));
-
-            _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator ?? throw new ArgumentNullException(nameof(employerAccountPayeOrchestrator));
+            _employerAccountPayeOrchestrator = employerAccountPayeOrchestrator;
+            _mediatr = mediatr;
         }
 
         [HttpGet]
@@ -111,10 +112,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var url = await _employerAccountPayeOrchestrator.GetGatewayUrl(
                 Url.Action(
-                ControllerConstants.ConfirmPayeSchemeActionName,
-                ControllerConstants.EmployerAccountPayeControllerName,
-                null,
-                HttpContext.Request.Url?.Scheme));
+                    ControllerConstants.ConfirmPayeSchemeActionName,
+                    ControllerConstants.EmployerAccountPayeControllerName,
+                    null,
+                    HttpContext.Request.Url?.Scheme));
 
             return Redirect(url);
         }
@@ -124,10 +125,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> ConfirmPayeScheme(string hashedAccountId)
         {
             var gatewayResponseModel = await _employerAccountPayeOrchestrator.GetPayeConfirmModel(
-                    hashedAccountId, 
-                    Request.Params[ControllerConstants.CodeKeyName], 
-                    Url.Action(ControllerConstants.ConfirmPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }, Request.Url?.Scheme), 
-                    System.Web.HttpContext.Current?.Request.QueryString);
+                hashedAccountId, 
+                Request.Params[ControllerConstants.CodeKeyName], 
+                Url.Action(ControllerConstants.ConfirmPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName, new { hashedAccountId }, Request.Url?.Scheme), 
+                System.Web.HttpContext.Current?.Request.QueryString);
 
             if (gatewayResponseModel.Status == HttpStatusCode.NotAcceptable)
             {
@@ -138,6 +139,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 return View(ControllerConstants.IndexActionName, model);
             }
+
             return View(gatewayResponseModel);
         }
 
@@ -216,20 +218,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("schemes/waysToAdd")]
-        public ViewResult WaysToAdd()
+        public async Task<ViewResult> WaysToAdd()
         {
+            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+            {
+                UserRef = userRef
+            });
+
             var model = new
             {
-                HideHeaderSignInLink = true
+                HideHeaderSignInLink = true,
             };
 
+            ViewBag.AornLock = aornLock.UserAornStatus.RemainingLock;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("schemes/waysToAdd")]
-        public ActionResult WaysToAdd(int? choice)
+        public async Task<ActionResult> WaysToAdd(int? choice)
         {
             switch (choice ?? 0)
             {
@@ -239,7 +248,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
                 default:
                 {
+                    var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                    var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+                    {
+                        UserRef = userRef
+                    });
+
                     ViewBag.InError = true;
+                    ViewBag.AornLock = aornLock.UserAornStatus.RemainingLock;
+
                     var model = new
                     {
                         HideHeaderSignInLink = true,

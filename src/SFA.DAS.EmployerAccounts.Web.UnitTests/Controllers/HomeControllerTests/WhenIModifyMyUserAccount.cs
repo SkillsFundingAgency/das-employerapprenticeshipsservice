@@ -9,6 +9,8 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Web.Models;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -37,7 +39,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
                 _homeOrchestrator.Object,              
                 _configuration, 
                 _userViewTestingService.Object,
-                _flashMessage.Object)
+                _flashMessage.Object,
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+                Mock.Of<ILog>())
             {
                 ControllerContext = _controllerContext.Object
             };
