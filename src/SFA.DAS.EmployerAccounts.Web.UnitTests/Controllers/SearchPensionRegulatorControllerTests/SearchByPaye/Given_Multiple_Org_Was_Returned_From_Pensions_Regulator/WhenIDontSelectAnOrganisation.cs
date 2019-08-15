@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
           
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
-                orchestrator.Object,
+                orchestrator.Object,             
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 Mock.Of<IMediator>());
@@ -37,13 +37,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
             {
                 Results = new List<PensionRegulatorDetailsViewModel>
                 {
-                    new PensionRegulatorDetailsViewModel {ReferenceNumber = 1},
-                    new PensionRegulatorDetailsViewModel {ReferenceNumber = 2}
+                    new PensionRegulatorDetailsViewModel { ReferenceNumber = 1 },
+                    new PensionRegulatorDetailsViewModel { ReferenceNumber = 2 }
                 }             
             };
 
             var response = _controller.SearchPensionRegulator(It.IsAny<string>(), viewModel).Result;
-            var viewResponse = (ViewResult)response;
+            var viewResponse = (ViewResult) response;
 
             Assert.AreEqual(ControllerConstants.SearchPensionRegulatorResultsViewName, viewResponse.ViewName);
             Assert.AreEqual(true, viewResponse.ViewBag.InError);
