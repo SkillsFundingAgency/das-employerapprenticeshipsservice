@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
@@ -8,6 +9,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -20,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
     {
         private const string ExpectedAorn = "0123456789ABC";
         private const string ExpectedPayeRef = "000/1234567";
+        private readonly string _expectedId = Guid.NewGuid().ToString();
         private SearchPensionRegulatorController _controller;
         private SearchPensionRegulatorResultsViewModel _expectedData;
         private Mock<IMediator> _mediator;
@@ -28,7 +31,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public void Setup()
         {
             _expectedData = new SearchPensionRegulatorResultsViewModel { Results = new List<PensionRegulatorDetailsViewModel> { new PensionRegulatorDetailsViewModel(), new PensionRegulatorDetailsViewModel() } };
+
             var orchestrator = new Mock<SearchPensionRegulatorOrchestrator>();
+            var owinWrapper = new Mock<IAuthenticationService>();
+            owinWrapper.Setup(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName)).Returns(_expectedId);
 
             orchestrator
                 .Setup(x => x.GetOrganisationsByAorn(ExpectedAorn, ExpectedPayeRef))
@@ -49,10 +55,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                     });
 
             _mediator = new Mock<IMediator>();
+            _mediator.Setup(x => x.SendAsync(new UpdateUserAornLockRequest()));
 
             _controller = new SearchPensionRegulatorController(
-                Mock.Of<IAuthenticationService>(),
-                orchestrator.Object,
+                owinWrapper.Object,
+                orchestrator.Object,              
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 _mediator.Object);
@@ -62,7 +69,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenThePayeDetailsAreSaved()
         {
             await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
-
             _mediator.Verify(x => x.SendAsync(It.Is<SavePayeRefData>(y => y.PayeRefData.AORN == ExpectedAorn && y.PayeRefData.PayeReference == ExpectedPayeRef)));
         }
 
