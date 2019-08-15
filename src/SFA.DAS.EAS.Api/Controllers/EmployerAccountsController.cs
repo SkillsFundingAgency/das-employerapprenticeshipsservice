@@ -30,11 +30,8 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
                 result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
                 return Ok(result.Data);
             }
-            else
-            {
-                //TODO: Handle unhappy paths.
-                return Conflict();
-            }
+        
+            return Conflict();
         }
 
 

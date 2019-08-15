@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts
+namespace SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts
 {
     public class GetPagedEmployerAccountsQuery : IAsyncRequest<GetPagedEmployerAccountsResponse>
     {

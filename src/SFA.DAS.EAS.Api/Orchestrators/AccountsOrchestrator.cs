@@ -5,7 +5,6 @@ using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountByHashedId;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclaration;
 using SFA.DAS.EAS.Application.Queries.GetLevyDeclarationsByAccountAndPeriod;
-using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EAS.Application.Queries.GetTeamMembers;
 using SFA.DAS.EAS.Application.Queries.GetTransferAllowance;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -41,41 +40,37 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         {
             _logger.Info("Getting all account balances.");
 
-            toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
+            //toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
+            //var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
+
+            var accountsResult = new PagedApiResponseViewModel<AccountWithBalanceViewModel>
+            {
+                Data = new List<AccountWithBalanceViewModel>()
+            };
+
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
-                AccountIds = accountsResult.Accounts.Select(account => account.Id).ToList()
+                AccountIds = accountsResult.Data.Select(account => account.AccountId).ToList()
             });
-
-            var data = new List<AccountWithBalanceViewModel>();
-
+       
             var accountBalanceHash = BuildAccountBalanceHash(transactionResult.Accounts);
 
-            accountsResult.Accounts.ForEach(account =>
+            accountsResult.Data.ForEach(account =>
             {
-                var accountBalanceModel = new AccountWithBalanceViewModel
+                if (accountBalanceHash.TryGetValue(account.AccountId, out var accountBalance))
                 {
-                    AccountId = account.Id,
-                    AccountName = account.Name,
-                    AccountHashId = account.HashedId,
-                    PublicAccountHashId = account.PublicHashedId,
-                    IsLevyPayer = true
-                };
-
-                if (accountBalanceHash.TryGetValue(account.Id, out var accountBalance))
-                {
-                    accountBalanceModel.Balance = accountBalance.Balance;
-                    accountBalanceModel.RemainingTransferAllowance = accountBalance.RemainingTransferAllowance;
-                    accountBalanceModel.StartingTransferAllowance = accountBalance.StartingTransferAllowance;
-                    accountBalanceModel.IsLevyPayer = accountBalance.IsLevyPayer == 1;
+                    account.Balance = accountBalance.Balance;
+                    account.RemainingTransferAllowance = accountBalance.RemainingTransferAllowance;
+                    account.StartingTransferAllowance = accountBalance.StartingTransferAllowance;
+                    account.IsLevyPayer = accountBalance.IsLevyPayer == 1;
                 }
-
-                data.Add(accountBalanceModel);
             });
 
-            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>> { Data = new PagedApiResponseViewModel<AccountWithBalanceViewModel> { Data = data, Page = pageNumber, TotalPages = (accountsResult.AccountsCount / pageSize) + 1 } };
+            return new OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>
+            {
+                Data = accountsResult
+            };
         }
 
         private Dictionary<long, AccountBalance> BuildAccountBalanceHash(List<AccountBalance> accountBalances)

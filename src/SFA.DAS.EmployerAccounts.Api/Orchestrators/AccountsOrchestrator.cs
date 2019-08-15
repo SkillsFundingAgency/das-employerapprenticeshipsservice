@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.NLog.Logger;
 
@@ -29,6 +32,40 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
             var viewModel = ConvertPayeSchemeToViewModel(hashedAccountId, payeSchemeResult);
             return viewModel;
+        }
+
+        public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountViewModel>>> GetAllAccounts(string toDate, int pageSize, int pageNumber)
+        {
+            _logger.Info("Getting all accounts.");
+
+            toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
+
+            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });            
+
+            var data = new List<AccountViewModel>();          
+
+            accountsResult.Accounts.ForEach(account =>
+            {
+                var accountModel = new AccountViewModel
+                {
+                    AccountId = account.Id,
+                    AccountName = account.Name,
+                    AccountHashId = account.HashedId,
+                    PublicAccountHashId = account.PublicHashedId
+                };
+
+                data.Add(accountModel);
+            });
+
+            return new OrchestratorResponse<PagedApiResponseViewModel<AccountViewModel>>
+            {
+                Data = new PagedApiResponseViewModel<AccountViewModel>
+                {
+                    Data = data,
+                    Page = pageNumber,
+                    TotalPages = (accountsResult.AccountsCount / pageSize) + 1
+                }
+            };
         }
 
         private PayeSchemeViewModel ConvertPayeSchemeToViewModel(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
