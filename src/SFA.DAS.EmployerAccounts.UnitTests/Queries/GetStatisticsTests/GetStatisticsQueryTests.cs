@@ -13,7 +13,7 @@ using SFA.DAS.Testing;
 using SFA.DAS.Testing.EntityFramework;
 using Z.EntityFramework.Plus;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetStatisticsTests
 {
     [TestFixture]
     public class GetStatisticsQueryTests : FluentTest<GetStatisticsQueryTestsFixtures>
@@ -33,7 +33,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
 
     public class GetStatisticsQueryTestsFixtures : FluentTestFixture
     {
-        public List<EmployerAccounts.Models.Account.Account> Accounts { get; }
+        public List<Account> Accounts { get; }
         public Mock<EmployerAccountsDbContext> AccountsDb { get; }
         public List<EmployerAgreement> Agreements { get; set; }
         public GetStatisticsQueryHandler Handler { get; }
@@ -43,10 +43,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetStatisticsTests
 
         public GetStatisticsQueryTestsFixtures()
         {
-            Accounts = new List<EmployerAccounts.Models.Account.Account>
+            Accounts = new List<Account>
             {
-                new EmployerAccounts.Models.Account.Account(),
-                new EmployerAccounts.Models.Account.Account()
+                new Account(),
+                new Account()
             };
 
             LegalEntities = new List<LegalEntity>
