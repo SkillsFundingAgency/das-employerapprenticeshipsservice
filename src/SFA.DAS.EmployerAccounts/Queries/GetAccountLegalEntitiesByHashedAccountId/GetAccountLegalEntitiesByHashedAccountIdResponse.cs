@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccoun
 {
     public class GetAccountLegalEntitiesByHashedAccountIdResponse
     {
-        public List<AccountSpecificLegalEntity> Entites { get; set; }
+        public List<AccountSpecificLegalEntity> Entities { get; set; }
     }
 }
