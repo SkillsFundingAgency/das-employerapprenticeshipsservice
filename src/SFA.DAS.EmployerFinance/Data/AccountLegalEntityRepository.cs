@@ -36,5 +36,21 @@ namespace SFA.DAS.EmployerFinance.Data
                 _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
+
+        public Task SignAgreement(long signedAgreementId, int signedAgreementVersion, long accountId, long legalEntityId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
+            parameters.Add("@signedAgreementVersion", signedAgreementVersion, DbType.Int32);
+            parameters.Add("@signedAgreementId", signedAgreementId, DbType.Int64);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                "[employer_financial].[SignAccountLegalEntityAgreement]",
+                parameters,
+                _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }

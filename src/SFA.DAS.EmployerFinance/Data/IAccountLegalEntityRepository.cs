@@ -7,5 +7,7 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         Task CreateAccountLegalEntity(long id, long? pendingAgreementId, long? signedAgreementId,
             int? signedAgreementVersion, long accountId, long legalEntityId);
+
+        Task SignAgreement(long signedAgreementId, int signedAgreementVersion, long accountId, long legalEntityId);
     }
 }

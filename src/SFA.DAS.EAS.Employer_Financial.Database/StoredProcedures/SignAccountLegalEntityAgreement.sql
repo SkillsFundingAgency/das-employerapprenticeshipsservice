@@ -1,6 +1,10 @@
 ﻿CREATE PROCEDURE [employer_financial].[SignAccountLegalEntityAgreement]
-	@legalEntityId BIGINT,
-	@agreementId BIGINT
+	@signedAgreementId BIGINT,
+	@signedAgreementVersion INT,
+	@accountId BIGINT,
+	@legalEntityId BIGINT
 AS
-	--SELECT @param1, @param2
+	UPDATE [employer_financial].[AccountLegalEntity]
+	SET SignedAgreementId = @signedAgreementId, SignedAgreementVersion = @signedAgreementVersion
+	WHERE AccountId = @accountId AND LegalEntityId = @legalEntityId
 RETURN 0

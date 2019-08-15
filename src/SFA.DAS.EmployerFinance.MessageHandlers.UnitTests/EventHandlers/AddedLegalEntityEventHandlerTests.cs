@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
     internal class AddedLegalEntityEventHandlerTests : FluentTest<AddedLegalEntityEventHandlerTestsFixture>
     {
         [Test]
-        public Task Handle_WhenHandlingEvent_ThenShouldSendCreateAccountUserCommand()
+        public Task Handle_WhenHandlingEvent_ThenShouldSendCreateAccountLegalEntityCommand()
         {
             return RunAsync(f => f.Handler.Handle(f.Message, Mock.Of<IMessageHandlerContext>()),
                 f => f.Mediator.Verify(x => x.SendAsync(It.Is<CreateAccountLegalEntityCommand>(p =>
