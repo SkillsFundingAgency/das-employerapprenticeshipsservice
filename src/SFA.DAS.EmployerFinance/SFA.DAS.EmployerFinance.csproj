@@ -71,7 +71,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\CreateAccountPaye\" />
     <Folder Include="Queries\FindAccountProviderPayments\" />
   </ItemGroup>
 

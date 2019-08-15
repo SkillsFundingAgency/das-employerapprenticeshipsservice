@@ -1,8 +1,8 @@
-﻿using SFA.DAS.NServiceBus;
+﻿using MediatR;
 
 namespace SFA.DAS.EmployerFinance.Commands.CreateAccountPaye
 {
-    public class CreateAccountPayeCommand : Command
+    public class CreateAccountPayeCommand : IAsyncRequest
     {
         public CreateAccountPayeCommand(long accountId, string empRef, string name, string aorn)
         {

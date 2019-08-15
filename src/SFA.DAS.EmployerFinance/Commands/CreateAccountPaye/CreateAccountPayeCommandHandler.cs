@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Paye;
@@ -7,7 +8,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Commands.CreateAccountPaye
 {
-    public class CreateAccountPayeCommandHandler : IHandleMessages<CreateAccountPayeCommand>
+    public class CreateAccountPayeCommandHandler : AsyncRequestHandler<CreateAccountPayeCommand>
     {
         private readonly IPayeRepository _payeRepository;
         private readonly ILog _logger;
@@ -18,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Commands.CreateAccountPaye
             _logger = logger;
         }
 
-        public async Task Handle(CreateAccountPayeCommand message, IMessageHandlerContext context)
+        protected override async Task HandleCore(CreateAccountPayeCommand message)
         {
             try
             {
