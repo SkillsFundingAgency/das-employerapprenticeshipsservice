@@ -6,7 +6,9 @@ namespace SFA.DAS.EAS.Portal.Application.Services.Commitments
 {
     public interface ICommitmentsService
     {
-        Task<CommitmentView> GetProviderCommitment(long providerId, long commitmentId,
+        Task<CommitmentView> GetProviderCommitment(
+            long providerId,
+            long commitmentId,
             CancellationToken cancellationToken = default);
     }
 }
