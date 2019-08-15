@@ -12,19 +12,25 @@ namespace SFA.DAS.EAS.Portal.Application.Services.Commitments
         private readonly ILogger<CommitmentsService> _log;
         private readonly RestHttpClient _restHttpClient;
 
-        public CommitmentsService(ICommitmentsApiHttpClientFactory commitmentsApiHttpClientFactory, ILogger<CommitmentsService> log)
+        public CommitmentsService(
+            ICommitmentsApiHttpClientFactory commitmentsApiHttpClientFactory,
+            ILogger<CommitmentsService> log)
         {
             _log = log;
             _restHttpClient = new RestHttpClient(commitmentsApiHttpClientFactory.CreateHttpClient());
         }
 
-        public Task<CommitmentView> GetProviderCommitment(long providerId, long commitmentId, 
-                CancellationToken cancellationToken = default)
+        public Task<CommitmentView> GetProviderCommitment(
+            long providerId,
+            long commitmentId,
+            CancellationToken cancellationToken = default)
         {
             _log.LogInformation($"Getting commitment {commitmentId} for provider {providerId}");
 
-            return _restHttpClient.Get<CommitmentView>($"/api/provider/{providerId}/commitments/{commitmentId}",
-        null, cancellationToken);
+            return _restHttpClient.Get<CommitmentView>(
+                $"/api/provider/{providerId}/commitments/{commitmentId}",
+                null,
+                cancellationToken);
         }
     }
 }
