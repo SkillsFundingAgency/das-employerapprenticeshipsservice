@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models
+namespace SFA.DAS.EAS.Portal.Client.Services.Recruit.Models
 {
     public class VacancySummary
     {

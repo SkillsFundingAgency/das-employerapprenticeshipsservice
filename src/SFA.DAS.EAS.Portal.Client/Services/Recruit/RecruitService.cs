@@ -8,22 +8,23 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Portal.Client.Http;
-using SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models;
+using SFA.DAS.EAS.Portal.Client.Services.Recruit.Http;
+using SFA.DAS.EAS.Portal.Client.Services.Recruit.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
+namespace SFA.DAS.EAS.Portal.Client.Services.Recruit
 {
     /// <summary>
     /// https://skillsfundingagency.atlassian.net/wiki/spaces/RAAV2/pages/200245289/Environments
     /// </summary>
-    internal class DasRecruitService : IDasRecruitService
+    internal class RecruitService : IRecruitService
     {
         private readonly ILog _log;
         private readonly HttpClient _httpClient;
         private readonly Type _vacancyStatusType;
 
-        public DasRecruitService(IRecruitApiHttpClientFactory recruitApiHttpClientFactory, ILog log)
+        public RecruitService(IRecruitApiHttpClientFactory recruitApiHttpClientFactory, ILog log)
         {
             _log = log;
             _httpClient = recruitApiHttpClientFactory.CreateHttpClient();

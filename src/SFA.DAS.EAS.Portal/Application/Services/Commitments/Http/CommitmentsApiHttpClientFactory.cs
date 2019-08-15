@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Portal.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 
-namespace SFA.DAS.EAS.Portal.Application.Services.Commitments
+namespace SFA.DAS.EAS.Portal.Application.Services.Commitments.Http
 {
     //todo: decide on whether client factories belong with services or separate, and make consistent
     // common base class, named instances??

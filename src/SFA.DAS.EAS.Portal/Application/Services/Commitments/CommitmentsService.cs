@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Commitments.Api.Types.Commitment;
+using SFA.DAS.EAS.Portal.Application.Services.Commitments.Http;
 using SFA.DAS.Http;
 
 namespace SFA.DAS.EAS.Portal.Application.Services.Commitments

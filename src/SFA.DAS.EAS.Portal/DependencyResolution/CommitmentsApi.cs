@@ -2,6 +2,7 @@
 using SFA.DAS.EAS.Portal.Configuration;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.EAS.Portal.Application.Services.Commitments;
+using SFA.DAS.EAS.Portal.Application.Services.Commitments.Http;
 
 namespace SFA.DAS.EAS.Portal.DependencyResolution
 {
