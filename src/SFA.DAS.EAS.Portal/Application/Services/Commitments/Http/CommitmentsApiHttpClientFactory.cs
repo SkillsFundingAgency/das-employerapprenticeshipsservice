@@ -6,8 +6,6 @@ using SFA.DAS.Http.TokenGenerators;
 
 namespace SFA.DAS.EAS.Portal.Application.Services.Commitments.Http
 {
-    //todo: decide on whether client factories belong with services or separate, and make consistent
-    // common base class, named instances??
     public class CommitmentsApiHttpClientFactory : ICommitmentsApiHttpClientFactory
     {
         private readonly CommitmentsApiClientConfiguration _commitmentsApiClientConfiguration;
