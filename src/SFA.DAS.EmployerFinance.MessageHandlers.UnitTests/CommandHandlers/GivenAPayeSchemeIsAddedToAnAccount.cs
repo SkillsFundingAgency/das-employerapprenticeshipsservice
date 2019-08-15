@@ -2,29 +2,29 @@
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
-using SFA.DAS.EmployerFinance.Commands.CreateAccountPaye;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.Paye;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountPayeTests
+namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
 {
-    public class WhenIHandleTheCommand
+    public class GivenAPayeSchemeIsAddedToAnAccount
     {
         private CreateAccountPayeCommandHandler _handler;
         private Mock<IPayeRepository> _payeRepository;
         private Mock<ILog> _logger;
-        private Mock<IMessageSession> _messageSession;
+        private Mock<IMessageHandlerContext> _context;
 
         [SetUp]
         public void Arrange()
         {
             _payeRepository = new Mock<IPayeRepository>();
-            _messageSession = new Mock<IMessageSession>();
+            _context = new Mock<IMessageHandlerContext>();
             _logger = new Mock<ILog>();
 
-            _handler = new CreateAccountPayeCommandHandler(_payeRepository.Object, _messageSession.Object, _logger.Object);
+            _handler = new CreateAccountPayeCommandHandler(_payeRepository.Object, _logger.Object);
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountPayeTests
             var empRef = "ABC/123246";
             var aorn = "AORN123";
 
-            await _handler.Handle(new CreateAccountPayeCommand(accountId, empRef, name, aorn));
+            await _handler.Handle(new CreateAccountPayeCommand(accountId, empRef, name, aorn), _context.Object);
 
             _payeRepository.Verify(x => x.CreatePayeScheme(It.Is<Paye>(y => y.Aorn == aorn && y.AccountId == accountId && y.Ref == empRef && y.RefName == name)));
         }
@@ -48,9 +48,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountPayeTests
             var empRef = "ABC/123246";
             var aorn = string.Empty;
 
-            await _handler.Handle(new CreateAccountPayeCommand(accountId, empRef, name, aorn));
+            await _handler.Handle(new CreateAccountPayeCommand(accountId, empRef, name, aorn), _context.Object);
 
-            _messageSession.Verify(x => x.Send(It.Is<ImportAccountLevyDeclarationsCommand>(y => y.AccountId == accountId && y.PayeRef == empRef), It.IsAny<SendOptions>()));
+            _context.Verify(x => x.Send(It.Is<ImportAccountLevyDeclarationsCommand>(y => y.AccountId == accountId && y.PayeRef == empRef), It.IsAny<SendOptions>()));
         }
 
         [Test]
@@ -61,9 +61,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountPayeTests
             var empRef = "ABC/123246";
             var aorn = "AORN";
 
-            await _handler.Handle(new CreateAccountPayeCommand(accountId, empRef, name, aorn));
+            await _handler.Handle(new CreateAccountPayeCommand(accountId, empRef, name, aorn), _context.Object);
 
-            _messageSession.Verify(x => x.Send(It.IsAny<ImportAccountLevyDeclarationsCommand>(), It.IsAny<SendOptions>()), Times.Never());
+            _context.Verify(x => x.Send(It.IsAny<ImportAccountLevyDeclarationsCommand>(), It.IsAny<SendOptions>()), Times.Never());
         }
     }
 }
