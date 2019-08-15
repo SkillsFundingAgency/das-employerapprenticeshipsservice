@@ -13,21 +13,18 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
     {
         protected LegalEntitiesController Controller;
         protected Mock<IMediator> Mediator;
-        protected Mock<ILog> Logger;
         protected Mock<UrlHelper> UrlHelper;
-        protected Mock<IMapper> Mapper;
 
         [SetUp]
         public void Arrange()
         {
             Mediator = new Mock<IMediator>();
-            Logger = new Mock<ILog>();
-            Mapper = new Mock<IMapper>();
-            new Mock<IHashingService>();
-            Controller = new LegalEntitiesController( null);
-
             UrlHelper = new Mock<UrlHelper>();
+
+            Controller = new LegalEntitiesController(Mediator.Object);
+
             Controller.Url = UrlHelper.Object;
+
         }
     }
 }

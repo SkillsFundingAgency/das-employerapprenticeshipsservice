@@ -5,7 +5,7 @@ using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using It = Moq.It;
@@ -32,11 +32,11 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                         {
                             new AccountLegalEntity
                             {
-                                Id = 1
+                                LegalEntityId = 1
                             },
                             new AccountLegalEntity
                             {
-                                Id = 4
+                                LegalEntityId = 4
                             }
                         }
                     }
@@ -57,8 +57,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
 
             foreach (var legalEntity in _accountResponse.Account.AccountLegalEntities)
             {
-                var matchedEntity = model.Content.Single(x => x.Id == legalEntity.ToString());
-                matchedEntity.Href.Should().Be($"/api/accounts/{_hashedAccountId}/legalentities/{legalEntity}");
+                var matchedEntity = model.Content.Single(x => x.Id == legalEntity.LegalEntityId.ToString());
+                matchedEntity.Href.Should().Be($"/api/accounts/{_hashedAccountId}/legalentities/{legalEntity.LegalEntityId}");
             }
         }
 
@@ -86,9 +86,9 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                     x => x.Route(
                         "GetLegalEntity",
                         It.Is<object>(
-                            o => IsAccountLegalEntityOne(0))))
+                            obj => IsAccountLegalEntityOne(obj))))
                 .Returns(
-                    $"/api/accounts/{_hashedAccountId}/legalentities/{_accountResponse.Account.AccountLegalEntities.ToList()[0].Id}");
+                    $"/api/accounts/{_hashedAccountId}/legalentities/{_accountResponse.Account.AccountLegalEntities.ToList()[0].LegalEntityId}");
         }
 
         private void SetupUrlHelperForAccountLegalEntityTwo()
@@ -97,9 +97,9 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                     x => x.Route(
                         "GetLegalEntity",
                         It.Is<object>(
-                            o => IsAccountLegalEntityTwo(0))))
+                            obj => IsAccountLegalEntityTwo(obj))))
                 .Returns(
-                    $"/api/accounts/{_hashedAccountId}/legalentities/{_accountResponse.Account.AccountLegalEntities.ToList()[1].Id}");
+                    $"/api/accounts/{_hashedAccountId}/legalentities/{_accountResponse.Account.AccountLegalEntities.ToList()[1].LegalEntityId}");
         }
 
         private bool IsAccountLegalEntityTwo(object o)
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             return
                 o.GetPropertyValue<string>("hashedAccountId").Equals(_hashedAccountId)
                 &&
-                o.GetPropertyValue<string>("legalEntityId").Equals(_accountResponse.Account.AccountLegalEntities.ToList()[positionIndex].Id);
+                o.GetPropertyValue<long>("LegalEntityId").Equals(_accountResponse.Account.AccountLegalEntities.ToList()[positionIndex].LegalEntityId);
         }
     }
 }

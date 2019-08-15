@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Api.Attributes;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.Validation.WebApi;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
@@ -22,17 +26,32 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
         {
-            throw new NotImplementedException();
-            //var result = await _orchestrator.GetAccount(hashedAccountId);
+            var result = await _mediator.SendAsync(
+                new GetEmployerAccountByHashedIdQuery
+                {
+                    HashedAccountId = hashedAccountId
+                });
 
-//            if (result.Data == null)
-//            {
-//                return NotFound();
-//            }
-//            
-//            result.Data.LegalEntities.ForEach(l => l.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = l.Id }));
-//
-//            return Ok(result.Data.LegalEntities);
+            if (result.Account == null)
+            {
+                return NotFound();
+            }
+
+            var resources = new List<ResourceViewModel>();
+
+            foreach (var legalEntity in result.Account.AccountLegalEntities)
+            {
+                resources
+                    .Add(
+                        new ResourceViewModel
+                        {
+                            Id = legalEntity.LegalEntityId.ToString(),
+                            Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntity.LegalEntityId })
+                        });
+            }
+
+            return Ok(
+                new ResourceList(resources));
         }
     }
 }
