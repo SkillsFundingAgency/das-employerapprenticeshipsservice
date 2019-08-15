@@ -7,6 +7,7 @@
     ViewBag.GaData.Vpv = "/accounts/schemes/ways-to-add";
     var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "hidden";
     var errorClass = ViewBag.InError != null && ViewBag.InError ? "error" : "";
+    var aornAction = ViewBag.AornLock > 0 ? "$('#AornWarning').removeClass('hidden')" : "";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
@@ -37,10 +38,15 @@
                         I want to use Government Gateway
                     </label>
                     <label for="want-to-use-aorn" class="block-label">
-                        <input type="radio" name="choice" id="want-to-use-aorn" value="2" />
+                        <input type="radio" name="choice" id="want-to-use-aorn" value="2" onclick="@aornAction" />
                         I want to use my accounts office reference number and employer PAYE scheme reference
                     </label>
                 </fieldset>
+                <div class="panel hidden" id="AornWarning">
+                    <span class="error-message">
+                        Due to incorrect attempts, this has been disabled for @ViewBag.AornLock minute@(ViewBag.AornLock > 1 ? "s" : "")
+                    </span>
+                </div>
                 <p>
                     <div class="notice">
                         <i class="icon icon-important">

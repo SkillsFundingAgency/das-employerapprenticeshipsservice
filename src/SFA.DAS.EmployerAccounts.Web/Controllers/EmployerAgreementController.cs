@@ -155,7 +155,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 FlashMessageViewModel flashMessage = new FlashMessageViewModel
                 {
-                    Headline = "Agreement signed",
+                    Headline = "Agreement(s) signed",
                     Severity = FlashMessageSeverityLevel.Success
                 };
 
@@ -174,7 +174,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 else
                 {
                     flashMessage.Headline = "All agreements signed";
-                    flashMessage.Message = "You've successfully signed all of your organisation agreements.";
+                    flashMessage.Message = "You’ve successfully signed your organisation agreement(s)";
                     result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 }
 
