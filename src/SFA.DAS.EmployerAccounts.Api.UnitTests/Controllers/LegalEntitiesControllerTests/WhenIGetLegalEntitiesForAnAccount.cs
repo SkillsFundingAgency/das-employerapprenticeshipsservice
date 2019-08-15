@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                     }
             };
                 
-            Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_accountResponse);
+            //Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_accountResponse);
 
             SetupUrlHelperForAccountLegalEntityOne();
             SetupUrlHelperForAccountLegalEntityTwo();
@@ -65,14 +65,14 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
         [Test]
         public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
         {
-            Mediator.Setup(
-                    x => x.SendAsync(
-                        It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == _hashedAccountId)))
-                .ReturnsAsync(
-                    new GetEmployerAccountResponse
-                    {
-                        Account = null
-                    });
+//            Mediator.Setup(
+//                    x => x.SendAsync(
+//                        It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == _hashedAccountId)))
+//                .ReturnsAsync(
+//                    new GetEmployerAccountResponse
+//                    {
+//                        Account = null
+//                    });
 
             var response = await Controller.GetLegalEntities(_hashedAccountId);
 

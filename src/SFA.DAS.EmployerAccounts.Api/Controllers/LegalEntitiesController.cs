@@ -26,32 +26,33 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
         {
-            var result = await _mediator.SendAsync(
-                new GetEmployerAccountByHashedIdQuery
-                {
-                    HashedAccountId = hashedAccountId
-                });
-
-            if (result.Account == null)
-            {
-                return NotFound();
-            }
-
-            var resources = new List<ResourceViewModel>();
-
-            foreach (var legalEntity in result.Account.AccountLegalEntities)
-            {
-                resources
-                    .Add(
-                        new ResourceViewModel
-                        {
-                            Id = legalEntity.LegalEntityId.ToString(),
-                            Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntity.LegalEntityId })
-                        });
-            }
-
-            return Ok(
-                new ResourceList(resources));
+            throw new NotImplementedException();
+//            var result = await _mediator.SendAsync(
+//                new GetEmployerAccountByHashedIdQuery
+//                {
+//                    HashedAccountId = hashedAccountId
+//                });
+//
+//            if (result.Account == null)
+//            {
+//                return NotFound();
+//            }
+//
+//            var resources = new List<ResourceViewModel>();
+//
+//            foreach (var legalEntity in result.Account.AccountLegalEntities)
+//            {
+//                resources
+//                    .Add(
+//                        new ResourceViewModel
+//                        {
+//                            Id = legalEntity.LegalEntityId.ToString(),
+//                            Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntity.LegalEntityId })
+//                        });
+//            }
+//
+//            return Ok(
+//                new ResourceList(resources));
         }
     }
 }
