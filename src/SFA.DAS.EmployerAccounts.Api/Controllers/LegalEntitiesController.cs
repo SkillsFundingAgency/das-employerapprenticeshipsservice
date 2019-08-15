@@ -70,9 +70,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [HttpNotFoundForNullModel]
         public async Task<IHttpActionResult> GetLegalEntity()
         {
+            // Will move this action over in next task, but need the rout here so we can have this
+            // route in resources return in action added above.
             throw new NotImplementedException();
-//            var response = await _mediator.SendAsync(query);
-//            return Ok(response.LegalEntity);
         }
     }
 }
