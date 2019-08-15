@@ -24,9 +24,6 @@ namespace SFA.DAS.EAS.Portal.Application.Services.Commitments.Http
 
             httpClient.BaseAddress = new Uri(_commitmentsApiClientConfiguration.BaseUrl);
 
-            //todo: set timeout
-            //httpClient.Timeout = TimeSpan.Parse(_recruitApiClientConfig.TimeoutTimeSpan);
-
             return httpClient;
         }
     }
