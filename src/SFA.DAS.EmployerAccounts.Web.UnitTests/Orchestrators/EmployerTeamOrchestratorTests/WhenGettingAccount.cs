@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             };
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountByHashedIdForAuthorisedUserQuery>(q => q.HashedAccountId == HashedAccountId)))
+            _mediator.Setup(m => m.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId == HashedAccountId)))
                 .ReturnsAsync(new GetEmployerAccountResponse
                 {
                     Account = new Account

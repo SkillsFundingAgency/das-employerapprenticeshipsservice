@@ -147,7 +147,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
 
-                var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountByHashedIdForAuthorisedUserQuery
+                var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
                     UserId = externalUserId
@@ -214,7 +214,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel)
                 };
 
-                //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountByHashedIdForAuthorisedUserQuery, but we need to transition to calling the api instead.
+                //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
                 // we could blat over the existing flag, but it's much nicer to store the enum (as above) rather than a byte!
                 //viewModel.Account.ApprenticeshipEmployerType = (byte) ((ApprenticeshipEmployerType) Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true));
 

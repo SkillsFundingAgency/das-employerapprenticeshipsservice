@@ -127,7 +127,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
-                await _mediator.SendAsync(new GetEmployerAccountByHashedIdForAuthorisedUserQuery
+                await _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = hashedAccountId,
                     UserId = externalUserId

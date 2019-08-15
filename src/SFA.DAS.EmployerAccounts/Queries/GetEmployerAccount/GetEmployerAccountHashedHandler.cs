@@ -6,26 +6,31 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
 {
-    public class GetEmployerAccountByHashedIdHandler : IAsyncRequestHandler<GetEmployerAccountByHashedIdQuery, GetEmployerAccountResponse>
+    public class GetEmployerAccountHashedHandler : IAsyncRequestHandler<GetEmployerAccountHashedQuery, GetEmployerAccountResponse>
     {
         private readonly IEmployerAccountRepository _employerAccountRepository;
-        private readonly IValidator<GetEmployerAccountByHashedIdQuery> _validator;
+        private readonly IValidator<GetEmployerAccountHashedQuery> _validator;
 
-        public GetEmployerAccountByHashedIdHandler(
+        public GetEmployerAccountHashedHandler(
             IEmployerAccountRepository employerAccountRepository,
-            IValidator<GetEmployerAccountByHashedIdQuery> validator)
+            IValidator<GetEmployerAccountHashedQuery> validator)
         {
             _employerAccountRepository = employerAccountRepository;
             _validator = validator;
         }
 
-        public async Task<GetEmployerAccountResponse> Handle(GetEmployerAccountByHashedIdQuery message)
+        public async Task<GetEmployerAccountResponse> Handle(GetEmployerAccountHashedQuery message)
         {
             var result = await _validator.ValidateAsync(message);
 
             if (!result.IsValid())
             {
                 throw new InvalidRequestException(result.ValidationDictionary);
+            }
+
+            if (result.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
             }
 
             var employerAccount = await _employerAccountRepository.GetAccountByHashedId(message.HashedAccountId);
