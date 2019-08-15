@@ -7,7 +7,9 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.Validation;
 using It = Moq.It;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
@@ -16,33 +18,29 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
     public class WhenIGetLegalEntitiesForAnAccount : LegalEntitiesControllerTests
     {
         private string _hashedAccountId;
-        private GetEmployerAccountResponse _accountResponse;
+        private GetAccountLegalEntitiesByHashedAccountIdResponse _response;
 
         [Test]
         public async Task ThenTheLegalEntitiesAreReturned()
         {
             _hashedAccountId = "ABC123";
-            _accountResponse = new GetEmployerAccountResponse
+            _response = new GetAccountLegalEntitiesByHashedAccountIdResponse
             {
-                Account =
-                    new Account
+                Entites =
+                    new List<AccountSpecificLegalEntity>
                     {
-                        HashedId = _hashedAccountId,
-                        AccountLegalEntities = new List<AccountLegalEntity>
+                        new AccountSpecificLegalEntity
                         {
-                            new AccountLegalEntity
-                            {
-                                LegalEntityId = 1
-                            },
-                            new AccountLegalEntity
-                            {
-                                LegalEntityId = 4
-                            }
+                            Id = 1
+                        },
+                        new AccountSpecificLegalEntity
+                        {
+                            Id = 4
                         }
                     }
             };
                 
-            //Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_accountResponse);
+            Mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId))).ReturnsAsync(_response);
 
             SetupUrlHelperForAccountLegalEntityOne();
             SetupUrlHelperForAccountLegalEntityTwo();
@@ -55,24 +53,38 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
 
             model?.Content.Should().NotBeNull();
 
-            foreach (var legalEntity in _accountResponse.Account.AccountLegalEntities)
+            foreach (var legalEntity in _response.Entites)
             {
-                var matchedEntity = model.Content.Single(x => x.Id == legalEntity.LegalEntityId.ToString());
-                matchedEntity.Href.Should().Be($"/api/accounts/{_hashedAccountId}/legalentities/{legalEntity.LegalEntityId}");
+                var matchedEntity = model.Content.Single(x => x.Id == legalEntity.Id.ToString());
+                matchedEntity.Href.Should().Be($"/api/accounts/{_hashedAccountId}/legalentities/{legalEntity.Id}");
             }
+        }
+
+        [Test]
+        public async Task AndTheAccountCannotBeDecodedThenItIsNotReturned()
+        {
+            Mediator.Setup(
+                    x => x.SendAsync(
+                        It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId)))
+                .ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+
+            var response = await Controller.GetLegalEntities(_hashedAccountId);
+
+            Assert.IsNotNull(response);
+            Assert.IsInstanceOf<NotFoundResult>(response);
         }
 
         [Test]
         public async Task AndTheAccountDoesNotExistThenItIsNotReturned()
         {
-//            Mediator.Setup(
-//                    x => x.SendAsync(
-//                        It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId == _hashedAccountId)))
-//                .ReturnsAsync(
-//                    new GetEmployerAccountResponse
-//                    {
-//                        Account = null
-//                    });
+            Mediator.Setup(
+                    x => x.SendAsync(
+                        It.Is<GetAccountLegalEntitiesByHashedAccountIdRequest>(q => q.HashedAccountId == _hashedAccountId)))
+                .ReturnsAsync(
+                    new GetAccountLegalEntitiesByHashedAccountIdResponse
+                    {
+                        Entites = new List<AccountSpecificLegalEntity>(0)
+                    });
 
             var response = await Controller.GetLegalEntities(_hashedAccountId);
 
@@ -88,7 +100,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                         It.Is<object>(
                             obj => IsAccountLegalEntityOne(obj))))
                 .Returns(
-                    $"/api/accounts/{_hashedAccountId}/legalentities/{_accountResponse.Account.AccountLegalEntities.ToList()[0].LegalEntityId}");
+                    $"/api/accounts/{_hashedAccountId}/legalentities/{_response.Entites[0].Id}");
         }
 
         private void SetupUrlHelperForAccountLegalEntityTwo()
@@ -99,7 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
                         It.Is<object>(
                             obj => IsAccountLegalEntityTwo(obj))))
                 .Returns(
-                    $"/api/accounts/{_hashedAccountId}/legalentities/{_accountResponse.Account.AccountLegalEntities.ToList()[1].LegalEntityId}");
+                    $"/api/accounts/{_hashedAccountId}/legalentities/{_response.Entites[1].Id}");
         }
 
         private bool IsAccountLegalEntityTwo(object o)
@@ -115,7 +127,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesContro
             return
                 o.GetPropertyValue<string>("hashedAccountId").Equals(_hashedAccountId)
                 &&
-                o.GetPropertyValue<long>("LegalEntityId").Equals(_accountResponse.Account.AccountLegalEntities.ToList()[positionIndex].LegalEntityId);
+                o.GetPropertyValue<long>("legalEntityId").Equals(_response.Entites[positionIndex].Id);
         }
     }
 }
