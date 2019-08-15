@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
@@ -126,6 +127,34 @@ namespace SFA.DAS.EmployerAccounts.Data
             {
                 UserList = result.ToList()
             };
+        }
+
+        public async Task<IEnumerable<DateTime>> GetAornPayeQueryAttempts(string userRef)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@UserRef", new Guid(userRef), DbType.Guid);
+
+            var query = await _db.Value.Database.Connection.QueryAsync<DateTime>(
+                sql: "[employer_account].[GetUserAornAttempts]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+
+            return query.ToList();
+        }
+
+        public Task UpdateAornPayeQueryAttempt(string userRef, bool success)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@UserRef", new Guid(userRef), DbType.Guid);
+            parameters.Add("@Succeeded", success, DbType.Boolean);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[UpdateUserAornAttempts]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
         }
     }
 }
