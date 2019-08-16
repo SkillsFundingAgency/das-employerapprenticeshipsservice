@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
         {
             _log.Info($"Getting statistics");
 
-            var response = await _httpClient.GetAsync("/api/statistics", cancellationToken);
+            var response = await _httpClient.GetAsync("/api/statistics", cancellationToken).ConfigureAwait(false);
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
