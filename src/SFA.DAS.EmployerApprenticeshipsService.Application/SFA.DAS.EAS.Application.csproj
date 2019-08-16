@@ -180,6 +180,9 @@
     <Reference Include="SFA.DAS.Elastic, Version=1.0.0.52762, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Elastic.1.0.0.52762\lib\net45\SFA.DAS.Elastic.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.EmployerAccounts.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EmployerAccounts.Api.Types.1.6.1469\lib\netstandard2.0\SFA.DAS.EmployerAccounts.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.EntityFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.EntityFramework.1.0.1\lib\netstandard2.0\SFA.DAS.EntityFramework.dll</HintPath>
     </Reference>
