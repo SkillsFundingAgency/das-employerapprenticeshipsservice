@@ -342,6 +342,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyResolution\EmployerAccountsApiServiceRegistry.cs" />
     <Compile Include="Extensions\AddressExtensions.cs" />
     <Compile Include="Http\RestHttpClientException.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />

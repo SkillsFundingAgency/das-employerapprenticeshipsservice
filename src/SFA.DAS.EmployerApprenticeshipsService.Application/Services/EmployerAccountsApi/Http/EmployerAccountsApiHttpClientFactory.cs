@@ -6,7 +6,7 @@ using SFA.DAS.Http.TokenGenerators;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http
 {
-    public class EmployerAccountsApiHttpClientFactory
+    public class EmployerAccountsApiHttpClientFactory : IEmployerAccountsApiHttpClientFactory
     {
         private readonly EmployerAccountsApiConfiguration _employerAccountsApiConfig;
 

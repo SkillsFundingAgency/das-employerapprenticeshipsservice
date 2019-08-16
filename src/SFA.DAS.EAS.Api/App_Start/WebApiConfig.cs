@@ -6,7 +6,6 @@ using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
 
@@ -45,7 +44,7 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<ValidationRegistry>();
-                c.AddRegistry<EmployerAccountsApiClientRegistry>();
+                c.AddRegistry<EmployerAccountsApiServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }
