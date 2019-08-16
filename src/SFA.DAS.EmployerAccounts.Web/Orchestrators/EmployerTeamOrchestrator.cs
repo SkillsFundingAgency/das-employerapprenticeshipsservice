@@ -198,7 +198,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     UserRole = userRoleResponse.UserRole,
                     HashedUserId = externalUserId,
                     UserFirstName = userResponse.User.FirstName,
-                    OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
+                    OrganisationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     TeamMembersInvited = accountStatsResponse?.Stats?.TeamMembersInvited ?? 0,

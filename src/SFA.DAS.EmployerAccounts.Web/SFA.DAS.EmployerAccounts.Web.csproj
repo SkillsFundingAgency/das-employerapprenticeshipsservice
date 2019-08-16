@@ -742,6 +742,7 @@
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\EmployerAccountPaye\WaysToAdd.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\PreAgreementRecruitment.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="Views\Shared\_NonLevy_Agreement_V1.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2_body.cshtml" />
