@@ -3,7 +3,6 @@ using SFA.DAS.Http;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
-    //todo: own interface??
     public class EmployerAccountsApiConfiguration : IAzureADClientConfiguration
     {
         public string ApiBaseUrl { get; set; }
