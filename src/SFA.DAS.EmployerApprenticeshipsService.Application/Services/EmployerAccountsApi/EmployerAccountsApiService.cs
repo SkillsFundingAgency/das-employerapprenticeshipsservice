@@ -10,7 +10,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
 {
-    public class EmployerAccountsApiService
+    public class EmployerAccountsApiService : IEmployerAccountsApiService
     {
         private readonly ILog _log;
         private readonly HttpClient _httpClient;

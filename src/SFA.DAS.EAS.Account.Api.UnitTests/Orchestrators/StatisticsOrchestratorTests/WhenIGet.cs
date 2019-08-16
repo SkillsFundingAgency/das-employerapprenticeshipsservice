@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -6,6 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
@@ -17,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
     {
         private StatisticsOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
-        private Mock<IEmployerAccountsApiClient> _employerAccountsApiClient;
+        private Mock<IEmployerAccountsApiService> _employerAccountsApiService;
         private GetFinancialStatisticsResponse _response;
         private Statistics _statistics; 
 
@@ -25,7 +27,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
         public void Setup()
         {
             _mediator = new Mock<IMediator>();
-            _employerAccountsApiClient = new Mock<IEmployerAccountsApiClient>();
+            _employerAccountsApiService = new Mock<IEmployerAccountsApiService>();
 
             _response = new GetFinancialStatisticsResponse { TotalPayments = 5 };
 
@@ -39,9 +41,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestrator
                 TotalPayeSchemes = 4
             };
 
-            _employerAccountsApiClient.Setup(m => m.GetStatistics()).ReturnsAsync(_statistics);
+            _employerAccountsApiService.Setup(
+                s => s.GetStatistics(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(_statistics);
 
-            _orchestrator = new StatisticsOrchestrator(_mediator.Object, _employerAccountsApiClient.Object);
+            _orchestrator = new StatisticsOrchestrator(_mediator.Object, _employerAccountsApiService.Object);
         }
 
         [Test]
