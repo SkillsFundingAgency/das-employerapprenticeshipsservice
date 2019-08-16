@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccoun
 
                 return new GetAccountLegalEntitiesByHashedAccountIdResponse
                 {
-                    Entities = accountSpecificLegalEntity.ToList()
+                    LegalEntities = accountSpecificLegalEntity.ToList()
                 };
             }
 

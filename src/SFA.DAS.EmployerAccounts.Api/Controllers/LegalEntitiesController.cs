@@ -43,14 +43,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
                 return NotFound();
             }
 
-            if (result.Entities.Count == 0)
+            if (result.LegalEntities.Count == 0)
             {
                 return NotFound();
             }
 
             var resources = new List<ResourceViewModel>();
 
-            foreach (var legalEntity in result.Entities)
+            foreach (var legalEntity in result.LegalEntities)
             {
                 resources
                     .Add(
