@@ -33,8 +33,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpNotFoundForNullModel]
         public async Task<IHttpActionResult> GetLegalEntity([FromUri] GetLegalEntityQuery query)
         {
-            var response = await _mediator.SendAsync(query);
-            return Ok(response.LegalEntity);
+            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/accounts/{query.AccountHashedId}/legalentities/{query.LegalEntityId}");
         }
     }
 }
