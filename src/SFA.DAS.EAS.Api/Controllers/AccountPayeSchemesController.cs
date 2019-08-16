@@ -13,12 +13,12 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     public class AccountPayeSchemesController : ApiController
     {
         private readonly AccountsOrchestrator _orchestrator;
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        private readonly EmployerAccountsApiConfiguration _employerAccountsApiconfiguration;
 
-        public AccountPayeSchemesController(AccountsOrchestrator orchestrator, EmployerApprenticeshipsServiceConfiguration configuration)
+        public AccountPayeSchemesController(AccountsOrchestrator orchestrator, EmployerAccountsApiConfiguration employerAccountsApiconfiguration)
         {
             _orchestrator = orchestrator;
-            _configuration = configuration;
+            _employerAccountsApiconfiguration = employerAccountsApiconfiguration;
         }
 
         [Route("", Name = "GetPayeSchemes")]
@@ -42,7 +42,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}");
+            return Redirect($"{_employerAccountsApiconfiguration.ApiBaseUrl}/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}");
         }
 
         private void CreateGetPayeSchemeLink(string hashedAccountId, ResourceViewModel payeScheme)

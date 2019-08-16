@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
-using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
+    //todo: not a great client/http combo
     public class EmployerAccountsApiClient : IEmployerAccountsApiClient
     {
         private readonly IEmployerAccountsApiClientConfiguration _configuration;
