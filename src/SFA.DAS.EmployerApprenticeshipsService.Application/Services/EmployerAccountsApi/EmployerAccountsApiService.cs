@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -22,7 +21,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
             _httpClient = employerAccountsApiHttpClientFactory.CreateHttpClient();
         }
 
-        public async Task<Statistics> GetStatistics(CancellationToken cancellationToken = default)
+        public async Task<Statistics> GetStatistics(CancellationToken cancellationToken = default(CancellationToken))
         {
             _log.Info($"Getting statistics");
 

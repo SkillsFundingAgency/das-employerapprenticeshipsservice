@@ -6,6 +6,6 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
 {
     public interface IEmployerAccountsApiService
     {
-        Task<Statistics> GetStatistics(CancellationToken cancellationToken = default);
+        Task<Statistics> GetStatistics(CancellationToken cancellationToken = default(CancellationToken));
     }
 }
