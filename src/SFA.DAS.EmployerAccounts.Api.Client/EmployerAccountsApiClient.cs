@@ -1,7 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
@@ -27,14 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             var url = $"{baseUrl}/api/healthcheck";
 
             return _httpClient.GetAsync(url);
-        }
-
-        public async Task<Statistics> GetStatistics()
-        {
-            var url = $"{GetBaseUrl()}/api/statistics";
-
-            var responseBody = await _httpClient.GetAsync(url);
-            return JsonConvert.DeserializeObject<Statistics>(responseBody);
         }
 
         public Task<bool> IsUserInRole(IsUserInRoleRequest roleRequest, CancellationToken cancellationToken)
