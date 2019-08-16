@@ -163,6 +163,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("getApprenticeshipFunding")]
         public ActionResult GetApprenticeshipFunding()
         {
+            ViewBag.UserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var model = new
             {
                 HideHeaderSignInLink = true
