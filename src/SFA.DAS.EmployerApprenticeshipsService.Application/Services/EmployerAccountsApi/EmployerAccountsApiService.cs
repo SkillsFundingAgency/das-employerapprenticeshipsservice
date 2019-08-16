@@ -3,7 +3,9 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
@@ -20,8 +22,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
             _httpClient = employerAccountsApiHttpClientFactory.CreateHttpClient();
         }
 
-        //        public async Task<Statistics> GetStatistics(CancellationToken cancellationToken = default)
-        public async Task GetStatistics(CancellationToken cancellationToken = default)
+        public async Task<Statistics> GetStatistics(CancellationToken cancellationToken = default)
         {
             _log.Info($"Getting statistics");
 
@@ -29,11 +30,10 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-            throw new NotImplementedException();
-            //if (!response.IsSuccessStatusCode)
-            //    throw new RestHttpClientException(response, content);
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
 
-            //return JsonConvert.DeserializeObject<Statistics>(content);
+            return JsonConvert.DeserializeObject<Statistics>(content);
         }
     }
 }
