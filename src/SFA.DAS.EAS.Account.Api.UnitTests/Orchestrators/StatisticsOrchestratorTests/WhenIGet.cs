@@ -8,7 +8,6 @@ using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetFinancialStatistics;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
-using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.StatisticsOrchestratorTests
