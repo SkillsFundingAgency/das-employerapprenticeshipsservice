@@ -11,7 +11,6 @@ using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
-using StructureMap.Graph;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
@@ -39,17 +38,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
 
             UrlHelper = new Mock<UrlHelper>();
             Controller.Url = UrlHelper.Object;
-            /*
-            var accountsResponse = new GetPagedEmployerAccountsResponse
-            {
-                Accounts = new List<Domain.Models.Account.Account>()
-            };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
-            */
-            var balancesResponse = new GetAccountBalancesResponse {Accounts = new List<AccountBalance>()};
+            var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
         }
     }
-
 }

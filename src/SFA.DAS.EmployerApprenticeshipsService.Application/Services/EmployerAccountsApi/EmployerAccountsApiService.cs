@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Newtonsoft.Json;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Http;
@@ -15,15 +14,12 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
     {
         private readonly ILog _log;
         private readonly HttpClient _httpClient;
-        private readonly IMapper _mapper;
-
+      
         public EmployerAccountsApiService(
             IEmployerAccountsApiHttpClientFactory employerAccountsApiHttpClientFactory, 
-            ILog log,
-            IMapper mapper)
+            ILog log)
         {
-            _log = log;
-            _mapper = mapper;
+            _log = log;       
 
             //todo: using RestHttpClient would be better, but would need to upgrade the api, which might be a bit much for this story!?
             _httpClient = employerAccountsApiHttpClientFactory.CreateHttpClient();

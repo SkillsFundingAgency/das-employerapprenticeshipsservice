@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         {
             _logger.Info($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
 
-            var payeSchemeResult = await _mediator.SendAsync(new Queries.GetPayeSchemeByRef.GetPagedEmployerAccountsQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
+            var payeSchemeResult = await _mediator.SendAsync(new GetPayeSchemeByRefQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
             if (payeSchemeResult.PayeScheme == null)
             {
                 return null;
@@ -35,13 +35,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             return viewModel;
         }
 
-        public async Task<OrchestratorResponse<PagedApiResponse<Account>>> GetAccounts(string toDate, int pageSize, int pageNumber)
+        public async Task<PagedApiResponse<Account>> GetAccounts(string toDate, int pageSize, int pageNumber)
         {
             _logger.Info("Getting all accounts.");
 
             toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
 
-            var accountsResult = await _mediator.SendAsync(new Queries.GetPagedEmployerAccounts.GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });            
+            var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });            
 
             var data = new List<Account>();          
 
@@ -59,14 +59,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
                 data.Add(accountModel);
             });
 
-            return new OrchestratorResponse<PagedApiResponse<Account>>
+            return new PagedApiResponse<Account>
             {
-                Data = new PagedApiResponse<Account>
-                {
-                    Data = data,
-                    Page = pageNumber,
-                    TotalPages = (accountsResult.AccountsCount / pageSize) + 1
-                }
+                Data = data,
+                Page = pageNumber,
+                TotalPages = (accountsResult.AccountsCount / pageSize) + 1
             };
         }
 

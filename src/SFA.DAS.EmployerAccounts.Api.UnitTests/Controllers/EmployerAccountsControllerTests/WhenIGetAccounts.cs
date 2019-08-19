@@ -6,7 +6,6 @@ using System.Web.Http.Results;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.TestCommon.Extensions;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -41,8 +40,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
             var response = await Controller.GetAccounts(toDate, pageSize, pageNumber);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<PagedApiResponse<Types.Account>>>(response);
-            var model = response as OkNegotiatedContentResult<PagedApiResponse<Types.Account>>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<PagedApiResponse<Account>>>(response);
+            var model = response as OkNegotiatedContentResult<PagedApiResponse<Account>>;
 
             model?.Content?.Data.Should().NotBeNull();
             model?.Content?.Page.Should().Be(pageNumber);

@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
     public class WhenIGetAccounts : EmployerAccountsControllerTests
     {
         [Test]
-        public async Task ThenShouldReturnOkNegotiatedContentResultWithStatistics()
+        public async Task ThenAccountsAreReturnedWithTheirBalanceAndAUriToGetAccountDetails()
         {
             var accountsResponse = new PagedApiResponseViewModel<AccountWithBalanceViewModel>()
             {

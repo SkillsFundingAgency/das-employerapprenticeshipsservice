@@ -18,18 +18,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 
         [Route("", Name = "AccountsIndex")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpGet]   
+        [HttpGet]
         public async Task<IHttpActionResult> GetAccounts(string toDate = null, int pageSize = 1000, int pageNumber = 1)
         {
             var result = await _orchestrator.GetAccounts(toDate, pageSize, pageNumber);
-            
-            if (result.Status == HttpStatusCode.OK)
-            {
-                result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
-                return Ok(result.Data);
-            }
 
-            return Conflict();
+            result.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
+            return Ok(result);
         }
     }
 }
