@@ -5,10 +5,9 @@ namespace SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity
 {
     public class CreateAccountLegalEntityCommand : IAsyncRequest
     { 
-        public CreateAccountLegalEntityCommand(long id, DateTime? deleted, long? pendingAgreementId, long? signedAgreementId, int? signedAgreementVersion, long accountId, long legalEntityId)
+        public CreateAccountLegalEntityCommand(long id, long? pendingAgreementId, long? signedAgreementId, int? signedAgreementVersion, long accountId, long legalEntityId)
         {
             Id = id;
-            Deleted = deleted;
             PendingAgreementId = pendingAgreementId;
             SignedAgreementId = signedAgreementId;
             SignedAgreementVersion = signedAgreementVersion;
@@ -17,7 +16,6 @@ namespace SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity
         }
 
         public long Id { get; set; }
-        public DateTime? Deleted { get; set; }
         public long? PendingAgreementId { get; set; }
         public long? SignedAgreementId { get; set; }
         public int? SignedAgreementVersion { get; set; }

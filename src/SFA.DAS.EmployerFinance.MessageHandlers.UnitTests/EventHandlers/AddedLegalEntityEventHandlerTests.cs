@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
                 f => f.Mediator.Verify(x => x.SendAsync(It.Is<CreateAccountLegalEntityCommand>(p =>
                         p.AccountId == f.AccountId &&
                         p.LegalEntityId == f.LegalEntityId &&
-                        p.Deleted == null &&
                         p.Id == f.AccountLegalEntityId
                     ))));
         }

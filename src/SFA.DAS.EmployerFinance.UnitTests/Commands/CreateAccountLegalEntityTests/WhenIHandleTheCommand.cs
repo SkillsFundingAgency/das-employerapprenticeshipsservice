@@ -26,14 +26,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.CreateAccountLegalEntityTes
         public async Task ThenTheAccountLegalEntityIsCreated()
         {
             var id = 337782;
-            var deleted = new DateTime(2010, 01, 01);
             var pendingAgreementId = 56832;
             var signedAgreementId = 338921;
             var signedAgreementVersion = 3;
             var accountId = 10862;
             var legalEntityId = 44893;
 
-            await _handler.Handle(new CreateAccountLegalEntityCommand(id, deleted, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
+            await _handler.Handle(new CreateAccountLegalEntityCommand(id, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
 
             _accountLegalEntityRepository.Verify(x => x.CreateAccountLegalEntity(id, pendingAgreementId, signedAgreementId, signedAgreementVersion, accountId, legalEntityId));
         }

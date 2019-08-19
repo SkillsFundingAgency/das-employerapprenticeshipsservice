@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 
         public Task Handle(AddedLegalEntityEvent message, IMessageHandlerContext context)
          {
-            return _mediator.SendAsync(new CreateAccountLegalEntityCommand(message.AccountLegalEntityId, null, null, null, null,
+            return _mediator.SendAsync(new CreateAccountLegalEntityCommand(message.AccountLegalEntityId, null, null, null,
                 message.AccountId, message.LegalEntityId));
         }
     }

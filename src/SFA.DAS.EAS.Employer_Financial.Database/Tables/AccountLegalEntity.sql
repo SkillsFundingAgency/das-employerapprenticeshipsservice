@@ -5,6 +5,5 @@
 	[LegalEntityId] BIGINT NOT NULL,
 	[SignedAgreementVersion] INT NULL,
 	[SignedAgreementId] BIGINT NULL,
-	[PendingAgreementId] BIGINT NULL,
-	[Deleted] DATETIME NULL
+	[PendingAgreementId] BIGINT NULL
 )
