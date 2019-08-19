@@ -22,7 +22,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http
                 .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(_employerAccountsApiConfig))
                 .Build();
 
-            httpClient.BaseAddress = new Uri(_employerAccountsApiConfig.ApiBaseUrl);
+            httpClient.BaseAddress = new Uri(_employerAccountsApiConfig.BaseUrl);
 
             httpClient.Timeout = TimeSpan.Parse(_employerAccountsApiConfig.TimeoutTimeSpan);
 
