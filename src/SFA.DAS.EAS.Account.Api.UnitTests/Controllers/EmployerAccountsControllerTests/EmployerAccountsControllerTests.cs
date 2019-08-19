@@ -7,9 +7,11 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
+using StructureMap.Graph;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControllerTests
 {
@@ -21,6 +23,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         protected Mock<UrlHelper> UrlHelper;
         protected Mock<IMapper> Mapper;
         protected Mock<IHashingService> HashingService;
+        protected Mock<IEmployerAccountsApiService> ApiService;
 
         [SetUp]
         public void Arrange()
@@ -29,7 +32,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             Logger = new Mock<ILog>();
             Mapper = new Mock<IMapper>();
             HashingService = new Mock<IHashingService>();
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
+            ApiService = new Mock<IEmployerAccountsApiService>();
+
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object, ApiService.Object);
             Controller = new EmployerAccountsController(orchestrator);
 
             UrlHelper = new Mock<UrlHelper>();

@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
@@ -25,6 +26,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         private Mock<IMediator> _mediator;
         private Mock<ILog> _log;
         private Mock<IHashingService> _hashingService;
+        private Mock<IEmployerAccountsApiService> _apiService;
         private IMapper _mapper;
         private TransferAllowance _transferAllowance;
 
@@ -39,7 +41,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             _mapper = ConfigureMapper();
             _log = new Mock<ILog>();
             _hashingService = new Mock<IHashingService>();
-            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper, _hashingService.Object);
+            _apiService = new Mock<IEmployerAccountsApiService>();
+            _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper, _hashingService.Object, _apiService.Object);
 
             var response = new GetEmployerAccountByHashedIdResponse
             {

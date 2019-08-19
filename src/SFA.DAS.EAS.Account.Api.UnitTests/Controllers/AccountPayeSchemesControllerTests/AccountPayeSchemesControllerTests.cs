@@ -5,6 +5,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
@@ -20,6 +21,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountPayeSchemesContro
         protected Mock<UrlHelper> UrlHelper;
         protected Mock<IMapper> Mapper;
         protected Mock<IHashingService> HashingService;
+        protected Mock<IEmployerAccountsApiService> ApiService;
 
         [SetUp]
         public void Arrange()
@@ -29,7 +31,9 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountPayeSchemesContro
             Mapper = new Mock<IMapper>();
             HashingService = new Mock<IHashingService>();
             Configuration = new EmployerAccountsApiConfiguration();
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
+            ApiService = new Mock<IEmployerAccountsApiService>();
+
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object, ApiService.Object);
             Controller = new AccountPayeSchemesController(orchestrator, Configuration);
 
             UrlHelper = new Mock<UrlHelper>();

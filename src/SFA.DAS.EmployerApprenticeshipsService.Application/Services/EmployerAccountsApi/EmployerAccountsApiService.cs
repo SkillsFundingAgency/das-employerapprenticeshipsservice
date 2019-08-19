@@ -54,8 +54,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            var result = JsonConvert.DeserializeObject<PagedApiResponse<EmployerAccounts.Api.Types.Account>>(content);
-            return _mapper.Map<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(result);
+            return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(content);
         }
     }
 }
