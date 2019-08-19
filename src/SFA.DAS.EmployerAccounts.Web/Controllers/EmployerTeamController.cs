@@ -49,6 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
+            PopulateViewBagWithExternalUserId();
             var response = await GetAccountInformation(hashedAccountId);
             var hasPayeScheme = HasPayeScheme(response.Data);
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
@@ -555,6 +556,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
+        }
+
+        private void PopulateViewBagWithExternalUserId()
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            if (externalUserId != null)
+                ViewBag.UserId = externalUserId;
         }
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
