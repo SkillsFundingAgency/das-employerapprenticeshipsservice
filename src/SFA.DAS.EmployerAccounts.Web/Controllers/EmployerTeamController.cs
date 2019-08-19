@@ -546,7 +546,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var viewModel = new ApprenticeDetailsViewModel
             {
                 ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
-                TrainingProviderName = apprenticeship.TrainingProvider.Name,
+                TrainingProviderName = apprenticeship.TrainingProvider?.Name,
                 CourseName = apprenticeship.CourseName,
                 StartDateText = apprenticeship.StartDate?.ToGdsFormatWithoutDay(),
                 EndDateText = apprenticeship.EndDate?.ToGdsFormatWithoutDay(),
