@@ -9,5 +9,7 @@ namespace SFA.DAS.EmployerFinance.Data
             int? signedAgreementVersion, long accountId, long legalEntityId);
 
         Task SignAgreement(long signedAgreementId, int signedAgreementVersion, long accountId, long legalEntityId);
+
+        Task RemoveAccountLegalEntity(long id);
     }
 }
