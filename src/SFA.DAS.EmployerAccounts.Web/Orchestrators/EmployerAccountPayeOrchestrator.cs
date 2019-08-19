@@ -170,7 +170,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     });
 
             var payeResponse = await
-                Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                Mediator.SendAsync(new GetPagedEmployerAccountsQuery
                 {
                     HashedAccountId = model.HashedAccountId,
                     Ref = model.PayeRef
@@ -188,7 +188,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             var response = new OrchestratorResponse<RemovePayeSchemeViewModel> { Data = model };
             try
             {
-                var result = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                var result = await Mediator.SendAsync(new GetPagedEmployerAccountsQuery
                 {
                     HashedAccountId = model.HashedAccountId,
                     Ref = model.PayeRef,
@@ -227,7 +227,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     UserId = userId
                 });
 
-                var payeSchemeResult = await Mediator.SendAsync(new GetPayeSchemeByRefQuery
+                var payeSchemeResult = await Mediator.SendAsync(new GetPagedEmployerAccountsQuery
                 {
                     HashedAccountId = hashedAccountId,
                     Ref = empRef
