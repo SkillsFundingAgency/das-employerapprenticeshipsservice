@@ -26,10 +26,10 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
             var accountsResponse = new GetPagedEmployerAccountsResponse
             {
                 AccountsCount = 2,
-                Accounts = new List<Account>
+                Accounts = new List<Models.Account.Account>
                 {
-                    new Account { HashedId = "ABC123", Id = 123, Name = "Test 1" },
-                    new Account { HashedId = "ABC999", Id = 987, Name = "Test 2" }
+                    new Models.Account.Account { HashedId = "ABC123", Id = 123, Name = "Test 1" },
+                    new Models.Account.Account { HashedId = "ABC999", Id = 987, Name = "Test 2" }
                 }
             };
             Mediator.Setup(x => x.SendAsync(It.Is<GetPagedEmployerAccountsQuery>(q => q.PageNumber == pageNumber && q.PageSize == pageSize && q.ToDate == toDate)))
@@ -41,8 +41,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
             var response = await Controller.GetAccounts(toDate, pageSize, pageNumber);
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<PagedApiResponseViewModel<AccountViewModel>>>(response);
-            var model = response as OkNegotiatedContentResult<PagedApiResponseViewModel<AccountViewModel>>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<PagedApiResponse<Types.Account>>>(response);
+            var model = response as OkNegotiatedContentResult<PagedApiResponse<Types.Account>>;
 
             model?.Content?.Data.Should().NotBeNull();
             model?.Content?.Page.Should().Be(pageNumber);

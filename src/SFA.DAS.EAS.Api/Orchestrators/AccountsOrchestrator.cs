@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
 {
@@ -25,29 +27,27 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         private readonly ILog _logger;
         private readonly IMapper _mapper;
         private readonly IHashingService _hashingService;
+        private readonly IEmployerAccountsApiService _employerAccountsApiService;
 
-        public AccountsOrchestrator(IMediator mediator, ILog logger, IMapper mapper, IHashingService hashingService)
-        {
-            if (mediator == null)
-                throw new ArgumentNullException(nameof(mediator));
+        public AccountsOrchestrator(
+            IMediator mediator, 
+            ILog logger, 
+            IMapper mapper, 
+            IHashingService hashingService,
+            IEmployerAccountsApiService employerAccountsApiService)
+        {    
             _mediator = mediator;
             _logger = logger;
             _mapper = mapper;
             _hashingService = hashingService;
+            _employerAccountsApiService = employerAccountsApiService;
         }
 
         public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountWithBalanceViewModel>>> GetAllAccountsWithBalances(string toDate, int pageSize, int pageNumber)
         {
             _logger.Info("Getting all account balances.");
-
-            //toDate = toDate ?? DateTime.MaxValue.ToString("yyyyMMddHHmmss");
-
-            //var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });
-
-            var accountsResult = new PagedApiResponseViewModel<AccountWithBalanceViewModel>
-            {
-                Data = new List<AccountWithBalanceViewModel>()
-            };
+            
+            var accountsResult = await _employerAccountsApiService.GetAccounts(toDate, pageSize, pageNumber);
 
             var transactionResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {

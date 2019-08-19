@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Api.Types
 {
-    public class AccountViewModel
+    public class Account
     {
         public string AccountName { get; set; }
         public string AccountHashId { get; set; }

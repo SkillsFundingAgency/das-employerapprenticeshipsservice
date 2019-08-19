@@ -210,9 +210,6 @@
     <Reference Include="SFA.DAS.Elastic, Version=1.0.0.52762, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Elastic.1.0.0.52762\lib\net45\SFA.DAS.Elastic.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.EmployerAccounts.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.EmployerAccounts.Api.Types.1.6.1852\lib\net462\SFA.DAS.EmployerAccounts.Api.Types.dll</HintPath>
-    </Reference>
     <Reference Include="SFA.DAS.EntityFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.EntityFramework.1.0.1\lib\netstandard2.0\SFA.DAS.EntityFramework.dll</HintPath>
     </Reference>
@@ -628,6 +625,10 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{8057e87b-5893-45d0-93a1-6278ea8ba328}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>

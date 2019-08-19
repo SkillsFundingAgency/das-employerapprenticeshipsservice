@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             return viewModel;
         }
 
-        public async Task<OrchestratorResponse<PagedApiResponseViewModel<AccountViewModel>>> GetAccounts(string toDate, int pageSize, int pageNumber)
+        public async Task<OrchestratorResponse<PagedApiResponse<Account>>> GetAccounts(string toDate, int pageSize, int pageNumber)
         {
             _logger.Info("Getting all accounts.");
 
@@ -42,11 +42,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
             var accountsResult = await _mediator.SendAsync(new GetPagedEmployerAccountsQuery { ToDate = toDate, PageSize = pageSize, PageNumber = pageNumber });            
 
-            var data = new List<AccountViewModel>();          
+            var data = new List<Account>();          
 
             accountsResult.Accounts.ForEach(account =>
             {
-                var accountModel = new AccountViewModel
+                var accountModel = new Account
                 {
                     AccountId = account.Id,
                     AccountName = account.Name,
@@ -57,9 +57,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
                 data.Add(accountModel);
             });
 
-            return new OrchestratorResponse<PagedApiResponseViewModel<AccountViewModel>>
+            return new OrchestratorResponse<PagedApiResponse<Account>>
             {
-                Data = new PagedApiResponseViewModel<AccountViewModel>
+                Data = new PagedApiResponse<Account>
                 {
                     Data = data,
                     Page = pageNumber,
