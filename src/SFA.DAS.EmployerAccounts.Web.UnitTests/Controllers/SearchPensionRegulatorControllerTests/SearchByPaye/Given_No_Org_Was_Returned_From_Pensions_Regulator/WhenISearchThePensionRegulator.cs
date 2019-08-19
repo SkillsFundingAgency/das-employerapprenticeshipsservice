@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenTheSearchOrganisationPageIsDisplayed()
         {
             var response = await _controller.SearchPensionRegulator(It.IsAny<string>());
-            var redirectResponse = (RedirectToRouteResult)response;
+            var redirectResponse = (RedirectToRouteResult) response;
 
             Assert.AreEqual(ControllerConstants.SearchForOrganisationActionName, redirectResponse.RouteValues["action"].ToString());
             Assert.AreEqual(ControllerConstants.SearchOrganisationControllerName, redirectResponse.RouteValues["controller"].ToString());
