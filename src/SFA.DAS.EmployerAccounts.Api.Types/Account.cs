@@ -7,5 +7,6 @@
         public string PublicAccountHashId { get; set; }
         public long AccountId { get; set; }
         public string Href { get; set; }
+        public bool IsLevyPayer { get; set; }
     }
 }

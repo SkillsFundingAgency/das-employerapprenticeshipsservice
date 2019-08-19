@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
@@ -63,7 +62,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                     account.Balance = accountBalance.Balance;
                     account.RemainingTransferAllowance = accountBalance.RemainingTransferAllowance;
                     account.StartingTransferAllowance = accountBalance.StartingTransferAllowance;
-                    account.IsLevyPayer = accountBalance.IsLevyPayer == 1;
                 }
             });
 
@@ -129,7 +127,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             var response = await GetAccountTeamMembers(hashedAccountId);
 
             return response;
-
         }
 
         public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(string hashedAccountId)

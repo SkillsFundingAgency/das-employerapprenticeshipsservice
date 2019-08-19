@@ -211,6 +211,7 @@
     <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetALevyAccount.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAllAccountsWithBalances.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccountWithNoAgreements.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetANonLevyAccount.cs" />
     <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />

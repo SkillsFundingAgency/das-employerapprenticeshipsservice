@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
@@ -51,7 +52,8 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
                     AccountId = account.Id,
                     AccountName = account.Name,
                     AccountHashId = account.HashedId,
-                    PublicAccountHashId = account.PublicHashedId
+                    PublicAccountHashId = account.PublicHashedId,
+                    IsLevyPayer = ((ApprenticeshipEmployerType) account.ApprenticeshipEmployerType) == ApprenticeshipEmployerType.Levy
                 };
 
                 data.Add(accountModel);
