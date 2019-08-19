@@ -14,5 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public long LegalEntityId { get; set; }
         public bool CohortCreated { get; set; }
         public AgreementType AgreementType { get; set; }
+        public int SignedAgreementVersion { get; set; }
     }
 }

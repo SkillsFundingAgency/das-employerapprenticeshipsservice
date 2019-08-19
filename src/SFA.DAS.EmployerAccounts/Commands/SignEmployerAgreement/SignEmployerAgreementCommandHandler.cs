@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var accountHasCommitments = commitments?.Any() ?? false;
 
             await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId,
-                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType);
+                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType, agreement.VersionNumber);
         }
 
         private async Task PublishLegalGenericEvent(SignEmployerAgreementCommand message, string hashedLegalEntityId)
@@ -142,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
         private Task PublishAgreementSignedMessage(
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, string currentUserRef, AgreementType agreementType)
+            bool cohortCreated, string currentUserName, string currentUserRef, AgreementType agreementType, int versionNumber)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
             {
@@ -154,7 +154,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
                 Created = DateTime.UtcNow,
                 UserName = currentUserName,
                 UserRef = Guid.Parse(currentUserRef),
-                AgreementType = agreementType
+                AgreementType = agreementType,
+                SignedAgreementVersion = versionNumber
             });
         }
 
