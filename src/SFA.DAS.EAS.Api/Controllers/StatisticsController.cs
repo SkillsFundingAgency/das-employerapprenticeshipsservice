@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Application.Queries.GetStatistics;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -10,18 +9,17 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/statistics")]
     public class StatisticsController : ApiController
     {
-        private readonly IMediator _mediator;
+        private readonly StatisticsOrchestrator _statisticsOrchestrator;
 
-        public StatisticsController(IMediator mediator)
+        public StatisticsController(StatisticsOrchestrator statisticsOrchestrator)
         {
-            _mediator = mediator;
+            _statisticsOrchestrator = statisticsOrchestrator;
         }
-        
+
         [Route("")]
         public async Task<IHttpActionResult> GetStatistics()
         {
-            var response = await _mediator.SendAsync(new GetStatisticsQuery());
-            return Ok(response.Statistics);
+            return Ok(await _statisticsOrchestrator.Get());
         }
     }
 }

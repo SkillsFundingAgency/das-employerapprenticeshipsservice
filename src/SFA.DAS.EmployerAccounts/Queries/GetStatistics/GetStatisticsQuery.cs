@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetStatistics
+namespace SFA.DAS.EmployerAccounts.Queries.GetStatistics
 {
     public class GetStatisticsQuery : IAsyncRequest<GetStatisticsResponse>
     {

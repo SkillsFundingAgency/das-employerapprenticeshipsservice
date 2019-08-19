@@ -1,11 +1,11 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http.Results;
-using MediatR;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
+using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetStatistics;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTests
 {
@@ -13,38 +13,39 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.StatisticsControllerTest
     public class WhenICallTheStatisticsEndPoint
     {
         private StatisticsController _controller;
-        private Mock<IMediator> _mediator;
-        private GetStatisticsResponse _response;
-        private StatisticsViewModel _statistics;
+        private Mock<StatisticsOrchestrator> _orchestrator;
+        private StatisticsViewModel _statisticsViewModel;
 
         [SetUp]
         public void Setup()
         {
-            _mediator = new Mock<IMediator>();
+            _orchestrator = new Mock<StatisticsOrchestrator>(null, null);
 
-            _statistics = new StatisticsViewModel
+            _statisticsViewModel = new StatisticsViewModel
             {
                 TotalAccounts = 1,
-                TotalPayeSchemes = 2,
+                TotalAgreements = 2,
                 TotalLegalEntities = 3,
-                TotalAgreements = 4,
+                TotalPayeSchemes = 4,
                 TotalPayments = 5
             };
 
-            _response = new GetStatisticsResponse { Statistics = _statistics };
+            _orchestrator.Setup(m => m.Get()).ReturnsAsync(_statisticsViewModel);
 
-            _mediator.Setup(m => m.SendAsync(It.IsAny<GetStatisticsQuery>())).ReturnsAsync(_response);
-
-            _controller = new StatisticsController(_mediator.Object);
+            _controller = new StatisticsController(_orchestrator.Object);
         }
 
         [Test]
-        public async Task ThenShouldReturnStatistics()
+        public async Task ThenShouldReturnOkNegotiatedContentResultWithStatistics()
         {
-            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<StatisticsViewModel>; ;
-            
-            Assert.That(result, Is.Not.Null);
-            Assert.That(result.Content, Is.SameAs(_statistics));
+            var result = await _controller.GetStatistics();
+
+            result.Should().NotBeNull();
+            result.Should().BeOfType<OkNegotiatedContentResult<StatisticsViewModel>>();
+
+            var okResult = (OkNegotiatedContentResult<StatisticsViewModel>)result;
+            okResult.Content.Should().NotBeNull();
+            okResult.Content.ShouldBeEquivalentTo(_statisticsViewModel);
         }
     }
 }
