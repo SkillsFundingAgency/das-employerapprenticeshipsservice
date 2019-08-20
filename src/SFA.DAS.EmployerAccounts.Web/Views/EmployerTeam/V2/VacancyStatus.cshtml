@@ -6,10 +6,10 @@
     <dt class="das-definition-list__title">Closing date</dt>
     <dd class="das-definition-list__definition">@Model.ClosingDateText</dd>
 
-    @{ if (Model.NumberOfApplications.HasValue)
+    @{ if (Model.Applications != null)
         {
             <dt class="das-definition-list__title">Applications</dt>
-            <dd class="das-definition-list__definition">@Model.NumberOfApplications.Value</dd>
+            <dd class="das-definition-list__definition">@Model.Applications</dd>
         }
     }
 

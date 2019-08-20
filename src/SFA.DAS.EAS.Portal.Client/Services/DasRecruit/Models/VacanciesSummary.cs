@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit.Models
 {
-    public class VacanciesSummary
+    internal class VacanciesSummary
     {
         public IEnumerable<VacancySummary> Vacancies { get; set; }
         public int PageSize { get; set; }
