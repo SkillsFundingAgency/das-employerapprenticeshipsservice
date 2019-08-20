@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public class EmployerSchemesRepository : BaseRepository, IEmployerSchemesRepository
     {
-        private readonly Lazy<EmployerAccountsDbContext> _db;
+        private readonly Lazy<EmployerFinanceDbContext> _db;
 
-        public EmployerSchemesRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
+        public EmployerSchemesRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@accountId", employerId, DbType.Int64);
 
             var result = await _db.Value.Database.Connection.QueryAsync<PayeScheme>(
-                sql: "[employer_account].[GetPayeSchemes_ByAccountId]",
+                sql: "[employer_finance].[GetPayeSchemes_ByAccountId]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
