@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
                 }
             };
 
-            ApiService.Setup(s => s.GetAccounts(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<int>(), It.IsAny<CancellationToken>()))
+            ApiService.Setup(s => s.GetAccounts(null, 1000, 1, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(accountsResponse);
 
             var result = await Controller.GetAccounts();

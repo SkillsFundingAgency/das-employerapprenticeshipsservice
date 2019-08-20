@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
     public class WhenIGetAccounts : EmployerAccountsControllerTests
     {
         [Test]
-        public async Task ThenAccountsAreReturnedWithTheirBalanceAndAUriToGetAccountDetails()
+        public async Task ThenAccountsAreReturnedWithTheirAUriToGetAccountDetails()
         {
             var pageNumber = 123;
             var pageSize = 9084;
