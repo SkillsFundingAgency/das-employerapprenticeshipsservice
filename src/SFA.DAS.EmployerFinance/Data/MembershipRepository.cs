@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public MembershipRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
+        public MembershipRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
