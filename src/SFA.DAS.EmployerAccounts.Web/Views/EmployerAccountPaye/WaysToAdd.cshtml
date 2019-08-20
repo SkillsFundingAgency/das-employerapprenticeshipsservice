@@ -14,18 +14,18 @@
         <h1 class="heading-xlarge">
             Ways to add your PAYE scheme
         </h1>
-        <h1 class="bold-small">If you know the annual payroll for you organisation is under £3 million, you can use either:</h1>
+        <h1 class="bold-small">If you know the annual payroll for your organisation is under £3 million, you can use either:</h1>
         <br />
         <ul class="list list-bullet">
             <li>Government Gateway login for your PAYE scheme</li>
             <li>accounts office reference number and employer PAYE scheme reference</li>
         </ul>
-        <h1 class="bold-small">If you know the annual payroll for you organisation is over £3 million, you can use:</h1>
+        <h1 class="bold-small">If you know the annual payroll for your organisation is over £3 million, you can use:</h1>
         <br/>
         <ul class="list list-bullet">
             <li>Government Gateway login for your PAYE scheme</li>
         </ul>
-        <div class="panel panel-border-wide">If you've not sure how much you annual payroll is, choose Government Gateway.</div>
+        <div class="panel panel-border-wide">If you've not sure how much your annual payroll is, choose Government Gateway.</div>
         <form method="POST" action="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="how-do-you-want-to-add-paye-scheme-form">
