@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public class AccountRepository : BaseRepository, IAccountRepository
     {
-        private readonly Lazy<EmployerAccountsDbContext> _db;
+        private readonly Lazy<EmployerFinanceDbContext> _db;
 
-        public AccountRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
+        public AccountRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@accountId", accountId, DbType.Int64);
 
             var result = await _db.Value.Database.Connection.QueryAsync<string>(
-                sql: "SELECT Name FROM [employer_account].[Account] WHERE Id = @accountId",
+                sql: "SELECT Name FROM [employer_financial].[Account] WHERE Id = @accountId",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerFinance.Data
         public async Task<Dictionary<long, string>> GetAccountNames(IEnumerable<long> accountIds)
         {
             var result = await _db.Value.Database.Connection.QueryAsync<AccountNameItem>(
-                sql: "SELECT Id, Name FROM [employer_account].[Account] WHERE Id IN @accountIds",
+                sql: "SELECT Id, Name FROM [employer_financial].[Account] WHERE Id IN @accountIds",
                 param: new { accountIds = accountIds },
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
