@@ -131,7 +131,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
-        [AuthoriseActiveUser]
+        // [AuthoriseActiveUser]
         [HttpGet]
         [Route("accounts")]
         public async Task<ActionResult> ViewAccounts()
