@@ -158,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (Exception e)
             {
-                _logger.Info($"Create Account Validation Error: {e.Message}");
+                _logger.Error(e,$"Create Account Validation Error: {e.Message}");
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel(),
@@ -249,7 +249,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                _logger.Info($"Create Account Validation Error: {ex.Message}");
+                _logger.Error(ex, $"Create Account Validation Error: {ex.Message}");
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel(),
@@ -294,7 +294,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                _logger.Info($"Create User Account Validation Error: {ex.Message}");
+                _logger.Error(ex, $"Create User Account Validation Error: {ex.Message}");
                 return new OrchestratorResponse<EmployerAccountViewModel>
                 {
                     Data = new EmployerAccountViewModel(),
