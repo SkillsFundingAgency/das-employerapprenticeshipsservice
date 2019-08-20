@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
 
             _controller = new SearchPensionRegulatorController(
                 Mock.Of<IAuthenticationService>(),
-                orchestrator.Object,
+                orchestrator.Object,            
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
                 _mediator.Object);
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenTheCheckYourDetailsPageIsDisplayed()
         {
             var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
-            var redirectResponse = (RedirectToRouteResult)response;
+            var redirectResponse = (RedirectToRouteResult) response;
 
             Assert.AreEqual(ControllerConstants.SummaryActionName, redirectResponse.RouteValues["action"].ToString());
             Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());
