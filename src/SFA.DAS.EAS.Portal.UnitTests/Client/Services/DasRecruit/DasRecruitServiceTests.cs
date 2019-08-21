@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Portal.Client.Http;
-using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
+using SFA.DAS.EAS.Portal.Client.Services.Recruit;
+using SFA.DAS.EAS.Portal.Client.Services.Recruit.Http;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.UnitTests.Fakes;
 using SFA.DAS.NLog.Logger;
@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
 
     internal class DasRecruitServiceTestsFixture
     {
-        public DasRecruitService DasRecruitService { get; set; }
+        public RecruitService RecruitService { get; set; }
         public Mock<IRecruitApiHttpClientFactory> RecruitApiHttpClientFactory { get; set; }
         public FakeHttpMessageHandler HttpMessageHandler { get; set; }
         public HttpClient HttpClient { get; set; }
@@ -61,7 +61,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
 
             Log = new Mock<ILog>();
 
-            DasRecruitService = new DasRecruitService(RecruitApiHttpClientFactory.Object, Log.Object);
+            RecruitService = new RecruitService(RecruitApiHttpClientFactory.Object, Log.Object);
         }
 
         public DasRecruitServiceTestsFixture ArrangeApiReturnsOk()
@@ -103,7 +103,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client.Services.DasRecruit
         public async Task<IEnumerable<Vacancy>> GetVacancies()
         {
             const string hashedAccountId = "HASHAI";
-            return await DasRecruitService.GetVacancies(hashedAccountId);
+            return await RecruitService.GetVacancies(hashedAccountId);
         }
 
         public void AssertVacancies(IEnumerable<Vacancy> vacancies)

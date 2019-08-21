@@ -1,14 +1,15 @@
-﻿using SFA.DAS.EAS.Portal.Client.Database.Models;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Portal.Application.Services.MessageContext;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 
-namespace SFA.DAS.EAS.Portal.Application.Services
+namespace SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService
 {
-    public class AccountDocumentServiceWithDuplicateCheck : IAccountDocumentService
+    public class AccountDocumentServiceWithSetProperties : IAccountDocumentService
     {
         private readonly IAccountDocumentService _accountDocumentService;
         private readonly IMessageContext _messageContext;
-        public AccountDocumentServiceWithDuplicateCheck(IAccountDocumentService accountDocumentService, IMessageContext messageContext)
+        public AccountDocumentServiceWithSetProperties(IAccountDocumentService accountDocumentService, IMessageContext messageContext)
         {
             _accountDocumentService = accountDocumentService;
             _messageContext = messageContext;
@@ -26,10 +27,14 @@ namespace SFA.DAS.EAS.Portal.Application.Services
 
         public Task Save(AccountDocument accountDocument, CancellationToken cancellationToken = default)
         {
-            accountDocument.DeleteOldMessages();
-            if (accountDocument.IsMessageProcessed(_messageContext.Id)) { return Task.CompletedTask; };
-
-            accountDocument.AddOutboxMessage(_messageContext.Id, _messageContext.CreatedDateTime);
+            if (accountDocument.IsNew)
+            {
+                accountDocument.Created = _messageContext.CreatedDateTime;
+            }
+            else
+            {
+                accountDocument.Updated = _messageContext.CreatedDateTime;
+            }
 
             return _accountDocumentService.Save(accountDocument, cancellationToken);
         }
