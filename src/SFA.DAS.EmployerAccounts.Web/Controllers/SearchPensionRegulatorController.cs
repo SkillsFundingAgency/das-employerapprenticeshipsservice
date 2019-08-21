@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly IMediator _mediatr;
         private const int OrgNotListed = 0;
         private Regex _aornRegex = new Regex("^[A-Z0-9]{13}$");
-        private Regex _payeRegex = new Regex("^[0-9]{3}/?[A-Z0-9]{7}$");
+        private Regex _payeRegex = new Regex("^[0-9]{3}/?[A-Z0-9]{1,7}$");
 
         public SearchPensionRegulatorController(
             IAuthenticationService owinWrapper,
