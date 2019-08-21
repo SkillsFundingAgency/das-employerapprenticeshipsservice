@@ -1,9 +1,5 @@
-﻿using System;
-using System.Linq.Expressions;
-using SFA.DAS.Authentication;
-using SFA.DAS.Caches;
+﻿using SFA.DAS.Authentication;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
