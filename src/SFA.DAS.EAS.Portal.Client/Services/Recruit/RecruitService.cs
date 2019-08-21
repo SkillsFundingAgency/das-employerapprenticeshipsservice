@@ -77,7 +77,8 @@ namespace SFA.DAS.EAS.Portal.Client.Services.Recruit
                 Reference = summary.VacancyReference,
                 Status = (VacancyStatus)Enum.Parse(_vacancyStatusType, summary.Status, true),
                 Title = summary.Title,
-                TrainingTitle = summary.TrainingTitle
+                TrainingTitle = summary.TrainingTitle,
+                ApplicationMethod = summary.ApplicationMethod
             };
         }
     }

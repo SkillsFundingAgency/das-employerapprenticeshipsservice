@@ -1,8 +1,9 @@
 ﻿using System;
+using SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EAS.Portal.Client.Services.Recruit.Models
 {
-    public class VacancySummary
+    internal class VacancySummary
     {
         public string Title { get; set; }
         public long? VacancyReference { get; set; }
@@ -13,5 +14,6 @@ namespace SFA.DAS.EAS.Portal.Client.Services.Recruit.Models
         public int NoOfSuccessfulApplications { get; set; }
         public int NoOfUnsuccessfulApplications { get; set; }
         public string RaaManageVacancyUrl { get; set; }
+        public ApplicationMethod ApplicationMethod { get; set; }
     }
 }
