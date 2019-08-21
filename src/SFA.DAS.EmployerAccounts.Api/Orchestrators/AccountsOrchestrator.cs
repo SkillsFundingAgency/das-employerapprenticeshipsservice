@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.NLog.Logger;
@@ -21,18 +23,20 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             _logger = logger;
         }
 
-        public async Task<PayeSchemeViewModel> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+        public async Task<PayeScheme> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
             _logger.Info($"Getting paye scheme {payeSchemeRef} for account {hashedAccountId}");
 
             var payeSchemeResult = await _mediator.SendAsync(new GetPayeSchemeByRefQuery { HashedAccountId = hashedAccountId, Ref = payeSchemeRef });
-            if (payeSchemeResult.PayeScheme == null)
-            {
-                return null;
-            }
+            return payeSchemeResult.PayeScheme == null ? null : ConvertToPayeScheme(hashedAccountId, payeSchemeResult);
+        }
 
-            var viewModel = ConvertPayeSchemeToViewModel(hashedAccountId, payeSchemeResult);
-            return viewModel;
+        public async Task<AccountDetail> GetAccount(string hashedAccountId)
+        {
+            _logger.Info($"Getting account {hashedAccountId}");
+
+            var accountResult = await _mediator.SendAsync(new GetEmployerAccountDetailByHashedIdQuery { HashedAccountId = hashedAccountId });
+            return accountResult.Account == null ? null : ConvertToAccountDetail(accountResult);
         }
 
         public async Task<PagedApiResponse<Account>> GetAccounts(string toDate, int pageSize, int pageNumber)
@@ -67,9 +71,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
             };
         }
 
-        private PayeSchemeViewModel ConvertPayeSchemeToViewModel(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
+        private PayeScheme ConvertToPayeScheme(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)
         {
-            var payeSchemeViewModel = new PayeSchemeViewModel
+            return new PayeScheme
             {
                 DasAccountId = hashedAccountId,
                 Name = payeSchemeResult.PayeScheme.Name,
@@ -77,8 +81,36 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
                 AddedDate = payeSchemeResult.PayeScheme.AddedDate,
                 RemovedDate = payeSchemeResult.PayeScheme.RemovedDate
             };
+        }
 
-            return payeSchemeViewModel;
+        private static AccountDetail ConvertToAccountDetail(GetEmployerAccountDetailByHashedIdResponse accountResult)
+        {
+            return new AccountDetail
+            {
+                AccountId = accountResult.Account.AccountId,
+                HashedAccountId = accountResult.Account.HashedId,
+                PublicHashedAccountId = accountResult.Account.PublicHashedId,
+                DateRegistered = accountResult.Account.CreatedDate,
+                OwnerEmail = accountResult.Account.OwnerEmail,
+                DasAccountName = accountResult.Account.Name,
+                LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new Resource { Id = x.ToString() })),
+                PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new Resource { Id = x })),
+                ApprenticeshipEmployerType = accountResult.Account.ApprenticeshipEmployerType.ToString(),
+                AccountAgreementType = GetAgreementType(accountResult)
+            };
+        }
+
+        private static AccountAgreementType GetAgreementType(GetEmployerAccountDetailByHashedIdResponse accountResult)
+        {
+            var agreementTypeGroup = accountResult.Account.AccountAgreementTypes?
+                .GroupBy(x => x);
+
+            if (agreementTypeGroup == null || !agreementTypeGroup.Any())
+            {
+                return AccountAgreementType.Unknown;
+            }
+
+            return agreementTypeGroup?.Count() > 1 ? AccountAgreementType.Inconsistent : (AccountAgreementType)Enum.Parse(typeof(AccountAgreementType), agreementTypeGroup?.FirstOrDefault()?.Key.ToString());
         }
     }
 }

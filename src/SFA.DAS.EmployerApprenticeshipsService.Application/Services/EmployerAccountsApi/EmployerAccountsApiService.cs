@@ -43,7 +43,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
         {
             _log.Info($"Getting paged accounts");
 
-            var response = await _httpClient.GetAsync($"/api/accounts?{(string.IsNullOrWhiteSpace(toDate) ? "" : "toDate=" + toDate + "&")}pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken);
+            var response = await _httpClient.GetAsync($"/api/accounts?{(string.IsNullOrWhiteSpace(toDate) ? "" : "toDate=" + toDate + "&")}pageNumber={pageNumber}&pageSize={pageSize}", cancellationToken).ConfigureAwait(false); 
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
@@ -51,6 +51,20 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
                 throw new RestHttpClientException(response, content);
 
             return JsonConvert.DeserializeObject<PagedApiResponseViewModel<AccountWithBalanceViewModel>>(content);
+        }
+
+        public async Task<AccountDetailViewModel> GetAccount(string hashedAccountId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            _log.Info($"Getting paged accounts");
+
+            var response = await _httpClient.GetAsync($"/api/accounts/{hashedAccountId}", cancellationToken).ConfigureAwait(false);
+
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return JsonConvert.DeserializeObject<AccountDetailViewModel>(content);
         }
     }
 }

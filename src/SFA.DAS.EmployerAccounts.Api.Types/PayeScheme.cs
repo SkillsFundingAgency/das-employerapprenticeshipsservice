@@ -2,7 +2,7 @@ using System;
 
 namespace SFA.DAS.EmployerAccounts.Api.Types
 {
-    public class PayeSchemeViewModel : IAccountResource
+    public class PayeScheme 
     {
         public string DasAccountId { get; set; }
         public string Ref { get; set; }

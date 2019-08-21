@@ -1,8 +1,6 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 
@@ -47,8 +45,6 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
                 return NotFound();
             }
 
-            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
-            result.Data.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
             return Ok(result.Data);
         }
 
@@ -63,12 +59,9 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             {
                 return NotFound();
             }
-
-            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(result.Data.HashedAccountId, x));
-            result.Data.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(result.Data.HashedAccountId, x));
+         
             return Ok(result.Data);
         }
-
 
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
@@ -98,17 +91,6 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             }
 
             return Ok(result.Data);
-        }
-        
-
-        private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
-        {
-            legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
-        }
-
-        private void CreateGetPayeSchemeLink(string hashedAccountId, ResourceViewModel payeScheme)
-        {
-            payeScheme.Href = Url.Route("GetPayeScheme", new { hashedAccountId, payeSchemeRef = HttpUtility.UrlEncode(payeScheme.Id) });
         }
     }
 }

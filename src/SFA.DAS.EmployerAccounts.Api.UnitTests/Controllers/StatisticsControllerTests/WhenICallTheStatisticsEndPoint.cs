@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.StatisticsControlle
         [Test]
         public async Task ThenShouldReturnStatistics()
         {
-            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<Statistics>; ;
+            var result = await _controller.GetStatistics() as OkNegotiatedContentResult<Statistics>; 
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(_statistics));

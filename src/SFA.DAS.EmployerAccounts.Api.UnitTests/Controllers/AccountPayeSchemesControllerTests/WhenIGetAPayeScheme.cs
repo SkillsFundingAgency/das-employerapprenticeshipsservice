@@ -33,8 +33,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountPayeSchemesC
             var response = await Controller.GetPayeScheme(hashedAccountId, payeSchemeRef.Replace("/", "%2f"));
 
             Assert.IsNotNull(response);
-            Assert.IsInstanceOf<OkNegotiatedContentResult<PayeSchemeViewModel>>(response);
-            var model = response as OkNegotiatedContentResult<PayeSchemeViewModel>;
+            Assert.IsInstanceOf<OkNegotiatedContentResult<PayeScheme>>(response);
+            var model = response as OkNegotiatedContentResult<PayeScheme>;
 
             model?.Content.Should().NotBeNull();
             model.Content.ShouldBeEquivalentTo(payeSchemeResponse.PayeScheme, options => options.Excluding(x => x.DasAccountId));

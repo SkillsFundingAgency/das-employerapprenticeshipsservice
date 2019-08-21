@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
 {
-    public class GetEmployerAccountHashedQuery : IAsyncRequest<GetEmployerAccountResponse>
+    public class GetEmployerAccountByHashedIdQuery : IAsyncRequest<GetEmployerAccountByHashedIdResponse>
     {
         public string HashedAccountId { get; set; }
         public string UserId { get; set; }
