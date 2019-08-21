@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Portal.Client.Data;
-using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
+using SFA.DAS.EAS.Portal.Client.Services.Recruit;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.Encoding;
 using StructureMap;
@@ -14,13 +14,13 @@ namespace SFA.DAS.EAS.Portal.Client
     {
         private readonly IEncodingService _encodingService;
         private readonly IAccountsReadOnlyRepository _accountsReadOnlyRepository;
-        private readonly IDasRecruitService _dasRecruitService;
+        private readonly IRecruitService _recruitService;
         
         public PortalClient(IContainer container, IEncodingService encodingService)
         {
             _encodingService = encodingService;
             _accountsReadOnlyRepository = container.GetInstance<IAccountsReadOnlyRepository>();
-            _dasRecruitService = container.GetInstance<IDasRecruitService>();
+            _recruitService = container.GetInstance<IRecruitService>();
         }
         
         public async Task<Account> GetAccount(GetAccountParameters parameters, CancellationToken cancellationToken = default)
@@ -35,7 +35,7 @@ namespace SFA.DAS.EAS.Portal.Client
                 throw new ArgumentOutOfRangeException(nameof(parameters.MaxNumberOfVacancies));
 
             var vacanciesTask = parameters.MaxNumberOfVacancies > 0 ?
-                _dasRecruitService.GetVacancies(parameters.HashedAccountId, parameters.MaxNumberOfVacancies, cancellationToken) : null;
+                _recruitService.GetVacancies(parameters.HashedAccountId, parameters.MaxNumberOfVacancies, cancellationToken) : null;
 
             // might have been better to key doc on the public hashed account id
             var accountId = _encodingService.Decode(parameters.HashedAccountId, EncodingType.AccountId);
