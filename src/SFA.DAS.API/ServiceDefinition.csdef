@@ -18,7 +18,6 @@
       <Setting name="LoggingRedisConnectionString" />
       <Setting name="LoggingRedisKey" />
       <Setting name="LogLevel" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <Setting name="StorageConnectionString" />
     </ConfigurationSettings>
     <Endpoints>
