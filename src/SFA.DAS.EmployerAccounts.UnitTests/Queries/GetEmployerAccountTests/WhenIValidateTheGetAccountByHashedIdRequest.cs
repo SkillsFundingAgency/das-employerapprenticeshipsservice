@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAccount;
-using SFA.DAS.EAS.Domain.Data.Repositories;
-using SFA.DAS.EAS.Domain.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAccountTests
 {
     public class WhenIValidateTheGetAccountByHashedIdRequest
     {
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheResultIsValidWhenAllFieldsArePopulatedAndTheUserIsPartOfTheAccount()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountHashedQuery { HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId });
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery { HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheUnauthorizedFlagIsSetWhenTheUserIsNotPartOfTheAccount()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountHashedQuery());
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery());
 
             //Assert
             Assert.IsFalse(result.IsUnauthorized);
@@ -50,7 +50,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
         public async Task ThenTheDictionaryIsPopulatedWithValidationErrors()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAccountHashedQuery());
+            var result = await _validator.ValidateAsync(new GetEmployerAccountByHashedIdQuery());
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -58,6 +58,5 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTests
             Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"), result.ValidationDictionary);
             _membershipRepository.Verify(x => x.GetCaller(It.IsAny<long>(), It.IsAny<string>()), Times.Never);
         }
-
     }
 }
