@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EAS.Portal.Client.Data;
-using SFA.DAS.EAS.Portal.Client.Services.DasRecruit;
+using SFA.DAS.EAS.Portal.Client.Services.Recruit;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.Encoding;
 using SFA.DAS.Testing;
@@ -241,7 +241,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
         Mock<IContainer> MockContainer { get; set; } = new Mock<IContainer>();
         private Mock<IEncodingService> MockEncodingService { get; set; } = new Mock<IEncodingService>();
         Mock<IAccountsReadOnlyRepository> MockAccountsReadOnlyRepository { get; set; } = new Mock<IAccountsReadOnlyRepository>();
-        Mock<IDasRecruitService> MockDasRecruitService { get; set; } = new Mock<IDasRecruitService>();
+        Mock<IRecruitService> MockDasRecruitService { get; set; } = new Mock<IRecruitService>();
         Account Account { get; set; }
         Vacancy Vacancy { get; set; }
         Vacancy OriginalVacancy { get; set; }
@@ -261,7 +261,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Client
 
             MockContainer.Setup(c => c.GetInstance<IAccountsReadOnlyRepository>())
                 .Returns(MockAccountsReadOnlyRepository.Object);
-            MockContainer.Setup(c => c.GetInstance<IDasRecruitService>())
+            MockContainer.Setup(c => c.GetInstance<IRecruitService>())
                 .Returns(MockDasRecruitService.Object);
 
             MockEncodingService.Setup(s => s.Decode(HashedAccountId, EncodingType.AccountId))

@@ -2,9 +2,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.CommitmentsV2.Messages.Events;
-using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService;
+using SFA.DAS.EAS.Portal.Application.Services.Commitments;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EAS.Portal.TypesExtensions;
 using SFA.DAS.HashingService;
@@ -15,18 +15,18 @@ namespace SFA.DAS.EAS.Portal.Application.EventHandlers.Commitments
     {
         private readonly IAccountDocumentService _accountDocumentService;
         private readonly ILogger<CohortApprovalRequestedByProviderEventHandler> _logger;
-        private readonly IProviderCommitmentsApi _providerCommitmentsApi;
+        private readonly ICommitmentsService _commitmentsService;
         private readonly IHashingService _hashingService;
 
         public CohortApprovalRequestedByProviderEventHandler(
                 IAccountDocumentService accountDocumentService,
                 ILogger<CohortApprovalRequestedByProviderEventHandler> logger,
-                IProviderCommitmentsApi providerCommitmentsApi,
+                ICommitmentsService commitmentsService,
                 IHashingService hashingService)
         {
             _accountDocumentService = accountDocumentService;
             _logger = logger;
-            _providerCommitmentsApi = providerCommitmentsApi;
+            _commitmentsService = commitmentsService;
             _hashingService = hashingService;
         }
 
@@ -35,7 +35,10 @@ namespace SFA.DAS.EAS.Portal.Application.EventHandlers.Commitments
             CancellationToken cancellationToken = default)
         {
             var accountDocumentTask = _accountDocumentService.GetOrCreate(cohortApprovalRequestedByProvider.AccountId, cancellationToken);
-            var commitment = await _providerCommitmentsApi.GetProviderCommitment(cohortApprovalRequestedByProvider.ProviderId, cohortApprovalRequestedByProvider.CommitmentId);
+            var commitment = await _commitmentsService.GetProviderCommitment(
+                cohortApprovalRequestedByProvider.ProviderId, cohortApprovalRequestedByProvider.CommitmentId, cancellationToken);
+            
+            //todo: most AccountLegalEntityPublicHashedId's are null in the commitments db in AT. can we rely on it coming back every time?
             long accountLegalEntityId = _hashingService.DecodeValue(commitment.AccountLegalEntityPublicHashedId);
 
             var accountDocument = await accountDocumentTask;
