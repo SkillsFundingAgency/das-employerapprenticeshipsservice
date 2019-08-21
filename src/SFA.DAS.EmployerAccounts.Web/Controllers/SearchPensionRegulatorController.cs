@@ -146,17 +146,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         private async Task<ActionResult> PerformSearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
-			var schemeCheck = await _mediatr.SendAsync(new GetPayeSchemeInUseQuery { Empref = viewModel.PayeRef });
-
-            if (schemeCheck.PayeScheme != null)
-            {
-                return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName,
-                    new
-                    {
-                        NotFound = false
-                    });
-            }
-			
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var model = await _searchPensionRegulatorOrchestrator.GetOrganisationsByAorn(viewModel.Aorn, viewModel.PayeRef);
 
@@ -184,12 +173,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 case 1:
                 {
+                    if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
+                    {
+                        return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                    }
                     await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                 }
                 default:
                 {
+                    if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
+                    {
+                        return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                    }
                     await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
                     return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
                 }
@@ -226,6 +223,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             viewModel.AddErrorsFromDictionary(errors);
+        }
+
+        private async Task<bool> CheckIfPayeSchemeAlreadyInUse(string empRef)
+        {
+            var schemeCheck = await _mediatr.SendAsync(new GetPayeSchemeInUseQuery { Empref = empRef });
+
+            return schemeCheck.PayeScheme != null;
         }
 
         private async Task SavePayeDetails(string aorn, string payeRef)
