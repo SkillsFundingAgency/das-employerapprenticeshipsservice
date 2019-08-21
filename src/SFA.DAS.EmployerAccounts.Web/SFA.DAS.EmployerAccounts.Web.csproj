@@ -79,7 +79,7 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.1469</Version>
+      <Version>1.6.1641</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
@@ -263,6 +263,7 @@
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\ApprenticeDetailsViewModel.cs" />
     <Compile Include="ViewModels\VacancyStatusViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
