@@ -3,9 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Portal.Client.Types;
 
-namespace SFA.DAS.EAS.Portal.Client.Services.DasRecruit
+namespace SFA.DAS.EAS.Portal.Client.Services.Recruit
 {
-    internal interface IDasRecruitService
+    internal interface IRecruitService
     {
         Task<IEnumerable<Vacancy>> GetVacancies(string hashedAccountId, int maxVacanciesToGet = int.MaxValue,
             CancellationToken cancellationToken = default);
