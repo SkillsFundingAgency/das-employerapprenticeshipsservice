@@ -4,92 +4,86 @@
 @{ViewBag.HideNav = true; }
 @{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
-    @{
-        ViewBag.GaData.Vpv = "/service/getApprenticeshipFunding/get-government-funding";
-        var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "hidden";
-        var errorClass = Model?.GetType().GetProperty("InError") != null ? "error" : "";
-    }
-    <div class="govuk-grid-row">
-        <div class="govuk-column-two-thirds">
-            <h1 class="govuk-heading-xl">Get apprenticeship funding</h1>
-            <p class="govuk-body">If you're ready to pay for your apprenticeship training, you can do this now by adding the PAYE scheme for your organisation.</p>
-            <p class="govuk-body">If you don't need to get apprenticeship funding yet, you can still register an account to:</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>search and save apprenticeships</li>
-                <li>save your chosen training providers</li>
-            </ul>
-            <p class="govuk-body">To get apprenticeship funding now, you can use either of the following:</p>
-            <ul class="govuk-list govuk-list--bullet">
-                <li>the Government Gateway login for your PAYE scheme</li>
-                <li>your accounts office reference number and employer PAYE scheme reference</li>
-            </ul>
-            <details class="govuk-details" role="group">
-                <summary class="govuk-details__summary" role="button" aria-expanded="false">
-                    <span class="govuk-details__summary-text">
-                        Find your Government Gateway details
+
+@{
+    ViewBag.GaData.Vpv = "/service/getApprenticeshipFunding/get-government-funding";
+    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "govuk-visually-hidden";
+    var errorClass = Model?.GetType().GetProperty("InError") != null ? "govuk-form-group--error" : "";
+}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Get apprenticeship funding</h1>
+        <p class="govuk-body">If you're ready to pay for your apprenticeship training, you can do this now by adding the PAYE scheme for your organisation.</p>
+        <p class="govuk-body">If you don't need to get apprenticeship funding yet, you can still register an account to:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>search and save apprenticeships</li>
+            <li>save your chosen training providers</li>
+        </ul>
+        <p class="govuk-body">To get apprenticeship funding now, you can use either of the following:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>the Government Gateway login for your PAYE scheme</li>
+            <li>your accounts office reference number and employer PAYE scheme reference</li>
+        </ul>
+        <details class="govuk-details" role="group">
+            <summary class="govuk-details__summary" role="button" aria-expanded="false">
+                <span class="govuk-details__summary-text">
+                    Find your Government Gateway details
+                </span>
+            </summary>
+            <div class="govuk-details__text" aria-hidden="true">
+                <p class="govuk-body">If you have lost your Government Gateway log in details you can <a class="govuk-link" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" target="blank"><br>get help signing in</a></p>
+            </div>
+        </details>
+
+        <details class="govuk-details" role="group">
+            <summary class="govuk-details__summary" role="button" aria-expanded="false">
+                <span class="govuk-details__summary-text">
+                    Find your accounts office and PAYE scheme reference numbers
+                </span>
+            </summary>
+            <div class="govuk-details__text" aria-hidden="true">
+                <p class="govuk-body">You can find your 13-character accounts office reference number on the letter HMRC sent you when you first registered as an employer.</p>
+                <p class="govuk-body">You will find your employer PAYE scheme reference in the payslip booklet HMRC provided. Contact HMRC or your accountant if you do not have access to the booklet.</p>
+            </div>
+        </details>
+
+        <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
+            @Html.AntiForgeryToken()
+
+            <div class="govuk-form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
+
+                <fieldset class="govuk-fieldset">
+
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                            Do you want to add a PAYE scheme to get apprenticeship funding?
+                        </h1>
+                    </legend>
+                    <span class="govuk-error-message @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                        Tell us if you want to add a PAYE scheme
                     </span>
-                </summary>
-                <div class="govuk-details__text" aria-hidden="true">
-                    <p class="govuk-body">If you have lost your Government Gateway log in details you can <a class="govuk-link" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" target="blank"><br>get help signing in</a></p>
-                </div>
-            </details>
 
-            <details class="govuk-details" role="group">
-                <summary class="govuk-details__summary" role="button" aria-expanded="false">
-                    <span class="govuk-details__summary-text">
-                        Find your accounts office and PAYE scheme reference numbers
-                    </span>
-                </summary>
-                <div class="govuk-details__text" aria-hidden="true">
-                    <p class="govuk-body">You can find your 13-character accounts office reference number on the letter HMRC sent you when you first registered as an employer.</p>
-                    <p class="govuk-body">You will find your employer PAYE scheme reference in the payslip booklet HMRC provided. Contact HMRC or your accountant if you do not have access to the booklet.</p>
-                </div>
-            </details>
-
-            <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
-                @Html.AntiForgeryToken()
-
-                <div class="govuk-form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
-
-                    <fieldset class="govuk-fieldset">
-
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
-                            <h1 class="govuk-fieldset__heading">
-                                Do you want to add a PAYE scheme to get apprenticeship funding?
-                            </h1>
-                            <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
-                                Tell us if you want to add a PAYE scheme
-                            </span>
-                        </legend>
-
-                        <div class="govuk-radios">
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
-                                <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme">
-                                    Yes, add my PAYE scheme details now
-                                </label>
-                            </div>
-
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
-                                <label class="govuk-label govuk-radios__label" for="do-not-want-to-add-paye-scheme">
-                                    No, I'll do this later
-                                </label>
-                            </div>
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
+                            <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme">
+                                Yes, add my PAYE scheme details now
+                            </label>
                         </div>
-                    </fieldset>
-                </div>
 
-                <div class="govuk-form-group">
-                    <button class="govuk-button" type="submit" id="submit-confirm-who-you-are-button">Continue</button>
-                </div>
-            </form>
-        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
+                            <label class="govuk-label govuk-radios__label" for="do-not-want-to-add-paye-scheme">
+                                No, I'll do this later
+                            </label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <div class="govuk-form-group">
+                <button class="govuk-button" type="submit" id="submit-confirm-who-you-are-button">Continue</button>
+            </div>
+        </form>
     </div>
-    @section pageSpecificJS {
-        <script>
-            $(function () {
-                sfa.homePage.init();
-            });
-        </script>
-    }
+</div>
