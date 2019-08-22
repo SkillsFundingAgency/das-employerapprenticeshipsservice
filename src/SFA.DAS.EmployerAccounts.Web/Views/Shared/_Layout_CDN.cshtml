@@ -286,9 +286,17 @@
             Environment: @SystemDetailsViewModel.EnvironmentName ● Version: @SystemDetailsViewModel.VersionNumber
         </p>
     }
-    <script src="https://das-prd-frnt-end.azureedge.net/js/das-all.min.js"></script>
+
+    <script src="https://das-prd-frnt-end.azureedge.net//libs/govuk-frontend/all.js"></script>
+
+    <script src="https://das-prd-frnt-end.azureedge.net//libs/jquery/jquery.min.js"></script>
+
+    <script src="https://das-prd-frnt-end.azureedge.net//js/das-all.js"></script>
+    <script src="https://das-prd-frnt-end.azureedge.net//js/app.min.js"></script>
+
     <script>
-        window.GOVUKFrontend.initAll()
+        window.GOVUKFrontend.initAll();
+        window.DASFrontend.initAll();
     </script>
     @RenderSection("pageSpecificJS", required: false)
 
