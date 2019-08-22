@@ -7,7 +7,7 @@ namespace SFA.DAS.EmployerAccounts.Models.PensionRegulator
     {
         public string Name { get; set; }
         public string Status { get; set; }
-        public int UniqueIdentity { get; set; }
+        public long UniqueIdentity { get; set; }
         public OrganisationType Type { get; set; }  
         public Models.Organisation.Address Address { get; set; }     
     }
