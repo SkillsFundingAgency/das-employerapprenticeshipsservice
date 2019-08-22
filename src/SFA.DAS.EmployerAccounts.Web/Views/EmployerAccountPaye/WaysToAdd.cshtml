@@ -5,71 +5,74 @@
 @{ViewBag.HideNav = true; }
 @{
     ViewBag.GaData.Vpv = "/accounts/schemes/ways-to-add";
-    var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "hidden";
-    var errorClass = ViewBag.InError != null && ViewBag.InError ? "error" : "";
+    var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "govuk-visually-hidden";
+    var errorClass = ViewBag.InError != null && ViewBag.InError ? "govuk-form-group--error" : "";
     var aornAction = ViewBag.AornLock > 0 ? "$('#AornWarning').removeClass('hidden')" : "";
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-            Ways to add your PAYE scheme
-        </h1>
-        <h1 class="bold-small">If you know the annual payroll for your organisation is under £3 million, you can use either:</h1>
-        <br />
-        <ul class="list list-bullet">
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Ways to add your PAYE scheme</h1>
+        <p class="govuk-heading-s">If you know the annual payroll for your organisation is under £3 million, you can use either:</p>
+        <ul class="govuk-list govuk-list--bullet">
             <li>Government Gateway login for your PAYE scheme</li>
             <li>accounts office reference number and employer PAYE scheme reference</li>
         </ul>
-        <h1 class="bold-small">If you know the annual payroll for your organisation is over £3 million, you can use:</h1>
-        <br/>
-        <ul class="list list-bullet">
+
+        <p class="govuk-heading-s">If you know the annual payroll for your organisation is over £3 million, you can use:</p>
+        <ul class="govuk-list govuk-list--bullet">
             <li>Government Gateway login for your PAYE scheme</li>
         </ul>
-        <div class="panel panel-border-wide">If you've not sure how much your annual payroll is, choose Government Gateway.</div>
+        <p class="govuk-inset-text">If you’re not sure how much your annual payroll is, choose <br>Government Gateway.</p>
+
         <form method="POST" action="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName)">
             @Html.AntiForgeryToken()
-            <div class="form-group @errorClass" id="how-do-you-want-to-add-paye-scheme-form">
-                <fieldset>
-                    <legend class="form-label-bold">
-                        <span class="error-message @hiddenClass" aria-hidden="true" id="have-not-got-everything">
-                            You must select an option to continue.
-                        </span>
-                    </legend>
-                    <label for="want-to-use-gov-gateway" class="block-label">
-                        <input type="radio" name="choice" id="want-to-use-gov-gateway" value="1" />
-                        I want to use Government Gateway
-                    </label>
-                    <label for="want-to-use-aorn" class="block-label">
-                        <input type="radio" name="choice" id="want-to-use-aorn" value="2" onclick="@aornAction" />
-                        I want to use my accounts office reference number and employer PAYE scheme reference
-                    </label>
-                </fieldset>
-                <div class="panel hidden" id="AornWarning">
-                    <span class="error-message">
-                        Due to incorrect attempts, this has been disabled for @ViewBag.AornLock minute@(ViewBag.AornLock > 1 ? "s" : "")
+            <div class="govuk-form-group @errorClass" id="how-do-you-want-to-add-paye-scheme-form">
+
+                <fieldset class="govuk-fieldset" aria-describedby="how-contacted-conditional-hint">
+                    <span class="govuk-error-message @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                        You must select an option to continue.
                     </span>
-                </div>
-                <p>
-                    <div class="notice">
-                        <i class="icon icon-important">
-                            <span class="visuallyhidden">Warning</span>
-                        </i>
-                        <strong class="bold-small">
-                            Before you continue, you must make sure you have authority to add PAYE schemes to the account for this organisation.
-                        </strong>
+                    @** TODO
+                        <span class="govuk-error-message @hiddenClass govuk-visually-hidden" id="AornWarning">
+                            Due to incorrect attempts, this has been disabled for @ViewBag.AornLock minute@(ViewBag.AornLock > 1 ? "s" : "")
+                        </span>
+                    **@
+                    <div class="govuk-radios govuk-radios--conditional" data-module="radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="ways-to-add-your-paye" value="1" />
+                            <label class="govuk-label govuk-radios__label" for="ways-to-add-your-paye">
+                                I want to use Government Gateway
+                            </label>
+                        </div>
+
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-use-aorn" value="2" onclick="@aornAction" />
+                            <label class="govuk-label govuk-radios__label" for="how-contacted-conditional-2">
+                                I want to use my accounts office reference number and employer PAYE scheme reference
+                            </label>
+                        </div>
+
                     </div>
-                </p>
+                </fieldset>
+                
             </div>
-            <div class="form-group">
-                <button class="button" type="submit" id="submit-how-to-add-payescheme">Continue</button>
+
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                    Before you continue, you must make sure you have authority to add PAYE schemes to the account for this organisation
+                </strong>
             </div>
+
+            <div class="govuk-form-group">
+                <button class="govuk-button" type="submit" id="submit-how-to-add-payescheme">Continue</button>
+            </div>
+
+  
+            
         </form>
     </div>
 </div>
-@section pageSpecificJS {
-    <script type="text/javascript">
-        $(function () {
-            sfa.homePage.init();
-        });
-    </script>
-}
