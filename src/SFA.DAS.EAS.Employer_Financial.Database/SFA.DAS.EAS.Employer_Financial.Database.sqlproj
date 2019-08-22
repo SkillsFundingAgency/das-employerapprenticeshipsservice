@@ -187,6 +187,9 @@
     <Build Include="Tables\AccountPaye.sql" />
     <Build Include="StoredProcedures\CreateAccountPaye.sql" />
     <Build Include="StoredProcedures\RemoveAccountPaye.sql" />
+    <Build Include="StoredProcedures\CreateAccountLegalEntity.sql" />
+    <Build Include="StoredProcedures\SignAccountLegalEntityAgreement.sql" />
+    <Build Include="StoredProcedures\RemoveAccountLegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -200,6 +203,7 @@
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\ExampleScenario.sql" />
     <None Include="Scripts\Manual\GenerateTestData\ReadMe.md" />
+    <Build Include="Tables\AccountLegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />
