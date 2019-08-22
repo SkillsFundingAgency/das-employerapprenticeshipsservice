@@ -63,7 +63,6 @@ namespace SFA.DAS.EmployerFinance.Data
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.HasDefaultSchema("employer_account");
-            modelBuilder.Entity<Account>().HasMany(a => a.AccountLegalEntities);
             modelBuilder.Entity<AccountLegalEntity>().HasMany(ale => ale.Agreements);
             modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.Account);
             modelBuilder.Entity<AccountLegalEntity>().HasRequired(ale => ale.LegalEntity);

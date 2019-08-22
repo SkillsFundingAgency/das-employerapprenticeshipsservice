@@ -19,7 +19,6 @@ namespace SFA.DAS.Authorization.Mvc
                 var authorizationContext = _authorizationService().GetAuthorizationContext();
 
                 viewModel.AccountId = authorizationContext.AccountContext.Id;
-                viewModel.AccountHashedId = authorizationContext.AccountContext.HashedId;
             }
         }
     }

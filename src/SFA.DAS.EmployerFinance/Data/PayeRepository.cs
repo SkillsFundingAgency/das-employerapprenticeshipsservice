@@ -13,14 +13,11 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public class PayeRepository : BaseRepository, IPayeRepository
     {
-        private readonly Lazy<EmployerAccountsDbContext> _accountDb;
-        private readonly Lazy<EmployerFinanceDbContext> _financeDb;
-
-        public PayeRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> accountDb, Lazy<EmployerFinanceDbContext> financeDb)
+        private readonly Lazy<EmployerFinanceDbContext> _db;
+        public PayeRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
-            _accountDb = accountDb;
-            _financeDb = financeDb;
+            _db = db;
         }
 
         public async Task<Paye> GetPayeSchemeByRef(string payeRef)
@@ -30,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@Ref", payeRef, DbType.String);
 
             var result = await _accountDb.Value.Database.Connection.QueryAsync<Paye>(
-                sql: "[employer_account].[GetPaye_ByRef]",
+                sql: "[employer_financial].[GetPaye_ByRef]",
                 param: parameters,
                 transaction: _accountDb.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
@@ -46,21 +43,21 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@RefName", refName, DbType.String);
 
             return _accountDb.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[UpdatePayeName_ByRef]",
+                sql: "[employer_financial].[UpdatePayeName_ByRef]",
                 param: parameters,
                 transaction: _accountDb.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<PayeSchemeView> GetPayeForAccountByRef(string hashedAccountId, string reference)
+        public async Task<PayeSchemeView> GetPayeForAccountByRef(long accountId, string reference)
         {
             var parameters = new DynamicParameters();
 
-            parameters.Add("@HashedAccountId", hashedAccountId, DbType.String);
+            parameters.Add("@AccountId", accountId, DbType.Int64);
             parameters.Add("@Ref", reference, DbType.String);
 
             var result = await _accountDb.Value.Database.Connection.QueryAsync<PayeSchemeView>(
-                sql: "[employer_account].[GetPayeForAccount_ByRef]",
+                sql: "[employer_financial].[GetPayeForAccount_ByRef]",
                 param: parameters,
                 transaction: _accountDb.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);

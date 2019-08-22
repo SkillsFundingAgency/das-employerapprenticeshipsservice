@@ -351,47 +351,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             };
         }
 
-
-        public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> GetFinanceDashboardViewModel(
-            string hashedId, int year, int month, string externalUserId)
-        {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-            {
-                HashedAccountId = hashedId,
-                UserId = externalUserId
-            });
-
-            if (employerAccountResult.Account == null)
-            {
-                return new OrchestratorResponse<FinanceDashboardViewModel>
-                {
-                    Data = new FinanceDashboardViewModel()
-                };
-            }
-
-            employerAccountResult.Account.HashedId = hashedId;
-
-            var data =
-                await
-                    _mediator.SendAsync(new GetEmployerAccountTransactionsQuery
-                    {
-                        ExternalUserId = externalUserId,
-                        Year = year,
-                        Month = month,
-                        HashedAccountId = hashedId
-                    });
-
-
-            return new OrchestratorResponse<FinanceDashboardViewModel>
-            {
-                Data = new FinanceDashboardViewModel
-                {
-                    AccountHashedId = hashedId,
-                    CurrentLevyFunds = data.Data.Balance
-                }
-            };
-        }
-
         private TransactionViewModel BuildTransactionViewModel(AggregationData aggregationData, int year, int month)
         {
             var viewModel = new TransactionViewModel
