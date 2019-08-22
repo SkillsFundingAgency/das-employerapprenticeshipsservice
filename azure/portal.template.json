@@ -25,12 +25,16 @@
         },
         "workerAppServicePlanInstances": {
             "type": "int"
+        },
+        "ipRangeFilter" : {
+            "type": "string",
+            "defaultValue": ""
         }
     },
     "variables": {
         "deploymentUrlBase": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
         "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
-        "storageAccountName": "[toLower(concat('das', parameters('resourceEnvironmentName'), parameters('serviceName'), 'str'))]",
+        "storageAccountName": "[toLower(concat('das', parameters('resourceEnvironmentName'), parameters('serviceName'), 'prtlstr'))]",
         "workerAppServiceName": "[concat(variables('resourceNamePrefix'), 'wkr-as')]",
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "cosmosDbName": "[concat(variables('resourceNamePrefix'), '-cdb')]"
@@ -165,6 +169,18 @@
                             }
                         ]
                     },
+                    "appServiceVirtualApplications": {
+                        "value": [
+                            {
+                                "virtualPath": "/",
+                                "physicalPath": "site\\wwwroot"
+                            },
+                            {
+                                "virtualPath": "/EAS.Portal.Worker.Jobs",
+                                "physicalPath": "site\\wwwroot\\app_data\\jobs\\continuous\\EAS.Portal.Worker.Jobs"
+                            }
+                        ]
+                    },
                     "deployStagingSlot": {
                         "value": false
                     }
@@ -196,6 +212,9 @@
                     },
                     "defaultConsistencyLevel": {
                         "value": "Strong"
+                    },
+                    "ipRangeFilter": {
+                        "value": "[parameters('ipRangeFilter')]"
                     }
                 }
             }
@@ -206,9 +225,13 @@
             "type": "string",
             "value": "[variables('workerAppServiceName')]"
         },
-        "PortalCosmosDbName": {
+        "PortalCosmosDatabaseUri": {
             "type": "string",
-            "value": "[variables('cosmosDbName')]"
+            "value": "[concat('https://', variables('cosmosDbName'), '.documents.azure.com:443/')]"
+        },
+        "PortalCosmosDatabaseAuthKey": {
+            "type": "string",
+            "value": "[reference('cosmos-db').outputs.PrimaryMasterKey.value]"
         }
     }
 }

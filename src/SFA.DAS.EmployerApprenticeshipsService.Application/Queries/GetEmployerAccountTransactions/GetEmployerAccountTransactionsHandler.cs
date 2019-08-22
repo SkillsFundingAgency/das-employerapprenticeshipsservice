@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
-using SFA.DAS.Hashing;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 
 namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 {
@@ -21,7 +21,6 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
     {
         private readonly IDasLevyService _dasLevyService;
         private readonly IValidator<GetEmployerAccountTransactionsQuery> _validator;
-        private readonly IApprenticeshipInfoServiceWrapper _apprenticeshipInfoServiceWrapper;
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
         private readonly ILog _logger;
@@ -29,14 +28,12 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
         public GetEmployerAccountTransactionsHandler(
             IDasLevyService dasLevyService,
             IValidator<GetEmployerAccountTransactionsQuery> validator,
-            IApprenticeshipInfoServiceWrapper apprenticeshipInfoServiceWrapper,
             ILog logger,
             IHashingService hashingService,
             IPublicHashingService publicHashingService)
         {
             _dasLevyService = dasLevyService;
             _validator = validator;
-            _apprenticeshipInfoServiceWrapper = apprenticeshipInfoServiceWrapper;
             _logger = logger;
             _hashingService = hashingService;
             _publicHashingService = publicHashingService;
@@ -71,7 +68,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
 
             foreach (var transaction in transactions)
             {
-                GenerateTransactionDescription(transaction);
+                await GenerateTransactionDescription(transaction);
             }
 
             PopulateTransferPublicHashedIds(transactions);
@@ -90,7 +87,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             return toDate;
         }
 
-        private void GenerateTransactionDescription(TransactionLine transaction)
+        private async Task GenerateTransactionDescription(TransactionLine transaction)
         {
             if (transaction.GetType() == typeof(LevyDeclarationTransactionLine))
             {
@@ -100,7 +97,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             {
                 var paymentTransaction = (PaymentTransactionLine)transaction;
 
-                transaction.Description = GetPaymentTransactionDescription(paymentTransaction);
+                transaction.Description = await GetPaymentTransactionDescription(paymentTransaction);
             }
             else if (transaction.GetType() == typeof(ExpiredFundTransactionLine))
             {
@@ -121,15 +118,16 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
         }
 
-        private string GetPaymentTransactionDescription(PaymentTransactionLine transaction)
+        private async Task<string> GetPaymentTransactionDescription(PaymentTransactionLine transaction)
         {
             var transactionPrefix = transaction.IsCoInvested ? "Co-investment - " : string.Empty;
 
             try
             {
                 var ukprn = Convert.ToInt32(transaction.UkPrn);
-                var providerName = _apprenticeshipInfoServiceWrapper.GetProvider(ukprn);
-                return $"{transactionPrefix}{providerName.Provider.ProviderName}";
+                var providerName = await _dasLevyService.GetProviderName(ukprn, transaction.AccountId, transaction.PeriodEnd);
+                if (providerName != null)
+                    return $"{transactionPrefix}{providerName}";
             }
             catch (Exception ex)
             {
@@ -137,6 +135,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions
             }
 
             return $"{transactionPrefix}Training provider - name not recognised";
+
         }
 
         private static GetEmployerAccountTransactionsResponse GetResponse(string hashedAccountId, long accountId, bool hasPreviousTransactions, int year, int month)

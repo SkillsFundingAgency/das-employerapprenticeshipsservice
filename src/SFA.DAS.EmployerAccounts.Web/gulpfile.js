@@ -16,7 +16,7 @@ sassOptions = {
     includePaths: [
     'src/govuk_template/assets/stylesheets',
     'src/govuk_frontend_toolkit/stylesheets'
-  ],
+  ]
 };
 
 gulp.task('watch', () => {

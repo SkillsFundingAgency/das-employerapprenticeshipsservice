@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.NLog.Logger;
@@ -17,12 +18,14 @@ namespace SFA.DAS.EmployerFinance.Data
     {
         private readonly EmployerFinanceConfiguration _configuration;
         private readonly Lazy<EmployerFinanceDbContext> _db;
+        private readonly ICurrentDateTime _currentDateTime;
 
-        public DasLevyRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db)
+        public DasLevyRepository(EmployerFinanceConfiguration configuration, ILog logger, Lazy<EmployerFinanceDbContext> db, ICurrentDateTime currentDateTime)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _configuration = configuration;
             _db = db;
+            _currentDateTime = currentDateTime;
         }
 
         public async Task CreateEmployerDeclarations(IEnumerable<DasDeclaration> declarations, string empRef, long accountId)
@@ -203,14 +206,16 @@ namespace SFA.DAS.EmployerFinance.Data
             return result.SingleOrDefault();
         }
 
-        public Task ProcessDeclarations(long accountId, string empRef)
+        public Task<decimal> ProcessDeclarations(long accountId, string empRef)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@AccountId", accountId, DbType.Int64);
             parameters.Add("@EmpRef", empRef, DbType.String);
+            parameters.Add("@currentDate", _currentDateTime.Now, DbType.DateTime);
+            parameters.Add("@expiryPeriod", _configuration.FundsExpiryPeriod, DbType.Int32);
 
-            return _db.Value.Database.Connection.ExecuteAsync(
+            return _db.Value.Database.Connection.QuerySingleAsync<decimal>(
                 sql: "[employer_financial].[ProcessDeclarationsTransactions]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,

@@ -4,11 +4,18 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
+using System.Linq;
+using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models.Portal;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
+using System.Globalization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -17,6 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+        private readonly IPortalClient _portalClient;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -30,28 +38,40 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator)
+            EmployerTeamOrchestrator employerTeamOrchestrator,
+            IPortalClient portalClient)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
+            _portalClient = portalClient;
         }
 
         [HttpGet]
         [Route]
-        public async Task<ActionResult> Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
-            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-
-            if (flashMessage != null)
+            var response = await GetAccountInformation(hashedAccountId);
+            var hasPayeScheme = HasPayeScheme(response.Data);
+            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
-                response.FlashMessage = flashMessage;
-                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
-            }
+                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
+                {
+                    HashedAccountId = hashedAccountId,
+                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
+                });
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
+                response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+                response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
 
+                if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
+                    response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
+
+                return View("v2/Index", "_Layout_v2", response);
+            }
             return View(response);
+
         }
+
         [HttpGet]
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
@@ -291,30 +311,89 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "SignAgreement";
             }
-
+            else if (model.ApprenticeshipAdded)
+            {
+                viewModel.ViewName = "ApprenticeshipDetails";
+            }
+            else if (model.ShowReservations) 
+            {
+                viewModel.ViewName = "FundingComplete";
+            }
+            else if(model.RecentlyAddedReservationId != null)
+            {
+                viewModel.ViewName = "NotCurrentlyInStorage";
+            }
+            else if(model.PayeSchemeCount == 0)
+            {
+                viewModel.ViewName = "AddPAYE";
+            }
             return PartialView(viewModel);
-        }       
+        }
 
         [ChildActionOnly]
         public ActionResult Row1Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "ProviderPermissions", Data = model };
-            if (model.AgreementsToSign)
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { Data = model };
+            if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
             {
                 viewModel.ViewName = "ProviderPermissionsDenied";
+            }
+            else if (model.HasSingleProvider)
+            {
+                viewModel.ViewName = "SingleProvider";
+            }
+            else if (model.HasMultipleProviders)
+            {
+                viewModel.ViewName = "ProviderPermissionsMultiple";
+            }
+            else
+            {
+                viewModel.ViewName = "ProviderPermissions";
             }
 
             return PartialView(viewModel);
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "SavedProviders", Data = model });
+            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "FinancialTransactions", Data = model });
         }
+
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model });
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
+            if (HasPayeScheme(model))
+            {
+                if (model.AccountViewModel?.VacanciesRetrieved == false)
+                {
+                    viewModel.ViewName = "MultipleVacancies";
+                }
+                else
+                {
+                    switch (model.AccountViewModel?.GetVacancyCardinality())
+                    {
+                        case null:
+                        case Cardinality.None:
+                            viewModel.ViewName = "CreateVacancy";
+                            break;
+                        case Cardinality.One:
+                            viewModel.ViewName = "VacancyStatus";
+                            break;
+                        default:
+                            viewModel.ViewName = "MultipleVacancies";
+                            break;
+                    }
+                }
+            }
+            return PartialView(viewModel);
+        }
+
+        [ChildActionOnly]
+        public ActionResult AddPAYE(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
         }
 
         [ChildActionOnly]
@@ -322,35 +401,190 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissions(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
+        [ChildActionOnly]
+        public ActionResult ProviderPermissionsMultiple(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
         [ChildActionOnly]
         public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }        
+        }
+
+        [ChildActionOnly]
+        public ActionResult FinancialTransactions(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        public ActionResult SingleProvider(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
         [ChildActionOnly]
         public ActionResult SavedProviders(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult AccountSettings(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
+        [ChildActionOnly]
+        public ActionResult FundingComplete(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
         [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
+
+        [ChildActionOnly]
+        public ActionResult VacancyStatus(AccountDashboardViewModel model)
+        {
+            Vacancy vacancy = model.AccountViewModel.Vacancies.First();
+
+            var viewModel = new VacancyStatusViewModel
+            {
+                VacancyTitle = vacancy.Title,
+                ClosingDateText = vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-",
+                ManageVacancyLinkUrl = vacancy.ManageVacancyUrl,
+                ManageVacancyLinkText = "Manage vacancy",
+                Reference = "VAC" + vacancy.Reference,
+                Status = vacancy.Status.ToString()
+            };
+
+            switch(vacancy.Status)
+            {
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Submitted:
+                    viewModel.ManageVacancyLinkText = "Preview vacancy";
+                    viewModel.Status = "Pending review";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Draft:
+                    viewModel.ManageVacancyLinkText = "Edit and submit vacancy";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Referred:
+                    viewModel.ManageVacancyLinkText = "Edit and re-submit vacancy";
+                    viewModel.Status = "Rejected";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Live:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
+                    break;
+            }
+
+            return PartialView(viewModel);
+        }
+
+        private string ApplicationsDisplay(Vacancy vacancy)
+        {
+            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
+                ? "Advertised by employer"
+                : vacancy.NumberOfApplications.ToString();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MultipleVacancies(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+                
+        [ChildActionOnly]
+        public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult SearchBar()
+        {
+            return PartialView();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult OtherTasksPanel(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
+        {
+            Cohort cohort = model.AccountViewModel.Organisations.FirstOrDefault()?.Cohorts?.FirstOrDefault();
+            Apprenticeship apprenticeship = cohort?.Apprenticeships?.FirstOrDefault();
+            
+            var viewModel = new ApprenticeDetailsViewModel
+            {
+                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
+                TrainingProviderName = apprenticeship.TrainingProvider?.Name,
+                CourseName = apprenticeship.CourseName,
+                StartDateText = apprenticeship.StartDate?.ToGdsFormatWithoutDay(),
+                EndDateText = apprenticeship.EndDate?.ToGdsFormatWithoutDay(),
+                ProposedCostText = $"{apprenticeship.ProposedCost?.ToString("C0", CultureInfo.CreateSpecificCulture("en-GB"))} excluding VAT",
+                IsApproved = cohort.IsApproved
+            };
+
+            return PartialView(viewModel);
+        }
+
+        private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessage != null)
+            {
+                response.FlashMessage = flashMessage;
+                response.Data.EmployerAccountType = flashMessage.HiddenFlashMessageInformation;
+            }
+
+            return response;
+        }
+
+        private bool HasPayeScheme(AccountDashboardViewModel data)
+        {
+            return data.PayeSchemeCount > 0;
+        }
+
+        private bool HasOrganisation(AccountDashboardViewModel data)
+        {
+            return data.OrgainsationCount > 0;
+        }
     }
 }
+ 

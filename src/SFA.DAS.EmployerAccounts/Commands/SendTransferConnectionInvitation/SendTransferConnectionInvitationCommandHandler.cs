@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Services;
-using SFA.DAS.Hashing;
 
 namespace SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation
 {

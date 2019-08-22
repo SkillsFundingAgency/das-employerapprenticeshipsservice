@@ -1,0 +1,31 @@
+﻿using System;
+using System.Threading.Tasks;
+using NServiceBus;
+using SFA.DAS.CommitmentsV2.Messages.Events;
+
+namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
+{
+    public class PublishCohortApprovalRequestedByProviderEvents
+    {
+        private readonly IMessageSession _messageSession;
+
+        public PublishCohortApprovalRequestedByProviderEvents(IMessageSession messageSession)
+        {
+            _messageSession = messageSession;
+        }
+
+        public async Task Run()
+        {
+            const long accountId = 27446L;
+
+            await _messageSession.Publish(new CohortApprovalRequestedByProvider
+            {
+                AccountId = accountId,
+                ProviderId = 10000534,
+                CommitmentId = 3271
+            });
+
+            Console.WriteLine($"Published {nameof(CohortApprovalRequestedByProvider)}. ProviderId: 456, CommitmentId = 789");
+        }
+    }
+}

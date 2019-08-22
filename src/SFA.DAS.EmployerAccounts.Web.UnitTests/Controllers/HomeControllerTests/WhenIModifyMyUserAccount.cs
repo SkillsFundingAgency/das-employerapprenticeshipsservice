@@ -4,13 +4,13 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Web.Models;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -18,8 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
     {
         private Mock<IAuthenticationService> _owinWrapper;
         private Mock<HomeOrchestrator> _homeOrchestrator;
-        private EmployerAccountsConfiguration _configuration;
-        private Mock<IAuthorizationService> _featureToggle;
+        private EmployerAccountsConfiguration _configuration;      
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private HomeController _homeController;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -30,15 +29,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             base.Arrange();
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _homeOrchestrator = new Mock<HomeOrchestrator>();
-            _featureToggle = new Mock<IAuthorizationService>();
+            _homeOrchestrator = new Mock<HomeOrchestrator>();          
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-
             _configuration = new EmployerAccountsConfiguration();
 
-            _homeController = new HomeController(_owinWrapper.Object, _homeOrchestrator.Object, _configuration, 
-                _featureToggle.Object, _userViewTestingService.Object,_flashMessage.Object)
+            _homeController = new HomeController(
+                _owinWrapper.Object, 
+                _homeOrchestrator.Object,              
+                _configuration, 
+                _userViewTestingService.Object,
+                _flashMessage.Object,
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+                Mock.Of<ILog>())
             {
                 ControllerContext = _controllerContext.Object
             };
@@ -65,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             await _homeController.HandleEmailChanged(true);
 
             //Assert
-            _flashMessage.Verify(x=>x.Create(It.Is<FlashMessageViewModel>(c=>c.Headline.Equals("You've changed your email")),It.IsAny<string>(),1),Times.Never);
+            _flashMessage.Verify(x => x.Create(It.Is<FlashMessageViewModel>(c => c.Headline.Equals("You've changed your email")), It.IsAny<string>(), 1), Times.Never);
             _owinWrapper.Verify(x => x.UpdateClaims(), Times.Never);
         }
 
@@ -81,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         }
 
         [Test]
-        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToTheIndex()
+        public async Task ThenTheAccountCreatedActionCreatesARedirectToRouteResultToIndex()
         {
             //Act
             var actual = await _homeController.HandleNewRegistration();
@@ -112,8 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             _owinWrapper.Verify(x => x.UpdateClaims(), Times.Once);
-            _homeOrchestrator.Verify(x=>x.SaveUpdatedIdentityAttributes(expectedId,expectedEmail,expectedFirstName,expectedLastName));
-
+            _homeOrchestrator.Verify(x => x.SaveUpdatedIdentityAttributes(expectedId, expectedEmail, expectedFirstName, expectedLastName));
         }
     }
 }

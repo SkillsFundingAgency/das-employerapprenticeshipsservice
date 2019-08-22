@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 
 @model OrchestratorResponse<EmployerAgreementViewModel>
 
@@ -8,6 +9,7 @@
     ViewBag.Title = "About your agreement";
     ViewBag.Section = "organisations";
     ViewBag.GaData.Vpv = "/accounts/agreements/about-your-agreement/agreement-about";
+    ViewBag.HideNav = true;
 }
 
 <div class="grid-row header-index">
@@ -28,17 +30,9 @@
             <p>You need to make sure you have authority from your organisation before you sign this agreement.</p>
         }
               
-        <form method="get" action="@Url.Action("SignAgreement","EmployerAgreement")">
+        <form method="get" action="@Url.Action(ControllerConstants.SignAgreementActionName ,ControllerConstants.EmployerAgreementControllerName)">
             @Html.AntiForgeryToken()
             <input class="button" type="submit" value="Continue to your agreement" />
         </form>
     </div>
 </div>
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
-    </div>
-}

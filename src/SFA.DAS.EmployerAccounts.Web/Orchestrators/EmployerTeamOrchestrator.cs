@@ -1,10 +1,9 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using MediatR;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
 using SFA.DAS.EmployerAccounts.Commands.CreateInvitation;
 using SFA.DAS.EmployerAccounts.Commands.DeleteInvitation;
@@ -25,6 +24,11 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -32,12 +36,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
+        private readonly IAccountApiClient _accountApiClient;
+        private readonly IMapper _mapper;        
 
-        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime)
+        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient, IMapper mapper)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
+            _accountApiClient = accountApiClient;
+            _mapper = mapper;
+        }
+
+        //Needed for tests
+        protected EmployerTeamOrchestrator()
+        {
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
@@ -132,6 +145,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
+                var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
+
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
@@ -158,7 +173,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -175,6 +190,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
+                var accountDetailViewModel = apiGetAccountTask.Result;
 
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -193,8 +209,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     RequiresAgreementSigning = pendingAgreements.Count(),
                     AgreementsToSign = pendingAgreements.Count() > 0,
                     SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
-                    PendingAgreements = pendingAgreements
+                    PendingAgreements = pendingAgreements,
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true),
+                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel)
                 };
+
+                //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
+                // we could blat over the existing flag, but it's much nicer to store the enum (as above) rather than a byte!
+                //viewModel.Account.ApprenticeshipEmployerType = (byte) ((ApprenticeshipEmployerType) Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true));
 
                 return new OrchestratorResponse<AccountDashboardViewModel>
                 {
@@ -219,6 +241,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
+
+        
 
         public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
         {
@@ -532,6 +556,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Status = teamMember.Status,
                 ExpiryDate = teamMember.ExpiryDate
             };
-        }
+        }       
     }
 }

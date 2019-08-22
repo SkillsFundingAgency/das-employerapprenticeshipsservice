@@ -1,11 +1,14 @@
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Activities.Client;
+using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
+using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
+using ConfigurationRegistry = SFA.DAS.EmployerAccounts.DependencyResolution.ConfigurationRegistry;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -25,10 +28,12 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<EmployerAccountsApiClientRegistry>();
+                c.AddRegistry<AccountApiClientRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
+                c.AddRegistry<HmrcRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
@@ -42,7 +47,8 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
-
+                c.AddRegistry<PortalClientRegistry>();
+                c.AddRegistry<PensionsRegulatorRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

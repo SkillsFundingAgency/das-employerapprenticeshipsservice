@@ -3,10 +3,11 @@
     [Id] INT NOT NULL PRIMARY KEY IDENTITY, 
     [PartialViewName] NVARCHAR(50) NOT NULL,
     [CreatedDate] DATETIME NOT NULL, 
-    [VersionNumber] INT NOT NULL
+    [VersionNumber] INT NOT NULL,
+	[AgreementType] TINYINT NOT NULL DEFAULT 0
 )
 GO
 
-CREATE UNIQUE INDEX [IX_VersionNumber]
-ON [employer_account].[EmployerAgreementTemplate] ([VersionNumber] DESC)
+CREATE UNIQUE INDEX [IX_AgreementTypeVersionNumber]
+ON [employer_account].[EmployerAgreementTemplate] (AgreementType, [VersionNumber] DESC)
 GO

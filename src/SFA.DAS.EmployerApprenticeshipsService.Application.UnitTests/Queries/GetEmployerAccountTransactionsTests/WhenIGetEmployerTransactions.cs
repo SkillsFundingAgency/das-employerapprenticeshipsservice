@@ -1,22 +1,20 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.EAS.Application.MarkerInterfaces;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAccountTransactions;
-using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Domain.Models.ApprenticeshipProvider;
+using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
 using SFA.DAS.EAS.Domain.Models.Levy;
 using SFA.DAS.EAS.Domain.Models.Payments;
 using SFA.DAS.EAS.Domain.Models.Transaction;
 using SFA.DAS.EAS.Domain.Models.Transfers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Domain.Models.ExpiredFunds;
-using SFA.DAS.Hashing;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactionsTests
 {
@@ -24,7 +22,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
     {
         private Mock<IDasLevyService> _dasLevyService;
         private GetEmployerAccountTransactionsQuery _request;
-        private Mock<IApprenticeshipInfoServiceWrapper> _apprenticshipInfoService;
         private Mock<ILog> _logger;
 
         public override GetEmployerAccountTransactionsQuery Query { get; set; }
@@ -57,14 +54,12 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             _dasLevyService.Setup(x => x.GetPreviousAccountTransaction(It.IsAny<long>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(2);
 
-            _apprenticshipInfoService = new Mock<IApprenticeshipInfoServiceWrapper>();
 
             _logger = new Mock<ILog>();
 
             RequestHandler = new GetEmployerAccountTransactionsHandler(
                 _dasLevyService.Object,
                 RequestValidator.Object,
-                _apprenticshipInfoService.Object,
                 _logger.Object,
                 _hashingService.Object,
                 _publicHashingService.Object);
@@ -162,61 +157,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         }
 
         [Test]
-        public async Task ThenTheProviderNameIsTakenFromTheService()
-        {
-            //Arrange
-            var expectedUkprn = 545646541;
-            var transactions = new List<TransactionLine>
-            {
-                new PaymentTransactionLine()
-                {
-                    AccountId = 1,
-                    TransactionDate = DateTime.Now.AddMonths(-3),
-                    Amount = 1000,
-                    TransactionType = TransactionItemType.Payment,
-                    UkPrn = expectedUkprn
-                }
-            };
-            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(transactions);
-            _apprenticshipInfoService.Setup(x => x.GetProvider(expectedUkprn)).Returns(new ProvidersView { Provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" } });
-
-            //Act
-            await RequestHandler.Handle(_request);
-
-            //Assert
-            _apprenticshipInfoService.Verify(x => x.GetProvider(expectedUkprn), Times.Once);
-        }
-
-        [Test]
-        public async Task ThenTheProviderNameIsSetToUnknownProviderIfTheRecordCantBeFound()
-        {
-            //Arrange
-            var transactions = new List<TransactionLine>
-            {
-                new PaymentTransactionLine
-                {
-                    AccountId = 1,
-                    TransactionDate = DateTime.Now.AddMonths(-3),
-                    Amount = 1000,
-                    TransactionType = TransactionItemType.Payment,
-                    UkPrn = 1254545
-                }
-            };
-            _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
-                .ReturnsAsync(transactions);
-
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>())).Throws(new WebException());
-
-            //Act
-            var actual = await RequestHandler.Handle(_request);
-
-            //Assert
-            Assert.AreEqual("Training provider - name not recognised", actual.Data.TransactionLines.First().Description);
-            _logger.Verify(x => x.Info(It.Is<string>(y => y.StartsWith("Provider not found for UkPrn:1254545"))));
-        }
-
-        [Test]
         public async Task ThenIShouldGetBackCorrectLevyTransactions()
         {
             //Arrange
@@ -273,16 +213,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectPaymentTransactions()
         {
             //Arrange
-            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
                 TransactionType = TransactionItemType.Payment,
-                Amount = 123.45M
+                Amount = 123.45M,
+                ProviderName = "test"
             };
 
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                .Returns(new ProvidersView { Provider = provider });
+            _dasLevyService
+                .Setup(mock => mock.GetProviderName((int)transaction.UkPrn, It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(transaction.ProviderName);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<TransactionLine>
@@ -296,7 +237,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual(provider.ProviderName, actualTransaction.Description);
+            Assert.AreEqual(transaction.ProviderName, actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 
@@ -304,16 +245,17 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromSFAPayment()
         {
             //Arrange
-            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
                 TransactionType = TransactionItemType.Payment,
-                SfaCoInvestmentAmount = 123.45M
+                SfaCoInvestmentAmount = 123.45M,
+                ProviderName = "test"
             };
 
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                .Returns(new ProvidersView { Provider = provider });
+            _dasLevyService
+                .Setup(mock => mock.GetProviderName((int)transaction.UkPrn, It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(transaction.ProviderName);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<TransactionLine>
@@ -327,7 +269,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual($"Co-investment - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual($"Co-investment - {transaction.ProviderName}", actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 
@@ -335,19 +277,19 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
         public async Task ThenIShouldGetBackCorrectCoInvestmentTransactionFromEmployerPayment()
         {
             //Arrange
-            var provider = new Domain.Models.ApprenticeshipProvider.Provider { ProviderName = "test" };
+            var providerName = "test";
             var transaction = new PaymentTransactionLine
             {
                 UkPrn = 100,
                 TransactionType = TransactionItemType.Payment,
                 Amount = 123.45M,
-                EmployerCoInvestmentAmount = 50
+                EmployerCoInvestmentAmount = 50,
+                ProviderName = "test"
             };
 
-            _apprenticshipInfoService.Setup(x => x.GetProvider(It.IsAny<long>()))
-                .Returns(new ProvidersView { Provider = provider });
-
-            var p = _apprenticshipInfoService.Object.GetProvider(100);
+            _dasLevyService
+                .Setup(mock => mock.GetProviderName((int)transaction.UkPrn, It.IsAny<long>(), It.IsAny<string>()))
+                .ReturnsAsync(providerName);
 
             _dasLevyService.Setup(x => x.GetAccountTransactionsByDateRange(It.IsAny<long>(), It.IsAny<DateTime>(), It.IsAny<DateTime>()))
                 .ReturnsAsync(new List<TransactionLine>
@@ -361,7 +303,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAccountTransactio
             //Assert
             var actualTransaction = actual.Data.TransactionLines.First();
 
-            Assert.AreEqual($"Co-investment - {provider.ProviderName}", actualTransaction.Description);
+            Assert.AreEqual($"Co-investment - {providerName}", actualTransaction.Description);
             Assert.AreEqual(transaction.Amount, actualTransaction.Amount);
         }
 

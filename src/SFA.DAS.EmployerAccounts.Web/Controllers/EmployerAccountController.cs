@@ -10,10 +10,13 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
+using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -24,7 +27,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
         private readonly ILog _logger;
         private readonly IMediator _mediatr;
-        private IAuthorizationService _authorizationService;
+        private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
+        private const int AddPayeLater = 1;
+        private const int AddPayeNow = 2;
+        private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
+        private readonly string _hashedAccountIdCookieName;
+        private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
         public EmployerAccountController(IAuthenticationService owinWrapper,
             EmployerAccountOrchestrator employerAccountOrchestrator,
@@ -32,19 +40,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             ILog logger,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediatr,
-            IAuthorizationService authorizationService)
+            ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
+            ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerAccountOrchestrator = employerAccountOrchestrator;
             _logger = logger;
             _mediatr = mediatr ?? throw new ArgumentNullException(nameof(mediatr));
-            _authorizationService = authorizationService ?? throw new ArgumentNullException(nameof(authorizationService));
+            _returnUrlCookieStorageService = returnUrlCookieStorageService;
+            _accountCookieStorage = accountCookieStorage;
+            _hashedAccountIdCookieName = typeof(HashedAccountIdModel).FullName;
         }
 
         [HttpGet]
         [Route("gatewayInform")]
-        public ActionResult GatewayInform()
+        [Route("{HashedAccountId}/gatewayInform")]
+        public ActionResult GatewayInform(string hashedAccountId = "")
         {
+            if (!string.IsNullOrWhiteSpace(hashedAccountId))
+            {
+                _accountCookieStorage.Delete(_hashedAccountIdCookieName);
+
+                _accountCookieStorage.Create(
+                    new HashedAccountIdModel { Value = hashedAccountId }, 
+                    _hashedAccountIdCookieName);
+            }
+
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
             {
                 Data = new GatewayInformViewModel
@@ -68,8 +89,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gateway")]
         public async Task<ActionResult> Gateway()
         {
-            var url = await _employerAccountOrchestrator.GetGatewayUrl(Url.Action(ControllerConstants.GateWayResponseActionName,
-                ControllerConstants.EmployerAccountControllerName, null,HttpContext.Request.Url?.Scheme));
+            var url = await _employerAccountOrchestrator.GetGatewayUrl(
+                Url.Action(ControllerConstants.GateWayResponseActionName,
+                    ControllerConstants.EmployerAccountControllerName, 
+                    null, 
+                    HttpContext.Request.Url?.Scheme));
 
             return Redirect(url);
         }
@@ -82,7 +106,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 _logger.Info("Starting processing gateway response");
 
                 if (Request.Url == null)
-                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                    return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
 
                 var response = await _employerAccountOrchestrator.GetGatewayTokenResponse(
                     Request.Params[ControllerConstants.CodeKeyName],
@@ -126,7 +150,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         });
                 }
 
-                return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
             }
             catch (Exception ex)
             {
@@ -136,25 +160,56 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("youhaveregistered")]
-        public ViewResult YouHaveRegistered(string hashedAccountId = null)
+        [Route("getApprenticeshipFunding")]
+        public ActionResult GetApprenticeshipFunding()
         {
-            var cookie = _employerAccountOrchestrator.GetCookieData();
-
-            if (cookie == null)
+            var model = new
             {
-                ViewBag.RequiresPayeScheme = true;
-            }
-            else
+                HideHeaderSignInLink = true
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("getApprenticeshipFunding")]
+        public async Task<ActionResult> GetApprenticeshipFunding(int? choice)
+        {
+            switch (choice ?? 0)
             {
-                ViewBag.RequiresPayeScheme = string.IsNullOrEmpty(cookie.EmployerAccountPayeRefData.PayeReference) ||
-                                             cookie.EmployerAccountPayeRefData.EmpRefNotFound;
+                case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                default:
+                {
+                    var model = new
+                    {
+                        HideHeaderSignInLink = true,
+                        InError = true
+                    };
+
+                    return View(model);
+                }
             }
+        }
 
-            _employerAccountOrchestrator.DeleteCookieData();
+        [HttpGet]
+        [Route("skipRegistration")]
+        public async Task<ActionResult> SkipRegistration()
+        {
+            var request = new CreateUserAccountViewModel
+            {
+                UserId = GetUserId(),
+                OrganisationName = "MY ACCOUNT"
+            };
 
-            ViewBag.AccountUrl = this.Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { hashedAccountId });
-            return View();
+            var response = await _employerAccountOrchestrator.CreateMinimalUserAccountForSkipJourney(request, HttpContext);
+            var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+            _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                return Redirect(returnUrlCookie.Value);
+
+            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { hashedAccountId = response.Data.HashedId });
         }
 
         [HttpGet]
@@ -195,7 +250,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
             }
 
-            var request = new CreateAccountViewModel
+            var request = new CreateAccountModel
             {
                 UserId = GetUserId(),
                 OrganisationType = enteredData.EmployerAccountOrganisationData.OrganisationType,
@@ -209,10 +264,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 OrganisationStatus = string.IsNullOrWhiteSpace(enteredData.EmployerAccountOrganisationData.OrganisationStatus) ? null : enteredData.EmployerAccountOrganisationData.OrganisationStatus,
                 EmployerRefName = enteredData.EmployerAccountPayeRefData.EmployerRefName,
                 PublicSectorDataSource = enteredData.EmployerAccountOrganisationData.PublicSectorDataSource,
-                Sector = enteredData.EmployerAccountOrganisationData.Sector
+                Sector = enteredData.EmployerAccountOrganisationData.Sector,
+                HashedAccountId = _accountCookieStorage.Get(_hashedAccountIdCookieName),
+                Aorn = enteredData.EmployerAccountPayeRefData.AORN
             };
 
-            var response = await _employerAccountOrchestrator.CreateAccount(request, HttpContext);
+            var response = await _employerAccountOrchestrator.CreateOrUpdateAccount(request, HttpContext);
 
             if (response.Status == HttpStatusCode.BadRequest)
             {
@@ -220,16 +277,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 response.FlashMessage = new FlashMessageViewModel { Headline = "There was a problem creating your account" };
                 return RedirectToAction(ControllerConstants.SummaryActionName);
             }
+            
+            _employerAccountOrchestrator.DeleteCookieData();
 
-            if (_authorizationService.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-            {
-                return RedirectToAction(ControllerConstants.EmployerAccountAccountegisteredActionName, ControllerConstants.EmployerAccountControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
-            else
-            {
-                _employerAccountOrchestrator.DeleteCookieData();
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName, new { response.Data.EmployerAgreement.HashedAccountId });
-            }
+            var returnUrlCookie = _returnUrlCookieStorageService.Get(ReturnUrlCookieName);
+            _accountCookieStorage.Delete(_hashedAccountIdCookieName);
+
+            _returnUrlCookieStorageService.Delete(ReturnUrlCookieName);
+
+            if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
+                return Redirect(returnUrlCookie.Value);
+
+            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
         }
 
         [HttpGet]
@@ -260,7 +319,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 AddFlashMessageToCookie(flashmessage);
 
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamActionName);
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
             }
 
             var errorResponse = new OrchestratorResponse<RenameEmployerAccountViewModel>();
@@ -275,6 +334,46 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             errorResponse.Status = response.Status;
 
             return View(errorResponse);
+        }
+
+        [HttpGet]
+        [Route("amendOrganisation")]
+        public ActionResult AmendOrganisation()
+        {
+            var employerAccountData = _employerAccountOrchestrator.GetCookieData();
+
+            if (employerAccountData.EmployerAccountOrganisationData.OrganisationType == OrganisationType.PensionsRegulator && employerAccountData.EmployerAccountOrganisationData.PensionsRegulatorReturnedMultipleResults)
+            {
+                if (!string.IsNullOrWhiteSpace(employerAccountData.EmployerAccountPayeRefData.AORN))
+                {
+                    return RedirectToAction(
+                        ControllerConstants.SearchUsingAornActionName,
+                        ControllerConstants.SearchPensionRegulatorControllerName,
+                        new
+                        {
+                            Aorn = employerAccountData.EmployerAccountPayeRefData.AORN,
+                            payeRef = employerAccountData.EmployerAccountPayeRefData.PayeReference
+                        });
+                }
+
+                return RedirectToAction(ControllerConstants.SearchPensionRegulatorActionName, ControllerConstants.SearchPensionRegulatorControllerName);
+            }
+
+            return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+        }
+
+        [HttpGet]
+        [Route("amendPaye")]
+        public ActionResult AmendPaye()
+        {
+            var employerAccountPayeData = _employerAccountOrchestrator.GetCookieData().EmployerAccountPayeRefData;
+
+            if (!string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
+            {
+                return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
+            }
+
+            return RedirectToAction(ControllerConstants.GatewayInformActionName);
         }
 
         private string GetUserId()

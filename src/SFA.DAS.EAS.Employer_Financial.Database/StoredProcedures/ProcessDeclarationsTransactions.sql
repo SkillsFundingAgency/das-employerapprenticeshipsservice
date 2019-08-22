@@ -1,6 +1,8 @@
 ﻿CREATE PROCEDURE [employer_financial].[ProcessDeclarationsTransactions]
-@AccountId BIGINT,
-@EmpRef NVARCHAR(50)
+	@AccountId BIGINT,
+	@EmpRef NVARCHAR(50),
+	@currentDate DATETIME = NULL,
+	@expiryPeriod INT = NULL
 AS
 
 --Add the topup from the declaration
@@ -18,6 +20,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
 		x.LevyDueYTD is not null AND x.LastSubmission = 1 AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
+	AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	union all
 	select
 		x.AccountId,
@@ -29,6 +32,7 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 		[employer_financial].[GetLevyDeclarationAndTopUp] x
 	where
 		x.LevyDueYTD is not null and x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
+	AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
@@ -39,8 +43,10 @@ INSERT INTO [employer_financial].LevyDeclarationTopup
 
 -- Create Declarations
 
+DECLARE @updatedAccountTransactions table(Amount decimal(18,4))
 
 INSERT INTO [employer_financial].TransactionLine
+OUTPUT INSERTED.Amount INTO @updatedAccountTransactions
 select mainUpdate.* from
 	(
 	select 
@@ -65,6 +71,7 @@ select mainUpdate.* from
 			[employer_financial].[GetLevyDeclarationAndTopUp] x
 		where
 			x.LevyDueYTD is not null AND x.LastSubmission = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
+		AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	union all	
 		select 
 			x.AccountId,
@@ -85,14 +92,17 @@ select mainUpdate.* from
 			null as TransferReceiverAccountId,
 			null as TransferReceiverAccountName			
 		FROM 
-			[employer_financial].[GetLevyDeclarationAndTopUp] x
+			[employer_financial].[GetLevyDeclarationAndTopUp] x 
 		inner join
 			[employer_financial].[LevyDeclarationTopup] ldt on ldt.SubmissionId = x.SubmissionId
 		where x.EndOfYearAdjustment = 1  AND x.AccountId = @AccountId AND x.EmpRef = @EmpRef
+		AND [employer_financial].[IsInDateLevy](@currentDate, @expiryPeriod, PayrollYear, PayrollMonth) = 1
 	) mainUpdate
 	inner join (
 		select SubmissionId from [employer_financial].LevyDeclaration
 	EXCEPT
 		select SubmissionId from [employer_financial].TransactionLine where TransactionType = 1
 	) dervx on dervx.SubmissionId = mainUpdate.SubmissionId
-GO
+
+	SELECT SUM(Amount)
+	FROM @updatedAccountTransactions

@@ -157,6 +157,21 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure);
         }
 
+        public async Task<string> GetProviderName(int ukprn, long accountId, string periodEnd)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@ukprn", ukprn, DbType.Int64);
+            parameters.Add("@accountId", accountId, DbType.Int64);
+            parameters.Add("@periodEnd", periodEnd, DbType.String);
+
+            return await _db.Value.Database.Connection.ExecuteScalarAsync<string>(
+                sql: "[employer_financial].[GetProviderName]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
         private List<TransactionLine> MapTransactions(IEnumerable<TransactionEntity> transactionEntities)
         {
             var transactions = new List<TransactionLine>();
@@ -228,6 +243,5 @@ namespace SFA.DAS.EAS.Infrastructure.Data
 
             return table;
         }
-        
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -13,6 +14,8 @@ using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
@@ -61,27 +64,12 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
         protected override async Task HandleCore(SignEmployerAgreementCommand message)
         {
-            var validationResult = await _validator.ValidateAsync(message);
-
-            if (!validationResult.IsValid())
-                throw new InvalidRequestException(validationResult.ValidationDictionary);
-
-            var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
-
-            if (owner == null || owner.Role != Role.Owner)
-                throw new UnauthorizedAccessException();
+            await ValidateRequest(message);
+            var owner = await VerifyUserIsAccountOwner(message);
 
             var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
 
-            var signedAgreementDetails = new Models.EmployerAgreement.SignEmployerAgreement
-            {
-                SignedDate = message.SignedDate,
-                AgreementId = agreementId,
-                SignedById = owner.UserId,
-                SignedByName = $"{owner.FirstName} {owner.LastName}"
-            };
-
-            await _employerAgreementRepository.SignAgreement(signedAgreementDetails);
+            await SignAgreement(message, agreementId, owner);
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
@@ -93,24 +81,68 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
             var hashedLegalEntityId = _hashingService.HashValue((long) agreement.LegalEntityId);
 
-            var agreementEvent = _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId, message.HashedAgreementId);
+            await PublishEvents(message, hashedLegalEntityId, accountId, agreement, agreementId, owner);
 
-            var genericEvent = _genericEventFactory.Create(agreementEvent);
+            await _agreementService.RemoveFromCacheAsync(accountId);
+        }
 
-            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
+        private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, long accountId,
+            EmployerAgreementView agreement, long agreementId, MembershipView owner)
+        {
+            await PublishLegalGenericEvent(message, hashedLegalEntityId);
 
             var commitments = await _commitmentService.GetEmployerCommitments(accountId);
 
             var accountHasCommitments = commitments?.Any() ?? false;
 
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId, accountHasCommitments, owner.FullName(), owner.UserRef);
+            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId,
+                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType);
+        }
 
-            await _agreementService.RemoveFromCacheAsync(accountId);
+        private async Task PublishLegalGenericEvent(SignEmployerAgreementCommand message, string hashedLegalEntityId)
+        {
+            var agreementEvent =
+                _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId,
+                    message.HashedAgreementId);
+
+            var genericEvent = _genericEventFactory.Create(agreementEvent);
+
+            await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
+        }
+
+        private async Task<MembershipView> VerifyUserIsAccountOwner(SignEmployerAgreementCommand message)
+        {
+            var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
+
+            if (owner == null || owner.Role != Role.Owner)
+                throw new UnauthorizedAccessException();
+            return owner;
+        }
+
+        private async Task ValidateRequest(SignEmployerAgreementCommand message)
+        {
+            var validationResult = await _validator.ValidateAsync(message);
+
+            if (!validationResult.IsValid())
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
+        }
+
+        private async Task SignAgreement(SignEmployerAgreementCommand message, long agreementId, MembershipView owner)
+        {
+            var signedAgreementDetails = new Models.EmployerAgreement.SignEmployerAgreement
+            {
+                SignedDate = message.SignedDate,
+                AgreementId = agreementId,
+                SignedById = owner.UserId,
+                SignedByName = $"{owner.FirstName} {owner.LastName}"
+            };
+
+            await _employerAgreementRepository.SignAgreement(signedAgreementDetails);
         }
 
         private Task PublishAgreementSignedMessage(
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, string currentUserRef)
+            bool cohortCreated, string currentUserName, string currentUserRef, AgreementType agreementType)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
             {
@@ -121,7 +153,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
                 CohortCreated = cohortCreated,
                 Created = DateTime.UtcNow,
                 UserName = currentUserName,
-                UserRef = Guid.Parse(currentUserRef)
+                UserRef = Guid.Parse(currentUserRef),
+                AgreementType = agreementType
             });
         }
 

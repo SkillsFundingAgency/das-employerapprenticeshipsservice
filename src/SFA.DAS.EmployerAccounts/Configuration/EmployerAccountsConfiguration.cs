@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
-using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
@@ -16,10 +16,13 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string EmployerPortalBaseUrl { get; set; }
         public string EmployerProjectionsBaseUrl { get; set; }
         public string EmployerRecruitBaseUrl { get; set; }
+        public string ReservationsBaseUrl { get; set; }
+        public string EmployerFavouritesBaseUrl { get; set; }
         public string ProviderRelationshipsBaseUrl { get; set; }
         public EventsApiClientConfiguration EventsApi { get; set; }
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
+        public PensionRegulatorConfiguration PensionRegulatorApi { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
@@ -32,5 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ServiceBusConnectionString { get; set; }
         public string RedisConnectionString { get; set; }
         public bool CanSkipRegistrationSteps { get; set; }
+        public AccountApiConfiguration AccountApi { get; set; }
+		public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
     }
 }

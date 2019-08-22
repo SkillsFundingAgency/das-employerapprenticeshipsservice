@@ -5,7 +5,6 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.Extensions;
 using SFA.DAS.Logging;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NLog;
@@ -22,16 +21,15 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using SFA.DAS.Configuration;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.UnitOfWork.NServiceBus;
-using Environment = SFA.DAS.Configuration.Environment;
 using System.Configuration;
 using Microsoft.ApplicationInsights.Extensibility;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Audit.Client.Web;
+using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 
@@ -58,9 +56,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
             WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
 
-            var container = StructuremapMvc.StructureMapDependencyScope.Container;
             ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new FeatureToggleViewEngine());
+            ViewEngines.Engines.Add(new NewHomepageViewEngine());
 
             AuditMessageFactory.RegisterBuilder(m =>
             {
@@ -72,14 +69,28 @@ namespace SFA.DAS.EmployerAccounts.Web
                 };
             });
 
-            if (ConfigurationHelper.IsEnvironmentAnyOf(Environment.Local, Environment.At, Environment.Test))
+            var container = StructuremapMvc.StructureMapDependencyScope.Container;
+            var environmentService = container.GetInstance<IEnvironmentService>();
+
+            if (environmentService.IsCurrent(DasEnv.LOCAL))
             {
-                SystemDetailsViewModel.EnvironmentName = ConfigurationHelper.CurrentEnvironment.ToString();
+                SystemDetailsViewModel.EnvironmentName = DasEnv.LOCAL.ToString();
+                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+            if (environmentService.IsCurrent(DasEnv.AT))
+            {
+                SystemDetailsViewModel.EnvironmentName = DasEnv.AT.ToString();
+                SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            }
+            if (environmentService.IsCurrent(DasEnv.TEST))
+            {
+                SystemDetailsViewModel.EnvironmentName = DasEnv.TEST.ToString();
                 SystemDetailsViewModel.VersionNumber = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             }
 
             StartServiceBusEndpoint();
         }
+
         protected void Application_PreSendRequestHeaders(object sender, EventArgs e)
         {
             new HttpContextPolicyProvider(new List<IHttpContextPolicy> { new ResponseHeaderRestrictionPolicy() })
@@ -95,7 +106,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         {
             var exception = Server.GetLastError();
 
-            if (exception is HttpException httpException && httpException.GetHttpCode() == (int)HttpStatusCode.NotFound)
+            if (exception is HttpException httpException && httpException.GetHttpCode() == (int) HttpStatusCode.NotFound)
             {
                 return;
             }
@@ -129,10 +140,10 @@ namespace SFA.DAS.EmployerAccounts.Web
             var container = StructuremapMvc.StructureMapDependencyScope.Container;
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
-                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString)
+                .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
                 .UseErrorQueue()
                 .UseInstallers()
-                .UseLicense(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense.HtmlDecode())
+                .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()

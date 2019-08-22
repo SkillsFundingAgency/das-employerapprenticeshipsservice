@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using AutoFixture;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
@@ -63,6 +64,7 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders
             var account = _fixture
                 .Build<EmployerAccountInput>()
                 .With(input => input.UserId, () => currentUser.UserOutput.UserId)
+                .With(input => input.Aorn, _fixture.Create<string>().Substring(0, 25))
                 .Create();
 
             var accountSetup = new EmployerAccountSetup

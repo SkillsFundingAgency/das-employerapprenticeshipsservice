@@ -5,11 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
-using SFA.DAS.Hashing;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 
@@ -19,12 +19,15 @@ namespace SFA.DAS.EmployerAccounts.Data
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
-
-        public AccountRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db, IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
+       
+        public AccountRepository(
+            EmployerAccountsConfiguration configuration, 
+            ILog logger, Lazy<EmployerAccountsDbContext> db, 
+            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
-            _accountLegalEntityHashingService = accountLegalEntityHashingService;
+            _accountLegalEntityHashingService = accountLegalEntityHashingService;       
         }
 
         public Task AddPayeToAccount(Paye payeScheme)
@@ -37,6 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@refreshToken", payeScheme.RefreshToken, DbType.String);
             parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
             parameters.Add("@employerRefName", payeScheme.RefName, DbType.String);
+            parameters.Add("@aorn", payeScheme.Aorn, DbType.String);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[AddPayeToAccount]",
@@ -45,28 +49,51 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector)
+        public async Task<CreateUserAccountResult> CreateUserAccount(long userId, string employerName)
         {
             var parameters = new DynamicParameters();
 
-            parameters.Add("@userId", userId, DbType.Int64);
-            parameters.Add("@employerNumber", employerNumber, DbType.String);
+            parameters.Add("@userId", userId, DbType.Int64);         
             parameters.Add("@employerName", employerName, DbType.String);
-            parameters.Add("@employerRegisteredAddress", employerRegisteredAddress, DbType.String);
-            parameters.Add("@employerDateOfIncorporation", employerDateOfIncorporation, DbType.DateTime);
-            parameters.Add("@employerRef", employerRef, DbType.String);
+            parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
+            parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
+
+            await _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_account].[CreateUserAccount]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+         
+            return new CreateUserAccountResult
+            {
+                AccountId = parameters.Get<long>("@accountId")            
+            };
+        }
+
+        public async Task<CreateAccountResult> CreateAccount(CreateAccountParams createParams)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@userId", createParams.UserId, DbType.Int64);
+            parameters.Add("@employerNumber", createParams.EmployerNumber, DbType.String);
+            parameters.Add("@employerName", createParams.EmployerName, DbType.String);
+            parameters.Add("@employerRegisteredAddress", createParams.EmployerRegisteredAddress, DbType.String);
+            parameters.Add("@employerDateOfIncorporation", createParams.EmployerDateOfIncorporation, DbType.DateTime);
+            parameters.Add("@employerRef", createParams.EmployerRef, DbType.String);
             parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
             parameters.Add("@legalentityId", null, DbType.Int64, ParameterDirection.Output, 8);
             parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output, 8);
             parameters.Add("@employerAgreementId", null, DbType.Int64, ParameterDirection.Output, 8);
-            parameters.Add("@accessToken", accessToken, DbType.String);
-            parameters.Add("@refreshToken", refreshToken, DbType.String);
+            parameters.Add("@accessToken", createParams.AccessToken, DbType.String);
+            parameters.Add("@refreshToken", createParams.RefreshToken, DbType.String);
             parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
-            parameters.Add("@employerRefName", employerRefName, DbType.String);
-            parameters.Add("@status", companyStatus);
-            parameters.Add("@source", source);
-            parameters.Add("@publicSectorDataSource", publicSectorDataSource);
-            parameters.Add("@sector", sector, DbType.String);
+            parameters.Add("@employerRefName", createParams.EmployerRefName, DbType.String);
+            parameters.Add("@status", createParams.CompanyStatus);
+            parameters.Add("@source", createParams.Source);
+            parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource);
+            parameters.Add("@sector", createParams.Sector, DbType.String);
+            parameters.Add("@aorn", createParams.Aorn, DbType.String);
+            parameters.Add("@AgreementType", createParams.AgreementType, DbType.Boolean);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateAccount]",
@@ -102,6 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@source", createParams.Source, DbType.Int16);
             parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource, DbType.Int16);
             parameters.Add("@sector", createParams.Sector, DbType.String);
+            parameters.Add("@agreementType", createParams.AgreementType, DbType.Int16);
             parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output);
             parameters.Add("@accountLegalEntityCreated", null, DbType.Boolean, ParameterDirection.Output);
 

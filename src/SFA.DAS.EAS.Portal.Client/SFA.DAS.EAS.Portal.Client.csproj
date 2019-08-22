@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+        <Authors>DAS</Authors>
+        <Description>Client for SFA.DAS.EAS.Portal</Description>
+        <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</PackageProjectUrl>
+
+        <EmbedUntrackedSources>false</EmbedUntrackedSources>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+      <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+      <PackageReference Include="SFA.DAS.CosmosDb" Version="1.0.47" />
+      <PackageReference Include="SFA.DAS.Encoding" Version="1.1.57" />
+        <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651">
+            <NoWarn>NU1701</NoWarn>
+        </PackageReference>
+      <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
+      <PackageReference Include="StructureMap" Version="4.7.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>SFA.DAS.EAS.Portal.UnitTests</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+    
+</Project>

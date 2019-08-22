@@ -8,6 +8,8 @@ using System.Web;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
+using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.EAS.Portal.Client.Data;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -29,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
-            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();
+            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();            
         }
     }
 }

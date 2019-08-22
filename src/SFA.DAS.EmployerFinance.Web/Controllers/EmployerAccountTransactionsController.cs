@@ -12,10 +12,8 @@ using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
-using System.Net;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
-using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
@@ -33,7 +31,10 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         public EmployerAccountTransactionsController(
             IAuthenticationService owinWrapper,
-            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator, IMapper mapper, IMediator mediator, ILog logger)
+            EmployerAccountTransactionsOrchestrator accountTransactionsOrchestrator,
+            IMapper mapper,
+            IMediator mediator,
+            ILog logger)
         : base(owinWrapper)
         {
             _owinWrapper = owinWrapper;
@@ -57,18 +58,10 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("balance")]
         public async Task<ActionResult> Index(GetAccountFinanceOverviewQuery query)
         {
-            var response = await _mediator.SendAsync(query);
+            var viewModel = await _accountTransactionsOrchestrator.Index(query);
 
-            var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
-            {
-                Data = new FinanceDashboardViewModel
-                {
-                    AccountHashedId = query.AccountHashedId,
-                    CurrentLevyFunds = response.CurrentFunds,
-                    ExpiringFunds = response.ExpiringFundsAmount,
-                    ExpiryDate = response.ExpiringFundsExpiryDate
-                }
-            };
+            if (viewModel.RedirectUrl != null)
+                return Redirect(viewModel.RedirectUrl);
 
             return View(viewModel);
         }

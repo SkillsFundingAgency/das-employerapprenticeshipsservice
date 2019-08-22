@@ -2,13 +2,14 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Authorization;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 {
@@ -17,25 +18,37 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         private Mock<IAuthenticationService> _owinWrapper;
         private HomeController _homeController;
         private EmployerAccountsConfiguration _configuration;
-        private string ExpectedUserId = "123ABC";
+        private Mock<HomeOrchestrator> _homeOrchestrator;  
 
         [SetUp]
         public void Arrange()
         {
             _owinWrapper = new Mock<IAuthenticationService>();
             _configuration = new EmployerAccountsConfiguration();
+            _homeOrchestrator = new Mock<HomeOrchestrator>();
 
             _homeController = new HomeController(
-                _owinWrapper.Object, Mock.Of<HomeOrchestrator>(), _configuration, Mock.Of<IAuthorizationService>(),
-                Mock.Of<IMultiVariantTestingService>(), Mock.Of<ICookieStorageService<FlashMessageViewModel>>());
+                _owinWrapper.Object, 
+                _homeOrchestrator.Object,            
+                _configuration,
+                Mock.Of<IMultiVariantTestingService>(), 
+                Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
+                Mock.Of<ICookieStorageService<ReturnUrlModel>>(),
+                Mock.Of<ILog>());
         }
-
 
         [Test]
         public async Task ThenTheClaimsAreRefreshedForThatUserWhenAuthenticated()
         {
             //Arrange
-            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(ExpectedUserId);
+            var expectedEmail = "test@test.com";
+            var expectedId = "123456";
+            var expectedFirstName = "Test";
+            var expectedLastName = "tester";
+            _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(expectedId);
+            _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns(expectedEmail);
+            _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.GivenName)).Returns(expectedFirstName);
+            _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.FamilyName)).Returns(expectedLastName);
 
             //Act
             await _homeController.HandleNewRegistration();

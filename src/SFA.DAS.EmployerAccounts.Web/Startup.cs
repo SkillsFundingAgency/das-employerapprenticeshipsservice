@@ -8,7 +8,6 @@ using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
-using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
@@ -23,6 +22,7 @@ using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
+using SFA.DAS.EmployerAccounts.Web.Models;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -31,13 +31,13 @@ namespace SFA.DAS.EmployerAccounts.Web
     public class Startup
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        private const string CookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+        private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
 
         public void Configuration(IAppBuilder app)
         {
-            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>();
-            var cookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
+            var accountDataCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
+            var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
 
@@ -67,7 +67,11 @@ namespace SFA.DAS.EmployerAccounts.Web
                 TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
                 AuthenticatedCallback = identity =>
                 {
-                    PostAuthentiationAction(identity, authenticationOrchestrator, constants, cookieStorageService);
+                    PostAuthentiationAction(
+                        identity,                     
+                        constants,
+                        accountDataCookieStorageService,
+                        hashedAccountIdCookieStorageService);
                 }
             });
 
@@ -112,24 +116,26 @@ namespace SFA.DAS.EmployerAccounts.Web
             };
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants, ICookieStorageService<EmployerAccountData> cookieStorageService)
+        private static void PostAuthentiationAction(ClaimsIdentity identity,
+            Constants constants,
+            ICookieStorageService<EmployerAccountData> accountDataCookieStorageService,
+            ICookieStorageService<HashedAccountIdModel> hashedAccountIdCookieStorageService)
         {
             Logger.Info("Retrieving claims from OIDC server.");
 
             var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-            var email = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Email())?.Value;
-            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.GivenName())?.Value;
-            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.FamilyName())?.Value;
-
+          
             Logger.Info($"Retrieved claims from OIDC server for user with external ID '{userRef}'.");
 
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
+            identity.AddClaim(new Claim("firstname", identity.Claims.First(c => c.Type == constants.GivenName()).Value));
+            identity.AddClaim(new Claim("lastname", identity.Claims.First(c => c.Type == constants.FamilyName()).Value));
 
-            Task.Run(() => cookieStorageService.Delete(CookieName)).Wait();
-            Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
+            Task.Run(() => accountDataCookieStorageService.Delete(AccountDataCookieName)).Wait();
+            Task.Run(() => hashedAccountIdCookieStorageService.Delete(typeof(HashedAccountIdModel).FullName)).Wait();
         }
     }
 

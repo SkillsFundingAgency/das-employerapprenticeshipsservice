@@ -4,12 +4,12 @@
 
 @{ViewBag.PageID = "page-onboard-paye-check-details"; }
 @{ViewBag.Title = "Check Details"; }
-@{ViewBag.HideNav = "true"; }
+@{ViewBag.HideNav = true; }
 @{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-confirm-organisation";}
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Check details</h1>
+        <h1 class="heading-xlarge">Check your details</h1>
         <table class="top-border">
             <tr>
                 <th scope="row">
@@ -18,36 +18,53 @@
                 <td>
                     @Model.Data.OrganisationName
                 </td>
-                </tr>
-            <tr>
-                <th scope="row">
-                    Address
-                </th>
-                <td>
-                    @Model.Data.RegisteredAddress
+                <td class="link-right">
+                    <a href="@Url.Action(ControllerConstants.AmendOrganisationActionName, ControllerConstants.EmployerAccountControllerName)">Change</a>
                 </td>
             </tr>
             <tr>
                 <th scope="row">
-                    @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+                    Address
+                </th>
+                <td colspan="2">
+                    @foreach (var line in Model.Data.RegisteredAddress)
                     {
-                        if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
+                        <div>@line</div>
+                    }
+                </td>
+            </tr>
+            @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
+            {
+                <tr>
+                    <th scope="row">                       
+                        @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse)
                         {
                             <span>Companies House number</span>
                         }
                         else
                         {
                             <span>Charity number</span>
-                        }
-                    }
-                </th>
-                <td>
-                    @if (Model.Data.OrganisationType == OrganisationType.CompaniesHouse || Model.Data.OrganisationType == OrganisationType.Charities)
-                    {
-                        <span>@Model.Data.OrganisationReferenceNumber</span>
-                    }
-                </td> 
-            </tr>
+                        }                     
+                    </th>
+                    <td colspan="2">                      
+                        <span>@Model.Data.OrganisationReferenceNumber</span>                
+                    </td>
+                </tr>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Data.AORN))
+            {
+                <tr>
+                    <th scope="row">
+                        Account office reference number
+                    </th>
+                    <td>
+                        @Model.Data.AORN
+                    </td>
+                    <td class="link-right">
+                        <a href="@Url.Action(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName)">Change</a>
+                    </td>
+                </tr>
+            }
             <tr>
                 <th scope="row">
                     PAYE scheme
@@ -61,20 +78,16 @@
                         }
                     </dl>
                 </td>
+                <td class="link-right">
+                    <a href="@Url.Action(ControllerConstants.AmendPayeActionName, ControllerConstants.EmployerAccountControllerName)">Change</a>
+                </td>
             </tr>
         </table>
         <form method="POST" action="@Url.Action("CreateAccount", "EmployerAccount")">
             @Html.AntiForgeryToken()
             <div class="form-group">
-                <button type="submit" class="button" id="continue">These details are correct</button>
-                <a class="button-link" href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Change details</a>                
+                <button type="submit" class="button" id="continue">These details are correct</button>                
             </div>
         </form> 
     </div>
 </div>
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("GatewayInform", "EmployerAccount")" class="back-link">Back</a>
-    </div>
-}

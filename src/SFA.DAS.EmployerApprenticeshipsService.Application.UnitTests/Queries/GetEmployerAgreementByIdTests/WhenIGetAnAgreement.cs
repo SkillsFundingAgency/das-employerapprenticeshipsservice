@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
@@ -28,7 +29,10 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTest
 
             _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             _hashingService = new Mock<IHashingService>();
-            _agreement = new EmployerAgreementView();
+            _agreement = new EmployerAgreementView()
+            {
+                AgreementType = AgreementType.NonLevyExpressionOfInterest
+            };
 
             RequestHandler = new GetEmployerAgreementByIdRequestHandler(
                 _employerAgreementRepository.Object,
@@ -37,7 +41,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTest
 
             Query = new GetEmployerAgreementByIdRequest
             {
-                HashedAgreementId = "ABC123"
+                HashedAgreementId = "ABC123",
             };
 
             _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(It.IsAny<long>()))
@@ -87,6 +91,16 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetEmployerAgreementByIdTest
 
             //Assert
             Assert.ThrowsAsync<InvalidRequestException>(() => RequestHandler.Handle(Query));
+        }
+
+        [Test]
+        public async Task ThenIfTheMessageIsValidTheAgreementTypeIsSet()
+        {
+            //Act
+            var response = await RequestHandler.Handle(Query);
+
+            //Assert
+            Assert.AreEqual(_agreement.AgreementType, response.EmployerAgreement.AgreementType);
         }
     }
 }

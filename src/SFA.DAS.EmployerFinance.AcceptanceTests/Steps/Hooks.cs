@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Data.Common;
 using System.Diagnostics;
+using System.Net;
 using System.Threading.Tasks;
 using BoDi;
+using Moq;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution;
 using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.Extensions;
+using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.NServiceBus.NLog;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.SqlServer;
+using SFA.DAS.Testing.AzureStorageEmulator;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using TechTalk.SpecFlow;
@@ -35,6 +38,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         [BeforeTestRun]
         public static async Task BeforeTestRun()
         {
+            AzureStorageEmulatorManager.StartStorageEmulator();
+
             _container = IoC.Initialize();
 
             await StartNServiceBusEndpoint();
@@ -44,6 +49,9 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
         public void BeforeScenario()
         {
             _container.GetInstance<ILog>().Info("Starting Scenario.");
+
+            ResetCurrentDateTime(_container);
+            ResetFundsExpiryPeriod(_container);
 
             _objectContainer.RegisterInstances(_container);
             _objectContainer.RegisterMocks(_container);
@@ -64,6 +72,18 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             }
         }
 
+        private static void ResetCurrentDateTime(IContainer container)
+        {
+            var currentDateTime = container.GetInstance<Mock<ICurrentDateTime>>();
+            currentDateTime.Setup(x => x.Now).Returns(DateTime.Now);
+        }
+
+        private static void ResetFundsExpiryPeriod(IContainer container)
+        {
+            var config = container.GetInstance<EmployerFinanceConfiguration>();
+            config.FundsExpiryPeriod = 24;
+        }
+
         private static async Task StartNServiceBusEndpoint()
         {
             try
@@ -74,7 +94,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                     .UseAzureServiceBusTransport()
                     .UseErrorQueue()
                     .UseInstallers()
-                    .UseLicense(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense.HtmlDecode())
+                    .UseLicense(WebUtility.HtmlDecode(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense))
                     .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())
                     .UseNewtonsoftJsonSerializer()
                     .UseNLogFactory()
@@ -92,7 +112,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 _container.Configure(c => c.For<IMessageSession>().Use(_endpoint));
 
                 _container.GetInstance<ILog>().Info("Endpoint Started.");
-
             }
             catch (Exception e)
             {
