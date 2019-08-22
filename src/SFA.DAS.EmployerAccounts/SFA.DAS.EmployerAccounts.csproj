@@ -18,6 +18,7 @@
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" version="1.0.43" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Types" version="1.0.43" />
     <PackageReference Include="MediatR" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
