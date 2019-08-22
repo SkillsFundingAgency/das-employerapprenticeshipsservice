@@ -11,10 +11,10 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
     public class EmployerAccountsController : ApiController
     {
         private readonly AccountsOrchestrator _orchestrator;
-
+      
         public EmployerAccountsController(AccountsOrchestrator orchestrator)
         {
-            _orchestrator = orchestrator;
+            _orchestrator = orchestrator;          
         }
 
         [Route("", Name = "AccountsIndex")]
@@ -37,6 +37,24 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
 
             result.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
             result.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
+            return Ok(result);
+        }
+
+        [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
+        {
+            var result = await _orchestrator.GetAccountTeamMembers(hashedAccountId);
+            return Ok(result);
+        }
+
+        [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
+        [ApiAuthorize(Roles = "ReadAllAccountUsers")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAccountUsers(long accountId)
+        {
+            var result = await _orchestrator.GetAccountTeamMembers(accountId);
             return Ok(result);
         }
 

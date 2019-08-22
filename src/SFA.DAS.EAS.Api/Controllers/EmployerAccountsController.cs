@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -10,10 +11,12 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     public class EmployerAccountsController : ApiController
     {
         private readonly AccountsOrchestrator _orchestrator;
+        private readonly EmployerAccountsApiConfiguration _employerAccountsApiConfiguration;
 
-        public EmployerAccountsController(AccountsOrchestrator orchestrator)
+        public EmployerAccountsController(AccountsOrchestrator orchestrator, EmployerAccountsApiConfiguration employerAccountsApiConfiguration)
         {
             _orchestrator = orchestrator;
+            _employerAccountsApiConfiguration = employerAccountsApiConfiguration;
         }
 
         [Route("", Name = "AccountsIndex")]
@@ -66,31 +69,17 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
+        public IHttpActionResult GetAccountUsers(string hashedAccountId)
         {
-            var result = await _orchestrator.GetAccountTeamMembers(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-           
-            return Ok(result.Data);
+            return Redirect($"{_employerAccountsApiConfiguration.BaseUrl}/api/accounts/{hashedAccountId}/users");
         }
 
         [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetAccountUsers(long accountId)
+        public IHttpActionResult GetAccountUsers(long accountId)
         {
-            var result = await _orchestrator.GetAccountTeamMembers(accountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data);
+            return Redirect($"{_employerAccountsApiConfiguration.BaseUrl}/api/accounts/internal/{accountId}/users");
         }
     }
 }

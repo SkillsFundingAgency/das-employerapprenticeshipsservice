@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
+using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
@@ -16,11 +20,19 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
+        private readonly IMapper _mapper;
+        private readonly IHashingService _hashingService;
 
-        public AccountsOrchestrator(IMediator mediator, ILog logger)
+        public AccountsOrchestrator(
+            IMediator mediator, 
+            ILog logger, 
+            IMapper mapper,
+            IHashingService hashingService)
         {
             _mediator = mediator;
             _logger = logger;
+            _mapper = mapper;
+            _hashingService = hashingService;
         }
 
         public async Task<PayeScheme> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
@@ -69,6 +81,20 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
                 Page = pageNumber,
                 TotalPages = (accountsResult.AccountsCount / pageSize) + 1
             };
+        }
+
+        public async Task<List<TeamMember>> GetAccountTeamMembers(string hashedAccountId)
+        {
+            _logger.Info($"Requesting team members for account {hashedAccountId}");
+
+            var teamMembers = await _mediator.SendAsync(new GetAccountTeamMembersQuery { HashedAccountId = hashedAccountId });
+            return teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMember>(x)).ToList();
+        }
+
+        public async Task<List<TeamMember>> GetAccountTeamMembers(long accountId)
+        {
+            var hashedAccountId = _hashingService.HashValue(accountId);
+            return await GetAccountTeamMembers(hashedAccountId);
         }
 
         private PayeScheme ConvertToPayeScheme(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)

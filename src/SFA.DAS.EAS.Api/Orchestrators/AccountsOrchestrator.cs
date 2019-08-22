@@ -117,30 +117,6 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             return new OrchestratorResponse<AccountDetailViewModel> { Data = accountResult };
         }
 
-        public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(long accountId)
-        {
-            var hashedAccountId = _hashingService.HashValue(accountId);
-
-            var response = await GetAccountTeamMembers(hashedAccountId);
-
-            return response;
-        }
-
-        public async Task<OrchestratorResponse<ICollection<TeamMemberViewModel>>> GetAccountTeamMembers(string hashedAccountId)
-        {
-            _logger.Info($"Requesting team members for account {hashedAccountId}");
-
-            var teamMembers = await _mediator.SendAsync(new GetTeamMembersRequest { HashedAccountId = hashedAccountId });
-
-            var memberViewModels = teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMemberViewModel>(x)).ToList();
-
-            return new OrchestratorResponse<ICollection<TeamMemberViewModel>>
-            {
-                Data = memberViewModels,
-                Status = HttpStatusCode.OK
-            };
-        }
-
         public async Task<OrchestratorResponse<AccountResourceList<LevyDeclarationViewModel>>> GetLevy(string hashedAccountId)
         {
             _logger.Info($"Requesting levy declaration for account {hashedAccountId}");

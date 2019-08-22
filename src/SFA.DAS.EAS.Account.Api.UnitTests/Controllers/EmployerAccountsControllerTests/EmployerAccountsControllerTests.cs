@@ -8,6 +8,7 @@ using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
@@ -17,6 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
     public abstract class EmployerAccountsControllerTests
     {
         protected EmployerAccountsController Controller;
+        protected EmployerAccountsApiConfiguration Configuration;
         protected Mock<IMediator> Mediator;
         protected Mock<ILog> Logger;
         protected Mock<UrlHelper> UrlHelper;
@@ -32,9 +34,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             Mapper = new Mock<IMapper>();
             HashingService = new Mock<IHashingService>();
             ApiService = new Mock<IEmployerAccountsApiService>();
+            Configuration = new EmployerAccountsApiConfiguration();
 
             var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object, ApiService.Object);
-            Controller = new EmployerAccountsController(orchestrator);
+            Controller = new EmployerAccountsController(orchestrator, Configuration);
 
             UrlHelper = new Mock<UrlHelper>();
             Controller.Url = UrlHelper.Object;

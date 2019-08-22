@@ -1,16 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestratorTests
 {
-    internal class WhenIGetAnAccount
+    internal class WhenIGetAnAccountsUsers
     {
         private AccountsOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
@@ -25,19 +27,19 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestra
             _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, Mock.Of<IMapper>(), Mock.Of<IHashingService>());
 
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>()))
-                .ReturnsAsync(new GetEmployerAccountDetailByHashedIdResponse())
+                .Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
+                .ReturnsAsync(new GetAccountTeamMembersResponse { TeamMembers = new List<TeamMember>() })
                 .Verifiable("Get account was not called");
         }
 
         [Test]
-        public async Task TheARequestToGetAccountDetailsShouldBeMade()
+        public async Task TheARequestToGetAccountUsersShouldBeMade()
         {
             //Arrange
             const string hashedAgreementId = "ABC123";
 
             //Act
-            await _orchestrator.GetAccount(hashedAgreementId);
+            await _orchestrator.GetAccountTeamMembers(hashedAgreementId);
 
             //Assert
             _mediator.VerifyAll();
