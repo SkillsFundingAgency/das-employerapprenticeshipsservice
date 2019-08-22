@@ -1,9 +1,6 @@
-﻿using System;
-using Microsoft.Azure;
-using SFA.DAS.Activities.Configuration;
+﻿using Microsoft.Azure;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Caches;
-using SFA.DAS.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
