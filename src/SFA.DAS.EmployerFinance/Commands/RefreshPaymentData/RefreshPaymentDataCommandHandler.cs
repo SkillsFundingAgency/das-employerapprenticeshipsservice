@@ -95,23 +95,6 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
             await _dasLevyRepository.CreatePayments(newNonFullyFundedPayments);
             await _mediator.PublishAsync(new ProcessPaymentEvent { AccountId = message.AccountId });
 
-            var paymentEventTasks = new Task[newPayments.Length];
-
-            for (var index = 0; index < newPayments.Length; index++)
-            {
-                var payment = newPayments[index];
-
-                paymentEventTasks[index] = _eventPublisher.Publish(new CreatedPaymentEvent
-                {
-                    AccountId = payment.EmployerAccountId,
-                    ProviderName = payment.ProviderName,
-                    Amount = payment.Amount,
-                    Created = DateTime.UtcNow
-                });
-            }
-
-            Task.WaitAll(paymentEventTasks);
-
             await PublishRefreshPaymentDataCompletedEvent(message, true);
 
             _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
