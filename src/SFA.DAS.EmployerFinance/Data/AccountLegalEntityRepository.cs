@@ -52,5 +52,18 @@ namespace SFA.DAS.EmployerFinance.Data
                 _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
         }
+
+        public Task RemoveAccountLegalEntity(long id)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@id", id, DbType.Int64);
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                "[employer_financial].[RemoveAccountLegalEntity]",
+                parameters,
+                _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }
