@@ -23,6 +23,7 @@
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+    <PackageReference Include="SFA.DAS.Caches" Version="1.0.22" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client" Version="1.6.1641" />
