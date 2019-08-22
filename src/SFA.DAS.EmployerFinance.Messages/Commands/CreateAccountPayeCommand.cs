@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.NServiceBus;
 
-namespace SFA.DAS.EmployerFinance.Commands.CreateAccountPaye
+namespace SFA.DAS.EmployerFinance.Messages.Commands
 {
     public class CreateAccountPayeCommand : Command
     {

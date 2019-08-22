@@ -380,7 +380,6 @@
     <Compile Include="Services\DasLevyServiceTests\WhenIGetPreviousTransactionCount.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTheLastDeclarationForAPayeRef.cs" />
     <Compile Include="Services\DasLevyServiceTests\WhenIGetTransactionInformation.cs" />
-    <Compile Include="Services\RefreshEmployerLevyServiceTests\WhenQueuingAMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

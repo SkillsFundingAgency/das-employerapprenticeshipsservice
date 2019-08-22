@@ -569,7 +569,6 @@
     <Compile Include="Queries\GetUser\GetUserQueryValidator.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
     <Compile Include="Services\DasLevyService.cs" />
-    <Compile Include="Services\RefreshEmployerLevyService.cs" />
     <Compile Include="Services\TransferAllowanceService.cs" />
   </ItemGroup>
   <ItemGroup>
