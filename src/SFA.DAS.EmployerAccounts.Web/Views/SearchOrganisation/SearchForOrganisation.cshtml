@@ -5,23 +5,22 @@
     ViewBag.Title = "Search for your organisation";
     ViewBag.Section = "organisations";
     ViewBag.HideNav = !Model.Data.IsExistingAccount;
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 }
 
 @{
     ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/search-for-organisation" : "/onboarding/search/search-for-organisation";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@ViewBag.Title</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
         <form action="@Url.Action("SearchForOrganisation")" method="POST">
-            <div class="form-group">
-                <label for="searchTerm">
-                    <span class="form-label-bold">Enter organisation name</span>
-                </label>
-                <input type="text" id="searchTerm" name="searchTerm" value="" class="form-control" />
+            <div class="govuk-form-group">
+                <label class="govuk-label" for="searchTerm">Enter organisation name</label>
+                <input type="text" id="searchTerm" name="searchTerm" value="" class="govuk-input" />
             </div>
-            <input class="button" type="submit" value="Search" />
+            <input class="govuk-button" type="submit" value="Search" />
         </form>
     </div>
 </div>

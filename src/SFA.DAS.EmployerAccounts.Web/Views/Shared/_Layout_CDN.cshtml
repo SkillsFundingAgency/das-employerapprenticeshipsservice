@@ -237,6 +237,8 @@
 
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper " id="main-content" role="main">
+            @RenderSection("breadcrumb", required: false)
+            @Html.Partial(@"_SuccessMessage_CDN", Model as OrchestratorResponse)
             @RenderBody()
         </main>
     </div>
