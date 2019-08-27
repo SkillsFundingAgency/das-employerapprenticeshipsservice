@@ -30,7 +30,6 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpNotFoundForNullModel]
         public async Task<IHttpActionResult> GetLegalEntity([FromUri] GetLegalEntityQuery query)
         {
             return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/accounts/{query.AccountHashedId}/legalentities/{query.LegalEntityId}");
