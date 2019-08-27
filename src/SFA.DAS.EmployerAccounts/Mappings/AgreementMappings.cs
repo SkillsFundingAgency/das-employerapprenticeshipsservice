@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
             CreateMap<EmployerAgreement, Api.Types.AgreementViewModel>()
                 .ForMember(
                     v => v.Status,
-                    o => o.MapFrom(a => (EmployerAgreementStatus) (int) a.StatusId))
+                    o => o.MapFrom(a => (Api.Types.EmployerAgreementStatus) (int) a.StatusId))
                 .ForMember(
                     v => v.TemplateVersionNumber,
                     o => o.MapFrom(a => a.Template.VersionNumber))
