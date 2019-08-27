@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.EventHandlers;
-using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Application.Services.MessageContext;
 using SFA.DAS.ProviderRelationships.Messages.Events;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers.ProviderRelationships

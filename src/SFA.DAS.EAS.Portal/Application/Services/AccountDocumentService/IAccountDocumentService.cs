@@ -1,8 +1,8 @@
-﻿using SFA.DAS.EAS.Portal.Client.Database.Models;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 
-namespace SFA.DAS.EAS.Portal.Application.Services
+namespace SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService
 {
     public interface IAccountDocumentService
     {

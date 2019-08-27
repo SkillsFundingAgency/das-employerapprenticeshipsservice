@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.TypesExtensions;
 using SFA.DAS.Reservations.Messages;

@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -15,6 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
     public class WhenIWantToAddAPayeScheme
     {
         private Mock<EmployerAccountPayeOrchestrator> _employerAccountPayeOrchestrator;
+        private Mock<IMediator> _mediator;
         private Mock<IAuthenticationService> _owinWrapper;
         private EmployerAccountPayeController _controller;
         private Mock<IAuthorizationService> _featureToggle;
@@ -32,17 +37,31 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _employerAccountPayeOrchestrator = new Mock<EmployerAccountPayeOrchestrator>();
+            _mediator = new Mock<IMediator>();
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAornLockRequest>())).ReturnsAsync(
+                new GetUserAornLockResponse
+                {
+                    UserAornStatus = new UserAornPayeStatus
+                    { 
+                        RemainingLock = 0
+                    }
+                });
 
             _controller = new EmployerAccountPayeController(
-                _owinWrapper.Object, _employerAccountPayeOrchestrator.Object, _featureToggle.Object, 
-                _userViewTestingService.Object, _flashMessage.Object);
+                _owinWrapper.Object, 
+                _employerAccountPayeOrchestrator.Object, 
+                _featureToggle.Object, 
+                _userViewTestingService.Object, 
+                _flashMessage.Object,
+                _mediator.Object);
         }
 
         [Test]
         public async Task AndISelectGovernmentGatewayThenTheGovernmentGatewayPageIsShown()
         {
             //Act
-            var result = _controller.WaysToAdd(1);
+            var result = await _controller.WaysToAdd(1);
 
             //Assert
             var redirectResult = (RedirectToRouteResult)result;
@@ -54,10 +73,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
         public async Task AndISelectAornThenTheAornPageIsShown()
         {
             //Act
-            var result = _controller.WaysToAdd(2);
+            var result = await _controller.WaysToAdd(2);
 
             //Assert
-            var redirectResult = (RedirectToRouteResult)result;
+            var redirectResult = (RedirectToRouteResult) result;
             Assert.AreEqual(ControllerConstants.SearchUsingAornActionName, redirectResult.RouteValues["action"].ToString());
             Assert.AreEqual(ControllerConstants.SearchPensionRegulatorControllerName, redirectResult.RouteValues["controller"].ToString());
         }
@@ -66,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountPaye
         public async Task IDontSelectAnOptionThenAnErrorIsShown()
         {
             //Act
-            var result = _controller.WaysToAdd(0) as ViewResult;
+            var result = await _controller.WaysToAdd(0) as ViewResult;
 
             //Assert
             dynamic model = result.ViewBag;

@@ -8,7 +8,7 @@ using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.EventHandlers;
-using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 

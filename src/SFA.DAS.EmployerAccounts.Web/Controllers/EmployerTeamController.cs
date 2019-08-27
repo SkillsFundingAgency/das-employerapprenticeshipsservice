@@ -15,6 +15,7 @@ using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using System.Globalization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -477,8 +478,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             switch(vacancy.Status)
             {
-                case EAS.Portal.Client.Types.VacancyStatus.Closed:                    
-                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Submitted:
@@ -496,14 +497,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Live:
-                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
-                    break;
-
-                default:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
                     break;
             }
 
             return PartialView(viewModel);
+        }
+
+        private string ApplicationsDisplay(Vacancy vacancy)
+        {
+            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
+                ? "Advertised by employer"
+                : vacancy.NumberOfApplications.ToString();
         }
 
         [ChildActionOnly]
@@ -539,7 +544,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            Cohort cohort = model.AccountViewModel.Organisations.FirstOrDefault()?.Cohorts?.FirstOrDefault();
+            Apprenticeship apprenticeship = cohort?.Apprenticeships?.FirstOrDefault();
+            
+            var viewModel = new ApprenticeDetailsViewModel
+            {
+                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
+                TrainingProviderName = apprenticeship.TrainingProvider?.Name,
+                CourseName = apprenticeship.CourseName,
+                StartDateText = apprenticeship.StartDate?.ToGdsFormatWithoutDay(),
+                EndDateText = apprenticeship.EndDate?.ToGdsFormatWithoutDay(),
+                ProposedCostText = $"{apprenticeship.ProposedCost?.ToString("C0", CultureInfo.CreateSpecificCulture("en-GB"))} excluding VAT",
+                IsApproved = cohort.IsApproved
+            };
+
+            return PartialView(viewModel);
         }
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
@@ -568,3 +587,4 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
     }
 }
+ 

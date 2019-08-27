@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EAS.Portal.Application.Services
+namespace SFA.DAS.EAS.Portal.Application.Services.MessageContext
 {
     public interface IMessageContext
     {

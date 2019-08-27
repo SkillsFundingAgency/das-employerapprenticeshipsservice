@@ -4,7 +4,7 @@ using SFA.DAS.EAS.Portal.Client.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 
-namespace SFA.DAS.EAS.Portal.Client.Http
+namespace SFA.DAS.EAS.Portal.Client.Services.Recruit.Http
 {
     public class RecruitApiHttpClientFactory : IRecruitApiHttpClientFactory
     {
