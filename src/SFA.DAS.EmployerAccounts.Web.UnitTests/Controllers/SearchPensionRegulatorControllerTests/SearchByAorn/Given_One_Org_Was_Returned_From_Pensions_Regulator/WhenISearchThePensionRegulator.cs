@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.OrganisationAndPayeRefData;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -64,21 +65,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         }
 
         [Test]
-        public async Task ThenTheOrganisationDetailsAreSaved()
+        public async Task ThenTheOrganisationAndPayeDetailsAreSaved()
         {
             await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
 
-            _mediator.Verify(x => x.SendAsync(It.Is<SaveOrganisationData>(y => OrganisationDataMatchesViewModel(y))));
+            _mediator.Verify(x => x.SendAsync(It.Is<SaveOrganisationAndPayeData>(y => OrganisationAndPayeDataMatchesViewModel(y))));
         }
-
-        [Test]
-        public async Task ThenThePayeDetailsAreSaved()
-        {
-            await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = ExpectedAorn, PayeRef = ExpectedPayeRef });
-
-            _mediator.Verify(x => x.SendAsync(It.Is<SavePayeRefData>(y => y.PayeRefData.AORN == ExpectedAorn && y.PayeRefData.PayeReference == ExpectedPayeRef)));
-        }
-
+        
         [Test]
         public async Task ThenTheCheckYourDetailsPageIsDisplayed()
         {
@@ -101,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
             Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());
         }
 
-        private bool OrganisationDataMatchesViewModel(SaveOrganisationData saveOrganisationData)
+        private bool OrganisationAndPayeDataMatchesViewModel(SaveOrganisationAndPayeData saveOrganisationData)
         {
             return _expectedViewModel.Address == saveOrganisationData.OrganisationData.OrganisationRegisteredAddress
                    && _expectedViewModel.Name == saveOrganisationData.OrganisationData.OrganisationName
@@ -109,7 +102,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                    && _expectedViewModel.Status == saveOrganisationData.OrganisationData.OrganisationStatus
                    && _expectedViewModel.Type == OrganisationType.PensionsRegulator
                    && saveOrganisationData.OrganisationData.NewSearch
-                   && !saveOrganisationData.OrganisationData.PensionsRegulatorReturnedMultipleResults;
+                   && !saveOrganisationData.OrganisationData.PensionsRegulatorReturnedMultipleResults
+                   && ExpectedPayeRef == saveOrganisationData.PayeRefData.PayeReference
+                   && ExpectedAorn == saveOrganisationData.PayeRefData.AORN;
         }
     }
 }
