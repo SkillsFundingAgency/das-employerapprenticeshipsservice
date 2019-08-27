@@ -104,6 +104,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AccountPayeSchemesController.cs" />
+    <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
