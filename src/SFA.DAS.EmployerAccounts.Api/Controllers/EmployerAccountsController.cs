@@ -33,9 +33,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAccount(string hashedAccountId)
         {
-            var result = await _orchestrator.GetAccount(hashedAccountId);      
+            var result = await _orchestrator.GetAccount(hashedAccountId);
 
-            result.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
+            if (result == null) return NotFound();
+             
+            // result.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
             result.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
             return Ok(result);
         }

@@ -346,7 +346,6 @@
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
-    <Compile Include="Controllers\AccountTransferConnectionsController.cs" />
     <Compile Include="Controllers\AccountTransactionsController.cs" />
     <Compile Include="Controllers\AccountLevyController.cs" />
     <Compile Include="Controllers\LegalEntitiesController.cs" />

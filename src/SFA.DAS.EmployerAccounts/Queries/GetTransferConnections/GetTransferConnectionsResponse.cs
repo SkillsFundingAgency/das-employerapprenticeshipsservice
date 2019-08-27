@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EAS.Application.Queries.GetTransferConnections
+namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnections
 {
     public class GetTransferConnectionsResponse
     {

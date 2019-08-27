@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 
-namespace SFA.DAS.EAS.Application.Queries.GetTransferConnections
+namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnections
 {
     public class GetTransferConnectionsQueryHandler : IAsyncRequestHandler<GetTransferConnectionsQuery, GetTransferConnectionsResponse>
     {

@@ -11,10 +11,10 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
         private readonly IMediator _mediator;
         private readonly IEmployerAccountsApiService _employerAccountsApiService;
 
-        public StatisticsOrchestrator(IMediator mediator, IEmployerAccountsApiService EmployerAccountsApiService)
+        public StatisticsOrchestrator(IMediator mediator, IEmployerAccountsApiService employerAccountsApiService)
         {
             _mediator = mediator;
-            _employerAccountsApiService = EmployerAccountsApiService;
+            _employerAccountsApiService = employerAccountsApiService;
         }
 
         public virtual async Task<StatisticsViewModel> Get()

@@ -207,7 +207,6 @@
     <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetALegalEntity.cs" />
     <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
-    <Compile Include="Controllers\TransferConnectionsControllerTests\WhenIGetTransferConnections.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAllAccountsWithBalances.cs" />
