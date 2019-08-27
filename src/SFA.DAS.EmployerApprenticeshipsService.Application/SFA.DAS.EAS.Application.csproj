@@ -398,9 +398,6 @@
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityResponse.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityValidator.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />

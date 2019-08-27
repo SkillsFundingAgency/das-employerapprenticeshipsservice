@@ -192,7 +192,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountLegalEntitiesControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetAllLevyForAnAccount.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccountAndPeriod.cs" />

@@ -6,15 +6,14 @@ using AutoMapper;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Mappings;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api;
-using SFA.DAS.EAS.Domain.Models.Account;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Mappings;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
+using SFA.DAS.EmployerAccounts.TestCommon;
 using Z.EntityFramework.Plus;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities.Api
 {
     [TestFixture]
     public class GetAccountLegalEntitiesQueryHandlerTests : FluentTest<GetAccountLegalEntitiesQueryHandlerTestsFixture>
@@ -25,8 +24,8 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
             return RunAsync(f => f.SetAccountLegalEntities(2), f => f.Handle(), (f, r) =>
             {
                 r.Should().NotBeNull().And.BeOfType<GetAccountLegalEntitiesResponse>();
-                r.AccountLegalEntities.Should().NotBeNull().And.BeOfType<PagedApiResponseViewModel<AccountLegalEntityViewModel>>();
-                r.AccountLegalEntities.Data.ShouldAllBeEquivalentTo(f.AccountLegalEntities.Select(a => new AccountLegalEntityViewModel { AccountLegalEntityId = a.Id, AccountLegalEntityPublicHashedId = a.PublicHashedId }));
+                r.AccountLegalEntities.Should().NotBeNull().And.BeOfType<PagedApiResponse<AccountLegalEntity>>();
+                r.AccountLegalEntities.Data.ShouldAllBeEquivalentTo(f.AccountLegalEntities.Select(a => new AccountLegalEntity { AccountLegalEntityId = a.Id, AccountLegalEntityPublicHashedId = a.PublicHashedId }));
                 r.AccountLegalEntities.Page.Should().Be(1);
                 r.AccountLegalEntities.TotalPages.Should().Be(1);
             });
@@ -79,7 +78,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
         public GetAccountLegalEntitiesQuery Query { get; set; }
         public IConfigurationProvider ConfigurationProvider { get; set; }
         public Mock<EmployerAccountsDbContext> Db { get; set; }
-        public List<AccountLegalEntity> AccountLegalEntities { get; set; }
+        public List<EmployerAccounts.Models.Account.AccountLegalEntity> AccountLegalEntities { get; set; }
 
         public GetAccountLegalEntitiesQueryHandlerTestsFixture()
         {
@@ -91,9 +90,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
             });
 
             Db = new Mock<EmployerAccountsDbContext>();
-            AccountLegalEntities = new List<AccountLegalEntity>();
+            AccountLegalEntities = new List<EmployerAccounts.Models.Account.AccountLegalEntity>();
 
-            Db.Setup(d => d.AccountLegalEntities).Returns(new DbSetStub<AccountLegalEntity>(AccountLegalEntities));
+            Db.Setup(d => d.AccountLegalEntities).Returns(new DbSetStub<EmployerAccounts.Models.Account.AccountLegalEntity>(AccountLegalEntities));
 
             Handler = new GetAccountLegalEntitiesQueryHandler(ConfigurationProvider, new Lazy<EmployerAccountsDbContext>(() => Db.Object));
 
@@ -107,7 +106,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetAccountLegalEntities.Api
 
         public GetAccountLegalEntitiesQueryHandlerTestsFixture SetAccountLegalEntities(int count)
         {
-            AccountLegalEntities.AddRange(Enumerable.Range(1, count).Select(i => new AccountLegalEntity { Id = i, PublicHashedId = i.ToString() }));
+            AccountLegalEntities.AddRange(Enumerable.Range(1, count).Select(i => new EmployerAccounts.Models.Account.AccountLegalEntity { Id = i, PublicHashedId = i.ToString() }));
 
             return this;
         }

@@ -5,12 +5,12 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api;
-using SFA.DAS.EAS.TestCommon;
+using SFA.DAS.EmployerAccounts.Api.Controllers;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api;
+using SFA.DAS.EmployerAccounts.TestCommon;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.AccountLegalEntitiesControllerTests
 {
     [TestFixture]
     public class AccountLegalEntitiesControllerTests : FluentTest<AccountLegalEntitiesControllerTestsFixture>
@@ -18,7 +18,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers
         [Test]
         public Task Get_WhenGettingAccountLegalEntities_ThenShouldReturnAccountLegalEntities()
         {
-            return RunAsync(f => f.Get(), (f, r) => r.Should().NotBeNull().And.Match<OkNegotiatedContentResult<PagedApiResponseViewModel<AccountLegalEntityViewModel>>>(o => o.Content == f.AccountLegalEntities));
+            return RunAsync(f => f.Get(), (f, r) => r.Should().NotBeNull().And.Match<OkNegotiatedContentResult<PagedApiResponse<AccountLegalEntity>>>(o => o.Content == f.AccountLegalEntities));
         }
     }
 
@@ -28,13 +28,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers
         public GetAccountLegalEntitiesQuery Query { get; set; }
         public Mock<IMediator> Mediator { get; set; }
         public GetAccountLegalEntitiesResponse Response { get; set; }
-        public PagedApiResponseViewModel<AccountLegalEntityViewModel> AccountLegalEntities { get; set; }
+        public PagedApiResponse<AccountLegalEntity> AccountLegalEntities { get; set; }
 
         public AccountLegalEntitiesControllerTestsFixture()
         {
             Query = new GetAccountLegalEntitiesQuery { PageSize = 1000, PageNumber = 1 };
             Mediator = new Mock<IMediator>();
-            AccountLegalEntities = new PagedApiResponseViewModel<AccountLegalEntityViewModel>();
+            AccountLegalEntities = new PagedApiResponse<AccountLegalEntity>();
             Response = new GetAccountLegalEntitiesResponse { AccountLegalEntities = AccountLegalEntities };
 
             Mediator.Setup(m => m.SendAsync(Query)).ReturnsAsync(Response);

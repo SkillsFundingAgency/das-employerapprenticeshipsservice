@@ -4,13 +4,13 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.EAS.Infrastructure.Extensions;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EntityFramework;
 using Z.EntityFramework.Plus;
 
-namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities.Api
 {
     public class GetAccountLegalEntitiesQueryHandler : IAsyncRequestHandler<GetAccountLegalEntitiesQuery, GetAccountLegalEntitiesResponse>
     {
@@ -32,7 +32,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
                 .OrderBy(a => a.Id)
                 .Skip(message.PageSize.Value * (message.PageNumber.Value - 1))
                 .Take(message.PageSize.Value)
-                .ProjectTo<AccountLegalEntityViewModel>(_configurationProvider)
+                .ProjectTo<AccountLegalEntity>(_configurationProvider)
                 .Future();
 
             var accountLegalEntitiesCount = await accountLegalEntitiesCountQuery.ValueAsync();
@@ -41,7 +41,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api
 
             return new GetAccountLegalEntitiesResponse
             {
-                AccountLegalEntities = new PagedApiResponseViewModel<AccountLegalEntityViewModel>
+                AccountLegalEntities = new PagedApiResponse<AccountLegalEntity>
                 {
                     Data = accountLegalEntities,
                     Page = message.PageNumber.Value,
