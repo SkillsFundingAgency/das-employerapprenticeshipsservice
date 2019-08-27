@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
+using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
@@ -87,7 +86,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         {
             _logger.Info($"Requesting team members for account {hashedAccountId}");
 
-            var teamMembers = await _mediator.SendAsync(new GetAccountTeamMembersQuery { HashedAccountId = hashedAccountId });
+            var teamMembers = await _mediator.SendAsync(new GetTeamMembersRequest { HashedAccountId = hashedAccountId });
             return teamMembers.TeamMembers.Select(x => _mapper.Map<TeamMember>(x)).ToList();
         }
 

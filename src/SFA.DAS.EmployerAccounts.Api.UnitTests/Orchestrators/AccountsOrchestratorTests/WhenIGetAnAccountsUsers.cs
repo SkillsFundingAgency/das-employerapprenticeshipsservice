@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
+using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 
@@ -27,8 +27,8 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestra
             _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, Mock.Of<IMapper>(), Mock.Of<IHashingService>());
 
             _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
-                .ReturnsAsync(new GetAccountTeamMembersResponse { TeamMembers = new List<TeamMember>() })
+                .Setup(x => x.SendAsync(It.IsAny<GetTeamMembersRequest>()))
+                .ReturnsAsync(new GetTeamMembersResponse { TeamMembers = new List<TeamMember>() })
                 .Verifiable("Get account was not called");
         }
 

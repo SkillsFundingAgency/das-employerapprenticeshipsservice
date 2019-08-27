@@ -1,12 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http.Results;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Api.Types;
-using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
+using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using TeamMember = SFA.DAS.EmployerAccounts.Api.Types.TeamMember;
 
 namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsControllerTests
@@ -18,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
         {
             var hashedAccountId = "ABC123";
 
-            var accountsUserResponse = new GetAccountTeamMembersResponse
+            var accountsUserResponse = new GetTeamMembersResponse
             {
                 TeamMembers = new List<Models.AccountTeam.TeamMember>
                 {
@@ -31,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.EmployerAccountsCon
                 }
             };
 
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetTeamMembersRequest>()))
                 .ReturnsAsync(accountsUserResponse);
           
             var response = await Controller.GetAccountUsers(hashedAccountId);
