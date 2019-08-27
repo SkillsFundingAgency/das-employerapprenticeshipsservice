@@ -2,7 +2,6 @@
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
@@ -10,28 +9,19 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/accounts/{hashedAccountId}/payeschemes")]
     public class AccountPayeSchemesController : ApiController
     {
-        private readonly AccountsOrchestrator _orchestrator;
-        private readonly EmployerAccountsApiConfiguration _employerAccountsApiconfiguration;
+        private readonly EmployerAccountsApiConfiguration _configuration;
 
-        public AccountPayeSchemesController(AccountsOrchestrator orchestrator, EmployerAccountsApiConfiguration employerAccountsApiconfiguration)
+        public AccountPayeSchemesController(EmployerAccountsApiConfiguration configuration)
         {
-            _orchestrator = orchestrator;
-            _employerAccountsApiconfiguration = employerAccountsApiconfiguration;
+            _configuration = configuration;
         }
 
         [Route("", Name = "GetPayeSchemes")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
+        public IHttpActionResult GetPayeSchemes(string hashedAccountId)
         {
-            var result = await _orchestrator.GetAccount(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data.PayeSchemes);
+            return Redirect(_configuration.BaseUrl + $"/api/accounts/{hashedAccountId}/payeschemes");
         }
 
         [Route("{payeschemeref}", Name = "GetPayeScheme")]
@@ -39,7 +29,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public IHttpActionResult GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            return Redirect($"{_employerAccountsApiconfiguration.BaseUrl}/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}");
+            return Redirect($"{_configuration.BaseUrl}/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}");
         }
     }
 }

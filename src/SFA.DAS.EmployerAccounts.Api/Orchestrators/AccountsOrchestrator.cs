@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,12 +7,16 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Models.PAYE;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetPagedEmployerAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamMembers;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.Validation;
+using PayeScheme = SFA.DAS.EmployerAccounts.Api.Types.PayeScheme;
 
 namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 {
@@ -94,6 +99,25 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
         {
             var hashedAccountId = _hashingService.HashValue(accountId);
             return await GetAccountTeamMembers(hashedAccountId);
+        }
+
+        public async Task<IEnumerable<PayeView>> GetPayeSchemesForAccount(string hashedAccountId)
+        {
+            try
+            {
+                return
+                    (await _mediator.SendAsync(
+                        new GetAccountPayeSchemesQuery
+                        {
+                            HashedAccountId = hashedAccountId
+                        })
+                    )
+                    .PayeSchemes;
+            }
+            catch (InvalidRequestException)
+            {
+                return null;
+            }
         }
 
         private PayeScheme ConvertToPayeScheme(string hashedAccountId, GetPayeSchemeByRefResponse payeSchemeResult)

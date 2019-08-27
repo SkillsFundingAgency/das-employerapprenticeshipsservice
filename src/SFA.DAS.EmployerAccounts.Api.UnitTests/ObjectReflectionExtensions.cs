@@ -4,10 +4,8 @@
     {
         public static T GetPropertyValue<T>(this object o, string propertyName)
         {
-            return
-                (T) o.GetType().GetProperty(propertyName).GetValue(
-                    o,
-                    null);
+            return 
+            (T) o.GetType().GetProperty(propertyName).GetValue(o,null);
         }
     }
 }

@@ -1,35 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes
 {
-    public class GetAccountPayeSchemesQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesQuery, GetAccountPayeSchemesResponse>
+    public class GetAccountPayeSchemesForAuthorisedUserQueryHandler : IAsyncRequestHandler<GetAccountPayeSchemesForAuthorisedUserQuery, GetAccountPayeSchemesResponse>
     {
-        private readonly IValidator<GetAccountPayeSchemesQuery> _validator;
-        private IPayeSchemesService _payeSchemesService;
+        private readonly IPayeSchemesService _payeSchemesService;
+        private readonly IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> _validator;
 
-        public GetAccountPayeSchemesQueryHandler(
+        public GetAccountPayeSchemesForAuthorisedUserQueryHandler(
             IPayeSchemesService payeSchemesService,
-            IValidator<GetAccountPayeSchemesQuery> validator )
+            IValidator<GetAccountPayeSchemesForAuthorisedUserQuery> validator)
         {
-            _validator = validator;
             _payeSchemesService = payeSchemesService;
+            _validator = validator;
         }
 
-        public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesQuery message)
+        public async Task<GetAccountPayeSchemesResponse> Handle(GetAccountPayeSchemesForAuthorisedUserQuery message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
             if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
+            }
+
+            if (validationResult.IsUnauthorized)
+            {
+                throw new UnauthorizedAccessException();
             }
 
             var payeSchemes =

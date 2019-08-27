@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.EmployerAccounts.Api.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
@@ -29,6 +32,37 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
             }
 
             return Ok(result);
+        }
+
+        [Route("", Name = "GetPayeSchemes")]
+        [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
+        [HttpGet]
+        public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
+        {
+            var result = await _orchestrator.GetPayeSchemesForAccount(hashedAccountId);
+
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(
+                new ResourceList(
+                    result
+                        .Select(
+                            pv => new Resource
+                            {
+                                Id = pv.Ref,
+                                Href = Url.Route(
+                                    "GetPayeScheme",
+                                    new
+                                    {
+                                        hashedAccountId,
+                                        payeSchemeRef = HttpUtility.UrlEncode(pv.Ref)
+                                    })
+                            }))
+            );
         }
     }
 }
