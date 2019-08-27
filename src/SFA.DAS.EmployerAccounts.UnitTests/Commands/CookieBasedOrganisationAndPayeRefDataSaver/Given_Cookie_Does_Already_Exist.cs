@@ -41,15 +41,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationAnd
             return
                 RunAsync(
                     act: f => f.Handle(),
-                    assert: f =>
-                        f.CookieRepository
-                            .Verify(
-                                m => m.Create(
-                                    It.IsAny<EmployerAccountData>(),
-                                    It.IsAny<string>(),
-                                    It.IsAny<int>()),
-                                Times.Never
-                                ));
+                    assert: f => f.CookieRepository
+                            .Verify(m => m.Create(It.IsAny<EmployerAccountData>(), It.IsAny<string>(), It.IsAny<int>()), Times.Never));
         }
 
         [Test]
@@ -60,13 +53,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CookieBasedOrganisationAnd
                     act: f => f.Handle(),
                     assert: f =>
                         f.CookieRepository
-                            .Verify(
-                                m =>
-                                    m.Update(
-                                        It.IsAny<string>(),
-                                        It.IsAny<EmployerAccountData>())));
+                            .Verify(m => m.Update(It.IsAny<string>(), It.IsAny<EmployerAccountData>())));
         }
-        
+
         public Mock<ICookieStorageService<EmployerAccountData>> CookieRepository { get; set; }
 
         private Task Handle()
