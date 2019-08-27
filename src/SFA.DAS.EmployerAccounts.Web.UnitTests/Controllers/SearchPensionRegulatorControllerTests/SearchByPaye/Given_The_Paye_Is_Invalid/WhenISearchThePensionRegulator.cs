@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
         public async Task ThenTheGatewayInformPageIsDisplayed()
         {
             var response = await _controller.SearchPensionRegulator(It.IsAny<string>());
-            var redirectResponse = (RedirectToRouteResult)response;
+            var redirectResponse = (RedirectToRouteResult) response;
 
             Assert.AreEqual(ControllerConstants.GatewayViewName, redirectResponse.RouteValues["action"].ToString());
             Assert.AreEqual(ControllerConstants.EmployerAccountControllerName, redirectResponse.RouteValues["controller"].ToString());

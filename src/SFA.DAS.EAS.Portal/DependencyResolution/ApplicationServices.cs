@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SFA.DAS.EAS.Portal.Application.EventHandlers;
-using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService;
+using SFA.DAS.EAS.Portal.Application.Services.MessageContext;
 
 namespace SFA.DAS.EAS.Portal.DependencyResolution
 {
