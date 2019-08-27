@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
+    <Folder Include="Queries\GetLegalEntityQueryTests\" />
   </ItemGroup>
 
 </Project>
