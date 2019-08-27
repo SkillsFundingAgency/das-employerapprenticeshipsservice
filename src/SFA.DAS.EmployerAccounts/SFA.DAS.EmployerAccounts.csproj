@@ -86,6 +86,7 @@
 
   <ItemGroup>
     <Folder Include="Models\Portal\" />
+    <Folder Include="Queries\GetEmployerAgreementById\" />
   </ItemGroup>
 
 </Project>
