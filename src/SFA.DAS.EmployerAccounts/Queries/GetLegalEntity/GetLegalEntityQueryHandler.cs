@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.CosmosDb;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
