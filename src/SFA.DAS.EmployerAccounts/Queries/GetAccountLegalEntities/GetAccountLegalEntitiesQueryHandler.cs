@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntities
 
             return new GetAccountLegalEntitiesResponse
             {
-                Entites = accountSpecificLegalEntity.ToList()
+                LegalEntities = accountSpecificLegalEntity.ToList()
             };
         }
     }

@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnections
             var transferConnections = await _db.Value.TransferConnectionInvitations
                 .Where(i => i.ReceiverAccount.Id == message.AccountId.Value && i.Status == TransferConnectionInvitationStatus.Approved)
                 .OrderBy(i => i.SenderAccount.Name)
-                .ProjectTo<TransferConnectionViewModel>(_configurationProvider)
+                .ProjectTo<TransferConnection>(_configurationProvider)
                 .ToListAsync();
 
             return new GetTransferConnectionsResponse

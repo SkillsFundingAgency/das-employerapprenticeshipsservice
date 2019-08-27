@@ -17,14 +17,14 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.TransferConnections
         private Mock<IMediator> _mediator;
         private GetTransferConnectionsQuery _query;
         private GetTransferConnectionsResponse _response;
-        private IEnumerable<TransferConnectionViewModel> _transferConnections;
+        private IEnumerable<TransferConnection> _transferConnections;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
             _query = new GetTransferConnectionsQuery();
-            _transferConnections = new List<TransferConnectionViewModel>();
+            _transferConnections = new List<TransferConnection>();
             _response = new GetTransferConnectionsResponse { TransferConnections = _transferConnections };
 
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.TransferConnections
         [Test]
         public async Task ThenShouldReturnTransferConnections()
         {
-            var result = await _controller.GetTransferConnections(_query) as OkNegotiatedContentResult<IEnumerable<TransferConnectionViewModel>>;
+            var result = await _controller.GetTransferConnections(_query) as OkNegotiatedContentResult<IEnumerable<TransferConnection>>;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(_transferConnections));

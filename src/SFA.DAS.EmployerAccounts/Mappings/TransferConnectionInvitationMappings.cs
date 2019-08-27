@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
 
             CreateMap<TransferConnectionInvitationChange, TransferConnectionInvitationChangeDto>();
 
-            CreateMap<TransferConnectionInvitation, TransferConnectionViewModel>()
+            CreateMap<TransferConnectionInvitation, TransferConnection>()
                 .ForMember(m => m.FundingEmployerAccountId, o => o.MapFrom(i => i.SenderAccount.Id))
                 .ForMember(m => m.FundingEmployerHashedAccountId, o => o.MapFrom(i => i.SenderAccount.HashedId))
                 .ForMember(m => m.FundingEmployerPublicHashedAccountId, o => o.MapFrom(i => i.SenderAccount.PublicHashedId))

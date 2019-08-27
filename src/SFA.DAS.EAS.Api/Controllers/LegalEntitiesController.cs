@@ -2,8 +2,8 @@
 using System.Web.Http;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.Validation.WebApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
@@ -11,30 +11,21 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/accounts/{hashedAccountId}/legalentities")]
     public class LegalEntitiesController : ApiController
     {
-        private readonly AccountsOrchestrator _orchestrator;
         private readonly IMediator _mediator;
+        private readonly EmployerAccountsApiConfiguration _configuration;
 
-        public LegalEntitiesController(AccountsOrchestrator orchestrator, IMediator mediator)
+        public LegalEntitiesController(IMediator mediator, EmployerAccountsApiConfiguration configuration)
         {
-            _orchestrator = orchestrator;
             _mediator = mediator;
+            _configuration = configuration;
         }
 
         [Route("", Name = "GetLegalEntities")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
+        public IHttpActionResult GetLegalEntities(string hashedAccountId)
         {
-            var result = await _orchestrator.GetAccount(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-            
-            result.Data.LegalEntities.ForEach(l => l.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = l.Id }));
-
-            return Ok(result.Data.LegalEntities);
+            return Redirect(_configuration.BaseUrl + $"/api/accounts/{hashedAccountId}/legalentities");
         }
 
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
