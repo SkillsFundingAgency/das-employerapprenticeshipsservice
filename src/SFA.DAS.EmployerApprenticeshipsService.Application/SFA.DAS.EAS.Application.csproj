@@ -383,7 +383,6 @@
     <Compile Include="Mappings\LegalEntityMappings.cs" />
     <Compile Include="Queries\Extensions\QueryExtensions.cs" />
     <Compile Include="Queries\GetLegalEntity\GetLegalEntityQuery.cs" />
-    <Compile Include="Queries\GetLegalEntity\GetLegalEntityQueryHandler.cs" />
     <Compile Include="Queries\GetLegalEntity\GetLegalEntityResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
