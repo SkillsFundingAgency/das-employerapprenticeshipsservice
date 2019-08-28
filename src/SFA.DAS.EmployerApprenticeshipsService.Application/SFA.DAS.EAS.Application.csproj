@@ -484,10 +484,6 @@
     <Compile Include="Formatters\TransactionDowloads\DownloadFormatType.cs" />
     <Compile Include="Formatters\TransactionDowloads\ExcelTransactionFormatter.cs" />
     <Compile Include="Formatters\TransactionDowloads\ITransactionFormatter.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestHandler.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestValidator.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdResponse.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodRequest.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodResponse.cs" />

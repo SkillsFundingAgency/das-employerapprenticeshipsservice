@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById
 {
     public class GetEmployerAgreementByIdRequestValidator : IValidator<GetEmployerAgreementByIdRequest>
     {
