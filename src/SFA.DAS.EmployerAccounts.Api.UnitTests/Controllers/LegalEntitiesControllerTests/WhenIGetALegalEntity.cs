@@ -3,12 +3,12 @@ using System.Web.Http.Results;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EmployerAccounts.Api.Controllers;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
 {
     [TestFixture]
     public class WhenIGetALegalEntity
@@ -17,19 +17,18 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerT
         private Mock<IMediator> _mediator;
         private GetLegalEntityQuery _query;
         private GetLegalEntityResponse _response;
-        private LegalEntityViewModel _legalEntity;
+        private LegalEntity _legalEntity;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
             _query = new GetLegalEntityQuery();
-            _legalEntity = new LegalEntityViewModel();
+            _legalEntity = new LegalEntity();
             _response = new GetLegalEntityResponse { LegalEntity = _legalEntity };
 
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
-
-            _controller = new LegalEntitiesController(_mediator.Object, new EmployerAccountsApiConfiguration());
+            _controller = new LegalEntitiesController(_mediator.Object);
         }
 
         [Test]
@@ -43,7 +42,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerT
         [Test]
         public async Task ThenShouldReturnLegalEntity()
         {
-            var result = await _controller.GetLegalEntity(_query) as OkNegotiatedContentResult<LegalEntityViewModel>;
+            var result = await _controller.GetLegalEntity(_query) as OkNegotiatedContentResult<LegalEntity>;
 
             Assert.That(result, Is.Not.Null);
             Assert.That(result.Content, Is.SameAs(_legalEntity));

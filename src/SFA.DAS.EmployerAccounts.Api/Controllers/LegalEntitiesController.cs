@@ -6,6 +6,7 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Api.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
+using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.Validation;
 using SFA.DAS.Validation.WebApi;
 
@@ -66,11 +67,10 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpNotFoundForNullModel]
-        public async Task<IHttpActionResult> GetLegalEntity()
+        public async Task<IHttpActionResult> GetLegalEntity([FromUri] GetLegalEntityQuery query)
         {
-            // Will move this action over in next task, but need the rout here so we can have this
-            // route in resources return in action added above.
-            throw new NotImplementedException();
+            var response = await _mediator.SendAsync(query);
+            return Ok(response.LegalEntity);
         }
     }
 }
