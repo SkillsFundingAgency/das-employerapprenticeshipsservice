@@ -1,22 +1,17 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.Validation.WebApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/accounts/{hashedAccountId}/legalentities")]
     public class LegalEntitiesController : ApiController
     {
-        private readonly IMediator _mediator;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public LegalEntitiesController(IMediator mediator, EmployerApprenticeshipsServiceConfiguration configuration)
+        public LegalEntitiesController(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _mediator = mediator;
             _configuration = configuration;
         }
 
@@ -30,11 +25,11 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
 
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpNotFoundForNullModel]
-        public async Task<IHttpActionResult> GetLegalEntity([FromUri] GetLegalEntityQuery query)
+        public async Task<IHttpActionResult> GetLegalEntity(
+            string hashedAccountId,
+            long legalEntityId)
         {
-            var response = await _mediator.SendAsync(query);
-            return Ok(response.LegalEntity);
+            return Redirect(_configuration.EmployerAccountsApiBaseUrl + $"/api/accounts/{hashedAccountId}/legalentities/{legalEntityId}");
         }
     }
 }

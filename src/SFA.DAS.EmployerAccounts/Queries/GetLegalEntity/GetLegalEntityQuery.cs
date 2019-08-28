@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
 using SFA.DAS.Authorization;
-using SFA.DAS.EAS.Application.Messages;
 
-namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
+namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
 {
     public class GetLegalEntityQuery : AccountMessage, IAsyncRequest<GetLegalEntityResponse>
     {

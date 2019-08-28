@@ -3,12 +3,12 @@ using System.Web.Http.Results;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Controllers;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EmployerAccounts.Api.Controllers;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Controllers.LegalEntitiesControllerTests
 {
     [TestFixture]
     public class WhenIGetALegalEntity
@@ -29,7 +29,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerT
 
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new LegalEntitiesController(_mediator.Object, new EmployerApprenticeshipsServiceConfiguration());
+            _controller = new LegalEntitiesController(_mediator.Object);
         }
 
         [Test]

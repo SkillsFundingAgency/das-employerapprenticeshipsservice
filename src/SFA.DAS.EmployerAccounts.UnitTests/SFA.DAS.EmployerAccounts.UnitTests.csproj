@@ -36,4 +36,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
+    <Folder Include="Queries\GetLegalEntityQueryTests\" />
+  </ItemGroup>
+
 </Project>

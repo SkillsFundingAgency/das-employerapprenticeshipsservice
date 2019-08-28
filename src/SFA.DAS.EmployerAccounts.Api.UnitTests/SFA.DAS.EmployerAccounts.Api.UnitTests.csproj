@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\AccountPayeSchemesControllerTests\" />
-    <Folder Include="Controllers\LegalEntitiesControllerTests\" />
   </ItemGroup>
 
 </Project>

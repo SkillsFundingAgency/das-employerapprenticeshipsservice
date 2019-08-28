@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.Entity;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Infrastructure.Data;
-using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
+using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
+namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
 {
     public class GetLegalEntityQueryHandler : IAsyncRequestHandler<GetLegalEntityQuery, GetLegalEntityResponse>
     {

@@ -317,7 +317,6 @@
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
     <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />
-    <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />
     <Compile Include="Queries\GetTransferAllowanceTests\GetTransferAllowanceTests.cs" />
     <Compile Include="Factories\LevyEventFactoryTests\WhenICreateAnEvent.cs" />
     <Compile Include="FakeTimeProvider.cs" />
