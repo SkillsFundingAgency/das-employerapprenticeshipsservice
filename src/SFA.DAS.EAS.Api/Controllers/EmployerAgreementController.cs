@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
@@ -9,12 +8,10 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/accounts/{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements")]
     public class EmployerAgreementController : ApiController
     {
-        private readonly AgreementOrchestrator _orchestrator;
         private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
 
-        public EmployerAgreementController(AgreementOrchestrator orchestrator, EmployerApprenticeshipsServiceConfiguration configuration)
+        public EmployerAgreementController(EmployerApprenticeshipsServiceConfiguration configuration)
         {
-            _orchestrator = orchestrator;
             _configuration = configuration;
         }
 
