@@ -15,7 +15,7 @@ using SFA.DAS.EmployerAccounts.TestCommon;
 using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 
-namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
 {
     [TestFixture]
     public class GetLegalEntityQueryTests : Testing.FluentTest<GetLegalEntityQueryTestsFixture>
@@ -27,9 +27,9 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
                 .And.Match<GetLegalEntityResponse>(r2 => 
                     r2.LegalEntity.LegalEntityId == f.LegalEntity.Id &&
                     r2.LegalEntity.Agreements.Count == 2 &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == EmployerAccounts.Api.Types.EmployerAgreementStatus.Signed) &&
-                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == EmployerAccounts.Api.Types.EmployerAgreementStatus.Pending) &&
-                    r2.LegalEntity.AgreementStatus == EmployerAccounts.Api.Types.EmployerAgreementStatus.Pending &&
+                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 1 && a.Status == Api.Types.EmployerAgreementStatus.Signed) &&
+                    r2.LegalEntity.Agreements.Any(a => a.TemplateVersionNumber == 2 && a.Status == Api.Types.EmployerAgreementStatus.Pending) &&
+                    r2.LegalEntity.AgreementStatus == Api.Types.EmployerAgreementStatus.Pending &&
                     r2.LegalEntity.Agreements.Any(a => a.AgreementType == f.LegalEntity.AccountLegalEntities.First().Agreements.First().Template.AgreementType)
                 ));
         }
@@ -40,7 +40,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
         public GetLegalEntityQueryHandler Handler { get; set; }
         public Mock<EmployerAccountsDbContext> Db { get; set; }
         public IConfigurationProvider ConfigurationProvider { get; set; }
-        public EmployerAccounts.Models.Account.Account Account { get; private set; }
+        public Account Account { get; private set; }
         public LegalEntity LegalEntity { get; set; }
         public AccountLegalEntity AccountLegalEntity { get; set; }
         public DbSetStub<LegalEntity> LegalEntitiesDbSet { get; set; }
@@ -90,7 +90,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
 
         public GetLegalEntityQueryTestsFixture SetAccount()
         {
-            Account = new EmployerAccounts.Models.Account.Account
+            Account = new Account
             {
                 Id = 111111,
                 HashedId = "ABC123"
@@ -101,7 +101,7 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
 
         public GetLegalEntityQueryTestsFixture EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
         {
-            EmployerAgreement FindVersionToUse(AccountLegalEntity ale, EmployerAccounts.Models.EmployerAgreement .EmployerAgreementStatus status)
+            EmployerAgreement FindVersionToUse(AccountLegalEntity ale, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementStatus status)
             {
                 return ale.Agreements.Where(a => a.StatusId == status)
                     .OrderByDescending(a => a.Template.VersionNumber)
@@ -137,7 +137,6 @@ namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetLegalEntityQueryTests
 
         private GetLegalEntityQueryTestsFixture SetLegalAccountLegalEntity()
         {
-
             AccountLegalEntity = new AccountLegalEntity
             {
                 Id = AccountLegalEntities.Count + 1,
