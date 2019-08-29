@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         [AllowHtml]
         public string Name { get; set; }
         public string Address { get; set; }
-        public int ReferenceNumber { get; set; }
+        public long ReferenceNumber { get; set; }
         public string Status { get; set; }
     }
 }
