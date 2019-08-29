@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Commands.OrganisationAndPayeRefData;
 using SFA.DAS.EmployerAccounts.Commands.OrganisationData;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -32,20 +33,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthenticationService owinWrapper,
             SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
-            ICookieStorageService<FlashMessageViewModel> flashMessage,          
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediatr)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
             _mediatr = mediatr;
         }
-       
+
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
         public async Task<ActionResult> SearchPensionRegulator(string hashedAccountId)
         {
             var payeRef = _searchPensionRegulatorOrchestrator.GetCookieData().EmployerAccountPayeRefData.PayeReference;
-           
+
             if (string.IsNullOrEmpty(payeRef))
             {
                 return RedirectToAction(ControllerConstants.GatewayViewName, ControllerConstants.EmployerAccountControllerName);
@@ -57,27 +58,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (model.Data.Results.Count)
             {
                 case 0:
-                {
-                    return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
-                }
+                    {
+                        return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
+                    }
                 case 1:
-                {
-                    await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
-                    return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
-                }
+                    {
+                        await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
+                        return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
+                    }
                 default:
-                {
-                    return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
-                }
+                    {
+                        return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
+                    }
             }
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
         [Route("pensionregulator", Order = 1)]
         public async Task<ActionResult> SearchPensionRegulator(string hashedAccountId, SearchPensionRegulatorResultsViewModel viewModel)
-        {    
+        {
             if (!viewModel.SelectedOrganisation.HasValue)
             {
                 ViewBag.InError = true;
@@ -105,7 +106,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
             {
                 UserRef = userRef
-            });       
+            });
 
             if (!string.IsNullOrWhiteSpace(payeRef) && !string.IsNullOrWhiteSpace(aorn))
             {
@@ -158,38 +159,37 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (model.Data.Results.Count)
             {
                 case 0:
-                {               
-                    var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
                     {
-                        UserRef = userRef
-                    });
+                        var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
+                        {
+                            UserRef = userRef
+                        });
 
-                    viewModel.IsLocked = aornLock.UserAornStatus.IsLocked;
-                    viewModel.RemainingAttempts = aornLock.UserAornStatus.RemainingAttempts;
-                    viewModel.AllowedAttempts = aornLock.UserAornStatus.AllowedAttempts;
-                    viewModel.RemainingLock = aornLock.UserAornStatus.RemainingLock;
+                        viewModel.IsLocked = aornLock.UserAornStatus.IsLocked;
+                        viewModel.RemainingAttempts = aornLock.UserAornStatus.RemainingAttempts;
+                        viewModel.AllowedAttempts = aornLock.UserAornStatus.AllowedAttempts;
+                        viewModel.RemainingLock = aornLock.UserAornStatus.RemainingLock;
 
-                    return View(ControllerConstants.SearchUsingAornViewName, viewModel);
-                }
+                        return View(ControllerConstants.SearchUsingAornViewName, viewModel);
+                    }
                 case 1:
-                {
-                    if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
                     {
-                        return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                        if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
+                        {
+                            return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                        }
+                        await SavePensionRegulatorDataIfItHasAValidName(model.Data.Results.First(), true, false, viewModel.Aorn, viewModel.PayeRef);
+                        return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
                     }
-                    await SavePensionRegulatorOrganisationDataIfItHasAValidName(model.Data.Results.First(), true, false);
-                    await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
-                    return RedirectToAction(ControllerConstants.SummaryActionName, ControllerConstants.EmployerAccountControllerName);
-                }
                 default:
-                {
-                    if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
                     {
-                        return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                        if (await CheckIfPayeSchemeAlreadyInUse(viewModel.PayeRef))
+                        {
+                            return RedirectToAction(ControllerConstants.PayeErrorActionName, ControllerConstants.EmployerAccountControllerName, new { NotFound = false });
+                        }
+                        await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
+                        return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
                     }
-                    await SavePayeDetails(viewModel.Aorn, viewModel.PayeRef);
-                    return View(ControllerConstants.SearchPensionRegulatorResultsViewName, model.Data);
-                }
             }
         }
 
@@ -241,7 +241,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }));
         }
 
-        private async Task SavePensionRegulatorOrganisationDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
+        private async Task SavePensionRegulatorOrganisationDataIfItHasAValidName(
+            PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults)
         {
             if (viewModel?.Name != null)
             {
@@ -252,7 +253,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                         {
                             OrganisationReferenceNumber = viewModel.ReferenceNumber.ToString(),
                             OrganisationName = viewModel.Name,
-                            OrganisationType = viewModel.Type,                       
+                            OrganisationType = viewModel.Type,
                             OrganisationRegisteredAddress = viewModel.Address,
                             OrganisationStatus = viewModel.Status ?? string.Empty,
                             NewSearch = newSearch,
@@ -261,5 +262,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     ));
             }
         }
+
+        private async Task SavePensionRegulatorDataIfItHasAValidName(PensionRegulatorDetailsViewModel viewModel, bool newSearch, bool multipleResults, string aorn, string payeRef)
+        {
+            if (viewModel?.Name != null)
+            {
+                await _mediatr
+                    .SendAsync(new SaveOrganisationAndPayeData
+                    (
+                        new EmployerAccountOrganisationData
+                        {
+                            OrganisationReferenceNumber = viewModel.ReferenceNumber.ToString(),
+                            OrganisationName = viewModel.Name,
+                            OrganisationType = viewModel.Type,
+                            OrganisationRegisteredAddress = viewModel.Address,
+                            OrganisationStatus = viewModel.Status ?? string.Empty,
+                            NewSearch = newSearch,
+                            PensionsRegulatorReturnedMultipleResults = multipleResults
+                        },
+                        new EmployerAccountPayeRefData { AORN = aorn, PayeReference = payeRef }
+                    ));
+            }
+        }
+
     }
 }
