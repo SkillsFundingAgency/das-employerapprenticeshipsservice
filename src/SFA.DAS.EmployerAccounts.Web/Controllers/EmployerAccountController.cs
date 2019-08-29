@@ -179,7 +179,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (choice ?? 0)
             {
                 case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
-                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
                 default:
                 {
                     var model = new
@@ -360,20 +360,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
-        }
-
-        [HttpGet]
-        [Route("amendPaye")]
-        public ActionResult AmendPaye()
-        {
-            var employerAccountPayeData = _employerAccountOrchestrator.GetCookieData().EmployerAccountPayeRefData;
-
-            if (!string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
-            {
-                return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
-            }
-
-            return RedirectToAction(ControllerConstants.GatewayInformActionName);
         }
 
         private string GetUserId()
