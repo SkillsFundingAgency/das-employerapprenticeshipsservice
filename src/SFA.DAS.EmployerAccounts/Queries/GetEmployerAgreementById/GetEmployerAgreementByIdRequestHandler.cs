@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Validation;
-using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById
 {
     public class GetEmployerAgreementByIdRequestHandler : IAsyncRequestHandler<GetEmployerAgreementByIdRequest, GetEmployerAgreementByIdResponse>
     {

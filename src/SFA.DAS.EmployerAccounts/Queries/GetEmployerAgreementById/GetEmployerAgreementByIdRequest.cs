@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById
+namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById
 {
     public class GetEmployerAgreementByIdRequest : IAsyncRequest<GetEmployerAgreementByIdResponse>
     {

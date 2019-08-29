@@ -1,11 +1,10 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 
-namespace SFA.DAS.EAS.Account.Api.Orchestrators
+namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 {
     public class AgreementOrchestrator
     {
@@ -18,17 +17,15 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             _mapper = mapper;
         }
         
-        public async Task<OrchestratorResponse<EmployerAgreementView>> GetAgreement(string hashedAgreementId)
+        public async Task<EmployerAgreementView> GetAgreement(string hashedAgreementId)
         {
             var response = await _mediator.SendAsync(new GetEmployerAgreementByIdRequest
             {
                 HashedAgreementId = hashedAgreementId
             });
 
-            return new OrchestratorResponse<EmployerAgreementView>
-            {
-                Data = _mapper.Map<EmployerAgreementView>(response.EmployerAgreement)
-            };
+            return
+                _mapper.Map<EmployerAgreementView>(response.EmployerAgreement);
         }
     }
 }

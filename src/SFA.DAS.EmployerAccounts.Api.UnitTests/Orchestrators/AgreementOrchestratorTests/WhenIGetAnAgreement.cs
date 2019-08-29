@@ -3,30 +3,28 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
-using Castle.Core.Internal;
 using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.GetEmployerAgreementById;
-using SFA.DAS.EAS.Domain.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Api.Orchestrators;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementById;
 
-namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AgreementOrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AgreementOrchestratorTests
 {
     internal class WhenIGetAnAgreement
     {
         private AgreementOrchestrator _orchestrator;
         private Mock<IMediator> _mediator;
         private IMapper _mapper;
-        private EmployerAgreementView _agreement;
+        private Models.EmployerAgreement.EmployerAgreementView _agreement;
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
             _mapper = ConfigureMapper();
-            _agreement = new EmployerAgreementView();
+            _agreement = new Models.EmployerAgreement.EmployerAgreementView();
 
             var response = new GetEmployerAgreementByIdResponse()
             {
@@ -49,19 +47,22 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AgreementOrchestratorT
             var result = await _orchestrator.GetAgreement(hashedAgreementId);
 
             //Assert
-            result.Data.ShouldBeEquivalentTo(_agreement);
+            result.ShouldBeEquivalentTo(_agreement);
         }
 
         private IMapper ConfigureMapper()
         {
-            var profiles = Assembly.Load("SFA.DAS.EAS.Account.Api")
+            var profiles = Assembly.Load("SFA.DAS.EmployerAccounts.Api")
                 .GetTypes()
                 .Where(t => typeof(Profile).IsAssignableFrom(t))
                 .Select(t => (Profile)Activator.CreateInstance(t));
 
             var config = new MapperConfiguration(c =>
             {
-                profiles.ForEach(c.AddProfile);
+                foreach (var profile in profiles)
+                {
+                    c.AddProfile(profile);
+                }
             });
 
             return config.CreateMapper();

@@ -35,4 +35,8 @@
     <Folder Include="Controllers\AccountPayeSchemesControllerTests\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Orchestrators\AgreementOrchestratorTests\" />
+  </ItemGroup>
+
 </Project>

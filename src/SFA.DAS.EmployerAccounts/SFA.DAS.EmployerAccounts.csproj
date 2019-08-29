@@ -89,6 +89,7 @@
   <ItemGroup>
     <Folder Include="Models\Portal\" />
     <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
+    <Folder Include="Queries\GetEmployerAgreementById\" />
     <Folder Include="Queries\GetLegalEntity\" />
   </ItemGroup>
 
