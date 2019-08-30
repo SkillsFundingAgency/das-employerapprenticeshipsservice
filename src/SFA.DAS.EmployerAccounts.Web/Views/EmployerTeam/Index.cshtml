@@ -20,10 +20,13 @@
     }
 }
 
-
+@*<h1 class="heading-xlarge heading-dashboard" id="company-Name">
+    @Model.Data.Account.Name
+    <span class="heading-secondary">Account ID: @Model.Data.Account.PublicHashedId</span>
+</h1>*@
 
     <h1 class="heading-secondary dashboard-heading">
-        Your employer account 
+        Account ID: @Model.Data.Account.PublicHashedId
     </h1>
     <p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
 
