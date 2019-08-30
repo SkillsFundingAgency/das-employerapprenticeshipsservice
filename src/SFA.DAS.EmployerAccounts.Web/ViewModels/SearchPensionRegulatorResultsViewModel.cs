@@ -8,6 +8,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string Aorn { get; set; }
         public IList<PensionRegulatorDetailsViewModel> Results { get; set; }
         public bool IsExistingAccount { get; set; }
-        public int? SelectedOrganisation { get; set; }
+        public long? SelectedOrganisation { get; set; }
     }
 }

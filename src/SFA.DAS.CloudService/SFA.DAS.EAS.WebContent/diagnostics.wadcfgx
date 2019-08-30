@@ -43,5 +43,5 @@
   <PrivateConfig>
     <StorageAccount name="" key="" endpoint="" />
   </PrivateConfig>
-  <IsEnabled>true</IsEnabled>
+  <IsEnabled>false</IsEnabled>
 </DiagnosticsConfiguration>
