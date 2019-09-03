@@ -53,9 +53,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("gatewayInform")]
-        [Route("{HashedAccountId}/gatewayInform")]
-        public ActionResult GatewayInform(string hashedAccountId = "")
+        [Route("{HashedAccountId}/gatewayInform", Order = 0)]
+        [Route("gatewayInform", Order = 1)]
+        public ActionResult GatewayInform(string hashedAccountId)
         {
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
