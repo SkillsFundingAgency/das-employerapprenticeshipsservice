@@ -99,7 +99,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("pensionregulator/aorn")]
+        [Route("{HashedAccountId}/pensionregulator/aorn", Order = 0)]
+        [Route("pensionregulator/aorn", Order = 1)]
         public async Task<ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn)
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
@@ -132,7 +133,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("pensionregulator/aorn")]
+        [Route("{HashedAccountId}/pensionregulator/aorn", Order = 0)]
+        [Route("pensionregulator/aorn", Order = 1)]
         public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
             ValidateAndFormatSearchPensionRegulatorByAornViewModel(viewModel);
