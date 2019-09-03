@@ -31,6 +31,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests
 
             var response = await client.GetAsync(@"https://localhost:44330/api/healthcheck");
 
+            client.Dispose();
+
             Assert
                 .IsNotNull(response);
 
