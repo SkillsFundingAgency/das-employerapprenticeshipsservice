@@ -240,7 +240,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         [Route("{HashedAccountId}/schemes/waysToAdd", Order = 0)]
         [Route("schemes/waysToAdd", Order = 1)]
-        public async Task<ActionResult> WaysToAdd(int? choice, string hashedAccountId)
+        public async Task<ActionResult> WaysToAdd(int? choice)
         {
             switch (choice ?? 0)
             {
