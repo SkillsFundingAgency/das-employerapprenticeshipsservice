@@ -60,10 +60,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
                 _accountCookieStorage.Delete(_hashedAccountIdCookieName);
-
-                _accountCookieStorage.Create(
-                    new HashedAccountIdModel { Value = hashedAccountId }, 
-                    _hashedAccountIdCookieName);
+                
+                    _accountCookieStorage.Create(
+                        new HashedAccountIdModel { Value = hashedAccountId },
+                        _hashedAccountIdCookieName);
             }
 
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>

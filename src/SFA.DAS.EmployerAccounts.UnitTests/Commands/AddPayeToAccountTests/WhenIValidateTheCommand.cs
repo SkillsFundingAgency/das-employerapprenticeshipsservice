@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
         }
 
         [Test]
-        public async Task ThenTheCommandIsValidIfAllFieldsArePopulatedAndTheUserIsAnOwner()
+        public async Task ThenTheCommandIsValidIfAllRequiredFieldsArePopulatedAndTheUserIsAnOwner()
         {
             //Arrange
             var command = AddPayeToNewLegalEntityCommandObjectMother.Create(ExpectedOwnerUserId);
