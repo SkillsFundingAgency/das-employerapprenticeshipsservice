@@ -10,11 +10,10 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
 using EnglishFractionDeclarations = HMRC.ESFA.Levy.Api.Types.EnglishFractionDeclarations;
-using SFA.DAS.Http;
 using SFA.DAS.ActiveDirectory;
+using SFA.DAS.EAS.Infrastructure.Http;
 using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
 using SFA.DAS.EmployerAccounts.Configuration;
-using EmployerApprenticeshipsServiceConfiguration = SFA.DAS.EAS.Domain.Configuration.EmployerApprenticeshipsServiceConfiguration;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {

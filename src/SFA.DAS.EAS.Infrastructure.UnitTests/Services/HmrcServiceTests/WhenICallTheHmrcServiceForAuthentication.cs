@@ -4,14 +4,13 @@ using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Infrastructure.Http;
 using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
 using SFA.DAS.EAS.Infrastructure.Services;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.TokenService.Api.Client;
 using SFA.DAS.TokenService.Api.Types;
-using SFA.DAS.Http;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
 {
@@ -33,12 +32,12 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
         public void Arrange()
         {
             _configuration = new HmrcConfiguration
-                {
-                    BaseUrl = ExpectedBaseUrl,
-                    ClientId = ExpectedClientId,
-                    OgdClientId = ExpectedOgdClientId,
-                    Scope = ExpectedScope,
-                    ClientSecret = ExpectedClientSecret
+            {
+                BaseUrl = ExpectedBaseUrl,
+                ClientId = ExpectedClientId,
+                OgdClientId = ExpectedOgdClientId,
+                Scope = ExpectedScope,
+                ClientSecret = ExpectedClientSecret
             };
 
             _httpClientWrapper = new Mock<IHttpClientWrapper>();
@@ -81,8 +80,6 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HmrcServiceTests
             //Assert
             _httpClientWrapper.Verify(x => x.SendMessage(It.IsAny<object>(), "oauth/token"), Times.Once);
             Assert.IsAssignableFrom<HmrcTokenResponse>(actual);
-
         }
-
     }
 }

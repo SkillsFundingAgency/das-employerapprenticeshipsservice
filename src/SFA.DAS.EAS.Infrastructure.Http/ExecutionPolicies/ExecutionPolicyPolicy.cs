@@ -4,7 +4,7 @@ using System.Reflection;
 using StructureMap;
 using StructureMap.Pipeline;
 
-namespace SFA.DAS.ExecutionPolicies
+namespace SFA.DAS.EAS.Infrastructure.Http.ExecutionPolicies
 {
     public class ExecutionPolicyPolicy : ConfiguredInstancePolicy
     {
@@ -14,7 +14,7 @@ namespace SFA.DAS.ExecutionPolicies
             foreach (var policyDependency in policies)
             {
                 var policyName = policyDependency.GetCustomAttribute<RequiredPolicyAttribute>()?.Name;
-                instance.Dependencies.AddForConstructorParameter(policyDependency, new ReferencedInstance(policyName));
+                instance?.Dependencies.AddForConstructorParameter(policyDependency, new ReferencedInstance(policyName));
             }
         }
     }

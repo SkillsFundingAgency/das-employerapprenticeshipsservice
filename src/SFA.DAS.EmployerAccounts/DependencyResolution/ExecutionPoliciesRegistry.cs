@@ -1,4 +1,4 @@
-﻿using SFA.DAS.ExecutionPolicies;
+﻿using SFA.DAS.EAS.Infrastructure.Http.ExecutionPolicies;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution

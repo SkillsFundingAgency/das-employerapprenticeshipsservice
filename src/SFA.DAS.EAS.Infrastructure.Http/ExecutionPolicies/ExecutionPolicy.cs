@@ -1,8 +1,8 @@
-﻿using Polly;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Polly;
 
-namespace SFA.DAS.ExecutionPolicies
+namespace SFA.DAS.EAS.Infrastructure.Http.ExecutionPolicies
 {
     public abstract class ExecutionPolicy
     {
@@ -19,6 +19,7 @@ namespace SFA.DAS.ExecutionPolicies
                 OnException(ex);
             }
         }
+
         public virtual async Task ExecuteAsync(Func<Task> action)
         {
             try
@@ -35,13 +36,14 @@ namespace SFA.DAS.ExecutionPolicies
         {
             try
             {
-                return RootPolicy.Execute<T>(func);
+                return RootPolicy.Execute(func);
             }
             catch (Exception ex)
             {
                 return OnException<T>(ex);
             }
         }
+
         public virtual async Task<T> ExecuteAsync<T>(Func<Task<T>> func)
         {
             try
@@ -59,12 +61,11 @@ namespace SFA.DAS.ExecutionPolicies
         {
             throw ex;
         }
+
         protected virtual T OnException<T>(Exception ex)
         {
             throw ex;
         }
-
-
 
         protected static Policy CreateRetryPolicy<T>(int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
             where T : Exception
@@ -74,11 +75,13 @@ namespace SFA.DAS.ExecutionPolicies
             {
                 waits[i] = waitBetweenTries;
             }
+
             return Policy.Handle<T>().WaitAndRetry(waits, (ex, wait) =>
             {
                 onRetryableFailure?.Invoke(ex);
             });
         }
+
         protected static Policy CreateAsyncRetryPolicy<T>(int numberOfRetries, TimeSpan waitBetweenTries, Action<Exception> onRetryableFailure = null)
             where T : Exception
         {
@@ -87,6 +90,7 @@ namespace SFA.DAS.ExecutionPolicies
             {
                 waits[i] = waitBetweenTries;
             }
+
             return Policy.Handle<T>().WaitAndRetryAsync(waits, (ex, wait) =>
             {
                 onRetryableFailure?.Invoke(ex);
@@ -101,11 +105,11 @@ namespace SFA.DAS.ExecutionPolicies
             {
                 waits[i] = waitBetweenTries;
             }
-            return Policy.Handle<T>(canHandle).WaitAndRetryAsync(waits, (ex, wait) =>
+
+            return Policy.Handle(canHandle).WaitAndRetryAsync(waits, (ex, wait) =>
             {
                 onRetryableFailure?.Invoke(ex);
             });
         }
-
     }
 }

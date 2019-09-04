@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.ExecutionPolicies
+namespace SFA.DAS.EAS.Infrastructure.Http.ExecutionPolicies
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class PolicyNameAttribute : Attribute

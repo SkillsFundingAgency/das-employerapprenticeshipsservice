@@ -3,9 +3,9 @@ using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Models.ExpiringFunds;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Http;
 using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
 using System;
+using SFA.DAS.EAS.Infrastructure.Http;
 
 namespace SFA.DAS.EmployerFinance.Services
 {

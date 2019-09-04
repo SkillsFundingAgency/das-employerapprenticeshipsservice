@@ -4,8 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Services;
-using SFA.DAS.Http;
+using SFA.DAS.EAS.Infrastructure.Http;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HttpResponseLoggerTests
@@ -25,7 +24,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HttpResponseLoggerTests
         {
             _logger = new Mock<ILog>();
             _httpResponseLogger = new HttpResponseLogger();
-            _httpResponseMessage = new HttpResponseMessage(TestStatusCode) { Content = new StringContent(TestContent), ReasonPhrase = TestReason};
+            _httpResponseMessage = new HttpResponseMessage(TestStatusCode) { Content = new StringContent(TestContent), ReasonPhrase = TestReason };
         }
 
         [Test]
@@ -38,7 +37,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests.Services.HttpResponseLoggerTests
             await _httpResponseLogger.LogResponseAsync(_logger.Object, _httpResponseMessage);
 
             // Assert
-            _logger.Verify(l => l.Debug(It.IsAny<string>(), It.IsAny<Dictionary<string,object>>()), Times.Once);
+            _logger.Verify(l => l.Debug(It.IsAny<string>(), It.IsAny<Dictionary<string, object>>()), Times.Once);
         }
 
         [TestCase("Content", TestContent)]

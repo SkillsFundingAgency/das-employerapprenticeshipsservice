@@ -577,6 +577,10 @@
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Http\SFA.DAS.EAS.Infrastructure.Http.csproj">
+      <Project>{ce65d6c2-bfa0-4084-b8f0-d42c07aa6ab9}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure.Http</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
       <Name>SFA.DAS.EAS.Domain</Name>

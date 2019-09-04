@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EAS.Infrastructure.UnitTests
 {
-    public class NoopExecutionPolicy : ExecutionPolicies.ExecutionPolicy
+    public class NoopExecutionPolicy : Http.ExecutionPolicies.ExecutionPolicy
     {
         public override void Execute(Action action)
         {
         }
+
         public override async Task ExecuteAsync(Func<Task> action)
         {
             await action();
@@ -17,6 +18,7 @@ namespace SFA.DAS.EAS.Infrastructure.UnitTests
         {
             return func();
         }
+
         public override async Task<T> ExecuteAsync<T>(Func<Task<T>> func)
         {
             return await func();

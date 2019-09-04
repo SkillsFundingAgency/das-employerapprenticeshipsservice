@@ -1,12 +1,12 @@
-﻿using HMRC.ESFA.Levy.Api.Types.Exceptions;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.ExecutionPolicies;
-using SFA.DAS.NLog.Logger;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using HMRC.ESFA.Levy.Api.Types.Exceptions;
+using SFA.DAS.EAS.Infrastructure.Http.ExecutionPolicies;
+using NUnit.Framework;
+using Moq;
+using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.UnitTests.ExecutionPolicies.HmrcExecutionPolicyTests
+namespace SFA.DAS.EAS.Infrastructure.Http.UnitTests.ExecutionPolicies.HmrcExecutionPolicyTests
 {
     [TestFixture]
     public class PolicyRetryTest

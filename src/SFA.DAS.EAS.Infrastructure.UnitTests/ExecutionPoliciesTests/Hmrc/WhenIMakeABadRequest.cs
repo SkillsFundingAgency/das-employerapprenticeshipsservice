@@ -1,13 +1,12 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.ExecutionPolicies;
-using SFA.DAS.Http;
+using SFA.DAS.EAS.Infrastructure.Http;
+using SFA.DAS.EAS.Infrastructure.Http.ExecutionPolicies;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EAS.Infrastructure.UnitTests.ExecutionPoliciesTests.CompanyHouse
+namespace SFA.DAS.EAS.Infrastructure.UnitTests.ExecutionPoliciesTests.Hmrc
 {
     public class WhenIMakeABadRequest
     {

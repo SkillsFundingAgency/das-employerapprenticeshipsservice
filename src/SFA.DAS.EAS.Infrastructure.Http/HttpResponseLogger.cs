@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.Http
+namespace SFA.DAS.EAS.Infrastructure.Http
 {
     public class HttpResponseLogger : IHttpResponseLogger
     {
@@ -15,7 +15,7 @@ namespace SFA.DAS.Http
 
                 logger.Debug("Logged response", new Dictionary<string, object>()
                 {
-                    { "StatusCode", response.StatusCode},
+                    { "StatusCode", response.StatusCode },
                     { "Reason", response.ReasonPhrase },
                     { "Content", content }
                 });

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.Http
+namespace SFA.DAS.EAS.Infrastructure.Http
 { 
     public class HttpClientWrapper : IHttpClientWrapper
     {
@@ -61,7 +61,9 @@ namespace SFA.DAS.Http
                 if (!string.IsNullOrEmpty(accessToken))
                 {
                     var authScheme = !string.IsNullOrEmpty(AuthScheme) 
-                        ? AuthScheme : "Bearer";
+                        ? AuthScheme
+                        : "Bearer";
+
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(authScheme, accessToken);
                 }
 
@@ -82,7 +84,6 @@ namespace SFA.DAS.Http
             var httpClient = new HttpClient
             {
                 BaseAddress = new Uri(BaseUrl)
-
             };
 
             if (MediaTypeWithQualityHeaderValueList.Any())
@@ -102,7 +103,8 @@ namespace SFA.DAS.Http
             {
                 return;
             }
-            switch ((int)response.StatusCode)
+
+            switch ((int) response.StatusCode)
             {
                 case 404:
                     throw new ResourceNotFoundException(response.RequestMessage.RequestUri.ToString());
@@ -119,7 +121,8 @@ namespace SFA.DAS.Http
                     {
                         await _httpResponseLogger.LogResponseAsync(_logger, response);
                     }
-                    throw new HttpException((int)response.StatusCode, $"Unexpected HTTP exception - ({(int)response.StatusCode}): {response.ReasonPhrase}");
+
+                    throw new HttpException((int) response.StatusCode, $"Unexpected HTTP exception - ({(int) response.StatusCode}): {response.ReasonPhrase}");
             }
         }
     }

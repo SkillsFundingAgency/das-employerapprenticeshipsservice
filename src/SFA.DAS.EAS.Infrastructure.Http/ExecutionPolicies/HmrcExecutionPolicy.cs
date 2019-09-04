@@ -1,10 +1,9 @@
-﻿using HMRC.ESFA.Levy.Api.Types.Exceptions;
+﻿using System;
+using HMRC.ESFA.Levy.Api.Types.Exceptions;
 using Polly;
-using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
-using System;
 
-namespace SFA.DAS.ExecutionPolicies
+namespace SFA.DAS.EAS.Infrastructure.Http.ExecutionPolicies
 {
     [PolicyName(Name)]
     public class HmrcExecutionPolicy : ExecutionPolicy
@@ -15,7 +14,6 @@ namespace SFA.DAS.ExecutionPolicies
 
         public HmrcExecutionPolicy(ILog logger) : this(logger, new TimeSpan(0, 0, 10))
         {
-
         }
 
         public HmrcExecutionPolicy(ILog logger, TimeSpan retryWaitTime)

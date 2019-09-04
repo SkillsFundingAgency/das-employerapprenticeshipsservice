@@ -255,6 +255,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Http\SFA.DAS.EAS.Infrastructure.Http.csproj">
+      <Project>{ce65d6c2-bfa0-4084-b8f0-d42c07aa6ab9}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure.Http</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
       <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
       <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>

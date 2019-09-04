@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Http
+﻿namespace SFA.DAS.EAS.Infrastructure.Http
 {
     public class RequestTimeOutException : HttpException
     {
