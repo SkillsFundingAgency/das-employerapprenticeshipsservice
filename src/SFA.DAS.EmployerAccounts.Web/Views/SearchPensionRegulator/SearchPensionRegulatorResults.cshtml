@@ -33,7 +33,7 @@
                             Please choose an organisation
                         </span>
                     </legend>
-                    @for(int i = 0; i < Model.Results.Count; i++)
+                    @for (int i = 0; i < Model.Results.Count; i++)
                     {
                         <label class="block-label">
                             @Html.RadioButtonFor(m => m.SelectedOrganisation, Model.Results[i].ReferenceNumber, false)
@@ -46,7 +46,7 @@
                         </label>
                     }
                 </fieldset>
-                <p>or</p>
+                <p class="form-block">or</p>
                 <fieldset>
                     <label class="block-label">
                         @Html.RadioButtonFor(m => m.SelectedOrganisation, 0, false)

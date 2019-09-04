@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
             var createdByName = caller.FullName();
-            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref);
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref, message.Aorn, message.EmployerRefName);
 
             await PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId);
 
@@ -185,7 +185,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef)
+        private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef, string aorn, string schemeName)
         {
             return _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
@@ -193,7 +193,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 AccountId = accountId,
                 UserName = createdByName,
                 UserRef = userRef,
-                Created = DateTime.UtcNow
+                Created = DateTime.UtcNow,
+                Aorn = aorn,
+                SchemeName = schemeName
             });
         }
 
