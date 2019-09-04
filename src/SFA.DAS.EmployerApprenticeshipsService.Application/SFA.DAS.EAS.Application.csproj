@@ -350,7 +350,6 @@
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
-    <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
@@ -472,10 +471,6 @@
     <Compile Include="Queries\GetAccountTasks\GetAccountTasksQueryHandler.cs" />
     <Compile Include="Queries\GetAccountTasks\GetAccountTasksQueryValidator.cs" />
     <Compile Include="Queries\GetAccountTasks\GetAccountTasksResponse.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersHandler.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersValidator.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryHandler.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
@@ -554,13 +549,6 @@
     <Compile Include="Queries\GetUserByRef\GetUserByRefQueryHandler.cs" />
     <Compile Include="Queries\GetUserByRef\GetUserByRefResponse.cs" />
     <Compile Include="Queries\GetUserByRef\GetUserByRefValidator.cs" />
-    <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsHandler.cs" />
-    <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsQuery.cs" />
-    <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsResponse.cs" />
-    <Compile Include="Queries\GetUserInvitations\GetNumberOfUserInvitationsValidator.cs" />
-    <Compile Include="Queries\GetUserInvitations\GetUserInvitationsQueryHandler.cs" />
-    <Compile Include="Queries\GetUserInvitations\GetUserInvitationsRequest.cs" />
-    <Compile Include="Queries\GetUserInvitations\GetUserInvitationsResponse.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQuery.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryHandler.cs" />
     <Compile Include="Queries\GetUsers\GetUsersQueryResponse.cs" />

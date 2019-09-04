@@ -322,7 +322,6 @@
     <Compile Include="Data\EmployerAccountRepository.cs" />
     <Compile Include="Data\FileSystemRepository.cs" />
     <Compile Include="Data\FileSystemUserRepository.cs" />
-    <Compile Include="Data\InvitationRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\TransferConnectionInvitationRepository.cs" />
     <Compile Include="Data\TransferRepository.cs" />

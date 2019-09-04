@@ -329,7 +329,6 @@
     <Compile Include="Data\Repositories\IEmployerAccountRepository.cs" />
     <Compile Include="Data\Repositories\IEmployerAgreementRepository.cs" />
     <Compile Include="Data\Repositories\IEmployerSchemesRepository.cs" />
-    <Compile Include="Data\Repositories\IInvitationRepository.cs" />
     <Compile Include="Data\Repositories\IMembershipRepository.cs" />
     <Compile Include="Data\Repositories\IUserAccountRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
@@ -350,9 +349,7 @@
     <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
-    <Compile Include="Models\AccountTeam\Invitation.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
-    <Compile Include="Models\AccountTeam\InvitationView.cs" />
     <Compile Include="Models\Levy\LevyDeclarationView.cs" />
     <Compile Include="Models\Audit\EasAuditMessage.cs" />
     <Compile Include="Models\Levy\LevyDeclarationTransactionLine.cs" />

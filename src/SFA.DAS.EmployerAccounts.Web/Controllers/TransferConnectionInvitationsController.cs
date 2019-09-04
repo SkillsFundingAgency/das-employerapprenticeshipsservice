@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.ApproveTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Commands.RejectTransferConnectionInvitation;
@@ -22,9 +22,7 @@ using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
-    [Feature(FeatureType.TransferConnectionRequests)]
-    [ValidateMembership]
+    [DasAuthorize("EmployerFeature.TransferConnectionRequests", EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/requests")]
     public class TransferConnectionInvitationsController : Controller
     {

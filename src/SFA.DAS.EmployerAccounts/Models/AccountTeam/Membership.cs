@@ -1,6 +1,4 @@
-﻿using System;
-using SFA.DAS.Authorization;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
+﻿using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
 namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 {

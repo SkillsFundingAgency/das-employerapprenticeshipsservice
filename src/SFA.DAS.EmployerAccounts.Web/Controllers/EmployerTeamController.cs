@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -12,13 +11,15 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System.Linq;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
@@ -34,7 +35,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,

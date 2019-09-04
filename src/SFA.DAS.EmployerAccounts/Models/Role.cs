@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Authorization
+namespace SFA.DAS.EmployerAccounts.Models
 {
     public enum Role
     {
@@ -10,11 +10,16 @@ namespace SFA.DAS.Authorization
         Viewer = 3
     }
 
-    public static class RoleStrings {
-        public static string GetRoleDescription(Role role) { return GetRoleDescription(role.ToString()); }
+    public static class RoleStrings
+    {
+        public static string GetRoleDescription(Role role)
+        {
+            return GetRoleDescription(role.ToString());
+        }
+
         public static string GetRoleDescription(string role)
         {
-            switch(role)
+            switch (role)
             {
                 case "Owner": return "Accept agreements, view information and manage PAYE schemes, organisations, apprentices and team members";
                 case "Transactor": return "Add apprentices and view information";
@@ -22,14 +27,16 @@ namespace SFA.DAS.Authorization
                 default: throw new ArgumentException("Unexpected role: " + role);
             }
         }
-        
-        public static string GetRoleDescriptionToLower(Role role) { return GetRoleDescriptionToLower(role.ToString()); }
+
+        public static string GetRoleDescriptionToLower(Role role)
+        {
+            return GetRoleDescriptionToLower(role.ToString());
+        }
+
         public static string GetRoleDescriptionToLower(string role)
         {
             var str = GetRoleDescription(role);
             return char.ToLower(str[0]) + str.Substring(1);
         }
-
-
     }
 }

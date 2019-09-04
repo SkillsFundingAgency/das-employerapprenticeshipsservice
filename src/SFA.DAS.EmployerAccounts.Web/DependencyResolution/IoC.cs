@@ -1,13 +1,13 @@
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Activities.Client;
+using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
 using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
-using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
 using ConfigurationRegistry = SFA.DAS.EmployerAccounts.DependencyResolution.ConfigurationRegistry;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<ApprenticeshipLevyRegistry>();
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
+                c.AddRegistry<EmployerUserRolesAuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();

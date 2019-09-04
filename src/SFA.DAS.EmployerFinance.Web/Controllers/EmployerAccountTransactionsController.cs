@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
@@ -18,7 +19,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize(EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountTransactionsController : BaseController
     {
@@ -66,7 +67,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View(viewModel);
         }
 
-        [ValidateMembership]
         [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
@@ -75,7 +75,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [HttpPost]
-        [ValidateMembership]
         [ValidateAntiForgeryToken]
         [ValidateModelState]
         [Route("finance/downloadtransactions")]

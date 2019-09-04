@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -12,7 +14,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("tasks/{hashedAccountId}")]
     public class TaskController : BaseController
     {
@@ -22,7 +24,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public TaskController(
             IAuthenticationService owinWrapper,
             TaskOrchestrator taskOrchestrator,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             ILog logger) : base(owinWrapper, multiVariantTestingService, flashMessage)
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpPost]
-        [AuthoriseActiveUser]
+        [DasAuthorize]
         [Route("dismissTask", Name = "DismissTask")]
         public async Task<ActionResult> DismissTask(DismissTaskViewModel viewModel)
         {

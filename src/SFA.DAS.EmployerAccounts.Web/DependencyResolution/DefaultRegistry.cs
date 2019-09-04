@@ -5,11 +5,9 @@ using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.NLog.Logger;
 using StructureMap;
 using System.Web;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.Context;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
-using SFA.DAS.EAS.Portal.Client;
-using SFA.DAS.EAS.Portal.Client.Data;
+using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -26,12 +24,12 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 
             For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
-            For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
-            For<ICallerContextProvider>().Use<CallerContextProvider>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
-            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();            
+            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();
+
+            For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
         }
     }
 }
