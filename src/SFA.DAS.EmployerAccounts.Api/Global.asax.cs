@@ -24,18 +24,16 @@ namespace SFA.DAS.EmployerAccounts.Api
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
-            StartServiceBusEndpoint();
+            _endpoint = StartServiceBusEndpoint(GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>());
         }
 
         protected void Application_End()
         {
-            StopServiceBusEndpoint();
+            StopServiceBusEndpoint(_endpoint);
         }
 
-        private void StartServiceBusEndpoint()
+        public static IEndpointInstance StartServiceBusEndpoint(IContainer container)
         {
-            var container = GlobalConfiguration.Configuration.DependencyResolver.GetService<IContainer>();
-
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Api")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
                 .UseErrorQueue()
@@ -48,17 +46,19 @@ namespace SFA.DAS.EmployerAccounts.Api
                 .UseStructureMapBuilder(container)
                 .UseUnitOfWork();
 
-            _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
+            var endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
             container.Configure(c =>
             {
-                c.For<IMessageSession>().Use(_endpoint);
+                c.For<IMessageSession>().Use(endpoint);
             });
+
+            return endpoint;
         }
 
-        private void StopServiceBusEndpoint()
+        public static void StopServiceBusEndpoint(IEndpointInstance endpoint)
         {
-            _endpoint?.Stop().GetAwaiter().GetResult();
+            endpoint?.Stop().GetAwaiter().GetResult();
         }
     }
 }
