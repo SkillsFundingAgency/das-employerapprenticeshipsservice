@@ -224,6 +224,10 @@
       <Project>{9b6a8ddb-bf37-406d-ba80-2eb8b18d9d90}</Project>
       <Name>SFA.DAS.EmployerAccounts.Api</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{b520a3e4-8259-4309-94d4-4a99fd32d2f7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
