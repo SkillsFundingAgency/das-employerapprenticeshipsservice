@@ -213,7 +213,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HealthCheckTest.cs" />
+    <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
+    <Compile Include="GivenEmployerAccountsApi\WhenHealthCheckIsCalled.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +231,7 @@
       <Name>SFA.DAS.EmployerAccounts</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
