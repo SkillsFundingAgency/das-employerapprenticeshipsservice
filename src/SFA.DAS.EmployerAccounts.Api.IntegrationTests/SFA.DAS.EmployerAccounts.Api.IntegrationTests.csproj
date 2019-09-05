@@ -268,7 +268,6 @@
     <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
     <Compile Include="GivenEmployerAccountsApi\WhenHealthCheckIsCalled.cs" />
     <Compile Include="Helpers\AccountStatisticsDataHelper.cs" />
-    <Compile Include="Helpers\FinanceStatisticsDataHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
