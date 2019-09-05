@@ -62,10 +62,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Security.Jwt">
-      <Version>4.0.1</Version>
+      <Version>3.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Owin.Security.OAuth">
-      <Version>4.0.1</Version>
+      <Version>3.0.1</Version>
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Authentication">
