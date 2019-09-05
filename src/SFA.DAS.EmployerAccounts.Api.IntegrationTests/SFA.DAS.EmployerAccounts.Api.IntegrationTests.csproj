@@ -266,8 +266,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
+    <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetASingleLegalEntityWithKnownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\WhenHealthCheckIsCalled.cs" />
     <Compile Include="Helpers\AccountStatisticsDataHelper.cs" />
+    <Compile Include="Helpers\HttpResponseMessageExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -278,6 +280,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{8057e87b-5893-45d0-93a1-6278ea8ba328}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api\SFA.DAS.EmployerAccounts.Api.csproj">
       <Project>{9b6a8ddb-bf37-406d-ba80-2eb8b18d9d90}</Project>
       <Name>SFA.DAS.EmployerAccounts.Api</Name>
