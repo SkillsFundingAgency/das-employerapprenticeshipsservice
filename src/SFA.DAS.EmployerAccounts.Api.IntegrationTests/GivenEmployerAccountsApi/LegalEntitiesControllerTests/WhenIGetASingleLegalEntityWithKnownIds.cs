@@ -1,14 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Threading.Tasks;
 using FluentAssertions;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers;
-using SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi.LegalEntitiesControllerTests
 {
     [TestFixture]
     [ExcludeFromCodeCoverage]

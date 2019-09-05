@@ -267,6 +267,7 @@
   <ItemGroup>
     <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
     <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetASingleLegalEntityWithKnownIds.cs" />
+    <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithUnknownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\WhenHealthCheckIsCalled.cs" />
     <Compile Include="Helpers\AccountStatisticsDataHelper.cs" />
     <Compile Include="Helpers\HttpResponseMessageExtensions.cs" />
