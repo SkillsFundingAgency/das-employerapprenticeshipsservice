@@ -47,10 +47,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
 
         private static void CheckFieldsArePopulated(AddPayeToAccountCommand item, ValidationResult validationResult)
         {
-            if (string.IsNullOrEmpty(item.AccessToken))
-            {
-                validationResult.AddError(nameof(item.AccessToken), "AccessToken has not been supplied");
-            }
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
                 validationResult.AddError(nameof(item.HashedAccountId), "HashedId has not been supplied");
@@ -62,10 +58,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             if (string.IsNullOrEmpty(item.ExternalUserId))
             {
                 validationResult.AddError(nameof(item.ExternalUserId), "ExternalUserId has not been supplied");
-            }
-            if (string.IsNullOrEmpty(item.RefreshToken))
-            {
-                validationResult.AddError(nameof(item.RefreshToken), "RefreshToken has not been supplied");
             }
         }
     }

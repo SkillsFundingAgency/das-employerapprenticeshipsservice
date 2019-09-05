@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAornLock;
 using SFA.DAS.EmployerAccounts.Queries.UpdateUserAornLock;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -28,17 +29,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private const int OrgNotListed = 0;
         private Regex _aornRegex = new Regex("^[A-Z0-9]{13}$");
         private Regex _payeRegex = new Regex("^[0-9]{3}/?[A-Z0-9]{1,7}$");
+        private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
 
         public SearchPensionRegulatorController(
             IAuthenticationService owinWrapper,
             SearchPensionRegulatorOrchestrator searchPensionRegulatorOrchestrator,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            IMediator mediatr)
+            IMediator mediatr,
+            ICookieStorageService<HashedAccountIdModel> accountCookieStorage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _searchPensionRegulatorOrchestrator = searchPensionRegulatorOrchestrator;
             _mediatr = mediatr;
+            _accountCookieStorage = accountCookieStorage;
         }
 
         [Route("{HashedAccountId}/pensionregulator", Order = 0)]
@@ -99,9 +103,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("pensionregulator/aorn")]
-        public async Task<ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn)
+        [Route("{HashedAccountId}/pensionregulator/aorn", Order = 0)]
+        [Route("pensionregulator/aorn", Order = 1)]
+        public async Task<ActionResult> SearchPensionRegulatorByAorn(string payeRef, string aorn, string hashedAccountId)
         {
+            if (!string.IsNullOrWhiteSpace(hashedAccountId))
+            {
+                _accountCookieStorage.Delete(typeof(HashedAccountIdModel).FullName);
+
+                _accountCookieStorage.Create(
+                    new HashedAccountIdModel { Value = hashedAccountId },
+                    typeof(HashedAccountIdModel).FullName);
+            }
+
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
             {
@@ -132,7 +146,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("pensionregulator/aorn")]
+        [Route("{HashedAccountId}/pensionregulator/aorn", Order = 0)]
+        [Route("pensionregulator/aorn", Order = 1)]
         public async Task<ActionResult> SearchPensionRegulatorByAorn(SearchPensionRegulatorByAornViewModel viewModel)
         {
             ValidateAndFormatSearchPensionRegulatorByAornViewModel(viewModel);
