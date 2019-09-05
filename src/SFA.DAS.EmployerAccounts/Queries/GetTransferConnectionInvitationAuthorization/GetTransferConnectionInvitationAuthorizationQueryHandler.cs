@@ -3,6 +3,7 @@ using System.Data.Entity;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
@@ -30,8 +31,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthor
 
         public async Task<GetTransferConnectionInvitationAuthorizationResponse> Handle(GetTransferConnectionInvitationAuthorizationQuery message)
         {
-            var authorizationResult = await _authorizationService.GetAuthorizationResultAsync(FeatureType.TransferConnectionRequests);
-            var transferAllowance = await _financeDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
+            var authorizationResult = await _authorizationService.GetAuthorizationResultAsync("EmployerFeature.TransferConnectionRequests");
+            var transferAllowance = await _financeDb.GetTransferAllowance(message.AccountId, _configuration.TransferAllowancePercentage);
 
             var isReceiver = await _accountDb.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.ReceiverAccount.Id == message.AccountId && (

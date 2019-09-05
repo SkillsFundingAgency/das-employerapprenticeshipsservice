@@ -2,7 +2,8 @@
 using System.Web;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.Authorization.EmployerUserRoles;
+using SFA.DAS.Authorization.EmployerFeatures.Context;
+using SFA.DAS.Authorization.EmployerUserRoles.Context;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.HashingService;
 
@@ -27,7 +28,8 @@ namespace SFA.DAS.EmployerFinance.Web.Authorization
             var accountValues = GetAccountValues();
             var userValues = GetUserValues();
 
-            authorizationContext.AddEmployerUserRoleValues(accountValues.Id, userValues.Ref);
+            authorizationContext.AddEmployerFeatureValues(accountValues.Id.Value, userValues.Email);
+            authorizationContext.AddEmployerUserRoleValues(accountValues.Id.Value, userValues.Ref.Value);
 
             return authorizationContext;
         }

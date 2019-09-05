@@ -13,9 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Api.DependencyResolution
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
-
-            For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
-            For<ICallerContextProvider>().Use<CallerContextProvider>();
         }
     }
 }

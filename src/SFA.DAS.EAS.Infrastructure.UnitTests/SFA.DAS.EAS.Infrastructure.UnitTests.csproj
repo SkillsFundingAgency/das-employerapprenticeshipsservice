@@ -159,8 +159,8 @@
     <Reference Include="SFA.DAS.TokenService.Api.Types, Version=1.1.16.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.TokenService.Api.Client.1.1.16\lib\net45\SFA.DAS.TokenService.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="StructureMap, Version=4.6.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StructureMap.4.6.0\lib\net45\StructureMap.dll</HintPath>
+    <Reference Include="StructureMap, Version=4.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StructureMap.4.7.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -224,7 +224,6 @@
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Features\AgreementServiceTests.cs" />
     <Compile Include="NoopExecutionPolicy.cs" />
-    <Compile Include="Authorization\AuthorizationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICallDateRange.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveNoResponse.cs" />

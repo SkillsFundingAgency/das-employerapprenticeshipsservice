@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Application.Queries.GetUserAccountRole;
 using SFA.DAS.Validation;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountRole

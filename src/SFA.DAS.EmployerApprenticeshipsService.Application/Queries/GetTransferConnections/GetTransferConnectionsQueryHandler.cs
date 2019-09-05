@@ -25,7 +25,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetTransferConnections
         public async Task<GetTransferConnectionsResponse> Handle(GetTransferConnectionsQuery message)
         {
             var transferConnections = await _db.Value.TransferConnectionInvitations
-                .Where(i => i.ReceiverAccount.Id == message.AccountId.Value && i.Status == TransferConnectionInvitationStatus.Approved)
+                .Where(i => i.ReceiverAccount.Id == message.AccountId && i.Status == TransferConnectionInvitationStatus.Approved)
                 .OrderBy(i => i.SenderAccount.Name)
                 .ProjectTo<TransferConnectionViewModel>(_configurationProvider)
                 .ToListAsync();

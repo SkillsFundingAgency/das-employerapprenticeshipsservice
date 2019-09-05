@@ -72,6 +72,9 @@
     <PackageReference Include="SFA.DAS.Authorization">
       <Version>6.0.1</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
+      <Version>6.0.1</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
       <Version>6.0.1</Version>
     </PackageReference>
@@ -100,7 +103,7 @@
       <Version>1.0.17</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
-    <PackageReference Include="StructureMap" Version="4.6.1" />
+    <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
@@ -128,6 +131,9 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="SFA.DAS.Authorization.EmployerFeatures">
+      <HintPath>..\packages\SFA.DAS.Authorization.EmployerFeatures.6.0.1\lib\netstandard2.0\SFA.DAS.Authorization.EmployerFeatures.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />

@@ -18,7 +18,9 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {

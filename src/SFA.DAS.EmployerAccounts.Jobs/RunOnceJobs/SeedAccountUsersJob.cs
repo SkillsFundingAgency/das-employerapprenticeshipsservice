@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;

@@ -27,11 +27,11 @@ namespace SFA.DAS.EAS.Application.Queries.GetLegalEntity
             var legalEntity = await _db.Value.AccountLegalEntities
                 .Where(l =>
                     l.LegalEntityId == message.LegalEntityId.Value &&
-                    l.AccountId == message.AccountId.Value && 
+                    l.AccountId == message.AccountId && 
                     (l.PendingAgreementId != null || l.SignedAgreementId != null))
                 .ProjectTo<LegalEntityViewModel>(_configurationProvider, new
                 {
-                    accountId = message.AccountId.Value,
+                    accountId = message.AccountId,
                     accountHashedId = message.AccountHashedId
                 })
                 .SingleOrDefaultAsync();

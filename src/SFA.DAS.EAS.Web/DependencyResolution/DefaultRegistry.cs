@@ -20,8 +20,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
             });
 
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
-            For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
-            For<ICallerContextProvider>().Use<CallerContextProvider>();
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
         }
