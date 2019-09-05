@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.Services
             return new Models.ApprenticeshipProvider.Provider()
             {
                 Ukprn = provider.Ukprn,
-                ProviderName = provider.ProviderName,
+                Name = provider.ProviderName,
                 Email = provider.Email,
                 Phone = provider.Phone,
                 NationalProvider = provider.NationalProvider
