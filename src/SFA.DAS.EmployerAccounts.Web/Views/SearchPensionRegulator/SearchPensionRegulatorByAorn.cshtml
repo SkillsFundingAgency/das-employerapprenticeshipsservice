@@ -10,45 +10,71 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-            Enter your PAYE scheme details
-        </h1>
+        @if (Model.IsLocked)
+        {
+            <h1 class="heading-xlarge">
+                Sorry
+            </h1>
 
-        <p>Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
+            <p>Due to incorrect attempts, this has been disabled for <span class="bold-small">@Model.RemainingLock minute@(Model.RemainingLock > 1 ? "s" : "").</span></p>
 
-        <form method="POST" action="@Url.Action(ControllerConstants.SearchUsingAornActionName)">
-            @Html.AntiForgeryToken()
-            <div class="form-group" id="aorn-details-form">
-                <fieldset>
-                    <div class="form-group @(!string.IsNullOrEmpty(Model.AornError) ? "error" : "")">
-                        <label for="aorn">
-                            <span class="form-label-bold">Accounts office reference number</span>
-                            <span class="form-hint">For example, 123PA12345678</span>
-                            @if (!string.IsNullOrEmpty(Model.AornError))
-                            {
-                                <span class="error-message" id="error-message-aorn">@Model.AornError</span>
-                            }
-                        </label>
-                        <input class="form-control" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
-                    </div>
-                    <div class="form-group @(!string.IsNullOrEmpty(Model.PayeRefError) ? "error" : "")">
-                        <label for="payeRef">
-                            <span class="form-label-bold">Employer PAYE scheme reference</span>
-                            <span class="form-hint">For example, 123/AB12345</span>
-                            @if (!string.IsNullOrEmpty(Model.PayeRefError))
-                            {
-                                <span class="error-message" id="error-message-payeRef">@Model.PayeRefError</span>
-                            }
-                        </label>
-                        <input class="form-control" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="form-group">
-                <button class="button" type="submit" id="submit-aorn-details">Continue</button>
-                <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="button button-link">Skip this step for now</a>
-            </div>
-        </form>
+            <p><a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Try adding your PAYE scheme via Government Gateway</a></p>
+        }
+        else
+        {
+            if (Model.RemainingAttempts != Model.AllowedAttempts)
+            {
+                <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+                    <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
+                        There is a problem
+                    </h2>
+                    <br />
+                    <p class="error-message">
+                        You have @(Model.RemainingAttempts) attempt@(Model.RemainingAttempts > 1 ? "s" : "") remaining to enter a valid PAYE scheme and accounts office reference
+                    </p>
+                </div>
+            }
+
+            <h1 class="heading-xlarge">
+                Enter your PAYE scheme details
+            </h1>
+
+            <p>Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
+
+            <form method="POST" action="@Url.Action(ControllerConstants.SearchUsingAornActionName)">
+                @Html.AntiForgeryToken()
+                <div class="form-group" id="aorn-details-form">
+                    <fieldset>
+                        <div class="form-group @(!string.IsNullOrEmpty(Model.AornError) ? "error" : "")">
+                            <label for="aorn">
+                                <span class="form-label-bold">Accounts office reference number</span>
+                                <span class="form-hint">For example, 123PA12345678</span>
+                                @if (!string.IsNullOrEmpty(Model.AornError))
+                                {
+                                    <span class="error-message" id="error-message-aorn">@Model.AornError</span>
+                                }
+                            </label>
+                        <input class="form-control uppercase" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
+                        </div>
+                        <div class="form-group @(!string.IsNullOrEmpty(Model.PayeRefError) ? "error" : "")">
+                            <label for="payeRef">
+                                <span class="form-label-bold">Employer PAYE scheme reference</span>
+                                <span class="form-hint">For example, 123/AB12345</span>
+                                @if (!string.IsNullOrEmpty(Model.PayeRefError))
+                                {
+                                    <span class="error-message" id="error-message-payeRef">@Model.PayeRefError</span>
+                                }
+                            </label>
+                        <input class="form-control uppercase" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="form-group">
+                    <button class="button" type="submit" id="submit-aorn-details">Continue</button>
+                    <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="button button-link">Skip this step for now</a>
+                </div>
+            </form>
+        }
     </div>
 </div>
 

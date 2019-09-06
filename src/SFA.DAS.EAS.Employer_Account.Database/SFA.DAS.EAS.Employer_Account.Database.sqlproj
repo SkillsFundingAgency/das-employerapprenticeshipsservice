@@ -147,6 +147,10 @@
     <None Include="Scripts\PreDeployment\DeleteHealthChecks.sql" />
     <Build Include="Tables\RunOnceJob.sql" />
     <Build Include="StoredProcedures\CreateUserAccount.sql" />
+    <Build Include="Tables\UserAornFailedAttempts.sql" />
+    <Build Include="StoredProcedures\UpdateUserAornAttempts.sql" />
+    <Build Include="StoredProcedures\GetUserAornAttempts.sql" />
+    <None Include="Scripts\PreDeployment\AML-3784-AgreementTypeChanges.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
@@ -157,6 +161,7 @@
     <None Include="Scripts\PreDeployment\AML-2119-BackupAgreementDetails.sql" />
     <None Include="Scripts\PreDeployment\AML-2239-DeleteDuplicateAccountHistory.sql" />
     <None Include="Scripts\Manual\CON-91-DeleteLegalEntitiesWithNoAgreements.sql" />
+    <None Include="Scripts\PostDeployment\AML-3762-EOI-API.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />

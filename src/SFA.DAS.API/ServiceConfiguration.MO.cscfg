@@ -3,7 +3,6 @@
   <Role name="SFA.DAS.EAS.Account.Api">
     <Instances count="3" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="EnvironmentName" value="__EnvironmentName__" />
       <Setting name="ConfigurationStorageConnectionString" value="__ConfigurationStorageConnectionString__" />
       <Setting name="LogLevel" value="__loglevel__" />

@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using MediatR;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -52,17 +53,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("gatewayInform")]
-        [Route("{HashedAccountId}/gatewayInform")]
-        public ActionResult GatewayInform(string hashedAccountId = "")
+        [Route("{HashedAccountId}/gatewayInform", Order = 0)]
+        [Route("gatewayInform", Order = 1)]
+        public ActionResult GatewayInform(string hashedAccountId)
         {
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
                 _accountCookieStorage.Delete(_hashedAccountIdCookieName);
-
-                _accountCookieStorage.Create(
-                    new HashedAccountIdModel { Value = hashedAccountId }, 
-                    _hashedAccountIdCookieName);
+                
+                    _accountCookieStorage.Create(
+                        new HashedAccountIdModel { Value = hashedAccountId },
+                        _hashedAccountIdCookieName);
             }
 
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
@@ -160,25 +161,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("getApprenticeshipFunding")]
-        public ActionResult GetApprenticeshipFunding(string returnUrl = "")
+        public ActionResult GetApprenticeshipFunding()
         {
-            _logger.Info($"Called into GetApprenticeshipFunding with returnUrl: '{returnUrl}'");
-            try
+            var model = new
             {
-                _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
+                HideHeaderSignInLink = true
+            };
 
-                var model = new
-                {
-                    HideHeaderSignInLink = true
-                };
-
-                return View(model);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, $"Error processing getApprenticeshipFunding. ReturnUrl: '{returnUrl}', Exception: - {ex.Message}");
-                throw;
-            }
+            return View(model);
         }
 
         [HttpPost]
@@ -189,7 +179,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (choice ?? 0)
             {
                 case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
-                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
                 default:
                 {
                     var model = new
@@ -298,7 +288,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
                 return Redirect(returnUrlCookie.Value);
 
-            return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { response.Data.EmployerAgreement.HashedAccountId });
+            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
         }
 
         [HttpGet]
@@ -370,20 +360,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
-        }
-
-        [HttpGet]
-        [Route("amendPaye")]
-        public ActionResult AmendPaye()
-        {
-            var employerAccountPayeData = _employerAccountOrchestrator.GetCookieData().EmployerAccountPayeRefData;
-
-            if (!string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
-            {
-                return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
-            }
-
-            return RedirectToAction(ControllerConstants.GatewayInformActionName);
         }
 
         private string GetUserId()

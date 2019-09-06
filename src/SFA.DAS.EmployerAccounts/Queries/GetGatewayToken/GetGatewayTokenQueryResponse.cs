@@ -1,4 +1,4 @@
-using SFA.DAS.EmployerAccounts.Models.HmrcLevy;
+using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken
 {

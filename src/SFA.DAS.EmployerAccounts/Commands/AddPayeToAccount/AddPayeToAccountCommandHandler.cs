@@ -6,7 +6,6 @@ using SFA.DAS.Audit.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Events;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
@@ -30,7 +29,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
         private readonly IMediator _mediator;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IPayeSchemeEventFactory _payeSchemeEventFactory;
-        private readonly IRefreshEmployerLevyService _refreshEmployerLevyService;
 
         public AddPayeToAccountCommandHandler(
             IValidator<AddPayeToAccountCommand> validator,
@@ -39,8 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             IHashingService hashingService,
             IMediator mediator,
             IGenericEventFactory genericEventFactory,
-            IPayeSchemeEventFactory payeSchemeEventFactory,
-            IRefreshEmployerLevyService refreshEmployerLevyService)
+            IPayeSchemeEventFactory payeSchemeEventFactory)
         {
             _validator = validator;
             _payeRepository = payeRepository;
@@ -49,7 +46,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             _mediator = mediator;
             _genericEventFactory = genericEventFactory;
             _payeSchemeEventFactory = payeSchemeEventFactory;
-            _refreshEmployerLevyService = refreshEmployerLevyService;
         }
 
         protected override async Task HandleCore(AddPayeToAccountCommand message)
@@ -74,9 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
 
             await AddAuditEntry(message, accountId);
 
-            await RefreshLevy(accountId, message.Empref);
-
-            await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.UserRef);
+            await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.UserRef, message.Aorn, message.EmprefName);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -105,12 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private async Task RefreshLevy(long accountId, string payeRef)
-        {
-            await _refreshEmployerLevyService.QueueRefreshLevyMessage(accountId, payeRef);
-        }
-
-        private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef)
+        private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef, string aorn, string schemeName)
         {
             return _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
@@ -118,7 +107,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
                 AccountId = accountId,
                 UserName = userName,
                 UserRef = Guid.Parse(userRef),
-                Created = DateTime.UtcNow
+                Created = DateTime.UtcNow,
+                Aorn = aorn,
+                SchemeName = schemeName
             });
         }
 

@@ -7,6 +7,7 @@
 	@status VARCHAR(50),
 	@source TINYINT,
 	@publicSectorDataSource TINYINT,
+	@agreementType TINYINT,
 	@legalEntityId BIGINT OUTPUT,
 	@employerAgreementId BIGINT OUTPUT,
 	@sector NVARCHAR(100) NULL,
@@ -43,5 +44,6 @@ BEGIN
 	EXEC [employer_account].[CreateEmployerAgreement] 
 			@accountLegalEntityId = @accountLegalEntityId, 
 			@templateId = NULL, 
+			@agreementType = @agreementType,
 			@employerAgreementId = @employerAgreementId OUTPUT
 END

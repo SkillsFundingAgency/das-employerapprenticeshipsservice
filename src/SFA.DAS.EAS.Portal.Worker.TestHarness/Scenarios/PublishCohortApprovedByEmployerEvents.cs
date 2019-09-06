@@ -16,7 +16,7 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
 
         public async Task Run()
         {
-            const long accountId = 3L;
+            const long accountId = 27446L;
 
             await _messageSession.Publish(new CohortApprovedByEmployer
             {

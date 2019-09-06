@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using SFA.DAS.EmployerAccounts.Web.Models;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -18,23 +21,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly HomeOrchestrator _homeOrchestrator;
         private readonly EmployerAccountsConfiguration _configuration;
-      
+        private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
+        private readonly ILog _logger;
+
+        private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
+
         public HomeController(IAuthenticationService owinWrapper, 
             HomeOrchestrator homeOrchestrator,        
             EmployerAccountsConfiguration configuration,
             IMultiVariantTestingService multiVariantTestingService, 
-            ICookieStorageService<FlashMessageViewModel> flashMessage)
+            ICookieStorageService<FlashMessageViewModel> flashMessage,
+            ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
+            ILog logger)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _homeOrchestrator = homeOrchestrator;          
-            _configuration = configuration;         
+            _configuration = configuration;
+            _returnUrlCookieStorageService = returnUrlCookieStorageService;
+            _logger = logger;
         }
 
         [Route("~/")]
         [Route]
         [Route("Index")]
         public async Task<ActionResult> Index()
-        {           
+        {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             if (!string.IsNullOrWhiteSpace(userId))
@@ -93,6 +104,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             };
 
             return View(ControllerConstants.ServiceStartPageViewName, model);
+        }
+
+        [Authorize]
+        [Route("SaveAndSearch")]
+        public async Task<ActionResult> SaveAndSearch(string returnUrl)
+        {
+            var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                _logger.Warn($"UserId not found on OwinWrapper. Redirecting back to passed in returnUrl: {returnUrl}");
+                return Redirect(returnUrl);
+            }
+
+            await OwinWrapper.UpdateClaims();
+
+            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+            var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+            var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+            await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
+
+            _returnUrlCookieStorageService.Create(new ReturnUrlModel { Value = returnUrl }, ReturnUrlCookieName);
+
+            return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
         [AuthoriseActiveUser]

@@ -119,8 +119,8 @@
     <Reference Include="SFA.DAS.Commitments.Api.Types, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Types.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Types.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.205.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.205\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
+    <Reference Include="SFA.DAS.Common.Domain, Version=1.4.276.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.276\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.CookieService, Version=1.0.0.27423, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.CookieService.1.0.0.27423\lib\net45\SFA.DAS.CookieService.dll</HintPath>
@@ -218,7 +218,6 @@
   <ItemGroup>
     <Compile Include="Caching\InProcessCacheTests.cs" />
     <Compile Include="ExecutionPoliciesTests\Hmrc\WhenIMakeABadRequest.cs" />
-    <Compile Include="ExecutionPoliciesTests\CompanyHouse\WhenILookUpACompanyThatDoesNotExist.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionTests.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensionsTests.cs" />
@@ -233,7 +232,6 @@
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveAStringResponse.cs" />
     <Compile Include="Services\AuditServiceTests\WhenISendAnAuditMessage.cs" />
     <Compile Include="Services\CommitmentsServiceTests\WhenIRequestAccountCommitments.cs" />
-    <Compile Include="Services\CompaniesHouseEmployerVerificationServiceTests\WhenIGetCompanyInformation.cs" />
     <Compile Include="Services\CookieStorageTests\WhenIUseTheCookieStorageService.cs" />
     <Compile Include="Services\ExcelService\WhenICreatedAnExcelFile.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICompareTheSubmissionDateToPayrolDate.cs" />
@@ -257,6 +255,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
+      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
+      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>

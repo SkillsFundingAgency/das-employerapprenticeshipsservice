@@ -11,6 +11,7 @@ Post-Deployment Script Template
 */
 
 :r .\CreateAgreementTemplates.sql
+:r .\AML-3762-EOI-API.sql
 :r .\AML-2119-RestoreAgreementDetails.sql
 
 IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')

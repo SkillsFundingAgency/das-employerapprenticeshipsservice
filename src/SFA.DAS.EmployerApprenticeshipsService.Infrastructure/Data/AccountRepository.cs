@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Infrastructure.MarkerInterfaces;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
@@ -47,7 +48,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector, string aorn)
+        public async Task<CreateAccountResult> CreateAccount(long userId, string employerNumber, string employerName, string employerRegisteredAddress, DateTime? employerDateOfIncorporation, string employerRef, string accessToken, string refreshToken, string companyStatus, string employerRefName, short source, short? publicSectorDataSource, string sector, string aorn, AgreementType agreementType)
         {
             var parameters = new DynamicParameters();
 
@@ -67,9 +68,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@employerRefName", employerRefName, DbType.String);
             parameters.Add("@status", companyStatus);
             parameters.Add("@source", source);
-            parameters.Add("@publicSectorDataSource", publicSectorDataSource);
+            parameters.Add("@publicSectorDataSource", publicSectorDataSource); 
             parameters.Add("@sector", sector, DbType.String);
-            parameters.Add("@aorn", sector, DbType.String);
+            parameters.Add("@aorn", aorn, DbType.String);
+            parameters.Add("@agreementType", agreementType, DbType.Int16);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateAccount]",
@@ -105,6 +107,7 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             parameters.Add("@source", createParams.Source, DbType.Int16);
             parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource, DbType.Int16);
             parameters.Add("@sector", createParams.Sector, DbType.String);
+            parameters.Add("@agreementType", createParams.AgreementType, DbType.Int16);
             parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output);
             parameters.Add("@accountLegalEntityCreated", null, DbType.Boolean, ParameterDirection.Output);
 

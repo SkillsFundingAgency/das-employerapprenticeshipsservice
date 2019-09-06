@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
@@ -22,5 +23,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public string LegalEntityStatus { get; set; }
         public string Sector { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
+        public AgreementType AgreementType { get; set; }
     }
 }

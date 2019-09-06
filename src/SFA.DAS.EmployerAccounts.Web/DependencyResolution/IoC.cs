@@ -28,10 +28,12 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<EmployerAccountsApiClientRegistry>();
+                c.AddRegistry<AccountApiClientRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
+                c.AddRegistry<HmrcRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();

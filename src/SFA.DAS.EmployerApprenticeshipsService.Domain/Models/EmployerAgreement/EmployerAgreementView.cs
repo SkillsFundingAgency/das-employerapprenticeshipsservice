@@ -25,5 +25,6 @@ namespace SFA.DAS.EAS.Domain.Models.EmployerAgreement
         public string Sector { get; set; }
         public long AccountLegalEntityId { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
+        public AgreementType AgreementType { get; set; }
     }
 }

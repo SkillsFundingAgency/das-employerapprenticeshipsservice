@@ -7,25 +7,30 @@
     ViewBag.GaData.Vpv = "/accounts/schemes/ways-to-add";
     var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "hidden";
     var errorClass = ViewBag.InError != null && ViewBag.InError ? "error" : "";
+    var aornAction = ViewBag.AornLock > 0 ? "$('#AornWarning').removeClass('hidden')" : "";
 }
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
             Ways to add your PAYE scheme
         </h1>
-        <p>You can add a PAYE scheme using either your:</p>
+        <h1 class="bold-small">If you know the annual payroll for your organisation is under £3 million, you can use either:</h1>
+        <br />
         <ul class="list list-bullet">
             <li>Government Gateway login for your PAYE scheme</li>
             <li>accounts office reference number and employer PAYE scheme reference</li>
         </ul>
-        <h2 class="heading-small">By continuing you agree to the following:</h2>
-        <div class="panel">I have the authority to add PAYE schemes to this account that are used by my organisation.</div>
+        <h1 class="bold-small">If you know the annual payroll for your organisation is over £3 million, you can use:</h1>
+        <br/>
+        <ul class="list list-bullet">
+            <li>Government Gateway login for your PAYE scheme</li>
+        </ul>
+        <div class="panel panel-border-wide">If you've not sure how much your annual payroll is, choose Government Gateway.</div>
         <form method="POST" action="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="how-do-you-want-to-add-paye-scheme-form">
                 <fieldset>
                     <legend class="form-label-bold">
-                        <span>How do you want to add your PAYE scheme?</span>
                         <span class="error-message @hiddenClass" aria-hidden="true" id="have-not-got-everything">
                             You must select an option to continue.
                         </span>
@@ -35,10 +40,15 @@
                         I want to use Government Gateway
                     </label>
                     <label for="want-to-use-aorn" class="block-label">
-                        <input type="radio" name="choice" id="want-to-use-aorn" value="2" />
-                        I want to use my account office reference number and employer PAYE scheme reference
+                        <input type="radio" name="choice" id="want-to-use-aorn" value="2" onclick="@aornAction" />
+                        I want to use my accounts office reference number and employer PAYE scheme reference
                     </label>
                 </fieldset>
+                <div class="panel hidden" id="AornWarning">
+                    <span class="error-message">
+                        Due to incorrect attempts, this has been disabled for @ViewBag.AornLock minute@(ViewBag.AornLock > 1 ? "s" : "")
+                    </span>
+                </div>
                 <p>
                     <div class="notice">
                         <i class="icon icon-important">

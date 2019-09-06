@@ -1,40 +1,32 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
-using SFA.DAS.EAS.Portal.Application.Services;
-using SFA.DAS.EAS.Portal.Client.Database.Models;
+using SFA.DAS.EAS.Portal.Application.EventHandlers;
+using SFA.DAS.EAS.Portal.Application.Services.MessageContext;
 
 namespace SFA.DAS.EAS.Portal.Worker.EventHandlers
 {
-    public abstract class EventHandler<TEvent> : IHandleMessages<TEvent>
+    public class EventHandler<TEvent> : IHandleMessages<TEvent>
     {
-        protected readonly IAccountDocumentService AccountDocumentService;
+        //todo: better name
+        protected readonly IEventHandler<TEvent> EventHandlerPartTwo;
         protected readonly ILogger Logger;
         private readonly IMessageContextInitialisation _messageContextInitialisation;
 
         protected EventHandler(
-            IAccountDocumentService accountDocumentService, 
             IMessageContextInitialisation messageContextInitialisation,
+            IEventHandler<TEvent> eventHandler,
             ILogger logger)
         {
-            AccountDocumentService = accountDocumentService;
             _messageContextInitialisation = messageContextInitialisation;
+            EventHandlerPartTwo = eventHandler;
             Logger = logger;
         }
         
         public Task Handle(TEvent message, IMessageHandlerContext context)
         {
             _messageContextInitialisation.Initialise(context);
-            var cancellationToken = default(CancellationToken);
-            return Handle(message, cancellationToken);
-        }
-
-        protected abstract Task Handle(TEvent message, CancellationToken cancellationToken);
-        
-        protected async Task<AccountDocument> GetOrCreateAccountDocument(long accountId, CancellationToken cancellationToken = default)
-        {
-            return await AccountDocumentService.Get(accountId, cancellationToken) ?? new AccountDocument(accountId);
+            return EventHandlerPartTwo.Handle(message);
         }
     }
 }

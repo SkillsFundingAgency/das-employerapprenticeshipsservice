@@ -16,17 +16,16 @@ namespace SFA.DAS.EAS.Portal.Worker.TestHarness.Scenarios
 
         public async Task Run()
         {
-            const long accountId = 3L;
+            const long accountId = 27446L;
 
             await _messageSession.Publish(new CohortApprovalRequestedByProvider
             {
                 AccountId = accountId,
-                ProviderId = 456,
-                CommitmentId = 789
+                ProviderId = 10000534,
+                CommitmentId = 3271
             });
 
             Console.WriteLine($"Published {nameof(CohortApprovalRequestedByProvider)}. ProviderId: 456, CommitmentId = 789");
-            
         }
     }
 }

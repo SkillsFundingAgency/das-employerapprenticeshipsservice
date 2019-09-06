@@ -15,7 +15,6 @@
       <Setting name="LoggingRedisConnectionString" value="__LoggingRedisConnectionString__" />
       <Setting name="LoggingRedisKey" value="__LoggingRedisKey__" />
       <Setting name="LogLevel" value="__LogLevel__" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="__StorageConnectionString__" />
       <Setting name="RedisConnection" value="__RedisConnection__" />
       <Setting name="StorageConnectionString" value="__StorageConnectionString__" />
       <Setting name="TokenCertificateThumbprint" value="__TokenCertificateThumbprint__" />

@@ -58,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 }
             };
         }
-        
+
         public virtual async Task<OrchestratorResponse<RenameEmployerAccountViewModel>> GetRenameEmployerAccountViewModel(string hashedAccountId, string userId)
         {
             var response = await Mediator.SendAsync(new GetEmployerAccountHashedQuery
@@ -139,7 +139,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 await AddPayeToExistingAccount(model);
 
-                await AddLegalEntityToExistingAccount(model);
+                var hashedAgreementId = await AddLegalEntityToExistingAccount(model);
 
                 await UpdateAccountNameToLegalEntityName(model);
 
@@ -149,7 +149,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     {
                         EmployerAgreement = new EmployerAgreementView
                         {
-                            HashedAccountId = model.HashedAccountId.Value
+                            HashedAccountId = model.HashedAccountId.Value,
+                            HashedAgreementId = hashedAgreementId
                         }
                     },
                     Status = HttpStatusCode.OK
@@ -157,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (Exception e)
             {
-                _logger.Info($"Create Account Validation Error: {e.Message}");
+                _logger.Error(e,$"Create Account Validation Error: {e.Message}");
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel(),
@@ -178,9 +179,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             });
         }
 
-        private async Task AddLegalEntityToExistingAccount(CreateAccountModel model)
+        private async Task<string> AddLegalEntityToExistingAccount(CreateAccountModel model)
         {
-            await Mediator.SendAsync(new CreateLegalEntityCommand
+            var response = await Mediator.SendAsync(new CreateLegalEntityCommand
             {
                 HashedAccountId = model.HashedAccountId.Value,
                 Code = model.OrganisationReferenceNumber,
@@ -193,6 +194,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Address = model.OrganisationAddress,
                 ExternalUserId = model.UserId
             });
+
+            return response.AgreementView.HashedAgreementId;
         }
 
         private async Task AddPayeToExistingAccount(CreateAccountModel model)
@@ -237,7 +240,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     {
                         EmployerAgreement = new EmployerAgreementView
                         {
-                            HashedAccountId = result.HashedAccountId
+                            HashedAccountId = result.HashedAccountId,
+                            HashedAgreementId = result.HashedAgreementId
                         }
                     },
                     Status = HttpStatusCode.OK
@@ -245,7 +249,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                _logger.Info($"Create Account Validation Error: {ex.Message}");
+                _logger.Error(ex, $"Create Account Validation Error: {ex.Message}");
                 return new OrchestratorResponse<EmployerAgreementViewModel>
                 {
                     Data = new EmployerAgreementViewModel(),
@@ -290,7 +294,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                _logger.Info($"Create User Account Validation Error: {ex.Message}");
+                _logger.Error(ex, $"Create User Account Validation Error: {ex.Message}");
                 return new OrchestratorResponse<EmployerAccountViewModel>
                 {
                     Data = new EmployerAccountViewModel(),

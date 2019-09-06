@@ -1,21 +1,21 @@
-﻿﻿using System;
+﻿using System;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
-using System;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web.Mvc;
+using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models.Portal;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
+using System.Globalization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -25,7 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
-        private readonly IHashingService _hashingService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -40,13 +39,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
-            IHashingService hashingService)
+            IPortalClient portalClient)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
-            _hashingService = hashingService;
         }
 
         [HttpGet]
@@ -54,10 +51,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
-            if (FeatureToggles.Features.HomePage.Enabled || !HasPayeScheme(response.Data) && !HasOrganisation(response.Data))
+            //todo: if response contains an exception, Data is null and we get a NullReferenceException
+            var hasPayeScheme = HasPayeScheme(response.Data);
+            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
-                var unhashedAccountId = _hashingService.DecodeValue(hashedAccountId);
-                response.Data.AccountViewModel = await _portalClient.GetAccount(unhashedAccountId);
+                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
+                {
+                    HashedAccountId = hashedAccountId,
+                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
+                });
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
@@ -362,10 +364,29 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CreateVacancy", Data = model };
-            if (!HasPayeScheme(model))
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
+            if (HasPayeScheme(model))
             {
-                viewModel.ViewName = "PrePayeRecruitment";
+                if (model.AccountViewModel?.VacanciesRetrieved == false)
+                {
+                    viewModel.ViewName = "MultipleVacancies";
+                }
+                else
+                {
+                    switch (model.AccountViewModel?.GetVacancyCardinality())
+                    {
+                        case null:
+                        case Cardinality.None:
+                            viewModel.ViewName = "CreateVacancy";
+                            break;
+                        case Cardinality.One:
+                            viewModel.ViewName = "VacancyStatus";
+                            break;
+                        default:
+                            viewModel.ViewName = "MultipleVacancies";
+                            break;
+                    }
+                }
             }
             return PartialView(viewModel);
         }
@@ -442,6 +463,62 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult VacancyStatus(AccountDashboardViewModel model)
+        {
+            Vacancy vacancy = model.AccountViewModel.Vacancies.First();
+
+            var viewModel = new VacancyStatusViewModel
+            {
+                VacancyTitle = vacancy.Title,
+                ClosingDateText = vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-",
+                ManageVacancyLinkUrl = vacancy.ManageVacancyUrl,
+                ManageVacancyLinkText = "Manage vacancy",
+                Reference = "VAC" + vacancy.Reference,
+                Status = vacancy.Status.ToString()
+            };
+
+            switch(vacancy.Status)
+            {
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Submitted:
+                    viewModel.ManageVacancyLinkText = "Preview vacancy";
+                    viewModel.Status = "Pending review";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Draft:
+                    viewModel.ManageVacancyLinkText = "Edit and submit vacancy";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Referred:
+                    viewModel.ManageVacancyLinkText = "Edit and re-submit vacancy";
+                    viewModel.Status = "Rejected";
+                    break;
+
+                case EAS.Portal.Client.Types.VacancyStatus.Live:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
+                    break;
+            }
+
+            return PartialView(viewModel);
+        }
+
+        private string ApplicationsDisplay(Vacancy vacancy)
+        {
+            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
+                ? "Advertised by employer"
+                : vacancy.NumberOfApplications.ToString();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MultipleVacancies(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+                
+        [ChildActionOnly]
         public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
         {
             return PartialView(model);
@@ -468,7 +545,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            Cohort cohort = model.AccountViewModel.Organisations.FirstOrDefault()?.Cohorts?.FirstOrDefault();
+            Apprenticeship apprenticeship = cohort?.Apprenticeships?.FirstOrDefault();
+            
+            var viewModel = new ApprenticeDetailsViewModel
+            {
+                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
+                TrainingProviderName = apprenticeship.TrainingProvider?.Name,
+                CourseName = apprenticeship.CourseName,
+                StartDateText = apprenticeship.StartDate?.ToGdsFormatWithoutDay(),
+                EndDateText = apprenticeship.EndDate?.ToGdsFormatWithoutDay(),
+                ProposedCostText = $"{apprenticeship.ProposedCost?.ToString("C0", CultureInfo.CreateSpecificCulture("en-GB"))} excluding VAT",
+                IsApproved = cohort.IsApproved
+            };
+
+            return PartialView(viewModel);
         }
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
@@ -497,3 +588,4 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
     }
 }
+ 

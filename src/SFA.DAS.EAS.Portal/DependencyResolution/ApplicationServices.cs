@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Application.EventHandlers;
+using SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService;
+using SFA.DAS.EAS.Portal.Application.Services.MessageContext;
 
 namespace SFA.DAS.EAS.Portal.DependencyResolution
 {
@@ -14,12 +16,10 @@ namespace SFA.DAS.EAS.Portal.DependencyResolution
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithSetProperties>();
             services.Decorate<IAccountDocumentService, AccountDocumentServiceWithDuplicateCheck>();
 
-//            services.Scan(scan =>
-//                    scan.FromAssembliesOf(typeof(ICommand<>))
-//                    .AddClasses(classes =>
-//                    classes.AssignableTo(typeof(ICommand<>)).Where(_ => !_.IsGenericType))
-//                        .AsImplementedInterfaces()
-//                        .WithTransientLifetime());
+            services.Scan(scan => scan.FromAssembliesOf(typeof(IEventHandler<>))
+                .AddClasses(classes => classes.AssignableTo(typeof(IEventHandler<>)).Where(_ => !_.IsGenericType))
+                .AsImplementedInterfaces()
+                .WithTransientLifetime());
 
             return services;
         }

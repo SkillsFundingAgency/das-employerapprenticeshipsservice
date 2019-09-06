@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Data
         Task<PeriodEnd> GetLatestPeriodEnd();
         Task<DasDeclaration> GetSubmissionByEmprefPayrollYearAndMonth(string empRef, string payrollYear, short payrollMonth);
         Task<DasDeclaration> GetEffectivePeriod12Declaration(string empRef, string payrollYear, DateTime yearEndAdjustmentCutOff);
-        Task ProcessDeclarations(long accountId, string empRef);
+        Task<decimal> ProcessDeclarations(long accountId, string empRef);
         Task ProcessPaymentData(long accountId);
         Task<string> FindHistoricalProviderName(long ukprn);
     }
