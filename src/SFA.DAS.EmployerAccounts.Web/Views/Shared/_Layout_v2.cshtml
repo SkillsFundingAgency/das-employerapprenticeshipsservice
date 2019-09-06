@@ -27,7 +27,7 @@
 </head>
 
 <body id="@ViewBag.PageID" class="govuk-template__body">
-
+    @Html.Partial("_GoogleTagManagerNoScript")
     <script>
         document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>

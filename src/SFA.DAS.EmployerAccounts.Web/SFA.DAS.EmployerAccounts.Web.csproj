@@ -751,6 +751,7 @@
     <Content Include="Views\EmployerTeam\V2\VacancyStatus.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourDocument.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

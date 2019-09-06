@@ -85,12 +85,7 @@
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
 </head>
 <body id="@ViewBag.PageID">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
-                height="0" width="0" style="display: none; visibility: hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+    @Html.Partial("_GoogleTagManagerNoScript")
     <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
     <div id="skiplink-container">
         <div>
