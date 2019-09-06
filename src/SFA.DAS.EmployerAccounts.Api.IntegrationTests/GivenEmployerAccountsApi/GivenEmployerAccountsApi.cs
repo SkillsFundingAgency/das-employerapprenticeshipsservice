@@ -29,19 +29,15 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
             _nServiceBusEndpoint = WebApiApplication.StartServiceBusEndpoint(container);
 
             _server = new HttpServer(config);
-
-            CallControllerAction();
         }
 
-        private void CallControllerAction()
+        protected void WhenControllerActionIsCalled(string uri)
         {
             using (var client = new HttpClient(_server))
             {
-                Response = client.GetAsync(GetRequestUri()).Result;
+                Response = client.GetAsync(uri).Result;
             }
         }
-
-        protected abstract string GetRequestUri();
 
         [TearDown]
         public void Cleanup()

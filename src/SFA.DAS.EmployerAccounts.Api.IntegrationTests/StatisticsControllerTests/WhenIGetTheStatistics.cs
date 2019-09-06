@@ -13,13 +13,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.StatisticsControllerTest
     {
         private Statistics _expectedStatisticsViewModel;
 
-        protected override string GetRequestUri()
-        {
-            return @"https://localhost:44330/api/statistics";
-        }
-
         [SetUp]
-        public async Task Setup()
+        public async Task SetUp()
         {
             var accountStatisticsDataHelper = new AccountStatisticsDataHelper();
 
@@ -29,6 +24,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.StatisticsControllerTest
                 await accountStatisticsDataHelper.CreateAccountStatistics();
                 _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
             }
+
+            WhenControllerActionIsCalled(@"https://localhost:44330/api/statistics");
         }
 
         private static bool AnyAccountStatisticsAreZero(Statistics accountStatistics)

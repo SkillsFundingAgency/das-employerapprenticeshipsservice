@@ -9,9 +9,10 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
     [TestFixture]
     public class WhenHealthCheckIsCalled : GivenEmployerAccountsApi
     {
-        protected override string GetRequestUri()
+        [SetUp]
+        public void SetUp()
         {
-            return @"https://localhost:44330/api/healthcheck";
+            WhenControllerActionIsCalled(@"https://localhost:44330/api/healthcheck");
         }
 
         [Test]
