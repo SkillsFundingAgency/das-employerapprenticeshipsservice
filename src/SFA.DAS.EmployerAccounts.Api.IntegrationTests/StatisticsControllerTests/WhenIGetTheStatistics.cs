@@ -1,5 +1,7 @@
 ﻿using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 using SFA.DAS.EmployerAccounts.Api.Types;
@@ -7,36 +9,26 @@ using SFA.DAS.EmployerAccounts.Api.Types;
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.StatisticsControllerTests
 {
     [TestFixture]
-    public class WhenIGetTheStatistics
+    public class WhenIGetTheStatistics : GivenEmployerAccountsApi.GivenEmployerAccountsApi
     {
-        private ApiIntegrationTester _apiTester;
-        private CallResponse<StatisticsViewModel> _actualResponse;
         private Statistics _expectedStatisticsViewModel;
+
+        protected override string GetRequestUri()
+        {
+            return @"https://localhost:44330/api/statistics";
+        }
 
         [SetUp]
         public async Task Setup()
         {
-            _apiTester = new ApiIntegrationTester();
             var accountStatisticsDataHelper = new AccountStatisticsDataHelper();
-            var financeStatisticsDataHelper = new FinanceStatisticsDataHelper();
-            
+
             _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
             if (AnyAccountStatisticsAreZero(_expectedStatisticsViewModel))
             {
                 await accountStatisticsDataHelper.CreateAccountStatistics();
                 _expectedStatisticsViewModel = await accountStatisticsDataHelper.GetStatistics();
             }
-
-            var financialStatistics = await financeStatisticsDataHelper.GetStatistics();
-            if (AnyFinanceStatisticsAreZero(financialStatistics))
-            {
-                await financeStatisticsDataHelper.CreateFinanceStatistics();
-                financialStatistics = await financeStatisticsDataHelper.GetStatistics();
-            }
-
-            _expectedStatisticsViewModel.TotalPayments = financialStatistics.TotalPayments;
-
-            _actualResponse = await _apiTester.InvokeGetAsync<Statistics>(new CallRequirements("api/statistics"));
         }
 
         private static bool AnyAccountStatisticsAreZero(Statistics accountStatistics)
@@ -47,51 +39,39 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.StatisticsControllerTest
                    || accountStatistics.TotalPayeSchemes == 0;
         }
 
-        private static bool AnyFinanceStatisticsAreZero(Statistics financialStatistics)
-        {
-            return financialStatistics.TotalPayments == 0;
-        }
-
         [Test]
         public void ThenTheStatusShouldBeOk()
         {
-            _actualResponse.Response.StatusCode
+            Response.StatusCode
                 .Should().Be(HttpStatusCode.OK);
         }
 
         [Test]
         public void ThenTotalAccountsIsCorrect()
         {
-            _actualResponse.Data.TotalAccounts
+            Response.Content.ReadAsAsync<Statistics>().Result.TotalAccounts
                 .Should().Be(_expectedStatisticsViewModel.TotalAccounts);
         }
 
         [Test]
         public void ThenTotalAgreementsIsCorrect()
         {
-            _actualResponse.Data.TotalAgreements
+            Response.Content.ReadAsAsync<Statistics>().Result.TotalAgreements
                 .Should().Be(_expectedStatisticsViewModel.TotalAgreements);
         }
 
         [Test]
         public void ThenTotalLegalEntitiesIsCorrect()
         {
-            _actualResponse.Data.TotalLegalEntities
+            Response.Content.ReadAsAsync<Statistics>().Result.TotalLegalEntities
                 .Should().Be(_expectedStatisticsViewModel.TotalLegalEntities);
         }
 
         [Test]
         public void ThenTotalPayeSchemesIsCorrect()
         {
-            _actualResponse.Data.TotalPayeSchemes
+            Response.Content.ReadAsAsync<Statistics>().Result.TotalPayeSchemes
                 .Should().Be(_expectedStatisticsViewModel.TotalPayeSchemes);
-        }
-
-        [Test]
-        public void ThenTotalPaymentsIsCorrect()
-        {
-            _actualResponse.Data.TotalPayments
-                .Should().Be(_expectedStatisticsViewModel.TotalPayments);
         }
     }
 }
