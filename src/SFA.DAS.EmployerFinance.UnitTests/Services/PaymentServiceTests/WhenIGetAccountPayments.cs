@@ -190,7 +190,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
             var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
 
             //Assert
-            Assert.AreEqual(_provider.ProviderName, details.First().ProviderName);
+            Assert.AreEqual(_provider.Name, details.First().ProviderName);
         }
 
         [Test]
@@ -382,7 +382,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
             {
                 Id = 10,
                 Ukprn = 74765,
-                ProviderName = "Test Provider"
+                Name = "Test Provider"
             };
 
             _standardPayment = new PaymentDetails

@@ -130,7 +130,7 @@ namespace SFA.DAS.EmployerFinance.Services
         private async Task GetProviderDetails(PaymentDetails payment)
         {
             var provider = await _providerService.Get(payment.Ukprn);
-            payment.ProviderName = provider?.ProviderName;
+            payment.ProviderName = provider?.Name;
             payment.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
         }
 
