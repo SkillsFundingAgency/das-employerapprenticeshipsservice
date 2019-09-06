@@ -51,6 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             var response = await GetAccountInformation(hashedAccountId);
+            //todo: if response contains an exception, Data is null and we get a NullReferenceException
             var hasPayeScheme = HasPayeScheme(response.Data);
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {

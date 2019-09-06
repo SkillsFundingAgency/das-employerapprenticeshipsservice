@@ -1,28 +1,29 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/accounts/{hashedAccountId}/legalEntities/{hashedlegalEntityId}/agreements")]
     public class EmployerAgreementController : ApiController
     {
-        private readonly EmployerAccountsApiConfiguration _configuration;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public EmployerAgreementController(EmployerAccountsApiConfiguration configuration)
+        public EmployerAgreementController(IEmployerAccountsApiService apiService)
         {
-            _configuration = configuration;
+            _apiService = apiService;
         }
 
         [Route("{hashedAgreementId}", Name = "AgreementById")]
         [ApiAuthorize(Roles = "ReadAllEmployerAgreements")]
-        [HttpGet]   
-        public IHttpActionResult GetAgreement(
+        [HttpGet]
+        public async Task<IHttpActionResult> GetAgreement(
             string hashedAccountId,
             string hashedLegalEntityId,
             string hashedAgreementId)
         {
-            return Redirect($"{_configuration.BaseUrl}/api/accounts/{hashedAccountId}/legalEntities/{hashedLegalEntityId}/agreements/{hashedAgreementId}");
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities/{hashedLegalEntityId}/agreements/{hashedAgreementId}"));
         }
     }
 }

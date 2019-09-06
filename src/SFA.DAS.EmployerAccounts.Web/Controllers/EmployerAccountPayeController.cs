@@ -217,7 +217,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("schemes/waysToAdd")]
+        [Route("{HashedAccountId}/schemes/waysToAdd", Order = 0)]
+        [Route("schemes/waysToAdd", Order = 1)]
         public async Task<ViewResult> WaysToAdd()
         {
             var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
@@ -228,7 +229,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var model = new
             {
-                HideHeaderSignInLink = true,
+                HideHeaderSignInLink = true
             };
 
             ViewBag.AornLock = aornLock.UserAornStatus.RemainingLock;
@@ -237,7 +238,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("schemes/waysToAdd")]
+        [Route("{HashedAccountId}/schemes/waysToAdd", Order = 0)]
+        [Route("schemes/waysToAdd", Order = 1)]
         public async Task<ActionResult> WaysToAdd(int? choice)
         {
             switch (choice ?? 0)

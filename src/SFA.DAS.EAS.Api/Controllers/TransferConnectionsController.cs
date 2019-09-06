@@ -1,6 +1,7 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -8,17 +9,17 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/accounts/{hashedAccountId}/transfers/connections")]
     public class TransferConnectionsController : ApiController
     {
-        private readonly EmployerAccountsApiConfiguration _configuration;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public TransferConnectionsController(EmployerAccountsApiConfiguration configuration)
+        public TransferConnectionsController(IEmployerAccountsApiService apiService)
         {
-            _configuration = configuration;
+            _apiService = apiService;
         }
 
         [Route]
-        public IHttpActionResult GetTransferConnections(string hashedAccountId)
+        public async Task<IHttpActionResult> GetTransferConnections(string hashedAccountId)
         {
-            return Redirect(_configuration.BaseUrl + $"/api/accounts/{hashedAccountId}/transfers/connections");
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/transfers/connections"));
         }
     }
 }

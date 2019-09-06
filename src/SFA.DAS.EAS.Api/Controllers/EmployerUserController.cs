@@ -1,25 +1,26 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/user/{userRef}")]
     public class EmployerUserController : ApiController
     {
-        private readonly EmployerAccountsApiConfiguration _configuration;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public EmployerUserController(EmployerAccountsApiConfiguration configuration)
+        public EmployerUserController(IEmployerAccountsApiService apiService)
         {
-            _configuration = configuration;
+            _apiService = apiService;
         }
 
         [Route("accounts", Name = "Accounts")]
         [ApiAuthorize(Roles = "ReadUserAccounts")]
         [HttpGet]
-        public IHttpActionResult GetUserAccounts(string userRef)
+        public async Task<IHttpActionResult> GetUserAccounts(string userRef)
         {
-            return Redirect(_configuration.BaseUrl + $"/api/user/{userRef}/accounts");
+            return Ok(await _apiService.Redirect($"/api/user/{userRef}/accounts"));
         }
     }
 }
