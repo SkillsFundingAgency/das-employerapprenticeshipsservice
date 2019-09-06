@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
 using NUnit.Framework;
+using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
 using SFA.DAS.EmployerAccounts.Api.Types;
 
@@ -46,28 +46,28 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.StatisticsControllerTest
         [Test]
         public void ThenTotalAccountsIsCorrect()
         {
-            Response.Content.ReadAsAsync<Statistics>().Result.TotalAccounts
+            Response.GetContent<Statistics>().TotalAccounts
                 .Should().Be(_expectedStatisticsViewModel.TotalAccounts);
         }
 
         [Test]
         public void ThenTotalAgreementsIsCorrect()
         {
-            Response.Content.ReadAsAsync<Statistics>().Result.TotalAgreements
+            Response.GetContent<Statistics>().TotalAgreements
                 .Should().Be(_expectedStatisticsViewModel.TotalAgreements);
         }
 
         [Test]
         public void ThenTotalLegalEntitiesIsCorrect()
         {
-            Response.Content.ReadAsAsync<Statistics>().Result.TotalLegalEntities
+            Response.GetContent<Statistics>().TotalLegalEntities
                 .Should().Be(_expectedStatisticsViewModel.TotalLegalEntities);
         }
 
         [Test]
         public void ThenTotalPayeSchemesIsCorrect()
         {
-            Response.Content.ReadAsAsync<Statistics>().Result.TotalPayeSchemes
+            Response.GetContent<Statistics>().TotalPayeSchemes
                 .Should().Be(_expectedStatisticsViewModel.TotalPayeSchemes);
         }
     }
