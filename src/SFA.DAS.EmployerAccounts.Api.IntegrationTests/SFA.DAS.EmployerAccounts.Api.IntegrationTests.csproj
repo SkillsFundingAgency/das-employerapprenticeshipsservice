@@ -147,6 +147,9 @@
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
     </Reference>
+    <Reference Include="Polly, Version=5.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.5.1.0\lib\net45\Polly.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
     </Reference>
@@ -179,6 +182,9 @@
     </Reference>
     <Reference Include="SFA.DAS.OidcMiddleware, Version=2.0.0.61553, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.OidcMiddleware.2.0.0.61553\lib\net45\SFA.DAS.OidcMiddleware.dll</HintPath>
+    </Reference>
+    <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.32930, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.32930\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Testing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Testing.3.0.121\lib\netstandard2.0\SFA.DAS.Testing.dll</HintPath>
@@ -279,6 +285,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{8057E87B-5893-45D0-93A1-6278EA8BA328}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api\SFA.DAS.EmployerAccounts.Api.csproj">
       <Project>{9b6a8ddb-bf37-406d-ba80-2eb8b18d9d90}</Project>
       <Name>SFA.DAS.EmployerAccounts.Api</Name>
@@ -286,6 +296,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{b520a3e4-8259-4309-94d4-4a99fd32d2f7}</Project>
       <Name>SFA.DAS.EmployerAccounts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

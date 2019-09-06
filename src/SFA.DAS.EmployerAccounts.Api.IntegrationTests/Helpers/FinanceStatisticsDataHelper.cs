@@ -5,30 +5,31 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Dapper;
 using Moq;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.EAS.Domain.Models.Payments;
-using SFA.DAS.EAS.Infrastructure.Data;
+using SFA.DAS.EmployerAccounts.Api.Types;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing.Helpers;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
+namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
 {
     public class FinanceStatisticsDataHelper
     {
         private const string ServiceName = "SFA.DAS.LevyAggregationProvider";
-        private readonly LevyDeclarationProviderConfiguration _configuration;
+        private readonly EmployerFinanceConfiguration _configuration;
 
         public FinanceStatisticsDataHelper()
         {
-            _configuration = ConfigurationTestHelper.GetConfiguration<LevyDeclarationProviderConfiguration>(ServiceName);
+            _configuration = ConfigurationTestHelper.GetConfiguration<EmployerFinanceConfiguration>(ServiceName);
         }
 
-        public async Task<StatisticsViewModel> GetStatistics()
+        public async Task<Statistics> GetStatistics()
         {
             using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
             {
-                return await connection.QuerySingleAsync<StatisticsViewModel>(Sql);
+                return await connection.QuerySingleAsync<Statistics>(Sql);
             }
         }
 
@@ -42,7 +43,7 @@ from employer_financial.Payment;";
 
             var financeDbContext = new EmployerFinanceDbContext(_configuration.DatabaseConnectionString);
             var lazyDb = new Lazy<EmployerFinanceDbContext>(() => financeDbContext);
-            var levyRepository = new DasLevyRepository(_configuration, Mock.Of<ILog>(), lazyDb);
+            var levyRepository = new DasLevyRepository(_configuration, Mock.Of<ILog>(), lazyDb, Mock.Of<ICurrentDateTime>());
 
             financeDbContext.Database.BeginTransaction();
 

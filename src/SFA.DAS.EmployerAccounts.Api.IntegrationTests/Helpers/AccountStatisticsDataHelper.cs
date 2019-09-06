@@ -6,37 +6,35 @@ using AutoFixture;
 using Dapper;
 using Moq;
 using SFA.DAS.Common.Domain.Types;
-//using SFA.DAS.EAS.Account.Api.Types;
-//using SFA.DAS.EAS.Domain.Configuration;
-//using SFA.DAS.EAS.Domain.Models.UserProfile;
-//using SFA.DAS.EAS.Infrastructure.Data;
-//using SFA.DAS.EAS.Infrastructure.MarkerInterfaces;
+using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing.Helpers;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
+namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
 {
     [ExcludeFromCodeCoverage]
     internal class AccountStatisticsDataHelper
     {
-        private const string ServiceName = "SFA.DAS.EmployerApprenticeshipsService";
-        private readonly EmployerApprenticeshipsServiceConfiguration _configuration;
+        private const string ServiceName = "SFA.DAS.EmployerAccounts";
+        private readonly EmployerAccountsConfiguration _configuration;
         
         public AccountStatisticsDataHelper()
         {
-            _configuration = ConfigurationTestHelper.GetConfiguration<EmployerApprenticeshipsServiceConfiguration>(ServiceName);
+            _configuration = ConfigurationTestHelper.GetConfiguration<EmployerAccountsConfiguration>(ServiceName);
         }
 
-        //public async Task<StatisticsViewModel> GetStatistics()
-        //{
-        //    using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
-        //    {   
-        //        return await connection.QuerySingleAsync<StatisticsViewModel>(GetStatisticsSql);
-        //    }
-        //}
+        public async Task<Statistics> GetStatistics()
+        {
+            using (var connection = new SqlConnection(_configuration.DatabaseConnectionString))
+            {
+                return await connection.QuerySingleAsync<Statistics>(GetStatisticsSql);
+            }
+        }
 
         private const string GetStatisticsSql = @"
 select (
@@ -54,52 +52,54 @@ select (
   where a.StatusId = 2 -- signed
 ) as TotalAgreements;";
 
-        //public async Task CreateAccountStatistics()
-        //{
-        //    var fixture = new Fixture();
+        public async Task CreateAccountStatistics()
+        {
+            var fixture = new Fixture();
 
-        //    var accountDbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
-        //    var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
-        //    var userRepo = new UserRepository(_configuration, Mock.Of<ILog>(), lazyDb);
-        //    var userToCreate = fixture
-        //        .Build<User>()
-        //        .Without(user => user.Id)
-        //        .Without(user => user.UserRef)
-        //        .Create();
-        //    var accountRepo = new AccountRepository(_configuration,
-        //        Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
+            var accountDbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
+            var lazyDb = new Lazy<EmployerAccountsDbContext>(() => accountDbContext);
+            var userRepo = new UserRepository(_configuration, Mock.Of<ILog>(), lazyDb);
+            var userToCreate = fixture
+                .Build<User>()
+                .Without(user => user.Id)
+                .Without(user => user.UserRef)
+                .Create();
+            var accountRepo = new AccountRepository(_configuration,
+                Mock.Of<ILog>(), lazyDb, Mock.Of<IAccountLegalEntityPublicHashingService>());
 
-        //    accountDbContext.Database.BeginTransaction();
+            accountDbContext.Database.BeginTransaction();
 
-        //    try
-        //    {
-        //        await userRepo.Create(userToCreate);
-        //        var createdUser = await userRepo.GetUserByRef(userToCreate.UserRef);
-        //        await accountRepo.CreateAccount(
-        //            createdUser.Id,
-        //            fixture.Create<string>(),
-        //            fixture.Create<string>(),
-        //            fixture.Create<string>(),
-        //            DateTime.Today,
-        //            $"ref-{DateTime.Now.Ticks.ToString().Substring(4, 10)}",
-        //            fixture.Create<string>(),
-        //            fixture.Create<string>(),
-        //            fixture.Create<string>(),
-        //            fixture.Create<string>(),
-        //            2,
-        //            1,
-        //            fixture.Create<string>(),
-        //            fixture.Create<string>(),
-        //            fixture.Create<AgreementType>());
+            try
+            {
+                await userRepo.Create(userToCreate);
+                var createdUser = await userRepo.GetUserByRef(userToCreate.UserRef);
+                await accountRepo.CreateAccount(new CreateAccountParams
+                {
+                    UserId = createdUser.Id,
+                    EmployerDateOfIncorporation = DateTime.Today,
+                    EmployerRef = $"ref-{DateTime.Now.Ticks.ToString().Substring(4, 10)}",
+                    Source = 2,
+                    PublicSectorDataSource = 1,
+                    EmployerNumber = fixture.Create<string>(),
+                    EmployerName = fixture.Create<string>(),
+                    EmployerRegisteredAddress = fixture.Create<string>(),
+                    AccessToken = fixture.Create<string>(),
+                    RefreshToken = fixture.Create<string>(),
+                    CompanyStatus = fixture.Create<string>(),
+                    EmployerRefName = fixture.Create<string>(),
+                    Sector = fixture.Create<string>(),
+                    Aorn = fixture.Create<string>(),
+                    AgreementType = fixture.Create<AgreementType>()
+                });
 
-        //        accountDbContext.Database.CurrentTransaction.Commit();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        accountDbContext.Database.CurrentTransaction.Rollback();
-        //        Console.WriteLine(e);
-        //        throw;
-        //    }
-        //}
+                accountDbContext.Database.CurrentTransaction.Commit();
+            }
+            catch (Exception e)
+            {
+                accountDbContext.Database.CurrentTransaction.Rollback();
+                Console.WriteLine(e);
+                throw;
+            }
+        }
     }
 }
