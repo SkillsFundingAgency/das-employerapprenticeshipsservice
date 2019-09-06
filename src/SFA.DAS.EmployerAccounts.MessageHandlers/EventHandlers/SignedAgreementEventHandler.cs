@@ -25,6 +25,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
                 message.CohortCreated,
                 message.UserName,
                 message.UserRef.ToString()));
+
+            //also send command to create copy in readstore?
         }
     }
 }
