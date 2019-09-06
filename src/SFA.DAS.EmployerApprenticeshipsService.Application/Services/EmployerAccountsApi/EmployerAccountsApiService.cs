@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Helpers;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http;
