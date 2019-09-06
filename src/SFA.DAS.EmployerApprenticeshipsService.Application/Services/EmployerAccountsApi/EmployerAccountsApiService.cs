@@ -1,7 +1,9 @@
 ﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Helpers;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Http;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi.Http;
@@ -67,7 +69,7 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
             return JsonConvert.DeserializeObject<AccountDetailViewModel>(content);
         }
 
-        public async Task<string> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<dynamic> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
         {
             var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -75,7 +77,8 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
             if (!response.IsSuccessStatusCode)
                 throw new RestHttpClientException(response, content);
 
-            return content;
+            var x = Json.Decode(content);
+            return x;
         }
     }
 }
