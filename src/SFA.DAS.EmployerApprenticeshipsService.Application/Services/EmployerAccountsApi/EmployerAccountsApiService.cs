@@ -66,5 +66,16 @@ namespace SFA.DAS.EAS.Application.Services.EmployerAccountsApi
 
             return JsonConvert.DeserializeObject<AccountDetailViewModel>(content);
         }
+
+        public async Task<string> Redirect(string url, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var response = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+            var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            if (!response.IsSuccessStatusCode)
+                throw new RestHttpClientException(response, content);
+
+            return content;
+        }
     }
 }

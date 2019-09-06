@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -11,12 +11,12 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     public class EmployerAccountsController : ApiController
     {
         private readonly AccountsOrchestrator _orchestrator;
-        private readonly EmployerAccountsApiConfiguration _employerAccountsApiConfiguration;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public EmployerAccountsController(AccountsOrchestrator orchestrator, EmployerAccountsApiConfiguration employerAccountsApiConfiguration)
+        public EmployerAccountsController(AccountsOrchestrator orchestrator, IEmployerAccountsApiService apiService)
         {
             _orchestrator = orchestrator;
-            _employerAccountsApiConfiguration = employerAccountsApiConfiguration;
+            _apiService = apiService;
         }
 
         [Route("", Name = "AccountsIndex")]
@@ -69,17 +69,17 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
-        public IHttpActionResult GetAccountUsers(string hashedAccountId)
+        public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
         {
-            return Redirect($"{_employerAccountsApiConfiguration.BaseUrl}/api/accounts/{hashedAccountId}/users");
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/users"));
         }
 
         [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
-        public IHttpActionResult GetAccountUsers(long accountId)
+        public async Task<IHttpActionResult> GetAccountUsers(long accountId)
         {
-            return Redirect($"{_employerAccountsApiConfiguration.BaseUrl}/api/accounts/internal/{accountId}/users");
+            return Ok(await _apiService.Redirect($"/api/accounts/internal/{accountId}/users"));
         }
     }
 }

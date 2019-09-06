@@ -1,6 +1,7 @@
-﻿using System.Web.Http;
+﻿using System.Threading.Tasks;
+using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -8,17 +9,17 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/accountlegalentities")]
     public class AccountLegalEntitiesController : ApiController
     {      
-        private readonly EmployerAccountsApiConfiguration _configuration;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public AccountLegalEntitiesController(EmployerAccountsApiConfiguration configuration)
+        public AccountLegalEntitiesController(IEmployerAccountsApiService apiService)
         {
-            _configuration = configuration;
+            _apiService = apiService;
         }
 
         [Route]
-        public IHttpActionResult Get(int? pageSize, int? pageNumber)
+        public async Task<IHttpActionResult> Get(int? pageSize, int? pageNumber)
         {
-            return Redirect(_configuration.BaseUrl + $"/api/accountlegalentities?{(pageSize.HasValue ? "pageSize=" + pageSize + "&" : "")}{(pageNumber.HasValue ? "pageNumber=" + pageNumber : "")}");
+            return Ok(await _apiService.Redirect($"/api/accountlegalentities?{(pageSize.HasValue ? "pageSize=" + pageSize + "&" : "")}{(pageNumber.HasValue ? "pageNumber=" + pageNumber : "")}"));
         }
     }
 }

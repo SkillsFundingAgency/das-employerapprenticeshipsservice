@@ -2,34 +2,34 @@
 using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Domain.Configuration;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/accounts/{hashedAccountId}/payeschemes")]
     public class AccountPayeSchemesController : ApiController
     {
-        private readonly EmployerAccountsApiConfiguration _configuration;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public AccountPayeSchemesController(EmployerAccountsApiConfiguration configuration)
+        public AccountPayeSchemesController(IEmployerAccountsApiService apiService)
         {
-            _configuration = configuration;
+            _apiService = apiService;
         }
 
         [Route("", Name = "GetPayeSchemes")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public IHttpActionResult GetPayeSchemes(string hashedAccountId)
+        public async Task<IHttpActionResult> GetPayeSchemes(string hashedAccountId)
         {
-            return Redirect(_configuration.BaseUrl + $"/api/accounts/{hashedAccountId}/payeschemes");
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes"));
         }
 
         [Route("{payeschemeref}", Name = "GetPayeScheme")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpGet]
-        public IHttpActionResult GetPayeScheme(string hashedAccountId, string payeSchemeRef)
+        public async Task<IHttpActionResult> GetPayeScheme(string hashedAccountId, string payeSchemeRef)
         {
-            return Redirect($"{_configuration.BaseUrl}/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}");
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/payeschemes/{HttpUtility.UrlEncode(payeSchemeRef)}"));
         }
     }
 }
