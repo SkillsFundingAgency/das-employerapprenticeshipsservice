@@ -276,6 +276,7 @@
     <Compile Include="Helpers\AccountStatisticsDataHelper.cs" />
     <Compile Include="Helpers\FinanceStatisticsDataHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\SFA.DAS.EmployerAccounts.Api\Web.config">
@@ -302,9 +303,7 @@
       <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="StatisticsControllerTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
