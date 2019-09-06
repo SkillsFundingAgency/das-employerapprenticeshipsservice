@@ -274,11 +274,6 @@
     <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
     <Compile Include="GivenEmployerAccountsApi\WhenHealthCheckIsCalled.cs" />
     <Compile Include="Helpers\AccountStatisticsDataHelper.cs" />
-    <Compile Include="Helpers\CallRequirements.cs" />
-    <Compile Include="Helpers\CallResponse.cs" />
-    <Compile Include="Helpers\FinanceStatisticsDataHelper.cs" />
-    <Compile Include="Helpers\IntegrationTestDependencyResolver.cs" />
-    <Compile Include="Helpers\IntegrationTestExceptionLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
   </ItemGroup>
