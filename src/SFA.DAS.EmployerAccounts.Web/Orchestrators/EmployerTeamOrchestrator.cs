@@ -22,6 +22,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Web.Exceptions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
@@ -141,12 +142,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string accountId, string externalUserId)
+        public async Task<AccountDetailViewModel> GetAccount(string accountId)
         {
             try
             {
-                var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
+                return await _accountApiClient.GetAccount(accountId).ConfigureAwait(false);
+            }
+            catch(System.Net.Http.HttpRequestException ex)
+            {
+                throw new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex);
+            }
+        }
 
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string accountId, string externalUserId)
+        {
+            var apiGetAccountTask = await GetAccount(accountId);
+
+            try
+            {
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
@@ -173,7 +186,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -190,7 +203,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
-                var accountDetailViewModel = apiGetAccountTask.Result;
+                var accountDetailViewModel = apiGetAccountTask;
 
                 var viewModel = new AccountDashboardViewModel
                 {

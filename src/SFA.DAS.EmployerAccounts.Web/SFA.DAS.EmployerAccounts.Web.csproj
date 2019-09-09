@@ -142,6 +142,7 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Exceptions\ResourceNotFoundException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
