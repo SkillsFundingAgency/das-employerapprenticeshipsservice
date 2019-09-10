@@ -56,9 +56,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 return View(response);
             }
-            //todo: if response contains an exception, Data is null and we get a NullReferenceException
-            var hasPayeScheme = HasPayeScheme(response.Data);
 
+            var hasPayeScheme = HasPayeScheme(response.Data);
             
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
@@ -76,8 +75,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 return View("v2/Index", "_Layout_v2", response);
             }
-            return View(response);
 
+            return View(response);
         }
 
         [HttpGet]

@@ -142,47 +142,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<AccountDetailViewModel>> GetAccount(string accountId)
-        {
-            try
-            {
-                // return await _accountApiClient.GetAccount(accountId).ConfigureAwait(false);
-                return new OrchestratorResponse<AccountDetailViewModel>
-                {
-                    Status = HttpStatusCode.OK,
-                    Data = await _accountApiClient.GetAccount(accountId).ConfigureAwait(false)
-                    // Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex)
-                };
-
-            }
-            catch(System.Net.Http.HttpRequestException ex)
-            {
-                return new OrchestratorResponse<AccountDetailViewModel>
-                {
-                    Status = HttpStatusCode.InternalServerError,
-                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex)
-                };
-            }
-        }
-
         public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string accountId, string externalUserId)
         {
-            var apiGetAccountResponse = await GetAccount(accountId);
-
-            if (apiGetAccountResponse.Status != HttpStatusCode.OK)
-            {
-                return new OrchestratorResponse<AccountDashboardViewModel>
-                {
-                    Exception = apiGetAccountResponse.Exception,
-                    Status = apiGetAccountResponse.Status
-                };
-                
-            }
-
-            var apiGetAccountTask = apiGetAccountResponse.Data;
-
             try
             {
+                var apiGetAccountTask = await _accountApiClient.GetAccount(accountId).ConfigureAwait(false);
+
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
                     HashedAccountId = accountId,
@@ -268,6 +233,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Exception = ex
                 };
             }
+            catch (System.Net.Http.HttpRequestException ex)
+            {
+                return new OrchestratorResponse<AccountDashboardViewModel>
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex)
+                };
+            }
             catch (Exception ex)
             {
                 return new OrchestratorResponse<AccountDashboardViewModel>
@@ -277,8 +250,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
-
-        
 
         public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
         {
