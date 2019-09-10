@@ -2,6 +2,7 @@
 <html lang="en" class="govuk-template ">
 
 <head>
+    @Html.Partial("_GoogleTagManager")
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Manage apprentices</title>
     @if (!string.IsNullOrWhiteSpace(ViewBag.MetaDesc))
@@ -26,7 +27,7 @@
 </head>
 
 <body id="@ViewBag.PageID" class="govuk-template__body">
-
+    @Html.Partial("_GoogleTagManagerNoScript")
     <script>
         document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
