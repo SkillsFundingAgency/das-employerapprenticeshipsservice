@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var accountHasCommitments = commitments?.Any() ?? false;
 
             await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId,
-                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType);
+                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType, agreement.);
         }
 
         private async Task PublishLegalGenericEvent(SignEmployerAgreementCommand message, string hashedLegalEntityId)
