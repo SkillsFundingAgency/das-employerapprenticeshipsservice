@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Models
 {
@@ -13,11 +14,12 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         [JsonProperty("agreementType")]
         public string AgreementType { get; private set; }
 
-        public AccountSignedAgreement(long accountId, int agreementVersion, string agreementType)
+        public AccountSignedAgreement(long accountId, int agreementVersion, string agreementType, Guid id)
         {
             AccountId = accountId;
             AgreementVersion = agreementVersion;
             AgreementType = agreementType;
+            Id = id;
         }
 
         [JsonConstructor]

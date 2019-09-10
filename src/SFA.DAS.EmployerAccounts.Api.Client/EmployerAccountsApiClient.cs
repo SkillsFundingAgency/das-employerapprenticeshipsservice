@@ -44,6 +44,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
                 roleRequest.AccountId), cancellationToken);
         }
 
+        public Task<bool> HasAgreementBeenSigned(HasAgreementBeenSignedRequest hasAgreementBeenSignedRequest, CancellationToken cancellationToken)
+        {
+            return _mediator.Send(new HasAgreementBeenSignedQuery(
+                hasAgreementBeenSignedRequest.AccountId,
+                hasAgreementBeenSignedRequest.AgreementVersion,
+                hasAgreementBeenSignedRequest.AgreementType), cancellationToken);
+        }
+
         private string GetBaseUrl()
         {
             return _configuration.ApiBaseUrl.Trim('/');

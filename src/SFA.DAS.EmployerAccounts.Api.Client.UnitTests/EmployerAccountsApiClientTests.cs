@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         [Test]
         public Task IsUserInRole_ShouldCallTheMediatorCorrectly()
         {
-            return TestAsync(f => f.IsUserInRole(), f => f.VerifyMediatorCallForIsUserInAny());
+            return TestAsync(f => f.IsUserInRole(), f => f.VerifyMediatorCallForIsUserInRole());
         }
 
         [Test]
@@ -32,13 +32,25 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         [Test]
         public Task IsUserInAnyRole_ShouldCallTheMediatorCorrectly()
         {
-            return TestAsync(f => f.IsUserInRole(), f => f.VerifyMediatorCallForIsUserInAny());
+            return TestAsync(f => f.IsUserInAnyRole(), f => f.VerifyMediatorCallForIsUserInAny());
         }
 
         [Test]
         public Task IsUserInAnyRole_ShouldReturnTheExpectedValue()
         {
-            return TestAsync(f => f.IsUserInRole(), (f, r) => r.Should().BeTrue());
+            return TestAsync(f => f.IsUserInAnyRole(), (f, r) => r.Should().BeTrue());
+        }
+
+        [Test]
+        public Task HasAgreementBeenSigned_ShouldCallTheMediatorCorrectly()
+        {
+            return TestAsync(f => f.HasAgreementBeenSigned(), f => f.VerifyMediatorCallForHasAgreementBeenSigned());
+        }
+
+        [Test]
+        public Task HasAgreementBeenSigned_ShouldReturnTheExpectedValue()
+        {
+            return TestAsync(f => f.HasAgreementBeenSigned(), (f, r) => r.Should().BeTrue());
         }
     }
 
@@ -46,6 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
     {
         public IsUserInRoleRequest IsUserInRoleRequest { get; set; }
         public IsUserInAnyRoleRequest IsUserInAnyRoleRequest { get; set; }
+        public HasAgreementBeenSignedRequest HasAgreementBeenSignedRequest { get; set; }
         public CancellationToken CancellationToken { get; set; }
         public Mock<IReadStoreMediator> MockApiMediator { get; set; }
         public IEmployerAccountsApiClient EmployerAccountsApiClient { get; set; }
@@ -76,6 +89,17 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             MockApiMediator
                 .Setup(m => m.Send(It.IsAny<IsUserInAnyRoleQuery>(), CancellationToken))
                 .ReturnsAsync(true);
+
+            HasAgreementBeenSignedRequest = new HasAgreementBeenSignedRequest
+            {
+                AccountId = 116,
+                AgreementType = "Levy TEST",
+                AgreementVersion = 2
+            };
+
+            MockApiMediator
+                .Setup(m => m.Send(It.IsAny<HasAgreementBeenSignedQuery>(), CancellationToken))
+                .ReturnsAsync(true);
         }
 
         public Task<bool> IsUserInRole()
@@ -88,13 +112,36 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
             return EmployerAccountsApiClient.IsUserInAnyRole(IsUserInAnyRoleRequest, CancellationToken);
         }
 
-        public void VerifyMediatorCallForIsUserInAny()
+        public Task<bool> HasAgreementBeenSigned()
         {
-            MockApiMediator.Verify(m => m.Send(It.Is<IsUserInRoleQuery>(q => 
+            return EmployerAccountsApiClient.HasAgreementBeenSigned(HasAgreementBeenSignedRequest, CancellationToken);
+        }
+
+        public void VerifyMediatorCallForIsUserInRole()
+        {
+            MockApiMediator.Verify(m => m.Send(It.Is<IsUserInRoleQuery>(q =>
                 q.UserRef == IsUserInRoleRequest.UserRef
                 && q.AccountId == IsUserInRoleRequest.AccountId
                 && q.UserRoles.Count == IsUserInRoleRequest.Roles.Count
                 && q.UserRoles.All(role => IsUserInRoleRequest.Roles.Any(requestRole => requestRole == role))
+            ), CancellationToken));
+        }
+
+        public void VerifyMediatorCallForIsUserInAny()
+        {
+            MockApiMediator.Verify(m => m.Send(It.Is<IsUserInAnyRoleQuery>(q =>
+                q.UserRef == IsUserInAnyRoleRequest.UserRef
+                && q.AccountId == IsUserInAnyRoleRequest.AccountId
+            ), CancellationToken));
+            
+        }
+
+        public void VerifyMediatorCallForHasAgreementBeenSigned()
+        {
+            MockApiMediator.Verify(m => m.Send(It.Is<HasAgreementBeenSignedQuery>(q =>
+                q.AccountId == HasAgreementBeenSignedRequest.AccountId
+                && q.AgreementType == HasAgreementBeenSignedRequest.AgreementType
+                && q.AgreementVersion == HasAgreementBeenSignedRequest.AgreementVersion
             ), CancellationToken));
         }
     }
