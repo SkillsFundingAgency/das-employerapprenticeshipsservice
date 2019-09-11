@@ -273,7 +273,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LegalEntitiesControllerTests\WhenIGetMultipleLegalEntitiesWithKnownIds.cs" />
     <Compile Include="TestSetup.cs" />
     <Compile Include="TestUtils\ApiTester\CallResponseExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />

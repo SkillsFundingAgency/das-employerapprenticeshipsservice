@@ -1,29 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Account.API.IntegrationTests.ModelBuilders;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.ApiTester;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess;
-using SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.Dtos;
+using SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers;
+using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
+using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dtos;
+using SFA.DAS.EmployerAccounts.Api.Types;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
+namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi.LegalEntitiesControllerTests
 {
+    [ExcludeFromCodeCoverage]
     [TestFixture]
     public class WhenIGetMultipleLegalEntitiesWithKnownIds
+    :GivenEmployerAccountsApi
     {
-        private ApiIntegrationTester _tester;
         private EmployerAccountSetup _employerAccount;
 
         [SetUp]
         public async Task Setup()
         {
-            _tester = new ApiIntegrationTester(TestSetupIoC.CreateIoC);
-
-            // Arrange
-            await _tester.InitialiseData<EmployerAccountsDbBuilder>(async builder =>
+            await InitialiseEmployerAccountData(async builder =>
             {
                 var data = new TestModelBuilder()
                     .WithNewUser()
@@ -34,28 +31,22 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.LegalEntitiesControllerTests
 
                 _employerAccount = data.CurrentAccount;
             });
-        }
 
-        [TearDown]
-        public void TearDown()
-        {
-            _tester.Dispose();
+            WhenControllerActionIsCalled($"https://localhost:44330/api/accounts/{_employerAccount.AccountOutput.HashedAccountId}/legalentities");
         }
 
         [Test]
         public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
         {
-            var callRequirements =
-                new CallRequirements($"api/accounts/{_employerAccount.AccountOutput.HashedAccountId}/legalentities");
-
-            // Act
-            var account = await _tester.InvokeGetAsync<ResourceList>(callRequirements);
+            var resources =
+                Response
+                    .GetContent<ResourceList>();
 
             // Assert
-            Assert.IsNotNull(account.Data);
-            Assert.AreEqual(2, account.Data.Count);
+            Assert.IsNotNull(resources);
+            Assert.AreEqual(2, resources.Count);
             
-            var idsFromApi = account.Data.Select(a => long.Parse(a.Id, NumberStyles.None)).ToArray();
+            var idsFromApi = resources.Select(a => long.Parse(a.Id, NumberStyles.None)).ToArray();
 
             var idsFromDatabase = _employerAccount.LegalEntities
                 .Select(le => le.LegalEntityWithAgreementInputOutput.LegalEntityId)
