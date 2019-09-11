@@ -1,5 +1,4 @@
 ﻿using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
