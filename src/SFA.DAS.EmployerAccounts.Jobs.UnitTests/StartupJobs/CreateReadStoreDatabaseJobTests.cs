@@ -36,10 +36,23 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.StartupJobs
         }
 
         [Test]
-        public Task Run_WhenRunningCreateReadStoreDatabaseJob_ThenShouldCreateReadStoreUsersCollectionWithOfferThroughputSet()
+        public Task Run_WhenRunningCreateReadStoreDatabaseJob_ThenShouldCreateReadStoreAccountSignedAgreementsCollectionWithPartitionAndUniqueKey()
         {
             return TestAsync(f => f.Run(), f => f.DocumentClient.Verify(c => c.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(DocumentSettings.DatabaseName),
-                It.IsAny<DocumentCollection>(), It.Is<RequestOptions>(p=>p.OfferThroughput == 1000)), Times.Once));
+                It.Is<DocumentCollection>(d =>
+                    d.Id == DocumentSettings.AccountSignedAgreementsCollectionName &&
+                    d.PartitionKey.Paths.Contains("/accountId") &&
+                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/accountId") &&
+                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/agreementVersion") &&
+                    d.UniqueKeyPolicy.UniqueKeys[0].Paths.Contains("/agreementType")
+                ), It.IsAny<RequestOptions>()), Times.Once));
+        }
+
+        [Test]
+        public Task Run_WhenRunningCreateReadStoreDatabaseJob_ThenShouldCreateAllCollectionsWithOfferThroughputSet()
+        {
+            return TestAsync(f => f.Run(), f => f.DocumentClient.Verify(c => c.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(DocumentSettings.DatabaseName),
+                It.IsAny<DocumentCollection>(), It.Is<RequestOptions>(p => p.OfferThroughput == 1000)), Times.Exactly(2)));
         }
     }
 
