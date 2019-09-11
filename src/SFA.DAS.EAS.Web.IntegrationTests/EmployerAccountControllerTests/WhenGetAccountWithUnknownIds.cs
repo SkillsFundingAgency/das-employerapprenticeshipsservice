@@ -38,20 +38,5 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
             response.ExpectStatusCodes(HttpStatusCode.NotFound);
             Assert.Pass("Verified we got http status NotFound");
         }
-
-
-        [Test]
-        public async Task ThenTheStatusShouldBeNotFound_ByHashedId()
-        {
-            // Arrange
-            var callRequirements = new CallRequirements($"api/accounts/MADE*UP*ID");
-
-            // Act
-            var response = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);
-
-            // Assert
-            response.ExpectControllerType(typeof(EmployerAccountsController));
-            response.ExpectStatusCodes(HttpStatusCode.NotFound);
-        }
     }
 }
