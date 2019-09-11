@@ -306,6 +306,7 @@
     <Compile Include="GivenEmployerAccountsApi\EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
+    <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetASingleLegalEntityWithKnownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithUnknownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetMultipleLegalEntitiesWithKnownIds.cs" />

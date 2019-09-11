@@ -277,7 +277,6 @@
     <Compile Include="TestUtils\ApiTester\CallResponseExtensions.cs" />
     <Compile Include="TestUtils\ApiTester\TestSetupIoC.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
-    <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNoKey.cs" />
     <Compile Include="EmployerAccountControllerTests\WhenGetAccountWithUnknownIds.cs" />
     <Compile Include="HealthCheckControllerTests\WhenHealthCheck.cs" />
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
