@@ -303,6 +303,7 @@
   <ItemGroup>
     <Compile Include="GivenEmployerAccountsApi\EmployerAccountControllerTests\WhenGetAccountUsersWithKnownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\EmployerAccountControllerTests\WhenGetAccountUsersWithUnknownIds.cs" />
+    <Compile Include="GivenEmployerAccountsApi\EmployerAccountControllerTests\WhenGetAccountWithKnownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
     <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetASingleLegalEntityWithKnownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetLegalEntitiesWithUnknownIds.cs" />

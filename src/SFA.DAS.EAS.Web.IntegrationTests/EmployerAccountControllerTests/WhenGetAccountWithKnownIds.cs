@@ -42,22 +42,6 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.EmployerAccountControllerTest
         }
 
         [Test]
-        public async Task ThenTheStatusShouldBeFound_ByHashedAccountId()
-        {
-
-            var callRequirements = new CallRequirements($"api/accounts/{_employerAccount.HashedAccountId}");
-            
-            // Act
-            var account = await _tester.InvokeGetAsync<AccountDetailViewModel>(callRequirements);
-
-            // Assert
-            account.ExpectControllerType(typeof(EmployerAccountsController));
-            account.ExpectStatusCodes(HttpStatusCode.OK);
-            Assert.IsNotNull(account.Data);
-        }
-
-
-        [Test]
         public async Task ThenTheStatusShouldBeFound_ByAccountId()
         {
             var callRequirements = new CallRequirements($"api/accounts/internal/{_employerAccount.AccountId}");
