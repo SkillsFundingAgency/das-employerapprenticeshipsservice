@@ -1,8 +1,11 @@
-﻿using System.Net.Http;
+﻿using System.Linq;
+using System.Net;
+using System.Net.Http;
 using FluentAssertions;
 using Newtonsoft.Json;
+using NUnit.Framework;
 
-namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelpers
+namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.Helpers
 {
     public static class HttpResponseMessageExtensions
     {
@@ -24,5 +27,13 @@ namespace SFA.DAS.EAS.Account.API.IntegrationTests.TestUtils.DataAccess.DataHelp
             return
                 JsonConvert.DeserializeObject<TContent>(content);
         }
+
+        public static void ExpectStatusCodes(this HttpResponseMessage response, params HttpStatusCode[] statuscodes)
+        {
+            Assert.IsTrue(statuscodes.Contains(response.StatusCode), $"Received response {response.StatusCode} " +
+                                                                                  $"when expected any of [{string.Join(",", statuscodes.Select(sc => sc))}]. " +
+                                                                                  $"Additional information sent to the client: {response.ReasonPhrase}. ");
+        }
+
     }
 }
