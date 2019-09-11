@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
         [SetUp]
         public async Task Setup()
         {
-            await InitialiseData<EmployerAccountsDbBuilder>(async builder =>
+            await InitialiseEmployerAccountData(async builder =>
             {
                 var data = new TestModelBuilder()
                     .WithNewUser()

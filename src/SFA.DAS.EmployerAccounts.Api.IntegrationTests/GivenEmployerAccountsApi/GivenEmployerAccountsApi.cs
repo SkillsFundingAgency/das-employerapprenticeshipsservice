@@ -43,9 +43,9 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
             }
         }
 
-        protected async Task InitialiseData<TDbBuilder>(Func<TDbBuilder, Task> initialiseAction) where TDbBuilder : IDbBuilder
+        protected async Task InitialiseEmployerAccountData(Func<EmployerAccountsDbBuilder, Task> initialiseAction)
         {
-            var builder = _container.GetNestedContainer().GetInstance<TDbBuilder>();
+            var builder = new EmployerAccountsDbBuilder(_container.GetNestedContainer());
 
             builder.BeginTransaction();
             try

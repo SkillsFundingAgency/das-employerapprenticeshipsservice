@@ -311,7 +311,6 @@
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="TestUtils\DataAccess\Adapters\LegalEntityWithAgreementInputAdapter.cs" />
     <Compile Include="TestUtils\DataAccess\Adapters\UserInputToUserAdapter.cs" />
-    <Compile Include="TestUtils\DataAccess\DbBuilderDependentRepositories.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountInput.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountOutput.cs" />
     <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountSetup.cs" />

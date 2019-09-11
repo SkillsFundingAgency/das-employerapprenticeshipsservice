@@ -1,34 +1,72 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.ModelBuilders;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Adapters;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dtos;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.HashingService;
+using SFA.DAS.Testing.Helpers;
+using SFA.DAS.NLog.Logger;
+using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 {
-    class EmployerAccountsDbBuilder : IDbBuilder
+    [ExcludeFromCodeCoverage]
+    public class EmployerAccountsDbBuilder : IDbBuilder
     {
+        private const string ServiceName = "SFA.DAS.EmployerAccounts";
+
+        private readonly IContainer _container;
         private readonly IHashingService _hashingService;
         private readonly IPublicHashingService _publicHashingService;
         private readonly EmployerAccountsDbContext _dbContext;
+        private readonly Lazy<IAccountRepository> _lazyAccountRepository;
+        private readonly Lazy<IUserRepository> _lazyUserRepository;
+        private EmployerAccountsConfiguration _configuration;
 
         public EmployerAccountsDbBuilder(
-            DbBuilderDependentRepositories dependentRepositories,
-            IHashingService hashingService,
-            IPublicHashingService publicHashingService,
-            EmployerAccountsDbContext dbContext)
+            IContainer container
+            )
         {
-            DependentRepositories = dependentRepositories;
-            _hashingService = hashingService;
-            _publicHashingService = publicHashingService;
-            _dbContext = dbContext;
+            _container = container;
+
+            _configuration = ConfigurationTestHelper.GetConfiguration<EmployerAccountsConfiguration>(ServiceName);
+
+            _hashingService = _container.GetInstance<IHashingService>();
+            _publicHashingService = _container.GetInstance<IPublicHashingService>();
+
+            _dbContext = new EmployerAccountsDbContext(_configuration.DatabaseConnectionString);
+
+            _lazyAccountRepository = new  Lazy<IAccountRepository>(buildAccountRepository);
+            _lazyUserRepository = new Lazy<IUserRepository>(buildUserRepository);
+
         }
 
-        public DbBuilderDependentRepositories DependentRepositories { get; }
+        private IUserRepository buildUserRepository()
+        {
+            return 
+                new UserRepository(
+                    _configuration,
+                    _container.GetInstance<ILog>(),
+                    new Lazy<EmployerAccountsDbContext>(() => _dbContext)
+                    );
+        }
+
+        private IAccountRepository buildAccountRepository()
+        {
+            return
+                new AccountRepository(
+                    _configuration,
+                    _container.GetInstance<ILog>(),
+                    new Lazy<EmployerAccountsDbContext>(() => _dbContext),
+                    _container.GetInstance<IAccountLegalEntityPublicHashingService>());
+        }
+
         public bool HasTransaction => _dbContext.Database.CurrentTransaction != null;
 
         /// <summary>
@@ -50,8 +88,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 
         public async Task<UserOutput> CreateUserAsync(UserInput input)
         {
-            await DependentRepositories.UserRepository.Upsert(new UserInputToUserAdapter(input));
-            var user = await DependentRepositories.UserRepository.GetUserByRef(input.Ref);
+            await _lazyUserRepository.Value.Upsert(new UserInputToUserAdapter(input));
+            var user = await _lazyUserRepository.Value.GetUserByRef(input.Ref);
 
             var output = new UserOutput
             {
@@ -64,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
 
         public async Task<EmployerAccountOutput> CreateAccountAsync(EmployerAccountInput input)
         {
-            var createResult = await DependentRepositories.AccountRepository.CreateAccount(
+            var createResult = await _lazyAccountRepository.Value.CreateAccount(
                 new CreateAccountParams { 
                 UserId = input.UserId(),
                 EmployerNumber = input.OrganisationReferenceNumber,
@@ -90,14 +128,14 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess
                 LegalEntityId =  createResult.LegalEntityId
             };
 
-            await DependentRepositories.AccountRepository.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
+            await _lazyAccountRepository.Value.UpdateAccountHashedIds(output.AccountId, output.HashedAccountId, output.PublicHashedAccountId);
 
             return output;
         }
 
         public async Task<LegalEnityWithAgreementOutput> CreateLegalEntityAsync(LegalEntityWithAgreementInput input)
         {
-            var view = await DependentRepositories.AccountRepository.CreateLegalEntityWithAgreement(
+            var view = await _lazyAccountRepository.Value.CreateLegalEntityWithAgreement(
                new LegalEntityWithAgreementInputAdapter(input));
 
             var output = new LegalEnityWithAgreementOutput
