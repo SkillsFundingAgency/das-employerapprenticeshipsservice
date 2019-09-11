@@ -71,40 +71,15 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         }
 
         [Test]
-        public async Task AndAccountAgreementTypeIsNonLevyEoiThenRedirectUrlShouldBeSetToYourFundingReservationsPage()
+        [TestCase("0", false, TestName = "Non-Levy Employer returned")]
+        [TestCase("1", true, TestName = "Levy Employer returned")]
+        public async Task ThenShouldDetermineIfEmployerIsLevyOrNonLevy(string apprenticeshipEmployerType, bool isLevy)
         {
             //Arrange
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
                 .ReturnsAsync(new AccountDetailViewModel
                 {
-                    AccountAgreementType = AccountAgreementType.NonLevyExpressionOfInterest
-                });
-
-            var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
-            {
-                AccountHashedId = HashedAccountId
-            };
-
-            _employerAccountsConfiguration.ReservationsBaseUrl = "http://example.com";
-
-            //Act
-            var response = await _orchestrator.Index(getAccountFinanceOverviewQuery);
-
-            //Assert
-            response.Should().NotBeNull();
-            response.RedirectUrl.Should().Be($"http://example.com/accounts/{HashedAccountId}/reservations/manage");
-        }
-
-        [TestCase(AccountAgreementType.Unknown)]
-        [TestCase(AccountAgreementType.Inconsistent)]
-        [TestCase(AccountAgreementType.Levy)]
-        public async Task AndAccountAgreementTypeIsNotNonLevyEoiThenRedirectUrlShouldBeNull(AccountAgreementType accountAgreementType)
-        {
-            //Arrange
-            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
-                .ReturnsAsync(new AccountDetailViewModel
-                {
-                    AccountAgreementType = accountAgreementType
+                    ApprenticeshipEmployerType = apprenticeshipEmployerType
                 });
 
             var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
@@ -122,7 +97,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             //Assert
             response.Should().NotBeNull();
-            response.RedirectUrl.Should().BeNull();
+            response.Data.IsLevyEmployer.Should().Be(isLevy);
         }
 
         [TestCase(2, 2017)]

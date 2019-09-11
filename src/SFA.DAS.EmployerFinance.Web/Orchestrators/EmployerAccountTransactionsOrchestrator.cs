@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 Data = new FinanceDashboardViewModel
                 {
-                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), account.ApprenticeshipEmployerType, true),
+                    IsLevyEmployer = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), account.ApprenticeshipEmployerType, true) == ApprenticeshipEmployerType.Levy,
                     AccountHashedId = query.AccountHashedId,
                     CurrentLevyFunds = getAccountFinanceOverview.CurrentFunds,
                     ExpiringFunds = getAccountFinanceOverview.ExpiringFundsAmount,
