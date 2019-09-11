@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 
             WebApiConfig.Register(config);
 
-            _container = config.DependencyResolver. GetService(typeof(IContainer)) as IContainer;
+            _container = config.DependencyResolver.GetService(typeof(IContainer)) as IContainer;
 
             _nServiceBusEndpoint = WebApiApplication.StartServiceBusEndpoint(_container);
 
