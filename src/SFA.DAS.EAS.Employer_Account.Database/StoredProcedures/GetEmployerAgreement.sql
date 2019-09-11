@@ -24,7 +24,8 @@ BEGIN
 		le.[Source] as LegalEntitySource,
 		ea.AccountLegalEntityId,
 		ale.PublicHashedId as AccountLegalEntityPublicHashedId,
-		eat.AgreementType
+		eat.AgreementType,
+		eat.VersionNumber AS AgreementVersion
 	FROM [employer_account].[EmployerAgreement] ea
 		JOIN [employer_account].[AccountLegalEntity] ale
 			ON ale.Id = ea.AccountLegalEntityId

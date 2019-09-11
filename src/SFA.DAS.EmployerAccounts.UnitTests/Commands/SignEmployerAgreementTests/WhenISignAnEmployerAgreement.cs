@@ -50,6 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         private const string OrganisationName = "Foo";
         private const string HashedLegalEntityId = "2635JHG";
         private const AgreementType AgreementType = Common.Domain.Types.AgreementType.NonLevyExpressionOfInterest;
+        private const int AgreementVersion = 4;
 
         [SetUp]
         public void Setup()
@@ -78,7 +79,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 HashedAgreementId = "124GHJG",
                 LegalEntityId = LegalEntityId,
                 LegalEntityName = OrganisationName,
-                AgreementType = AgreementType
+                AgreementType = AgreementType,
+                AgreementVersion = AgreementVersion
             };
 
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
@@ -221,6 +223,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             message.UserName.Should().Be(_owner.FullName());
             message.UserRef.Should().Be(_owner.UserRef);
             message.AgreementType.Should().Be(AgreementType);
+            message.AgreementVersion.Should().Be(AgreementVersion);
         }
 
         [Test]
@@ -246,6 +249,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             message.UserName.Should().Be(_owner.FullName());
             message.UserRef.Should().Be(_owner.UserRef);
             message.AgreementType.Should().Be(AgreementType);
+            message.AgreementVersion.Should().Be(AgreementVersion);
         }
 
         [Test]

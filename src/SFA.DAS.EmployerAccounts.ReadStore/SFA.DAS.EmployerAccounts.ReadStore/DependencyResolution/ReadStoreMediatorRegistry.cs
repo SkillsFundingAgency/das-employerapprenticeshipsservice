@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution
             For<IReadStoreRequestHandler<CreateAccountUserCommand, Unit>>().Use<CreateAccountUserCommandHandler>();
             For<IReadStoreRequestHandler<UpdateAccountUserCommand, Unit>>().Use<UpdateAccountUserCommandHandler>();
             For<IReadStoreRequestHandler<RemoveAccountUserCommand, Unit>>().Use<RemoveAccountUserCommandHandler>();
+            For<IReadStoreRequestHandler<SignAccountAgreementCommand, Unit>>().Use<SignAccountAgreementCommandHandler>();
             For<IReadStoreRequestHandler<IsUserInRoleQuery, bool>>().Use<IsUserInRoleQueryHandler>();
             For<IReadStoreRequestHandler<IsUserInAnyRoleQuery, bool>>().Use<IsUserInAnyRoleQueryHandler>();
             For<IReadStoreRequestHandler<HasAgreementBeenSignedQuery, bool>>().Use<HasAgreementBeenSignedQueryHandler>();
