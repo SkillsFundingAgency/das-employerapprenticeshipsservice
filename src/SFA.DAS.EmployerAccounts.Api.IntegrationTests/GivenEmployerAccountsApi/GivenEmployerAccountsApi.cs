@@ -1,8 +1,11 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using NServiceBus;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
@@ -14,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
         private IEndpointInstance _endpoint;
         private IEndpointInstance _nServiceBusEndpoint;
         protected HttpResponseMessage Response;
+        private IContainer _container;
 
         [SetUp]
         public void Startup()
@@ -24,9 +28,9 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 
             WebApiConfig.Register(config);
 
-            var container = config.DependencyResolver.GetService(typeof(IContainer)) as IContainer;
+            _container = config.DependencyResolver. GetService(typeof(IContainer)) as IContainer;
 
-            _nServiceBusEndpoint = WebApiApplication.StartServiceBusEndpoint(container);
+            _nServiceBusEndpoint = WebApiApplication.StartServiceBusEndpoint(_container);
 
             _server = new HttpServer(config);
         }
@@ -39,13 +43,29 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
             }
         }
 
+        protected async Task InitialiseData<TDbBuilder>(Func<TDbBuilder, Task> initialiseAction) where TDbBuilder : IDbBuilder
+        {
+            var builder = _container.GetNestedContainer().GetInstance<TDbBuilder>();
+
+            builder.BeginTransaction();
+            try
+            {
+                await initialiseAction(builder);
+                builder.CommitTransaction();
+            }
+            catch (Exception)
+            {
+                builder.RollbackTransaction();
+                throw;
+            }
+        }
+
         [TearDown]
         public void Cleanup()
         {
             WebApiApplication.StopServiceBusEndpoint(_nServiceBusEndpoint);
 
-            if (_server != null)
-                _server.Dispose();
+            _server?.Dispose();
         }
     }
 }

@@ -302,11 +302,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GivenEmployerAccountsApi\GivenEmployerAccountsApi.cs" />
+    <Compile Include="GivenEmployerAccountsApi\LegalEntitiesControllerTests\WhenIGetASingleLegalEntityWithKnownIds.cs" />
     <Compile Include="GivenEmployerAccountsApi\WhenHealthCheckIsCalled.cs" />
     <Compile Include="Helpers\AccountStatisticsDataHelper.cs" />
     <Compile Include="Helpers\HttpResponseMessageExtensions.cs" />
+    <Compile Include="ModelBuilders\TestModelBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticsControllerTests\WhenIGetTheStatistics.cs" />
+    <Compile Include="TestUtils\DataAccess\Adapters\LegalEntityWithAgreementInputAdapter.cs" />
+    <Compile Include="TestUtils\DataAccess\Adapters\UserInputToUserAdapter.cs" />
+    <Compile Include="TestUtils\DataAccess\DbBuilderDependentRepositories.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountInput.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountOutput.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\EmployerAccountSetup.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\LegalEnityWithAgreementOutput.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\LegalEntityWithAgreementInput.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\LegalEntityWithAgreementSetUp.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\UserInput.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\UserOutput.cs" />
+    <Compile Include="TestUtils\DataAccess\Dtos\UserSetUp.cs" />
+    <Compile Include="TestUtils\DataAccess\EmployerAccountsDbBuilder.cs" />
+    <Compile Include="TestUtils\DataAccess\IDbBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\SFA.DAS.EmployerAccounts.Api\Web.config">
