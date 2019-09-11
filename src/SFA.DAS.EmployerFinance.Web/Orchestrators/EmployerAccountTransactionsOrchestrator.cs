@@ -1,4 +1,11 @@
-﻿using MediatR;
+﻿using System;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using MediatR;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.Models.Levy;
@@ -6,20 +13,13 @@ using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
 using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
 using SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTransactions;
+using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccountTransactions;
 using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
 using TransactionViewModel = SFA.DAS.EmployerFinance.Web.ViewModels.TransactionViewModel;
 
@@ -59,20 +59,13 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
             var account = await accountTask;
 
-            if (account.AccountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest)
-            {
-                return new OrchestratorResponse<FinanceDashboardViewModel>
-                {
-                    RedirectUrl = $"{_employerAccountsConfiguration.ReservationsBaseUrl}/accounts/{query.AccountHashedId}/reservations/manage"
-                };
-            }
-
             var getAccountFinanceOverview = await getAccountFinanceOverviewTask;
 
             var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
             {
                 Data = new FinanceDashboardViewModel
                 {
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), account.ApprenticeshipEmployerType, true),
                     AccountHashedId = query.AccountHashedId,
                     CurrentLevyFunds = getAccountFinanceOverview.CurrentFunds,
                     ExpiringFunds = getAccountFinanceOverview.ExpiringFundsAmount,
