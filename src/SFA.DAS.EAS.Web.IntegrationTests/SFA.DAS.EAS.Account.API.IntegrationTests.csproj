@@ -288,7 +288,6 @@
     <Compile Include="TestUtils\ApiTester\IntegrationTestDependencyResolver.cs" />
     <Compile Include="TestUtils\ApiTester\TestWebApiResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EmployerAccountControllerTests\WhenGetLegalEntitiesWithNonExistentKey.cs" />
     <Compile Include="TestUtils\DataAccess\DataHelpers\AccountStatisticsDataHelper.cs" />
     <Compile Include="TestUtils\DataAccess\DataHelpers\FinanceStatisticsDataHelper.cs" />
     <Compile Include="TestUtils\DataAccess\DbBuilderDependentRepositories.cs" />
