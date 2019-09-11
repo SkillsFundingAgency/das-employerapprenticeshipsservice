@@ -24,5 +24,6 @@ namespace SFA.DAS.EAS.Account.Api.Client
         Task<ICollection<TransactionSummaryViewModel>> GetTransactionSummary(string accountId);
         Task<ICollection<TransferConnectionViewModel>> GetTransferConnections(string accountHashedId);
         Task<ICollection<AccountDetailViewModel>> GetUserAccounts(string userId);
+        Task Ping();
     }
 }

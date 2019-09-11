@@ -203,6 +203,7 @@
     <Compile Include="Controllers\LegalEntitiesControllerTests\LegalEntitiesControllerTests.cs" />
     <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetALegalEntity.cs" />
     <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
+    <Compile Include="Controllers\PingControllerTests\WhenIPing.cs" />
     <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="Controllers\TransferConnectionsControllerTests\WhenIGetTransferConnections.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
