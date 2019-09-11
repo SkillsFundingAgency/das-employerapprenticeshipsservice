@@ -122,14 +122,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
 
         public EmployerAccountsApiClientTestsFixture SetReadStorePingSuccess()
         {
-            MockApiMediator.Setup(m => m.Send(It.IsAny<PingCommand>(), CancellationToken)).ReturnsAsync(Unit.Value);
+            MockApiMediator.Setup(m => m.Send(It.IsAny<PingQuery>(), CancellationToken)).ReturnsAsync(Unit.Value);
 
             return this;
         }
 
         public EmployerAccountsApiClientTestsFixture SetReadStorePingFailure()
         {
-            MockApiMediator.Setup(m => m.Send(It.IsAny<PingCommand>(), CancellationToken)).Throws<Exception>();
+            MockApiMediator.Setup(m => m.Send(It.IsAny<PingQuery>(), CancellationToken)).Throws<Exception>();
 
             return this;
         }

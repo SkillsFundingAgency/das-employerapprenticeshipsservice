@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
 
         public Task Ping(CancellationToken cancellationToken = new CancellationToken())
         {
-            return Task.WhenAll(_httpClient.GetAsync("ping", cancellationToken), _mediator.Send(new PingCommand(), cancellationToken));
+            return Task.WhenAll(_httpClient.GetAsync("ping", cancellationToken), _mediator.Send(new PingQuery(), cancellationToken));
         }
     }
 }

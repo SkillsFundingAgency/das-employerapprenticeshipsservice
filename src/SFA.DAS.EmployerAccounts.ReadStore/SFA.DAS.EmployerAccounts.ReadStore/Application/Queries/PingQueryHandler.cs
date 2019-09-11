@@ -6,18 +6,18 @@ using Microsoft.Azure.Documents;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
-namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
+namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Queries
 {
-    internal class PingCommandHandler : IReadStoreRequestHandler<PingCommand, Unit>
+    internal class PingQueryHandler : IReadStoreRequestHandler<PingQuery, Unit>
     {
         private readonly IDocumentClient _documentClient;
 
-        public PingCommandHandler(IDocumentClient documentClient)
+        public PingQueryHandler(IDocumentClient documentClient)
         {
             _documentClient = documentClient;
         }
 
-        public Task<Unit> Handle(PingCommand request, CancellationToken cancellationToken)
+        public Task<Unit> Handle(PingQuery request, CancellationToken cancellationToken)
         {
             var value = _documentClient.CreateDatabaseQuery()
                 .Where(d => d.Id == DocumentSettings.DatabaseName)

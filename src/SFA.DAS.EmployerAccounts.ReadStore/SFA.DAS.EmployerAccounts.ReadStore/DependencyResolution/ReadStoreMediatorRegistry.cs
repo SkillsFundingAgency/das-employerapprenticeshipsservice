@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution
             For<IReadStoreRequestHandler<IsUserInRoleQuery, bool>>().Use<IsUserInRoleQueryHandler>();
             For<IReadStoreRequestHandler<IsUserInAnyRoleQuery, bool>>().Use<IsUserInAnyRoleQueryHandler>();
             For<IReadStoreRequestHandler<RemoveAccountUserCommand, Unit>>().Use<RemoveAccountUserCommandHandler>();
-            For<IReadStoreRequestHandler<PingCommand, Unit>>().Use<PingCommandHandler>().Ctor<IDocumentClient>().IsNamedInstance(InstanceKeys.DocumentClient);
+            For<IReadStoreRequestHandler<PingQuery, Unit>>().Use<PingQueryHandler>().Ctor<IDocumentClient>().IsNamedInstance(InstanceKeys.DocumentClient);
             For<IReadStoreRequestHandler<UpdateAccountUserCommand, Unit>>().Use<UpdateAccountUserCommandHandler>();
         }
     }
