@@ -1,7 +1,8 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using System.Web.Routing;
 using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerFinance.Web.Helpers;
 
 namespace SFA.DAS.EmployerFinance.Web.Filters
 {
@@ -9,21 +10,31 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            var hashedAccountId = filterContext.ActionParameters["HashedAccountId"].ToString();
-            var accountApi = DependencyResolver.Current.GetService<IAccountApiClient>();
-            var account = accountApi.GetAccount(hashedAccountId).Result;
-            if (account.ApprenticeshipEmployerType == "1")
+            try
             {
-                base.OnActionExecuting(filterContext);
+                var hashedAccountId = filterContext.ActionParameters["HashedAccountId"].ToString();
+                var accountApi = DependencyResolver.Current.GetService<IAccountApiClient>();
+                var task = accountApi.GetAccount(hashedAccountId);
+                task.RunSynchronously();
+                var account = task.Result;
+
+                if (account.ApprenticeshipEmployerType == "1")
+                {
+                    base.OnActionExecuting(filterContext);
+                }
+                else
+                {
+                    filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(
+                            new
+                            {
+                                controller = ControllerConstants.AccessDeniedControllerName,
+                                action = "Index",
+                            }));
+                }
             }
-            else
+            catch (Exception ex)
             {
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(
-                        new
-                        {
-                            controller = "AccessDenied",
-                            action = "Index",
-                        }));
+                filterContext.Result = new ViewResult { ViewName = ControllerConstants.BadRequestViewName };
             }
         }
     }
