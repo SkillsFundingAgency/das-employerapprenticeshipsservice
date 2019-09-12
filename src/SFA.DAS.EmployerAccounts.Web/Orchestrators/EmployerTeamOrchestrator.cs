@@ -22,6 +22,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Web.Exceptions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
@@ -232,6 +233,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Exception = ex
                 };
             }
+            catch (System.Net.Http.HttpRequestException ex)
+            {
+                return new OrchestratorResponse<AccountDashboardViewModel>
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex)
+                };
+            }
             catch (Exception ex)
             {
                 return new OrchestratorResponse<AccountDashboardViewModel>
@@ -241,8 +250,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
-
-        
 
         public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
         {
