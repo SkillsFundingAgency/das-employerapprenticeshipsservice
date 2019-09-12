@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerFinance.Messages.Commands;
