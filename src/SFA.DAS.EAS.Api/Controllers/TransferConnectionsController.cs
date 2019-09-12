@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Application.Queries.GetTransferConnections;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -10,18 +9,17 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     [RoutePrefix("api/accounts/{hashedAccountId}/transfers/connections")]
     public class TransferConnectionsController : ApiController
     {
-        private readonly IMediator _mediator;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public TransferConnectionsController(IMediator mediator)
+        public TransferConnectionsController(IEmployerAccountsApiService apiService)
         {
-            _mediator = mediator;
+            _apiService = apiService;
         }
-        
+
         [Route]
-        public async Task<IHttpActionResult> GetTransferConnections([FromUri] GetTransferConnectionsQuery query)
+        public async Task<IHttpActionResult> GetTransferConnections(string hashedAccountId)
         {
-            var response = await _mediator.SendAsync(query);
-            return Ok(response.TransferConnections);
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/transfers/connections"));
         }
     }
 }

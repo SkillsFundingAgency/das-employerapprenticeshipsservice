@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using SFA.DAS.EAS.Account.Api.Types;
+using SFA.DAS.EmployerAccounts.Api.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Client.UnitTests.AccountApiClientTests
 {

@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
 {
-    public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccountHashedQuery>
+    public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccountByHashedIdQuery>
     {
         private readonly IMembershipRepository _membershipRepository;
 
@@ -15,12 +14,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetEmployerAccountHashedQuery item)
+        public ValidationResult Validate(GetEmployerAccountByHashedIdQuery item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetEmployerAccountHashedQuery item)
+        public async Task<ValidationResult> ValidateAsync(GetEmployerAccountByHashedIdQuery item)
         {
             var result = new ValidationResult();
 
@@ -28,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
             {
                 result.AddError(nameof(item.UserId), "UserId has not been supplied");
             }
+
             if (string.IsNullOrEmpty(item.HashedAccountId))
             {
                 result.AddError(nameof(item.HashedAccountId), "HashedAccountId has not been supplied");
@@ -40,7 +40,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount
                 if (membership == null)
                     result.IsUnauthorized = true;
             }
-
 
             return result;
         }

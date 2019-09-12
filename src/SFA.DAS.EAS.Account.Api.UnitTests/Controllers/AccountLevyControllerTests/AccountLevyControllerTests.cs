@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
@@ -21,6 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
         protected Mock<ILog> Logger;
         protected IMapper Mapper;
         protected Mock<IHashingService> HashingService;
+        protected Mock<IEmployerAccountsApiService> ApiService;
 
         [SetUp]
         public void Arrange()
@@ -28,12 +30,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.AccountLevyControllerTes
             Mediator = new Mock<IMediator>();
             Logger = new Mock<ILog>();
             HashingService = new Mock<IHashingService>();
+            ApiService = new Mock<IEmployerAccountsApiService>();
             Mapper = ConfigureMapper();
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper, HashingService.Object);
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper, HashingService.Object, ApiService.Object);
             Controller = new AccountLevyController(orchestrator);
         }
-
-        
 
         private IMapper ConfigureMapper()
         {

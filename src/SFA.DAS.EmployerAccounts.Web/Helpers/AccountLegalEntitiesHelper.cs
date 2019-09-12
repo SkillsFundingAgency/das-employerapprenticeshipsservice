@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
                 HashedLegalEntityId = hashedLegalEntityId,
                 UserId = userIdClaim
             });
-            return accountEntities.Entites;
+            return accountEntities.LegalEntities;
         }
 
         internal bool IsLegalEntityAlreadyAddedToAccount(List<AccountSpecificLegalEntity> accountLegalEntities, string organisationName, string organisationCode, OrganisationType organisationType)

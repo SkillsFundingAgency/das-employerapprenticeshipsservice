@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
             string email = $"{Guid.NewGuid().ToString()}@foo.com";
 
             var fixtures = new EmployerAccountTeamRepositoryTestFixtures()
-                                .WithNewAccountAndActiveUser(email, Role.Owner, out var hashedId);
+                .WithNewAccountAndActiveUser(email, Role.Owner, out var hashedId);
 
             return fixtures.CheckEmployerAccountTeamRepository(async repo =>
             {
@@ -95,6 +95,7 @@ namespace SFA.DAS.EmployerAccounts.IntegrationTests.Data
                 membership.Account = account;
                 membership.User = user;
                 membership.Role = role;
+                membership.CreatedDate = DateTime.Now;
 
                 db.Users.Add(user);
                 db.Memberships.Add(membership);

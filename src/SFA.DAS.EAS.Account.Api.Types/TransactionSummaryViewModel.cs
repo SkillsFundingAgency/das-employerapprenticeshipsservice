@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class TransactionSummaryViewModel : IAccountResource
+    public class TransactionSummaryViewModel
     {
         public int Year { get; set; }
         public int Month { get; set; }

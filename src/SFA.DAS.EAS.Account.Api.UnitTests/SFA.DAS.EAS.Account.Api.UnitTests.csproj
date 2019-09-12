@@ -112,6 +112,9 @@
     <Reference Include="SFA.DAS.Common.Domain, Version=1.4.276.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Common.Domain.1.4.276\lib\net462\SFA.DAS.Common.Domain.dll</HintPath>
     </Reference>
+    <Reference Include="SFA.DAS.EmployerAccounts.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.EmployerAccounts.Api.Types.1.6.1852\lib\net462\SFA.DAS.EmployerAccounts.Api.Types.dll</HintPath>
+    </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.HashingService.1.0.183\lib\netstandard2.0\SFA.DAS.HashingService.dll</HintPath>
     </Reference>
@@ -189,28 +192,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\AccountLegalEntitiesControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\AccountLevyControllerTests.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetAllLevyForAnAccount.cs" />
     <Compile Include="Controllers\AccountLevyControllerTests\WhenIGetLevyForAnAccountAndPeriod.cs" />
-    <Compile Include="Controllers\AccountPayeSchemesControllerTests\AccountPayeSchemesControllerTests.cs" />
     <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTheTransactionSummaryForAnAccount.cs" />
     <Compile Include="Controllers\AccountTransactionsControllerTests\WhenIGetTransactionsForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\EmployerAccountsControllerTests.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAccounts.cs" />
-    <Compile Include="Controllers\AccountPayeSchemesControllerTests\WhenIGetPayeSchemesForAnAccount.cs" />
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
-    <Compile Include="Controllers\LegalEntitiesControllerTests\LegalEntitiesControllerTests.cs" />
-    <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetALegalEntity.cs" />
-    <Compile Include="Controllers\LegalEntitiesControllerTests\WhenIGetLegalEntitiesForAnAccount.cs" />
     <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
-    <Compile Include="Controllers\TransferConnectionsControllerTests\WhenIGetTransferConnections.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
-    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetALevyAccount.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
-    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccountWithNoAgreements.cs" />
-    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetANonLevyAccount.cs" />
-    <Compile Include="Orchestrators\AgreementOrchestratorTests\WhenIGetAnAgreement.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAllAccountsWithBalances.cs" />
+    <Compile Include="Orchestrators\StatisticsOrchestratorTests\WhenIGet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
