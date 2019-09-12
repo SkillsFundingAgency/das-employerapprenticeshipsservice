@@ -352,7 +352,6 @@
     <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
-    <Compile Include="Features\FeatureAgreementAuthorisationHandler.cs" />
     <Compile Include="Features\AgreementService.cs" />
     <Compile Include="NServiceBus\EndpointConfigurationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

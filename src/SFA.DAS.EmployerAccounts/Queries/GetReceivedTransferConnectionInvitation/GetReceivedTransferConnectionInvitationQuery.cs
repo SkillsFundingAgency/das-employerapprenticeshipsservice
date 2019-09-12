@@ -7,6 +7,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReceivedTransferConnectionInvitati
     public class GetReceivedTransferConnectionInvitationQuery : IAuthorizationContextModel, IAsyncRequest<GetReceivedTransferConnectionInvitationResponse>
     {
         [Required]
+        public long AccountId { get; set; }
+
+        [Required]
         public long? TransferConnectionInvitationId { get; set; }
     }
 }

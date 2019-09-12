@@ -10,5 +10,9 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
         [IgnoreMap]
         [Required]
         public long AccountId { get; set; }
+
+        [IgnoreMap]
+        [Required]
+        public string AccountHashedId { get; set; }
     }
 }

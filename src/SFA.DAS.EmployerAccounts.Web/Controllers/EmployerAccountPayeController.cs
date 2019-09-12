@@ -27,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public EmployerAccountPayeController(
             IAuthenticationService owinWrapper,
             EmployerAccountPayeOrchestrator employerAccountPayeOrchestrator,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediatr) : base(owinWrapper, multiVariantTestingService, flashMessage)

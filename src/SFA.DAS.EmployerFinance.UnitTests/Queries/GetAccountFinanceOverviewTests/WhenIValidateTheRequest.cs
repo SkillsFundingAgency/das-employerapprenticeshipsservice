@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 
@@ -10,14 +12,14 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
 {
     public class WhenIValidateTheRequest
     {
-        private Mock<IMembershipRepository> _membershipRepository;
+        private Mock<IAuthorizationService> _authorizationService;
         private GetAccountFinanceOverviewQueryValidator _validator;
 
         [SetUp]
         public void Arrange()
         {
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _validator = new GetAccountFinanceOverviewQueryValidator(_membershipRepository.Object);
+            _authorizationService = new Mock<IAuthorizationService>();
+            _validator = new GetAccountFinanceOverviewQueryValidator(_authorizationService.Object);
         }
 
         [Test]
@@ -26,8 +28,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
             //Act
             var actual = await _validator.ValidateAsync(new GetAccountFinanceOverviewQuery
                 {
-                    UserRef = Guid.NewGuid(),
-                    AccountHashedId = "ABC123",
                     AccountId = 10
                 });
 
@@ -52,13 +52,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
         public async Task ThenTheUnauthorizedFlagIsSetWhenTheUserDoesNotValidateAgainstTheAccount()
         {
             //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
+            _authorizationService.Setup(x => x.IsAuthorized(EmployerUserRole.Any)).Returns(false);
 
             //Act
             var actual = await _validator.ValidateAsync(new GetAccountFinanceOverviewQuery
             {
-                UserRef = Guid.NewGuid(),
-                AccountHashedId = "ABC123",
                 AccountId = 10
             });
 

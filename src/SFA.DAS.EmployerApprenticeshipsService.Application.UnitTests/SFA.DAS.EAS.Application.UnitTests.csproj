@@ -361,12 +361,7 @@
     <Compile Include="Queries\GetTeamMembers\WhenIGetTeamMembers.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetTransferConnectionsTests\WhenIGetTransferConnections.cs" />
-    <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
-    <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
-    <Compile Include="Queries\GetUserInvitations\WhenIRequestHowManyInvitationsIHave.cs" />
-    <Compile Include="Queries\GetUserInvitations\WhenIRequestUserInvitations.cs" />
-    <Compile Include="Queries\GetUserInvitations\WhenIValidateTheRequestForNumberOfInvitations.cs" />
     <Compile Include="Queries\GetUsersTests\WhenIGetUsers.cs" />
     <Compile Include="Queries\GetUserByRefTests\WhenIGetAUser.cs" />
     <Compile Include="Queries\GetUserByRefTests\WhenIValidatedTheQuery.cs" />

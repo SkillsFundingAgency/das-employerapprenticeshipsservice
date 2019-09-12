@@ -1,3 +1,4 @@
+using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Data;

@@ -478,7 +478,6 @@
     <Compile Include="Factories\PayeSchemeEventFactory.cs" />
     <Compile Include="Helpers\NameOf.cs" />
     <Compile Include="Mappings\AccountMappings.cs" />
-    <Compile Include="Mappings\MembershipMappings.cs" />
     <Compile Include="Mappings\TransferConnectionInvitationMappings.cs" />
     <Compile Include="Mappings\UserMappings.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
@@ -591,10 +590,6 @@
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestHandler.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersRequestValidator.cs" />
     <Compile Include="Queries\GetTeamMembers\GetTeamMembersResponse.cs" />
-    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleHandler.cs" />
-    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleQuery.cs" />
-    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleResponse.cs" />
-    <Compile Include="Queries\GetUserAccountRole\GetUserAccountRoleValidator.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQuery.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryHandler.cs" />
     <Compile Include="Queries\GetUserAccounts\GetUserAccountsQueryResponse.cs" />

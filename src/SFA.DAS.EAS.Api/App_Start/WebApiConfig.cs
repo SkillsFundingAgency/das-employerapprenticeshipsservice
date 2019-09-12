@@ -2,12 +2,13 @@
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using System.Web.Http.ModelBinding;
-using SFA.DAS.Authorization.WebApi;
+using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
+using SFA.DAS.Authorization.WebApi.Extensions;
 
 namespace SFA.DAS.EAS.Account.Api
 {
@@ -16,11 +17,13 @@ namespace SFA.DAS.EAS.Account.Api
         public static void Register(HttpConfiguration config)
         {
             config.Filters.Add(new ValidateModelStateFilter());
-            config.Filters.Add(new HandleErrorFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();
             config.Services.Add(typeof(IExceptionLogger), new ErrorLogger());
-            config.Services.Insert(typeof(ModelBinderProvider), 0, new MessageModelBinderProvider());
+            config.Services.UseAuthorizationModelBinder();
+            config.Filters.AddAuthorizationFilter();
+            config.Filters.AddUnauthorizedAccessExceptionFilter();
+
 
             config.UseStructureMap(c =>
             {

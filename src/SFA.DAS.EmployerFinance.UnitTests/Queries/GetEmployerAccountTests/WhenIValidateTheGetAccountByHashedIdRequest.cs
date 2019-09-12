@@ -1,17 +1,15 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Models.AccountTeam;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization.Services;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
 {
     public class WhenIValidateTheGetAccountByHashedIdRequest
     {
         private GetEmployerAccountByHashedIdValidator _validator;
-        private Mock<IMembershipRepository> _membershipRepository;
 
         private const string ExpectedHashedId = "4567";
         private const string ExpectedUserId = "asdf4660";
@@ -19,10 +17,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
         [SetUp]
         public void Arrange()
         {
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedUserId)).ReturnsAsync(new MembershipView());
-
-            _validator = new GetEmployerAccountByHashedIdValidator(_membershipRepository.Object);
+            _validator = new GetEmployerAccountByHashedIdValidator(Mock.Of<IAuthorizationService>());
         }
 
         [Test]

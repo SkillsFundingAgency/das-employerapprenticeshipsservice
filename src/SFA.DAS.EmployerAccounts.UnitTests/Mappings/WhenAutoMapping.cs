@@ -17,7 +17,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Mappings
                 c.AddProfile<AgreementMappings>();
                 c.AddProfile<EmploymentAgreementStatusMappings>();
                 c.AddProfile<LegalEntityMappings>();
-                c.AddProfile<MembershipMappings>();
                 c.AddProfile<TransferConnectionInvitationMappings>();
                 c.AddProfile<UserMappings>();
             });
