@@ -7,8 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
-using SFA.DAS.EAS.Application.Queries.GetPagedEmployerAccounts;
-using SFA.DAS.EAS.Domain.Interfaces;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Account;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.HashingService;
@@ -23,6 +22,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
         protected Mock<UrlHelper> UrlHelper;
         protected Mock<IMapper> Mapper;
         protected Mock<IHashingService> HashingService;
+        protected Mock<IEmployerAccountsApiService> ApiService;
 
         [SetUp]
         public void Arrange()
@@ -31,21 +31,16 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.EmployerAccountsControll
             Logger = new Mock<ILog>();
             Mapper = new Mock<IMapper>();
             HashingService = new Mock<IHashingService>();
-            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object);
-            Controller = new EmployerAccountsController(orchestrator);
+            ApiService = new Mock<IEmployerAccountsApiService>();
+          
+            var orchestrator = new AccountsOrchestrator(Mediator.Object, Logger.Object, Mapper.Object, HashingService.Object, ApiService.Object);
+            Controller = new EmployerAccountsController(orchestrator, ApiService.Object);
 
             UrlHelper = new Mock<UrlHelper>();
             Controller.Url = UrlHelper.Object;
 
-            var accountsResponse = new GetPagedEmployerAccountsResponse
-            {
-                Accounts = new List<Domain.Models.Account.Account>()
-            };
-            Mediator.Setup(x => x.SendAsync(It.IsAny<GetPagedEmployerAccountsQuery>())).ReturnsAsync(accountsResponse);
-
-            var balancesResponse = new GetAccountBalancesResponse {Accounts = new List<AccountBalance>()};
+            var balancesResponse = new GetAccountBalancesResponse { Accounts = new List<AccountBalance>() };
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>())).ReturnsAsync(balancesResponse);
         }
     }
-
 }

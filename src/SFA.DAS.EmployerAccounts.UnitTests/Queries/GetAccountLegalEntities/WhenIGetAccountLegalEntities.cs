@@ -68,11 +68,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountLegalEntities
             var response = await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.That(response.Entites.Count, Is.EqualTo(2));
+            Assert.That(response.LegalEntities.Count, Is.EqualTo(2));
 
             foreach (var legalEntity in _legalEntities)
             {
-                var returned = response.Entites.SingleOrDefault(x => x.Id == legalEntity.Id);
+                var returned = response.LegalEntities.SingleOrDefault(x => x.Id == legalEntity.Id);
 
                 Assert.That(returned.Name, Is.EqualTo(legalEntity.Name));
             }

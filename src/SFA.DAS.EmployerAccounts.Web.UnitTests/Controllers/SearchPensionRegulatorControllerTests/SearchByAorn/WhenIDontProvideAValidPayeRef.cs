@@ -8,6 +8,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -26,13 +27,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.SearchPensionRegula
                 Mock.Of<SearchPensionRegulatorOrchestrator>(),
                 Mock.Of<IMultiVariantTestingService>(),
                 Mock.Of<ICookieStorageService<FlashMessageViewModel>>(),
-                Mock.Of<IMediator>());
+                Mock.Of<IMediator>(),
+                Mock.Of<ICookieStorageService<HashedAccountIdModel>>());
         }
 
         [Test]
         public async Task ThenAnErrorIsDisplayed()
         {
-            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "1234567890ABC", PayeRef = "000/DD" });
+            var response = await _controller.SearchPensionRegulatorByAorn(new SearchPensionRegulatorByAornViewModel { Aorn = "1234567890ABC", PayeRef = "000/" });
             var viewResponse = (ViewResult)response;
 
             Assert.AreEqual(ControllerConstants.SearchUsingAornViewName, viewResponse.ViewName);

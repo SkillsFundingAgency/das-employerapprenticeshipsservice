@@ -57,6 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             try
             {
                 var result = await Mediator.SendAsync(new GetOrganisationsByAornRequest(aorn, payeRef));
+
                 response.Data.Results = CreateResult(result.Organisations).ToList();
             }
             catch (Exception ex)

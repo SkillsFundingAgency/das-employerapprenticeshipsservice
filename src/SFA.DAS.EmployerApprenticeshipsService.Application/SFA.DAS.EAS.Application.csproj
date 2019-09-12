@@ -63,6 +63,9 @@
       <HintPath>..\packages\MediatR.2.1.0\lib\net45\MediatR.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNetCore.WebUtilities, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNetCore.WebUtilities.2.2.0\lib\netstandard2.0\Microsoft.AspNetCore.WebUtilities.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.2.0.4\lib\net45\Microsoft.Azure.KeyVault.Core.dll</HintPath>
     </Reference>
@@ -75,8 +78,35 @@
     <Reference Include="Microsoft.Data.Services.Client, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.8.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Configuration.Binder, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Configuration.Binder.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Configuration.Binder.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Logging.Abstractions.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Options, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Options.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Options.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Primitives, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Extensions.Primitives.2.2.0\lib\netstandard2.0\Microsoft.Extensions.Primitives.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel.Clients.ActiveDirectory, Version=5.0.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.IdentityModel.Clients.ActiveDirectory.5.0.5\lib\net45\Microsoft.IdentityModel.Clients.ActiveDirectory.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Net.Http.Headers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Net.Http.Headers.2.2.0\lib\netstandard2.0\Microsoft.Net.Http.Headers.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
@@ -98,7 +128,7 @@
       <HintPath>..\packages\NEST.5.6.1\lib\net46\Nest.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.5.3\lib\net45\NLog.dll</HintPath>
@@ -263,6 +293,12 @@
       <HintPath>..\packages\StructureMap.4.6.1\lib\net45\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -272,10 +308,24 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.1\lib\netstandard2.0\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -295,8 +345,8 @@
     <Reference Include="System.Spatial, Version=5.8.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Spatial.5.8.2\lib\net40\System.Spatial.dll</HintPath>
     </Reference>
-    <Reference Include="System.Text.Encodings.Web, Version=4.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Text.Encodings.Web.4.0.0\lib\netstandard1.0\System.Text.Encodings.Web.dll</HintPath>
+    <Reference Include="System.Text.Encodings.Web, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Text.Encodings.Web.4.5.0\lib\netstandard2.0\System.Text.Encodings.Web.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Transactions" />
@@ -339,16 +389,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DependencyResolution\EmployerAccountsApiServiceRegistry.cs" />
     <Compile Include="Extensions\AddressExtensions.cs" />
+    <Compile Include="Http\RestHttpClientException.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
     <Compile Include="MarkerInterfaces\IPublicHashingService.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityResponse.cs" />
     <Compile Include="Queries\GetAccountLegalEntitiy\GetAccountLegalEntityValidator.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQuery.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandler.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="DependencyResolution\AuditRegistry.cs" />
     <Compile Include="DependencyResolution\AuthorizationRegistry.cs" />
     <Compile Include="DependencyResolution\CachesRegistry.cs" />
@@ -376,21 +425,15 @@
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesValidator.cs" />
-    <Compile Include="Queries\GetStatistics\GetStatisticsQueryHandler.cs" />
-    <Compile Include="Queries\GetStatistics\GetStatisticsQuery.cs" />
-    <Compile Include="Queries\GetStatistics\GetStatisticsResponse.cs" />
+    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQueryHandler.cs" />
+    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsQuery.cs" />
+    <Compile Include="Queries\GetFinancialStatistics\GetFinancialStatisticsResponse.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\LegalEntityMappings.cs" />
     <Compile Include="Queries\Extensions\QueryExtensions.cs" />
-    <Compile Include="Queries\GetLegalEntity\GetLegalEntityQuery.cs" />
-    <Compile Include="Queries\GetLegalEntity\GetLegalEntityQueryHandler.cs" />
-    <Compile Include="Queries\GetLegalEntity\GetLegalEntityResponse.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQuery.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceQueryHandler.cs" />
     <Compile Include="Queries\GetTransferAllowance\GetTransferAllowanceResponse.cs" />
-    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQuery.cs" />
-    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsQueryHandler.cs" />
-    <Compile Include="Queries\GetTransferConnections\GetTransferConnectionsResponse.cs" />
     <Compile Include="Services\ApprenticeshipInfoServiceWrapper.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommand.cs" />
     <Compile Include="Commands\DismissMonthlyTaskReminder\DismissMonthlyTaskReminderCommandHandler.cs" />
@@ -472,10 +515,6 @@
     <Compile Include="Queries\GetAccountTasks\GetAccountTasksQueryHandler.cs" />
     <Compile Include="Queries\GetAccountTasks\GetAccountTasksQueryValidator.cs" />
     <Compile Include="Queries\GetAccountTasks\GetAccountTasksResponse.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersHandler.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersQuery.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersResponse.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\GetAccountTeamMembersValidator.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryHandler.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryRequest.cs" />
     <Compile Include="Queries\GetCharity\GetCharityQueryResponse.cs" />
@@ -484,39 +523,17 @@
     <Compile Include="Formatters\TransactionDowloads\DownloadFormatType.cs" />
     <Compile Include="Formatters\TransactionDowloads\ExcelTransactionFormatter.cs" />
     <Compile Include="Formatters\TransactionDowloads\ITransactionFormatter.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestHandler.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdRequestValidator.cs" />
-    <Compile Include="Queries\GetEmployerAgreementById\GetEmployerAgreementByIdResponse.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodRequest.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriod\GetLevyDeclarationsByAccountAndPeriodResponse.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefHandler.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefQuery.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefResponse.cs" />
-    <Compile Include="Queries\GetPayeSchemeByRef\GetPayeSchemeByRefValidator.cs" />
-    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdHandler.cs" />
-    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdQuery.cs" />
-    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdResponse.cs" />
-    <Compile Include="Queries\GetEmployerAccountByHashedId\GetEmployerAccountByHashedIdValidator.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionHandler.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionQuery.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionResponse.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistory\GetEmployerEnglishFractionValidator.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedAccountsQueryHandler.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsQuery.cs" />
-    <Compile Include="Queries\GetPagedEmployerAccounts\GetPagedEmployerAccountsResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsHandler.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsQuery.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsResponse.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactions\GetEmployerAccountTransactionsValidator.cs" />
-    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountByHashedIdValidator.cs" />
-    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHandler.cs" />
-    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHashedHandler.cs" />
-    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountHashedQuery.cs" />
-    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountQuery.cs" />
-    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountResponse.cs" />
-    <Compile Include="Queries\GetEmployerAccount\GetEmployerAccountValidator.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationQueryHandler.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationRequest.cs" />
     <Compile Include="Queries\GetLevyDeclaration\GetLevyDeclarationResponse.cs" />
@@ -569,12 +586,20 @@
     <Compile Include="Queries\GetUser\GetUserQueryValidator.cs" />
     <Compile Include="Queries\GetUser\GetUserResponse.cs" />
     <Compile Include="Services\DasLevyService.cs" />
+    <Compile Include="Services\EmployerAccountsApi\EmployerAccountsApiService.cs" />
+    <Compile Include="Services\EmployerAccountsApi\Http\EmployerAccountsApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerAccountsApi\Http\IEmployerAccountsApiHttpClientFactory.cs" />
+    <Compile Include="Services\EmployerAccountsApi\IEmployerAccountsApiService.cs" />
     <Compile Include="Services\TransferAllowanceService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj">
+      <Project>{8057e87b-5893-45d0-93a1-6278ea8ba328}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Api.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
       <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>

@@ -142,6 +142,7 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Exceptions\ResourceNotFoundException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -749,6 +750,8 @@
     <Content Include="Views\Shared\_NonLevy_Agreement_V1_body.cshtml" />
     <Content Include="Views\EmployerTeam\V2\VacancyStatus.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourDocument.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

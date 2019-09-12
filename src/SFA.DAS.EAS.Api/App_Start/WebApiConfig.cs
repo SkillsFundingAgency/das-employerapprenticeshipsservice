@@ -44,6 +44,7 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<ValidationRegistry>();
+                c.AddRegistry<EmployerAccountsApiServiceRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }

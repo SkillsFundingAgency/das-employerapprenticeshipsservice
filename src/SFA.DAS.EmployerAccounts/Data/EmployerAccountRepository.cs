@@ -9,7 +9,9 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
@@ -26,6 +28,29 @@ namespace SFA.DAS.EmployerAccounts.Data
         public Task<Account> GetAccountById(long id)
         {
             return _db.Value.Accounts.SingleOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@toDate", toDate);
+
+            var offset = pageSize * (pageNumber - 1);
+
+            var countResult = await _db.Value.Database.Connection.QueryAsync<int>(
+                sql: $"select count(*) from [employer_account].[Account] a;",
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
+
+            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
+                sql: $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;",
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
+
+            return new Accounts<Account>
+            {
+                AccountsCount = countResult.First(),
+                AccountList = result.ToList()
+            };
         }
 
         public async Task<List<Account>> GetAllAccounts()
@@ -53,6 +78,59 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.SingleOrDefault();
         }
 
+        public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
+        {        
+            var accountDetail = await _db.Value.Accounts
+                .Where(ac => ac.HashedId == hashedAccountId)
+                .Select(ac => new AccountDetail
+                {
+                    AccountId = ac.Id,
+                    HashedId = ac.HashedId,
+                    PublicHashedId = ac.PublicHashedId,
+                    Name = ac.Name,
+                    CreatedDate = ac.CreatedDate,
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType) ac.ApprenticeshipEmployerType
+                }).FirstOrDefaultAsync();
+
+            if (accountDetail == null)
+            {             
+                return null;
+            }
+
+            accountDetail.OwnerEmail = await _db.Value.Memberships
+                .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
+                .OrderBy(m => m.CreatedDate)
+                .Select(m => m.User.Email)
+                .FirstOrDefaultAsync();
+
+            accountDetail.PayeSchemes = await _db.Value.AccountHistory
+                .Where(ach => ach.AccountId == accountDetail.AccountId)
+                .Select(ach => ach.PayeRef)
+                .ToListAsync();
+
+            accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
+                .Where(ale => ale.AccountId == accountDetail.AccountId
+                              && ale.Deleted == null
+                              && ale.Agreements.Any(ea =>
+                                  ea.StatusId == EmployerAgreementStatus.Pending ||
+                                  ea.StatusId == EmployerAgreementStatus.Signed))
+                .Select(ale => ale.LegalEntityId)
+                .ToListAsync();
+
+            var templateIds = await _db.Value.Agreements
+                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId))
+                .Select(x => x.TemplateId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            accountDetail.AccountAgreementTypes = await _db.Value.AgreementTemplates
+                .Where(x => templateIds.Contains(x.Id))
+                .Select(x => x.AgreementType)
+                .ToListAsync()
+                .ConfigureAwait(false);
+              
+            return accountDetail;
+        }
 
         public async Task<AccountStats> GetAccountStats(long accountId)
         {

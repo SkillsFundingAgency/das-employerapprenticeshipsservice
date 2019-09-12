@@ -313,11 +313,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Mappings\WhenAutoMapping.cs" />
-    <Compile Include="Queries\GetAccountLegalEntities\Api\GetAccountLegalEntitiesQueryHandlerTests.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenIGetAccountLegalEntities.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\WhenValidatingAccountLegalEntities.cs" />
     <Compile Include="Queries\GetStatisticsTests\GetStatisticsQueryTests.cs" />
-    <Compile Include="Queries\GetLegalEntityQueryTests\GetLegalEntityQueryTests.cs" />
     <Compile Include="Queries\GetTransferAllowanceTests\GetTransferAllowanceTests.cs" />
     <Compile Include="Factories\LevyEventFactoryTests\WhenICreateAnEvent.cs" />
     <Compile Include="FakeTimeProvider.cs" />
@@ -329,21 +327,14 @@
     <Compile Include="Queries\GetAccountStatsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTasksTests\WhenIGetAnAccountsTasks.cs" />
     <Compile Include="Queries\GetAccountTasksTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetAccountTransactionSummaryTests\WhenIGetAccountTransactionSummary.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIGetAccountTransactions.cs" />
     <Compile Include="Queries\GetAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetCharity\WhenIGetCharity.cs" />
     <Compile Include="Queries\GetCharity\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIGetAnAgreement.cs" />
-    <Compile Include="Queries\GetEmployerAgreementByIdTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLastLevyDeclarationsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetLevyDeclarationsByAccountAndPeriodTests\WhenIGetLevyDeclarations.cs" />
-    <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByAccountId.cs" />
-    <Compile Include="Queries\GetEmployerAccountTests\WhenIGetEmployerAccountsByHashedKey.cs" />
-    <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByHashedIdRequest.cs" />
-    <Compile Include="Queries\GetEmployerAccountTests\WhenIValidateTheGetAccountByIdRequest.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIGetEmployerTransactions.cs" />
     <Compile Include="Queries\GetEmployerAccountTransactionsTests\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetEmployerEnglishFractionHistoryTests\WhenIGetEnglishFractions.cs" />
@@ -352,9 +343,6 @@
     <Compile Include="Queries\GetEnglishFrationDetail\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIGetLevyDeclarations.cs" />
     <Compile Include="Queries\GetLevyDeclarationTests\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIGetEmployerAccounts.cs" />
-    <Compile Include="Queries\GetEmployerAccountByHashedIdTests\WhenIValidateTheQuery.cs" />
-    <Compile Include="Queries\GetAccountTeamMembers\WhenIGetUserAccounts.cs" />
     <Compile Include="Queries\GetPostcodeAddressTests\WhenIGetAddressesFromAPostcode.cs" />
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIGetPreviousTransactionsCount.cs" />
     <Compile Include="Queries\GetPreviousTransactionsCountTests\WhenIValidateTheRequest.cs" />
@@ -362,7 +350,6 @@
     <Compile Include="Queries\GetPublicSectorOrgainsationTests\WhenIValidateTheQuery.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIGetTeamMembers.cs" />
     <Compile Include="Queries\GetTeamMembers\WhenIValidateTheRequest.cs" />
-    <Compile Include="Queries\GetTransferConnectionsTests\WhenIGetTransferConnections.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIGetAUserAccountRole.cs" />
     <Compile Include="Queries\GetUserAccountRole\WhenIValidateTheRequest.cs" />
     <Compile Include="Queries\GetUserAccountsTests\WhenIGetUserAccounts.cs" />
@@ -438,9 +425,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Queries\GetAccountEmployerAgreementRemove\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
