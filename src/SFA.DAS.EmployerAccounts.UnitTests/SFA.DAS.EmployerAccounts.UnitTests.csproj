@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.TestCommon\SFA.DAS.EmployerAccounts.TestCommon.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
@@ -34,6 +35,12 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
+    <Folder Include="Queries\GetLegalEntityQueryTests\" />
+    <Folder Include="Queries\GetEmployerAgreementByIdTests\" />
   </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
@@ -16,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Data
     {
         public virtual DbSet<AccountLegalEntity> AccountLegalEntities { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<AccountHistory> AccountHistory { get; set; }
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
         public virtual DbSet<HealthCheck> HealthChecks { get; set; }
@@ -25,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Data
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserAccountSetting> UserAccountSettings { get; set; }
         public virtual DbSet<RunOnceJob> RunOnceJobs { get; set; }
+        public virtual DbSet<Paye> Payees { get; set; }
 
         static EmployerAccountsDbContext()
         {
@@ -69,6 +72,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
             modelBuilder.Entity<HealthCheck>().ToTable("HealthChecks", "dbo");
             modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId });
+            modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<TransferConnectionInvitation>().HasRequired(i => i.SenderAccount);
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.Ref).HasColumnName(nameof(User.UserRef));

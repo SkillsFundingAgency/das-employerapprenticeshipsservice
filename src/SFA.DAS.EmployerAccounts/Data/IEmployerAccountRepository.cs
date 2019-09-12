@@ -8,7 +8,9 @@ namespace SFA.DAS.EmployerAccounts.Data
     {
         Task<Account> GetAccountById(long id);
         Task<List<Account>> GetAllAccounts();
+        Task<Accounts<Account>> GetAccounts(string toDate, int pageNumber, int pageSize);
         Task<Account> GetAccountByHashedId(string hashedAccountId);
+        Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);
         Task<AccountStats> GetAccountStats(long accountId);
         Task RenameAccount(long id, string name);
         Task SetAccountAsLevy(long accountId);

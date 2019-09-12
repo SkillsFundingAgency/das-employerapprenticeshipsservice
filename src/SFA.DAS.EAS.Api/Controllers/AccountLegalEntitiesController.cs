@@ -1,27 +1,25 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Application.Queries.GetAccountLegalEntities.Api;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [ApiAuthorize(Roles = "ReadUserAccounts")]
     [RoutePrefix("api/accountlegalentities")]
     public class AccountLegalEntitiesController : ApiController
-    {
-        private readonly IMediator _mediator;
+    {      
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public AccountLegalEntitiesController(IMediator mediator)
+        public AccountLegalEntitiesController(IEmployerAccountsApiService apiService)
         {
-            _mediator = mediator;
+            _apiService = apiService;
         }
 
         [Route]
-        public async Task<IHttpActionResult> Get([FromUri] GetAccountLegalEntitiesQuery query)
+        public async Task<IHttpActionResult> Get(int? pageSize, int? pageNumber)
         {
-            var response = await _mediator.SendAsync(query);
-            return Ok(response.AccountLegalEntities);
+            return Ok(await _apiService.Redirect($"/api/accountlegalentities?{(pageSize.HasValue ? "pageSize=" + pageSize + "&" : "")}{(pageNumber.HasValue ? "pageNumber=" + pageNumber : "")}"));
         }
     }
 }
