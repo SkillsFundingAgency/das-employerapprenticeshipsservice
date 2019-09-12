@@ -8,21 +8,16 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
 {
     public class AddedPayeSchemeEventHandler : IHandleMessages<AddedPayeSchemeEvent>
     {
-        private readonly IMediator _mediator;
-
-        public AddedPayeSchemeEventHandler(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         public async Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
-        { 
+        {
+            await context.SendLocal(new CreateAccountPayeCommand(message.AccountId, message.PayeRef, message.SchemeName, message.Aorn));
+
             if (SchemeWasAddedViaAornRoute(message))
             {
                 return;
             }
 
-            await context.SendLocal(new CreateAccountPayeCommand(message.AccountId, message.PayeRef,message.SchemeName, message.Aorn));
+            await context.SendLocal(new ImportAccountLevyDeclarationsCommand(message.AccountId, message.PayeRef));
         }
 
         private static bool SchemeWasAddedViaAornRoute(AddedPayeSchemeEvent message)

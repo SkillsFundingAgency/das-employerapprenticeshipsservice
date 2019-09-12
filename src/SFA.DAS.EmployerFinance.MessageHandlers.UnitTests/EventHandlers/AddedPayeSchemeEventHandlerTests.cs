@@ -33,6 +33,28 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
                 f => f.Handle(),
                 f => f.Context.Verify(x => x.Send(It.Is<ImportAccountLevyDeclarationsCommand>(y => y.AccountId == f.Event.AccountId && y.PayeRef == f.Event.PayeRef), It.IsAny<SendOptions>()), Times.Once()));
         }
+
+        [Test]
+        public Task Handle_WhenThePayeSchemeWasAddedViaAorn_ThenShouldCreateAccountPaye()
+        {
+            return RunAsync(f =>
+                {
+                    f.Event.Aorn = "AORN";
+                },
+                f => f.Handle(),
+                f => f.Context.Verify(x => x.Send(It.Is<CreateAccountPayeCommand>(y => y.AccountId == f.Event.AccountId && y.EmpRef == f.Event.PayeRef && y.Aorn == f.Event.Aorn && y.Name == f.Event.SchemeName), It.IsAny<SendOptions>()), Times.Once()));
+        }
+
+        [Test]
+        public Task Handle_WhenThePayeSchemeWasAddedViaGovernmentGateway_ThenShouldCreateAccountPaye()
+        {
+            return RunAsync(f =>
+                {
+                    f.Event.Aorn = string.Empty;
+                },
+                f => f.Handle(),
+                f => f.Context.Verify(x => x.Send(It.Is<CreateAccountPayeCommand>(y => y.AccountId == f.Event.AccountId && y.EmpRef == f.Event.PayeRef && y.Aorn == f.Event.Aorn && y.Name == f.Event.SchemeName), It.IsAny<SendOptions>()), Times.Once()));
+        }
     }
 
     public class AddedPayeSchemeEventHandlerTestsFixture
