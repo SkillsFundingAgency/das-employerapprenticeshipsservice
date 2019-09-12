@@ -9,13 +9,10 @@
     <div class="govuk-width-container das-dashboard-header__border">
         <h1 class="govuk-heading-m das-account__title">Account ID: @Model.Data.Account.PublicHashedId</h1>
         <h2 class="govuk-heading-l das-account__account-name">@Model.Data.Account.Name</h2>
-        @if (Model.Data.ShowSavedFavourites)
-        {
-        <a href="@Url.FavouritesAction()" class="das-favourites-link govuk-body">
+        <a href="@Url.FavouritesAction("apprenticeships")" class="das-favourites-link govuk-body">
             <span class="das-favourites-link__icon"><img src="@Html.CdnLink("images", "favourite-unchecked-black.svg")" alt=""></span>
             <span class="das-favourites-link__text">View saved favourites</span>
         </a>
-        }
 </div>
 </div>
 
