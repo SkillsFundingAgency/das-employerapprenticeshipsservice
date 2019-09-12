@@ -112,8 +112,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         public async Task ThenTheMediatorIsCalledToGetThePayeSchemeWhenASchemeIsSelectedToBeRemoved()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountByHashedIdQuery>()))
+                .ReturnsAsync(new GetEmployerAccountByHashedIdResponse
                 {
                     Account = new Account
                     {
@@ -138,8 +138,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             var payeRef = "123/abc";
             var model = new RemovePayeSchemeViewModel { HashedAccountId = hashedId, PayeRef = payeRef, UserId = userRef };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountByHashedIdQuery>()))
+                .ReturnsAsync(new GetEmployerAccountByHashedIdResponse
                 {
                     Account = new Account
                     {

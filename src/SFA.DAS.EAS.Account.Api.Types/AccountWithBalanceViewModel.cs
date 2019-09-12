@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class AccountWithBalanceViewModel : IAccountResource
+    public class AccountWithBalanceViewModel
     {
         public string AccountName { get; set; }
 

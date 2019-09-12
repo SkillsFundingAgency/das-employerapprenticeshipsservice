@@ -6,6 +6,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
 namespace SFA.DAS.EmployerAccounts.Api.Client
 {
+    //todo: not a great client/http combo
     public class EmployerAccountsApiClient : IEmployerAccountsApiClient
     {
         private readonly ISecureHttpClient _httpClient;
