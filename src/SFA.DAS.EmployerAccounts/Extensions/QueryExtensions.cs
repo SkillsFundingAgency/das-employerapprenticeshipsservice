@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EmployerAccounts.Extensions
 {
@@ -16,6 +18,11 @@ namespace SFA.DAS.EmployerAccounts.Extensions
 
                 yield return item;
             }
+        }
+
+        public static QueryFutureEnumerable<int> FutureCount<T>(this IQueryable<T> source)
+        {
+            return source.GroupBy(a => 1).Select(g => g.Count()).Future();
         }
     }
 }

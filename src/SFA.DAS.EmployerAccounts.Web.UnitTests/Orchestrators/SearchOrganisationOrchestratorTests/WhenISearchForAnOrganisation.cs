@@ -93,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.CompaniesHouse, Code = "zzz999" } } 
+                LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.CompaniesHouse, Code = "zzz999" } } 
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -120,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.CompaniesHouse, Code = companyCode } } 
+                LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.CompaniesHouse, Code = companyCode } } 
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -147,7 +147,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.Charities, Code = charityCode } }
+                LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.Charities, Code = charityCode } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -174,7 +174,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.PublicBodies, Name = organisationName } } 
+                LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.PublicBodies, Name = organisationName } } 
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -201,7 +201,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.Other, Name = organisationName } } 
+                LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.Other, Name = organisationName } } 
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse
@@ -228,7 +228,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.SearchOrganisatio
             var pageNumber = 2;
             var expectedLegalEntitiesResponse = new GetAccountLegalEntitiesResponse
             {
-                Entites = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.PensionsRegulator, Code = companyCode } }
+                LegalEntities = new List<AccountSpecificLegalEntity> { new AccountSpecificLegalEntity { Source = OrganisationType.PensionsRegulator, Code = companyCode } }
             };
             _mediator.Setup(x => x.SendAsync(It.Is<GetAccountLegalEntitiesRequest>(y => y.HashedLegalEntityId == hashedAccountId && y.UserId == userId))).ReturnsAsync(expectedLegalEntitiesResponse);
             var expectedSearchResults = new GetOrganisationsResponse

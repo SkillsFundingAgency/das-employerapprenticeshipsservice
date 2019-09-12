@@ -1,10 +1,9 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
-using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Account.Api.Attributes;
 using SFA.DAS.EAS.Account.Api.Orchestrators;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
@@ -12,10 +11,12 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
     public class EmployerAccountsController : ApiController
     {
         private readonly AccountsOrchestrator _orchestrator;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public EmployerAccountsController(AccountsOrchestrator orchestrator)
+        public EmployerAccountsController(AccountsOrchestrator orchestrator, IEmployerAccountsApiService apiService)
         {
             _orchestrator = orchestrator;
+            _apiService = apiService;
         }
 
         [Route("", Name = "AccountsIndex")]
@@ -30,11 +31,8 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
                 result.Data.Data.ForEach(x => x.Href = Url.Route("GetAccount", new { hashedAccountId = x.AccountHashId }));
                 return Ok(result.Data);
             }
-            else
-            {
-                //TODO: Handle unhappy paths.
-                return Conflict();
-            }
+        
+            return Conflict();
         }
 
 
@@ -50,8 +48,6 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
                 return NotFound();
             }
 
-            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(hashedAccountId, x));
-            result.Data.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(hashedAccountId, x));
             return Ok(result.Data);
         }
 
@@ -66,26 +62,16 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
             {
                 return NotFound();
             }
-
-            result.Data.LegalEntities.ForEach(x => CreateGetLegalEntityLink(result.Data.HashedAccountId, x));
-            result.Data.PayeSchemes.ForEach(x => CreateGetPayeSchemeLink(result.Data.HashedAccountId, x));
+         
             return Ok(result.Data);
         }
-
 
         [Route("{hashedAccountId}/users", Name = "GetAccountUsers")]
         [ApiAuthorize(Roles = "ReadAllAccountUsers")]
         [HttpGet]
         public async Task<IHttpActionResult> GetAccountUsers(string hashedAccountId)
         {
-            var result = await _orchestrator.GetAccountTeamMembers(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-           
-            return Ok(result.Data);
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/users"));
         }
 
         [Route("internal/{accountId}/users", Name = "GetAccountUsersByInternalAccountId")]
@@ -93,25 +79,7 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetAccountUsers(long accountId)
         {
-            var result = await _orchestrator.GetAccountTeamMembers(accountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data);
-        }
-        
-
-        private void CreateGetLegalEntityLink(string hashedAccountId, ResourceViewModel legalEntity)
-        {
-            legalEntity.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = legalEntity.Id });
-        }
-
-        private void CreateGetPayeSchemeLink(string hashedAccountId, ResourceViewModel payeScheme)
-        {
-            payeScheme.Href = Url.Route("GetPayeScheme", new { hashedAccountId, payeSchemeRef = HttpUtility.UrlEncode(payeScheme.Id) });
+            return Ok(await _apiService.Redirect($"/api/accounts/internal/{accountId}/users"));
         }
     }
 }

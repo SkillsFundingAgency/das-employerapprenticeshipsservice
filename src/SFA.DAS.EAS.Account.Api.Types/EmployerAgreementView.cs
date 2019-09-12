@@ -3,7 +3,7 @@ using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EAS.Account.Api.Types
 {
-    public class EmployerAgreementView : IAccountResource
+    public class EmployerAgreementView
     {
         public long Id { get; set; }
         public long AccountId { get; set; }

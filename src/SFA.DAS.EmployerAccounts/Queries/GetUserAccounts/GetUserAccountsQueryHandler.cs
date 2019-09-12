@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts
             var userRef = message.UserRef;
 
             var accounts = await _userAccountsRepository.GetAccountsByUserRef(userRef);
-            return new GetUserAccountsQueryResponse {Accounts = accounts};
+            return new GetUserAccountsQueryResponse { Accounts = accounts };
         }
     }
 }
