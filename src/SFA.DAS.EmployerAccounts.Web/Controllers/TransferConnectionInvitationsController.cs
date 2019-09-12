@@ -57,8 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             await _mediator.SendAsync(new SendTransferConnectionInvitationQuery
             {
                 ReceiverAccountPublicHashedId = model.ReceiverAccountPublicHashedId,
-                AccountId = model.AccountId,
-                UserRef = model.UserRef
+                AccountId = model.AccountId
             });
             return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.ReceiverAccountPublicHashedId });
         }
