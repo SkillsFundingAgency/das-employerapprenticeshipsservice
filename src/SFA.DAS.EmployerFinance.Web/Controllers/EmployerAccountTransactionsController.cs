@@ -15,6 +15,7 @@ using SFA.DAS.Validation.Mvc;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerFinance.Web.Filters;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
@@ -68,6 +69,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [ValidateMembership]
         [ImportModelStateFromTempData]
+        [LevyEmployerTypeOnly]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
