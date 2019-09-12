@@ -168,12 +168,7 @@
     <Compile Include="Extensions\AccountDashboardViewModelExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="FeatureToggles\CloudConfigFeatureToggle.cs" />
-    <Compile Include="FeatureToggles\CloudConfigToggleValueProvider.cs" />
     <Compile Include="FeatureToggles\FeatureToggleViewEngine.cs" />
-    <Compile Include="FeatureToggles\Features.cs" />
-    <Compile Include="FeatureToggles\IBooleanToggleValueProvider.cs" />
-    <Compile Include="FeatureToggles\IFeatureToggle.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

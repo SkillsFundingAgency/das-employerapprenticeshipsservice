@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System.Linq;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Portal;
@@ -25,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
+        private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -38,11 +40,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient)
+            IPortalClient portalClient,
+            IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -51,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var response = await GetAccountInformation(hashedAccountId);
             var hasPayeScheme = HasPayeScheme(response.Data);
-            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage") || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {

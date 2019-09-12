@@ -6,7 +6,6 @@ using SFA.DAS.NLog.Logger;
 using StructureMap;
 using System.Web;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
@@ -26,8 +25,6 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-
-            For<IBooleanToggleValueProvider>().Use<CloudConfigToggleValueProvider>().Singleton();
 
             For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
         }

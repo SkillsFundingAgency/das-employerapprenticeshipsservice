@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
@@ -35,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object);
+                mockPortalClient.Object, Mock.Of<IAuthorizationService>());
         }
 
         [Test]

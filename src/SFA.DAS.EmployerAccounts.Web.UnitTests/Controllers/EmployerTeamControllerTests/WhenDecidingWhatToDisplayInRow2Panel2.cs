@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -38,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 _mockMultiVariantTestingService.Object,
                 _mockCookieStorageService.Object,
                 _mockEmployerTeamOrchestrator.Object,
-                _mockPortalClient.Object);
+                _mockPortalClient.Object, Mock.Of<IAuthorizationService>());
         }
 
         [Test]
