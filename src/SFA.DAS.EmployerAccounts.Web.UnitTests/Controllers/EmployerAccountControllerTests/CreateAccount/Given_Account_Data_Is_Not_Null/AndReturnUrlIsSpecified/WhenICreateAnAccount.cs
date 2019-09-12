@@ -42,8 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator = new Mock<EmployerAccountOrchestrator>();
 
-            _owinWrapper = new Mock<IAuthenticationService>();
-            new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             var logger = new Mock<ILog>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -88,15 +86,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
 
             _orchestrator.Setup(x => x.CreateOrUpdateAccount(It.IsAny<CreateAccountModel>(), It.IsAny<HttpContextBase>()))
                 .ReturnsAsync(_response);
-
-            var mockAuthorization = new Mock<IAuthorizationService>();
-
-            mockAuthorization
-                .Setup(
-                    m =>
-                        m.IsAuthorized(FeatureType.EnableNewRegistrationJourney))
-                .Returns(true);
-
+            
             _returnUrlCookieStorage.Setup(x => x.Get("SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie"))
                 .Returns(new ReturnUrlModel {Value = ExpectedReturnUrl});
 

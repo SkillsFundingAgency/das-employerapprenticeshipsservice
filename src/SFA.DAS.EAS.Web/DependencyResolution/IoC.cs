@@ -5,9 +5,9 @@ using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
-using SFA.DAS.Authorization.DependencyResolution;
-using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution;
-using SFA.DAS.Authorization.Features.DependencyResolution;
+using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.Features.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
