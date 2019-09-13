@@ -217,13 +217,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\InProcessCacheTests.cs" />
-    <Compile Include="ExecutionPoliciesTests\Hmrc\WhenIMakeABadRequest.cs" />
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\ExceptionExtensionTests.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Features\AgreementServiceTests.cs" />
-    <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Authorization\AuthorizationServiceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICallDateRange.cs" />
@@ -235,13 +233,6 @@
     <Compile Include="Services\CookieStorageTests\WhenIUseTheCookieStorageService.cs" />
     <Compile Include="Services\ExcelService\WhenICreatedAnExcelFile.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICompareTheSubmissionDateToPayrolDate.cs" />
-    <Compile Include="Services\HmrcServiceTests\WhenICallHmrcServiceForLastEnglishFractionUpdateDate.cs" />
-    <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForAuthentication.cs" />
-    <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForDeclarations.cs" />
-    <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmpref.cs" />
-    <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmprefDiscovery.cs" />
-    <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEmprefWithPrivilegedAccess.cs" />
-    <Compile Include="Services\HmrcServiceTests\WhenICallTheHmrcServiceForEnglishFractions.cs" />
     <Compile Include="Services\ReferenceDataService\WhenIGetACharity.cs" />
     <Compile Include="Services\ReferenceDataService\WhenISearchAndGetCloseMatches.cs" />
     <Compile Include="Services\ReferenceDataService\WhenISearchAnOrganisation.cs" />
@@ -255,10 +246,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
-      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
-      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{B520A3E4-8259-4309-94D4-4A99FD32D2F7}</Project>
       <Name>SFA.DAS.EmployerAccounts</Name>
@@ -278,6 +265,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.TestCommon\SFA.DAS.EAS.TestCommon.csproj">
       <Project>{05d7c094-e2c9-4ccd-b0d7-85d263254b26}</Project>
       <Name>SFA.DAS.EAS.TestCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
+      <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
+      <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
       <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>

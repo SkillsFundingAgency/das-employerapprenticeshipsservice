@@ -755,6 +755,10 @@
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\das-shared-packages\SFA.DAS.Hmrc\SFA.DAS.Hmrc\SFA.DAS.Hmrc.csproj">
+      <Project>{FEE82654-9036-4282-952A-E111EF0E2871}</Project>
+      <Name>SFA.DAS.Hmrc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
       <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Client</Name>
@@ -762,10 +766,6 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
-      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
-      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
       <Project>{98714180-addf-4ff9-b928-3e9a557ca4d5}</Project>

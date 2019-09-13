@@ -5,8 +5,8 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.ActiveDirectory;
 using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Http;
 using SFA.DAS.EmployerFinance.Models.ProjectedCalculations;
-using SFA.DAS.Http;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Services.DasForecastingService

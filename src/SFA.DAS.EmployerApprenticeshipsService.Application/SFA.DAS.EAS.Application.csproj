@@ -594,6 +594,10 @@
     <Compile Include="Services\TransferAllowanceService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\das-shared-packages\SFA.DAS.Hmrc\SFA.DAS.Hmrc\SFA.DAS.Hmrc.csproj">
+      <Project>{FEE82654-9036-4282-952A-E111EF0E2871}</Project>
+      <Name>SFA.DAS.Hmrc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>

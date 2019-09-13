@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.Http
+﻿namespace SFA.DAS.EmployerFinance.Http
 {
     public class ServiceUnavailableException : HttpException
     {

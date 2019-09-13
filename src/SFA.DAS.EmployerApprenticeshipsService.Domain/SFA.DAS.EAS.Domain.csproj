@@ -404,10 +404,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
-      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
-      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj">
       <Project>{c15dec5c-666d-4cb2-968e-a273eb60d15e}</Project>
       <Name>SFA.DAS.EmployerFinance.Messages</Name>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.Http
+namespace SFA.DAS.EmployerFinance.Http
 {
     public class HttpException : Exception
     {
@@ -9,6 +9,7 @@ namespace SFA.DAS.Http
         {
             StatusCode = statusCode;
         }
+
         public HttpException(int statusCode, string message)
             : base(message)
         {
