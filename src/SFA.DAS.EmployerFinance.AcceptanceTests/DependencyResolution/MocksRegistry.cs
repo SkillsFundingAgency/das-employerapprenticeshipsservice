@@ -2,6 +2,7 @@
 using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
@@ -18,13 +19,12 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
         {
             AddMock<IApprenticeshipLevyApiClient>();
             AddMock<IAuthenticationService>();
-            AddMock<IAuthorizationService>();
             AddMock<IEmployerAccountRepository>();
             AddMock<IEventsApi>();
-            //AddMock<IMembershipRepository>();
             AddMock<IPayeRepository>();
             SetupCurrentDateTimeMock(AddMock<ICurrentDateTime>());
             SetupTokenServiceApiClientMock(AddMock<ITokenServiceApiClient>());
+            SetupAuthorizationServiceMock(AddMock<IAuthorizationService>());
         }
 
         private Mock<T> AddMock<T>() where T : class
@@ -35,6 +35,14 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             For<Mock<T>>().Use(mock);
             For<T>().Use(mock.Object);
             return mock;
+        }
+
+        private void SetupAuthorizationServiceMock(Mock<IAuthorizationService> mockAuthorizationService)
+        {
+            mockAuthorizationService
+                .Setup(
+                    m => m.IsAuthorized(EmployerUserRole.Any))
+                .Returns(true);
         }
 
         private void SetupTokenServiceApiClientMock(Mock<ITokenServiceApiClient> mock)
