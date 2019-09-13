@@ -141,7 +141,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                             {
                                 EmployerAgreement = new EmployerAgreementView
                                 {
-                                    TemplateAgreementType = AgreementType.Levy
+                                    AgreementType = AgreementType.Levy
                                 }
                             }
                         });
@@ -168,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                             {
                                 EmployerAgreement = new EmployerAgreementView
                                 {
-                                    TemplateAgreementType = AgreementType.NonLevyExpressionOfInterest
+                                    AgreementType = AgreementType.NonLevyExpressionOfInterest
                                 }
                             }
                         });
