@@ -2,7 +2,7 @@
 using HMRC.ESFA.Levy.Api.Client;
 using Moq;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.Events.Api.Client;
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
             AddMock<IAuthorizationService>();
             AddMock<IEmployerAccountRepository>();
             AddMock<IEventsApi>();
-            AddMock<IMembershipRepository>();
+            //AddMock<IMembershipRepository>();
             AddMock<IPayeRepository>();
             SetupCurrentDateTimeMock(AddMock<ICurrentDateTime>());
             SetupTokenServiceApiClientMock(AddMock<ITokenServiceApiClient>());
