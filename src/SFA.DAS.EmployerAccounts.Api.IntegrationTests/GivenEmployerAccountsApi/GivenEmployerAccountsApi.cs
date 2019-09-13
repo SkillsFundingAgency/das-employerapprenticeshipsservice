@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using FluentAssertions.Common;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess;
@@ -14,8 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
     public abstract class GivenEmployerAccountsApi
     {
         private HttpServer _server;
-        private IEndpointInstance _endpoint;
-        private IEndpointInstance _nServiceBusEndpoint;
+        private ServiceBusEndPointConfigureAndRun _serviceBusEndpointManager;
         protected HttpResponseMessage Response;
         private IContainer _container;
 
@@ -30,7 +30,12 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 
             _container = config.DependencyResolver.GetService(typeof(IContainer)) as IContainer;
 
-            _nServiceBusEndpoint = WebApiApplication.StartServiceBusEndpoint(_container);
+            _serviceBusEndpointManager
+                = 
+                new ServiceBusEndPointConfigureAndRun(_container);
+
+            _serviceBusEndpointManager
+                .ConfigureAndStartServiceBusEndpoint();
 
             _server = new HttpServer(config);
         }
@@ -63,9 +68,8 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
         [TearDown]
         public void Cleanup()
         {
-            WebApiApplication.StopServiceBusEndpoint(_nServiceBusEndpoint);
-
-            _server?.Dispose();
+            _serviceBusEndpointManager?
+                .StopServiceBusEndpoint();
         }
     }
 }

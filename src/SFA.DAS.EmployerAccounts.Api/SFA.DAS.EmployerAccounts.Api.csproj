@@ -124,6 +124,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Mappings\AccountMappings.cs" />
+    <Compile Include="ServiceBusEndPointConfigureAndRun.cs" />
     <Compile Include="Orchestrators\AccountsOrchestrator.cs" />
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\UsersOrchestrator.cs" />
