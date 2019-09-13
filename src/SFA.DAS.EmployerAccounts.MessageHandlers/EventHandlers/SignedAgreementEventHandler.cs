@@ -32,15 +32,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
                 message.UserName,
                 message.UserRef.ToString()));
 
-            try
-            {
-                await _mediator.Send(new SignAccountAgreementCommand(message.AccountId, message.AgreementVersion, message.AgreementType.ToString()));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await _mediator.Send(new SignAccountAgreementCommand(message.AccountId, message.AgreementVersion, message.AgreementType.ToString()));
         }
     }
 }
