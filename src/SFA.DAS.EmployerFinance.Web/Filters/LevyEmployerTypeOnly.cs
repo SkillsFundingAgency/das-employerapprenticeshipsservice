@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Web.Helpers;
 
 namespace SFA.DAS.EmployerFinance.Web.Filters
@@ -14,11 +17,10 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
             {
                 var hashedAccountId = filterContext.ActionParameters["HashedAccountId"].ToString();
                 var accountApi = DependencyResolver.Current.GetService<IAccountApiClient>();
-                var task = accountApi.GetAccount(hashedAccountId);
-                task.RunSynchronously();
-                var account = task.Result;
+                AccountDetailViewModel account = null; 
+                new Task(async () => account = await accountApi.GetAccount(hashedAccountId)).RunSynchronously();
 
-                if (account.ApprenticeshipEmployerType == "1")
+                if (account.ApprenticeshipEmployerType == ((int)ApprenticeshipEmployerType.Levy).ToString())
                 {
                     base.OnActionExecuting(filterContext);
                 }

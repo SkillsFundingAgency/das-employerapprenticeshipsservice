@@ -8,6 +8,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Web.Filters;
+using SFA.DAS.EmployerFinance.Web.Helpers;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Filters
 {
@@ -48,6 +49,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Filters
 
             // Act
             sut.OnActionExecuting(_filterContext);
+            var result = _filterContext.Result as ViewResult;
 
             // Assert
             _filterContext.Result.Should().BeNull();
@@ -64,9 +66,29 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Filters
 
             // Act
             sut.OnActionExecuting(_filterContext);
+            var result = _filterContext.Result as RedirectToRouteResult;
 
             // Assert
-            _filterContext.Result.Should().NotBeNull();
+            result.Should().NotBeNull();
+            result.RouteValues["controller"].Should().Be("AccessDenied");
+        }
+
+        [Test]
+        public void WhenGetAccountFails_ShouldRedirectToBadRequest()
+        {
+            // Arrange
+            var sut = new LevyEmployerTypeOnly();
+            _accountApiClientMock
+                .Setup(mock => mock.GetAccount(It.IsAny<string>()))
+                .Throws(new Exception());
+
+            // Act
+            sut.OnActionExecuting(_filterContext);
+            var result = _filterContext.Result as ViewResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.ViewName.Should().Be(ControllerConstants.BadRequestViewName);
         }
     }
 }
