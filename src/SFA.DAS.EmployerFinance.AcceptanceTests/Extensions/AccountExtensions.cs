@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 .ReturnsAsync((string hashedAccountId, string externalUserId) => new MembershipView());
 
             objectContainer.Resolve<Mock<IEmployerAccountRepository>>()
-                .Setup(x => x.GetAccountByHashedId(It.IsAny<string>()))
+                .Setup(x => x.GetAccountById(It.IsAny<long>()))
                 .ReturnsAsync(account);
 
             return account;

@@ -6,8 +6,5 @@ namespace SFA.DAS.Authorization.Mvc
     {
         [IgnoreMap]
         public long AccountId { get; set; }
-
-        [IgnoreMap]
-        public string AccountHashedId { get; set; }
     }
 }

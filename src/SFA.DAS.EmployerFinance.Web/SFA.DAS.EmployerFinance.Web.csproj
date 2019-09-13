@@ -74,6 +74,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
+    <PackageReference Include="SFA.DAS.Logging">
+      <Version>1.0.5</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
@@ -89,6 +92,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus">
       <Version>1.0.17</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.Validation.Mvc">
+      <Version>5.1.167</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.6.1" />
@@ -158,7 +164,6 @@
     <Compile Include="Mappings\TransferMappings.cs" />
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="OrchestratorResponse.cs" />
-    <Compile Include="Orchestrators\AuthenticationOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

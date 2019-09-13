@@ -24,12 +24,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         private TestableMessageHandlerContext _messageHandlerContext;
         private IFixture Fixture = new Fixture();
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            Fixture.Customize<Account>(a => a.Without(x => x.AccountLegalEntities));
-        }
-
         [SetUp]
         public void SetUp()
         {

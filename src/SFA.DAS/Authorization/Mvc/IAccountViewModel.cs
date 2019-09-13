@@ -3,6 +3,5 @@
     public interface IAccountViewModel
     {
         long AccountId { get; set; }
-        string AccountHashedId { get; set; }
     }
 }
