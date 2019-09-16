@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Services;
+using AutoFixture;
 using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
@@ -42,12 +43,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockPortalClient.Object, Mock.Of<IAuthorizationService>());
         }
 
-        [TestCase(VacancyStatus.Closed, "Closed",  "Manage vacancy", 10)]
-        [TestCase(VacancyStatus.Submitted, "Pending review", "Preview vacancy", null)]
-        [TestCase(VacancyStatus.Draft, "Draft", "Edit and submit vacancy", null)]
-        [TestCase(VacancyStatus.Referred, "Rejected", "Edit and re-submit vacancy", null)]
-        [TestCase(VacancyStatus.Live, "Live", "Manage vacancy", 20)]
-        public void ThenTheModelContainsTheExpectedDataForTheVacancyStatus(VacancyStatus vacancyStatus, string status, string linkText, int? numberOfAplications)
+        [TestCase(VacancyStatus.Closed, "Closed",  "Manage vacancy")]
+        [TestCase(VacancyStatus.Submitted, "Pending review", "Preview vacancy")]
+        [TestCase(VacancyStatus.Draft, "Draft", "Edit and submit vacancy")]
+        [TestCase(VacancyStatus.Referred, "Rejected", "Edit and re-submit vacancy")]
+        [TestCase(VacancyStatus.Live, "Live", "Manage vacancy")]
+        public void ThenTheModelContainsTheExpectedDataForTheVacancyStatus(VacancyStatus vacancyStatus, string status, string linkText)
         {
             // Arrange
             var vacancyTitle = Guid.NewGuid().ToString();
@@ -69,11 +70,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 Reference = reference
             };
 
-            if (numberOfAplications.HasValue)
-            {
-                testVacancy.NumberOfApplications = numberOfAplications.Value;
-            }
-
             model.AccountViewModel.Vacancies.Add(testVacancy);
 
             //Act
@@ -87,10 +83,46 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual(linkText, result.ManageVacancyLinkText);
             Assert.AreEqual("VAC" + reference, result.Reference);            
             Assert.AreEqual(status, result.Status);
-            if (numberOfAplications.HasValue)
-            {
-                Assert.AreEqual(numberOfAplications.Value, result.NumberOfApplications);
-            }
         }
-    }    
+
+        [TestCase(null, VacancyStatus.Draft, ApplicationMethod.ThroughFindAnApprenticeship, 1)]
+        [TestCase(null, VacancyStatus.Draft, ApplicationMethod.ThroughExternalApplicationSite, 1)]
+        [TestCase(null, VacancyStatus.Submitted, ApplicationMethod.ThroughFindAnApprenticeship, 1)]
+        [TestCase(null, VacancyStatus.Submitted, ApplicationMethod.ThroughExternalApplicationSite, 1)]
+        [TestCase(null, VacancyStatus.Referred, ApplicationMethod.ThroughFindAnApprenticeship, 1)]
+        [TestCase(null, VacancyStatus.Referred, ApplicationMethod.ThroughExternalApplicationSite, 1)]
+        [TestCase("111", VacancyStatus.Live, ApplicationMethod.ThroughFindAnApprenticeship, 111)]
+        [TestCase("Advertised by employer", VacancyStatus.Live, ApplicationMethod.ThroughExternalApplicationSite, 111)]
+        [TestCase("22", VacancyStatus.Closed, ApplicationMethod.ThroughFindAnApprenticeship, 22)]
+        [TestCase("Advertised by employer", VacancyStatus.Closed, ApplicationMethod.ThroughExternalApplicationSite, 22)]
+        [TestCase(null, VacancyStatus.Approved, ApplicationMethod.ThroughFindAnApprenticeship, 1)]
+        [TestCase(null, VacancyStatus.Approved, ApplicationMethod.ThroughExternalApplicationSite, 1)]
+        public void ThenTheModelContainsTheExpectedApplication(string expectedApplications, VacancyStatus vacancyStatus, ApplicationMethod applicationMethod, int numberOfApplications)
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                AccountViewModel = new Account()
+            };
+
+            var fixture = new Fixture();
+            var vacancy = fixture.Create<Vacancy>();
+            vacancy.Status = vacancyStatus;
+            vacancy.ApplicationMethod = applicationMethod;
+            vacancy.NumberOfApplications = numberOfApplications;
+            model.AccountViewModel.Vacancies.Add(vacancy);
+
+            //Act
+            var result = _controller.VacancyStatus(model);
+
+            //Assert
+            Assert.IsNotNull(result);
+            var partialViewResult = result as PartialViewResult;
+            Assert.IsNotNull(partialViewResult);
+            var vacancyStatusViewModel = partialViewResult.Model as VacancyStatusViewModel;
+            Assert.IsNotNull(vacancyStatusViewModel);
+
+            Assert.AreEqual(expectedApplications, vacancyStatusViewModel.Applications);
+        }
+    }
 }

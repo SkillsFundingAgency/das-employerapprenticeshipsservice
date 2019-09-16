@@ -41,8 +41,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 Name = "Test Account"
             };
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse { Account = _account });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountByHashedIdQuery>()))
+                .ReturnsAsync(new GetEmployerAccountByHashedIdResponse { Account = _account });
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserAccountRoleQuery>()))
                 .ReturnsAsync(new GetUserAccountRoleResponse { UserRole = Role.Owner });
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             var response = await _orchestrator.GetEmployerAccount("ABC123");
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountHashedQuery>(q => q.HashedAccountId.Equals(_account.HashedId))));
+            _mediator.Verify(x => x.SendAsync(It.Is<GetEmployerAccountByHashedIdQuery>(q => q.HashedAccountId.Equals(_account.HashedId))));
             Assert.AreEqual(_account.HashedId, response.Data.HashedId);
             Assert.AreEqual(_account.Name, response.Data.Name);
             Assert.AreEqual(HttpStatusCode.OK, response.Status);

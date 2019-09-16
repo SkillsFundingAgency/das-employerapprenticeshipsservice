@@ -11,13 +11,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
     {
         private readonly IEmployerAccountRepository _accountRepository;
         private readonly ILog _logger;
-        private readonly IEmployerSchemesRepository _employerSchemesRepository;
+        private readonly IPayeRepository _payeRepository;
 
-        public ImportLevyDeclarationsCommandHandler(IEmployerAccountRepository accountRepository, ILog logger, IEmployerSchemesRepository employerSchemesRepository)
+        public ImportLevyDeclarationsCommandHandler(IEmployerAccountRepository accountRepository, ILog logger, IPayeRepository payeRepository)
         {
             _accountRepository = accountRepository;
             _logger = logger;
-            _employerSchemesRepository = employerSchemesRepository;
+            _payeRepository = payeRepository;
         }
 
         public async Task Handle(ImportLevyDeclarationsCommand message, IMessageHandlerContext context)
@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
             foreach (var account in employerAccounts)
             {
-                var schemes = await _employerSchemesRepository.GetGovernmentGatewayOnlySchemesByEmployerId(account.Id);
+                var schemes = await _payeRepository.GetGovernmentGatewayOnlySchemesByEmployerId(account.Id);
 
                 if (schemes?.SchemesList == null)
                 {

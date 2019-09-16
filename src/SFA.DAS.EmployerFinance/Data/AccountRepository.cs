@@ -44,7 +44,35 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return result.ToDictionary(d => d.Id, d => d.Name);
         }
-        
+
+        public async Task CreateAccount(long accountId, string name)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@id", accountId, DbType.Int64);
+            parameters.Add("@name", name, DbType.String);
+
+            await _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[CreateAccount]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task RenameAccount(long accountId, string name)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@id", accountId, DbType.Int64);
+            parameters.Add("@name", name, DbType.String);
+
+            await _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[RenameAccount]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
         private class AccountNameItem
         {
             public long Id { get; set; }

@@ -181,11 +181,20 @@
     <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\Cleardown\All\DeleteAllPayments.sql" />
     <Build Include="StoredProcedures\GetTotalSpendForLastYearByAccountId.sql" />
+    <Build Include="Tables\Account.sql" />
+    <Build Include="StoredProcedures\CreateAccount.sql" />
+    <Build Include="StoredProcedures\RenameAccount.sql" />
+    <Build Include="Tables\AccountPaye.sql" />
+    <Build Include="StoredProcedures\CreateAccountPaye.sql" />
     <Build Include="StoredProcedures\GetPayeSchemes_ByAccountId.sql" />
     <Build Include="StoredProcedures\GetPayeSchemesAddedByGovernmentGateway_ByAccountId.sql" />
     <Build Include="StoredProcedures\GetPaye_ByRef.sql" />
     <Build Include="StoredProcedures\UpdatePayeName_ByRef.sql" />
     <Build Include="StoredProcedures\GetPayeForAccount_ByRef.sql" />
+    <Build Include="StoredProcedures\RemoveAccountPaye.sql" />
+    <Build Include="StoredProcedures\CreateAccountLegalEntity.sql" />
+    <Build Include="StoredProcedures\SignAccountLegalEntityAgreement.sql" />
+    <Build Include="StoredProcedures\RemoveAccountLegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
@@ -199,6 +208,7 @@
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\FrameworkCreateLevies.sql" />
     <None Include="Scripts\Manual\GenerateTestData\DataGenFramework\ExampleScenario.sql" />
     <None Include="Scripts\Manual\GenerateTestData\ReadMe.md" />
+    <Build Include="Tables\AccountLegalEntity.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EAS.Levy.Database.refactorlog" />

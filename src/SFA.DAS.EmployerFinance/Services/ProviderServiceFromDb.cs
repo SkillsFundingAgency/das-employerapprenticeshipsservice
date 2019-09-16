@@ -22,10 +22,10 @@ namespace SFA.DAS.EmployerFinance.Services
 
             if(providerName == null)
             {
-                _logger.Warn($"No provider name found for Ukprn:{providerName} in previous payments");
+                _logger.Warn($"No provider name found for Ukprn:{ukPrn} in previous payments");
             }
 
-            _logger.Info($"Provider Name found {providerName}");
+            _logger.Info($"Provider Name {providerName} found for Ukprn: {ukPrn}.");
 
             return new Models.ApprenticeshipProvider.Provider
             {

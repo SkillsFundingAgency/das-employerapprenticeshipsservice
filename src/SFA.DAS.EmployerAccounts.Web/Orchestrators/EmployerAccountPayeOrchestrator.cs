@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public async Task<OrchestratorResponse<EmployerAccountPayeListViewModel>> Get(string hashedAccountId, string externalUserId)
         {
-            var response = await Mediator.SendAsync(new GetAccountPayeSchemesQuery
+            var response = await Mediator.SendAsync(new GetAccountPayeSchemesForAuthorisedUserQuery
             {
                 HashedAccountId = hashedAccountId,
                 ExternalUserId = externalUserId
@@ -164,7 +164,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<RemovePayeSchemeViewModel>> GetRemovePayeSchemeModel(RemovePayeSchemeViewModel model)
         {
             var accountResponse = await
-                    Mediator.SendAsync(new GetEmployerAccountHashedQuery
+                    Mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
                     {
                         HashedAccountId = model.HashedAccountId,
                         UserId = model.UserId

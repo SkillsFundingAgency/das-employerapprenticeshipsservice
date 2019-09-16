@@ -51,11 +51,11 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@onlyIfMemberIsActive", onlyIfMemberIsActive, DbType.Boolean);
 
             var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
-                sql: @"SELECT TOP 1 * FROM [employer_account].[GetTeamMembers] "+
-                      "WHERE HashedId = @hashedAccountId "+
-                      "AND Email = @email "+
-                      "AND (@onlyIfMemberIsActive = 0 OR IsUser = 1) "+
-                      "ORDER BY IsUser DESC;",
+                sql: @"SELECT TOP 1 * FROM [employer_account].[GetTeamMembers] " +
+                     "WHERE HashedId = @hashedAccountId " +
+                     "AND Email = @email " +
+                     "AND (@onlyIfMemberIsActive = 0 OR IsUser = 1) " +
+                     "ORDER BY IsUser DESC;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

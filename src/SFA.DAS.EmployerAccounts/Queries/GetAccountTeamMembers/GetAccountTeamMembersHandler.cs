@@ -32,8 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
             }
 
             var accounts = await _repository.GetAccountTeamMembersForUserId(message.HashedAccountId, message.ExternalUserId);
-            return new GetAccountTeamMembersResponse {TeamMembers = accounts};
-            
+            return new GetAccountTeamMembersResponse { TeamMembers = accounts };
         }
     }
 }

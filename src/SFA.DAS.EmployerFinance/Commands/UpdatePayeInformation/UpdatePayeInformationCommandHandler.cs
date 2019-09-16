@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation
                 return;
             }
 
-            var result = await _hmrcService.GetEmprefInformation(scheme.EmpRef);
+            var result = await _hmrcService.GetEmprefInformation(scheme.Ref);
 
             if (string.IsNullOrEmpty(result?.Employer?.Name?.EmprefAssociatedName))
             {

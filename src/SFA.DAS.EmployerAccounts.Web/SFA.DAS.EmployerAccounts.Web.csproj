@@ -91,10 +91,13 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.1469</Version>
+      <Version>1.6.1641</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
+    <PackageReference Include="SFA.DAS.Logging">
+      <Version>1.0.5</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
@@ -106,6 +109,9 @@
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="1.0.17" />
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.Validation.Mvc">
+      <Version>5.1.167</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy" Version="1.1.0.44309" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="StructureMap.MVC5" Version="3.1.1.134" />
@@ -162,6 +168,7 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Exceptions\ResourceNotFoundException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -276,6 +283,7 @@
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
+    <Compile Include="ViewModels\ApprenticeDetailsViewModel.cs" />
     <Compile Include="ViewModels\VacancyStatusViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
   </ItemGroup>
@@ -762,6 +770,8 @@
     <Content Include="Views\Shared\_NonLevy_Agreement_V1_body.cshtml" />
     <Content Include="Views\EmployerTeam\V2\VacancyStatus.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourDocument.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

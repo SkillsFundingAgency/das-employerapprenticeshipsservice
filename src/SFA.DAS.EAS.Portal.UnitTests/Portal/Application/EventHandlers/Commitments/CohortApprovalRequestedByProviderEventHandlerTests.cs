@@ -7,10 +7,10 @@ using AutoFixture;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types.Commitment;
 using SFA.DAS.CommitmentsV2.Messages.Events;
 using SFA.DAS.EAS.Portal.Application.EventHandlers.Commitments;
+using SFA.DAS.EAS.Portal.Application.Services.Commitments;
 using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.HashingService;
@@ -62,7 +62,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
     {
         public AccountEventHandlerTestHelper<CohortApprovalRequestedByProvider, CohortApprovalRequestedByProviderEventHandler> Helper { get; set; }
 
-        public Mock<IProviderCommitmentsApi> ProviderCommitmentsApi { get; set; }
+        public Mock<ICommitmentsService> CommitmentsService { get; set; }
         public Mock<IHashingService> HashingService { get; set; }
         public CommitmentView Commitment { get; set; }
         public CommitmentView ExpectedCommitment { get; set; }
@@ -81,9 +81,9 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
 
             Commitment = Helper.Fixture.Create<CommitmentView>();
             
-            ProviderCommitmentsApi = new Mock<IProviderCommitmentsApi>();
-            ProviderCommitmentsApi
-                .Setup(m => m.GetProviderCommitment(Helper.Message.ProviderId, Helper.Message.CommitmentId))
+            CommitmentsService = new Mock<ICommitmentsService>();
+            CommitmentsService
+                .Setup(m => m.GetProviderCommitment(Helper.Message.ProviderId, Helper.Message.CommitmentId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(Commitment);
 
             HashingService = new Mock<IHashingService>();
@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
             Helper.Handler = new CohortApprovalRequestedByProviderEventHandler(
                 Helper.AccountDocumentService.Object,
                 Helper.Logger.Object,
-                ProviderCommitmentsApi.Object,
+                CommitmentsService.Object,
                 HashingService.Object);
         }
         
@@ -127,8 +127,8 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Commitme
 
         public CohortApprovalRequestedByProviderEventHandlerTestsFixture ArrangeProviderCommitmentApiThrowsException()
         {
-            ProviderCommitmentsApi.Setup(c => c.GetProviderCommitment(
-                    Helper.Message.ProviderId, Helper.Message.CommitmentId))
+            CommitmentsService.Setup(c => c.GetProviderCommitment(
+                    Helper.Message.ProviderId, Helper.Message.CommitmentId, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new Exception(ProviderCommitmentsApiExceptionMessage));
             
             return this;

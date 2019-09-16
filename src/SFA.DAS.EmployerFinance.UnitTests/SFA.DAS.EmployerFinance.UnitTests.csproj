@@ -35,4 +35,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\CreateAccountPayeTests\" />
+  </ItemGroup>
+
 </Project>

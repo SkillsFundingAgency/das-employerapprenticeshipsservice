@@ -249,6 +249,7 @@
   <ItemGroup>
     <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
     <Compile Include="Configuration\ConfigurationKeys.cs" />
+    <Compile Include="Configuration\EmployerAccountsApiConfiguration.cs" />
     <Compile Include="Configuration\IdProcessorConfiguration.cs" />
     <Compile Include="Configuration\ApprenticeshipInfoServiceConfiguration.cs" />
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
@@ -279,7 +280,6 @@
     <Compile Include="Interfaces\IExcelService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
-    <Compile Include="Interfaces\IRefreshEmployerLevyService.cs" />
     <Compile Include="Interfaces\ITaskService.cs" />
     <Compile Include="Interfaces\IWebJobConfiguration.cs" />
     <Compile Include="Interfaces\ITransferAllowanceService.cs" />
@@ -339,9 +339,7 @@
     <Compile Include="Models\Account\LegalEntities.cs" />
     <Compile Include="Models\Account\LegalEntity.cs" />
     <Compile Include="Models\Transaction\TransactionEntity.cs" />
-    <Compile Include="Data\Repositories\IPayeRepository.cs" />
     <Compile Include="Models\Account\AccountDetail.cs" />
-    <Compile Include="Models\Account\PayeSchemeView.cs" />
     <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
     <Compile Include="Extensions\NullableDateTimeExtension.cs" />
     <Compile Include="Interfaces\IAddressLookupService.cs" />

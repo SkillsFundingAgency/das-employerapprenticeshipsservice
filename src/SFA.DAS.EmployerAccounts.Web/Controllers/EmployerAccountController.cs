@@ -52,17 +52,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("gatewayInform")]
-        [Route("{HashedAccountId}/gatewayInform")]
-        public ActionResult GatewayInform(string hashedAccountId = "")
+        [Route("{HashedAccountId}/gatewayInform", Order = 0)]
+        [Route("gatewayInform", Order = 1)]
+        public ActionResult GatewayInform(string hashedAccountId)
         {
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
                 _accountCookieStorage.Delete(_hashedAccountIdCookieName);
-
-                _accountCookieStorage.Create(
-                    new HashedAccountIdModel { Value = hashedAccountId }, 
-                    _hashedAccountIdCookieName);
+                
+                    _accountCookieStorage.Create(
+                        new HashedAccountIdModel { Value = hashedAccountId },
+                        _hashedAccountIdCookieName);
             }
 
             var gatewayInformViewModel = new OrchestratorResponse<GatewayInformViewModel>
@@ -178,7 +178,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (choice ?? 0)
             {
                 case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
-                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
                 default:
                 {
                     var model = new
@@ -359,20 +359,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName);
-        }
-
-        [HttpGet]
-        [Route("amendPaye")]
-        public ActionResult AmendPaye()
-        {
-            var employerAccountPayeData = _employerAccountOrchestrator.GetCookieData().EmployerAccountPayeRefData;
-
-            if (!string.IsNullOrWhiteSpace(employerAccountPayeData.AORN))
-            {
-                return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
-            }
-
-            return RedirectToAction(ControllerConstants.GatewayInformActionName);
         }
 
         private string GetUserId()

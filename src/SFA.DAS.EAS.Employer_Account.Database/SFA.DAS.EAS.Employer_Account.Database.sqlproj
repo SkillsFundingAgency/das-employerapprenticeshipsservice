@@ -163,6 +163,7 @@
     <None Include="Scripts\PreDeployment\AML-2239-DeleteDuplicateAccountHistory.sql" />
     <None Include="Scripts\Manual\CON-91-DeleteLegalEntitiesWithNoAgreements.sql" />
     <None Include="Scripts\PostDeployment\AML-3762-EOI-API.sql" />
+    <None Include="Scripts\Manual\AML-3655_GenerateFinanceDataInserts.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />

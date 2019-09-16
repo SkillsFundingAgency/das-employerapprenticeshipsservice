@@ -2,6 +2,7 @@
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Extensions
 @using SFA.DAS.EAS.Web.ViewModels
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -186,6 +187,19 @@
     }
     <main role="main" id="content">
         @RenderSection("breadcrumb", required: false)
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            <div class="grid-row">
+                <div class="column-full">
+                    <div class=" info-summary">
+                        <h2 class="heading-medium">Unable to see your payment transactions?</h2>
+                        <p>This doesn’t affect your payments to training providers.</p>
+                        <p>We will update this notice when transactions are visible again.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
         @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
         @RenderBody()
     </main>
