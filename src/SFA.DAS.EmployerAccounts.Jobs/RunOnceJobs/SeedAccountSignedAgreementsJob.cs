@@ -25,16 +25,16 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
             _accountSignedAgreementsRepository = accountSignedAgreementsRepository;
             _db = db;
             _logger = logger;
-            _jobName = typeof(SeedAccountUsersJob).Name;
+            _jobName = typeof(SeedAccountSignedAgreementsJob).Name;
         }
 
         [NoAutomaticTrigger]
         public Task Run()
         {
-            return _runOnceJobsService.RunOnce(_jobName, MigrateUsers);
+            return _runOnceJobsService.RunOnce(_jobName, MigrateAgreements);
         }
 
-        public async Task MigrateUsers()
+        public async Task MigrateAgreements()
         {
             var agreements = _db.Value.Agreements
                 .Include(x => x.AccountLegalEntity)
