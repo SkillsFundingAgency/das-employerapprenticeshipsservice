@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Moq;
@@ -24,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         [Test]
         public Task Handle_WhenHandlingARunHealthCheckCommand_ThenShouldRequestAnEmployerAccountsApiHealthCheckResponse()
         {
-            return RunAsync(f => f.Handle(), f => f.EmployerAccountsApiClient.Verify(c => c.HealthCheck(), Times.Once));
+            return RunAsync(f => f.Handle(), f => f.EmployerAccountsApiClient.Verify(c => c.Ping(f.CancellationToken), Times.Once));
         }
     }
 
@@ -35,6 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
         public IAsyncRequestHandler<RunHealthCheckCommand, Unit> Handler { get; set; }
         public Mock<IEmployerAccountsApiClient> EmployerAccountsApiClient { get; set; }
         public UnitOfWorkContext UnitOfWorkContext { get; set; }
+        public CancellationToken CancellationToken { get; set; }
 
         public RunHealthCheckCommandHandlerTestsFixture()
         {
@@ -42,9 +44,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
             RunHealthCheckCommand = new RunHealthCheckCommand { UserRef = Guid.NewGuid() };
             EmployerAccountsApiClient = new Mock<IEmployerAccountsApiClient>();
             UnitOfWorkContext = new UnitOfWorkContext();
+            CancellationToken = new CancellationToken();
 
             Db.Setup(d => d.HealthChecks.Add(It.IsAny<HealthCheck>()));
-            EmployerAccountsApiClient.Setup(c => c.HealthCheck()).Returns(Task.CompletedTask);
+            EmployerAccountsApiClient.Setup(c => c.Ping(CancellationToken)).Returns(Task.CompletedTask);
 
             Handler = new RunHealthCheckCommandHandler(new Lazy<EmployerAccountsDbContext>(() => Db.Object), EmployerAccountsApiClient.Object);
         }

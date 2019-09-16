@@ -10,12 +10,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
     {
         public EmployerAccountsApiClientRegistry()
         {
-            IncludeRegistry<AutoConfigurationRegistry>();
-            For<IEmployerAccountsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsApiClientConfiguration>("SFA.DAS.EmployerAccounts.Api.Client")).Singleton();
             For<EmployerAccountsReadStoreConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsReadStoreConfiguration>("SFA.DAS.EmployerAccounts.ReadStore")).Singleton();
+            For<IEmployerAccountsApiClient>().Use<EmployerAccountsApiClient>();
+            For<IEmployerAccountsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsApiClientConfiguration>("SFA.DAS.EmployerAccounts.Api.Client")).Singleton();
+            For<ISecureHttpClient>().Use<SecureHttpClient>();
+            IncludeRegistry<AutoConfigurationRegistry>();
             IncludeRegistry<ReadStoreDataRegistry>();
             IncludeRegistry<ReadStoreMediatorRegistry>();
-            For<IEmployerAccountsApiClient>().Use<EmployerAccountsApiClient>();
         }
     }
 }
