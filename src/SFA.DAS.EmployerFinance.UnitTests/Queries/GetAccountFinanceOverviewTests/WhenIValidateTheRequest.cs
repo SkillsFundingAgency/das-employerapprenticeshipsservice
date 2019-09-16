@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -33,19 +32,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetAccountFinanceOverviewTes
 
             //Assert
             Assert.IsTrue(actual.IsValid());
-        }
-
-        [Test]
-        public async Task ThenFalseIsReturnedAndTheValidtionDictionaryIsPopulatedWhenFieldsArentSupplied()
-        {
-            //Act
-            var actual = await _validator.ValidateAsync(new GetAccountFinanceOverviewQuery());
-
-            //Assert
-            Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string,string>("AccountId", "AccountId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("AccountHashedId", "AccountHashedId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("UserRef", "UserRef has not been supplied"), actual.ValidationDictionary);
         }
 
         [Test]

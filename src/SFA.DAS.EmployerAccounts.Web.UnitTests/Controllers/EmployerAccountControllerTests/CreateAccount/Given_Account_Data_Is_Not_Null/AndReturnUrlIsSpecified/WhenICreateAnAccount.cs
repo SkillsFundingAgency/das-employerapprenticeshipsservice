@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerAccountCont
                 .Returns(new ReturnUrlModel {Value = ExpectedReturnUrl});
 
             _employerAccountController = new EmployerAccountController(
-                _owinWrapper.Object,
+                Mock.Of<IAuthenticationService>(),
                 _orchestrator.Object,
                 _userViewTestingService.Object,
                 logger.Object,
