@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.Common.Domain.Types;
 @model TransferAllowanceViewModel
 @{
     ViewBag.Title = "Transfers";
@@ -17,7 +18,11 @@
 
 @if (Html.IsAuthorized(FeatureType.Transfers))
 {
-    @Html.Action("TransferAllowance")
+    if (ViewBag.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
+    {
+        @Html.Action("TransferAllowance", Model)
+    }
+
     @Html.Action("TransferConnectionInvitationAuthorization")
     @Html.Action("TransferConnectionInvitations")
     @Html.Action("TransferRequests")
