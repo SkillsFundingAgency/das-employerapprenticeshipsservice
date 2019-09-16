@@ -6,7 +6,6 @@ using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Application.DependencyResolution;
-using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
 using SFA.DAS.Authorization.WebApi.Extensions;
 
@@ -16,7 +15,6 @@ namespace SFA.DAS.EAS.Account.Api
     {
         public static void Register(HttpConfiguration config)
         {
-            config.Filters.Add(new ValidateModelStateFilter());
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();
             config.Services.Add(typeof(IExceptionLogger), new ErrorLogger());

@@ -1,4 +1,5 @@
-﻿using SFA.DAS.EmployerAccounts.Models.UserProfile;
+﻿using System;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 
 namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 {

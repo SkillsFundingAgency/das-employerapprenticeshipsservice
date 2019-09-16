@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Mappings
@@ -8,7 +7,6 @@ namespace SFA.DAS.EmployerAccounts.Mappings
     {
         public MembershipMappings()
         {
-            CreateMap<Membership, MembershipContext>();
             CreateMap<TeamMember, Api.Types.TeamMember>();
         }
     }
