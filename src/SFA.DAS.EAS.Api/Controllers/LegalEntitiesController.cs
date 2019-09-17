@@ -1,23 +1,18 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using MediatR;
 using SFA.DAS.EAS.Account.Api.Attributes;
-using SFA.DAS.EAS.Account.Api.Orchestrators;
-using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
-using SFA.DAS.Validation.WebApi;
+using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Controllers
 {
     [RoutePrefix("api/accounts/{hashedAccountId}/legalentities")]
     public class LegalEntitiesController : ApiController
     {
-        private readonly AccountsOrchestrator _orchestrator;
-        private readonly IMediator _mediator;
+        private readonly IEmployerAccountsApiService _apiService;
 
-        public LegalEntitiesController(AccountsOrchestrator orchestrator, IMediator mediator)
+        public LegalEntitiesController(IEmployerAccountsApiService apiService)
         {
-            _orchestrator = orchestrator;
-            _mediator = mediator;
+            _apiService = apiService;
         }
 
         [Route("", Name = "GetLegalEntities")]
@@ -25,25 +20,16 @@ namespace SFA.DAS.EAS.Account.Api.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> GetLegalEntities(string hashedAccountId)
         {
-            var result = await _orchestrator.GetAccount(hashedAccountId);
-
-            if (result.Data == null)
-            {
-                return NotFound();
-            }
-            
-            result.Data.LegalEntities.ForEach(l => l.Href = Url.Route("GetLegalEntity", new { hashedAccountId, legalEntityId = l.Id }));
-
-            return Ok(result.Data.LegalEntities);
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities"));
         }
 
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
-        [HttpNotFoundForNullModel]
-        public async Task<IHttpActionResult> GetLegalEntity([FromUri] GetLegalEntityQuery query)
+        public async Task<IHttpActionResult> GetLegalEntity(
+            string hashedAccountId,
+            long legalEntityId)
         {
-            var response = await _mediator.SendAsync(query);
-            return Ok(response.LegalEntity);
+            return Ok(await _apiService.Redirect($"/api/accounts/{hashedAccountId}/legalentities/{legalEntityId}"));
         }
     }
 }

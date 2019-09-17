@@ -255,26 +255,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
 
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Once);
         }
-
-        [Test]
-        public async Task ThenAnPaymentCreatedMessageIsCreated()
-        {
-            //Arrange
-            var expectedPayment = _paymentDetails.First();
-
-            //Act
-            await _handler.Handle(new RefreshPaymentDataCommand());
-
-            //Assert
-            _eventPublisher.Events.OfType<CreatedPaymentEvent>().Should().HaveCount(1);
-
-            var message = _eventPublisher.Events.OfType<CreatedPaymentEvent>().Single();
-
-            message.AccountId.Should().Be(AccountId);
-            message.Amount.Should().Be(Amount);
-            message.ProviderName.Should().Be(ProviderName);
-        }
-
+        
         [Test]
         public void ThenAnAccountPaymentCreatedIsNotCreatedIfPaymentProcessingFails()
         {
