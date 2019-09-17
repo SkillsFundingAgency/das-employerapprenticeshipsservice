@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models;
@@ -233,7 +234,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
+                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery { HashedAccountId = hashedAccountId, UserId = externalUserId });
+
+                var accountCoursePaymentsTask = _mediator.SendAsync(new FindAccountCoursePaymentsQuery
                 {
                     HashedAccountId = hashedAccountId,
                     UkPrn = ukprn,
@@ -245,7 +248,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var apprenticePaymentGroups = data.Transactions.GroupBy(x => new { x.ApprenticeULN });
+                var accountCoursePaymentsResponse = await accountCoursePaymentsTask;
+
+                var apprenticePaymentGroups = accountCoursePaymentsResponse.Transactions.GroupBy(x => new { x.ApprenticeULN });
 
                 var paymentSummaries = apprenticePaymentGroups.Select(pg =>
                 {
@@ -262,16 +267,19 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
                 var apprenticePayments = paymentSummaries.ToList();
 
+                var accountResponse = await accountTask;
+
                 return new OrchestratorResponse<CoursePaymentDetailsViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = new CoursePaymentDetailsViewModel
                     {
-                        ProviderName = data.ProviderName,
-                        CourseName = data.CourseName,
-                        CourseLevel = data.CourseLevel,
-                        PathwayName = data.PathwayName,
-                        PaymentDate = data.DateCreated,
+                        ApprenticeshipEmployerType = accountResponse.Account.ApprenticeshipEmployerType,
+                        ProviderName = accountCoursePaymentsResponse.ProviderName,
+                        CourseName = accountCoursePaymentsResponse.CourseName,
+                        CourseLevel = accountCoursePaymentsResponse.CourseLevel,
+                        PathwayName = accountCoursePaymentsResponse.PathwayName,
+                        PaymentDate = accountCoursePaymentsResponse.DateCreated,
                         LevyPaymentsTotal = apprenticePayments.Sum(p => p.LevyPaymentAmount),
                         SFACoInvestmentTotal = apprenticePayments.Sum(p => p.SFACoInvestmentAmount),
                         EmployerCoInvestmentTotal = apprenticePayments.Sum(p => p.EmployerCoInvestmentAmount),
