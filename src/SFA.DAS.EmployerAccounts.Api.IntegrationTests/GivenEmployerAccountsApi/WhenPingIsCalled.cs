@@ -7,12 +7,12 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.GivenEmployerAccountsApi
 {
     [ExcludeFromCodeCoverage]
     [TestFixture]
-    public class WhenHealthCheckIsCalled : GivenEmployerAccountsApi
+    public class WhenPingIsCalled : GivenEmployerAccountsApi
     {
         [SetUp]
         public void SetUp()
         {
-            WhenControllerActionIsCalled(@"https://localhost:44330/api/healthcheck");
+            WhenControllerActionIsCalled(@"https://localhost:44330/ping");
         }
 
         [Test]
