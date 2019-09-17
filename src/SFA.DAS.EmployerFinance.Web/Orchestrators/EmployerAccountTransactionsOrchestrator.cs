@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         public EmployerAccountTransactionsOrchestrator(
             IAccountApiClient accountApiClient,
-            EmployerAccountsConfiguration employerAccountsConfiguration, 
+            EmployerAccountsConfiguration employerAccountsConfiguration,
             IMediator mediator,
             ICurrentDateTime currentTime,
             ILog logger)
@@ -149,7 +149,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
+                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery { HashedAccountId = hashedId, UserId = externalUserId });
+                var accountProviderPaymentsTask = _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
                     HashedAccountId = hashedId,
                     UkPrn = ukprn,
@@ -158,8 +159,10 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ExternalUserId = externalUserId,
                 });
 
-                var courseGroups =
-                    data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
+                await Task.WhenAll(accountTask, accountProviderPaymentsTask);
+                var accountProviderPayments = accountProviderPaymentsTask.Result;
+
+                var courseGroups = accountProviderPayments.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
 
                 var coursePaymentSummaries = courseGroups.Select(x =>
                 {
@@ -183,10 +186,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     Status = HttpStatusCode.OK,
                     Data = new ProviderPaymentsSummaryViewModel
                     {
+                        ApprenticeshipEmployerType = accountTask.Result.Account.ApprenticeshipEmployerType,
                         HashedAccountId = hashedId,
                         UkPrn = ukprn,
-                        ProviderName = data.ProviderName,
-                        PaymentDate = data.DateCreated,
+                        ProviderName = accountProviderPayments.ProviderName,
+                        PaymentDate = accountProviderPayments.DateCreated,
                         FromDate = fromDate,
                         ToDate = toDate,
                         CoursePayments = coursePaymentSummaries,

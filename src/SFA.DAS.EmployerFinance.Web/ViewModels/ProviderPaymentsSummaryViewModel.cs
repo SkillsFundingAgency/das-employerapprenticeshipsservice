@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerFinance.Web.ViewModels
 {
@@ -20,5 +19,6 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels
         public decimal PaymentsTotal { get; set; }
 
         public ICollection<CoursePaymentSummaryViewModel> CoursePayments { get; set; }
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
     }
 }
