@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
         {
             _accountUsersRepository = accountUsersRepository;
         }
+
         public async Task<Unit> Handle(RemoveAccountUserCommand request, CancellationToken cancellationToken)
         {
             var user = await _accountUsersRepository.CreateQuery().SingleAsync(x => x.UserRef == request.UserRef && x.AccountId == request.AccountId, cancellationToken);
