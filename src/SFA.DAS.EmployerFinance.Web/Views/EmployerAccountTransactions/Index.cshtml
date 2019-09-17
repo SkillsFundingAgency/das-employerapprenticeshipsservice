@@ -150,7 +150,6 @@
             <p>Download your financial transactions within a specific date range. </p>
         </div>
 
-
         @if (Html.IsAuthorized(FeatureType.Projections))
         {
             <div class="column-half">
@@ -169,7 +168,7 @@
                 Transfers
             </a>
         </h2>
-        <p>Connect with other employers and send or receive transfer funds. </p>
+        <p>Connect with other employers and @(Model.Data.IsLevyEmployer ? "send or" : "") receive transfer funds. </p>
     </div>
 </div>
 
