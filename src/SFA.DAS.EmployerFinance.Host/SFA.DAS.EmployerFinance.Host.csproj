@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Web.WebJobs.Publish" Version="2.0.0" />
-    <PackageReference Include="structuremap" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>

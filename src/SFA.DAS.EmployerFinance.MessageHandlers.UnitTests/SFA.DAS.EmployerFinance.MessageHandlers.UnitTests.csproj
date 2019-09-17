@@ -15,7 +15,6 @@
     <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.32" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
-    <PackageReference Include="structuremap" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,7 +13,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="SFA.DAS.CosmosDb.Testing" Version="1.0.15" />
     <PackageReference Include="SFA.DAS.Testing" Version="3.0.22" />
-    <PackageReference Include="structuremap" Version="4.7.1" />
   </ItemGroup>
 
   <ItemGroup>

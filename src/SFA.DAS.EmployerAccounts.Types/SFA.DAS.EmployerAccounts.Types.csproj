@@ -4,8 +4,4 @@
     <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="structuremap" Version="4.7.1" />
-  </ItemGroup>
-
 </Project>

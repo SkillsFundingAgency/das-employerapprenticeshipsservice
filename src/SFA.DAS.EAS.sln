@@ -198,6 +198,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EAS.LegalAgreementP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Api.Types", "SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj", "{8057E87B-5893-45D0-93A1-6278EA8BA328}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.Hmrc", "..\..\das-shared-packages\SFA.DAS.Hmrc\SFA.DAS.Hmrc\SFA.DAS.Hmrc.csproj", "{FEE82654-9036-4282-952A-E111EF0E2871}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -489,6 +491,10 @@ Global
 		{8057E87B-5893-45D0-93A1-6278EA8BA328}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8057E87B-5893-45D0-93A1-6278EA8BA328}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8057E87B-5893-45D0-93A1-6278EA8BA328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEE82654-9036-4282-952A-E111EF0E2871}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEE82654-9036-4282-952A-E111EF0E2871}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEE82654-9036-4282-952A-E111EF0E2871}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEE82654-9036-4282-952A-E111EF0E2871}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
