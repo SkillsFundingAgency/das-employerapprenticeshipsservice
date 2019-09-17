@@ -196,7 +196,7 @@
                         <li>
                             <a href="@Url.EmployerFinanceAction("finance")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a>
                         </li>
-                        @if (Html.IsAuthorized(FeatureType.Recruitments))
+                        @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
                         {
                             <li>
                                 <a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a>

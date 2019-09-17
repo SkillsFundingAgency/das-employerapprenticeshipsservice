@@ -93,6 +93,9 @@
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
       <Version>1.6.1641</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
+      <Version>1.6.2103</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.Logging">
@@ -123,9 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="SFA.DAS.Authorization.EmployerFeatures">
-      <HintPath>..\packages\SFA.DAS.Authorization.EmployerFeatures.6.0.1\lib\netstandard2.0\SFA.DAS.Authorization.EmployerFeatures.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
@@ -186,6 +186,7 @@
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
+    <Compile Include="Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementInfoConverter.cs" />

@@ -1,6 +1,7 @@
 ﻿@using Microsoft.ApplicationInsights.Extensibility
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
+@using SFA.DAS.EmployerFinance.Web.Helpers
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -215,7 +216,7 @@
                         <li>
                             <a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a>
                         </li>
-                        @if (Html.IsAuthorized(FeatureType.Recruitments))
+                        @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
                         {
                             <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
                         }

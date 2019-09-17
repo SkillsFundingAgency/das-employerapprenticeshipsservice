@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
     public class TransferConnectionInvitationsViewModel : IAuthorizationContextModel
     {
         [IgnoreMap]
-        long AccountId { get; set; }
+        public long AccountId { get; set; }
 
         public IEnumerable<TransferConnectionInvitationDto> TransferConnectionInvitations { get; set; }
     }
