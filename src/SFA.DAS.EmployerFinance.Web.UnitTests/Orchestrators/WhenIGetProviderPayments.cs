@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
             _orchestrator =
-                new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _employerAccountsConfiguration, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
+                new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
         private Expression<Func<IMediator, Task<FindAccountProviderPaymentsResponse>>> AssertExpressionValidation()

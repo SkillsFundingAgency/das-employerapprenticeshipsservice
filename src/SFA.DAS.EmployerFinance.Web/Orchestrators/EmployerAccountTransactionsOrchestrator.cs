@@ -30,7 +30,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         private readonly ICurrentDateTime _currentTime;
         private readonly ILog _logger;
         private readonly IAccountApiClient _accountApiClient;
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
         private readonly IMediator _mediator;
 
         protected EmployerAccountTransactionsOrchestrator()
@@ -40,13 +39,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         public EmployerAccountTransactionsOrchestrator(
             IAccountApiClient accountApiClient,
-            EmployerAccountsConfiguration employerAccountsConfiguration, 
             IMediator mediator,
             ICurrentDateTime currentTime,
             ILog logger)
         {
             _accountApiClient = accountApiClient;
-            _employerAccountsConfiguration = employerAccountsConfiguration;
             _mediator = mediator;
             _currentTime = currentTime;
             _logger = logger;
