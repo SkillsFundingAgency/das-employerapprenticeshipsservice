@@ -3,11 +3,15 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
+using Z.EntityFramework.Plus;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
 {
@@ -18,13 +22,15 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
         private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly ILogger _logger;
         private readonly string _jobName;
+        private readonly IConfigurationProvider _configurationProvider;
 
-        public SeedAccountSignedAgreementsJob(IRunOnceJobsService runOnceJobsService, IAccountSignedAgreementsRepository accountSignedAgreementsRepository, Lazy<EmployerAccountsDbContext> db, ILogger logger)
+        public SeedAccountSignedAgreementsJob(IRunOnceJobsService runOnceJobsService, IAccountSignedAgreementsRepository accountSignedAgreementsRepository, Lazy<EmployerAccountsDbContext> db, ILogger logger, IConfigurationProvider configurationProvider)
         {
             _runOnceJobsService = runOnceJobsService;
             _accountSignedAgreementsRepository = accountSignedAgreementsRepository;
             _db = db;
             _logger = logger;
+            _configurationProvider = configurationProvider;
             _jobName = typeof(SeedAccountSignedAgreementsJob).Name;
         }
 
@@ -37,10 +43,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
         public async Task MigrateAgreements()
         {
             var agreements = _db.Value.Agreements
-                .Include(x => x.AccountLegalEntity)
-                .Include(x => x.Template)
-                .Where(x => x.SignedDate != null)
-                .ToList();
+                .ProjectTo<AgreementDto>(_configurationProvider)
+                .Where(x => x.SignedDate != null);
 
             _logger.LogInformation("Migrating signed agreements into the read store");
 
@@ -48,11 +52,11 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
             {
                 var agreementExists = await CosmosDb.QueryableExtensions.AnyAsync(
                     _accountSignedAgreementsRepository.CreateQuery(),
-                    x => x.AccountId == agreement.AccountLegalEntity.AccountId && x.AgreementType == agreement.Template.AgreementType.ToString() && x.AgreementVersion == agreement.Template.VersionNumber);
+                    x => x.AccountId == agreement.AccountId && x.AgreementType == agreement.Template.AgreementType.ToString() && x.AgreementVersion == agreement.Template.VersionNumber);
 
                 if (!agreementExists)
                 {
-                    var document = new AccountSignedAgreement(agreement.AccountLegalEntity.AccountId, agreement.Template.VersionNumber, agreement.Template.AgreementType.ToString(), Guid.NewGuid());
+                    var document = new AccountSignedAgreement(agreement.AccountId, agreement.Template.VersionNumber, agreement.Template.AgreementType.ToString(), Guid.NewGuid());
                     await _accountSignedAgreementsRepository.Add(document, null, CancellationToken.None);
                 }
             }

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -9,12 +11,14 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
+using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
 using SFA.DAS.Testing.EntityFramework;
+using StructureMap.TypeRules;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 {
@@ -50,13 +54,52 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         internal Mock<IAccountSignedAgreementsRepository> AccountSignedAgreementsRepository { get; set; }
         internal Mock<EmployerAccountsDbContext> EmployerAccountsDbContext { get; set; }
         public Mock<ILogger> Logger { get; set; }
+        public IConfigurationProvider ConfigurationProvider { get; set; }
 
         public ICollection<EmployerAgreement> Agreements = new List<EmployerAgreement>();
 
         public ICollection<AccountSignedAgreement> ReadStoreAgreements = new List<AccountSignedAgreement>();
 
-        public EmployerAgreement SignedAgreement = new EmployerAgreement{ AccountLegalEntity = new AccountLegalEntity{ AccountId = 112 }, Template = new AgreementTemplate{ AgreementType = AgreementType.Levy, VersionNumber = 3 }, SignedDate = DateTime.Today.AddDays(-1) };
-        public EmployerAgreement UnsignedAgreement = new EmployerAgreement { AccountLegalEntity = new AccountLegalEntity { AccountId = 114 }, Template = new AgreementTemplate { AgreementType = AgreementType.Levy, VersionNumber = 3 } };
+        public EmployerAgreement SignedAgreement = new EmployerAgreement
+        {
+            AccountLegalEntity = new AccountLegalEntity
+            {
+                AccountId = 112,
+                Account = new Account
+                {
+                    Id = 112,
+                    CreatedDate = DateTime.Today.AddDays(-1)
+                },
+                Id = 212,
+                LegalEntityId = 214
+            },
+            Template = new AgreementTemplate
+            {
+                AgreementType = AgreementType.Levy,
+                VersionNumber = 3
+            },
+            SignedDate = DateTime.Today.AddDays(-1)
+        };
+
+        public EmployerAgreement UnsignedAgreement = new EmployerAgreement
+        {
+            AccountLegalEntity = new AccountLegalEntity
+            {
+                AccountId = 114,
+                Account = new Account
+                {
+                    Id = 114,
+                    CreatedDate = DateTime.Today.AddDays(-1)
+                },
+                Id = 216,
+                LegalEntityId = 218
+            },
+            Template = new AgreementTemplate
+            {
+                AgreementType = AgreementType.Levy,
+                VersionNumber = 3
+            }
+        };
 
         internal SeedAccountSignedAgreementsJob SeedAccountSignedAgreementsJob { get; set; }
 
@@ -83,7 +126,22 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
             Logger = new Mock<ILogger>();
 
-            SeedAccountSignedAgreementsJob = new SeedAccountSignedAgreementsJob(RunOnceService.Object, AccountSignedAgreementsRepository.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object);
+            var profiles = AppDomain.CurrentDomain
+                .GetAssemblies()
+                .Where(a => a.FullName.StartsWith("SFA.DAS.EmployerAccounts"))
+                .SelectMany(a => a.GetTypes())
+                .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
+                .Select(t => (Profile)Activator.CreateInstance(t));
+
+            ConfigurationProvider = new MapperConfiguration(c =>
+            {
+                foreach (var profile in profiles)
+                {
+                    c.AddProfile(profile);
+                }
+            });
+
+            SeedAccountSignedAgreementsJob = new SeedAccountSignedAgreementsJob(RunOnceService.Object, AccountSignedAgreementsRepository.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object, ConfigurationProvider);
         }
 
         public Task Run()
