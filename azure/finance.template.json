@@ -64,13 +64,6 @@
         },
         "uiCertificateName": {
             "type": "string"
-        },
-        "apiCustomHostname": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "apiCertificateName": {
-            "type": "string"
         }
     },
     "variables": {},
@@ -228,12 +221,6 @@
                                 "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
                             }
                         ]
-                    },
-                    "customHostName": {
-                        "value": "[parameters('apiCustomHostname')]"
-                    },
-                    "certificateThumbprint": {
-                        "value": "[reference(resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/certificates', parameters('apiCertificateName')), '2016-03-01').Thumbprint]"
                     }
                 }
             },
