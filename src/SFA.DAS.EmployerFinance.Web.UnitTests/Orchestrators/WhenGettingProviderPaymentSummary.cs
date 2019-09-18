@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -13,7 +14,7 @@ using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
-using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
+using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
 using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
@@ -21,7 +22,7 @@ using SFA.DAS.NLog.Logger;
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 {
     [Parallelizable]
-    public class WhenGettingCoursePaymentSummary
+    public class WhenGettingProviderPaymentSummary
     {
         private IFixture _fixture = new Fixture();
         private EmployerAccountTransactionsOrchestrator _sut;
@@ -46,26 +47,26 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             SetupGetCoursePaymentsResponse(2019, 9);
 
             _sut = new EmployerAccountTransactionsOrchestrator(
-                _accountApiMock.Object, 
-                _mediatorMock.Object, 
+                _accountApiMock.Object,
+                _mediatorMock.Object,
                 _currentTimeMock.Object,
                 Mock.Of<ILog>());
         }
 
         [Test]
-        [TestCase(1, Description = "Course payment summary for single apprentice")]
-        [TestCase(9, Description = "Course payment summary for multiple apprentice")]
-        public async Task ThenSummariesForEachApprenticeShouldBeCreated(int numberOfApprentices)
+        [TestCase(1, Description = "Provider payment summary for single course")]
+        [TestCase(9, Description = "Provider payment summary for multiple courses")]
+        public async Task ThenSummariesForEachCourseShouldBeCreated(int numberOfCourses)
         {
             // Arrange
-            var coursePayments = CreateCoursePayments(numberOfApprentices, 1);
-            SetupGetCoursePaymentsResponse(2019, 9, coursePayments);
+            var coursePayments = CreateCoursePayments(numberOfCourses, 1);
+            SetupGetProviderPaymentsResponse(2019, 9, coursePayments);
 
             // Act
-            var response = await _sut.GetCoursePaymentSummary("abc123", 888888, "A course", 4, null, new DateTime(2019, 9, 1), new DateTime(2019, 9, 30), "userId");
+            var response = await _sut.GetProviderPaymentSummary("abc123", 888888, new DateTime(2019, 9, 1), new DateTime(2019, 9, 30), "userId");
 
             // Assert
-            response.Data.ApprenticePayments.Count().Should().Be(numberOfApprentices);
+            response.Data.CoursePayments.Count().Should().Be(numberOfCourses);
         }
 
         [Test]
@@ -88,7 +89,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 coursePayment.SfaCoInvestmentAmount = 900;
             }
 
-            SetupGetCoursePaymentsResponse(2019, 9, coursePayments);
+            SetupGetProviderPaymentsResponse(2019, 9, coursePayments);
 
             // Act
             var response = await _sut.GetCoursePaymentSummary("abc123", 888888, "A course", 4, null, new DateTime(2019, 9, 1), new DateTime(2019, 9, 30), "userId");
@@ -117,7 +118,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 coursePayment.SfaCoInvestmentAmount = 900;
             }
 
-            SetupGetCoursePaymentsResponse(2019, 9, coursePayments);
+            SetupGetProviderPaymentsResponse(2019, 9, coursePayments);
 
             // Act
             var response = await _sut.GetCoursePaymentSummary("abc123", 888888, "A course", 4, null, new DateTime(2019, 9, 1), new DateTime(2019, 9, 30), "userId");
@@ -141,7 +142,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             var coursePayments = CreateCoursePayments(1, 1, 1000, 0, 0);
 
-            SetupGetCoursePaymentsResponse(2019, 9, coursePayments);
+            SetupGetProviderPaymentsResponse(2019, 9, coursePayments);
 
             // Act
             var response = await _sut.GetCoursePaymentSummary("abc123", 888888, "A course", 4, null, new DateTime(2019, 9, 1), new DateTime(2019, 9, 30), "userId");
@@ -151,15 +152,15 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         }
 
         private IEnumerable<PaymentTransactionLine> CreateCoursePayments(
-            int noOfApprentices, 
-            int noOfPaymentsForApprentice, 
+            int noOfCourses,
+            int noOfPaymentsForCourse,
             decimal lineAmount = 100,
             decimal sfaCoInvestment = 100,
             decimal employerCoInvestment = 100)
         {
             var payments = new List<PaymentTransactionLine>();
 
-            for (int i = 1; i <= noOfApprentices; i++)
+            for (int i = 1; i <= noOfCourses; i++)
             {
                 payments.AddRange(_fixture
                     .Build<PaymentTransactionLine>()
@@ -171,7 +172,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                     .With(ptl => ptl.LineAmount, lineAmount)
                     .With(ptl => ptl.SfaCoInvestmentAmount, sfaCoInvestment)
                     .With(ptl => ptl.EmployerCoInvestmentAmount, employerCoInvestment)
-                    .CreateMany(noOfPaymentsForApprentice));
+                    .CreateMany(noOfPaymentsForCourse));
             }
 
             return payments;
@@ -179,13 +180,13 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
         private void SetupGetCoursePaymentsResponse(int year, int month)
         {
-            SetupGetCoursePaymentsResponse(year, month, new PaymentTransactionLine[0]);
+            SetupGetProviderPaymentsResponse(year, month, new PaymentTransactionLine[0]);
         }
 
-        private void SetupGetCoursePaymentsResponse(int year, int month, IEnumerable<PaymentTransactionLine> payments)
+        private void SetupGetProviderPaymentsResponse(int year, int month, IEnumerable<PaymentTransactionLine> payments)
         {
-            _mediatorMock.Setup(x => x.SendAsync(It.IsAny<FindAccountCoursePaymentsQuery>()))
-                .ReturnsAsync(new FindAccountCoursePaymentsResponse
+            _mediatorMock.Setup(x => x.SendAsync(It.IsAny<FindAccountProviderPaymentsQuery>()))
+                .ReturnsAsync(new FindAccountProviderPaymentsResponse
                 {
                     Transactions = payments.ToList()
                 });
