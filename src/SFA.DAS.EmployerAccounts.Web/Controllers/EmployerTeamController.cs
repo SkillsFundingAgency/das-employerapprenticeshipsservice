@@ -18,11 +18,10 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Globalization;
-using SFA.DAS.Authorization.EmployerUserRoles.Options;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [DasAuthorize(EmployerUserRole.Any)]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
