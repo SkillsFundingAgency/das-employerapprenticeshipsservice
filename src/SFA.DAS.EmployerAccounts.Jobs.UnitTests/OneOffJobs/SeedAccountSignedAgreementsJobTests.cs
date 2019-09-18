@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -18,7 +17,6 @@ using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
 using SFA.DAS.Testing.EntityFramework;
-using StructureMap.TypeRules;
 
 namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 {
@@ -44,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
         public Task Run_WhenRunningJob_ThenShouldPassInTheCorrectJobName()
         {
             return TestAsync(f => f.Run(),
-                f => f.RunOnceService.Verify(x => x.RunOnce("SeedAccountUsersJob", It.IsAny<Func<Task>>())));
+                f => f.RunOnceService.Verify(x => x.RunOnce("SeedAccountSignedAgreementsJob", It.IsAny<Func<Task>>())));
         }
     }
 
@@ -71,7 +69,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
                     CreatedDate = DateTime.Today.AddDays(-1)
                 },
                 Id = 212,
-                LegalEntityId = 214
+                LegalEntityId = 214,
+                LegalEntity = new LegalEntity()
             },
             Template = new AgreementTemplate
             {
@@ -92,7 +91,8 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
                     CreatedDate = DateTime.Today.AddDays(-1)
                 },
                 Id = 216,
-                LegalEntityId = 218
+                LegalEntityId = 218,
+                LegalEntity = new LegalEntity()
             },
             Template = new AgreementTemplate
             {
@@ -126,19 +126,11 @@ namespace SFA.DAS.EmployerAccounts.Jobs.UnitTests.OneOffJobs
 
             Logger = new Mock<ILogger>();
 
-            var profiles = AppDomain.CurrentDomain
-                .GetAssemblies()
-                .Where(a => a.FullName.StartsWith("SFA.DAS.EmployerAccounts"))
-                .SelectMany(a => a.GetTypes())
-                .Where(t => typeof(Profile).IsAssignableFrom(t) && t.IsConcrete() && t.HasConstructors())
-                .Select(t => (Profile)Activator.CreateInstance(t));
-
             ConfigurationProvider = new MapperConfiguration(c =>
             {
-                foreach (var profile in profiles)
-                {
-                    c.AddProfile(profile);
-                }
+                c.AddProfile<AccountMappings>();
+                c.AddProfile<AgreementMappings>();
+                c.AddProfile<LegalEntityMappings>();
             });
 
             SeedAccountSignedAgreementsJob = new SeedAccountSignedAgreementsJob(RunOnceService.Object, AccountSignedAgreementsRepository.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAccountsDbContext.Object), Logger.Object, ConfigurationProvider);
