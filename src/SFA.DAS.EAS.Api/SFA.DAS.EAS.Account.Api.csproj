@@ -354,6 +354,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
+    <Compile Include="Controllers\PingController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
@@ -367,7 +368,6 @@
     <Compile Include="Controllers\EmployerAgreementController.cs" />
     <Compile Include="Controllers\EmployerAccountsController.cs" />
     <Compile Include="Controllers\EmployerUserController.cs" />
-    <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

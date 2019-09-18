@@ -182,6 +182,14 @@ namespace SFA.DAS.EAS.Account.Api.Client
             return JsonConvert.DeserializeObject<ICollection<AccountDetailViewModel>>(json);
         }
 
+        public Task Ping()
+        {
+            var baseUrl = GetBaseUrl();
+            var url = $"{baseUrl}api/ping";
+
+            return _httpClient.GetAsync(url);
+        }
+
         private string GetBaseUrl()
         {
             return _configuration.ApiBaseUrl.EndsWith("/")
