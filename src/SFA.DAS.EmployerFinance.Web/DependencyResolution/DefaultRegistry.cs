@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
         {
             Scan(s =>
             {
-                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
+                s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS") && !a.GetName().Name.StartsWith("SFA.DAS.Authorization"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
                 s.With(new ControllerConvention());
             });

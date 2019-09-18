@@ -28,8 +28,11 @@ namespace SFA.DAS.EmployerFinance.Web.Authorization
             var accountValues = GetAccountValues();
             var userValues = GetUserValues();
 
-            authorizationContext.AddEmployerFeatureValues(accountValues.Id.Value, userValues.Email);
-            authorizationContext.AddEmployerUserRoleValues(accountValues.Id.Value, userValues.Ref.Value);
+            if (accountValues.Id.HasValue)
+            {
+                authorizationContext.AddEmployerFeatureValues(accountValues.Id.Value, userValues.Email);
+                authorizationContext.AddEmployerUserRoleValues(accountValues.Id.Value, userValues.Ref.Value);
+            }
 
             return authorizationContext;
         }
