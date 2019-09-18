@@ -54,7 +54,7 @@
         <table class="responsive">
             <thead>
                 <tr>
-                    <th colspan="2"></th>
+                    <th colspan="@(Model.ShowNonCoInvesmentPaymentsTotal ? "2" : "1")"></th>
                     <th class="highlight colgroup" scope="colgroup" colspan="2">Co-investment</th>
                     <th colspan="2"></th>
                 </tr>
@@ -95,7 +95,10 @@
             <tfoot>
                 <tr class="total">
                     <td data-label="Totals"> </td>
-                    <td data-label="Paid from levy" class="total numeric no-wrap">@Model.LevyPaymentsTotal.ToString("C2", culture)</td>
+                    @if (Model.ShowNonCoInvesmentPaymentsTotal)
+                    {
+                        <td data-label="Paid from levy" class="total numeric no-wrap">@Model.LevyPaymentsTotal.ToString("C2", culture)</td>
+                    }
                     <td data-label="Government contribution" class="highlight total numeric no-wrap">@Model.SFACoInvestmentTotal.ToString("C2", culture)</td>
                     <td data-label="Your contribution" class="highlight total numeric no-wrap">@Model.EmployerCoInvestmentTotal.ToString("C2", culture)</td>
                     <td data-label="Amount" class="total numeric no-wrap">@Model.PaymentsTotal.ToString("C2", culture)</td>
