@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models;
@@ -40,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         public EmployerAccountTransactionsOrchestrator(
             IAccountApiClient accountApiClient,
-            EmployerAccountsConfiguration employerAccountsConfiguration, 
+            EmployerAccountsConfiguration employerAccountsConfiguration,
             IMediator mediator,
             ICurrentDateTime currentTime,
             ILog logger)
@@ -149,7 +150,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindAccountProviderPaymentsQuery
+                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery { HashedAccountId = hashedId, UserId = externalUserId });
+                var accountProviderPaymentsTask = _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
                     HashedAccountId = hashedId,
                     UkPrn = ukprn,
@@ -158,8 +160,10 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ExternalUserId = externalUserId,
                 });
 
-                var courseGroups =
-                    data.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
+                await Task.WhenAll(accountTask, accountProviderPaymentsTask);
+                var accountProviderPayments = accountProviderPaymentsTask.Result;
+
+                var courseGroups = accountProviderPayments.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
 
                 var coursePaymentSummaries = courseGroups.Select(x =>
                 {
@@ -183,10 +187,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     Status = HttpStatusCode.OK,
                     Data = new ProviderPaymentsSummaryViewModel
                     {
+                        ApprenticeshipEmployerType = accountTask.Result.Account.ApprenticeshipEmployerType,
                         HashedAccountId = hashedId,
                         UkPrn = ukprn,
-                        ProviderName = data.ProviderName,
-                        PaymentDate = data.DateCreated,
+                        ProviderName = accountProviderPayments.ProviderName,
+                        PaymentDate = accountProviderPayments.DateCreated,
                         FromDate = fromDate,
                         ToDate = toDate,
                         CoursePayments = coursePaymentSummaries,
@@ -229,7 +234,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
-                var data = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
+                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery { HashedAccountId = hashedAccountId, UserId = externalUserId });
+
+                var accountCoursePaymentsResponse = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
                 {
                     HashedAccountId = hashedAccountId,
                     UkPrn = ukprn,
@@ -241,7 +248,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var apprenticePaymentGroups = data.Transactions.GroupBy(x => new { x.ApprenticeULN });
+                var apprenticePaymentGroups = accountCoursePaymentsResponse.Transactions.GroupBy(x => new { x.ApprenticeULN });
 
                 var paymentSummaries = apprenticePaymentGroups.Select(pg =>
                 {
@@ -258,16 +265,19 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
                 var apprenticePayments = paymentSummaries.ToList();
 
+                var accountResponse = await accountTask;
+
                 return new OrchestratorResponse<CoursePaymentDetailsViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = new CoursePaymentDetailsViewModel
                     {
-                        ProviderName = data.ProviderName,
-                        CourseName = data.CourseName,
-                        CourseLevel = data.CourseLevel,
-                        PathwayName = data.PathwayName,
-                        PaymentDate = data.DateCreated,
+                        ApprenticeshipEmployerType = accountResponse.Account.ApprenticeshipEmployerType,
+                        ProviderName = accountCoursePaymentsResponse.ProviderName,
+                        CourseName = accountCoursePaymentsResponse.CourseName,
+                        CourseLevel = accountCoursePaymentsResponse.CourseLevel,
+                        PathwayName = accountCoursePaymentsResponse.PathwayName,
+                        PaymentDate = accountCoursePaymentsResponse.DateCreated,
                         LevyPaymentsTotal = apprenticePayments.Sum(p => p.LevyPaymentAmount),
                         SFACoInvestmentTotal = apprenticePayments.Sum(p => p.SFACoInvestmentAmount),
                         EmployerCoInvestmentTotal = apprenticePayments.Sum(p => p.EmployerCoInvestmentAmount),
