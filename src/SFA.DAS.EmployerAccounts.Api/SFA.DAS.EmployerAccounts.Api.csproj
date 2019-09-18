@@ -128,6 +128,7 @@
     <Compile Include="Orchestrators\AgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\UsersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ServiceBusEndPointConfigureAndRun.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
