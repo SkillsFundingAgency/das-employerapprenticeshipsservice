@@ -10,8 +10,6 @@ namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness.DependencyResolution
             return new Container(c =>
             {
                 c.AddRegistry<EmployerAccountsApiClientRegistry>();
-                c.AddRegistry<DefaultRegistry>();
-                
             });
         }
     }

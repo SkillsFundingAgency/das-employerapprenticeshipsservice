@@ -52,6 +52,30 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         {
             return TestAsync(f => f.HasAgreementBeenSigned(), (f, r) => r.Should().BeTrue());
         }
+
+        [Test]
+        public Task Ping_WhenHttpPingSucceeds_ThenShouldNotThrowException()
+        {
+            return TestExceptionAsync(f => f.SetHttpPingSuccess(), f => f.Ping(), (f, r) => r.ShouldNotThrow<Exception>());
+        }
+
+        [Test]
+        public Task Ping_WhenHttpPingFails_ThenShouldThrowException()
+        {
+            return TestExceptionAsync(f => f.SetHttpPingFailure(), f => f.Ping(), (f, r) => r.ShouldThrow<Exception>());
+        }
+
+        [Test]
+        public Task Ping_WhenReadStorePingSucceeds_ThenShouldNotThrowException()
+        {
+            return TestExceptionAsync(f => f.SetReadStorePingSuccess(), f => f.Ping(), (f, r) => r.ShouldNotThrow<Exception>());
+        }
+
+        [Test]
+        public Task Ping_WhenReadStorePingFails_ThenShouldThrowException()
+        {
+            return TestExceptionAsync(f => f.SetReadStorePingFailure(), f => f.Ping(), (f, r) => r.ShouldThrow<Exception>());
+        }
     }
 
     public class EmployerAccountsApiClientTestsFixture
@@ -60,14 +84,16 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         public IsUserInAnyRoleRequest IsUserInAnyRoleRequest { get; set; }
         public HasAgreementBeenSignedRequest HasAgreementBeenSignedRequest { get; set; }
         public CancellationToken CancellationToken { get; set; }
+        public Mock<ISecureHttpClient> MockSecureHttpClient { get; set; }
         public Mock<IReadStoreMediator> MockApiMediator { get; set; }
         public IEmployerAccountsApiClient EmployerAccountsApiClient { get; set; }
 
         public EmployerAccountsApiClientTestsFixture()
         {
             CancellationToken = CancellationToken.None;
+            MockSecureHttpClient = new Mock<ISecureHttpClient>();
             MockApiMediator = new Mock<IReadStoreMediator>();
-            EmployerAccountsApiClient = new EmployerAccountsApiClient(null, MockApiMediator.Object);
+            EmployerAccountsApiClient = new EmployerAccountsApiClient(MockSecureHttpClient.Object, MockApiMediator.Object);
 
             IsUserInRoleRequest = new IsUserInRoleRequest
             {
@@ -110,6 +136,39 @@ namespace SFA.DAS.EmployerAccounts.Api.Client.UnitTests
         public Task<bool> IsUserInAnyRole()
         {
             return EmployerAccountsApiClient.IsUserInAnyRole(IsUserInAnyRoleRequest, CancellationToken);
+        }
+
+        public Task Ping()
+        {
+            return EmployerAccountsApiClient.Ping(CancellationToken);
+        }
+
+        public EmployerAccountsApiClientTestsFixture SetReadStorePingSuccess()
+        {
+            MockApiMediator.Setup(m => m.Send(It.IsAny<PingQuery>(), CancellationToken)).ReturnsAsync(Unit.Value);
+
+            return this;
+        }
+
+        public EmployerAccountsApiClientTestsFixture SetReadStorePingFailure()
+        {
+            MockApiMediator.Setup(m => m.Send(It.IsAny<PingQuery>(), CancellationToken)).Throws<Exception>();
+
+            return this;
+        }
+
+        public EmployerAccountsApiClientTestsFixture SetHttpPingSuccess()
+        {
+            MockSecureHttpClient.Setup(c => c.GetAsync(It.Is<string>(u => u == "ping"), CancellationToken)).ReturnsAsync("");
+
+            return this;
+        }
+
+        public EmployerAccountsApiClientTestsFixture SetHttpPingFailure()
+        {
+            MockSecureHttpClient.Setup(c => c.GetAsync(It.IsAny<string>(), CancellationToken)).Throws<Exception>();
+
+            return this;
         }
 
         public Task<bool> HasAgreementBeenSigned()

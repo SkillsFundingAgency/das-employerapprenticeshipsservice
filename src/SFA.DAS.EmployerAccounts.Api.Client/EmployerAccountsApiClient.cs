@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Queries;
 using SFA.DAS.EmployerAccounts.ReadStore.Mediator;
 
@@ -8,26 +9,16 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
     //todo: not a great client/http combo
     public class EmployerAccountsApiClient : IEmployerAccountsApiClient
     {
-        private readonly IEmployerAccountsApiClientConfiguration _configuration;
-        private readonly SecureHttpClient _httpClient;
+        private readonly ISecureHttpClient _httpClient;
         private readonly IReadStoreMediator _mediator;
 
-        public EmployerAccountsApiClient(IEmployerAccountsApiClientConfiguration configuration, IReadStoreMediator mediator)
+        public EmployerAccountsApiClient(ISecureHttpClient httpClient, IReadStoreMediator mediator)
         {
-            _configuration = configuration;
+            _httpClient = httpClient;
             _mediator = mediator;
-            _httpClient = new SecureHttpClient(configuration);
         }
 
-        public Task HealthCheck()
-        {
-            var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}/api/healthcheck";
-
-            return _httpClient.GetAsync(url);
-        }
-
-        public Task<bool> IsUserInRole(IsUserInRoleRequest roleRequest, CancellationToken cancellationToken)
+        public Task<bool> IsUserInRole(IsUserInRoleRequest roleRequest, CancellationToken cancellationToken = new CancellationToken())
         {
             return _mediator.Send(new IsUserInRoleQuery(
                 roleRequest.UserRef,
@@ -36,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
             ), cancellationToken);
         }
 
-        public Task<bool> IsUserInAnyRole(IsUserInAnyRoleRequest roleRequest, CancellationToken cancellationToken)
+        public Task<bool> IsUserInAnyRole(IsUserInAnyRoleRequest roleRequest, CancellationToken cancellationToken = new CancellationToken())
         {
             return _mediator.Send(new IsUserInAnyRoleQuery(
                 roleRequest.UserRef,
@@ -51,9 +42,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
                 hasAgreementBeenSignedRequest.AgreementType), cancellationToken);
         }
 
-        private string GetBaseUrl()
+	public Task Ping(CancellationToken cancellationToken = new CancellationToken())
         {
-            return _configuration.ApiBaseUrl.Trim('/');
+            return Task.WhenAll(_httpClient.GetAsync("ping", cancellationToken), _mediator.Send(new PingQuery(), cancellationToken));
         }
     }
 }
