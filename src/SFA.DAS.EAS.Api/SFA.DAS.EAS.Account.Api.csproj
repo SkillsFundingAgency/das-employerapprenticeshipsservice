@@ -211,10 +211,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.6.0.1\lib\net462\SFA.DAS.Authorization.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.6.0.7\lib\net462\SFA.DAS.Authorization.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.WebApi, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.WebApi.6.0.1\lib\net462\SFA.DAS.Authorization.WebApi.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.WebApi.6.0.7\lib\net462\SFA.DAS.Authorization.WebApi.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Commitments.Api.Client, Version=2.1.716.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Commitments.Api.Client.2.1.716\lib\net462\SFA.DAS.Commitments.Api.Client.dll</HintPath>
@@ -234,7 +234,7 @@
     <Reference Include="SFA.DAS.Configuration.FileStorage, Version=1.0.0.49931, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.FileStorage.1.0.0.49931\lib\net45\SFA.DAS.Configuration.FileStorage.dll</HintPath>
     </Reference>
-	<Reference Include="SFA.DAS.EmployerAccounts.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SFA.DAS.EmployerAccounts.Api.Types, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.EmployerAccounts.Api.Types.1.6.1852\lib\net462\SFA.DAS.EmployerAccounts.Api.Types.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.HashingService, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -243,7 +243,7 @@
     <Reference Include="SFA.DAS.Http, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Http.1.2.4\lib\net45\SFA.DAS.Http.dll</HintPath>
     </Reference>
-	<Reference Include="SFA.DAS.Logging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SFA.DAS.Logging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Logging.1.0.5\lib\netstandard2.0\SFA.DAS.Logging.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Messaging, Version=3.0.0.63765, Culture=neutral, processorArchitecture=MSIL">
