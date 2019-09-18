@@ -29,7 +29,7 @@
     <PackageReference Include="SFA.DAS.EntityFramework" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.890" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
-    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.12" />
+    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.13" />
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client" Version="1.1.74" />
     <PackageReference Include="SFA.DAS.TimeProvider" version="1.0.0.3956" />
     <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71" />
