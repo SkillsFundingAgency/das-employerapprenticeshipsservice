@@ -236,7 +236,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery { HashedAccountId = hashedAccountId, UserId = externalUserId });
 
-                var accountCoursePaymentsTask = _mediator.SendAsync(new FindAccountCoursePaymentsQuery
+                var accountCoursePaymentsResponse = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
                 {
                     HashedAccountId = hashedAccountId,
                     UkPrn = ukprn,
@@ -247,8 +247,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ToDate = toDate,
                     ExternalUserId = externalUserId
                 });
-
-                var accountCoursePaymentsResponse = await accountCoursePaymentsTask;
 
                 var apprenticePaymentGroups = accountCoursePaymentsResponse.Transactions.GroupBy(x => new { x.ApprenticeULN });
 
