@@ -19,5 +19,7 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels
 
         public ICollection<AprrenticeshipPaymentSummaryViewModel> ApprenticePayments { get; set; }
         public string HashedAccountId { get; set; }
+
+        public bool ShowNonCoInvesmentPaymentsTotal => LevyPaymentsTotal != 0;
     }
 }

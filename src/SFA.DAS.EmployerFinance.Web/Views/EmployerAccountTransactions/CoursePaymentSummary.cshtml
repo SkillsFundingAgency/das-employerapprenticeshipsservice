@@ -60,7 +60,7 @@
                 </tr>
                 <tr>
                     <th scope="col" class="tw-20">Apprentice</th>
-                    @if (Model.LevyPaymentsTotal != 0)
+                    @if (Model.ShowNonCoInvesmentPaymentsTotal)
                     {
                         <th scope="col" class="numeric tw-20">Paid from levy</th>
                     }
@@ -82,7 +82,7 @@
                             <td data-label="Apprentice">@coursePaymentSummary.ApprenticeName</td>
                         }
 
-                        @if (Model.LevyPaymentsTotal != 0)
+                        @if (Model.ShowNonCoInvesmentPaymentsTotal)
                         {
                             <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
                         }
