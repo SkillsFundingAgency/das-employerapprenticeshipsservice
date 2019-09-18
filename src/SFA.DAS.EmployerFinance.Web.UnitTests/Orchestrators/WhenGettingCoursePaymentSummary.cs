@@ -7,10 +7,14 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Payments;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
+using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.NLog.Logger;
 
@@ -30,6 +34,13 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _mediatorMock = new Mock<IMediator>();
             _accountApiMock = new Mock<IAccountApiClient>();
             _currentTimeMock = new Mock<ICurrentDateTime>();
+
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
+                .ReturnsAsync(new GetEmployerAccountResponse
+                {
+                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy }
+                });
 
             SetupGetCoursePaymentsResponse(2019, 9);
 
@@ -57,9 +68,16 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         }
 
         [Test]
-        public async Task ThenShouldNotShowNonCoInvestmentPaymentColumn_IfThereIsNoValue()
+        public async Task ThenNonLevyEmployerShouldNotSeeNonCoInvestmentPaymentColumn_IfThereIsNoValue()
         {
             // Arrange
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
+                .ReturnsAsync(new GetEmployerAccountResponse
+                {
+                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy }
+                });
+
             var coursePayments = CreateCoursePayments(1, 1, 0, 900, 100);
 
             foreach (var coursePayment in coursePayments)
@@ -79,9 +97,47 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         }
 
         [Test]
-        public async Task ThenShouldShowNonCoInvestmentPaymentColumn_IfThereIsValue()
+        public async Task ThenLevyEmployerShouldSeeNonCoInvestmentPaymentColumn_IfThereIsNoValue()
         {
             // Arrange
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
+                .ReturnsAsync(new GetEmployerAccountResponse
+                {
+                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy }
+                });
+
+            var coursePayments = CreateCoursePayments(1, 1, 0, 900, 100);
+
+            foreach (var coursePayment in coursePayments)
+            {
+                coursePayment.LineAmount = 0;
+                coursePayment.EmployerCoInvestmentAmount = 100;
+                coursePayment.SfaCoInvestmentAmount = 900;
+            }
+
+            SetupGetCoursePaymentsResponse(2019, 9, coursePayments);
+
+            // Act
+            var response = await _sut.GetCoursePaymentSummary("abc123", 888888, "A course", 4, null, new DateTime(2019, 9, 1), new DateTime(2019, 9, 30), "userId");
+
+            // Assert
+            response.Data.ShowNonCoInvesmentPaymentsTotal.Should().BeTrue();
+        }
+
+        [Test]
+        [TestCase(ApprenticeshipEmployerType.Levy)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy)]
+        public async Task ThenUserShouldSeeNonCoInvestmentPaymentColumn_IfThereIsValue(ApprenticeshipEmployerType apprenticeshipEmployerType)
+        {
+            // Arrange
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
+                .ReturnsAsync(new GetEmployerAccountResponse
+                {
+                    Account = new Account { ApprenticeshipEmployerType = apprenticeshipEmployerType }
+                });
+
             var coursePayments = CreateCoursePayments(1, 1, 1000, 0, 0);
 
             SetupGetCoursePaymentsResponse(2019, 9, coursePayments);
@@ -90,7 +146,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             var response = await _sut.GetCoursePaymentSummary("abc123", 888888, "A course", 4, null, new DateTime(2019, 9, 1), new DateTime(2019, 9, 30), "userId");
 
             // Assert
-            response.Data.ShowNonCoInvesmentPaymentsTotal.Should().BeFalse();
+            response.Data.ShowNonCoInvesmentPaymentsTotal.Should().BeTrue();
         }
 
         private IEnumerable<PaymentTransactionLine> CreateCoursePayments(
@@ -107,6 +163,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 payments.AddRange(_fixture
                     .Build<PaymentTransactionLine>()
                     .Without(ptl => ptl.SubTransactions)
+                    .With(ptl => ptl.TransactionType, TransactionItemType.Payment)
                     .With(ptl => ptl.ApprenticeName, $"Apprentice-{0}")
                     .With(ptl => ptl.ApprenticeNINumber, $"ApprenticeNI-{0}")
                     .With(ptl => ptl.ApprenticeULN, i)

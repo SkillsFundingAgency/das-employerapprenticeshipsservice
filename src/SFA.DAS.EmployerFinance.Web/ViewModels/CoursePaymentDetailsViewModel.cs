@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerFinance.Web.ViewModels
 {
@@ -19,7 +20,9 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels
 
         public ICollection<AprrenticeshipPaymentSummaryViewModel> ApprenticePayments { get; set; }
         public string HashedAccountId { get; set; }
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
 
-        public bool ShowNonCoInvesmentPaymentsTotal => LevyPaymentsTotal != 0;
+        public bool ShowNonCoInvesmentPaymentsTotal => LevyPaymentsTotal != 0 
+            || ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy;
     }
 }

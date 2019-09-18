@@ -226,6 +226,12 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
+                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
                 var data = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
                 {
                     HashedAccountId = hashedAccountId,
@@ -255,11 +261,13 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
                 var apprenticePayments = paymentSummaries.ToList();
 
+                var accountResponse = await accountTask;
                 return new OrchestratorResponse<CoursePaymentDetailsViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = new CoursePaymentDetailsViewModel
                     {
+                        ApprenticeshipEmployerType = accountResponse.Account.ApprenticeshipEmployerType,
                         ProviderName = data.ProviderName,
                         CourseName = data.CourseName,
                         CourseLevel = data.CourseLevel,
