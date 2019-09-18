@@ -30,21 +30,19 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthor
 
         public async Task<GetTransferConnectionInvitationAuthorizationResponse> Handle(GetTransferConnectionInvitationAuthorizationQuery message)
         {
-            var authorizationResultTask = _authorizationService.GetAuthorizationResultAsync(FeatureType.TransferConnectionRequests);
-            var transferAllowanceTask = _financeDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
+            var authorizationResult = await _authorizationService.GetAuthorizationResultAsync(FeatureType.TransferConnectionRequests);
+            var transferAllowance = await _financeDb.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
 
-            var isReceiverTask = _accountDb.Value.TransferConnectionInvitations.AnyAsync(i =>
+            var isReceiver = await _accountDb.Value.TransferConnectionInvitations.AnyAsync(i =>
                 i.ReceiverAccount.Id == message.AccountId && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
 
-            await Task.WhenAll(authorizationResultTask, transferAllowanceTask, isReceiverTask);
-
-            var isValidSender = transferAllowanceTask.Result.RemainingTransferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiverTask.Result;
+            var isValidSender = transferAllowance.RemainingTransferAllowance >= Constants.TransferConnectionInvitations.SenderMinTransferAllowance && !isReceiver;
 
             return new GetTransferConnectionInvitationAuthorizationResponse
             {
-                AuthorizationResult = authorizationResultTask.Result,
+                AuthorizationResult = authorizationResult,
                 IsValidSender = isValidSender,
                 TransferAllowancePercentage = _configuration.TransferAllowancePercentage
             };
