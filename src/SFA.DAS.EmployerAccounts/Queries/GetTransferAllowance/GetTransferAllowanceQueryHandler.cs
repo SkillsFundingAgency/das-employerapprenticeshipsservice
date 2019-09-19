@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Authorization.ModelBinding;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance
 {
-    public class GetTransferAllowanceQueryHandler : IAuthorizationContextModel, IAsyncRequestHandler<GetTransferAllowanceQuery, GetTransferAllowanceResponse>
+    public class GetTransferAllowanceQueryHandler : IAsyncRequestHandler<GetTransferAllowanceQuery, GetTransferAllowanceResponse>
     {
         private readonly EmployerFinanceDbContext _db;
         private readonly EmployerFinanceConfiguration _configuration;

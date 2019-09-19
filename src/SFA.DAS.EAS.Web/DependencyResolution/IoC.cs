@@ -6,6 +6,7 @@ using SFA.DAS.UnitOfWork.NServiceBus;
 using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
 using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.Features.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
 
@@ -45,6 +46,7 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
                 c.AddRegistry<FeaturesAuthorizationRegistry>();
+                c.AddRegistry<EmployerUserRolesAuthorizationRegistry>();
             });
         }
     }
