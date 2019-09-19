@@ -7,15 +7,6 @@ namespace SFA.DAS.EAS.Web.Extensions
 {
     public static class HtmlHelperExtensions
     {
-        public static MvcHtmlString CommaSeperatedAddressToHtml(this HtmlHelper htmlHelper, string commaSeperatedAddress)
-        {
-            var htmlAddress = commaSeperatedAddress.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                .Select(line => $"{line.Trim()}<br/>")
-                .Aggregate("", (x, y) => x + y);
-
-            return new MvcHtmlString(htmlAddress);
-        }
-
         public static bool IsValid<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression)
         {
             var partialFieldName = ExpressionHelper.GetExpressionText(expression);
@@ -33,14 +24,6 @@ namespace SFA.DAS.EAS.Web.Extensions
             }
 
             return true;
-        }
-
-        public static bool ViewExists(this HtmlHelper html, string viewName)
-        {
-            var controllerContext = html.ViewContext.Controller.ControllerContext;
-            var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
-
-            return result.View != null;
         }
     }
 }
