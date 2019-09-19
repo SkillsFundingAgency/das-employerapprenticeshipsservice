@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand
         {
             var healthCheck = new HealthCheck(message.UserRef.Value);
 
-            await healthCheck.Run(_employerAccountsApiClient.HealthCheck);
+            await healthCheck.Run(() => _employerAccountsApiClient.Ping());
 
             _db.Value.HealthChecks.Add(healthCheck);
         }
