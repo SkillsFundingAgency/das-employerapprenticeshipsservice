@@ -34,13 +34,13 @@
         <table class="responsive">
             <thead>
                 <tr>
-                    <th colspan="@(Model.Data.LevyPaymentsTotal != 0 ? "2" : "1")"></th>
+                    <th colspan="@(Model.Data.ShowNonCoInvesmentPaymentsTotal ? "2" : "1")"></th>
                     <th class="highlight colgroup" scope="colgroup" colspan="2">Co-investment</th>
                     <th colspan="2"></th>
                 </tr>
                 <tr>
                     <th scope="col" class="tw-20">Course</th>
-                    @if (Model.Data.LevyPaymentsTotal != 0)
+                    @if (Model.Data.ShowNonCoInvesmentPaymentsTotal)
                     {
                         <th scope="col" class="numeric tw-20">Paid from levy</th>
                     }
@@ -63,7 +63,7 @@
                             <td data-label="Course">@coursePaymentSummary.CourseName: @coursePaymentSummary.PathwayName <span class="no-wrap">level @coursePaymentSummary.CourseLevel</span></td>
                         }
 
-                        @if (Model.Data.LevyPaymentsTotal != 0)
+                        @if (Model.Data.ShowNonCoInvesmentPaymentsTotal)
                         {
                             <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
                         }
@@ -113,7 +113,7 @@
             <tfoot>
                 <tr class="total">
                     <td data-label="Totals"> </td>
-                    @if (Model.Data.LevyPaymentsTotal != 0)
+                    @if (Model.Data.ShowNonCoInvesmentPaymentsTotal)
                     {
                     <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C2", culture)</td>
                     }
