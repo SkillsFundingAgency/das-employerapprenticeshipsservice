@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
                 UserName = UserName,
                 AgreementType = AgreementType,
                 CohortCreated = CohortCreated,
-                SignedAgreementVersion = SignedAgreementVersion
+                AgreementVersion = SignedAgreementVersion
             };
 
             Mediator = new Mock<IMediator>();

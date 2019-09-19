@@ -15,6 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs.DependencyResolution
                 c.AddRegistry<ReadStoreDataRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<MapperRegistry>();
             });
 
             ServiceLocator.Initialize(container);

@@ -34,7 +34,15 @@ namespace SFA.DAS.EmployerAccounts.Api.Client
                 roleRequest.AccountId), cancellationToken);
         }
 
-        public Task Ping(CancellationToken cancellationToken = new CancellationToken())
+        public Task<bool> HasAgreementBeenSigned(HasAgreementBeenSignedRequest hasAgreementBeenSignedRequest, CancellationToken cancellationToken)
+        {
+            return _mediator.Send(new HasAgreementBeenSignedQuery(
+                hasAgreementBeenSignedRequest.AccountId,
+                hasAgreementBeenSignedRequest.AgreementVersion,
+                hasAgreementBeenSignedRequest.AgreementType), cancellationToken);
+        }
+
+	public Task Ping(CancellationToken cancellationToken = new CancellationToken())
         {
             return Task.WhenAll(_httpClient.GetAsync("ping", cancellationToken), _mediator.Send(new PingQuery(), cancellationToken));
         }

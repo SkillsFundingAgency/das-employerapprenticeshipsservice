@@ -2,7 +2,6 @@
 using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Messages.Events;
-using SFA.DAS.EmployerFinance.Commands.CreateAccountLegalEntity;
 using SFA.DAS.EmployerFinance.Commands.LegalEntitySignAgreement;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
@@ -19,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
         public Task Handle(SignedAgreementEvent message, IMessageHandlerContext context)
         {
             return _mediator.SendAsync(new LegalEntitySignAgreementCommand(message.AgreementId,
-                message.SignedAgreementVersion, message.AccountId, message.LegalEntityId));
+                message.AgreementVersion, message.AccountId, message.LegalEntityId));
         }
     }
 }

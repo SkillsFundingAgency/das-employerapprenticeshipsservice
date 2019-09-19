@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
@@ -28,25 +29,54 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
                 Id = DocumentSettings.DatabaseName
             };
 
-            var documentCollection = new DocumentCollection
+            var documentCollections = new List<DocumentCollection>
             {
-                Id = DocumentSettings.AccountUsersCollectionName,
-                PartitionKey = new PartitionKeyDefinition
+                new DocumentCollection
                 {
-                    Paths = new Collection<string>
+                    Id = DocumentSettings.AccountUsersCollectionName,
+                    PartitionKey = new PartitionKeyDefinition
+                    {
+                        Paths = new Collection<string>
                         {
                             "/accountId"
                         }
-                },
-                UniqueKeyPolicy = new UniqueKeyPolicy
-                {
-                    UniqueKeys = new Collection<UniqueKey>
+                    },
+                    UniqueKeyPolicy = new UniqueKeyPolicy
+                    {
+                        UniqueKeys = new Collection<UniqueKey>
                         {
                             new UniqueKey
                             {
-                                Paths = new Collection<string> { "/userRef" }
+                                Paths = new Collection<string> {"/userRef"}
                             }
                         }
+                    }
+                },
+                new DocumentCollection
+                {
+                    Id = DocumentSettings.AccountSignedAgreementsCollectionName,
+                    PartitionKey = new PartitionKeyDefinition
+                    {
+                        Paths = new Collection<string>
+                        {
+                            "/accountId"
+                        }
+                    },
+                    UniqueKeyPolicy = new UniqueKeyPolicy
+                    {
+                        UniqueKeys = new Collection<UniqueKey>
+                        {
+                            new UniqueKey
+                            {
+                                Paths = new Collection<string>
+                                {
+                                    "/accountId",
+                                    "/agreementVersion",
+                                    "/agreementType"
+                                }
+                            }
+                        }
+                    }
                 }
             };
 
@@ -56,8 +86,11 @@ namespace SFA.DAS.EmployerAccounts.Jobs.StartupJobs
             _logger.LogInformation($"Database {(createDatabaseResponse.StatusCode == HttpStatusCode.Created ? "created" : "already existed")}");
 
             var requestOptions = new RequestOptions { OfferThroughput = 1000 };
-            var createDocumentCollectionResponse = await _documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(database.Id), documentCollection, requestOptions);
-            _logger.LogInformation($"Document collection {(createDocumentCollectionResponse.StatusCode == HttpStatusCode.Created ? "created" : "already existed")}");
+            foreach (var documentCollection in documentCollections)
+            {
+                var createDocumentCollectionResponse = await _documentClient.CreateDocumentCollectionIfNotExistsAsync(UriFactory.CreateDatabaseUri(database.Id), documentCollection, requestOptions);
+                _logger.LogInformation($"Document collection {(createDocumentCollectionResponse.StatusCode == HttpStatusCode.Created ? "created" : "already existed")}");
+            }
         }
     }
 }
