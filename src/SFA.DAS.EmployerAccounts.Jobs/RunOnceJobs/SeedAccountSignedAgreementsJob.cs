@@ -46,11 +46,12 @@ namespace SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs
 
             _logger.LogInformation("Migrating signed agreements into the read store");
 
+            var readStoreAgreements = await CosmosDb.QueryableExtensions.ToListAsync(
+                _accountSignedAgreementsRepository.CreateQuery());
+
             foreach (var agreement in agreements)
             {
-                var agreementExists = await CosmosDb.QueryableExtensions.AnyAsync(
-                    _accountSignedAgreementsRepository.CreateQuery(),
-                    x => x.AccountId == agreement.AccountId && x.AgreementType == agreement.Template.AgreementType.ToString() && x.AgreementVersion == agreement.Template.VersionNumber);
+                var agreementExists = readStoreAgreements.Any(x => x.AccountId == agreement.AccountId && x.AgreementType == agreement.Template.AgreementType.ToString() && x.AgreementVersion == agreement.Template.VersionNumber);
 
                 if (!agreementExists)
                 {

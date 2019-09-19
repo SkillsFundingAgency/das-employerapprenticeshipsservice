@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.DependencyResolution
             For<IDocumentClient>().Add(c => c.GetInstance<IDocumentClientFactory>().CreateDocumentClient()).Named(InstanceKeys.DocumentClient).Singleton();
             For<IDocumentClientFactory>().Use<DocumentClientFactory>();
             For<IAccountUsersRepository>().Use<AccountUsersRepository>().Ctor<IDocumentClient>().IsNamedInstance(InstanceKeys.DocumentClient);
-            For<IAccountSignedAgreementsRepository>().Use<AccountSignedAgreementRepository>().Ctor<IDocumentClient>().IsNamedInstance(GetType().FullName);
+            For<IAccountSignedAgreementsRepository>().Use<AccountSignedAgreementRepository>().Ctor<IDocumentClient>().IsNamedInstance(InstanceKeys.DocumentClient);
         }
     }
 }
