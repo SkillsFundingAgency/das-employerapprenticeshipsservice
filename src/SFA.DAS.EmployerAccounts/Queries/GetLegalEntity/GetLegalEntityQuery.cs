@@ -1,22 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AutoMapper;
-using MediatR;
-using SFA.DAS.Authorization.ModelBinding;
-using SFA.DAS.Authorization;
+﻿using MediatR;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
 {
-    public class GetLegalEntityQuery : IAuthorizationContextModel, IAsyncRequest<GetLegalEntityResponse>
+    public class GetLegalEntityQuery : IAsyncRequest<GetLegalEntityResponse>
     {
-        [IgnoreMap]
-        [Required]
-        public string AccountHashedId { get; set; }
+        public GetLegalEntityQuery(string accountHashedId, long legalEntityId)
+        {
+            AccountHashedId = accountHashedId;
+            LegalEntityId = legalEntityId;
+        }
 
-        [IgnoreMap]
-        [Required]
-        public long AccountId { get; set; }
+        public string AccountHashedId { get;  }
 
-        [Required]
-        public long? LegalEntityId { get; set; }
+        public long LegalEntityId { get; }
     }
 }

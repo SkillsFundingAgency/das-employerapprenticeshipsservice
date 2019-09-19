@@ -25,12 +25,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
         {
             var legalEntity = await _db.Value.AccountLegalEntities
                 .Where(l =>
-                    l.LegalEntityId == message.LegalEntityId.Value &&
-                    l.AccountId == message.AccountId && 
+                    l.LegalEntityId == message.LegalEntityId &&
+                    l.Account.HashedId == message.AccountHashedId && 
                     (l.PendingAgreementId != null || l.SignedAgreementId != null))
                 .ProjectTo<LegalEntity>(_configurationProvider, new
                 {
-                    accountId = message.AccountId,
                     accountHashedId = message.AccountHashedId
                 })
                 .SingleOrDefaultAsync();
