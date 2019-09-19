@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.EmployerFinance.Queries.FindAccountProviderPayments;
+using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -53,6 +56,13 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                     new PaymentTransactionLine {Amount = 100}
                 }
             };
+
+            _mediator
+                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
+                .ReturnsAsync(new GetEmployerAccountResponse
+                {
+                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy }
+                });
 
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
