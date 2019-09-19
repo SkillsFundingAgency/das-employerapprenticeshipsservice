@@ -130,7 +130,7 @@
 <div class="grid-row">
     <div class="column-half">
         <h2 class="heading-medium">
-            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId, year = now.Year, month = now.Month })">
+            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { year = now.Year, month = now.Month })">
                 View transactions
             </a>
         </h2>
@@ -138,7 +138,7 @@
     </div>
     <div class="column-half">
         <h2 class="heading-medium">
-            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions", new { hashedAccountId = Model.Data.AccountHashedId })">
+            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions")">
                 Download transactions
             </a>
         </h2>
