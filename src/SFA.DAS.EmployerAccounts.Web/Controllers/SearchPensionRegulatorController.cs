@@ -300,6 +300,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     ));
             }
         }
-
     }
 }
