@@ -8,12 +8,11 @@ using SFA.DAS.NLog.Logger;
 using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [DasAuthorize("EmployerFeature.Activities", EmployerUserRole.Any)]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}/activity")]
     public class ActivitiesController : Controller
     {

@@ -1,11 +1,10 @@
 ﻿using SFA.DAS.EAS.Web.Extensions;
 using System.Web.Mvc;
-using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [DasAuthorize(EmployerUserRole.Any)]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}/transfers")]
     public class TransfersController : Controller
     {
