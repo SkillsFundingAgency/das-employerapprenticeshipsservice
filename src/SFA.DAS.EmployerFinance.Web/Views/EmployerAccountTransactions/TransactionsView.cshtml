@@ -75,7 +75,7 @@
                     <span>No transactions.</span>
                 }
             </p>
-            if (!Model.Data.AccountHasPreviousTransactions)
+            if (!Model.Data.AccountHasPreviousTransactions && Model.Data.Account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
 
                 <details>
