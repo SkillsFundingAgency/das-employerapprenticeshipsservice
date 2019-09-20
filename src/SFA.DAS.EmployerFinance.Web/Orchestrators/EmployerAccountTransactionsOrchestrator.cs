@@ -149,7 +149,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                 {
                     HashedAccountId = hashedAccountId,
                     UserId = externalUserId
-                }); ;
+                });
 
                 var getProviderPaymentsTask = _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
@@ -158,9 +158,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId,
-                });
+                });                
 
-                var providerPaymentsResponse = await getProviderPaymentsTask;
+                await Task.WhenAll(accountTask, getProviderPaymentsTask).ConfigureAwait(false);
+
+                var providerPaymentsResponse = getProviderPaymentsTask.Result;
 
                 var courseGroups =
                     providerPaymentsResponse.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
@@ -182,7 +184,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     };
                 }).ToList();
 
-                var accountResponse = await accountTask;
+                var accountResponse = accountTask.Result;
 
                 return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
                 {
