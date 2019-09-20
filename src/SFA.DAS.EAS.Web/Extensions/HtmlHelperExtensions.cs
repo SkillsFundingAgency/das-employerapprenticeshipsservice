@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Services;
 
 namespace SFA.DAS.EAS.Web.Extensions
 {
@@ -24,6 +25,13 @@ namespace SFA.DAS.EAS.Web.Extensions
             }
 
             return true;
+        }
+        public static bool IsAuthorized(this HtmlHelper htmlHelper, string featureType)
+        {
+            var authorisationService = DependencyResolver.Current.GetService<IAuthorizationService>();
+            var isAuthorized = authorisationService.IsAuthorized(featureType);
+
+            return isAuthorized;
         }
     }
 }
