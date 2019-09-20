@@ -334,7 +334,6 @@
     <Compile Include="Extensions\OrganisationTypeExtensions.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensions.cs" />
     <Compile Include="Extensions\QueryableExtensions.cs" />
-    <Compile Include="Features\IAgreementService.cs" />
     <Compile Include="MarkerInterfaces\IAccountLegalEntityPublicHashingService.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
@@ -351,7 +350,6 @@
     <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
-    <Compile Include="Features\AgreementService.cs" />
     <Compile Include="NServiceBus\EndpointConfigurationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AddressLookupService.cs" />

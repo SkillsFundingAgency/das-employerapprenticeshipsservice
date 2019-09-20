@@ -227,7 +227,6 @@
     <Compile Include="Extensions\EnumerableExtensionsTests.cs" />
     <Compile Include="Extensions\PaymentDetailsExtensionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
-    <Compile Include="Features\AgreementServiceTests.cs" />
     <Compile Include="NoopExecutionPolicy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HmrcDateServiceTests\WhenICallDateRange.cs" />

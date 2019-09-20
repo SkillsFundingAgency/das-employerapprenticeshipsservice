@@ -8,7 +8,6 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
@@ -32,7 +31,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
         private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
-        private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
         private Mock<IAuthorizationService> _authorizationService;
@@ -86,8 +84,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             _hashingService = new Mock<IHashingService>();
-            _agreementService = new Mock<IAgreementService>();
-
+            
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
             _hashingService.Setup(hs => hs.DecodeValue(_command.HashedAccountId)).Returns(_owner.AccountId);
 
@@ -109,7 +106,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 Mock.Of<IEventPublisher>(),
                 _hashingService.Object,
                 _accountLegalEntityPublicHashingService.Object,
-                _agreementService.Object,
                 _employerAgreementRepository.Object,
                 _validator.Object,
                 _authorizationService.Object
