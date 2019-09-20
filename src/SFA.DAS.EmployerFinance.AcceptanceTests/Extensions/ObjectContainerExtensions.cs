@@ -46,7 +46,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             objectContainer.RegisterMock<ICurrentDateTime>(container);
             objectContainer.RegisterMock<IEmployerAccountRepository>(container);
             objectContainer.RegisterMock<IEventsApi>(container);
-            //objectContainer.RegisterMock<IMembershipRepository>(container);
             objectContainer.RegisterMock<IPayeRepository>(container);
         }
 
