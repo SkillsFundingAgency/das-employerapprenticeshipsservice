@@ -36,24 +36,24 @@
         <meta name="description" content="@ViewBag.MetaDesc">
     }
 
-    <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="https://das-prd-frnt-end.azureedge.net/assets/images/favicon.ico" type="image/x-icon" />
-    <link rel="mask-icon" href="https://das-prd-frnt-end.azureedge.net/assets/images/govuk-mask-icon.svg" color="#0b0c0c">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://das-prd-frnt-end.azureedge.net/assets/images/govuk-apple-touch-icon-180x180.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="https://das-prd-frnt-end.azureedge.net/assets/images/govuk-apple-touch-icon-167x167.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://das-prd-frnt-end.azureedge.net/assets/images/govuk-apple-touch-icon-152x152.png">
-    <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
+    <link rel="shortcut icon" sizes="16x16 32x32 48x48" href="@Html.CdnLink("assets/images","favicon.ico")" type="image/x-icon" />
+    <link rel="mask-icon" href="@Html.CdnLink("assets/images","govuk-mask-icon.svg")" color="#0b0c0c">
+    <link rel="apple-touch-icon" sizes="180x180" href="@Html.CdnLink("assets/images","govuk-apple-touch-icon-180x180.png")">
+    <link rel="apple-touch-icon" sizes="167x167" href="@Html.CdnLink("assets/images","govuk-apple-touch-icon-167x167.png")">
+    <link rel="apple-touch-icon" sizes="152x152" href="@Html.CdnLink("assets/images","govuk-apple-touch-icon-152x152.png")">
+    <link rel="apple-touch-icon" href="@Html.CdnLink("assets/images","govuk-apple-touch-icon.png")">
     <link href="~/dist/css/select2.min.css" media="all" rel="stylesheet" />
     <!--[if !IE 8]><!-->
-    <link href="https://das-prd-frnt-end.azureedge.net/css/main.css" rel="stylesheet" />
+    <link href="@Html.CdnLink("css", "main.css")" rel="stylesheet" />
     <!--<![endif]-->
     <!--[if IE 8]
-      <link href="/govuk-frontend/all-ie8.css" rel="stylesheet" />
+      <link href="@Html.CdnLink("css", "all-ie8.css")" rel="stylesheet" />
     [endif]-->
     <!--[if lt IE 9]>
       <script src="/html5-shiv/html5shiv.js"></script>
     <![endif]-->
 
-    <meta property="og:image" content="https://das-prd-frnt-end.azureedge.net/assets/images/govuk-opengraph-image.png">
+    <meta property="og:image" content="@Html.CdnLink("assets/images","govuk-opengraph-image.png")">
 
     @Html.Partial("GoogleAnalyticsInfo")
     <!-- This is from individual pages -->
@@ -289,12 +289,11 @@
         </p>
     }
 
-    <script src="https://das-prd-frnt-end.azureedge.net//libs/govuk-frontend/all.js"></script>
+    <script src="@Html.CdnLink("libs/jquery","jquery.min.js")"></script>
+    <script src="@Html.CdnLink("libs/govuk-frontend","all.js")"></script>
 
-    <script src="https://das-prd-frnt-end.azureedge.net//libs/jquery/jquery.min.js"></script>
-
-    <script src="https://das-prd-frnt-end.azureedge.net//js/das-all.js"></script>
-    <script src="https://das-prd-frnt-end.azureedge.net//js/app.min.js"></script>
+    <script src="@Html.CdnLink("js","das-all.min.js")"></script>
+    <script src="@Html.CdnLink("js","app.min.js")"></script>
 
     <script>
         window.GOVUKFrontend.initAll();

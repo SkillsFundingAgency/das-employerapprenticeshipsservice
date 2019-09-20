@@ -8,24 +8,33 @@
     ViewBag.GaData.Vpv = "/page-service-start";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">
             @ViewBag.Title
-        </h1>     
-        <p>
-            You need to create or <a href="@Url.Action("SignIn", "Home")">sign in</a> to an apprenticeship account, then you'll be able to get funding to pay for apprenticeship training and assessment costs.
+        </h1>
+        <p class="govuk-body">
+            You need to create or <a href="@Url.Action("SignIn", "Home")" class="govuk-link">sign in</a> to an apprenticeship account, then you'll be able to get funding to pay for apprenticeship training and assessment costs.
         </p>
-        <p>
+        <p class="govuk-body">
             You’ll use your account to:
         </p>
-        <ul class="list list-bullet">
+        <ul class="govuk-list govuk-list--bullet">
             <li>get apprenticeship funding</li>
             <li>find and save apprenticeships</li>
             <li>find, save and manage training providers</li>
             <li>recruit apprentices</li>
             <li>add and manage apprenticeships</li>
         </ul>
-        <p><a class="button button-start" id="service-start" href="@Url.Action(ControllerConstants.RegisterUserActionName)">Create account</a></p>             
+
+        <a href="@Url.Action(ControllerConstants.RegisterUserActionName)" id="service-start" role="button" draggable="false" class="govuk-button govuk-button--start" data-module="govuk-button">
+            Create account
+            <svg class="govuk-button__start-icon" xmlns="http://www.w3.org/2000/svg" width="17.5" height="19" viewBox="0 0 33 40" role="presentation" focusable="false">
+                <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+            </svg>
+        </a>
+
     </div>
 </div>
