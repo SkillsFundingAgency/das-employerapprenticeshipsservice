@@ -83,6 +83,7 @@
         appInsights.trackPageView();
     </script>
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
+    @Html.Partial("_ZenDeskWidget")
 </head>
 <body id="@ViewBag.PageID">
     @Html.Partial("_GoogleTagManagerNoScript")
