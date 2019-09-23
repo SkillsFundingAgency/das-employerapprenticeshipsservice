@@ -6,8 +6,7 @@ namespace SFA.DAS.EAS.Web.Authorization
     {
         public IAuthorizationContext GetAuthorizationContext()
         {
-            var authorizationContext = new AuthorizationContext();
-            return authorizationContext;
+            return new AuthorizationContext();
         }
     }
 }
