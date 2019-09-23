@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -10,6 +12,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             var trimCharacters = new char[] { '/' };
             return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
+        }
+
+        public static MvcHtmlString CommaSeperatedAddressToHtml(this HtmlHelper htmlHelper, string commaSeperatedAddress)
+        {
+            var htmlAddress = commaSeperatedAddress.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(line => $"{line.Trim()}<br/>")
+                .Aggregate("", (x, y) => x + y);
+
+            return new MvcHtmlString(htmlAddress);
         }
     }
 }
