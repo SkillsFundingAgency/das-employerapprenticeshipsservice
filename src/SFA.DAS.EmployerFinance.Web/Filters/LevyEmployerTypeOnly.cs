@@ -15,6 +15,12 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
         {
             try
             {
+                if(filterContext.ActionParameters == null || !filterContext.ActionParameters.ContainsKey("HashedAccountId"))
+                {
+                    filterContext.Result = new ViewResult { ViewName = ControllerConstants.BadRequestViewName };
+                    return;
+                }
+
                 var hashedAccountId = filterContext.ActionParameters["HashedAccountId"].ToString();
                 var accountApi = DependencyResolver.Current.GetService<IAccountApiClient>();
                 AccountDetailViewModel account = null; 

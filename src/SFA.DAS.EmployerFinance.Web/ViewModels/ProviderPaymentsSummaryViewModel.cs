@@ -17,8 +17,10 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels
         public decimal SFACoInvestmentsTotal { get; set; }
         public decimal EmployerCoInvestmentsTotal { get; set; }
         public decimal PaymentsTotal { get; set; }
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
+
+        public bool ShowNonCoInvesmentPaymentsTotal => LevyPaymentsTotal != 0 || ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy;
 
         public ICollection<CoursePaymentSummaryViewModel> CoursePayments { get; set; }
-        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
     }
 }

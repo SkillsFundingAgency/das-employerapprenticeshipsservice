@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.Models.Levy;
@@ -31,7 +29,6 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         private readonly ICurrentDateTime _currentTime;
         private readonly ILog _logger;
         private readonly IAccountApiClient _accountApiClient;
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
         private readonly IMediator _mediator;
 
         protected EmployerAccountTransactionsOrchestrator()
@@ -41,13 +38,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         public EmployerAccountTransactionsOrchestrator(
             IAccountApiClient accountApiClient,
-            EmployerAccountsConfiguration employerAccountsConfiguration,
             IMediator mediator,
             ICurrentDateTime currentTime,
             ILog logger)
         {
             _accountApiClient = accountApiClient;
-            _employerAccountsConfiguration = employerAccountsConfiguration;
             _mediator = mediator;
             _currentTime = currentTime;
             _logger = logger;
@@ -146,24 +141,30 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         }
 
         public async Task<OrchestratorResponse<ProviderPaymentsSummaryViewModel>> GetProviderPaymentSummary(
-       string hashedId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
+       string hashedAccountId, long ukprn, DateTime fromDate, DateTime toDate, string externalUserId)
         {
             try
             {
-                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery { HashedAccountId = hashedId, UserId = externalUserId });
-                var accountProviderPaymentsTask = _mediator.SendAsync(new FindAccountProviderPaymentsQuery
+                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
                 {
-                    HashedAccountId = hashedId,
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                var getProviderPaymentsTask = _mediator.SendAsync(new FindAccountProviderPaymentsQuery
+                {
+                    HashedAccountId = hashedAccountId,
                     UkPrn = ukprn,
                     FromDate = fromDate,
                     ToDate = toDate,
                     ExternalUserId = externalUserId,
-                });
+                });                
 
-                await Task.WhenAll(accountTask, accountProviderPaymentsTask);
-                var accountProviderPayments = accountProviderPaymentsTask.Result;
+                await Task.WhenAll(accountTask, getProviderPaymentsTask).ConfigureAwait(false);
 
-                var courseGroups = accountProviderPayments.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
+                var providerPaymentsResponse = getProviderPaymentsTask.Result;
+
+                var courseGroups = providerPaymentsResponse.Transactions.GroupBy(x => new { x.CourseName, x.CourseLevel, x.PathwayName, x.CourseStartDate });
 
                 var coursePaymentSummaries = courseGroups.Select(x =>
                 {
@@ -182,16 +183,18 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     };
                 }).ToList();
 
+                var accountResponse = accountTask.Result;
+
                 return new OrchestratorResponse<ProviderPaymentsSummaryViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = new ProviderPaymentsSummaryViewModel
                     {
-                        ApprenticeshipEmployerType = accountTask.Result.Account.ApprenticeshipEmployerType,
-                        HashedAccountId = hashedId,
+                        ApprenticeshipEmployerType = accountResponse.Account.ApprenticeshipEmployerType,
+                        HashedAccountId = hashedAccountId,
                         UkPrn = ukprn,
-                        ProviderName = accountProviderPayments.ProviderName,
-                        PaymentDate = accountProviderPayments.DateCreated,
+                        ProviderName = providerPaymentsResponse.ProviderName,
+                        PaymentDate = providerPaymentsResponse.DateCreated,
                         FromDate = fromDate,
                         ToDate = toDate,
                         CoursePayments = coursePaymentSummaries,
@@ -234,7 +237,11 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
-                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery { HashedAccountId = hashedAccountId, UserId = externalUserId });
+                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
 
                 var accountCoursePaymentsResponse = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
                 {

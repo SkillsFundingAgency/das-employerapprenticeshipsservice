@@ -90,5 +90,24 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Filters
             result.Should().NotBeNull();
             result.ViewName.Should().Be(ControllerConstants.BadRequestViewName);
         }
+
+        [Test]
+        public void WhenFilterUsedIncorrectly_ShouldRedirectToBadRequest()
+        {
+            // Arrange
+            var sut = new LevyEmployerTypeOnly();
+            _accountApiClientMock
+                .Setup(mock => mock.GetAccount(It.IsAny<string>()))
+                .Throws(new Exception());
+
+            // Act
+            _filterContext = new ActionExecutingContext();
+            sut.OnActionExecuting(_filterContext);
+            var result = _filterContext.Result as ViewResult;
+
+            // Assert
+            result.Should().NotBeNull();
+            result.ViewName.Should().Be(ControllerConstants.BadRequestViewName);
+        }
     }
 }

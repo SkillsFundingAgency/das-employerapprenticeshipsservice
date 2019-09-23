@@ -57,6 +57,13 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 }
             };
 
+            _mediator
+                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
+                .ReturnsAsync(new GetEmployerAccountResponse
+                {
+                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy }
+                });
+
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
@@ -66,7 +73,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 .ReturnsAsync(new GetEmployerAccountResponse { Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy } });
 
             _orchestrator =
-                new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _employerAccountsConfiguration, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
+                new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
         private Expression<Func<IMediator, Task<FindAccountProviderPaymentsResponse>>> AssertExpressionValidation()

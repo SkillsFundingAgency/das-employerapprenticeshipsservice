@@ -143,11 +143,11 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
+            var orchestratorResponse = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
                 hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,
                 fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
+            return View(ControllerConstants.CoursePaymentSummaryViewName, orchestratorResponse.Data);
         }
 
         [Route("finance/transfer/details")]
