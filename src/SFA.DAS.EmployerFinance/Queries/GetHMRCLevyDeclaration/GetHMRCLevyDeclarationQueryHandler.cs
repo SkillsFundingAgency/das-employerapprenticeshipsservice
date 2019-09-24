@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Queries.GetLastLevyDeclaration;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetHMRCLevyDeclaration
 {
-    public class GetHMRCLevyDeclarationQueryHandler : IAsyncRequestHandler<GetHMRCLevyDeclarationQuery,GetHMRCLevyDeclarationResponse>
+    public class GetHMRCLevyDeclarationQueryHandler : IAsyncRequestHandler<GetHMRCLevyDeclarationQuery, GetHMRCLevyDeclarationResponse>
     {
         private readonly IValidator<GetHMRCLevyDeclarationQuery> _validator;
         private readonly IHmrcService _hmrcService;
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetHMRCLevyDeclaration
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var existingDeclaration = await _mediator.SendAsync(new GetLastLevyDeclarationQuery {EmpRef = message.EmpRef});
+            var existingDeclaration = await _mediator.SendAsync(new GetLastLevyDeclarationQuery { EmpRef = message.EmpRef });
 
             DateTime? dateFrom = null;
             if (existingDeclaration?.Transaction?.SubmissionDate != null && existingDeclaration.Transaction.SubmissionDate != DateTime.MinValue)

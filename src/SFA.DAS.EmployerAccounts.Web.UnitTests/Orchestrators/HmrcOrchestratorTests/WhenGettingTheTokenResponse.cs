@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Hmrc.Configuration;
+using SFA.DAS.Hmrc.Models;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorTests
@@ -31,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _configuration = new EmployerAccountsConfiguration
             {
-                Hmrc = new HmrcConfiguration ()
+                Hmrc = new HmrcConfiguration()
             };
 
             _employerAccountOrchestrator = new EmployerAccountOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
@@ -44,13 +45,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
             var accessCode = "546tg";
             var returnUrl = "http://someUrl";
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetGatewayTokenQuery>()))
-                .ReturnsAsync(new GetGatewayTokenQueryResponse {HmrcTokenResponse = new HmrcTokenResponse()});
+                .ReturnsAsync(new GetGatewayTokenQueryResponse { HmrcTokenResponse = new HmrcTokenResponse() });
 
             //Act
             var token = await _employerAccountOrchestrator.GetGatewayTokenResponse(accessCode, returnUrl, null);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is< GetGatewayTokenQuery>(c=>c.AccessCode.Equals(accessCode) && c.RedirectUrl.Equals(returnUrl))));
+            _mediator.Verify(x => x.SendAsync(It.Is<GetGatewayTokenQuery>(c => c.AccessCode.Equals(accessCode) && c.RedirectUrl.Equals(returnUrl))));
             Assert.IsAssignableFrom<HmrcTokenResponse>(token.Data);
         }
 
@@ -58,15 +59,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
         public async Task ThenTheFlashMessageIsPopulatedWhenAuthorityIsNotGranted()
         {
             //Act
-            var actual = await _employerAccountOrchestrator.GetGatewayTokenResponse(string.Empty, string.Empty, new NameValueCollection { new NameValueCollection { {"error", "USER_DENIED_AUTHORIZATION" }, { "error_Code", "USER_DENIED_AUTHORIZATION" } } });
+            var actual = await _employerAccountOrchestrator.GetGatewayTokenResponse(string.Empty, string.Empty, new NameValueCollection { new NameValueCollection { { "error", "USER_DENIED_AUTHORIZATION" }, { "error_Code", "USER_DENIED_AUTHORIZATION" } } });
 
             //Assert
             Assert.IsAssignableFrom<OrchestratorResponse<HmrcTokenResponse>>(actual);
             Assert.AreEqual("Account not added", actual.FlashMessage.Headline);
             Assert.AreEqual("error-summary", actual.FlashMessage.SeverityCssClass);
             Assert.AreEqual(FlashMessageSeverityLevel.Error, actual.FlashMessage.Severity);
-            Assert.Contains(new KeyValuePair<string,string>("agree_and_continue", "Agree and continue"), actual.FlashMessage.ErrorMessages);
-            
+            Assert.Contains(new KeyValuePair<string, string>("agree_and_continue", "Agree and continue"), actual.FlashMessage.ErrorMessages);
         }
     }
 }
