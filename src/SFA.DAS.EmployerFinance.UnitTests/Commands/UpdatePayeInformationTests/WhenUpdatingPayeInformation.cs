@@ -67,7 +67,6 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
         {
             //Arrange
             _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye {Ref = ExpectedEmpRef});
-            _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye { EmpRef = ExpectedEmpRef });
 
             //Act
             await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });
