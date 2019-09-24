@@ -12,10 +12,9 @@ namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine("Employer Accounts Api Client Test Harness");
             Task.Run(Test).Wait();
-
-            Console.WriteLine("Press ENTER to finish");
+            Console.WriteLine("Press any key to continue...");
             Console.ReadLine();
         }
 
@@ -26,15 +25,20 @@ namespace SFA.DAS.EmployerAccounts.ApiClient.TestHarness
                 try
                 {
                     var apiClient = container.GetInstance<IEmployerAccountsApiClient>();
-                    var userInRoleRequest = new IsUserInRoleRequest { AccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f"), Roles = new HashSet<UserRole>{ UserRole.Owner } } ;
-                    var inroleResponse = await apiClient.IsUserInRole(userInRoleRequest, CancellationToken.None);
 
-                    Console.WriteLine("IsUserInRole: " + inroleResponse);
+                    await apiClient.Ping();
 
-                    var anyRoleRequest = new IsUserInAnyRoleRequest { AccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f") };
-                    var response = await apiClient.IsUserInAnyRole(anyRoleRequest, CancellationToken.None);
+                    Console.WriteLine("Ping succeeded");
 
-                    Console.WriteLine("IsUserAnyRole: " + response);
+                    var isUserInRoleRequest = new IsUserInRoleRequest { AccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f"), Roles = new HashSet<UserRole>{ UserRole.Owner } } ;
+                    var isUserInRole = await apiClient.IsUserInRole(isUserInRoleRequest, CancellationToken.None);
+
+                    Console.WriteLine("IsUserInRole: " + isUserInRole);
+
+                    var isUserInAnyRoleRequest = new IsUserInAnyRoleRequest { AccountId = 2134, UserRef = Guid.Parse("45f8e859-337c-4a4f-a184-1e794ec91f4f") };
+                    var isUserInAnyRole = await apiClient.IsUserInAnyRole(isUserInAnyRoleRequest, CancellationToken.None);
+
+                    Console.WriteLine("IsUserAnyRole: " + isUserInAnyRole);
                 }
                 catch (Exception exception)
                 {
