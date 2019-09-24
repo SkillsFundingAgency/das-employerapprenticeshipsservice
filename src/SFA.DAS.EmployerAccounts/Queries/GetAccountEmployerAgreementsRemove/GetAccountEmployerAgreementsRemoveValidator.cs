@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove

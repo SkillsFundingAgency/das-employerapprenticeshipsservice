@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
 {

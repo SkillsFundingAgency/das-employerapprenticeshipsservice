@@ -1,9 +1,14 @@
-﻿using MediatR;
-using SFA.DAS.Authorization;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using MediatR;
+using SFA.DAS.Authorization.ModelBinding;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetLatestActivities
 {
-    public class GetLatestActivitiesQuery : MembershipMessage, IAsyncRequest<GetLatestActivitiesResponse>
+    public class GetLatestActivitiesQuery : IAuthorizationContextModel, IAsyncRequest<GetLatestActivitiesResponse>
     {
+        [IgnoreMap]
+        [Required]
+        public long AccountId { get; set; }
     }
 }

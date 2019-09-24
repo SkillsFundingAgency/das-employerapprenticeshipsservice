@@ -7,7 +7,6 @@ using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Models.Account;
-using SFA.DAS.EmployerFinance.Models.AccountTeam;
 using SFA.DAS.EmployerFinance.Models.Paye;
 
 namespace SFA.DAS.EmployerFinance.Data
@@ -20,7 +19,6 @@ namespace SFA.DAS.EmployerFinance.Data
         public virtual DbSet<EmployerAgreement> Agreements { get; set; }
         public virtual DbSet<AgreementTemplate> AgreementTemplates { get; set; }
         public virtual DbSet<LegalEntity> LegalEntities { get; set; }
-        public virtual DbSet<Membership> Memberships { get; set; }
         public virtual DbSet<User> Users { get; set; }
 
         static EmployerAccountsDbContext()
@@ -71,7 +69,6 @@ namespace SFA.DAS.EmployerFinance.Data
             modelBuilder.Entity<AgreementTemplate>().ToTable("EmployerAgreementTemplate").HasMany(t => t.Agreements);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.AccountLegalEntity);
             modelBuilder.Entity<EmployerAgreement>().HasRequired(a => a.Template);
-            modelBuilder.Entity<Membership>().HasKey(m => new { m.AccountId, m.UserId });
             modelBuilder.Entity<Paye>().Ignore(a => a.AccountId);
             modelBuilder.Entity<User>().Ignore(u => u.FullName).Ignore(u => u.UserRef).Property(u => u.Ref).HasColumnName(nameof(User.UserRef));
         }

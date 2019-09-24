@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitations;
@@ -14,8 +14,7 @@ using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
-    [ValidateMembership]
+    [DasAuthorize(EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}/transfers")]
     public class TransfersController : Controller
     {
@@ -46,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        [Feature(FeatureType.Transfers)]
+        [DasAuthorize("EmployerFeature.Transfers")]
         public ActionResult TransferConnectionInvitationAuthorization(GetTransferConnectionInvitationAuthorizationQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
@@ -56,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        [Feature(FeatureType.Transfers)]
+        [DasAuthorize("EmployerFeature.Transfers")]
         public ActionResult TransferConnectionInvitations(GetTransferConnectionInvitationsQuery query)
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
@@ -66,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        [Feature(FeatureType.Transfers)]
+        [DasAuthorize("EmployerFeature.Transfers")]
         public ActionResult TransferRequests(GetTransferRequestsQuery query)
         {
             try

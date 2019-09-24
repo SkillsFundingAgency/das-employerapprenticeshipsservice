@@ -1,4 +1,4 @@
-﻿using SFA.DAS.Authorization;
+﻿using SFA.DAS.Authorization.Results;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {

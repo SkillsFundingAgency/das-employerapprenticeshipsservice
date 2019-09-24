@@ -22,8 +22,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.RejectTransferConnectionInvitation
 
         protected override async Task HandleCore(RejectTransferConnectionInvitationCommand message)
         {
-            var rejectorAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
-            var rejectorUser = await _userRepository.GetUserByRef(message.UserRef.Value);
+            var rejectorAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
+            var rejectorUser = await _userRepository.GetUserByRef(message.UserRef);
             var transferConnectionInvitation = await _transferConnectionInvitationRepository.GetTransferConnectionInvitationById(message.TransferConnectionInvitationId.Value);
 
             transferConnectionInvitation.Reject(rejectorAccount, rejectorUser);

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Dtos;
 using Account = SFA.DAS.EmployerAccounts.Models.Account.Account;
 using AccountDetail = SFA.DAS.EmployerAccounts.Api.Types.AccountDetail;
@@ -10,7 +9,6 @@ namespace SFA.DAS.EmployerAccounts.Mappings
     {
         public AccountMappings()
         {
-            CreateMap<Account, AccountContext>();
             CreateMap<Account, AccountDto>();
 
             CreateMap<Account, AccountDetail>()

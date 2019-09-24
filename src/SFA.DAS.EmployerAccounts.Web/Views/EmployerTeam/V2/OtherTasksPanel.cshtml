@@ -75,7 +75,7 @@
                                 Tasks
                             </a>
                         </li>
-                    @if (Html.IsAuthorized(FeatureType.Activities))
+                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
                     {
                         <li class="govuk-tabs__list-item">
                             <a class="govuk-tabs__tab" href="#tab-activity">
@@ -153,7 +153,7 @@
                         </div>
                     </section>
                     <section class="govuk-tabs__panel govuk-tabs__panel--hidden" id="tab-activity">
-                        @if (Html.IsAuthorized(FeatureType.Activities))
+                        @if (Html.IsAuthorized("EmployerFeature.Activities"))
                         {
                             <div class="js-tab-pane" id="pane-activity" role="tabpanel">
                                 @Html.Action("Latest", "Activities")

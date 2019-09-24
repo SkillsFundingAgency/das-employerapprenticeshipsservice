@@ -7,7 +7,7 @@ using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -15,7 +15,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
@@ -26,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         public EmployerAgreementController(IAuthenticationService owinWrapper,
             EmployerAgreementOrchestrator orchestrator,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             IMediator mediator,

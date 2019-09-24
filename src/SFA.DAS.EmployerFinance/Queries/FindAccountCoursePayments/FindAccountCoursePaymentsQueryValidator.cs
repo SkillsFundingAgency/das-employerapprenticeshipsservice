@@ -1,18 +1,18 @@
 using SFA.DAS.Validation;
 using System;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Services;
 
 namespace SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments
 {
     public class FindAccountCoursePaymentsQueryValidator : IValidator<FindAccountCoursePaymentsQuery>
     {
-        private readonly IMembershipRepository _membershipRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public FindAccountCoursePaymentsQueryValidator(IMembershipRepository membershipRepository)
+        public FindAccountCoursePaymentsQueryValidator(IAuthorizationService authorizationService)
         {
-            _membershipRepository = membershipRepository;
+            _authorizationService = authorizationService;
         }
 
         public ValidationResult Validate(FindAccountCoursePaymentsQuery item)
@@ -58,9 +58,9 @@ namespace SFA.DAS.EmployerFinance.Queries.FindAccountCoursePayments
             if (!validationResult.IsValid())
                 return validationResult;
 
-            var memberView = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
+            var isAuthorized = _authorizationService.IsAuthorized(EmployerUserRole.Any);
 
-            if (memberView != null)
+            if (isAuthorized)
                 return validationResult;
 
             validationResult.AddError("Membership", "User is not a member of this Account");

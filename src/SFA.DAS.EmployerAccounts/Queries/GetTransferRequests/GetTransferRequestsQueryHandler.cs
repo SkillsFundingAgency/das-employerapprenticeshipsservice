@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
                     TransferCost = r.TransferCost,
                     TransferRequestHashedId = r.HashedTransferRequestId
                 })
-                .OrderBy(r => r.ReceiverAccount.Id == message.AccountId.Value ? r.SenderAccount.Name : r.ReceiverAccount.Name)
+                .OrderBy(r => r.ReceiverAccount.Id == message.AccountId ? r.SenderAccount.Name : r.ReceiverAccount.Name)
                 .ThenBy(r => r.CreatedDate)
                 .ToList();
 

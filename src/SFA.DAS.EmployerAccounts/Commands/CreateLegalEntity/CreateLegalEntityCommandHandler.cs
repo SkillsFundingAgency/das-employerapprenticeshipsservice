@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
@@ -37,7 +36,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
         private readonly IEventPublisher _eventPublisher;
         private readonly IHashingService _hashingService;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
-        private readonly IAgreementService _agreementService;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
 
         public CreateLegalEntityCommandHandler(
@@ -49,7 +47,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             IEventPublisher eventPublisher,
             IHashingService hashingService,
             IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
-            IAgreementService agreementService,
             IEmployerAgreementRepository employerAgreementRepository,
             IValidator<CreateLegalEntityCommand> validator,
             IAuthorizationService authorizationService)
@@ -62,7 +59,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             _eventPublisher = eventPublisher;
             _hashingService = hashingService;
             _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
-            _agreementService = agreementService;
             _employerAgreementRepository = employerAgreementRepository;
             _validator = validator;
             _authorizationService = authorizationService;
@@ -97,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 Source = message.Source,
                 Address = message.Address,
                 Sector = message.Sector,
-                AgreementType = _authorizationService.IsAuthorized(FeatureType.ExpressionOfInterest) ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Levy
+                AgreementType = _authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest") ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Levy
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
@@ -118,8 +114,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, message.Code, message.Address, message.Source, ownerExternalUserId);
 
             await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
-
-            await _agreementService.RemoveFromCacheAsync(accountId);
 
             return new CreateLegalEntityCommandResponse
             {

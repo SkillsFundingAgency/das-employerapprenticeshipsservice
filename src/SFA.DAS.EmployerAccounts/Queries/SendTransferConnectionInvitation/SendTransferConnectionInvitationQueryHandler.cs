@@ -51,8 +51,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.SendTransferConnectionInvitation
             }
 
             var anyTransferConnectionInvitations = await _db.Value.TransferConnectionInvitations.AnyAsync(i => (
-                i.SenderAccount.Id == message.AccountId.Value && i.ReceiverAccount.Id == receiverAccount.Id ||
-                i.SenderAccount.Id == receiverAccount.Id && i.ReceiverAccount.Id == message.AccountId.Value) && (
+                i.SenderAccount.Id == message.AccountId && i.ReceiverAccount.Id == receiverAccount.Id ||
+                i.SenderAccount.Id == receiverAccount.Id && i.ReceiverAccount.Id == message.AccountId) && (
                 i.Status == TransferConnectionInvitationStatus.Pending ||
                 i.Status == TransferConnectionInvitationStatus.Approved));
 

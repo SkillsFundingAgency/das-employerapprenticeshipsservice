@@ -11,7 +11,6 @@ namespace SFA.DAS.EmployerAccounts.Mappings
     {
         public LegalEntityMappings()
         {
-            long accountId = 0;
             string accountHashedId = null;
 
             CreateMap<AccountSpecificLegalEntity, AccountSpecificLegalEntityDto>()
@@ -36,9 +35,8 @@ namespace SFA.DAS.EmployerAccounts.Mappings
 
             CreateMap<AccountLegalEntity, Api.Types.LegalEntity>()
                 .ForMember(d => d.Agreements, o => o.MapFrom(l => l.Agreements.Where(a =>
-                    a.AccountLegalEntity.AccountId == accountId && (
-                        a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Pending ||
-                        a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Signed))))
+                    (  a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Pending ||
+                        a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Signed ))))
                 .ForMember(d => d.DasAccountId, o => o.MapFrom(l => accountHashedId))
                 .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId))

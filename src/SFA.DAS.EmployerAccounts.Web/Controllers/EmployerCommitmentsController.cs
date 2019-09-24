@@ -2,10 +2,11 @@
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
     public class EmployerCommitmentsController : Controller
     {

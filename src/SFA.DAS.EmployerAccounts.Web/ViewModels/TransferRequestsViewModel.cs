@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
+using SFA.DAS.Authorization.ModelBinding;
 using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class TransferRequestsViewModel : DAS.Authorization.Mvc.AccountViewModel
+    public class TransferRequestsViewModel : IAuthorizationContextModel
     {
+        [IgnoreMap]
+        public long AccountId { get; set; }
+
         public IEnumerable<TransferRequestDto> TransferRequests { get; set; }
     }
 }

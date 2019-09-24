@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Services;
 using AutoFixture;
 using Model = SFA.DAS.EAS.Portal.Client.Types;
 
@@ -19,30 +20,27 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
     {
         private EmployerTeamController _controller;
 
-        private Mock<IAuthenticationService> _mockAuthenticationService;
-        private Mock<IAuthorizationService> _mockAuthorizationService;
-        private Mock<IMultiVariantTestingService> _mockMultiVariantTestingService;
-        private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
-        private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
-        private Mock<IPortalClient> _mockPortalClient;
+        private Mock<IAuthenticationService> mockAuthenticationService;
+        private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
+        private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
+        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
+        private Mock<IPortalClient> mockPortalClient;
 
         [SetUp]
         public void Arrange()
         {
-            _mockAuthenticationService = new Mock<IAuthenticationService>();
-            _mockAuthorizationService = new Mock<IAuthorizationService>();
-            _mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
-            _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            _mockPortalClient = new Mock<IPortalClient>();
+            mockAuthenticationService = new Mock<IAuthenticationService>();
+            mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
+            mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
+            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+            mockPortalClient = new Mock<IPortalClient>();
 
             _controller = new EmployerTeamController(
-                _mockAuthenticationService.Object,
-                _mockAuthorizationService.Object,
-                _mockMultiVariantTestingService.Object,
-                _mockCookieStorageService.Object,
-                _mockEmployerTeamOrchestrator.Object,
-                _mockPortalClient.Object);
+                mockAuthenticationService.Object,
+                mockMultiVariantTestingService.Object,
+                mockCookieStorageService.Object,
+                mockEmployerTeamOrchestrator.Object,
+                mockPortalClient.Object, Mock.Of<IAuthorizationService>());
         }
 
         [TestCase(VacancyStatus.Closed, "Closed",  "Manage vacancy")]
