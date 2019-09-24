@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Paye;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
 {
@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
         public void Arrange()
         {
             _validator = new Mock<IValidator<UpdatePayeInformationCommand>>();
-            _validator.Setup(x => x.Validate(It.IsAny<UpdatePayeInformationCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> () });
+            _validator.Setup(x => x.Validate(It.IsAny<UpdatePayeInformationCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
             _payeRepository = new Mock<IPayeRepository>();
             _payeRepository.Setup(x => x.GetPayeSchemeByRef(ExpectedEmpRef)).ReturnsAsync(new Paye { Ref = ExpectedEmpRef });
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
             _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedEmpRef))
                 .ReturnsAsync(new EmpRefLevyInformation
                 {
-                    Employer = new Employer {Name = new Name {EmprefAssociatedName = ExpectedEmpRefName}}
+                    Employer = new Employer { Name = new Name { EmprefAssociatedName = ExpectedEmpRefName } }
                 });
 
             _handler = new UpdatePayeInformationCommandHandler(_validator.Object, _payeRepository.Object, _hmrcService.Object);
@@ -43,23 +43,23 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
         public void ThenTheCommandIsValidatedAndAnInvalidRequestExceptionIsThrownIfNotValid()
         {
             //Arrange
-            _validator.Setup(x => x.Validate(It.IsAny<UpdatePayeInformationCommand>())).Returns(new ValidationResult {ValidationDictionary = new Dictionary<string, string> {{"", ""}}});
+            _validator.Setup(x => x.Validate(It.IsAny<UpdatePayeInformationCommand>())).Returns(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act
-            Assert.ThrowsAsync<InvalidRequestException>(async ()=> await _handler.Handle(new UpdatePayeInformationCommand()));
+            Assert.ThrowsAsync<InvalidRequestException>(async () => await _handler.Handle(new UpdatePayeInformationCommand()));
 
             //Assert
-            _validator.Verify(x=>x.Validate(It.IsAny<UpdatePayeInformationCommand>()));
+            _validator.Verify(x => x.Validate(It.IsAny<UpdatePayeInformationCommand>()));
         }
 
         [Test]
         public async Task ThenTheSchemeIsRetrievedFromTheDatabase()
         {
             //Act
-            await _handler.Handle(new UpdatePayeInformationCommand {PayeRef = ExpectedEmpRef});
+            await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });
 
             //Assert
-            _payeRepository.Verify(x=>x.GetPayeSchemeByRef(ExpectedEmpRef),Times.Once);
+            _payeRepository.Verify(x => x.GetPayeSchemeByRef(ExpectedEmpRef), Times.Once);
         }
 
         [Test]
@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
             await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });
 
             //Assert
-            _hmrcService.Verify(x=>x.GetEmprefInformation(It.IsAny<string>()),Times.Never);
+            _hmrcService.Verify(x => x.GetEmprefInformation(It.IsAny<string>()), Times.Never);
         }
 
         [Test]
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
             await _handler.Handle(new UpdatePayeInformationCommand { PayeRef = ExpectedEmpRef });
 
             //Assert
-            _payeRepository.Verify(x=>x.UpdatePayeSchemeName(ExpectedEmpRef,ExpectedEmpRefName), Times.Once);
+            _payeRepository.Verify(x => x.UpdatePayeSchemeName(ExpectedEmpRef, ExpectedEmpRefName), Times.Once);
         }
 
 
@@ -106,7 +106,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdatePayeInformationTests
             _hmrcService.Setup(x => x.GetEmprefInformation(ExpectedEmpRef))
                 .ReturnsAsync(new EmpRefLevyInformation
                 {
-                    Employer = new Employer { Name = new Name () }
+                    Employer = new Employer { Name = new Name() }
                 });
 
             //Act

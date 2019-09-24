@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
+using SFA.DAS.Hmrc;
+using SFA.DAS.Hmrc.Models;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetGatewayTokenTests
 {
@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetGatewayTokenTests
         public void Arrange()
         {
             _hmrcService = new Mock<IHmrcService>();
-            _hmrcService.Setup(x => x.GetAuthenticationToken(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new HmrcTokenResponse {AccessToken = ExpectedAccessToken});
+            _hmrcService.Setup(x => x.GetAuthenticationToken(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new HmrcTokenResponse { AccessToken = ExpectedAccessToken });
 
             _getGatewayTokenHandler = new GetGatewayTokenHandler(_hmrcService.Object);
         }
@@ -30,10 +30,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetGatewayTokenTests
             var url = "http://myurl.local";
 
             //Act
-            await _getGatewayTokenHandler.Handle(new GetGatewayTokenQuery {AccessCode = code, RedirectUrl = url});
+            await _getGatewayTokenHandler.Handle(new GetGatewayTokenQuery { AccessCode = code, RedirectUrl = url });
 
             //Assert
-            _hmrcService.Verify(x=>x.GetAuthenticationToken(url, code));
+            _hmrcService.Verify(x => x.GetAuthenticationToken(url, code));
         }
 
         [Test]
@@ -45,8 +45,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetGatewayTokenTests
             //Assert
             Assert.IsAssignableFrom<GetGatewayTokenQueryResponse>(actual);
             Assert.AreEqual(ExpectedAccessToken, actual.HmrcTokenResponse.AccessToken);
-
         }
-
     }
 }

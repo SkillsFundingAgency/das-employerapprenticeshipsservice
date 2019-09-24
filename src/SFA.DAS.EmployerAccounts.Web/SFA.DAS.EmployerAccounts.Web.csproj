@@ -101,6 +101,9 @@
     <PackageReference Include="SFA.DAS.Logging">
       <Version>1.0.5</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.Hmrc">
+      <Version>1.0.13</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
@@ -783,10 +786,6 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj">
       <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Infrastructure.Interfaces\SFA.DAS.EAS.Infrastructure.Interfaces.csproj">
-      <Project>{81D5350B-DE25-43C3-89EC-F60841A3F21D}</Project>
-      <Name>SFA.DAS.EAS.Infrastructure.Interfaces</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj">
       <Project>{98714180-addf-4ff9-b928-3e9a557ca4d5}</Project>

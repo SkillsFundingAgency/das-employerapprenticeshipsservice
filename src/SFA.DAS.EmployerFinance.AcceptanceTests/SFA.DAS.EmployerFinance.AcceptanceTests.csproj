@@ -18,6 +18,7 @@
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.2103" />
+    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.13" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
