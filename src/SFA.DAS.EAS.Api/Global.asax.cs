@@ -1,9 +1,8 @@
 ﻿using System.Web;
 using System.Web.Http;
 using SFA.DAS.EAS.Infrastructure.Logging;
-using Microsoft.Azure;
 using Microsoft.ApplicationInsights.Extensibility;
-
+using System.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api
 {
@@ -13,7 +12,7 @@ namespace SFA.DAS.EAS.Account.Api
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             LoggingConfig.ConfigureLogging();
-            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
         }
 
         protected void Application_End()
