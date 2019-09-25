@@ -73,7 +73,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
 
-                return View("v2/Index", "_Layout_v2", response);
+                if (FeatureToggles.Features.HomePage.Enabled)
+                {
+                    return View("v2/Index", "_Layout_v2", response);
+                }
+            }
+
+            if (!hasPayeScheme)
+            {             
+                ViewBag.HideNav = true;
             }
 
             return View(response);
@@ -313,49 +321,67 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "CheckFunding", Data = model };
-            if (model.AgreementsToSign)
-            {
-                viewModel.ViewName = "SignAgreement";
-            }
-            else if (model.ApprenticeshipAdded)
-            {
-                viewModel.ViewName = "ApprenticeshipDetails";
-            }
-            else if (model.ShowReservations) 
-            {
-                viewModel.ViewName = "FundingComplete";
-            }
-            else if(model.RecentlyAddedReservationId != null)
-            {
-                viewModel.ViewName = "NotCurrentlyInStorage";
-            }
-            else if(model.PayeSchemeCount == 0)
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
+
+            if (model.PayeSchemeCount == 0)
             {
                 viewModel.ViewName = "AddPAYE";
             }
+
+            if (FeatureToggles.Features.HomePage.Enabled)
+            {
+                viewModel.ViewName = "CheckFunding";
+
+                if (model.AgreementsToSign)
+                {
+                    viewModel.ViewName = "SignAgreement";
+                }
+                else if (model.ApprenticeshipAdded)
+                {
+                    viewModel.ViewName = "ApprenticeshipDetails";
+                }
+                else if (model.ShowReservations)
+                {
+                    viewModel.ViewName = "FundingComplete";
+                }
+                else if (model.RecentlyAddedReservationId != null)
+                {
+                    viewModel.ViewName = "NotCurrentlyInStorage";
+                }
+                else if (model.PayeSchemeCount == 0)
+                {
+                    viewModel.ViewName = "V2AddPAYE";
+                }
+            }
+            
             return PartialView(viewModel);
         }
 
         [ChildActionOnly]
         public ActionResult Row1Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { Data = model };
-            if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Tasks", Data = model };
+
+            if (model.PayeSchemeCount == 0)
             {
-                viewModel.ViewName = "ProviderPermissionsDenied";
+                viewModel.ViewName = "Empty";
             }
-            else if (model.HasSingleProvider)
-            {
-                viewModel.ViewName = "SingleProvider";
-            }
-            else if (model.HasMultipleProviders)
-            {
-                viewModel.ViewName = "ProviderPermissionsMultiple";
-            }
-            else
+
+            if (FeatureToggles.Features.HomePage.Enabled)
             {
                 viewModel.ViewName = "ProviderPermissions";
+                if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
+                {
+                    viewModel.ViewName = "ProviderPermissionsDenied";
+                }
+                else if (model.HasSingleProvider)
+                {
+                    viewModel.ViewName = "SingleProvider";
+                }
+                else if (model.HasMultipleProviders)
+                {
+                    viewModel.ViewName = "ProviderPermissionsMultiple";
+                }
             }
 
             return PartialView(viewModel);
@@ -364,36 +390,55 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult Row2Panel1(AccountDashboardViewModel model)
         {
-            return PartialView(new PanelViewModel<AccountDashboardViewModel> { ViewName = "FinancialTransactions", Data = model });
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Dashboard", Data = model };
+
+            if (model.PayeSchemeCount == 0)
+            {
+                viewModel.ViewName = "Empty";
+            }
+
+            if (FeatureToggles.Features.HomePage.Enabled)
+            {
+                viewModel.ViewName = "FinancialTransactions";
+            }        
+
+            return PartialView(viewModel);
         }
 
         [ChildActionOnly]
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "PrePayeRecruitment", Data = model };
-            if (HasPayeScheme(model))
+            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
+
+            if (FeatureToggles.Features.HomePage.Enabled)
             {
-                if (model.AccountViewModel?.VacanciesRetrieved == false)
+                viewModel.ViewName = "PrePayeRecruitment";
+
+                if (HasPayeScheme(model))
                 {
-                    viewModel.ViewName = "MultipleVacancies";
-                }
-                else
-                {
-                    switch (model.AccountViewModel?.GetVacancyCardinality())
+                    if (model.AccountViewModel?.VacanciesRetrieved == false)
                     {
-                        case null:
-                        case Cardinality.None:
-                            viewModel.ViewName = "CreateVacancy";
-                            break;
-                        case Cardinality.One:
-                            viewModel.ViewName = "VacancyStatus";
-                            break;
-                        default:
-                            viewModel.ViewName = "MultipleVacancies";
-                            break;
+                        viewModel.ViewName = "MultipleVacancies";
+                    }
+                    else
+                    {
+                        switch (model.AccountViewModel?.GetVacancyCardinality())
+                        {
+                            case null:
+                            case Cardinality.None:
+                                viewModel.ViewName = "CreateVacancy";
+                                break;
+                            case Cardinality.One:
+                                viewModel.ViewName = "VacancyStatus";
+                                break;
+                            default:
+                                viewModel.ViewName = "MultipleVacancies";
+                                break;
+                        }
                     }
                 }
             }
+
             return PartialView(viewModel);
         }
 
@@ -404,8 +449,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult V2AddPAYE(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
         public ActionResult SignAgreement(AccountDashboardViewModel model)
         {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult Empty(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult Tasks(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult Dashboard(AccountDashboardViewModel model)
+        { 
             return PartialView(model);
         }
 

@@ -5,13 +5,14 @@ using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
-using Model = SFA.DAS.EAS.Portal.Client.Types;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
-{    public class WhenHasSinglePendingReviewVacancy
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenHomePageToggleIsEnabled
+{
+    public class WhenPayeSchemeCountIsZero
     {
         private EmployerTeamController _controller;
 
@@ -21,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
         private Mock<IPortalClient> mockPortalClient;
+        private Mock<IBooleanToggleValueProvider> mockFeatureToggleProvider;
 
         [SetUp]
         public void Arrange()
@@ -31,6 +33,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
+            mockFeatureToggleProvider = new Mock<IBooleanToggleValueProvider>();
+
+            FeatureToggles.Features.BooleanToggleValueProvider = mockFeatureToggleProvider.Object;
+            mockFeatureToggleProvider.Setup(m => m.EvaluateBooleanToggleValue(It.IsAny<IFeatureToggle>())).Returns(true);
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
@@ -42,24 +48,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenTheVacancyStatusViewIsReturned()
+        public void ThenTheProviderPermissionsDeniedViewIsReturned()
         {
             // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                AccountViewModel = new Model.Account(),
-                PayeSchemeCount = 1
-            };
-
-            model.AccountViewModel.Vacancies.Add(new Model.Vacancy { Status = Model.VacancyStatus.Submitted });
-            model.AccountViewModel.VacanciesRetrieved = true;
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 0;
 
             //Act
-            var result = _controller.Row2Panel2(model) as PartialViewResult;
+            var result = _controller.Row1Panel2(model) as PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("VacancyStatus", (result.Model as PanelViewModel<AccountDashboardViewModel>).ViewName);
+            Assert.AreEqual("ProviderPermissionsDenied", (result.Model as dynamic).ViewName);
         }
     }
 }
