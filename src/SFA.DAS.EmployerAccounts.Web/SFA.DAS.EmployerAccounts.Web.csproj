@@ -733,7 +733,7 @@
     <Content Include="Views\EmployerTeam\V2\Row1Panel2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row2Panel2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row2Panel1.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\SignAgreement.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\V2SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissions.cshtml" />
     <Content Include="Views\EmployerTeam\V2\AccountSettings.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CheckFunding.cshtml" />
@@ -766,6 +766,7 @@
     <Content Include="Views\EmployerTeam\Tasks.cshtml" />
     <Content Include="Views\EmployerTeam\Dashboard.cshtml" />
     <Content Include="Views\EmployerTeam\AddPAYE.cshtml" />
+    <Content Include="Views\EmployerTeam\SignAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
