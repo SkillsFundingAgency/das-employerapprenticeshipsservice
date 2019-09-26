@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransactionsDownloadTests
 
             _transactionFormatterFactory
                 .Setup(x => x.GetTransactionsFormatterByType(It.IsAny<DownloadFormatType>(), It.IsAny<ApprenticeshipEmployerType>()))
-                .Returns(new CsvTransactionFormatter());
+                .Returns(new LevyCsvTransactionFormatter());
 
             _transactionsRepository.Setup(x => x.GetAllTransactionDetailsForAccountByDate(AccountId, StartDate.ToDate(), ToDate))
                 .ReturnsAsync(new TransactionDownloadLine[] { new TransactionDownloadLine() });

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.Models.Levy;
@@ -53,7 +54,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var accountTask = _accountApiClient.GetAccount(query.AccountHashedId);
             var getAccountFinanceOverviewTask = _mediator.SendAsync(query);
 
-            var account = await accountTask;
+            var account = new AccountDetailViewModel { ApprenticeshipEmployerType = "0" };  // await accountTask;
 
             var getAccountFinanceOverview = await getAccountFinanceOverviewTask;
 
