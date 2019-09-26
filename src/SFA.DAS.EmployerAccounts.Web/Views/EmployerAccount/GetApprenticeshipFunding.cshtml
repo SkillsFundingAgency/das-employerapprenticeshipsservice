@@ -7,7 +7,7 @@
 
 @{
     ViewBag.GaData.Vpv = "/service/getApprenticeshipFunding/get-government-funding";
-    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "govuk-visually-hidden";
+    var hiddenClass = Model?.GetType().GetProperty("InError") != null ? "" : "das-hidden";
     var errorClass = Model?.GetType().GetProperty("InError") != null ? "govuk-form-group--error" : "";
 }
 <div class="govuk-grid-row">

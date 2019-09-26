@@ -5,9 +5,9 @@
 @{ViewBag.HideNav = true; }
 @{
     ViewBag.GaData.Vpv = "/accounts/schemes/ways-to-add";
-    var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "js-enabled js-hidden";
+    var hiddenClass = ViewBag.InError != null && ViewBag.InError ? "" : "das-hidden";
     var errorClass = ViewBag.InError != null && ViewBag.InError ? "govuk-form-group--error" : "";
-    var aornAction = ViewBag.AornLock > 0 ? "$('#AornWarning').removeClass('js-hidden');$('#how-do-you-want-to-add-paye-scheme-form').addClass('govuk-form-group--error');" : "";
+    var aornAction = ViewBag.AornLock > 0 ? "$('#AornWarning').removeClass('das-hidden');$('#how-do-you-want-to-add-paye-scheme-form').addClass('govuk-form-group--error');" : "";
 }
 @{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
@@ -35,7 +35,7 @@
                         You must select an option to continue.
                     </span>
 
-                    <div class="js-enabled js-hidden" id="AornWarning">
+                    <div class="das-hidden" id="AornWarning">
                         <span class="govuk-error-message">Due to incorrect attempts, this has been disabled for @ViewBag.AornLock minute@(ViewBag.AornLock > 1 ? "s" : "")</span>
                     </div>
 
