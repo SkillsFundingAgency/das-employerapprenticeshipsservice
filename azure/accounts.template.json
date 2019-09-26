@@ -66,7 +66,13 @@
         },
         "apiCertificateName": {
             "type": "string"
-        }
+        },
+        "keyVaultResourceGroupName": {
+            "type": "string"
+        },
+        "keyVaultName": {
+            "type": "string"
+         }
     },
     "variables": {},
     "resources": [
@@ -180,6 +186,32 @@
                 "UIAppInsights"
             ]
         },
+        
+    {
+        "condition": "[greater(length(parameters('apiCustomHostName')), 0)]",
+        "apiVersion": "2017-05-10",
+        "name": "api-app-service-certificate",
+        "resourceGroup": "[parameters('sharedAppServicePlanResourceGroup')]",
+        "type": "Microsoft.Resources/deployments",
+        "properties": {
+          "mode": "Incremental",
+          "templateLink": {
+            "uri": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/app-service-certificate.json",
+            "contentVersion": "1.0.0.0"
+          },
+          "parameters": {
+            "keyVaultCertificateName": {
+              "value": "[parameters('apiCertificateName')]"
+            },
+            "keyVaultName": {
+              "value": "[parameters('keyVaultName')]"
+            },
+            "keyVaultResourceGroup": {
+              "value": "[parameters('keyVaultResourceGroupName')]"
+            }
+          }
+        }
+      },
         {
             "apiVersion": "2017-08-01",
             "name": "ApiAppService",
@@ -228,7 +260,7 @@
                         "value": "[parameters('apiCustomHostname')]"
                     },
                     "certificateThumbprint": {
-                        "value": "[reference(resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/certificates', parameters('apiCertificateName')), '2016-03-01').Thumbprint]"
+                        "value": "[if(greater(length(parameters('apiCustomHostname')), 0), reference('api-app-service-certificate', '2018-11-01').outputs.certificateThumbprint.value, '')]"
                     }
                 }
             },
