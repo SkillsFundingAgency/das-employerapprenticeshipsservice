@@ -69,7 +69,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
 
         [ValidateMembership]
         [ImportModelStateFromTempData]
-        [LevyEmployerTypeOnly]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)
         {
