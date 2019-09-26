@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 
 namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
@@ -14,6 +15,8 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
 
         public DownloadFormatType DownloadFormatType =>
             DownloadFormatType.CSV;
+
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType => ApprenticeshipEmployerType.Levy;
 
         public byte[] GetFileData(IEnumerable<TransactionDownloadLine> transactions)
         {

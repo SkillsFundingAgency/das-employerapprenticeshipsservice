@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
 using SFA.DAS.EmployerFinance.Interfaces;
 
@@ -32,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Factories.TransactionFormatterFactor
         [Test]
         public void ThenIShouldGetCsvFormatter()
         {
-            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.CSV);
+            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.CSV, ApprenticeshipEmployerType.Levy);
 
             Assert.AreEqual(_csvFormatter.Object, formatter);
         }
@@ -40,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Factories.TransactionFormatterFactor
         [Test]
         public void ThenIShouldGetExcelFormatter()
         {
-            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.Excel);
+            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.Excel, ApprenticeshipEmployerType.Levy);
 
             Assert.AreEqual(_excelFormatter.Object, formatter);
         }

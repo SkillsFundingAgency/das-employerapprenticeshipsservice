@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 
@@ -19,6 +20,8 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
         public string MimeType => "text/xlsx";
         public string FileExtension => "xlsx";
         public DownloadFormatType DownloadFormatType => DownloadFormatType.Excel;
+
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType => ApprenticeshipEmployerType.Levy;
 
         public ExcelTransactionFormatter(IExcelService excelService)
         {

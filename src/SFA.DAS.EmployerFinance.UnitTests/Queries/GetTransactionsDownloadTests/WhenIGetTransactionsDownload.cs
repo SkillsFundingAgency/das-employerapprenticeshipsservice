@@ -1,12 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Models.Transaction;
+using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload;
 using SFA.DAS.Validation;
 using MonthYear = SFA.DAS.EmployerFinance.Messages.MonthYear;
@@ -25,19 +28,33 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransactionsDownloadTests
         private GetTransactionsDownloadQuery _query;
         private Mock<ITransactionFormatterFactory> _transactionFormatterFactory;
         private Mock<ITransactionRepository> _transactionsRepository;
-        
+        private Mock<IMediator> _mediatorMock;
+
         [SetUp]
         public void SetUp()
         {
             _transactionsRepository = new Mock<ITransactionRepository>();
             _transactionFormatterFactory = new Mock<ITransactionFormatterFactory>();
-            
-            _transactionFormatterFactory.Setup(x => x.GetTransactionsFormatterByType(It.IsAny<DownloadFormatType>())).Returns(new CsvTransactionFormatter());
+            _mediatorMock = new Mock<IMediator>();
+
+            _transactionFormatterFactory
+                .Setup(x => x.GetTransactionsFormatterByType(It.IsAny<DownloadFormatType>(), It.IsAny<ApprenticeshipEmployerType>()))
+                .Returns(new CsvTransactionFormatter());
 
             _transactionsRepository.Setup(x => x.GetAllTransactionDetailsForAccountByDate(AccountId, StartDate.ToDate(), ToDate))
                 .ReturnsAsync(new TransactionDownloadLine[] { new TransactionDownloadLine() });
 
-            _handler = new GetTransactionsDownloadQueryHandler(_transactionFormatterFactory.Object, _transactionsRepository.Object);
+            _mediatorMock
+                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
+                .ReturnsAsync(new GetEmployerAccountResponse
+                {
+                    Account = new Account
+                    {
+                        ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy
+                    }
+                }); ;
+
+            _handler = new GetTransactionsDownloadQueryHandler(_transactionFormatterFactory.Object, _transactionsRepository.Object, _mediatorMock.Object);
 
             _query = new GetTransactionsDownloadQuery
             {
@@ -52,8 +69,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetTransactionsDownloadTests
         public async Task ThenShouldGetATransactionsFormatter()
         {
             await _handler.Handle(_query);
-            
-            _transactionFormatterFactory.Verify(x => x.GetTransactionsFormatterByType(_query.DownloadFormat.Value), Times.Once());
+
+            _transactionFormatterFactory.Verify(x => x.GetTransactionsFormatterByType(_query.DownloadFormat.Value, ApprenticeshipEmployerType.Levy), Times.Once());
         }
 
         [Test]
