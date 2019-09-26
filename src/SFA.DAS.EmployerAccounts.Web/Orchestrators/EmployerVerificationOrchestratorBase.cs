@@ -7,12 +7,12 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using System.Threading.Tasks;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Models.HmrcLevy;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayToken;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Hmrc.Models;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -26,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         //Needed for tests
         protected EmployerVerificationOrchestratorBase()
         {
-
         }
 
         protected EmployerVerificationOrchestratorBase(IMediator mediator, ICookieStorageService<EmployerAccountData> cookieService, EmployerAccountsConfiguration configuration)
@@ -56,7 +55,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response.Url;
         }
 
-
         public async Task<OrchestratorResponse<HmrcTokenResponse>> GetGatewayTokenResponse(string accessCode, string returnUrl, NameValueCollection nameValueCollection)
         {
             var errorResponse = nameValueCollection?["error"];
@@ -74,9 +72,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                             Message = "You need to grant authority to HMRC to add an account.",
                             ErrorMessages = new Dictionary<string, string> { { "agree_and_continue", "Agree and continue" } }
                         }
-
                     };
                 }
+
                 return new OrchestratorResponse<HmrcTokenResponse>
                 {
                     Status = HttpStatusCode.NotAcceptable,
@@ -121,7 +119,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return response;
         }
-
-
     }
 }

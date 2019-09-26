@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -20,8 +20,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         private readonly EmployerAccountsConfiguration _configuration;
 
-        public InvitationController(InvitationOrchestrator invitationOrchestrator, IAuthenticationService owinWrapper,
-            IAuthorizationService authorization, IMultiVariantTestingService multiVariantTestingService,
+        public InvitationController(InvitationOrchestrator invitationOrchestrator, IAuthenticationService owinWrapper, 
+            IMultiVariantTestingService multiVariantTestingService,
             EmployerAccountsConfiguration configuration,
             ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [AuthoriseActiveUser]
+        [DasAuthorize]
         [Route]
         public async Task<ActionResult> All()
         {
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [DasAuthorize]
         [Route("view")]
         public async Task<ActionResult> Details(string invitationId)
         {
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [DasAuthorize]
         [ValidateAntiForgeryToken]
         [Route("accept")]
         public async Task<ActionResult> Accept(long invitation, UserInvitationsViewModel model)
@@ -107,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [DasAuthorize]
         [ValidateAntiForgeryToken]
         [Route("create")]
         public async Task<ActionResult> Create(InviteTeamMemberViewModel model)

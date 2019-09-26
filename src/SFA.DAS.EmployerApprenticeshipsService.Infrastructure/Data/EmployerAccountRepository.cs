@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.Account;
@@ -13,6 +12,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Domain.Models;
 using Stopwatch = System.Diagnostics.Stopwatch;
 
 namespace SFA.DAS.EAS.Infrastructure.Data

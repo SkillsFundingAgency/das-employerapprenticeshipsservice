@@ -2,16 +2,18 @@ using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.Validation;
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Services;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccount
 {
     public class GetEmployerAccountByHashedIdValidator : IValidator<GetEmployerAccountHashedQuery>
     {
-        private readonly IMembershipRepository _membershipRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public GetEmployerAccountByHashedIdValidator(IMembershipRepository membershipRepository)
+        public GetEmployerAccountByHashedIdValidator(IAuthorizationService authorizationService)
         {
-            _membershipRepository = membershipRepository;
+            _authorizationService = authorizationService;
         }
 
         public ValidationResult Validate(GetEmployerAccountHashedQuery item)
@@ -34,10 +36,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccount
 
             if (result.IsValid())
             {
-                var membership = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
-
-                if (membership == null)
-                    result.IsUnauthorized = true;
+                result.IsUnauthorized = !_authorizationService.IsAuthorized(EmployerUserRole.Any);
             }
 
 

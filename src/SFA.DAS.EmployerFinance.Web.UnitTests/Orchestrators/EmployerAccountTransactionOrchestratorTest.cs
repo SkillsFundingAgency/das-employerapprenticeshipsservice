@@ -51,7 +51,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             {
                 Account = new Account
                 {
-                    HashedId = HashedAccountId,
                     Name = "Test Account"
                 }
             };

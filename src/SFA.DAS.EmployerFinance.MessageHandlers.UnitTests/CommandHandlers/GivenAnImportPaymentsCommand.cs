@@ -37,7 +37,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public void OneTimeSetUp()
         {
             _importPaymentsCommand = new ImportPaymentsCommand();
-            Fixture.Customize<Account>(a => a.Without(x => x.AccountLegalEntities));
         }
 
         [SetUp]

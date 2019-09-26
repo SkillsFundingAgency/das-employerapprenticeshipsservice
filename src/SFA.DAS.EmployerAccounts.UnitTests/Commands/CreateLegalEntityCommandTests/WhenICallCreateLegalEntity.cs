@@ -9,7 +9,6 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
@@ -18,7 +17,9 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus;
 using SFA.DAS.Validation;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -35,7 +36,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         private Mock<ILegalEntityEventFactory> _legalEntityEventFactory;
         private Mock<IHashingService> _hashingService;
         private Mock<IAccountLegalEntityPublicHashingService> _accountLegalEntityPublicHashingService;
-        private Mock<IAgreementService> _agreementService;
         private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IValidator<CreateLegalEntityCommand>> _validator;
         private Mock<IEventPublisher> _eventPublisher;
@@ -100,7 +100,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _legalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             _eventPublisher = new Mock<IEventPublisher>();
-            _agreementService = new Mock<IAgreementService>();
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(hs => hs.HashValue(It.IsAny<long>())).Returns<long>(value => $"*{value}*");
@@ -125,7 +124,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 _eventPublisher.Object,
                 _hashingService.Object,
                 _accountLegalEntityPublicHashingService.Object,
-                _agreementService.Object,
                 _employerAgreementRepository.Object,
                 _validator.Object,
                 _authorizationService.Object
@@ -210,14 +208,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             //Assert
             var expectedHashedAgreementId = $"*{employerAgreementView.AgreementView.Id}*";
             Assert.AreEqual(expectedHashedAgreementId, employerAgreementView.AgreementView.HashedAgreementId);
-        }
-
-        [Test]
-        public async Task TheShouldInvalidateAccountAgreementCache()
-        {
-            await _commandHandler.Handle(_command);
-
-            _agreementService.Verify(s => s.RemoveFromCacheAsync(_owner.AccountId));
         }
 
         [Test]

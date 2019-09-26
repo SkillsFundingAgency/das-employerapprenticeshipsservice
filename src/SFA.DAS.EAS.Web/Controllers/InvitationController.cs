@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EAS.Web.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -22,7 +23,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [DasAuthorize]
         [Route("view")]
         public ActionResult Details(string invitationId)
         {

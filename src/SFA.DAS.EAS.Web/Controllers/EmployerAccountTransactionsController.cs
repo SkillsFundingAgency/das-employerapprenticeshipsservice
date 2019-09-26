@@ -1,12 +1,12 @@
 ﻿using SFA.DAS.EAS.Web.Extensions;
 using System;
 using System.Web.Mvc;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountTransactionsController: Controller
     {
@@ -17,7 +17,6 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerFinanceAction("finance"));
         } 
 
-        [ValidateMembership]
         [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload(string hashedAccountId)

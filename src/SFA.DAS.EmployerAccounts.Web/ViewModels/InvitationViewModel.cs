@@ -1,5 +1,5 @@
 ﻿using System;
-using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels

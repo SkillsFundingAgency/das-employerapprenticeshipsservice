@@ -1,4 +1,4 @@
-﻿using SFA.DAS.ExecutionPolicies;
+﻿using SFA.DAS.Hmrc.ExecutionPolicy;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution

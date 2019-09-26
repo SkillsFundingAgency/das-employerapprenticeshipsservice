@@ -3,7 +3,6 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -12,19 +11,23 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System.Linq;
+using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Globalization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IPortalClient _portalClient;
+        private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -35,15 +38,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper,
-            IAuthorizationService authorization,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient)
+            IPortalClient portalClient,
+            IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _portalClient = portalClient;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -58,8 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             var hasPayeScheme = HasPayeScheme(response.Data);
-            
-            if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage") || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {

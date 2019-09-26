@@ -6,8 +6,11 @@ namespace SFA.DAS.EmployerFinance.Data
 {
     public interface IPayeRepository
     {
-        Task<PayeSchemeView> GetPayeForAccountByRef(string hashedAccountId, string payeRef);
+        Task<PayeSchemeView> GetPayeForAccountByRef(long accountId, string payeRef);
         Task<Paye> GetPayeSchemeByRef(string payeRef);
         Task UpdatePayeSchemeName(string payeRef, string refName);
+        Task<PayeSchemes> GetGovernmentGatewayOnlySchemesByEmployerId(long employerId);
+        Task CreatePayeScheme(Paye paye);
+        Task RemovePayeScheme(long accountId, string payeRef);
     }
 }

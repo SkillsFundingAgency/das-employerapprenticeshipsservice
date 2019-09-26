@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model TransferAllowanceViewModel
 @{
     ViewBag.Title = "Transfers";
@@ -15,7 +16,7 @@
     </div>
 </div>
 
-@if (Html.IsAuthorized(FeatureType.Transfers))
+@if (Html.IsAuthorized("EmployerFeature.Transfers"))
 {
     @Html.Action("TransferAllowance")
     @Html.Action("TransferConnectionInvitationAuthorization")
