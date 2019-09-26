@@ -73,6 +73,12 @@
         "keyVaultName": {
             "type": "string"
          }
+        "idaTenant": {
+            "type": "string"
+        },
+        "idaAudience": {
+            "type": "string"
+        }
     },
     "variables": {},
     "resources": [
@@ -253,6 +259,14 @@
                             {
                                 "name": "InstrumentationKey",
                                 "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "IdaTenant",
+                                "value": "[parameters('idaTenant')]"
+                            },
+                            {
+                                "name": "IdaAudience",
+                                "value": "[parameters('idaAudience')]"
                             }
                         ]
                     },
