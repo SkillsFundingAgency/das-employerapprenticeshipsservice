@@ -192,8 +192,7 @@
                 "UIAppInsights"
             ]
         },
-        
-    {
+        {
         "condition": "[greater(length(parameters('apiCustomHostName')), 0)]",
         "apiVersion": "2017-05-10",
         "name": "api-app-service-certificate",
@@ -279,7 +278,8 @@
                 }
             },
             "dependsOn": [
-                "ApiAppInsights"
+                "ApiAppInsights",
+                "api-app-service-certificate"
             ]
         },
         {
