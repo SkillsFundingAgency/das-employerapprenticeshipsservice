@@ -72,7 +72,7 @@
         },
         "keyVaultName": {
             "type": "string"
-         }
+         },
         "idaTenant": {
             "type": "string"
         },
