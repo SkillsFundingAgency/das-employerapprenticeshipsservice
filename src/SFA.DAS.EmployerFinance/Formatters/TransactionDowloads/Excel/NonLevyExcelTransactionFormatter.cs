@@ -6,11 +6,11 @@ using SFA.DAS.EmployerFinance.Models.Transaction;
 
 namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
 {
-    public class LevyExcelTransactionFormatter : ExcelTransactionFormatter, ITransactionFormatter
+    public class NonLevyExcelTransactionFormatter : ExcelTransactionFormatter, ITransactionFormatter
     {
         public ApprenticeshipEmployerType ApprenticeshipEmployerType => ApprenticeshipEmployerType.Levy;
 
-        public LevyExcelTransactionFormatter(IExcelService excelService) : base(excelService)
+        public NonLevyExcelTransactionFormatter(IExcelService excelService) : base(excelService)
         {
         }
 
@@ -22,9 +22,6 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
                 transaction.TransactionType,
                 transaction.PayeScheme,
                 transaction.PeriodEnd,
-                transaction.LevyDeclaredFormatted,
-                transaction.EnglishFractionFormatted,
-                transaction.TenPercentTopUpFormatted,
                 transaction.TrainingProvider,
                 transaction.Uln,
                 transaction.Apprentice,
@@ -40,9 +37,8 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
         protected override string[] GetHeaderRow()
         {
             return new[]{
-                "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Levy declared",
-                "English %", "10% top up", "Training provider", "Unique learner number",
-                "Apprentice", "Apprenticeship training course", "Course level", "Paid from levy", "Your contribution",
+                "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Training provider", "Unique learner number",
+                "Apprentice", "Apprenticeship training course", "Course level", "Paid from transfer", "Your contribution",
                 "Government contribution", "Total"
             };
         }
