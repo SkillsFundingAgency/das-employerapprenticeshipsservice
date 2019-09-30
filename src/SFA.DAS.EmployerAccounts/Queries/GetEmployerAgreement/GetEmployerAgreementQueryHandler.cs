@@ -55,6 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
             if (employerAgreement == null)
                 return new GetEmployerAgreementResponse();
 
+
             AgreementDto lastSignedAgreement = null;
 
             if (employerAgreement.StatusId == EmployerAgreementStatus.Pending)
