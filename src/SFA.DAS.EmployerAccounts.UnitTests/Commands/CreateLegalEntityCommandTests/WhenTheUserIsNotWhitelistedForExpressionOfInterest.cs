@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         {
             base.Arrange();
 
-            AuthorizationService.Setup(x => x.IsAuthorized("Feature.ExpressionOfInterest")).Returns(false);
+            AuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(false);
         }
 
         [Test]
