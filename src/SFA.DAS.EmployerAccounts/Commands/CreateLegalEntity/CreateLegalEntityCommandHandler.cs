@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
@@ -93,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 Source = message.Source,
                 Address = message.Address,
                 Sector = message.Sector,
-                AgreementType = _authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest") ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Levy
+                AgreementType = await UserIsWhitelistedForEOIOrThereIsAlreadyAnEOIAgreementForThisAccount(owner) ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Levy
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
@@ -207,6 +208,16 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                     AffectedEntity = new Entity { Type = "EmployerAgreement", Id = agreementView.Id.ToString() }
                 }
             });
+        }
+
+        private async Task<bool> UserIsWhitelistedForEOIOrThereIsAlreadyAnEOIAgreementForThisAccount(MembershipView accountOwner)
+        {
+            if (_authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest")) return true;
+
+            var existingAgreements = await _employerAgreementRepository.GetAccountAgreements(accountOwner.AccountId);
+
+            return
+                existingAgreements.Any(a => a.Template.AgreementType.Equals(AgreementType.NonLevyExpressionOfInterest));
         }
     }
 }

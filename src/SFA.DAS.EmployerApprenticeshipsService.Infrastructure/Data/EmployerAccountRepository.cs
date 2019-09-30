@@ -52,25 +52,24 @@ namespace SFA.DAS.EAS.Infrastructure.Data
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
             var sw = new Stopwatch();
-
             sw.Start();
-            var accountDetail = await _db.Value.Accounts
-                .Where(ac => ac.HashedId == hashedAccountId)
-                .Select(ac => new AccountDetail
-                {
-                    AccountId = ac.Id,
-                    HashedId = ac.HashedId,
-                    PublicHashedId = ac.PublicHashedId,
-                    Name = ac.Name,
-                    CreatedDate = ac.CreatedDate,
-                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType) ac.ApprenticeshipEmployerType
-                }).FirstOrDefaultAsync();
 
-            if (accountDetail == null)
+            var account = _db.Value.Accounts.SingleOrDefault(ac => ac.HashedId == hashedAccountId);
+            if (account == null)
             {
                 _logger.Warn($"An attempt to fetch an account using an unknown account - {hashedAccountId}");
                 return null;
             }
+
+            var accountDetail = new AccountDetail
+            {
+                AccountId = account.Id,
+                HashedId = account.HashedId,
+                PublicHashedId = account.PublicHashedId,
+                Name = account.Name,
+                CreatedDate = account.CreatedDate,
+                ApprenticeshipEmployerType = account.ApprenticeshipEmployerType
+            };
 
             accountDetail.OwnerEmail = await _db.Value.Memberships
                 .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
@@ -81,34 +80,22 @@ namespace SFA.DAS.EAS.Infrastructure.Data
             accountDetail.PayeSchemes = await _db.Value.AccountHistory
                 .Where(ach => ach.AccountId == accountDetail.AccountId)
                 .Select(ach => ach.PayeRef)
-                .ToListAsync();
+                .ToListAsync().ConfigureAwait(false);
 
-            accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
+            accountDetail.LegalEntities = account.AccountLegalEntities
                 .Where(ale => ale.AccountId == accountDetail.AccountId
-                                && ale.Deleted == null
-                                && ale.Agreements.Any(ea =>
-                                    ea.StatusId == EmployerAgreementStatus.Pending ||
-                                    ea.StatusId == EmployerAgreementStatus.Signed))
-                .Select(ale => ale.LegalEntityId)
-                .ToListAsync();
+                              && ale.Deleted == null
+                              && ale.Agreements.Any(ea =>
+                                  ea.StatusId == EmployerAgreementStatus.Pending ||
+                                  ea.StatusId == EmployerAgreementStatus.Signed))
+                .Select(ale => ale.LegalEntityId).ToList();
 
-
-            var templateIds = await _db.Value.Agreements
-                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId))
-                .Select(x => x.TemplateId)
-                .ToListAsync()
-                .ConfigureAwait(false)
-            ;
-
-            accountDetail.AccountAgreementTypes = await _db.Value.AgreementTemplates
-                .Where(x => templateIds.Contains(x.Id))
-                .Select(x => x.AgreementType)
-                .ToListAsync()
-                .ConfigureAwait(false)
-            ;
+            accountDetail.AccountAgreementTypes = account.AccountLegalEntities
+                .SelectMany(x => x.Agreements.Select(y => y.Template.AgreementType)).ToList();
 
             sw.Stop();
-            _logger.Debug($"Fetched account with {accountDetail.LegalEntities.Count} legal entities and {accountDetail.PayeSchemes.Count} PAYE schemes in {sw.ElapsedMilliseconds} msecs");
+            _logger.Debug(
+                $"Fetched account with {accountDetail.LegalEntities.Count} legal entities and {accountDetail.PayeSchemes.Count} PAYE schemes in {sw.ElapsedMilliseconds} msecs");
 
             return accountDetail;
         }

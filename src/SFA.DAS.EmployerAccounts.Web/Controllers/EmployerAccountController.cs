@@ -162,6 +162,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("getApprenticeshipFunding")]
         public ActionResult GetApprenticeshipFunding()
         {
+            PopulateViewBagWithExternalUserId();
             var model = new
             {
                 HideHeaderSignInLink = true
@@ -365,6 +366,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var userIdClaim = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             return userIdClaim ?? "";
+        }
+
+        private void PopulateViewBagWithExternalUserId()
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            if (externalUserId != null)
+                ViewBag.UserId = externalUserId;
         }
     }
 }

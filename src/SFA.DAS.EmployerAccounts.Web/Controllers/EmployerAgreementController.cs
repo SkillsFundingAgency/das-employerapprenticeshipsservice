@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(agreement.Data.EmployerAgreement.TemplateAgreementType == AgreementType.Levy
+            return View(agreement.Data.EmployerAgreement.AgreementType == AgreementType.Levy
                 ? ControllerConstants.AboutYourAgreementViewName 
                 : ControllerConstants.AboutYourDocumentViewName, agreement);
         }
@@ -160,7 +160,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 ActionResult result;
 
-                if (response.Data.HasFurtherPendingAgreements)
+                if (agreement.Data.EmployerAgreement.AgreementType == AgreementType.NonLevyExpressionOfInterest)
+                {
+                    flashMessage.Headline = "Memorandum of Understanding signed";
+                    flashMessage.Message = "You’ve successfully signed the Memorandum of Understanding for your organisation.";
+                    result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
+                }
+                else if (response.Data.HasFurtherPendingAgreements)
                 {
                     flashMessage.Message = "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
 
