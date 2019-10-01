@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             var accountTask = _accountApiClient.GetAccount(query.AccountHashedId);
             var getAccountFinanceOverviewTask = _mediator.SendAsync(query);
 
-            var account = new AccountDetailViewModel { ApprenticeshipEmployerType = "0" };  // await accountTask;
+            var account = await accountTask;
 
             var getAccountFinanceOverview = await getAccountFinanceOverviewTask;
 

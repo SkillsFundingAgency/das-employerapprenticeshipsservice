@@ -10,40 +10,69 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Factories.TransactionFormatterFactor
     public class WhenIUseTheTransactionFormatterFactory
     {
         private ITransactionFormatterFactory _paymentFormatterFactory;
-        private Mock<ITransactionFormatter> _csvFormatter;
-        private Mock<ITransactionFormatter> _excelFormatter;
+        private Mock<ITransactionFormatter> _levyCsvFormatter;
+        private Mock<ITransactionFormatter> _levyExcelFormatter;
+        private Mock<ITransactionFormatter> _nonLevyCsvFormatter;
+        private Mock<ITransactionFormatter> _nonLevyExcelFormatter;
 
-
-       [SetUp]
+        [SetUp]
         public void Arrange()
         {
-            _csvFormatter = new Mock<ITransactionFormatter>();
-            _excelFormatter = new Mock<ITransactionFormatter>();
+            _levyCsvFormatter = new Mock<ITransactionFormatter>();
+            _levyExcelFormatter = new Mock<ITransactionFormatter>();
 
-            _csvFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
-            _excelFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.Excel);
+            _nonLevyCsvFormatter = new Mock<ITransactionFormatter>();
+            _nonLevyExcelFormatter = new Mock<ITransactionFormatter>();
+
+            _levyCsvFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
+            _levyCsvFormatter.Setup(x => x.ApprenticeshipEmployerType).Returns(ApprenticeshipEmployerType.Levy);
+            _levyExcelFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.Excel);
+            _levyExcelFormatter.Setup(x => x.ApprenticeshipEmployerType).Returns(ApprenticeshipEmployerType.Levy);
+
+            _nonLevyCsvFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.CSV);
+            _nonLevyCsvFormatter.Setup(x => x.ApprenticeshipEmployerType).Returns(ApprenticeshipEmployerType.NonLevy);
+            _nonLevyExcelFormatter.Setup(x => x.DownloadFormatType).Returns(DownloadFormatType.Excel);
+            _nonLevyExcelFormatter.Setup(x => x.ApprenticeshipEmployerType).Returns(ApprenticeshipEmployerType.NonLevy);
 
             _paymentFormatterFactory = new EmployerFinance.Formatters.TransactionFormatterFactory(new List<ITransactionFormatter>
             {
-                _csvFormatter.Object,
-                _excelFormatter.Object
+                _levyCsvFormatter.Object,
+                _levyExcelFormatter.Object,
+                _nonLevyCsvFormatter.Object,
+                _nonLevyExcelFormatter.Object
             });
         }
 
         [Test]
-        public void ThenIShouldGetCsvFormatter()
+        public void ThenIShouldGetLevyCsvFormatter()
         {
             var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.CSV, ApprenticeshipEmployerType.Levy);
 
-            Assert.AreEqual(_csvFormatter.Object, formatter);
+            Assert.AreEqual(_levyCsvFormatter.Object, formatter);
         }
 
         [Test]
-        public void ThenIShouldGetExcelFormatter()
+        public void ThenIShouldGetLevyExcelFormatter()
         {
             var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.Excel, ApprenticeshipEmployerType.Levy);
 
-            Assert.AreEqual(_excelFormatter.Object, formatter);
+            Assert.AreEqual(_levyExcelFormatter.Object, formatter);
+        }
+
+        [Test]
+        public void ThenIShouldGetNonLevyCsvFormatter()
+        {
+            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.CSV, ApprenticeshipEmployerType.NonLevy);
+
+            Assert.AreEqual(_nonLevyCsvFormatter.Object, formatter);
+        }
+
+        [Test]
+        public void ThenIShouldGetNonLevyExcelFormatter()
+        {
+            var formatter = _paymentFormatterFactory.GetTransactionsFormatterByType(DownloadFormatType.Excel, ApprenticeshipEmployerType.NonLevy);
+
+            Assert.AreEqual(_nonLevyExcelFormatter.Object, formatter);
         }
     }
 }
