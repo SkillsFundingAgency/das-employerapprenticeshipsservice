@@ -3144,7 +3144,8 @@ table.responsive tr, table.responsive--desktop tr {
     font-weight: bold; }
   .agreement ol a {
     font-weight: normal;
-      text-decoration: none; }
+    color: white;
+    text-decoration: none; }
     .agreement ol a:hover, .agreement ol a:focus, .agreement ol a:active {
       text-decoration: underline; }
   @media (min-width: 641px) {
@@ -3274,7 +3275,7 @@ table.responsive tr, table.responsive--desktop tr {
     left: 0; }
     @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2), only screen and (-o-min-device-pixel-ratio: 20 / 10), only screen and (min-device-pixel-ratio: 2), only screen and (min-resolution: 192dpi), only screen and (min-resolution: 2dppx) {
       .legal-warning .icon {
-        background-image: url("../images/icon-important-2x.png");
+        background-image: url("/dist/images/../../dist/images/icon-important-2x.png");
         background-size: 100%; } }
 
 /* PDF */
@@ -4818,3 +4819,48 @@ hr.dashboard-heading-separator {
 
 .das-favourites-link__count {
   font-weight: bold; }
+
+.das-panel {
+  padding: 20px;
+  background: #fff;
+  margin-bottom: 20px; }
+  @media (min-width: 641px) {
+    .das-panel {
+      margin-bottom: 30px;
+      padding: 30px; } }
+
+.das-panel--featured {
+  background: #005ea5;
+  color: #fff;
+  margin-top: 20px; }
+  .das-panel--featured > p {
+    color: #fff; }
+    .das-panel--featured > p:last-child {
+      margin-bottom: 0; }
+  .das-panel--featured > dl {
+    color: #fff;
+    font-size: 1em; }
+    .das-panel--featured > dl > dd.das-definition-list__definition {
+      border-color: rgba(255, 255, 255, 0.5); }
+  .das-panel--featured .das-panel__link {
+    color: #fff;
+    font-weight: 700; }
+    .das-panel--featured .das-panel__link:hover {
+      text-decoration: non; }
+    .das-panel--featured .das-panel__link:focus {
+      color: #000; }
+
+.das-panel__heading {
+  font-size: 19px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 0; }
+  @media (min-width: 641px) {
+    .das-panel__heading {
+      font-size: 24px; } }
+  .das-panel--featured .das-panel__heading {
+    font-size: 24px; }
+    @media (min-width: 641px) {
+      .das-panel--featured .das-panel__heading {
+        font-size: 36px;
+        line-height: 1.2; } }
