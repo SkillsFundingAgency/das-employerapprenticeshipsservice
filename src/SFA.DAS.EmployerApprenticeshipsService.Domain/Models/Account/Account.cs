@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using SFA.DAS.Authorization;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
-using SFA.DAS.EAS.Domain.Models.UserProfile;
 
 namespace SFA.DAS.EAS.Domain.Models.Account
 {
@@ -19,7 +18,7 @@ namespace SFA.DAS.EAS.Domain.Models.Account
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         public virtual Role Role { get; set; }
         public string RoleName => ((Role)Role).ToString();
-        public virtual short ApprenticeshipEmployerType { get; set; }
+        public virtual ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
     }
 }

@@ -50,9 +50,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
+            PopulateViewBagWithExternalUserId();
             var response = await GetAccountInformation(hashedAccountId);
-            //todo: if response contains an exception, Data is null and we get a NullReferenceException
+
+            if (response.Status != HttpStatusCode.OK)
+            {
+                return View(response);
+            }
+
             var hasPayeScheme = HasPayeScheme(response.Data);
+            
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
@@ -69,8 +76,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 return View("v2/Index", "_Layout_v2", response);
             }
-            return View(response);
 
+            return View(response);
         }
 
         [HttpGet]
@@ -566,6 +573,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+
             var flashMessage = GetFlashMessageViewModelFromCookie();
 
             if (flashMessage != null)
@@ -575,6 +583,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
+        }
+
+        private void PopulateViewBagWithExternalUserId()
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            if (externalUserId != null)
+                ViewBag.UserId = externalUserId;
         }
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
