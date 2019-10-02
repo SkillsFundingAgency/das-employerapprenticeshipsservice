@@ -50,23 +50,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (!string.IsNullOrWhiteSpace(userId))
             {
-                await OwinWrapper.UpdateClaims();
+                var accounts = new OrchestratorResponse<UserAccountsViewModel>();
 
-                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
-                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
-
-                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
-
-                var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
-
-                if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                if (HttpContext.User.IsInRole("Tier2User"))
                 {
-                    return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                    accounts = await _homeOrchestrator.GetAccounts();
                 }
+                else
+                {
+                    await OwinWrapper.UpdateClaims();
 
-                var accounts = await _homeOrchestrator.GetUserAccounts(userId);
+                    var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                    var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                    var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                    var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+                    await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
+
+                    var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
+
+                    if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                    }
+
+                    accounts = await _homeOrchestrator.GetUserAccounts(userId);
+                }
 
                 if (accounts.Data.Invitations > 0)
                 {
