@@ -327,14 +327,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "AddPAYE";
             }
-            if (model.AgreementsToSign)
+            else if (model.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";
+            }
+            else if (!model.HasReservations)
+            {
+                viewModel.ViewName = "CheckFunding";
             }
 
             if (FeatureToggles.Features.HomePage.Enabled)
             {
-                viewModel.ViewName = "CheckFunding";
+                viewModel.ViewName = "V2CheckFunding";
 
                 if (model.AgreementsToSign)
                 {
@@ -344,7 +348,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     viewModel.ViewName = "ApprenticeshipDetails";
                 }
-                else if (model.ShowReservations)
+                else if (model.HasReservations)
                 {
                     viewModel.ViewName = "FundingComplete";
                 }
@@ -531,6 +535,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult V2CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
