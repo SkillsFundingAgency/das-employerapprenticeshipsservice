@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Filters
             var sut = new LevyEmployerTypeOnly();
             _accountApiClientMock
                 .Setup(mock => mock.GetAccount(It.IsAny<string>()))
-                .ReturnsAsync(new AccountDetailViewModel { ApprenticeshipEmployerType = ((int)ApprenticeshipEmployerType.Levy).ToString() });
+                .ReturnsAsync(new AccountDetailViewModel { ApprenticeshipEmployerType = "Levy" });
 
             // Act
             sut.OnActionExecuting(_filterContext);
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Filters
             var sut = new LevyEmployerTypeOnly();
             _accountApiClientMock
                 .Setup(mock => mock.GetAccount(It.IsAny<string>()))
-                .ReturnsAsync(new AccountDetailViewModel { ApprenticeshipEmployerType = ((int)ApprenticeshipEmployerType.NonLevy).ToString() });
+                .ReturnsAsync(new AccountDetailViewModel { ApprenticeshipEmployerType = "NonLevy" });
 
             // Act
             sut.OnActionExecuting(_filterContext);
