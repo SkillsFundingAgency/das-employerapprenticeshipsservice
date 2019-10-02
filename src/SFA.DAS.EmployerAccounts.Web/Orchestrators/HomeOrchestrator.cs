@@ -1,11 +1,11 @@
-﻿using MediatR;
-using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using MediatR;
+using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 using SFA.DAS.EmployerAccounts.Queries.GetUsers;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -70,6 +70,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 LastName = lastName,
                 FirstName = firstName
             });
+        }
+
+        public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetAccounts()
+        {
+            var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery());
+
+            return new OrchestratorResponse<UserAccountsViewModel>
+            {
+                Data = new UserAccountsViewModel
+                {
+                    Accounts = getUserAccountsQueryResponse.Accounts
+                }
+            };
         }
     }
 }
