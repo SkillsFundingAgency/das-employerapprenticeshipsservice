@@ -23,8 +23,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
 
                 var hashedAccountId = filterContext.ActionParameters["HashedAccountId"].ToString();
                 var accountApi = DependencyResolver.Current.GetService<IAccountApiClient>();
-                AccountDetailViewModel account = null; 
-                new Task(async () => account = await accountApi.GetAccount(hashedAccountId)).RunSynchronously();
+                AccountDetailViewModel account = accountApi.GetAccount(hashedAccountId).GetAwaiter().GetResult();
 
                 if (account.ApprenticeshipEmployerType == ((int)ApprenticeshipEmployerType.Levy).ToString())
                 {
