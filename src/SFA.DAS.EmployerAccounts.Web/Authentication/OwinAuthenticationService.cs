@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;

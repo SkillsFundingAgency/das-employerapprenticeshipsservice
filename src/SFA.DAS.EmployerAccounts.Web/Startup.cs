@@ -38,6 +38,7 @@ using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web.Models;
+using SFA.DAS.OidcMiddleware.Validators;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -71,29 +72,71 @@ namespace SFA.DAS.EmployerAccounts.Web
                 AuthenticationMode = AuthenticationMode.Passive
             });
 
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "Staff",
+            });
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "Employer",
+                ExpireTimeSpan = new TimeSpan(0, 10, 0),
+                SlidingExpiration = true
+            });
+
+
             // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
             app.UseWsFederationAuthentication(GetADFSOptions());
 
-            //app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
-            //{
-            //    BaseUrl = config.Identity.BaseAddress,
-            //    ClientId = config.Identity.ClientId,
-            //    ClientSecret = config.Identity.ClientSecret,
-            //    Scopes = config.Identity.Scopes,
-            //    AuthorizeEndpoint = constants.AuthorizeEndpoint(),
-            //    TokenEndpoint = constants.TokenEndpoint(),
-            //    UserInfoEndpoint = constants.UserInfoEndpoint(),
-            //    TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
-            //    TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
-            //    AuthenticatedCallback = identity =>
-            //    {
-            //        PostAuthentiationAction(
-            //            identity,
-            //            constants,
-            //            accountDataCookieStorageService,
-            //            hashedAccountIdCookieStorageService);
-            //    }
-            //});
+            app.Map($"/login/staff", conf =>
+            {
+                conf.Run(context =>
+                {
+                    context.Authentication.Challenge(new AuthenticationProperties
+                    { RedirectUri = "/service/index", IsPersistent = true },
+                        "Staff"
+                    );
+
+                    context.Response.StatusCode = 401;
+                    return context.Response.WriteAsync(string.Empty);
+                });
+            });
+
+            app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
+            {
+                AuthenticationType = "Cookies",
+                BaseUrl = config.Identity.BaseAddress,
+                ClientId = config.Identity.ClientId,
+                ClientSecret = config.Identity.ClientSecret,
+                Scopes = config.Identity.Scopes,
+                AuthorizeEndpoint = constants.AuthorizeEndpoint(),
+                TokenEndpoint = constants.TokenEndpoint(),
+                UserInfoEndpoint = constants.UserInfoEndpoint(),
+                TokenSigningCertificateLoader = GetSigningCertificate(config.Identity.UseCertificate),
+                TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
+                AuthenticatedCallback = identity =>
+                {
+                    PostAuthentiationAction(
+                        identity,
+                        constants,
+                        accountDataCookieStorageService,
+                        hashedAccountIdCookieStorageService);
+                }
+            });
+
+            app.Map($"/login", conf =>
+            {
+                conf.Run(context =>
+                {
+                    context.Authentication.Challenge(new AuthenticationProperties
+                    { RedirectUri = "/service/index", IsPersistent = true },
+                        "Cookies"
+                    );
+
+                    context.Response.StatusCode = 401;
+                    return context.Response.WriteAsync(string.Empty);
+                });
+            });
 
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
@@ -106,6 +149,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         {
             return new WsFederationAuthenticationOptions
             {
+                AuthenticationType = "Staff",
                 Wtrealm = "https://localhost:44347",
                 MetadataAddress = "https://adfs.preprod.skillsfunding.service.gov.uk/FederationMetadata/2007-06/FederationMetadata.xml",
                 Notifications = Notifications()
