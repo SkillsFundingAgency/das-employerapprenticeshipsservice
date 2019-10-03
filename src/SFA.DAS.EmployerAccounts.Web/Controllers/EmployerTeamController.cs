@@ -49,6 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
+            // Get account owner userId and set on HttpContext
             var response = await GetAccountInformation(hashedAccountId);
             var hasPayeScheme = HasPayeScheme(response.Data);
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
