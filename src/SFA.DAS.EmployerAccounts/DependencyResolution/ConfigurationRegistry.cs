@@ -16,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<EmployerFinanceConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerFinanceConfiguration>(ConfigurationKeys.EmployerFinance)).Singleton();
             For<EmployerAccountsReadStoreConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EmployerAccountsReadStoreConfiguration>(ConfigurationKeys.EmployerAccountsReadStore)).Singleton();
             For<ReferenceDataApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ReferenceDataApiClientConfiguration>(ConfigurationKeys.ReferenceDataApiClient)).Singleton();
+            For<ReservationsClientApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ReservationsClientApiConfiguration>(ConfigurationKeys.ReservationsClientApiConfiguration)).Singleton();
             For<IAccountApiConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().AccountApi).Singleton();
         }
     }

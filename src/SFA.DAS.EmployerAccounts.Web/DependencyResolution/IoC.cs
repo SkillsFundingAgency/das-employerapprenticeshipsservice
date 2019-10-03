@@ -42,13 +42,14 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
-                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();                
                 c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<PortalClientRegistry>();
                 c.AddRegistry<PensionsRegulatorRegistry>();
+                c.AddRegistry<ReservationsApiClientRegistry>();
                 c.AddRegistry<DefaultRegistry>();
             });
         }
