@@ -328,6 +328,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "AddPAYE";
             }
+            if (model.AgreementsToSign)
+            {
+                viewModel.ViewName = "SignAgreement";
+            }
 
             if (FeatureToggles.Features.HomePage.Enabled)
             {
@@ -335,7 +339,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (model.AgreementsToSign)
                 {
-                    viewModel.ViewName = "SignAgreement";
+                    viewModel.ViewName = "V2SignAgreement";
                 }
                 else if (model.ApprenticeshipAdded)
                 {
@@ -457,6 +461,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult SignAgreement(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult V2SignAgreement(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
