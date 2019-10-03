@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.EAS.Account.Api.Controllers;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.GetLegalEntity;
+using SFA.DAS.EAS.Domain.Configuration;
 
 namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerTests
 {
@@ -28,7 +29,7 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Controllers.LegalEntitiesControllerT
 
             _mediator.Setup(m => m.SendAsync(_query)).ReturnsAsync(_response);
 
-            _controller = new LegalEntitiesController(null, _mediator.Object);
+            _controller = new LegalEntitiesController(_mediator.Object, new EmployerApprenticeshipsServiceConfiguration());
         }
 
         [Test]

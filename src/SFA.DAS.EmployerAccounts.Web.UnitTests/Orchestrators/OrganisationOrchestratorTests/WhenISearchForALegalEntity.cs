@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
             _mapper = new Mock<IMapper>();
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesRequest>()))
-                .ReturnsAsync(new GetAccountLegalEntitiesResponse {Entites = new List<AccountSpecificLegalEntity>()});
+                .ReturnsAsync(new GetAccountLegalEntitiesResponse {LegalEntities = new List<AccountSpecificLegalEntity>()});
 
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
             _hashingService = new Mock<IAccountLegalEntityPublicHashingService>();

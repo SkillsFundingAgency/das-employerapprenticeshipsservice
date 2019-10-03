@@ -26,4 +26,9 @@
     <Reference Include="System.Web" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\AccountPayeSchemesControllerTests\" />
+    <Folder Include="Controllers\LegalEntitiesControllerTests\" />
+  </ItemGroup>
+
 </Project>
