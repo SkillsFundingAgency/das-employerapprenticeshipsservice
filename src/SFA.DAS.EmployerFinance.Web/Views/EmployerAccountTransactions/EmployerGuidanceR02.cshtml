@@ -1,0 +1,79 @@
+﻿
+@{
+    ViewBag.Title = "Your transactions explained";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-xlarge">Your transactions explained</h1>
+        <p>
+            In September we did not debit employer accounts due to an issue with datamatching. Therefore,
+            in October we will be debiting all employer accounts with the payments due for September and October.
+            To ensure no employer is negatively impacted by this issue, we have delayed processing the September
+            expiry of levy funds until after these payments have been debited from your account. To aid you in
+            understanding these impacts, the examples below show how this will look in your apprenticeship service account.
+        </p>
+    </div>
+</div>
+
+<p class="lede responsive-detail">This example is for illustrative purposes only.</p>
+
+<h2 class="heading-medium">September 2019</h2>
+
+<table class="small responsive">
+    <thead>
+        <tr>
+            <th scope="col" class="tw-20">Payment date</th>
+            <th scope="col" class="tw-20">Description</th>
+            <th scope="col" class="tw-10 numeric">Amount</th>
+            <th scope="col" class="tw-50">Explanation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td data-label="Payment date">22 Aug 2019</td>
+            <td data-label="Description">Levy credit</td>
+            <td data-label="Amount" class="numeric">&pound;50,000.00</td>
+            <td data-label="Explanation">Levy account credited</td>
+        </tr>
+        <tr>
+            <td data-label="Payment date">6 Sep 2019</td>
+            <td data-label="Description">No levy debit</td>
+            <td data-label="Amount" class="numeric">&pound;0</td>
+            <td data-label="Explanation">No levy debit in September, for August payments</td>
+        </tr>
+        <tr>
+            <td data-label="Payment date">17 Sep 2019</td>
+            <td data-label="Description">Possible levy debit</td>
+            <td data-label="Amount" class="numeric">&pound;5,000.00</td>
+            <td data-label="Explanation">Any final provider adjustments relating to the 18/19 academic year</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2 class="heading-medium">October 2019</h2>
+
+<table class="small responsive">
+    <thead>
+        <tr>
+            <th scope="col" class="tw-20">Payment date</th>
+            <th scope="col" class="tw-20">Description</th>
+            <th scope="col" class="tw-10 numeric">Amount</th>
+            <th scope="col" class="tw-50">Explanation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td data-label="Payment date">22 Sep 2019</td>
+            <td data-label="Description">Levy credit</td>
+            <td data-label="Amount" class="numeric">&pound;50,000.00</td>
+            <td data-label="Explanation">Levy account credited</td>
+        </tr>
+        <tr>
+            <td data-label="Payment date">7 Oct 2019</td>
+            <td data-label="Description">Levy credit</td>
+            <td data-label="Amount" class="numeric">&pound;75,000.00</td>
+            <td data-label="Explanation">Debit in October for August &amp; September payments together</td>
+        </tr>
+    </tbody>
+</table>
