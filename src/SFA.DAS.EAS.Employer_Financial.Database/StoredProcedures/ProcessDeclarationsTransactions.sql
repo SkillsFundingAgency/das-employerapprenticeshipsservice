@@ -104,5 +104,5 @@ select mainUpdate.* from
 		select SubmissionId from [employer_financial].TransactionLine where TransactionType = 1
 	) dervx on dervx.SubmissionId = mainUpdate.SubmissionId
 
-	SELECT SUM(Amount)
+	SELECT ISNULL(SUM(Amount), 0)
 	FROM @updatedAccountTransactions
