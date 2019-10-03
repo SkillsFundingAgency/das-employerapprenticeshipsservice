@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetTeamMembers
+namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
 {
     public class GetReservationsRequestHandler : IAsyncRequestHandler<GetReservationsRequest, GetReservationsResponse>
     {
