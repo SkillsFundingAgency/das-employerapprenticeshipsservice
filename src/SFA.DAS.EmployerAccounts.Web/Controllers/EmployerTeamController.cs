@@ -16,6 +16,7 @@ using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -50,6 +51,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
+            // Get account owner userId and set on HttpContext
+            if (HttpContext.User.IsInRole("Tier2User"))
+            {
+                var accountOwner = await _employerTeamOrchestrator.GetAccountOwner(hashedAccountId);
+                ((ClaimsIdentity)HttpContext.User.Identity).AddClaim(new Claim("sub", accountOwner.UserRef));
+            }
+
             PopulateViewBagWithExternalUserId();
             var response = await GetAccountInformation(hashedAccountId);
 
