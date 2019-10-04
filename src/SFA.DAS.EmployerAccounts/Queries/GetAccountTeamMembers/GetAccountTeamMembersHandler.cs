@@ -8,14 +8,14 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
 {
     public class GetAccountTeamMembersHandler : IAsyncRequestHandler<GetAccountTeamMembersQuery, GetAccountTeamMembersResponse>
     {
-        private readonly IValidator<GetAccountTeamMembersQuery> _validator;
-        private readonly IEmployerAccountTeamRepository _repository;
+            private readonly IValidator<GetAccountTeamMembersQuery> _validator;
+            private readonly IEmployerAccountTeamRepository _repository;
 
-        public GetAccountTeamMembersHandler(IValidator<GetAccountTeamMembersQuery> validator, IEmployerAccountTeamRepository repository)
-        {
-            _validator = validator;
-            _repository = repository;
-        }
+            public GetAccountTeamMembersHandler(IValidator<GetAccountTeamMembersQuery> validator, IEmployerAccountTeamRepository repository)
+            {
+                _validator = validator;
+                _repository = repository;
+            }
 
         public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message)
         {
