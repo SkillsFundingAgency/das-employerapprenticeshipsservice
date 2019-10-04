@@ -10,7 +10,7 @@ using Moq;
 using NServiceBus;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.EventHandlers;
-using SFA.DAS.EAS.Portal.Application.Services;
+using SFA.DAS.EAS.Portal.Application.Services.MessageContext;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EAS.Portal.UnitTests.Worker.EventHandlers

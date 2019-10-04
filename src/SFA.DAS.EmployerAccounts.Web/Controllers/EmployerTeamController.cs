@@ -15,6 +15,7 @@ using System.Linq;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using System.Globalization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -49,14 +50,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
-            // Get account owner userId and set on HttpContext
-            if (HttpContext.User.IsInRole("Tier2User"))
+            PopulateViewBagWithExternalUserId();
+            var response = await GetAccountInformation(hashedAccountId);
+
+            if (response.Status != HttpStatusCode.OK)
             {
-                var accountOwner = _employerTeamOrchestrator.GetAccountOwner(hashedAccountId);
+                return View(response);
             }
 
-            var response = await GetAccountInformation(hashedAccountId);
             var hasPayeScheme = HasPayeScheme(response.Data);
+            
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
             {
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
@@ -73,8 +76,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 return View("v2/Index", "_Layout_v2", response);
             }
-            return View(response);
 
+            return View(response);
         }
 
         [HttpGet]
@@ -483,8 +486,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             switch(vacancy.Status)
             {
-                case EAS.Portal.Client.Types.VacancyStatus.Closed:                    
-                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
+                case EAS.Portal.Client.Types.VacancyStatus.Closed:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Submitted:
@@ -502,14 +505,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     break;
 
                 case EAS.Portal.Client.Types.VacancyStatus.Live:
-                    viewModel.NumberOfApplications = vacancy.NumberOfApplications;
-                    break;
-
-                default:
+                    viewModel.Applications = ApplicationsDisplay(vacancy);
                     break;
             }
 
             return PartialView(viewModel);
+        }
+
+        private string ApplicationsDisplay(Vacancy vacancy)
+        {
+            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
+                ? "Advertised by employer"
+                : vacancy.NumberOfApplications.ToString();
         }
 
         [ChildActionOnly]
@@ -545,13 +552,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            Cohort cohort = model.AccountViewModel.Organisations.FirstOrDefault()?.Cohorts?.FirstOrDefault();
+            Apprenticeship apprenticeship = cohort?.Apprenticeships?.FirstOrDefault();
+            
+            var viewModel = new ApprenticeDetailsViewModel
+            {
+                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
+                TrainingProviderName = apprenticeship.TrainingProvider?.Name,
+                CourseName = apprenticeship.CourseName,
+                StartDateText = apprenticeship.StartDate?.ToGdsFormatWithoutDay(),
+                EndDateText = apprenticeship.EndDate?.ToGdsFormatWithoutDay(),
+                ProposedCostText = $"{apprenticeship.ProposedCost?.ToString("C0", CultureInfo.CreateSpecificCulture("en-GB"))} excluding VAT",
+                IsApproved = cohort.IsApproved
+            };
+
+            return PartialView(viewModel);
         }
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+
             var flashMessage = GetFlashMessageViewModelFromCookie();
 
             if (flashMessage != null)
@@ -561,6 +583,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return response;
+        }
+
+        private void PopulateViewBagWithExternalUserId()
+        {
+            var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            if (externalUserId != null)
+                ViewBag.UserId = externalUserId;
         }
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
@@ -574,3 +603,4 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
     }
 }
+ 
