@@ -50,6 +50,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             // Get account owner userId and set on HttpContext
+            if (HttpContext.User.IsInRole("Tier2User"))
+            {
+                var accountOwner = _employerTeamOrchestrator.GetAccountOwner(hashedAccountId);
+            }
+
             var response = await GetAccountInformation(hashedAccountId);
             var hasPayeScheme = HasPayeScheme(response.Data);
             if (FeatureToggles.Features.HomePage.Enabled || !hasPayeScheme && !HasOrganisation(response.Data))
