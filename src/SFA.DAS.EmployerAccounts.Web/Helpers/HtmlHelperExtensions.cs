@@ -29,5 +29,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
             return result.View != null;
         }
+
+        public static MvcHtmlString SetZenDeskSuggestion(this HtmlHelper html, string suggestion)
+        {
+            return MvcHtmlString.Create($"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ search: '{suggestion}' }});</script>");
+        }
+    }
+
+    public static class ZenDeskSuggestions
+    {
+        public static string RegisterForAnApprenticeshipServiceAccount = "Register-for-an-apprenticeship-service-account";
+        public static string AddPAYESchemesToYourAccount = "Add-PAYE-schemes-to-your-account";
+        public static string ApprenticeshipFunding = "Apprenticeship-funding";
+        public static string EnteredTheWrongPAYESchemeDetails = "Entered-the-wrong-PAYE-scheme-details";
+        public static string UseYourGovernmentGatewayDetails = "Use-your-Government-Gateway-details";
+        public static string ReviewTheEmployerAgreement = "Review-the-employer-agreement";
     }
 }
