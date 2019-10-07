@@ -210,7 +210,7 @@
                         <li class="das-navigation__list-item">
                             <a class="das-navigation__link @(ViewBag.Section == "finance" ? "das-navigation__link--current" : "")" href="@Url.EmployerFinanceAction("finance")">Finance</a>
                         </li>
-                        @if (Html.IsAuthorized(FeatureType.Recruitments))
+                        @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
                         {
                             <li class="das-navigation__list-item">
                                 <a class="das-navigation__link" href="@Url.EmployerRecruitAction()">Recruitment</a>
