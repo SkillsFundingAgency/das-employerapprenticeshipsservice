@@ -12,6 +12,6 @@
         public const string EmployerFinance = "SFA.DAS.EmployerFinance";
         public const string EmployerAccountsReadStore = "SFA.DAS.EmployerAccounts.ReadStore";
         public const string AuditApi = "SFA.DAS.AuditApiClient";
-        public static string ReservationsClientApiConfiguration => $"SFA.DAS.Reservations.Api.Client";
+        public const string ReservationsClientApiConfiguration = "SFA.DAS.Reservations.Api.Client";
     }
 }
