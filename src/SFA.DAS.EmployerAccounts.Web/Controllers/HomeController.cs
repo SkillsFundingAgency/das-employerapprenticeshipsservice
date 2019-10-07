@@ -26,16 +26,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
-        public HomeController(IAuthenticationService owinWrapper, 
-            HomeOrchestrator homeOrchestrator,        
+        public HomeController(IAuthenticationService owinWrapper,
+            HomeOrchestrator homeOrchestrator,
             EmployerAccountsConfiguration configuration,
-            IMultiVariantTestingService multiVariantTestingService, 
+            IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
             ILog logger)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _homeOrchestrator = homeOrchestrator;          
+            _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;
             _returnUrlCookieStorageService = returnUrlCookieStorageService;
             _logger = logger;
@@ -46,74 +46,73 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-
+            var isStaff = HttpContext.User.IsInRole("Tier2User");
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
-            if (!string.IsNullOrWhiteSpace(userId))
+            var accounts = new OrchestratorResponse<UserAccountsViewModel>();
+
+            if (isStaff)
             {
-                var accounts = new OrchestratorResponse<UserAccountsViewModel>();
+                accounts = await _homeOrchestrator.GetAccounts();
+            }
+            else if (!string.IsNullOrWhiteSpace(userId))
+            {
+                await OwinWrapper.UpdateClaims();
 
-                if (HttpContext.User.IsInRole("Tier2User"))
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
+
+                var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
+
+                if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    accounts = await _homeOrchestrator.GetAccounts();
-                }
-                else
-                {
-                    await OwinWrapper.UpdateClaims();
-
-                    var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-                    var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
-                    var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
-                    var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
-
-                    await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
-
-                    var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
-
-                    if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
-                    }
-
-                    accounts = await _homeOrchestrator.GetUserAccounts(userId);
+                    return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
                 }
 
-                if (accounts.Data.Invitations > 0)
+                accounts = await _homeOrchestrator.GetUserAccounts(userId);
+            }
+            else
+            {
+                var model = new
                 {
-                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
-                }
+                    HideHeaderSignInLink = true
+                };
 
-                if (accounts.Data.Accounts.AccountList.Count == 1)
-                {
-                    var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
-
-                    if (account != null)
-                    {
-                        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
-                    }
-                }
-
-                var flashMessage = GetFlashMessageViewModelFromCookie();
-
-                if (flashMessage != null)
-                {
-                    accounts.FlashMessage = flashMessage;
-                }
-
-                if (accounts.Data.Accounts.AccountList.Count > 1)
-                {
-                    return View(accounts);
-                }
-
-                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
+                return View(ControllerConstants.ServiceStartPageViewName, model);
             }
 
-            var model = new
+            if (accounts.Data.Invitations > 0)
             {
-                HideHeaderSignInLink = true
-            };
+                return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
+            }
 
-            return View(ControllerConstants.ServiceStartPageViewName, model);
+            if (accounts.Data.Accounts.AccountList.Count == 1)
+            {
+                var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
+
+                if (account != null)
+                {
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
+                }
+            }
+
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessage != null)
+            {
+                accounts.FlashMessage = flashMessage;
+            }
+
+            if (accounts.Data.Accounts.AccountList.Count > 1)
+            {
+                return View(accounts);
+            }
+
+            return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
         [DasAuthorize]
@@ -148,8 +147,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
-        }     
-     
+        }
+
         [HttpGet]
         [Route("register")]
         public ActionResult RegisterUser()
