@@ -6,6 +6,7 @@ using MediatR;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
@@ -18,13 +19,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
         private readonly IEmployerCommitmentApi _employerCommitmentApi;
+        private readonly IDasRecruitService _dasRecruitService;
 
-        public GetAccountEmployerAgreementsRemoveQueryHandler(IValidator<GetAccountEmployerAgreementsRemoveRequest> validator, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService, IEmployerCommitmentApi employerCommitmentApi)
+        public GetAccountEmployerAgreementsRemoveQueryHandler(IValidator<GetAccountEmployerAgreementsRemoveRequest> validator, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService, IEmployerCommitmentApi employerCommitmentApi, IDasRecruitService dasRecruitService)
         {
             _validator = validator;
             _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
             _employerCommitmentApi = employerCommitmentApi;
+            _dasRecruitService = dasRecruitService;
         }
 
         public async Task<GetAccountEmployerAgreementsRemoveResponse> Handle(GetAccountEmployerAgreementsRemoveRequest message)
@@ -43,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             var result = await _employerAgreementRepository.GetEmployerAgreementsToRemove(accountId);
-
+            
             var commitments = new List<ApprenticeshipStatusSummary>();
 
             if (result != null && result.Count == 1)
@@ -57,45 +60,47 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
 
             if (result == null) return new GetAccountEmployerAgreementsRemoveResponse();
 
-            if (result != null)
+            foreach (var removeEmployerAgreementView in result)
             {
-                foreach (var removeEmployerAgreementView in result)
+                removeEmployerAgreementView.HashedAgreementId =
+                    _hashingService.HashValue(removeEmployerAgreementView.Id);
+                removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
+                
+                switch (removeEmployerAgreementView.Status)
                 {
-                    removeEmployerAgreementView.HashedAgreementId =
-                        _hashingService.HashValue((long) removeEmployerAgreementView.Id);
-                    removeEmployerAgreementView.HashedAccountId = message.HashedAccountId;
+                    case EmployerAgreementStatus.Pending:
+                        removeEmployerAgreementView.CanBeRemoved = true;
+                        break;
+                    case EmployerAgreementStatus.Signed:
+                        var legalAgreementId = _hashingService.DecodeValue(removeEmployerAgreementView.HashedAgreementId);
 
-                    if (result.Count == 1) continue;
+                        var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
 
-                    switch (removeEmployerAgreementView.Status)
-                    {
-                        case EmployerAgreementStatus.Pending:
-                            removeEmployerAgreementView.CanBeRemoved = true;
-                            break;
-                        case EmployerAgreementStatus.Signed:
+                        var vacanciesSummary = await _dasRecruitService.GetVacanciesByLegalEntity(message.HashedAccountId, agreement.LegalEntityId);
 
-                            var commitmentConnectedToEntity = commitments.FirstOrDefault(c =>
-                                !string.IsNullOrEmpty(c.LegalEntityIdentifier)
-                                && c.LegalEntityIdentifier.Equals(removeEmployerAgreementView.LegalEntityCode)
-                                && c.LegalEntityOrganisationType == removeEmployerAgreementView.LegalEntitySource);
+                        var commitmentConnectedToEntity = commitments.FirstOrDefault(c =>
+                            !string.IsNullOrEmpty(c.LegalEntityIdentifier)
+                            && c.LegalEntityIdentifier.Equals(removeEmployerAgreementView.LegalEntityCode)
+                            && c.LegalEntityOrganisationType == removeEmployerAgreementView.LegalEntitySource);
 
-                            if (commitmentConnectedToEntity != null &&
-                                (commitmentConnectedToEntity.ActiveCount +
-                                 commitmentConnectedToEntity.PendingApprovalCount +
-                                 commitmentConnectedToEntity.PausedCount) != 0)
-                            {
-                                removeEmployerAgreementView.CanBeRemoved = false;
-                            }
-                            else
-                            {
-                                removeEmployerAgreementView.CanBeRemoved = true;
-                            }
+                        removeEmployerAgreementView.HasVacancies = vacanciesSummary.Vacancies.Any();
+                        removeEmployerAgreementView.HasCommitments = commitmentConnectedToEntity != null &&
+                                                                     (commitmentConnectedToEntity.ActiveCount +
+                                                                      commitmentConnectedToEntity.PendingApprovalCount +
+                                                                      commitmentConnectedToEntity.PausedCount) != 0;
 
-                            break;
-                        default:
+                        if (removeEmployerAgreementView.HasVacancies || removeEmployerAgreementView.HasCommitments)
+                        {
                             removeEmployerAgreementView.CanBeRemoved = false;
-                            break;
-                    }
+                        }
+                        else
+                        {
+                            removeEmployerAgreementView.CanBeRemoved = true;
+                        }
+                        break;
+                    default:
+                        removeEmployerAgreementView.CanBeRemoved = false;
+                        break;
                 }
             }
 

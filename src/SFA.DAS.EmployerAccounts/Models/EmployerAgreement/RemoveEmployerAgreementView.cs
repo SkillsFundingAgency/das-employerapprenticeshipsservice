@@ -10,8 +10,9 @@ namespace SFA.DAS.EmployerAccounts.Models.EmployerAgreement
         public string HashedAgreementId { get; set; }
         public string HashedAccountId { get; set; }
         public bool CanBeRemoved { get; set; }
+        public bool HasVacancies { get; set; }
         public string LegalEntityCode { get; set; }
-
+        public bool HasCommitments { get; set; }
         public OrganisationType LegalEntitySource { get; set; }
     }
 }
