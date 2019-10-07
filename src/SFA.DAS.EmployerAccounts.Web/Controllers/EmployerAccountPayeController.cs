@@ -214,58 +214,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerAccountPayeControllerName, new { model.HashedAccountId });
         }
-
-        [HttpGet]
-        [Route("{HashedAccountId}/schemes/waysToAdd", Order = 0)]
-        [Route("schemes/waysToAdd", Order = 1)]
-        public async Task<ViewResult> WaysToAdd()
-        {
-            var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
-            {
-                UserRef = userRef
-            });
-
-            var model = new
-            {
-                HideHeaderSignInLink = true
-            };
-
-            ViewBag.AornLock = aornLock.UserAornStatus.RemainingLock;
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("{HashedAccountId}/schemes/waysToAdd", Order = 0)]
-        [Route("schemes/waysToAdd", Order = 1)]
-        public async Task<ActionResult> WaysToAdd(int? choice)
-        {
-            switch (choice ?? 0)
-            {
-                case AddPayeUsingGovernmentGateway:
-                    return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
-                case AddPayeUsingAorn:
-                    return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
-                default:
-                {
-                    var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-                    var aornLock = await _mediatr.SendAsync(new GetUserAornLockRequest
-                    {
-                        UserRef = userRef
-                    });
-
-                    ViewBag.InError = true;
-                    ViewBag.AornLock = aornLock.UserAornStatus.RemainingLock;
-
-                    var model = new
-                    {
-                        HideHeaderSignInLink = true,
-                    };
-
-                    return View(model);
-                }
-            }
-        }
     }
 }
