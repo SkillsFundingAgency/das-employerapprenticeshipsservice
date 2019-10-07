@@ -47,33 +47,41 @@
         <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
-                <fieldset>
-                    <legend class="form-label-bold">
-                        <span>You can add a PAYE scheme later if you need more time, we can still create your account for you.</span>
-                        <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
-                            Tell us if you want to add a PAYE scheme
-                        </span>
-                    </legend>
-                    <label for="want-to-add-paye-scheme" class="block-label">
-                        <input type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
-                        Use Government Gateway log in
-                    </label>
-                    <label for="want-to-add-paye-scheme-aorn" class="block-label">
-                        <input type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
-                        Use accounts office reference number and employer PAYE scheme reference. <b>You should only use this if your payroll for your organisation is under £3 million.</b>
-                    </label>
-                    <label for="do-not-want-to-add-paye-scheme" class="block-label">
-                        <input type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
-                        No, I’ll do this later
-                    </label>
-                </fieldset>
-            </div>
-            <strong class="govuk-warning-text__text">
-                <span class="govuk-warning-text__assistive">Warning</span>
-                Before you continue, you must make sure you have authority to add PAYE schemes to the account for this organisation
-            </strong>
-            <div class="form-group">
+                <p>
+                    <fieldset>
+                        <legend class="form-label-bold">
+                            <span>You can add a PAYE scheme later if you need more time, we can still create your account for you.</span>
+                            <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                                Tell us if you want to add a PAYE scheme
+                            </span>
+                        </legend>
+                        <label for="want-to-add-paye-scheme" class="block-label">
+                            <input type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
+                            Use Government Gateway log in
+                        </label>
+                        <label for="want-to-add-paye-scheme-aorn" class="block-label">
+                            <input type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
+                            Use accounts office reference number and employer PAYE scheme reference. <b>You should only use this if your payroll for your organisation is under £3 million.</b>
+                        </label>
+                        <label for="do-not-want-to-add-paye-scheme" class="block-label">
+                            <input type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
+                            No, I’ll do this later
+                        </label>
+                    </fieldset>
+                </p>
+                <p>
+                    <div class="notice">
+                        <i class="icon icon-important">
+                            <span class="visuallyhidden">Warning</span>
+                        </i>
+                        <strong class="bold-small">
+                            Before you continue, you must make sure you have authority to add PAYE schemes to the account for this organisation
+                        </strong>
+                    </div>
+                </p>
+
                 <button class="button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
+                
             </div>
         </form>
     </div>
