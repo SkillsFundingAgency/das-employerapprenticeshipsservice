@@ -20,8 +20,6 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
             {
                 transaction.DateCreated.ToString("G"),
                 transaction.TransactionType,
-                transaction.PayeScheme,
-                transaction.PeriodEnd,
                 transaction.TrainingProvider,
                 transaction.Uln,
                 transaction.Apprentice,
@@ -37,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
         protected override string[] GetHeaderRow()
         {
             return new[]{
-                "Transaction date", "Transaction type", "PAYE scheme", "Payroll month", "Training provider", "Unique learner number",
+                "Transaction date", "Transaction type", "Training provider", "Unique learner number",
                 "Apprentice", "Apprenticeship training course", "Course level", "Paid from transfer", "Your contribution",
                 "Government contribution", "Total"
             };
