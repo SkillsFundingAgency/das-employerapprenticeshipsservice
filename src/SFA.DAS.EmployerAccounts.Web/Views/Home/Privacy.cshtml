@@ -157,6 +157,16 @@
                     <td>To temporarily store data for the next server request.</td>
                     <td>Immediately on next request</td>
                 </tr>
+                <tr>
+                    <td>ZD-referrerPolicy</td>
+                    <td>Stores referrer tags.</td>
+                    <td>Forever (unless purged through normal browser activity)</td>
+                </tr>
+                <tr>
+                    <td>ZD-zE_oauth</td>
+                    <td>Stores the authentication token once the user has been authenticated.</td>
+                    <td>2 hours</td>
+                </tr>
             </tbody>
         </table>
 
@@ -218,11 +228,30 @@
                     <td>Used to manage the rate at which page view requests are made</td>
                     <td>10 minutes</td>
                 </tr>
-                <tr>
-                    <td>_gid</td>
-                    <td>To count how many people visit our sites.</td>
-                    <td>1 day</td>
-                </tr>
+            <tr>
+                <td>_gid</td>
+                <td>To count how many people visit our sites.</td>
+                <td>1 day</td>
+            </tr>
+            <tr>
+                <td>ZD-currentTime</td>
+                <td>Sets the time when page loads.</td>
+                <td>Forever</td>
+            </tr>  
+            <tr>   
+                <td>ZD-settings</td>
+                <td>Stores a hash of settings so that we don't keep sending blips after the initial one</td>
+                <td>Forever</td></tr>
+            <tr>   
+                <td>ZD-suid</td>
+                <td>Session id for pathfinder</td>
+                <td>20 minutes</td>
+            </tr>  
+            <tr>   
+                <td>ZD-buid</td>
+                <td>Collects Machine ID</td>
+                <td>Forever</td>
+            </tr>
             </tbody>
         </table>
 
