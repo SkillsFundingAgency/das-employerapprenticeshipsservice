@@ -1,13 +1,9 @@
-﻿@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
-@model EmployerAgreementViewModel
+﻿@model EmployerAgreementViewModel
 
 @{
     var hiddenClass = Model.NoChoiceSelected ? "" : "das-hidden";
     var errorClass = Model.NoChoiceSelected ? "govuk-form-group--error" : "";
 }
-
-<link href="@Url.Content("../../../../dist/css/legal/legal-agreement.css")" rel="stylesheet" type="text/css" />
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">

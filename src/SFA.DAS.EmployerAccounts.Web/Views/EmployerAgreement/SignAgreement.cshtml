@@ -14,6 +14,8 @@
     @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_changes");
 }
 
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
 <div class="grid-row" id="publication-banner">
     <div class="column-third">
         <div class="sfa-logo">
@@ -32,12 +34,17 @@
     </div>
 </div>
 
-@Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName)
-
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" class="back-link">Back</a></li>
+    xxxxxxxxxxxxxxxxxx
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
+            <li class="govuk-breadcrumbs__list-item">
+                <a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" class="govuk-breadcrumbs__link govuk-back-link">Back</a>
+            </li>
         </ol>
     </div>
 }
+
+@Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName)
+
+

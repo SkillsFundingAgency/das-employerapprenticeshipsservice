@@ -4,7 +4,7 @@
    local
      set environment variables
        ASPNETCORE_ENVIRONMENT                            Development (currently set in launchsettings.json)
-       APPSETTING_ConfigurationStorageConnectionString   storage account containing config tables (can be emulator)
+       APPSETTING_ConfigurationStorageConnectionString   storage account containing config tables (can be emulator) http://127.0.0.1:10002/
        AzureWebJobsStorage                               \ real storage account (not emulator)
        AzureWebJobsDashboard                             /
        todo: ^ ConnectionStrings: prefix??
