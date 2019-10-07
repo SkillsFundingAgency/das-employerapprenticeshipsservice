@@ -160,6 +160,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{HashedAccountId}/getApprenticeshipFunding")]
         [Route("getApprenticeshipFunding")]
         public ActionResult GetApprenticeshipFunding()
         {
@@ -174,6 +175,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("{HashedAccountId}/getApprenticeshipFunding")]
         [Route("getApprenticeshipFunding")]
         public async Task<ActionResult> GetApprenticeshipFunding(int? choice)
         {

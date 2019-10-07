@@ -18,7 +18,7 @@
         {
             <h1 class="heading-xlarge">These details are already in use</h1>
             <p>The details you added are already attached to a PAYE scheme.</p>
-            <p><a class="button" id="search_again" href="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName)">Use different details</a></p>
+            <p><a class="button" id="search_again" href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)">Use different details</a></p>
         }
         else 
         {
@@ -29,6 +29,6 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action("WaysToAdd", "EmployerAccountPaye")" class="back-link">Back</a>
+        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="back-link">Back</a>
     </div>
 }
