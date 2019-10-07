@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
 {
     public class NonLevyExcelTransactionFormatter : ExcelTransactionFormatter, ITransactionFormatter
     {
-        public ApprenticeshipEmployerType ApprenticeshipEmployerType => ApprenticeshipEmployerType.Levy;
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType => ApprenticeshipEmployerType.NonLevy;
 
         public NonLevyExcelTransactionFormatter(IExcelService excelService) : base(excelService)
         {
