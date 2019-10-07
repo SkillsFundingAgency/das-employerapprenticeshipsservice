@@ -30,8 +30,8 @@
                     <a rel="external" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in">get help signing in</a>
                 </p>
             </div>
-        </details>  
-        <br/>
+        </details>
+        <br />
         <details role="group">
             <summary role="button" aria-controls="details-content-0" aria-expanded="false"><span class="summary">Find your accounts office and PAYE scheme reference numbers</span></summary>
             <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
@@ -43,7 +43,7 @@
                 </p>
             </div>
         </details>
-        <br/>
+        <br />
         <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
@@ -81,7 +81,7 @@
                 </p>
 
                 <button class="button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
-                
+
             </div>
         </form>
     </div>
@@ -95,3 +95,4 @@
     </script>
 }
 
+@Html.SetZenDeskSuggestion($"{ZenDeskSuggestions.AddPAYESchemesToYourAccount} {ZenDeskSuggestions.ApprenticeshipFunding}")
