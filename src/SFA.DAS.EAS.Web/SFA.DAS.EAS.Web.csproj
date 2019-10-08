@@ -299,13 +299,13 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.6.0.15\lib\net462\SFA.DAS.Authorization.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.6.0.16\lib\net462\SFA.DAS.Authorization.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.Features, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.Features.6.0.15\lib\netstandard2.0\SFA.DAS.Authorization.Features.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.Features.6.0.16\lib\netstandard2.0\SFA.DAS.Authorization.Features.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.Mvc.6.0.15\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.Mvc.6.0.16\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
