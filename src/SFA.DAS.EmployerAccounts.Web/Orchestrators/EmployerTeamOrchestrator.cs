@@ -142,35 +142,35 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
         {
             try
             {
-                var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
+                var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     UserId = externalUserId
                 });
 
-                var userRoleResponseTask = GetUserAccountRole(accountId, externalUserId);
+                var userRoleResponseTask = GetUserAccountRole(hashedAccountId, externalUserId);
 
                 var userResponseTask = _mediator.SendAsync(new GetTeamMemberQuery
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     TeamMemberId = externalUserId
                 });
 
                 var accountStatsResponseTask = _mediator.SendAsync(new GetAccountStatsQuery
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
 
                 var agreementsResponseTask = _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
 
@@ -206,7 +206,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     RequiresAgreementSigning = pendingAgreements.Count(),
                     AgreementsToSign = pendingAgreements.Count() > 0,
                     SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
@@ -238,7 +238,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.InternalServerError,
-                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex)
+                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {hashedAccountId}", ex)
                 };
             }
             catch (Exception ex)

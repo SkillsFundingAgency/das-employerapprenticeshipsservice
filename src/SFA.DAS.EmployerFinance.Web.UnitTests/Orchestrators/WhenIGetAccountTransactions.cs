@@ -60,9 +60,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             SetupGetTransactionsResponse(2017, 5);
 
-            _employerAccountsConfiguration = new EmployerAccountsConfiguration();
-
-            _orchestrator = new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _employerAccountsConfiguration, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
+            _orchestrator = new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
         [Test]
@@ -252,7 +250,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             Assert.IsNotNull(actualTransactions);
             Assert.AreEqual(levyTransactions.Sum(t => t.Amount), actualTransactions.Single(t => t.TransactionType == TransactionItemType.Declaration).Amount);
         }
-
 
         private void SetupGetTransactionsResponse(int year, int month)
         {

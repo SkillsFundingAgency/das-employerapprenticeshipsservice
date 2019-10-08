@@ -1,21 +1,22 @@
 @using SFA.DAS.EmployerFinance.Web.Extensions
 @using System.Globalization
+@using SFA.DAS.Common.Domain.Types;
 @model OrchestratorResponse<ProviderPaymentsSummaryViewModel>
 
 @{
-                /**/
+    /**/
 
-                var culture = new CultureInfo("en-GB");
-                ViewBag.PageID = "page-course-payment-summary";
-                ViewBag.Title = "Payment details";
-                ViewBag.Section = "finance";
+    var culture = new CultureInfo("en-GB");
+    ViewBag.PageID = "page-course-payment-summary";
+    ViewBag.Title = "Payment details";
+    ViewBag.Section = "finance";
 
 }
 @*
-    Uncomment this line when the GaData handling branch is merged
-    @{
-    ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
-}*@
+        Uncomment this line when the GaData handling branch is merged
+        @{
+        ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
+    }*@
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">
@@ -34,13 +35,16 @@
         <table class="responsive">
             <thead>
                 <tr>
-                    <th colspan="2"></th>
+                    <th colspan="@(Model.Data.ShowNonCoInvesmentPaymentsTotal ? "2" : "1")"></th>
                     <th class="highlight colgroup" scope="colgroup" colspan="2">Co-investment</th>
                     <th colspan="2"></th>
                 </tr>
                 <tr>
                     <th scope="col" class="tw-20">Course</th>
-                    <th scope="col" class="numeric tw-20">Paid from levy</th>
+                    @if (Model.Data.ShowNonCoInvesmentPaymentsTotal)
+                    {
+                        <th scope="col" class="numeric tw-20">@(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "Paid from levy" : "Transferred funds")</th>
+                    }
                     <th scope="col" class="numeric tw-20 highlight">Government contribution</th>
                     <th scope="col" class="numeric tw-20 highlight">Your contribution</th>
                     <th scope="col" class="numeric tw-15">Amount</th>
@@ -60,7 +64,10 @@
                             <td data-label="Course">@coursePaymentSummary.CourseName: @coursePaymentSummary.PathwayName <span class="no-wrap">level @coursePaymentSummary.CourseLevel</span></td>
                         }
 
-                        <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
+                        @if (Model.Data.ShowNonCoInvesmentPaymentsTotal)
+                        {
+                            <td class="numeric" data-label="Paid from levy">@coursePaymentSummary.LevyPaymentAmount.ToString("C2", culture)</td>
+                        }
                         <td class="numeric highlight" data-label="Government contribution">@coursePaymentSummary.SFACoInvestmentAmount.ToString("C2", culture)</td>
                         <td class="numeric highlight" data-label="Your contribution">@coursePaymentSummary.EmployerCoInvestmentAmount.ToString("C2", culture)</td>
                         <td class="numeric" data-label="Amount">@coursePaymentSummary.TotalAmount.ToString("C2", culture)</td>
@@ -107,7 +114,10 @@
             <tfoot>
                 <tr class="total">
                     <td data-label="Totals"> </td>
-                    <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C2", culture)</td>
+                    @if (Model.Data.ShowNonCoInvesmentPaymentsTotal)
+                    {
+                        <td data-label="Paid from levy" class="total numeric no-wrap">@Model.Data.LevyPaymentsTotal.ToString("C2", culture)</td>
+                    }
                     <td data-label="Government contribution" class="highlight total numeric no-wrap">@Model.Data.SFACoInvestmentsTotal.ToString("C2", culture)</td>
                     <td data-label="Your contribution" class="highlight total numeric no-wrap">@Model.Data.EmployerCoInvestmentsTotal.ToString("C2", culture)</td>
                     <td data-label="Amount" class="total numeric no-wrap">@Model.Data.PaymentsTotal.ToString("C2", culture)</td>
