@@ -16,26 +16,7 @@
 
 @{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
-<div class="grid-row" id="publication-banner">
-    <div class="column-third">
-        <div class="sfa-logo">
-            <h1>
-                <span class="organisation-logo">
-                    <span>
-                        Education &amp; Skills <br>
-                        Funding Agency
-                    </span>
-                </span>
-            </h1>
-        </div>
-    </div>
-    <div class="column-two-thirds">
-        <a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank" class="download">Save this agreement as a PDF</a>
-    </div>
-</div>
-
 @section breadcrumb {
-    xxxxxxxxxxxxxxxxxx
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list" role="navigation">
             <li class="govuk-breadcrumbs__list-item">
@@ -44,6 +25,8 @@
         </ol>
     </div>
 }
+
+
 
 @Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName)
 

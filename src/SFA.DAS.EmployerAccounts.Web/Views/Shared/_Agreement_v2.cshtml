@@ -7,42 +7,64 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+
         <h1 class="govuk-heading-xl">Agreement between @Model.EmployerAgreement.LegalEntityName and the Education and Skills Funding Agency (ESFA)</h1>
+
         <p class="govuk-body">We updated the agreement on 1 May 2018.</p>
+
         <h2 class="govuk-heading-m">Key features of the agreement</h2>
+
         <p class="govuk-body">@Model.EmployerAgreement.LegalEntityName must:</p>
+
         <ul class="govuk-list govuk-list--bullet">
             <li>only use the funding in their apprenticeship service account to train and assess apprentices</li>
             <li>have a ‘contract for services’ with their training providers</li>
             <li>follow the apprenticeship funding rules</li>
         </ul>
+
         <p class="govuk-body">The ESFA can:</p>
+
         <ul class="govuk-list govuk-list--bullet">
             <li>suspend payments, recover funds or close @Model.EmployerAgreement.LegalEntityName’s account if @Model.EmployerAgreement.LegalEntityName breaks the agreement</li>
             <li>change the terms of the agreement and any part of the apprenticeship service</li>
         </ul>
-        <h2 class="govuk-heading-m">The full agreement</h2>
 
+        <h2 class="govuk-heading-m">The full agreement</h2>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default">
-            <div class="govuk-accordion__section ">
+            <article class="govuk-accordion__section">
                 <div class="govuk-accordion__section-header">
                     <h2 class="govuk-accordion__section-heading">
-                        <span class="govuk-accordion__section-button" id="accordion--heading-1">
+                        <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
                             ESFA employer agreement
                         </span>
                     </h2>
                 </div>
                 <div id="accordion-default-content-1" class="govuk-accordion__section-content" aria-labelledby="accordion-default-heading-1">
-                    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_body");
+                    @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_body")
                 </div>
-            </div>
+            </article>
         </div>
+    </div>
+</div>
+
+<div class="govuk-grid-row govuk-!-margin-bottom-4">
+    <div class="govuk-grid-column-full">
+        <a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank" class="govuk-link govuk-link--no-visited-state">Save this agreement as a <abbr>PDF</abbr></a>
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
 
         <div class="govuk-warning-text">
             <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
             <strong class="govuk-warning-text__text">
-                <span class="govuk-warning-text__assistive">Warning</span>
-                The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaks it, we could close their account and stop them running apprenticeships.
+                <span class="govuk-warning-text__assistive">Warning</span> The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaks it, we could close their account and stop them running apprenticeships.
             </strong>
         </div>
 
@@ -69,9 +91,11 @@
                     </div>
                 </fieldset>
             </div>
+
             <div class="govuk-form-group">
                 <input class="govuk-button" type="submit" value="Continue" />
             </div>
         </form>
+
     </div>
 </div>
