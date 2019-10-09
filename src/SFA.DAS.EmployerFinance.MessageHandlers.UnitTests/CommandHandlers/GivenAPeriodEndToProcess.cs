@@ -31,6 +31,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             _mediatorMock = new Mock<IMediator>();
             _loggerMock = new Mock<ILog>();
 
+            Fixture.Customize<Account>(x => x.Without(s => s.AccountLegalEntities));
+
             _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
                 .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { Fixture.Create<Account>() } });
 

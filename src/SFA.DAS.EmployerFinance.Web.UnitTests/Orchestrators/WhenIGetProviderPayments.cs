@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private Mock<IHashingService> _hashingService;
 
         private Mock<IAccountApiClient> _accountApiClient;
-        private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private FindAccountProviderPaymentsResponse _response;

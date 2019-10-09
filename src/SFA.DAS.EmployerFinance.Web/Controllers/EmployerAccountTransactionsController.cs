@@ -20,7 +20,7 @@ using SFA.DAS.EmployerFinance.Web.Filters;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    [DasAuthorize(EmployerUserRole.Any)]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountTransactionsController : BaseController
     {

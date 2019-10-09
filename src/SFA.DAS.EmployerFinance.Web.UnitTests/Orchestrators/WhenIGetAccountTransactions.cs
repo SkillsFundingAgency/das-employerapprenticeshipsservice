@@ -27,7 +27,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private const long AccountId = 1234;
 
         private Mock<IAccountApiClient> _accountApiClient;
-        private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private GetEmployerAccountResponse _response;

@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> Index(GetAccountFinanceOverviewQuery query)
         {
-            var accountTask = _accountApiClient.GetAccount(query.AccountHashedId);
+            var accountTask = _accountApiClient.GetAccount(query.AccountId);
             var getAccountFinanceOverviewTask = _mediator.SendAsync(query);
 
             var account = await accountTask;
