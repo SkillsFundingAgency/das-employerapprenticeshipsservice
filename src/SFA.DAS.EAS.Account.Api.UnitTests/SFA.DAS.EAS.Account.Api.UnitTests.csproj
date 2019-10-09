@@ -178,10 +178,10 @@
       <HintPath>..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.6.0.16\lib\net462\SFA.DAS.Authorization.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.6.0.18\lib\net462\SFA.DAS.Authorization.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.EmployerUserRoles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.EmployerUserRoles.6.0.16\lib\netstandard2.0\SFA.DAS.Authorization.EmployerUserRoles.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.EmployerUserRoles.6.0.18\lib\netstandard2.0\SFA.DAS.Authorization.EmployerUserRoles.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
