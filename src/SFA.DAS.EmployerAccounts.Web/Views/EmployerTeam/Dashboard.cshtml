@@ -1,5 +1,6 @@
 ﻿@using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
+@using SFA.DAS.Common.Domain.Types
 
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
@@ -54,7 +55,7 @@
         
         <div class="card">
             <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
-            <p>View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
+            <p>View your financial transactions, connect with other employers and @(Model.ApprenticeshipEmployerType ==  ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
         </div>
     </div>
 </section>
