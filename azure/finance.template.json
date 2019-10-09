@@ -118,7 +118,7 @@
         {
             "condition": "[greater(length(parameters('uiCustomHostName')), 0)]",
             "apiVersion": "2017-05-10",
-            "name": "api-app-service-certificate",
+            "name": "ui-app-service-certificate",
             "resourceGroup": "[parameters('sharedAppServicePlanResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -208,7 +208,8 @@
                 }
             },
             "dependsOn": [
-                "UIAppInsights"
+                "UIAppInsights",
+                "ui-app-service-certificate"
             ]
         },
         {
