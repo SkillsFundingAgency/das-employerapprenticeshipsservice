@@ -20,10 +20,10 @@
     }
 }
 
-    <h1 class="heading-secondary dashboard-heading">
-        Account ID: @Model.Data.Account.PublicHashedId
-    </h1>
-    <p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
+<h1 class="heading-secondary dashboard-heading">
+    Account ID: @Model.Data.Account.PublicHashedId
+</h1>
+<p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
 
     <a href="@Url.FavouritesAction("apprenticeships")" class="das-favourites-link govuk-body">
         <span class="das-favourites-link__icon">
@@ -33,183 +33,180 @@
         <span class="das-favourites-link__text">View saved favourites</span>
     </a>
 
-    <hr class="dashboard-heading-separator" />
+<hr class="dashboard-heading-separator" />
 
-    <div class="grid-row">
-        <div class="column-two-thirds">
-            <section class="dashboard-section">
-                <div class="grid-row">
-                    <div class="column-two-thirds">
-                        <h2 class="section-heading heading-large">Apprenticeships</h2>
-                        <p class="section-description">Manage your apprentices, recruit apprentice and set training provider permissions</p>
-                    </div>
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <section class="dashboard-section">
+            <div class="grid-row">
+                <div class="column-two-thirds">
+                    <h2 class="section-heading heading-large">Apprenticeships</h2>
+                    <p class="section-description">Manage your apprentices, recruit apprentice and set training provider permissions</p>
                 </div>
-                <div class="cards">
-                    <div class="card">
-                        <h3 class="heading-medium"><a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a></h3>
-                        <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
-                    </div>
-                    @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
-                    {
-                        <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.EmployerRecruitAction()">Recruitment</a></h3>
-                            <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprenticeship.</p>
-                        </div>
-                    }
-                    @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))
-                    {
-                        <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.ProviderRelationshipsAction("providers")">Training provider permissions</a></h3>
-                            <p>Set training provider permissions and control what tasks they can do on your behalf.</p>
-                        </div>
-                    }
-                    <div class="card">
-                        <h3 class="heading-medium"><a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external" target="_blank">Find apprenticeship training</a></h3>
-                        <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
-                    </div>
-                </div>
-            </section>
-
-            <section class="dashboard-section">
-                <div class="grid-row">
-                    <div class="column-two-thirds">
-                        <h2 class="section-heading heading-large">Finances</h2>
-                        <p class="section-description">Manage your apprenticeship funds</p>
-                    </div>
-                </div>
-                <div class="cards">
-                    @if (Model.Data.ShowYourFundingReservationsLink())
-                    {
-                        <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.ReservationsAction("reservations/manage")">Your funding reservations</a></h3>
-                            <p>Reserve and manage funding.</p>
-                        </div>
-                    }
-
-                    @if (Model.Data.ShowManageYourLevyLink())
-                    {
-                        <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
-                            <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
-                        </div>
-                    }
-                </div>
-            </section>
-
-            <section class="dashboard-section">
-                <div class="grid-row">
-                    <div class="column-two-thirds">
-                        <h2 class="section-heading heading-large">Account</h2>
-                        <p class="section-description">Manage your account details and team</p>
-                    </div>
-                </div>
-                <div class="cards">
-                    <div class="card">
-                        <h3 class="heading-medium"><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></h3>
-                        <p>Add your organisations that will make contracts with training providers.</p>
-                    </div>
-                    <div class="card">
-                        <h3 class="heading-medium"><a href="@Url.Action("ViewTeam")">Your team</a></h3>
-                        <p>Control what your team can do and invite new team members.</p>
-                    </div>
-                    <div class="card">
-                        <h3 class="heading-medium"><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a></h3>
-                        <p>Add or remove PAYE schemes.</p>
-                    </div>
-                </div>
-            </section>
-
-
-            <div class="panel panel-filled">
-                <h3 class="heading-medium">Help us improve this service</h3>
-                <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
-                <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
             </div>
-        </div>
-        <div class="column-one-third">
-            <section>
-                <nav>
-                    <ul class="js-tabs" role="tablist">
-                        <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
-                        @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                        {
-                            <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
-                        }
-                    </ul>
-                </nav>
-                <div class="panes">
-                    <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
-                        @if (Model.Data.Tasks.Count > 0)
-                        {
-                            <ul class="task-list">
-                                @{
-                                    var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();
-                                }
-
-                                @foreach (var task in priorityOrderTaskList)
-                                {
-                                    <li>
-                                        @switch (task.Type)
-                                        {
-                                            case "LevyDeclarationDue":
-                                                <p>
-                                                    Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
-                                                </p>
-                                                <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
-                                                    <button class="button-link" type="submit">Dismiss this message</button>
-                                                </form>
-                                                break;
-                                            case "AgreementToSign":
-                                                <p>
-                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
-                                                </p>
-                                                break;
-                                            case "AddApprentices":
-                                                <p>
-                                                    <a href="@Url.EmployerCommitmentsAction("apprentices/inform")">Start adding apprentices now</a>
-                                                </p>
-                                                break;
-                                            case "ApprenticeChangesToReview":
-                                                <p>
-                                                    @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsAction("apprentices/manage/all?RecordStatus=ChangesForReview")">View changes</a>
-                                                </p>
-                                                break;
-                                            case "CohortRequestReadyForApproval":
-                                                <p>
-                                                    @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")">View cohorts</a>
-                                                </p>
-                                                break;
-                                            case "ReviewConnectionRequest":
-                                                <p>
-                                                    @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")">View details</a>
-                                                </p>
-                                                break;
-                                            case "TransferRequestReceived":
-                                                <p>
-                                                    Transfer request received<a href="@Url.Action("Index", "Transfers")">View details</a>
-                                                </p>
-                                                break;
-                                        }
-                                    </li>
-                                }
-                            </ul>
-                        }
-                        else
-                        {
-                            <p>You do not have any tasks</p>
-                        }
-                    </div>
-                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
-                    {
-                        <div class="js-tab-pane" id="pane-activity" role="tabpanel">
-                            @Html.Action("Latest", "Activities")
-                        </div>
-                    }
+            <div class="cards">
+                <div class="card">
+                    <h3 class="heading-medium"><a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a></h3>
+                    <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
                 </div>
-            </section>
+                @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
+                {
+                    <div class="card">
+                        <h3 class="heading-medium"><a href="@Url.EmployerRecruitAction()">Recruitment</a></h3>
+                        <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprenticeship.</p>
+                    </div>
+                }
+                @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))
+                {
+                    <div class="card">
+                        <h3 class="heading-medium"><a href="@Url.ProviderRelationshipsAction("providers")">Training provider permissions</a></h3>
+                        <p>Set training provider permissions and control what tasks they can do on your behalf.</p>
+                    </div>
+                }
+                <div class="card">
+                    <h3 class="heading-medium"><a href="https://findapprenticeshiptraining.apprenticeships.education.gov.uk/Apprenticeship/Search" rel="external" target="_blank">Find apprenticeship training</a></h3>
+                    <p>Search for apprenticeships and see details of approved providers who can deliver the training.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="grid-row">
+                <div class="column-two-thirds">
+                    <h2 class="section-heading heading-large">Finances</h2>
+                    <p class="section-description">Manage your apprenticeship funds</p>
+                </div>
+            </div>
+            <div class="cards">
+                @if (Model.Data.ShowYourFundingReservationsLink())
+                {
+                    <div class="card">
+                        <h3 class="heading-medium"><a href="@Url.ReservationsAction("reservations/manage")">Your funding reservations</a></h3>
+                        <p>Reserve and manage funding.</p>
+                    </div>
+                }
+
+                <div class="card">
+                    <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
+                    <p>View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="dashboard-section">
+            <div class="grid-row">
+                <div class="column-two-thirds">
+                    <h2 class="section-heading heading-large">Account</h2>
+                    <p class="section-description">Manage your account details and team</p>
+                </div>
+            </div>
+            <div class="cards">
+                <div class="card">
+                    <h3 class="heading-medium"><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></h3>
+                    <p>Add your organisations that will make contracts with training providers.</p>
+                </div>
+                <div class="card">
+                    <h3 class="heading-medium"><a href="@Url.Action("ViewTeam")">Your team</a></h3>
+                    <p>Control what your team can do and invite new team members.</p>
+                </div>
+                <div class="card">
+                    <h3 class="heading-medium"><a href="@Url.Action("Index", "EmployerAccountPaye")">PAYE schemes</a></h3>
+                    <p>Add or remove PAYE schemes.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <div class="panel panel-filled">
+            <h3 class="heading-medium">Help us improve this service</h3>
+            <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
+            <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
         </div>
     </div>
+    <div class="column-one-third">
+        <section>
+            <nav>
+                <ul class="js-tabs" role="tablist">
+                    <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
+                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
+                    {
+                        <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
+                    }
+                </ul>
+            </nav>
+            <div class="panes">
+                <div class="js-tab-pane" id="pane-tasks" role="tabpanel">
+                    @if (Model.Data.Tasks.Count > 0)
+                    {
+                        <ul class="task-list">
+                            @{
+                                var priorityOrderTaskList = Model.Data.Tasks.OrderBy(AccountTaskHelper.GetTaskPriority).ToArray();
+                            }
+
+                            @foreach (var task in priorityOrderTaskList)
+                            {
+                                <li>
+                                    @switch (task.Type)
+                                    {
+                                        case "LevyDeclarationDue":
+                                            <p>
+                                                Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
+                                            </p>
+                                            <form action="@Url.Action("DismissTask", "Task")" method="POST">
+                                                <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+                                                <button class="button-link" type="submit">Dismiss this message</button>
+                                            </form>
+                                            break;
+                                        case "AgreementToSign":
+                                            <p>
+                                                @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
+                                            </p>
+                                            break;
+                                        case "AddApprentices":
+                                            <p>
+                                                <a href="@Url.EmployerCommitmentsAction("apprentices/inform")">Start adding apprentices now</a>
+                                            </p>
+                                            break;
+                                        case "ApprenticeChangesToReview":
+                                            <p>
+                                                @task.ItemsDueCount apprentice change@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.EmployerCommitmentsAction("apprentices/manage/all?RecordStatus=ChangesForReview")">View changes</a>
+                                            </p>
+                                            break;
+                                        case "CohortRequestReadyForApproval":
+                                            <p>
+                                                @task.ItemsDueCount cohort request@(task.ItemsDueCount > 1 ? "s" : "") ready for approval <a href="@Url.EmployerCommitmentsAction("apprentices/cohorts/review")">View cohorts</a>
+                                            </p>
+                                            break;
+                                        case "ReviewConnectionRequest":
+                                            <p>
+                                                @task.ItemsDueCount connection request@(task.ItemsDueCount > 1 ? "s" : "") to review <a href="@Url.Action("Index", "Transfers")">View details</a>
+                                            </p>
+                                            break;
+                                        case "TransferRequestReceived":
+                                            <p>
+                                                Transfer request received<a href="@Url.Action("Index", "Transfers")">View details</a>
+                                            </p>
+                                            break;
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>You do not have any tasks</p>
+                    }
+                </div>
+                @if (Html.IsAuthorized("EmployerFeature.Activities"))
+                {
+                    <div class="js-tab-pane" id="pane-activity" role="tabpanel">
+                        @Html.Action("Latest", "Activities")
+                    </div>
+                }
+            </div>
+        </section>
+    </div>
+</div>
 
 
 
