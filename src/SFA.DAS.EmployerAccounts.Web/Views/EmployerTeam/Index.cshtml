@@ -20,10 +20,10 @@
     }
 }
 
-    <h1 class="heading-secondary dashboard-heading">
-        Account ID: @Model.Data.Account.PublicHashedId
-    </h1>
-    <p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
+<h1 class="heading-secondary dashboard-heading">
+    Account ID: @Model.Data.Account.PublicHashedId
+</h1>
+<p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
 
     <a href="@Url.FavouritesAction("apprenticeships")" class="das-favourites-link govuk-body">
         <span class="das-favourites-link__icon">
@@ -33,27 +33,23 @@
         <span class="das-favourites-link__text">View saved favourites</span>
     </a>
 
-    <hr class="dashboard-heading-separator" />
+<hr class="dashboard-heading-separator" />
 
-    <div class="grid-row">
+  <div class="grid-row">
         <div class="column-two-thirds">
             @Html.Action("Row1Panel1", new { model = Model.Data })
             @Html.Action("Row2Panel1", new { model = Model.Data })
-
-            <div class="panel panel-filled">
-                <h3 class="heading-medium">Help us improve this service</h3>
-                <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
-                <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
-            </div>
+        <div class="panel panel-filled">
+            <h3 class="heading-medium">Help us improve this service</h3>
+            <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank">Take our 3 minute survey</a> so that we can improve this service.</p>
+            <p><a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank" class="button">Take the survey <span class="vh">so that we can improve the service</span></a></p>
         </div>
         <div class="column-one-third">
             @Html.Action("Row1Panel2", new { model = Model.Data })
             @Html.Action("Row2Panel2", new { model = Model.Data })            
         </div>
     </div>
-
-
-
+</div>
 
 @if (Model.Data.ShowAcademicYearBanner)
 {
