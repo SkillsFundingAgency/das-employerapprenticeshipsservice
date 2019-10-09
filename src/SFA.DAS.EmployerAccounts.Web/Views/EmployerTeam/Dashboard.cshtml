@@ -51,14 +51,11 @@
                 <p>Reserve and manage funding.</p>
             </div>
         }
-
-        @if (Model.ShowManageYourLevyLink())
-        {
-            <div class="card">
-                <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
-                <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
-            </div>
-        }
+        
+        <div class="card">
+            <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
+            <p>View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
+        </div>
     </div>
 </section>
 
