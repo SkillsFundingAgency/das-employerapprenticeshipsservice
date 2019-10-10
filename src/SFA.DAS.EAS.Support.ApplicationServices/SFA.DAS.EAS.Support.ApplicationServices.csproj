@@ -141,14 +141,6 @@
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj">
-      <Project>{99F6DD4A-CD1C-4D45-A2C9-ED2F89D1FB84}</Project>
-      <Name>SFA.DAS.EAS.Support.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj">
-      <Project>{9a31db97-209c-48ef-ae2a-b4a4f761f670}</Project>
-      <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

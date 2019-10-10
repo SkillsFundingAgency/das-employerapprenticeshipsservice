@@ -137,18 +137,6 @@
       <Project>{8afb0bbe-1e53-488c-a971-d236df9eaa77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.ApplicationServices\SFA.DAS.EAS.Support.ApplicationServices.csproj">
-      <Project>{84CD1351-253C-43D7-886D-A5E9CA3606CA}</Project>
-      <Name>SFA.DAS.EAS.Support.ApplicationServices</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj">
-      <Project>{99F6DD4A-CD1C-4D45-A2C9-ED2F89D1FB84}</Project>
-      <Name>SFA.DAS.EAS.Support.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj">
-      <Project>{9A31DB97-209C-48EF-AE2A-B4A4F761F670}</Project>
-      <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Infrastructure\SFA.DAS.EAS.Infrastructure.csproj">
       <Project>{01AC2BC2-AC01-400F-AB8F-548DD5C0EE74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>

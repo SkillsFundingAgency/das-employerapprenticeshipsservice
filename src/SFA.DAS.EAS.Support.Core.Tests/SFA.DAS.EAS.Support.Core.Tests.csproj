@@ -52,12 +52,6 @@
     <Compile Include="WhenTestingPayeSchemeObfuscator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.EAS.Support.Core\SFA.DAS.EAS.Support.Core.csproj">
-      <Project>{2924FD38-3A8D-4BBF-ABC3-0E0C21A8E125}</Project>
-      <Name>SFA.DAS.EAS.Support.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
