@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             return new Accounts<Account>
             {
-                AccountList = (List<Account>)result
+                AccountList = (List<Account>) result
             };
         }
 
@@ -119,9 +119,10 @@ namespace SFA.DAS.EmployerAccounts.Data
                 parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
+                parameters.Add("@correlationId", user.CorrelationId, DbType.String);
 
                 return c.ExecuteAsync(
-                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                     param: parameters,
                     commandType: CommandType.Text);
             });

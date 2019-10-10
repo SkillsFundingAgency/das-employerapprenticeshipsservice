@@ -261,6 +261,7 @@
     <Compile Include="ViewModels\OrganisationAddedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationUpdatedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\ProviderInvitationViewModel.cs" />
     <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />

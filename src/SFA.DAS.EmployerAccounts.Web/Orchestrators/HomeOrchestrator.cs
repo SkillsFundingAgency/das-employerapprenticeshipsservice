@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 using SFA.DAS.EmployerAccounts.Queries.GetUsers;
@@ -61,14 +63,40 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             };
         }
 
-        public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName)
+        public virtual async Task<OrchestratorResponse<ProviderInvitationViewModel>> GetProviderInvitation(Guid correlationId)
+        {
+            var getProviderInvitationQueryResponse = await _mediator.SendAsync(new GetProviderInvitationQuery
+            {
+                CorrelationId = correlationId
+            });
+
+            if (getProviderInvitationQueryResponse.Result != null)
+            {
+                return new OrchestratorResponse<ProviderInvitationViewModel>
+                {
+                    Data = new ProviderInvitationViewModel
+                    {
+                        EmployerEmail = getProviderInvitationQueryResponse.Result.EmployerEmail,
+                        EmployerFirstName = getProviderInvitationQueryResponse.Result.EmployerFirstName,
+                        EmployerLastName = getProviderInvitationQueryResponse.Result.EmployerLastName,
+                        EmployerOrganisation = getProviderInvitationQueryResponse.Result.EmployerOrganisation,
+                        Ukprn = getProviderInvitationQueryResponse.Result.Ukprn
+                    }
+                };
+            }
+
+            return new OrchestratorResponse<ProviderInvitationViewModel>();
+        }
+
+        public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName, string correlationId = null)
         {
             await _mediator.SendAsync(new UpsertRegisteredUserCommand
             {
                 EmailAddress = email,
                 UserRef = userRef,
                 LastName = lastName,
-                FirstName = firstName
+                FirstName = firstName,
+                CorrelationId = correlationId
             });
         }
     }

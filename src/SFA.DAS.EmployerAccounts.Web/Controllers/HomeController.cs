@@ -142,20 +142,43 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
      
         [HttpGet]
         [Route("register")]
-        public ActionResult RegisterUser()
+        [Route("invitation/{correlationId}")]
+        public async Task<ActionResult> RegisterUser(string correlationId)
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
+
+            if (!string.IsNullOrWhiteSpace(correlationId))
+            {
+                var invitation = await _homeOrchestrator.GetProviderInvitation(Guid.Parse(correlationId));
+
+                if (invitation.Data != null)
+                {
+                    return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={invitation.Data.EmployerFirstName}&lastname={invitation.Data.EmployerLastName}&email={invitation.Data.EmployerEmail}");
+                }
+            }
+
             return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [DasAuthorize]
         [HttpGet]
-        [Route("register/new")]
-        public async Task<ActionResult> HandleNewRegistration()
+        [Route("register/new/{correlationId?}")]
+        public async Task<ActionResult> HandleNewRegistration(string correlationId = null)
         {
             await OwinWrapper.UpdateClaims();
+
+            if (!string.IsNullOrWhiteSpace(correlationId))
+            {
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName, correlationId);
+            }
+
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
