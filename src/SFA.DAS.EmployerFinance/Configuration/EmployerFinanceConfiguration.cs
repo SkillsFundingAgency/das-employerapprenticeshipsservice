@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.Authentication;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 
@@ -28,5 +29,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string ServiceBusConnectionString { get; set; }
         public string RedisConnectionString { get; set; }
         public int FundsExpiryPeriod { get; set; }
+        public AccountApiConfiguration AccountApi { get; set; }
+        public string ReservationsBaseUrl { get; set; }
     }
 }

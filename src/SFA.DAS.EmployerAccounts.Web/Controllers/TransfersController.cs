@@ -5,6 +5,9 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitations;
@@ -30,8 +33,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [Route]
-        public ActionResult Index()
+        public async Task<ActionResult> Index(GetEmployerAccountDetailByHashedIdQuery query)
         {
+            var response = await _mediator.SendAsync(query);
+            ViewBag.ApprenticeshipEmployerType = response.Account.ApprenticeshipEmployerType;
             return View();
         }
 
