@@ -177,7 +177,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
                 var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
                                 
