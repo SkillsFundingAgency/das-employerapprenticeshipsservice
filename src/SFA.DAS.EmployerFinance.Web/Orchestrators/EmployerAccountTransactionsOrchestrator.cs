@@ -145,12 +145,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
-                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
-
+                var accountTask = _accountApiClient.GetAccount(hashedAccountId);
+                
                 var getProviderPaymentsTask = _mediator.SendAsync(new FindAccountProviderPaymentsQuery
                 {
                     HashedAccountId = hashedAccountId,
@@ -190,7 +186,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     Status = HttpStatusCode.OK,
                     Data = new ProviderPaymentsSummaryViewModel
                     {
-                        ApprenticeshipEmployerType = accountResponse.Account.ApprenticeshipEmployerType,
+                        ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResponse.ApprenticeshipEmployerType, true),
                         HashedAccountId = hashedAccountId,
                         UkPrn = ukprn,
                         ProviderName = providerPaymentsResponse.ProviderName,
@@ -237,11 +233,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         {
             try
             {
-                var accountTask = _mediator.SendAsync(new GetEmployerAccountHashedQuery
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = externalUserId
-                });
+                var accountTask = _accountApiClient.GetAccount(hashedAccountId);
 
                 var accountCoursePaymentsResponse = await _mediator.SendAsync(new FindAccountCoursePaymentsQuery
                 {
@@ -279,7 +271,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     Status = HttpStatusCode.OK,
                     Data = new CoursePaymentDetailsViewModel
                     {
-                        ApprenticeshipEmployerType = accountResponse.Account.ApprenticeshipEmployerType,
+                        ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResponse.ApprenticeshipEmployerType, true),
                         ProviderName = accountCoursePaymentsResponse.ProviderName,
                         CourseName = accountCoursePaymentsResponse.CourseName,
                         CourseLevel = accountCoursePaymentsResponse.CourseLevel,
@@ -322,13 +314,9 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<TransactionViewResultViewModel>> GetAccountTransactions(
             string hashedId, int year, int month, string externalUserId)
         {
-            var employerAccountResult = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-            {
-                HashedAccountId = hashedId,
-                UserId = externalUserId
-            });
+            var employerAccountResult = await _accountApiClient.GetAccount(hashedId);
 
-            if (employerAccountResult.Account == null)
+            if (employerAccountResult == null)
             {
                 return new OrchestratorResponse<TransactionViewResultViewModel>
                 {
@@ -352,7 +340,7 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
             {
                 Data = new TransactionViewResultViewModel(_currentTime.Now)
                 {
-                    Account = employerAccountResult.Account,
+                    Account = employerAccountResult,
                     Model = viewModel,
                     Month = aggregratedTransactions.Month,
                     Year = aggregratedTransactions.Year,

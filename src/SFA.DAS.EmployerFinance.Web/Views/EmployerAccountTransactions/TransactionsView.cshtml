@@ -32,7 +32,7 @@
             <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
         </h1>
 
-        @if (Model.Data.IsLatestMonth && Model.Data.Account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
+        @if (Model.Data.IsLatestMonth && Model.Data.Account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy.ToString())
         {
             <div class="data-wrap">
                 <div class="data">
@@ -75,7 +75,7 @@
                     <span>No transactions.</span>
                 }
             </p>
-            if (!Model.Data.AccountHasPreviousTransactions && Model.Data.Account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
+            if (!Model.Data.AccountHasPreviousTransactions && Model.Data.Account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy.ToString())
             {
 
                 <details>
