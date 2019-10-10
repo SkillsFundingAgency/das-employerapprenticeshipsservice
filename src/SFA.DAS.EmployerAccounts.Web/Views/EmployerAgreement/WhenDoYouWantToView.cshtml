@@ -1,0 +1,49 @@
+﻿@model WhenDoYouWantToViewViewModel
+@using SFA.DAS.EmployerAccounts.Web.Helpers
+@{ViewBag.PageID = "when-do-you-want-to-view"; }
+@{ViewBag.Title = "When do you want to view the employer agreement?"; }
+@{ViewBag.HideNav = true; }
+@{var errorClass = Model.InError ? "error" : "";}
+@{var hiddenClass = Model.InError ? "" : "hidden";}
+
+<div class="grid-row header-index">
+    <div class="column-two-thirds">
+        <div class="error-summary @hiddenClass" aria-hidden="true">
+            <p><span class="bold">There is a problem</span></p>
+            <ul class="error-summary-list">
+                <li>
+                    <a class="danger" href="#do-you-want-to-add-paye-scheme-form">Select whether you want to view the employer agreement now or later</a>
+                </li>
+            </ul>
+        </div>
+        <h1 class="heading-xlarge">
+            When do you want to view the employer agreement?
+        </h1>
+
+        <p>This agreement is between <span class="bold">@Model.EmployerAgreement.LegalEntityName</span> and the <span class="bold">Education and Skills Funding Agency (ESFA)</span></p>
+
+        <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
+            @Html.AntiForgeryToken()
+            <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
+                <p>
+                    <fieldset>
+                        <span class="error-message @hiddenClass" aria-hidden="true" id="select-option">
+                            Select whether you want to view the employer agreement now or later
+                        </span>
+                        <label for="view-it-now" class="block-label">
+                            <input type="radio" name="choice" id="view-it-now" value="1" />
+                            I'll view it now
+                        </label>
+                        <label for="view-it-later" class="block-label">
+                            <input type="radio" name="choice" id="view-it-later" value="2" />
+                            I'll view it later, after I have created an account
+                        </label>
+                    </fieldset>
+                </p>
+
+                <button class="button" type="submit" id="submit-when-do-you-want-to-view-button">Continue</button>
+
+            </div>
+        </form>
+    </div>
+</div>

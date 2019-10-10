@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -195,6 +196,56 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     Assert.IsTrue(((EmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
                 });
         }
+
+        [Test]
+        public Task WhenDoYouWantToView_WhenILandOnThePage_ThenTheLegalEntityNameIsCorrect()
+        {
+            return RunAsync(
+                arrange: fixtures =>
+                {
+                    fixtures.Orchestrator
+                        .Setup(x => x.GetById(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
+                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
+                        {
+                            Data = new EmployerAgreementViewModel { EmployerAgreement = new EmployerAgreementView { LegalEntityName = fixtures.LegalEntityName } }
+                        });
+                },
+                act: fixtures => fixtures.WhenDoYouWantToView(),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    var viewResult = actualResult as ViewResult;
+                    Assert.IsNotNull(viewResult);
+                    var actualModel = viewResult.Model as WhenDoYouWantToViewViewModel;
+                    Assert.IsNotNull(actualModel);
+                    Assert.That(actualModel.EmployerAgreement.LegalEntityName, Is.EqualTo(fixtures.LegalEntityName));
+                });
+        }
+
+        [Test]
+        public Task WhenDoYouWantToView_WhenISelectNow_ThenTheAgreementIsShown()
+        {
+            return RunAsync(
+                act: fixtures => fixtures.WhenDoYouWantToView(1, new WhenDoYouWantToViewViewModel()),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    Assert.That(actualResult.RouteValues["action"], Is.EqualTo("SignAgreement"));
+                });
+        }
+
+        [Test]
+        public Task WhenDoYouWantToView_WhenISelectLater_ThenTheHomepageIsShown()
+        {
+            return RunAsync(
+                act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel()),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    Assert.That(actualResult.RouteValues["action"], Is.EqualTo("Index"));
+                    Assert.That(actualResult.RouteValues["controller"], Is.EqualTo("EmployerTeam"));
+                });
+        }
     }
 
     public class EmployerAgreementControllerTestFixtures : FluentTestFixture
@@ -235,11 +286,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             public const string HashedAccountId = "ABC123";
             public const string UserId = "AFV456TGF";
             public const string HashedAgreementId = "789UHY";
+            public const string LegalEntityName = "FIFTEEN LIMITED";
         }
 
         public string HashedAccountId => Constants.HashedAccountId;
         public string UserId => Constants.UserId;
         public string HashedAgreementId => Constants.HashedAgreementId;
+        public string LegalEntityName => Constants.LegalEntityName;
 
         public GetEmployerAgreementRequest GetAgreementRequest { get; }
 
@@ -317,6 +370,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             var controller = CreateController();
             ViewResult = await controller.AboutYourAgreement(HashedAgreementId, HashedAccountId) as ViewResult;
             return ViewResult;
+        }
+
+        public async Task<ViewResult> WhenDoYouWantToView()
+        {
+            var controller = CreateController();
+            ViewResult = await controller.WhenDoYouWantToView(HashedAgreementId, HashedAccountId) as ViewResult;
+            return ViewResult;
+        }
+
+        public async Task<RedirectToRouteResult> WhenDoYouWantToView(int? choice, WhenDoYouWantToViewViewModel model)
+        {
+            var controller = CreateController();
+            return await controller.WhenDoYouWantToView(choice, model) as RedirectToRouteResult;
         }
     }
 }
