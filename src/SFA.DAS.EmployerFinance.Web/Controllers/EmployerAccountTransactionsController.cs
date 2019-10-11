@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [ImportModelStateFromTempData]
         [LevyEmployerTypeOnly]
         [Route("finance/downloadtransactions")]
-        public ActionResult TransactionsDownload(string hashedAccountId)
+        public ActionResult TransactionsDownload()
         {
             return View(new TransactionDownloadViewModel());
         }
