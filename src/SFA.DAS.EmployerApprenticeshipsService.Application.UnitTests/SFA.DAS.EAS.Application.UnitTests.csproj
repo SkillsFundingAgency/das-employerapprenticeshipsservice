@@ -199,6 +199,9 @@
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage">
       <Version>1.0.0.53229</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Api.Client">
+      <Version>1.4.1</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Events.Api.Client">
       <Version>1.20.0.26497</Version>
     </PackageReference>
