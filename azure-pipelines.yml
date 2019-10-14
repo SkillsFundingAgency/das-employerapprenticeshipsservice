@@ -22,6 +22,16 @@ steps:
   inputs:
     updateAssemblyInfo: true
 
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 5.x'
+  inputs:
+    versionSpec: 5.x
+
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: 'src/**.sln'
+
 - task: DotNetCoreCLI@2
   displayName: Restore
   inputs:
@@ -37,7 +47,6 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     clean: true
-    restoreNugetPackages: true
 
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
