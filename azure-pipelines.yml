@@ -14,7 +14,10 @@ variables:
   buildPlatform: 'any cpu'
 
 pool:
-  vmImage: 'windows-latest'
+  name: 'Continuous Integration 02 - SSD - 160ACU'
+  demands: 
+  - msbuild
+  - visualstudio
 
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
@@ -25,7 +28,7 @@ steps:
 - task: NuGetToolInstaller@0
   displayName: 'Install NuGet'
   inputs:
-    versionSpec: 4.7.x
+    versionSpec: '4.7.3'
 
 - task: NuGetCommand@2
   displayName: 'NuGet restore'
@@ -82,7 +85,7 @@ steps:
   displayName: 'Build solutions'
   inputs:
     solution: 'src/**.sln'
-    vsVersion: latest
+    vsVersion: 15.0
     #msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
