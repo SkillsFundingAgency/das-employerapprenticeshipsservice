@@ -14,10 +14,7 @@ variables:
   buildPlatform: 'any cpu'
 
 pool:
-  name: 'Continuous Integration 02 - SSD - 160ACU'
-  demands: 
-  - msbuild
-  - visualstudio
+  vmImage: 'windows-latest'
 
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
