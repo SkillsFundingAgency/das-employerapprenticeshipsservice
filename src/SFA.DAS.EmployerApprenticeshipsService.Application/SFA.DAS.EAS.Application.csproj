@@ -638,10 +638,6 @@
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
-    <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEvent.cs" />
-    <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
-    <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
-    <Compile Include="Events\ProcessPayment\ProcessPaymentEventHandler.cs" />
     <Compile Include="Factories\LevyEventFactory.cs" />
     <Compile Include="Factories\GenericEventFactory.cs" />
     <Compile Include="Factories\ILevyEventFactory.cs" />
