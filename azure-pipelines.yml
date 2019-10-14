@@ -36,7 +36,47 @@ steps:
   displayName: Restore
   inputs:
     command: restore
-    projects: 'src/**.sln'
+    projects: |
+      src\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj
+      src\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj
+      src\SFA.DAS.EAS.Portal.Client.TestHarness\SFA.DAS.EAS.Portal.Client.TestHarness.csproj
+      src\SFA.DAS.EAS.Portal.Client\SFA.DAS.EAS.Portal.Client.csproj
+      src\SFA.DAS.EAS.Portal.UnitTests\SFA.DAS.EAS.Portal.UnitTests.csproj
+      src\SFA.DAS.EAS.Portal.Worker.TestHarness\SFA.DAS.EAS.Portal.Worker.TestHarness.csproj
+      src\SFA.DAS.EAS.Portal.Worker\SFA.DAS.EAS.Portal.Worker.csproj
+      src\SFA.DAS.EAS.Portal\SFA.DAS.EAS.Portal.csproj
+      src\SFA.DAS.EmployerAccounts.Api.Client.UnitTests\SFA.DAS.EmployerAccounts.Api.Client.UnitTests.csproj
+      src\SFA.DAS.EmployerAccounts.Api.Client\SFA.DAS.EmployerAccounts.Api.Client.csproj
+      src\SFA.DAS.EmployerAccounts.Api.Types\SFA.DAS.EmployerAccounts.Api.Types.csproj
+      src\SFA.DAS.EmployerAccounts.Api.UnitTests\SFA.DAS.EmployerAccounts.Api.UnitTests.csproj
+      src\SFA.DAS.EmployerAccounts.ApiClient.TestHarness\SFA.DAS.EmployerAccounts.ApiClient.TestHarness.csproj
+      src\SFA.DAS.EmployerAccounts.Host\SFA.DAS.EmployerAccounts.Host.csproj
+      src\SFA.DAS.EmployerAccounts.Jobs.UnitTests\SFA.DAS.EmployerAccounts.Jobs.UnitTests.csproj
+      src\SFA.DAS.EmployerAccounts.Jobs\SFA.DAS.EmployerAccounts.Jobs.csproj
+      src\SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness\SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness.csproj
+      src\SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests\SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.csproj
+      src\SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj
+      src\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj
+      src\SFA.DAS.EmployerAccounts.ReadStore.UnitTests\SFA.DAS.EmployerAccounts.ReadStore.UnitTests.csproj
+      src\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj
+      src\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj
+      src\SFA.DAS.EmployerAccounts.UnitTests\SFA.DAS.EmployerAccounts.UnitTests.csproj
+      src\SFA.DAS.EmployerAccounts.Web.UnitTests\SFA.DAS.EmployerAccounts.Web.UnitTests.csproj
+      src\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj
+      src\SFA.DAS.EmployerFinance.AcceptanceTests\SFA.DAS.EmployerFinance.AcceptanceTests.csproj
+      src\SFA.DAS.EmployerFinance.Api.Client.UnitTests\SFA.DAS.EmployerFinance.Api.Client.UnitTests.csproj
+      src\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj
+      src\SFA.DAS.EmployerFinance.Api.UnitTests\SFA.DAS.EmployerFinance.Api.UnitTests.csproj
+      src\SFA.DAS.EmployerFinance.Host\SFA.DAS.EmployerFinance.Host.csproj
+      src\SFA.DAS.EmployerFinance.Jobs.UnitTests\SFA.DAS.EmployerFinance.Jobs.UnitTests.csproj
+      src\SFA.DAS.EmployerFinance.Jobs\SFA.DAS.EmployerFinance.Jobs.csproj
+      src\SFA.DAS.EmployerFinance.MessageHandlers.UnitTests\SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.csproj
+      src\SFA.DAS.EmployerFinance.MessageHandlers\SFA.DAS.EmployerFinance.MessageHandlers.csproj
+      src\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj
+      src\SFA.DAS.EmployerFinance.UnitTests\SFA.DAS.EmployerFinance.UnitTests.csproj
+      src\SFA.DAS.EmployerFinance.Web.UnitTests\SFA.DAS.EmployerFinance.Web.UnitTests.csproj
+      src\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj
+      src\SFA.DAS\SFA.DAS.csproj
 
 - task: VSBuild@1
   displayName: 'Build solutions'
