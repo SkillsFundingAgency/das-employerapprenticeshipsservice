@@ -621,7 +621,6 @@
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\TokenServiceRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
-    <Compile Include="Dtos\AccountSpecificLegalEntityDto.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesQueryHandler.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesRequest.cs" />
     <Compile Include="Queries\GetAccountLegalEntities\GetAccountLegalEntitiesResponse.cs" />
@@ -639,8 +638,6 @@
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommand.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandHandler.cs" />
     <Compile Include="Commands\UpsertRegisteredUser\UpsertRegisteredUserCommandValidator.cs" />
-    <Compile Include="Dtos\AccountDto.cs" />
-    <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEvent.cs" />
     <Compile Include="Events\ProcessDeclaration\ProcessDeclarationsEventHandler.cs" />
     <Compile Include="Events\ProcessPayment\ProcessPaymentEvent.cs" />
@@ -652,9 +649,7 @@
     <Compile Include="Factories\IPayeSchemeEventFactory.cs" />
     <Compile Include="Factories\PayeSchemeEventFactory.cs" />
     <Compile Include="Helpers\NameOf.cs" />
-    <Compile Include="Mappings\AccountMappings.cs" />
     <Compile Include="Mappings\TransferConnectionInvitationMappings.cs" />
-    <Compile Include="Mappings\UserMappings.cs" />
     <Compile Include="Messages\EmployerAccountCreatedQueueMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\AccountTransactions\GetAccountBalances\GetAccountBalancesQueryHandler.cs" />
