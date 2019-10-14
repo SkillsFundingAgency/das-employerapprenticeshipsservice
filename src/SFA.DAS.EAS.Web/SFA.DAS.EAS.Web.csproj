@@ -732,7 +732,6 @@
     <Compile Include="Helpers\AccountTaskHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
-    <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="ViewModels\Activities\ActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Activities\LatestActivitiesViewModel.cs" />
     <Compile Include="ViewModels\Organisation\OrganisationUpdatedNextStepsViewModel.cs" />
