@@ -182,6 +182,9 @@
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.4.1</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Types">
+      <Version>1.4.1</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents">
       <Version>1.0.0.4388</Version>
     </PackageReference>
