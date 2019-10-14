@@ -22,6 +22,12 @@ steps:
   inputs:
     updateAssemblyInfo: true
 
+- task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: 'src/**.sln'
+
 - task: VSBuild@1
   displayName: 'Build solutions'
   inputs:
