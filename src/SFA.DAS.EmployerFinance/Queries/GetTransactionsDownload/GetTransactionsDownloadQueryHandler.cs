@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
         {
             var endDate = message.EndDate.ToDate();
             var endDateBeginningOfNextMonth = new DateTime(endDate.Year, endDate.Month, 1).AddMonths(1);
-            var transactions = await _transactionRepository.GetAllTransactionDetailsForAccountByDate(message.AccountId.Value, message.StartDate, endDateBeginningOfNextMonth);
+            var transactions = await _transactionRepository.GetAllTransactionDetailsForAccountByDate(message.AccountId, message.StartDate, endDateBeginningOfNextMonth);
 
             if (!transactions.Any())
             {

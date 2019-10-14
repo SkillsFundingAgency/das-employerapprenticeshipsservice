@@ -1,5 +1,3 @@
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.WebApi;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
@@ -13,9 +11,6 @@ namespace SFA.DAS.EmployerFinance.Api.DependencyResolution
                 s.AssembliesFromApplicationBaseDirectory(a => a.GetName().Name.StartsWith("SFA.DAS"));
                 s.RegisterConcreteTypesAgainstTheFirstInterface();
             });
-
-            For<IAuthorizationContextCache>().Use<AuthorizationContextCache>();
-            For<ICallerContextProvider>().Use<CallerContextProvider>();
         }
     }
 }

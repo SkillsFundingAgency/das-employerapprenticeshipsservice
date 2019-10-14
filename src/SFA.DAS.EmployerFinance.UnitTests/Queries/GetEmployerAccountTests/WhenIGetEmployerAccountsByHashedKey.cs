@@ -5,6 +5,8 @@ using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.Validation;
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.Account;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
 {
@@ -16,16 +18,24 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
         public override Mock<IValidator<GetEmployerAccountHashedQuery>> RequestValidator { get; set; }
         private const string ExpectedUserId = "asdsa445";
         private const string ExpectedHashedId = "jfjfdjf444";
+        private const long ExpectedAccountId = 32450;
+        private Mock<IHashingService> _hashingService;
+        private Account ExpectedAccount;
 
         [SetUp]
         public void Arrange()
         {
             base.SetUp();
 
-            _employerAccountRepository = new Mock<IEmployerAccountRepository>();
-            _employerAccountRepository.Setup(x => x.GetAccountByHashedId(ExpectedHashedId)).ReturnsAsync(new EmployerFinance.Models.Account.Account());
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(ExpectedHashedId)).Returns(ExpectedAccountId);
 
-            RequestHandler = new GetEmployerAccountHashedHandler(_employerAccountRepository.Object, RequestValidator.Object);
+            ExpectedAccount = new Account();
+
+            _employerAccountRepository = new Mock<IEmployerAccountRepository>();
+            _employerAccountRepository.Setup(x => x.GetAccountById(ExpectedAccountId)).ReturnsAsync(ExpectedAccount);
+            
+            RequestHandler = new GetEmployerAccountHashedHandler(_employerAccountRepository.Object, RequestValidator.Object, _hashingService.Object);
             Query = new GetEmployerAccountHashedQuery { HashedAccountId = ExpectedHashedId, UserId = ExpectedUserId };
 
         }
@@ -41,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
             });
 
             //Assert
-            _employerAccountRepository.Verify(x => x.GetAccountByHashedId(ExpectedHashedId));
+            _employerAccountRepository.Verify(x => x.GetAccountById(ExpectedAccountId));
         }
 
         [Test]
@@ -56,7 +66,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetEmployerAccountTests
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.IsNotNull(result.Account);
+            Assert.AreSame(ExpectedAccount, result.Account);
         }
 
 

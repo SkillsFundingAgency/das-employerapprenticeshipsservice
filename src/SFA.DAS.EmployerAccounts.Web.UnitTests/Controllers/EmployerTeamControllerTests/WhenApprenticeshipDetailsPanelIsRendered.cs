@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System;
 using System.Globalization;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Services;
 using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
@@ -37,11 +38,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
-                mockAuthorizationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object);
+                mockPortalClient.Object,
+                mockAuthorizationService.Object);
         }
 
         [Test]

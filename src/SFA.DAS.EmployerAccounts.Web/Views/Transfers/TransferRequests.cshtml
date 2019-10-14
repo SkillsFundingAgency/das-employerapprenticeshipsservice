@@ -2,6 +2,7 @@
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.TransferRequestsViewModel
 
@@ -33,7 +34,7 @@
                             <td data-label="Status">@transferRequest.Status.ToString()</td>
                             <td data-label="Total cost">@transferRequest.TransferCost.ToString("C0", culture)</td>
                             <td>
-                                @if (Html.IsAuthorized(FeatureType.TransferConnectionRequests))
+                                @if (Html.IsAuthorized("EmployerFeature.TransferConnectionRequests"))
                                 {
                                     if (Model.AccountId == transferRequest.SenderAccount.Id)
                                     {

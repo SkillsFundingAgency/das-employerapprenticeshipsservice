@@ -58,27 +58,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferAllowanceTests
         }
 
         [Test]
-        public async Task Handle_WhenMakingAnInvalidCall_ShouldThrowException()
-        {
-            await RunAsync(
-                f => f.WithTransferAllowance(f.TransferAllowance),
-                f => f.Handle(null),
-                f => Assert.IsNotNull(f.HandlerException));
-        }
-
-        [Test]
-        public async Task Handle_WhenMakingAnInvalidCall_ShouldNotCallDatabase()
-        {
-            await RunAsync(
-                f => f.WithTransferAllowance(f.TransferAllowance),
-                f => f.Handle(null),
-                f => f.FinanceDatabaseMock.Verify(d => d.SqlQueryAsync<decimal?>(
-                    It.IsAny<string>(),
-                    It.IsAny<long>(),
-                    It.IsAny<decimal>()), Times.Never));
-        }
-
-        [Test]
         public async Task Handle_WhenMakingAValidCall_ShouldReturnCorrectTransferAllowancePercentage()
         {
             await RunAsync(
@@ -163,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferAllowanceTests
             return this;
         }
 
-        public async Task Handle(long? accountId)
+        public async Task Handle(long accountId)
         {
             var query = new GetTransferAllowanceQuery
             {

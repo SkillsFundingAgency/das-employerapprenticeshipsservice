@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation
 {
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation
                 return;
             }
 
-            var result = await _hmrcService.GetEmprefInformation(scheme.EmpRef);
+            var result = await _hmrcService.GetEmprefInformation(scheme?.Ref);
 
             if (string.IsNullOrEmpty(result?.Employer?.Name?.EmprefAssociatedName))
             {

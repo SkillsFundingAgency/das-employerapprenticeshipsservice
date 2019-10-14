@@ -1,37 +1,38 @@
-﻿@using SFA.DAS.Authorization
-@using SFA.DAS.Common.Domain.Types;
+@using SFA.DAS.Authorization.EmployerFeatures.Errors
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @using SFA.DAS.Authorization
-@using SFA.DAS.Authorization.Mvc
+
 @model TransferConnectionInvitationAuthorizationViewModel
 
-<p>Employers who pay the apprenticeship levy can connect with other employers and transfer up to @Model.TransferAllowancePercentage.ToString("N0")% of their previous year's annual funds.</p>
-
-@if (Html.IsAuthorized(FeatureType.Transfers))
+@if (Html.IsAuthorized("EmployerFeature.Transfers"))
 {
-    switch (Model.AuthorizationResult)
-    {
-        case AuthorizationResult.Ok:
-            <p>Before starting a connection, both the sending and receiving employers need to read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">rules for sending and receiving transfers</a>.</p>
-            <p>Only the sending employer can start a connection.</p>
-            if (Model.IsValidSender)
-            {
-                <div class="grid-row">
-                    <div class="column-two-thirds">
-                        <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations" )">Connect to a receiving employer</a>
-                    </div>
-                </div>
-            }
-            break;
-        case AuthorizationResult.FeatureAgreementNotSigned:
-            <p>Before starting a connection, both the sending and receiving employers need to read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">rules for sending and receiving transfers</a> and sign the updated organisation agreement with ESFA.</p>
+    <p>Employers who pay the apprenticeship levy can connect with other employers and transfer up to @Model.TransferAllowancePercentage.ToString("N0")% of their previous year's annual funds.</p>
 
+    if (Model.AuthorizationResult.IsAuthorized)
+    {
+        <p>Before starting a connection, both the sending and receiving employers need to read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">rules for sending and receiving transfers</a>.</p>
+        <p>Only the sending employer can start a connection.</p>
+        if (Model.IsValidSender)
+        {
             <div class="grid-row">
                 <div class="column-two-thirds">
-                    <a class="button" href="@Url.Action("Index", "EmployerAgreement" )">Sign ESFA agreement</a>
+                    <a class="button" href="@Url.Action("Index", "TransferConnectionInvitations" )">Connect to a receiving employer</a>
                 </div>
             </div>
-            break;
-        default:
-            throw new ArgumentOutOfRangeException();
+        }
+    }
+    else if (Model.AuthorizationResult.HasError<EmployerFeatureAgreementNotSigned>())
+    {
+        <p>Before starting a connection, both the sending and receiving employers need to read and understand the <a href="https://www.gov.uk/government/publications/apprenticeship-funding-and-performance-management-rules-2017-to-2018">rules for sending and receiving transfers</a> and sign the updated organisation agreement with ESFA.</p>
+
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <a class="button" href="@Url.Action("Index", "EmployerAgreement" )">Sign ESFA agreement</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        throw new ArgumentOutOfRangeException();
     }
 }

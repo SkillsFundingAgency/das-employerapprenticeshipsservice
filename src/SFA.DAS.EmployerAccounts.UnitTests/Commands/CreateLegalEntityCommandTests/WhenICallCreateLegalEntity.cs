@@ -6,10 +6,10 @@ using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
@@ -138,14 +138,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             //Assert
             var expectedHashedAgreementId = $"*{employerAgreementView.AgreementView.Id}*";
             Assert.AreEqual(expectedHashedAgreementId, employerAgreementView.AgreementView.HashedAgreementId);
-        }
-
-        [Test]
-        public async Task TheShouldInvalidateAccountAgreementCache()
-        {
-            await CommandHandler.Handle(Command);
-
-            AgreementService.Verify(s => s.RemoveFromCacheAsync(_owner.AccountId));
         }
 
         [Test]

@@ -7,6 +7,7 @@ using System.Data.Common;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Models.Account;
 
 
 namespace SFA.DAS.EmployerFinance.Data
@@ -17,7 +18,7 @@ namespace SFA.DAS.EmployerFinance.Data
         public virtual DbSet<HealthCheck> HealthChecks { get; set; }
         public virtual DbSet<PeriodEnd> PeriodEnds { get; set; }
         public virtual DbSet<TransactionLineEntity> Transactions { get; set; }
-
+        public virtual DbSet<Account> Accounts { get; set; }
 
         static EmployerFinanceDbContext()
         {

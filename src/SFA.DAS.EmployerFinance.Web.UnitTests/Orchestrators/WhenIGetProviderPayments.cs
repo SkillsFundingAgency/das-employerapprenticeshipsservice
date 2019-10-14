@@ -33,7 +33,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private Mock<IHashingService> _hashingService;
 
         private Mock<IAccountApiClient> _accountApiClient;
-        private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private FindAccountProviderPaymentsResponse _response;
@@ -57,20 +56,15 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
                 }
             };
 
-            _mediator
-                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse
-                {
-                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy }
-                });
-
             _mediator.Setup(AssertExpressionValidation()).ReturnsAsync(_response);
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
-            _mediator
-                .Setup(mock => mock.SendAsync(It.Is<GetEmployerAccountHashedQuery>(query => query.HashedAccountId == HashedAccountId)))
-                .ReturnsAsync(new GetEmployerAccountResponse { Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy } });
+            _accountApiClient.Setup(s => s.GetAccount(HashedAccountId))
+                .Returns(Task.FromResult(new EAS.Account.Api.Types.AccountDetailViewModel
+                {
+                    ApprenticeshipEmployerType = "Levy"
+                }));
 
             _orchestrator =
                 new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());

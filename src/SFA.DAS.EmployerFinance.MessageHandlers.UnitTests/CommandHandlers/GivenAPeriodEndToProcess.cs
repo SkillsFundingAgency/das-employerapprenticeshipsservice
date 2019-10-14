@@ -24,18 +24,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         private TestableMessageHandlerContext _messageHandlerContext;
         private IFixture Fixture = new Fixture();
 
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            Fixture.Customize<Account>(a => a.Without(x => x.AccountLegalEntities));
-        }
-
         [SetUp]
         public void SetUp()
         {
             _messageHandlerContext = new TestableMessageHandlerContext();
             _mediatorMock = new Mock<IMediator>();
             _loggerMock = new Mock<ILog>();
+
+            Fixture.Customize<Account>(x => x.Without(s => s.AccountLegalEntities));
 
             _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
                 .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { Fixture.Create<Account>() } });

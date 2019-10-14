@@ -1,4 +1,6 @@
 ﻿@using SFA.DAS.Authorization
+@using SFA.DAS.Authorization.EmployerFeatures.Errors
+@using SFA.DAS.Authorization.Results
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<EmployerAgreementListViewModel>
 
@@ -36,17 +38,21 @@
             <summary>
                 <span class="summary">Transfers status: 
                     <span class="bold">
-                        @switch (Html.GetAuthorizationResult(FeatureType.TransferConnectionRequests))
-                        {
-                            case AuthorizationResult.Ok:
+                        @{
+                            var authorizationResult = Html.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
+                            if (authorizationResult.IsAuthorized)
+                            {
                                 @:Enabled
-                                break;
-                            case AuthorizationResult.FeatureAgreementNotSigned:
+                            }
+                            else if (authorizationResult.HasError<EmployerFeatureAgreementNotSigned>())
+                            {
                                 @:Disabled
-                                break;
-                            default:
+                            }
+                            else
+                            {
                                 throw new ArgumentOutOfRangeException();
                             }
+                        }
                     </span>
                 </span>
             </summary>

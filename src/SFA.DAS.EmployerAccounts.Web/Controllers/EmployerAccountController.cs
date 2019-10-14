@@ -4,7 +4,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using System.Web.Mvc;
 using MediatR;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -21,7 +20,7 @@ using SFA.DAS.EmployerAccounts.Web.Models;
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [RoutePrefix("accounts")]
-    [AuthoriseActiveUser]
+    [DasAuthorize]
     public class EmployerAccountController : BaseController
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;

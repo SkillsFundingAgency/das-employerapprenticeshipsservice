@@ -36,12 +36,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             _accountApiMock = new Mock<IAccountApiClient>();
             _currentTimeMock = new Mock<ICurrentDateTime>();
 
-            _mediatorMock
-                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse
+            _accountApiMock.Setup(s => s.GetAccount(It.IsAny<string>()))
+                .Returns(Task.FromResult(new EAS.Account.Api.Types.AccountDetailViewModel
                 {
-                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy }
-                });
+                    ApprenticeshipEmployerType = "NonLevy"
+                }));
 
             SetupGetCoursePaymentsResponse(2019, 9);
 
@@ -72,12 +71,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         public async Task ThenNonLevyEmployerShouldNotSeeNonCoInvestmentPaymentColumn_IfThereIsNoValue()
         {
             // Arrange
-            _mediatorMock
-                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse
+            _accountApiMock.Setup(s => s.GetAccount(It.IsAny<string>()))
+                .Returns(Task.FromResult(new EAS.Account.Api.Types.AccountDetailViewModel
                 {
-                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy }
-                });
+                    ApprenticeshipEmployerType = "NonLevy"
+                }));
 
             var coursePayments = CreateCoursePayments(1, 1, 0, 900, 100);
 
@@ -101,12 +99,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         public async Task ThenLevyEmployerShouldSeeNonCoInvestmentPaymentColumn_IfThereIsNoValue()
         {
             // Arrange
-            _mediatorMock
-                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse
+            _accountApiMock.Setup(s => s.GetAccount(It.IsAny<string>()))
+                .Returns(Task.FromResult(new EAS.Account.Api.Types.AccountDetailViewModel
                 {
-                    Account = new Account { ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy }
-                });
+                    ApprenticeshipEmployerType = "Levy"
+                }));
 
             var coursePayments = CreateCoursePayments(1, 1, 0, 900, 100);
 
@@ -132,12 +129,11 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         public async Task ThenUserShouldSeeNonCoInvestmentPaymentColumn_IfThereIsValue(ApprenticeshipEmployerType apprenticeshipEmployerType)
         {
             // Arrange
-            _mediatorMock
-                .Setup(mock => mock.SendAsync(It.IsAny<GetEmployerAccountHashedQuery>()))
-                .ReturnsAsync(new GetEmployerAccountResponse
+            _accountApiMock.Setup(s => s.GetAccount(It.IsAny<string>()))
+                .Returns(Task.FromResult(new EAS.Account.Api.Types.AccountDetailViewModel
                 {
-                    Account = new Account { ApprenticeshipEmployerType = apprenticeshipEmployerType }
-                });
+                    ApprenticeshipEmployerType = apprenticeshipEmployerType.ToString()
+                }));
 
             var coursePayments = CreateCoursePayments(1, 1, 1000, 0, 0);
 

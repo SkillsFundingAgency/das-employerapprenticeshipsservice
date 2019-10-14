@@ -1,9 +1,14 @@
-﻿using MediatR;
-using SFA.DAS.Authorization;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using MediatR;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand
 {
-    public class RunHealthCheckCommand : UserMessage, IAsyncRequest
+    public class RunHealthCheckCommand : IAsyncRequest
     {
+        [IgnoreMap]
+        [Required]
+        public Guid? UserRef { get; set; }
     }
 }
