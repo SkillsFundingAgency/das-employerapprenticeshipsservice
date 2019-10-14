@@ -12,7 +12,7 @@
     ViewBag.GaData.Vpv = Model.Data.IsExistingAccount ? "/accounts/organisations/search/results/select-your-organisation" : "/onboarding/search/results/select-your-organisation";
 }
 
-
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
@@ -84,85 +84,93 @@
             </div>
 
         </form>
-        </section>
+    </section>
 
-        <section class="govuk-grid-column-two-thirds">
-            @if (Model.Data.Results.Data != null) {
-                <ul class="govuk-list das-govuk-list-forms">
+    <section class="govuk-grid-column-two-thirds">
+        @if (Model.Data.Results.Data != null)
+        {
+            <ul class="govuk-list das-govuk-list-forms">
 
-                    @foreach (var organisation in Model.Data.Results.Data) {
-                        if (!organisation.AddedToAccount){
-                            <li>
-                                <form action="@Url.Action("Confirm")" method="post">
-                                    <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
-                                    <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber" />
-                                    <input type="hidden" name="Sector" value="@organisation.Sector" />
-                                    <input type="hidden" name="Type" value="@organisation.Type" />
-                                    <input type="hidden" name="Name" value="@organisation.Name" />
-                                    <input type="hidden" name="Address" value="@organisation.Address" />
-                                    <button type="submit">@organisation.Name</button>
-                                </form>
-                                <dl class="das-inline-def-list">
-                                    <dt>Address</dt>
-                                    <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
-                                    <dt>Type</dt>
-                                    <dd>@organisation.Type.GetDescription()</dd>
-                                </dl>
-                            </li>
-                        } else {
-                            <li>
-                                <p class="govuk-heading-s">@organisation.Name</p>
-                                <dl class="das-inline-def-list">
-                                    <dt>Address</dt>
-                                    <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
-                                    <dt>Type</dt>
-                                    <dd>@organisation.Type.GetDescription()</dd>
-                                </dl>
-                                <p class="govuk-body">
-                                    Already added - <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link">view my organisations</a>
-                                </p>
-                            </li>
-                        }
-                    }
-                    @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0) {
+                @foreach (var organisation in Model.Data.Results.Data)
+                {
+                    if (!organisation.AddedToAccount)
+                    {
                         <li>
-                            <span class="govuk-heading-s">Can't find your organisation?</span>          <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>. <br>You can also <a href="@Url.Action("AddOtherOrganisationDetails")" class="govuk-link">enter your details manually.</a>
+                            <form action="@Url.Action("Confirm")" method="post">
+                                <input type="hidden" name="DateOfInception" value="@organisation.DateOfInception" />
+                                <input type="hidden" name="ReferenceNumber" value="@organisation.ReferenceNumber" />
+                                <input type="hidden" name="Sector" value="@organisation.Sector" />
+                                <input type="hidden" name="Type" value="@organisation.Type" />
+                                <input type="hidden" name="Name" value="@organisation.Name" />
+                                <input type="hidden" name="Address" value="@organisation.Address" />
+                                <button type="submit">@organisation.Name</button>
+                            </form>
+                            <dl class="das-inline-def-list">
+                                <dt>Address</dt>
+                                <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
+                                <dt>Type</dt>
+                                <dd>@organisation.Type.GetDescription()</dd>
+                            </dl>
                         </li>
-                     }
-
-                </ul>
-            } else {
-                <ul class="govuk-list das-govuk-list-forms">
+                    }
+                    else
+                    {
+                        <li>
+                            <p class="govuk-heading-s">@organisation.Name</p>
+                            <dl class="das-inline-def-list">
+                                <dt>Address</dt>
+                                <dd>@(string.IsNullOrEmpty(organisation.Address) ? "No address supplied" : organisation.Address)</dd>
+                                <dt>Type</dt>
+                                <dd>@organisation.Type.GetDescription()</dd>
+                            </dl>
+                            <p class="govuk-body">
+                                Already added - <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-link">view my organisations</a>
+                            </p>
+                        </li>
+                    }
+                }
+                @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
+                {
                     <li>
-                        <span class="govuk-heading-s"><strong>No results found.</strong></span> <br>
-                        <span>Can't find your organisation?</span> <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>. <br>You can also <a href="@Url.Action("AddOtherOrganisationDetails")" class="govuk-link">enter your details manually.</a>
+                        <span class="govuk-heading-s">Can't find your organisation?</span>          <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>. <br>You can also <a href="@Url.Action("AddOtherOrganisationDetails")" class="govuk-link">enter your details manually.</a>
                     </li>
-                </ul>
-            }
-            
-            <nav class="das-pagination-link">
+                }
 
+            </ul>
+        }
+        else
+        {
+            <ul class="govuk-list das-govuk-list-forms">
+                <li>
+                    <span class="govuk-heading-s"><strong>No results found.</strong></span> <br>
+                    <span>Can't find your organisation?</span> <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>. <br>You can also <a href="@Url.Action("AddOtherOrganisationDetails")" class="govuk-link">enter your details manually.</a>
+                </li>
+            </ul>
+        }
+
+        <nav class="das-pagination-link">
+            <ul>
             @if (Model.Data.Results.PageNumber > 1)
             {
-                <div class="das-pagination-link__wrap das-pagination-link--prev">
+                <li class="das-pagination-link__wrap das-pagination-link--prev">
                     <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber - 1, organisationType = Model.Data.OrganisationType })" class="govuk-link govuk-link--no-visited-state">
                         <span>Previous page</span><span class="das-visually-hidden">: </span>
-    <span>Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
-</a>
-                </div>
+                        <span>Page @(Model.Data.Results.PageNumber - 1) of @Model.Data.Results.TotalPages</span>
+                    </a>
+                </li>
             }
             @if (Model.Data.Results.PageNumber < Model.Data.Results.TotalPages)
             {
-                <div class="das-pagination-link__wrap das-pagination-link--next">
+                <li class="das-pagination-link__wrap das-pagination-link--next">
                     <a href="@Url.Action("SearchForOrganisationResults", new {searchTerm = Model.Data.SearchTerm, pageNumber = Model.Data.Results.PageNumber + 1, organisationType = Model.Data.OrganisationType })" class="govuk-link govuk-link--no-visited-state">
-                        <span>Next page</span><span class="das-visually-hidden">: </span> 
+                        <span>Next page</span><span class="das-visually-hidden">: </span>
                         <span>Page @(Model.Data.Results.PageNumber + 1) of @Model.Data.Results.TotalPages</span>
                     </a>
-                </div>
+                </li>
             }
-
-            </nav>
-        </section>
+            </ul>
+        </nav>
+    </section>
 </div>
 
 @section pageSpecificJS {
@@ -170,14 +178,14 @@
         $(function () {
             var filterForm = $('#filter');
             //if (filterForm.length > 0) {
-                var radios = filterForm.find('input:radio');
-                radios.on('change', function () {
-                    var radioLabel = radios.filter(':checked').siblings('label').text();
-                    dataLayer.push({
-                        'cd1': radioLabel
-                    });
-                    filterForm.submit();
+            var radios = filterForm.find('input:radio');
+            radios.on('change', function () {
+                var radioLabel = radios.filter(':checked').siblings('label').text();
+                dataLayer.push({
+                    'cd1': radioLabel
                 });
+                filterForm.submit();
+            });
             //}
         });
     </script>
