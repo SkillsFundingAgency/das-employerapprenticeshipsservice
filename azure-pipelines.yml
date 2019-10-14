@@ -28,7 +28,7 @@ steps:
 - task: VSBuild@1
   displayName: 'Restore solutions'
   inputs:
-    solution: 'src/**.sln'
+    solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 15.0
     msbuildArgs: '/t:restore'
     platform: '$(buildPlatform)'
@@ -38,7 +38,7 @@ steps:
 - task: VSBuild@1
   displayName: 'Build solutions'
   inputs:
-    solution: 'src/**.sln'
+    solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 15.0
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'

@@ -94,7 +94,6 @@
     <Compile Include="Services\ChallengeHelper.cs" />
     <Compile Include="Services\IPayeLevyMapper.cs" />
     <Compile Include="Services\PayeLevyMapper.cs" />
-    <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -118,7 +117,6 @@
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -154,6 +152,44 @@
       <Project>{9a31db97-209c-48ef-ae2a-b4a4f761f670}</Project>
       <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights.Web">
+      <Version>2.11.1</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost">
+      <Version>5.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.Configuration">
+      <Version>1.0.0.53229</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage">
+      <Version>1.0.0.53229</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.Web.Policy">
+      <Version>1.1.0.44309</Version>
+    </PackageReference>
+    <PackageReference Include="structuremap">
+      <Version>4.7.1</Version>
+    </PackageReference>
+    <PackageReference Include="StructureMap.MVC5">
+      <Version>3.1.1.134</Version>
+    </PackageReference>
+    <PackageReference Include="structuremap.web">
+      <Version>4.0.0.315</Version>
+    </PackageReference>
+    <PackageReference Include="StructureMap.WebApi2">
+      <Version>3.0.4.125</Version>
+    </PackageReference>
+    <PackageReference Include="WebActivatorEx">
+      <Version>2.0.5</Version>
+    </PackageReference>
+    <PackageReference Include="WebGrease">
+      <Version>1.5.2</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
