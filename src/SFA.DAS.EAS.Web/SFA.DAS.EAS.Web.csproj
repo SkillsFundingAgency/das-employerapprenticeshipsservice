@@ -710,14 +710,12 @@
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
     <Compile Include="Authorization\RouteValueKeys.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
-    <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactionsController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
-    <Compile Include="Mappings\ActivityMappings.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
