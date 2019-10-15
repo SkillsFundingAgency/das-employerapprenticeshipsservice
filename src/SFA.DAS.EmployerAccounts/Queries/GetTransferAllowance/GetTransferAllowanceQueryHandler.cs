@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance
 
         public async Task<GetTransferAllowanceResponse> Handle(GetTransferAllowanceQuery message)
         {
-            var transferAllowance = await _db.GetTransferAllowance(message.AccountId.Value, _configuration.TransferAllowancePercentage);
+            var transferAllowance = await _db.GetTransferAllowance(message.AccountId, _configuration.TransferAllowancePercentage);
 
             return new GetTransferAllowanceResponse
             {

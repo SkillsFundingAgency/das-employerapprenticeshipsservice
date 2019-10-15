@@ -37,7 +37,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public void OneTimeSetUp()
         {
             _importPaymentsCommand = new ImportPaymentsCommand();
-            Fixture.Customize<Account>(a => a.Without(x => x.AccountLegalEntities));
         }
 
         [SetUp]
@@ -51,6 +50,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             _mediatorMock
                 .Setup(mock => mock.SendAsync(It.IsAny<GetPeriodEndsRequest>()))
                 .ReturnsAsync(new GetPeriodEndsResponse { CurrentPeriodEnds = new List<DbPeriodEnd>() });
+
+            Fixture.Customize<Account>(x => x.Without(s => s.AccountLegalEntities));
 
             _mediatorMock.Setup(mock => mock.SendAsync(It.IsAny<GetAllEmployerAccountsRequest>()))
                 .ReturnsAsync(new GetAllEmployerAccountsResponse { Accounts = new List<Account> { Fixture.Create<Account>() } });

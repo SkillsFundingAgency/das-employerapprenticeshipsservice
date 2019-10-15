@@ -4,13 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
@@ -35,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         private readonly IMediator _mediator;
         private readonly IEventPublisher _eventPublisher;
         private readonly ICommitmentService _commitmentService;
-        private readonly IAgreementService _agreementService;
 
 
         public SignEmployerAgreementCommandHandler(
@@ -47,8 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             IGenericEventFactory genericEventFactory,
             IMediator mediator,
             IEventPublisher eventPublisher,
-            ICommitmentService commitmentService,
-            IAgreementService agreementService)
+            ICommitmentService commitmentService)
         {
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
@@ -59,7 +55,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             _mediator = mediator;
             _eventPublisher = eventPublisher;
             _commitmentService = commitmentService;
-            _agreementService = agreementService;
         }
 
         protected override async Task HandleCore(SignEmployerAgreementCommand message)
@@ -82,8 +77,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var hashedLegalEntityId = _hashingService.HashValue((long) agreement.LegalEntityId);
 
             await PublishEvents(message, hashedLegalEntityId, accountId, agreement, agreementId, owner);
-
-            await _agreementService.RemoveFromCacheAsync(accountId);
         }
 
         private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, long accountId,
@@ -96,7 +89,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var accountHasCommitments = commitments?.Any() ?? false;
 
             await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId,
-                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType);
+                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType, agreement.VersionNumber);
         }
 
         private async Task PublishLegalGenericEvent(SignEmployerAgreementCommand message, string hashedLegalEntityId)
@@ -142,7 +135,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
         private Task PublishAgreementSignedMessage(
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, string currentUserRef, AgreementType agreementType)
+            bool cohortCreated, string currentUserName, string currentUserRef, AgreementType agreementType, int versionNumber)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
             {
@@ -154,7 +147,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
                 Created = DateTime.UtcNow,
                 UserName = currentUserName,
                 UserRef = Guid.Parse(currentUserRef),
-                AgreementType = agreementType
+                AgreementType = agreementType,
+                SignedAgreementVersion = versionNumber
             });
         }
 

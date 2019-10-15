@@ -1,9 +1,10 @@
 ﻿using System.Web.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : Controller
     { 

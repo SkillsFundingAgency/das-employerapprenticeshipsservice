@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.Validation;
 
@@ -7,11 +9,11 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
 {
     public class GetAccountFinanceOverviewQueryValidator : IValidator<GetAccountFinanceOverviewQuery>
     {
-        private readonly IMembershipRepository _membershipRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public GetAccountFinanceOverviewQueryValidator(IMembershipRepository membershipRepository)
+        public GetAccountFinanceOverviewQueryValidator(IAuthorizationService authorizationService)
         {
-            _membershipRepository = membershipRepository;
+            _authorizationService = authorizationService;
         }
 
         public ValidationResult Validate(GetAccountFinanceOverviewQuery query)
@@ -22,25 +24,8 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
         public async Task<ValidationResult> ValidateAsync(GetAccountFinanceOverviewQuery query)
         {
             var result = new ValidationResult();
-           
-            if (string.IsNullOrEmpty(query.AccountHashedId))
-            {
-                result.AddError(nameof(query.AccountHashedId), "AccountHashedId has not been supplied");
-            }
-            if (!query.UserRef.HasValue)
-            {
-                result.AddError(nameof(query.UserRef), "UserRef has not been supplied");
-            }
-            if (query.AccountId == null)
-            {
-                result.AddError(nameof(query.AccountId), "AccountId has not been supplied");
-            }
 
-            if (!result.IsValid())
-                return result;
-
-            var caller = await _membershipRepository.GetCaller(query.AccountHashedId, query.UserRef.ToString());
-            result.IsUnauthorized = caller == null;
+            result.IsUnauthorized = !_authorizationService.IsAuthorized(EmployerUserRole.Any);
 
             return result;
         }

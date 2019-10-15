@@ -8,7 +8,7 @@ using SFA.DAS.EAS.Domain.Data.Repositories;
 using SFA.DAS.EAS.Domain.Models.AccountTeam;
 using SFA.DAS.Sql.Client;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Authorization;
+using SFA.DAS.EAS.Domain.Models;
 
 namespace SFA.DAS.EAS.Infrastructure.Data
 {
@@ -66,21 +66,6 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
-        }
-
-        public Task ChangeRole(long userId, long accountId, Role role)
-        {
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@userId", userId, DbType.Int64);
-            parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@role", role, DbType.Int16);
-
-            return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "UPDATE [employer_account].[Membership] SET Role = @role WHERE AccountId = @accountId AND UserId = @userId;",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.Text);
         }
 
         public async Task<MembershipView> GetCaller(long accountId, string externalUserId)

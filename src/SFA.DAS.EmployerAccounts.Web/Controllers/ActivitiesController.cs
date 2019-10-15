@@ -4,20 +4,16 @@ using SFA.DAS.EmployerAccounts.Queries.GetActivities;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
-using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Models.Activities;
 using SFA.DAS.EmployerAccounts.Queries.GetLatestActivities;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
-    [Feature(FeatureType.Activities)]
-    [ValidateMembership]
+    [DasAuthorize("EmployerFeature.Activities", EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}/activity")]
     public class ActivitiesController : Controller
     {

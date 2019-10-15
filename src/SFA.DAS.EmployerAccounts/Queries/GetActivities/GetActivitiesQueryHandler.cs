@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetActivities
         {
             var result = await _activitiesClient.GetActivities(new ActivitiesQuery
             {
-                AccountId = message.AccountId.Value,
+                AccountId = message.AccountId,
                 Take = message.Take,
                 From = message.From,
                 To = message.To,

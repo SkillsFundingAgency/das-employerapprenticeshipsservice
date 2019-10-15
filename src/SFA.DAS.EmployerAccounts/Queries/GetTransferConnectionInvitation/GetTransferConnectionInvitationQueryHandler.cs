@@ -26,8 +26,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitation
             var transferConnectionInvitation = await _db.Value.TransferConnectionInvitations
                 .Where(i =>
                     i.Id == message.TransferConnectionInvitationId.Value && (
-                    i.SenderAccount.Id == message.AccountId.Value && !i.DeletedBySender ||
-                    i.ReceiverAccount.Id == message.AccountId.Value))
+                    i.SenderAccount.Id == message.AccountId && !i.DeletedBySender ||
+                    i.ReceiverAccount.Id == message.AccountId))
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)
                 .SingleOrDefaultAsync();
 
@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitation
 
             return new GetTransferConnectionInvitationResponse
             {
-                AccountId = message.AccountId.Value,
+                AccountId = message.AccountId,
                 TransferConnectionInvitation = transferConnectionInvitation
             };
         }

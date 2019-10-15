@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Application.Queries.GetLatestActivities
 
         public async Task<GetLatestActivitiesResponse> Handle(GetLatestActivitiesQuery message)
         {
-            var result = await _activitiesClient.GetLatestActivities(message.AccountId.Value);
+            var result = await _activitiesClient.GetLatestActivities(message.AccountId);
 
             return new GetLatestActivitiesResponse
             {

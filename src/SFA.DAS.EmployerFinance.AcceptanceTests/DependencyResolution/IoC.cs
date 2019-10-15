@@ -32,7 +32,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<PaymentsRegistry>();
-                c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<UnitOfWorkRegistry>();

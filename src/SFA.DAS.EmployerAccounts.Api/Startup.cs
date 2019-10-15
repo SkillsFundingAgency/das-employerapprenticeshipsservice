@@ -1,7 +1,7 @@
-﻿using Microsoft.Azure;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Security.ActiveDirectory;
 using Owin;
+using System.Configuration;
 
 [assembly: OwinStartup(typeof(SFA.DAS.EmployerAccounts.Api.Startup))]
 
@@ -13,11 +13,11 @@ namespace SFA.DAS.EmployerAccounts.Api
         {
             app.UseWindowsAzureActiveDirectoryBearerAuthentication(new WindowsAzureActiveDirectoryBearerAuthenticationOptions
             {
-                Tenant = CloudConfigurationManager.GetSetting("idaTenant"),
+                Tenant = ConfigurationManager.AppSettings["idaTenant"],
                 TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
                 {
                     RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-                    ValidAudience = CloudConfigurationManager.GetSetting("idaAudience")
+                    ValidAudience = ConfigurationManager.AppSettings["idaAudience"]
                 }
             });
         }

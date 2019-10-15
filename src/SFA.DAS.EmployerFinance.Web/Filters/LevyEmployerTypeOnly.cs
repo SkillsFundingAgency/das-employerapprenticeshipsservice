@@ -15,13 +15,23 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
         {
             try
             {
-                if(filterContext.ActionParameters == null || !filterContext.ActionParameters.ContainsKey("HashedAccountId"))
+                string hashedAccountId = string.Empty;
+
+                if(filterContext.ActionParameters != null && filterContext.ActionParameters.ContainsKey("HashedAccountId"))
+                {
+                    hashedAccountId = filterContext.ActionParameters["HashedAccountId"].ToString();
+
+                } else if(filterContext.RouteData?.Values?.ContainsKey("HashedAccountId") == true) {
+
+                    hashedAccountId = filterContext.RouteData.Values["HashedAccountId"].ToString();
+                }
+
+                if(string.IsNullOrWhiteSpace(hashedAccountId))
                 {
                     filterContext.Result = new ViewResult { ViewName = ControllerConstants.BadRequestViewName };
                     return;
                 }
-
-                var hashedAccountId = filterContext.ActionParameters["HashedAccountId"].ToString();
+                
                 var accountApi = DependencyResolver.Current.GetService<IAccountApiClient>();
                 
                 var task = Task.Run(async () => await accountApi.GetAccount(hashedAccountId));

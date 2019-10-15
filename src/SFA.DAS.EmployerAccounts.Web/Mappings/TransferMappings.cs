@@ -57,8 +57,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<GetTransferRequestsResponse, TransferRequestsViewModel>();
 
-            CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationCommand>();
-
             CreateMap<SendTransferConnectionInvitationResponse, SendTransferConnectionInvitationViewModel>()
                 .ForMember(m => m.Choice, o => o.Ignore())
                 .ForMember(m => m.ReceiverAccountPublicHashedId, o => o.MapFrom(r => r.ReceiverAccount.HashedId));

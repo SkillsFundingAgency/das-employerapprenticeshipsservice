@@ -11,6 +11,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.Levy;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerEnglishFractionHistory;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPayeOrchestratorTests
@@ -29,14 +30,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
         [SetUp]
         public void Arrange()
         {
-            
             _configuration = new EmployerAccountsConfiguration { Hmrc = new HmrcConfiguration() };
 
             _logger = new Mock<ILog>();
             _cookieService = new Mock<ICookieStorageService<EmployerAccountData>>();
 
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionQuery>())).ReturnsAsync(new GetEmployerEnglishFractionResponse { Fractions = new List<DasEnglishFraction>()  });
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionQuery>())).ReturnsAsync(new GetEmployerEnglishFractionResponse { Fractions = new List<DasEnglishFraction>() });
             
             _employerAccountPayeOrchestrator = new EmployerAccountPayeOrchestrator(_mediator.Object, _logger.Object, _cookieService.Object, _configuration);
         }
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             await _employerAccountPayeOrchestrator.GetPayeDetails(EmpRef, AccountId, UserId);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.IsAny<GetEmployerEnglishFractionQuery>()),Times.Once);
+            _mediator.Verify(x => x.SendAsync(It.IsAny<GetEmployerEnglishFractionQuery>()), Times.Once);
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountPa
             var actual = await _employerAccountPayeOrchestrator.GetPayeDetails(EmpRef, AccountId, UserId);
 
             //Assert
-            Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status );
+            Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
         }
     }
 }

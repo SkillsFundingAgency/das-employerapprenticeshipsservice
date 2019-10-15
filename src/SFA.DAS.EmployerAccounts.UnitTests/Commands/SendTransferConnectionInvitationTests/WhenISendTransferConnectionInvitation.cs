@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using AutoMapper;
 using Moq;
 using NUnit.Framework;
@@ -97,10 +99,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendTransferConnectionInvi
         {
             _accounts.Remove(_receiverAccount);
 
-            var exception = Assert.ThrowsAsync<ValidationException<SendTransferConnectionInvitationQuery>>(async () => await _handler.Handle(_query));
+            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.Message, Is.EqualTo("You must enter a valid account ID"));
+            Assert.That(ExpressionHelper.GetExpressionText(exception.ValidationErrors.Single().Property), Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
+            Assert.That(exception.ValidationErrors.Single().Message, Is.EqualTo("You must enter a valid account ID"));
         }
 
         [Test]
@@ -112,10 +114,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendTransferConnectionInvi
                 .WithStatus(TransferConnectionInvitationStatus.Pending)
                 .Build());
 
-            var exception = Assert.ThrowsAsync<ValidationException<SendTransferConnectionInvitationQuery>>(async () => await _handler.Handle(_query));
+            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.Message, Is.EqualTo("You can't connect with this employer because they already have pending or accepted connection requests"));
+            Assert.That(ExpressionHelper.GetExpressionText(exception.ValidationErrors.Single().Property), Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
+            Assert.That(exception.ValidationErrors.Single().Message, Is.EqualTo("You can't connect with this employer because they already have pending or accepted connection requests"));
         }
 
         [Test]
@@ -127,10 +129,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendTransferConnectionInvi
                 .WithStatus(TransferConnectionInvitationStatus.Pending)
                 .Build());
 
-            var exception = Assert.ThrowsAsync<ValidationException<SendTransferConnectionInvitationQuery>>(async () => await _handler.Handle(_query));
+            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.Message, Is.EqualTo("You can't connect with this employer because they already have a pending or accepted connection request"));
+            Assert.That(ExpressionHelper.GetExpressionText(exception.ValidationErrors.Single().Property), Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
+            Assert.That(exception.ValidationErrors.Single().Message, Is.EqualTo("You can't connect with this employer because they already have a pending or accepted connection request"));
         }
 
         [Test]
@@ -142,10 +144,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SendTransferConnectionInvi
                 .WithStatus(TransferConnectionInvitationStatus.Approved)
                 .Build());
 
-            var exception = Assert.ThrowsAsync<ValidationException<SendTransferConnectionInvitationQuery>>(async () => await _handler.Handle(_query));
+            var exception = Assert.ThrowsAsync<ValidationException>(async () => await _handler.Handle(_query));
 
-            Assert.That(exception.PropertyName, Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
-            Assert.That(exception.Message, Is.EqualTo("You can't connect with this employer because they already have a pending or accepted connection request"));
+            Assert.That(ExpressionHelper.GetExpressionText(exception.ValidationErrors.Single().Property), Is.EqualTo(nameof(_query.ReceiverAccountPublicHashedId)));
+            Assert.That(exception.ValidationErrors.Single().Message, Is.EqualTo("You can't connect with this employer because they already have a pending or accepted connection request"));
         }
     }
 }

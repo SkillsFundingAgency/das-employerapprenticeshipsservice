@@ -1,5 +1,7 @@
-﻿using System.Web;
+﻿using System.Configuration;
+using System.Web;
 using System.Web.Http;
+using Microsoft.ApplicationInsights.Extensibility;
 using NServiceBus;
 using StructureMap;
 using WebApi.StructureMap;
@@ -14,6 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Api
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["InstrumentationKey"];
 
             _serviceBusEndpointManager = 
                 new ServiceBusEndPointConfigureAndRun(

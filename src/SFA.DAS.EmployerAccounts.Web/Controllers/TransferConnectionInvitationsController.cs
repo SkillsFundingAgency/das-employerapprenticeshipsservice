@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Commands.ApproveTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Commands.RejectTransferConnectionInvitation;
@@ -22,9 +22,7 @@ using SFA.DAS.Validation.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    [Authorize]
-    [Feature(FeatureType.TransferConnectionRequests)]
-    [ValidateMembership]
+    [DasAuthorize("EmployerFeature.TransferConnectionRequests", EmployerUserRole.Any)]
     [RoutePrefix("accounts/{HashedAccountId}/transfers/connections/requests")]
     public class TransferConnectionInvitationsController : Controller
     {
@@ -59,9 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             await _mediator.SendAsync(new SendTransferConnectionInvitationQuery
             {
                 ReceiverAccountPublicHashedId = model.ReceiverAccountPublicHashedId,
-                AccountHashedId = model.AccountHashedId,
-                AccountId = model.AccountId,
-                UserRef = model.UserRef
+                AccountId = model.AccountId
             });
             return RedirectToAction("Send", new { receiverAccountPublicHashedId = model.ReceiverAccountPublicHashedId });
         }
@@ -88,7 +84,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 case "Confirm":
                     var transferConnectionInvitationId = await _mediator.SendAsync(new SendTransferConnectionInvitationCommand
                     {
-                        AccountHashedId = model.AccountHashedId,
                         AccountId = model.AccountId,
                         ReceiverAccountPublicHashedId = model.ReceiverAccountPublicHashedId,
                         UserRef = model.UserRef
@@ -149,10 +144,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             switch (model.Choice)
             {
                 case "Approve":
-                    await _mediator.SendAsync(new ApproveTransferConnectionInvitationCommand { AccountId = model.AccountId, AccountHashedId = model.AccountHashedId, UserRef = model.UserRef, TransferConnectionInvitationId = model.TransferConnectionInvitationId });
+                    await _mediator.SendAsync(new ApproveTransferConnectionInvitationCommand { AccountId = model.AccountId, UserRef = model.UserRef, TransferConnectionInvitationId = model.TransferConnectionInvitationId });
                     return RedirectToAction("Approved", new { transferConnectionInvitationId = model.TransferConnectionInvitationId });
                 case "Reject":
-                    await _mediator.SendAsync(new RejectTransferConnectionInvitationCommand { AccountId = model.AccountId, AccountHashedId = model.AccountHashedId, UserRef = model.UserRef, TransferConnectionInvitationId = model.TransferConnectionInvitationId });
+                    await _mediator.SendAsync(new RejectTransferConnectionInvitationCommand { AccountId = model.AccountId, UserRef = model.UserRef, TransferConnectionInvitationId = model.TransferConnectionInvitationId });
                     return RedirectToAction("Rejected", new { transferConnectionInvitationId = model.TransferConnectionInvitationId });
                 default:
                     throw new ArgumentOutOfRangeException(nameof(model.Choice));
@@ -210,7 +205,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     await _mediator.SendAsync(new DeleteTransferConnectionInvitationCommand
                     {
                         AccountId = model.AccountId,
-                        AccountHashedId = model.AccountHashedId,
                         TransferConnectionInvitationId = model.TransferConnectionInvitationId,
                         UserRef = model.UserRef
                     });
@@ -245,8 +239,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     {
                         AccountId = model.AccountId,
                         TransferConnectionInvitationId = model.TransferConnectionInvitationId,
-                        UserRef = model.UserRef,
-                        AccountHashedId = model.AccountHashedId
+                        UserRef = model.UserRef
                     });
                     return RedirectToAction("Deleted");
                 case "GoToTransfersPage":

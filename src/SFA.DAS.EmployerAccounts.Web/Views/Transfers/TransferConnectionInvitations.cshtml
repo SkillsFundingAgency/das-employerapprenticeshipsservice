@@ -2,6 +2,7 @@
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Models.TransferConnections
 @using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.TransferConnectionInvitationsViewModel
 
@@ -26,7 +27,7 @@
                             <td data-label="Employer">@peerAccount.Name</td>
                             <td data-label="Status">@transferConnectionInvitation.Status.ToString()</td>
                             <td>
-                                @if (Html.IsAuthorized(FeatureType.TransferConnectionRequests))
+                                @if (Html.IsAuthorized("EmployerFeature.TransferConnectionRequests"))
                                 {
                                     if (Model.AccountId == transferConnectionInvitation.ReceiverAccount.Id && transferConnectionInvitation.Status == TransferConnectionInvitationStatus.Pending)
                                     {

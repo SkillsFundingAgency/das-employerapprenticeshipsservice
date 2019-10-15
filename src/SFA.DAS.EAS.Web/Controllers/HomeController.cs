@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EmployerUsers.WebClientComponents;
 using System.Web.Mvc;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -30,7 +31,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("service/register", false));
         }
 
-        [Authorize]
+        [DasAuthorize]
         [HttpGet]
         [Route("register/new")]
         public ActionResult HandleNewRegistration()
@@ -38,7 +39,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("service/register/new", false));
         }
 
-        [Authorize]
+        [DasAuthorize]
         [HttpGet]
         [Route("password/change")]
         public ActionResult HandlePasswordChanged(bool userCancelled = false)
@@ -46,7 +47,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("service/password/change", false));
         }
 
-        [Authorize]
+        [DasAuthorize]
         [HttpGet]
         [Route("email/change")]
         public ActionResult HandleEmailChanged(bool userCancelled = false)
@@ -54,7 +55,7 @@ namespace SFA.DAS.EAS.Web.Controllers
             return Redirect(Url.EmployerAccountsAction("service/email/change", false));
         }
 
-        [Authorize]
+        [DasAuthorize]
         [Route("signIn")]
         public ActionResult SignIn()
         {

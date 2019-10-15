@@ -27,7 +27,7 @@ namespace SFA.DAS.EAS.Infrastructure.Services
             }
 
             return commitmentItems.Where(x => x.CommitmentStatus != CommitmentStatus.Deleted)
-                                  .Select(x => new Cohort {Id = x.Id}).ToList();
+                .Select(x => new Cohort { Id = x.Id }).ToList();
         }
     }
 }

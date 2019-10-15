@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Account;
 using SFA.DAS.EmployerFinance.Queries.GetPayeSchemeByRef;
+using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetPayeSchemeByRefTests
@@ -15,6 +16,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetPayeSchemeByRefTests
         public override GetPayeSchemeByRefQuery Query { get; set; }
         public override GetPayeSchemeByRefHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetPayeSchemeByRefQuery>> RequestValidator { get; set; }
+        private Mock<IHashingService> _hashingService;
+        private const long ExpectedAccountId = 342905843;
 
         private PayeSchemeView _expectedPayeScheme;
 
@@ -25,16 +28,19 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetPayeSchemeByRefTests
 
             _expectedPayeScheme = new PayeSchemeView();
 
-            _payeRepository = new Mock<IPayeRepository>();
-            _payeRepository.Setup(x => x.GetPayeForAccountByRef(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(_expectedPayeScheme);
-
             Query = new GetPayeSchemeByRefQuery
             {
                 HashedAccountId = "ABC123",
                 Ref = "ABC/123"
             };
 
-            RequestHandler = new GetPayeSchemeByRefHandler(RequestValidator.Object,_payeRepository.Object);
+            _hashingService = new Mock<IHashingService>();
+            _hashingService.Setup(x => x.DecodeValue(Query.HashedAccountId)).Returns(ExpectedAccountId);
+
+            _payeRepository = new Mock<IPayeRepository>();
+            _payeRepository.Setup(x => x.GetPayeForAccountByRef(ExpectedAccountId, Query.Ref)).ReturnsAsync(_expectedPayeScheme);
+            
+            RequestHandler = new GetPayeSchemeByRefHandler(RequestValidator.Object,_payeRepository.Object, _hashingService.Object);
         }
 
         [Test]
@@ -47,7 +53,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetPayeSchemeByRefTests
             await RequestHandler.Handle(Query);
 
             //Assert
-            _payeRepository.Verify(x => x.GetPayeForAccountByRef(Query.HashedAccountId, Query.Ref), Times.Once);
+            _payeRepository.Verify(x => x.GetPayeForAccountByRef(ExpectedAccountId, Query.Ref), Times.Once);
         }
 
         [Test]

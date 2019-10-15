@@ -1,6 +1,7 @@
 ﻿@using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @using SFA.DAS.Common.Domain.Types;
 @model TransferAllowanceViewModel
 @{
@@ -33,7 +34,7 @@
 
 
 
-        @if (Html.IsAuthorized(FeatureType.Transfers))
+        @if (Html.IsAuthorized("EmployerFeature.Transfers"))
         {
 
             @Html.Action("TransferConnectionInvitations")
