@@ -254,9 +254,6 @@
     <Compile Include="Configuration\CommitmentsApiClientConfiguration.cs" />
     <Compile Include="Configuration\GoogleAnalyticsSnippets.cs" />
     <Compile Include="Configuration\ITopicMessageSubscriberConfiguration.cs" />
-    <Compile Include="Configuration\WebJobConfig.cs" />
-    <Compile Include="Interfaces\DateRange.cs" />
-    <Compile Include="Interfaces\IHmrcDateService.cs" />
     <Compile Include="Models\Account\AccountHistory.cs" />
     <Compile Include="Models\Account\AccountLegalEntity.cs" />
     <Compile Include="Models\Account\CreateLegalEntityWithAgreementParams.cs" />
@@ -266,14 +263,8 @@
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
-    <Compile Include="Interfaces\ICommitmentService.cs" />
-    <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
-    <Compile Include="Interfaces\IExcelService.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
-    <Compile Include="Interfaces\IMultiVariantTestingService.cs" />
-    <Compile Include="Interfaces\ITaskService.cs" />
-    <Compile Include="Interfaces\IWebJobConfiguration.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
     <Compile Include="Models\Account\AccountStats.cs" />
     <Compile Include="Models\Account\AccountTask.cs" />
@@ -324,11 +315,7 @@
     <Compile Include="Models\Account\LegalEntity.cs" />
     <Compile Include="Models\Transaction\TransactionEntity.cs" />
     <Compile Include="Models\Account\AccountDetail.cs" />
-    <Compile Include="Interfaces\IAddressLookupService.cs" />
-    <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
-    <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
-    <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
     <Compile Include="Models\Levy\LevyDeclarationView.cs" />
     <Compile Include="Models\Audit\EasAuditMessage.cs" />

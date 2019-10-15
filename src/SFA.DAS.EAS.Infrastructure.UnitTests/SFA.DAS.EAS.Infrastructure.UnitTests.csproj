@@ -262,20 +262,9 @@
     <Compile Include="Extensions\PaymentDetailsExtensionsTests.cs" />
     <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\HmrcDateServiceTests\WhenICallDateRange.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveNoResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveJsonResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveAStringResponse.cs" />
-    <Compile Include="Services\AuditServiceTests\WhenISendAnAuditMessage.cs" />
-    <Compile Include="Services\CommitmentsServiceTests\WhenIRequestAccountCommitments.cs" />
-    <Compile Include="Services\CookieStorageTests\WhenIUseTheCookieStorageService.cs" />
-    <Compile Include="Services\ExcelService\WhenICreatedAnExcelFile.cs" />
-    <Compile Include="Services\HmrcDateServiceTests\WhenICompareTheSubmissionDateToPayrolDate.cs" />
-    <Compile Include="Services\ReferenceDataService\WhenIGetACharity.cs" />
-    <Compile Include="Services\ReferenceDataService\WhenISearchAndGetCloseMatches.cs" />
-    <Compile Include="Services\ReferenceDataService\WhenISearchAnOrganisation.cs" />
-    <Compile Include="Services\TaskServiceTests\WhenIGetTasks.cs" />
-    <Compile Include="Services\TaskServiceTests\WhenIDismissAReminderTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

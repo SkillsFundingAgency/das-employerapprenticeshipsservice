@@ -372,18 +372,9 @@
     <Compile Include="Data\TransactionRepository.cs" />
     <Compile Include="NServiceBus\EndpointConfigurationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AddressLookupService.cs" />
-    <Compile Include="Services\AuditService.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
-    <Compile Include="Services\CommitmentService.cs" />
-    <Compile Include="Services\CookieStorageService.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
-    <Compile Include="Services\ExcelService.cs" />
-    <Compile Include="Services\HmrcDateService.cs" />
-    <Compile Include="Services\ReferenceDataService.cs" />
     <Compile Include="Services\RestService.cs" />
-    <Compile Include="Services\MultiVariantTestingService.cs" />
-    <Compile Include="Services\TaskService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
