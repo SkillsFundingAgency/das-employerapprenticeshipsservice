@@ -247,7 +247,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\ServiceBusConnectionKeyAttribute.cs" />
     <Compile Include="Configuration\ConfigurationKeys.cs" />
     <Compile Include="Configuration\EmployerAccountsApiConfiguration.cs" />
     <Compile Include="Configuration\IdProcessorConfiguration.cs" />
@@ -265,13 +264,8 @@
     <Compile Include="Models\Account\AgreementTemplate.cs" />
     <Compile Include="Models\Account\EmployerAccountOutput.cs" />
     <Compile Include="Models\Account\EmployerAgreement.cs" />
-    <Compile Include="Data\Entities\Statistics\StatisticsAccounts.cs" />
-    <Compile Include="Data\Entities\Statistics\StatisticsFinancial.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Data\IUnitOfWork.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
-    <Compile Include="Data\Repositories\ITransferConnectionInvitationRepository.cs" />
-    <Compile Include="Data\Repositories\ITransferRepository.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
@@ -321,15 +315,8 @@
     <Compile Include="Configuration\EventsApiClientConfiguration.cs" />
     <Compile Include="Configuration\PostcodeAnywhereConfiguration.cs" />
     <Compile Include="Configuration\ReferenceDataApiClientConfiguration.cs" />
-    <Compile Include="Data\Repositories\IAccountRepository.cs" />
-    <Compile Include="Data\Repositories\IAccountTeamRepository.cs" />
-    <Compile Include="Data\Repositories\IEnglishFractionRepository.cs" />
     <Compile Include="Data\Repositories\IDasLevyRepository.cs" />
-    <Compile Include="Data\Repositories\IEmployerAccountRepository.cs" />
-    <Compile Include="Data\Repositories\IEmployerAgreementRepository.cs" />
-    <Compile Include="Data\Repositories\IEmployerSchemesRepository.cs" />
     <Compile Include="Data\Repositories\IMembershipRepository.cs" />
-    <Compile Include="Data\Repositories\IUserAccountRepository.cs" />
     <Compile Include="Data\Repositories\IUserRepository.cs" />
     <Compile Include="Models\Account\Account.cs" />
     <Compile Include="Models\Account\AccountBalance.cs" />
@@ -343,7 +330,6 @@
     <Compile Include="Interfaces\IAddressLookupService.cs" />
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
-    <Compile Include="Data\Repositories\ILegalEntityRepository.cs" />
     <Compile Include="Interfaces\IEmpRefFileBasedService.cs" />
     <Compile Include="Interfaces\IReferenceDataService.cs" />
     <Compile Include="Models\AccountTeam\InvitationStatus.cs" />
