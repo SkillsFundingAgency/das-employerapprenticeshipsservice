@@ -27,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         [SetUp]
         public void Arrange()
         {
+            _mockAuthorizationService = new Mock<IAuthorizationService>();
             _mockAuthenticationService = new Mock<IAuthenticationService>();
             _mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();

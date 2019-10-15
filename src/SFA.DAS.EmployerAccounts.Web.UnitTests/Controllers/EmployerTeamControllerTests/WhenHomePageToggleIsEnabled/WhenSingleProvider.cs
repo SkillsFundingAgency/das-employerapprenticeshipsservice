@@ -34,14 +34,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
 
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(true);
+            mockAuthorizationService.Setup(m => m.IsAuthorized(It.Is<string>(s => s == "EmployerFeature.HomePage"))).Returns(true);
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object, Mock.Of<IAuthorizationService>());
+                mockPortalClient.Object, 
+                mockAuthorizationService.Object);
         }
 
         [Test]

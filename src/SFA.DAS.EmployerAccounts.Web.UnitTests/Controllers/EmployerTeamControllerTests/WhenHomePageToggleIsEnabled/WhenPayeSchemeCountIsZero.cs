@@ -40,7 +40,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object, Mock.Of<IAuthorizationService>());
+                mockPortalClient.Object, 
+                mockAuthorizationService.Object);
         }
 
         [Test]

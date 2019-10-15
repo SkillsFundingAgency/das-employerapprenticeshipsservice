@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         [SetUp]
         public void Arrange()
         {
+            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockAuthenticationService = new Mock<IAuthenticationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
@@ -38,7 +39,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object, Mock.Of<IAuthorizationService>());
+                mockPortalClient.Object, 
+                mockAuthorizationService.Object);
         }
 
         [Test]
