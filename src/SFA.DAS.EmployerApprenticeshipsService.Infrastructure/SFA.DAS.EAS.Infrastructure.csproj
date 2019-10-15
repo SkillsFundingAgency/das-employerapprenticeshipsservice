@@ -349,12 +349,8 @@
     <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
     <Compile Include="MarkerInterfaces\IAccountLegalEntityPublicHashingService.cs" />
-    <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
-    <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
     <Compile Include="Models\UserResponse.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
-    <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
-    <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
     <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
     <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
