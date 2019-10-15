@@ -161,7 +161,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             Assert.IsNotNull(actual.Data);
-            Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrgainsationCount);
+            Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrganisationCount);
             Assert.AreEqual(_accountStats.PayeSchemeCount, actual.Data.PayeSchemeCount);
             Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
         }

@@ -63,13 +63,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return View(response);
             }
 
-            var hasPayeScheme = HasPayeScheme(response.Data);
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage") || !hasPayeScheme && !HasOrganisation(response.Data))
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
             {
                 response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
                 {
                     HashedAccountId = hashedAccountId,
-                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
+                    MaxNumberOfVacancies = response.Data.HasPayeScheme ? 2 : 0
                 });
                 response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
@@ -84,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
             }
 
-            if (!hasPayeScheme)
+            if (!response.Data.HasPayeScheme)
             {             
                 ViewBag.HideNav = true;
             }
@@ -427,7 +426,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "PrePayeRecruitment";
 
-                if (HasPayeScheme(model))
+                if (model.HasPayeScheme)
                 {
                     if (model.AccountViewModel?.VacanciesRetrieved == false)
                     {
@@ -683,16 +682,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (externalUserId != null)
                 ViewBag.UserId = externalUserId;
-        }
-
-        private bool HasPayeScheme(AccountDashboardViewModel data)
-        {
-            return data.PayeSchemeCount > 0;
-        }
-
-        private bool HasOrganisation(AccountDashboardViewModel data)
-        {
-            return data.OrgainsationCount > 0;
         }
     }
 }
