@@ -346,18 +346,12 @@
     <Compile Include="Data\FileSystemUserRepository.cs" />
     <Compile Include="Data\MembershipRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
-    <Compile Include="DependencyResolution\CurrentDatePolicy.cs" />
     <Compile Include="Extensions\EmployerFinancialDbContextExtensions.cs" />
     <Compile Include="MarkerInterfaces\IAccountLegalEntityPublicHashingService.cs" />
-    <Compile Include="Models\UserResponse.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
-    <Compile Include="Models\PostcodeAnywhere\PcaAddress.cs" />
-    <Compile Include="Models\PostcodeAnywhere\PcaServiceFindResult.cs" />
     <Compile Include="Data\TransactionRepository.cs" />
     <Compile Include="NServiceBus\EndpointConfigurationExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\AzureServiceBase.cs" />
-    <Compile Include="Services\CurrentDateTime.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

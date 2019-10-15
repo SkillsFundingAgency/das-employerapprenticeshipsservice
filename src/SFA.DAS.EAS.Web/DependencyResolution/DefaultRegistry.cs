@@ -1,7 +1,4 @@
-using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.CookieService;
-using SFA.DAS.EAS.Domain.Interfaces;
-using SFA.DAS.EAS.Infrastructure.Services;
 using StructureMap;
 using System.Web;
 using SFA.DAS.Authorization.Context;

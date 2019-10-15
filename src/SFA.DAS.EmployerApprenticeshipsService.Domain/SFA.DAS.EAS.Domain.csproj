@@ -263,7 +263,6 @@
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
-    <Compile Include="Interfaces\ICurrentDateTime.cs" />
     <Compile Include="Configuration\TokenServiceApiClientConfiguration.cs" />
     <Compile Include="Models\Account\AccountHistoryEntry.cs" />
     <Compile Include="Models\Account\AccountStats.cs" />

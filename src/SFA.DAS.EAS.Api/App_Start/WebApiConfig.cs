@@ -30,7 +30,6 @@ namespace SFA.DAS.EAS.Account.Api
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
-                c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();

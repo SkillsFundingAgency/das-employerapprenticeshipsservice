@@ -600,7 +600,6 @@
     <Compile Include="DependencyResolution\CommitmentsRegistry.cs" />
     <Compile Include="DependencyResolution\ConfigurationRegistry.cs" />
     <Compile Include="DependencyResolution\DataRegistry.cs" />
-    <Compile Include="DependencyResolution\DateTimeRegistry.cs" />
     <Compile Include="DependencyResolution\EventsRegistry.cs" />
     <Compile Include="DependencyResolution\ExecutionPoliciesRegistry.cs" />
     <Compile Include="DependencyResolution\HashingRegistry.cs" />
