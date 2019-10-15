@@ -3,13 +3,11 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
-using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -19,13 +17,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
     public class WhenDecidingWhatToDisplayInRow2Panel2
     {
         private EmployerTeamController _controller;
-
+        private Mock<IAuthorizationService> _mockAuthorizationService;
         private Mock<IAuthenticationService> _mockAuthenticationService;
         private Mock<IMultiVariantTestingService> _mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
         private Mock<IPortalClient> _mockPortalClient;
-        private Mock<IBooleanToggleValueProvider> _mockFeatureToggleProvider;
 
         [SetUp]
         public void Arrange()
@@ -35,17 +32,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             _mockPortalClient = new Mock<IPortalClient>();
-            _mockFeatureToggleProvider = new Mock<IBooleanToggleValueProvider>();
 
-            FeatureToggles.Features.BooleanToggleValueProvider = _mockFeatureToggleProvider.Object;
-            _mockFeatureToggleProvider.Setup(m => m.EvaluateBooleanToggleValue(It.IsAny<IFeatureToggle>())).Returns(true);
+            _mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(true);
 
             _controller = new EmployerTeamController(
                 _mockAuthenticationService.Object,
                 _mockMultiVariantTestingService.Object,
                 _mockCookieStorageService.Object,
                 _mockEmployerTeamOrchestrator.Object,
-                _mockPortalClient.Object, Mock.Of<IAuthorizationService>());
+                _mockPortalClient.Object,
+                _mockAuthorizationService.Object);
         }
 
         [Test]

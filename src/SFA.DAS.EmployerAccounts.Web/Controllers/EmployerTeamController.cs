@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
                     response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
 
-                if (FeatureToggles.Features.HomePage.Enabled)
+                if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
                 {
                     return View("v2/Index", "_Layout_v2", response);
                 }
@@ -341,7 +341,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 viewModel.ViewName = "CheckFunding";
             }
 
-            if (FeatureToggles.Features.HomePage.Enabled)
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
             {
                 viewModel.ViewName = "V2CheckFunding";
 
@@ -380,7 +380,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 viewModel.ViewName = "Empty";
             }
 
-            if (FeatureToggles.Features.HomePage.Enabled)
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
             {
                 viewModel.ViewName = "ProviderPermissions";
                 if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
@@ -410,7 +410,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 viewModel.ViewName = "Empty";
             }
 
-            if (FeatureToggles.Features.HomePage.Enabled)
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
             {
                 viewModel.ViewName = "FinancialTransactions";
             }        
@@ -423,7 +423,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
 
-            if (FeatureToggles.Features.HomePage.Enabled)
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
             {
                 viewModel.ViewName = "PrePayeRecruitment";
 
