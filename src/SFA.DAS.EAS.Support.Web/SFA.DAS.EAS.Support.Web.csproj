@@ -224,6 +224,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="StartUp\FindPrivateKey.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
