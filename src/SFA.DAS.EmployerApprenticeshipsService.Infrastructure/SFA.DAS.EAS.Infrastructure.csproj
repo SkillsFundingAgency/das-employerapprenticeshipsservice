@@ -352,11 +352,6 @@
     <Compile Include="Messaging\ServiceBusConnectionStringAttribute.cs" />
     <Compile Include="Messaging\ServiceBusConnectionStringPolicy.cs" />
     <Compile Include="Models\UserResponse.cs" />
-    <Compile Include="Interfaces\REST\IRestServiceFactory.cs" />
-    <Compile Include="Factories\RestClientFactory.cs" />
-    <Compile Include="Factories\RestServiceFactory.cs" />
-    <Compile Include="Interfaces\REST\IRestClientFactory.cs" />
-    <Compile Include="Interfaces\REST\IRestService.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />
     <Compile Include="Mapping\Profiles\ReferenceDataMappings.cs" />
     <Compile Include="Mapping\Profiles\TransactionMappings.cs" />
@@ -367,7 +362,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AzureServiceBase.cs" />
     <Compile Include="Services\CurrentDateTime.cs" />
-    <Compile Include="Services\RestService.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

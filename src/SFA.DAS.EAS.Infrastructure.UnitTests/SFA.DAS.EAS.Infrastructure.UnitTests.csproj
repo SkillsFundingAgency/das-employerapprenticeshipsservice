@@ -258,7 +258,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Caching\InProcessCacheTests.cs" />
-    <Compile Include="Factories\WhenICreateARestClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveNoResponse.cs" />
     <Compile Include="Services\HttpResponseLoggerTests\WhenIReceiveJsonResponse.cs" />
@@ -303,9 +302,7 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Factories\RestClientFactoryTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

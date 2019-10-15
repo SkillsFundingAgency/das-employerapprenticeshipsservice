@@ -612,7 +612,6 @@
     <Compile Include="DependencyResolution\PaymentsRegistry.cs" />
     <Compile Include="DependencyResolution\ReferenceDataRegistry.cs" />
     <Compile Include="DependencyResolution\RepositoriesRegistry.cs" />
-    <Compile Include="DependencyResolution\ServicesRegistry.cs" />
     <Compile Include="DependencyResolution\TasksRegistry.cs" />
     <Compile Include="DependencyResolution\TokenServiceRegistry.cs" />
     <Compile Include="DependencyResolution\ValidationRegistry.cs" />
