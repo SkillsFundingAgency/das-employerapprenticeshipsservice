@@ -266,7 +266,6 @@
     <Compile Include="Models\Account\EmployerAgreement.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Data\Repositories\ITransactionRepository.cs" />
-    <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Interfaces\ICommitmentService.cs" />
     <Compile Include="Interfaces\ICookieStorageService.cs" />
     <Compile Include="Interfaces\ICurrentDateTime.cs" />
@@ -325,8 +324,6 @@
     <Compile Include="Models\Account\LegalEntity.cs" />
     <Compile Include="Models\Transaction\TransactionEntity.cs" />
     <Compile Include="Models\Account\AccountDetail.cs" />
-    <Compile Include="Extensions\EmploymentStatusAgreementExtension.cs" />
-    <Compile Include="Extensions\NullableDateTimeExtension.cs" />
     <Compile Include="Interfaces\IAddressLookupService.cs" />
     <Compile Include="Interfaces\IAuditService.cs" />
     <Compile Include="Interfaces\IDasLevyService.cs" />
