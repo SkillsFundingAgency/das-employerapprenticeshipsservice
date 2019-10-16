@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var response = Task.Run(() => _mediator.SendAsync(query)).GetAwaiter().GetResult();
             var model = _mapper.Map<TransferConnectionInvitationsViewModel>(response);
-
+            
             return PartialView(model);
         }
 
