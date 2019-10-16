@@ -55,6 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             PopulateViewBagWithExternalUserId();
+            SetZenDeskWidgetToHidden();
             var response = await GetAccountInformation(hashedAccountId);
 
             if (response.Status != HttpStatusCode.OK)
@@ -593,6 +594,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (externalUserId != null)
                 ViewBag.UserId = externalUserId;
+        }
+
+        private void SetZenDeskWidgetToHidden()
+        {
+            ViewBag.HideZenDeskWidget = true;
         }
 
         private bool HasPayeScheme(AccountDashboardViewModel data)
