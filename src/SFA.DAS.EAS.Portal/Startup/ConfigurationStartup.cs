@@ -15,7 +15,7 @@ namespace SFA.DAS.EAS.Portal.Startup
                 .AddEnvironmentVariables()
                 .AddAzureTableStorage(o =>
                     {
-                        o.EnvironmentNameEnvironmentVariableName = "LOCAL"; //EnvironmentVariableName.EnvironmentName;
+                        o.EnvironmentNameEnvironmentVariableName = EnvironmentVariableName.EnvironmentName; //"LOCAL"; 
                         o.ConfigurationKeys = new[]
                         {
                             ConfigurationKeys.EmployerApprenticeshipsServicePortal,
