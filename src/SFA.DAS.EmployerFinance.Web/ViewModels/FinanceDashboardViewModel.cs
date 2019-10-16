@@ -1,4 +1,5 @@
 ﻿using System;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerFinance.Web.ViewModels
 {
@@ -12,5 +13,6 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels
         public decimal AvailableFunds { get; set; }
         public decimal FundingExpected { get; set; }
         public decimal ProjectedSpend { get; set; }
+        public bool IsLevyEmployer { get; set; }
     }
 }

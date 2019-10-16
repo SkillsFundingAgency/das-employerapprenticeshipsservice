@@ -30,10 +30,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
             if (accountValues.Id.HasValue)
             {
-                authorizationContext.AddEmployerFeatureValues(accountValues.Id.Value, userValues.Email);
                 authorizationContext.AddEmployerUserRoleValues(accountValues.Id.Value, userValues.Ref.Value);
             }
 
+            authorizationContext.AddEmployerFeatureValues(accountValues.Id, userValues.Email);
+            
             return authorizationContext;
         }
 
