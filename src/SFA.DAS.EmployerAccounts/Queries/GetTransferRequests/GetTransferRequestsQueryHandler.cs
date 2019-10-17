@@ -61,7 +61,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
 
             return new GetTransferRequestsResponse
             {
-                TransferRequests = transferRequestsData
+                TransferRequests = transferRequestsData,
+                AccountId = message.AccountId
             };
         }
     }
