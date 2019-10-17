@@ -1,0 +1,32 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@{ViewBag.PageID = "unsubscibe-from-emails"; }
+@{ViewBag.Title = "Unsubscribe from emails"; }
+@{ViewBag.MetaDesc = "Unsubscribe from emails"; }
+@{ViewBag.HideNav = true; }
+
+@{
+    ViewBag.GaData.Vpv = "/unsubscibe-from-emails";
+}
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+        <h1 class="heading-large">
+            @ViewBag.Title
+        </h1>     
+        <p>If you would like to unsubscribe, please select the option below.</p>
+        @using (Html.BeginForm("Unsubscribe", "Home", FormMethod.Post))
+        { 
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <fieldset>
+                    <div class="multiple-choice">
+                        <input id="unsubscribe" name="unsubscribe" type="checkbox" value="true">
+                        <label for="unsubscribe">Unsubscribe from invitation emails from this training provider</label>
+                        <label for="unsubscribe">This will not affect the regular emails you receive as a registered user of our digital service. The training provider won't be told you have unsubscribed.</label>
+                    </div>
+                </fieldset>
+            </div>
+            <p><button class="button" type="submit">Unsubscribe</button></p>
+        }
+    </div>
+</div>
