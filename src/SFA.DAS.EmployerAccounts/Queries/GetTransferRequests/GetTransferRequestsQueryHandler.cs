@@ -33,7 +33,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
 
         public async Task<GetTransferRequestsResponse> Handle(GetTransferRequestsQuery message)
         {
-            var transferRequests = await _employerCommitmentApi.GetTransferRequests(message.AccountHashedId);
+            var accountHashedId = _hashingService.HashValue(message.AccountId);
+            var transferRequests = await _employerCommitmentApi.GetTransferRequests(accountHashedId);
 
             var accountIds = transferRequests
                 .SelectMany(r => new[] { r.HashedSendingEmployerAccountId, r.HashedReceivingEmployerAccountId })
