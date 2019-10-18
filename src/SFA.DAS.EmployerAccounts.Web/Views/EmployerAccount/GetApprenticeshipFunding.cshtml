@@ -11,79 +11,95 @@
     var errorClass = Model?.GetType().GetProperty("InError") != null ? "govuk-form-group--error" : "";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-            Add a PAYE Scheme
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-xl">
+            Add a <abbr title="Pay As You Earn">PAYE</abbr> Scheme
         </h1>
-        <p>We need you to add the PAYE scheme for your organisation.</p>
-        <p>
+
+        <p class="govuk-body">We need you to add the <abbr>PAYE</abbr> scheme for your organisation.</p>
+        <p class="govuk-body">
             You can do this by using either of the following:
-            <ul class="list list-bullet">
-                <li>the Government Gateway login for your organisation</li>
-                <li>your accounts office reference number for your organisation</li>
-            </ul>
         </p>
-        <details role="group">
-            <summary role="button" aria-controls="details-content-0" aria-expanded="false"><span class="summary">Find your Government Gateway details</span></summary>
-            <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
-                <p>
-                    If you have lost your Government Gateway log in details you can
-                    <a rel="external" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in">get help signing in</a>
-                </p>
+
+        <ul class="govuk-list govuk-list--bullet">
+            <li>the Government Gateway login for your organisation</li>
+            <li>your accounts office reference number for your organisation</li>
+        </ul>
+
+        <details class="govuk-details" role="group" data-module="govuk-details">
+            <summary class="govuk-details__summary" role="button" aria-controls="details-content-00">
+                <span class="govuk-details__summary-text">
+                    Find your Government Gateway details
+                </span>
+            </summary>
+            <div class="govuk-details__text" id="details-content-00" aria-hidden="true">
+                If you have lost your Government Gateway log in details you can <a href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in" class="govuk-link" rel="external" target="_blank" title="Opens in a new window">get help signing in</a>
             </div>
         </details>
-        <br />
-        <details role="group">
-            <summary role="button" aria-controls="details-content-0" aria-expanded="false"><span class="summary">Find your accounts office and PAYE scheme reference numbers</span></summary>
-            <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
-                <p>
-                    You can find your 13-character accounts office reference number on the letter HMRC sent you when you first registered as an employer.
-                </p>
-                <p>
-                    You will find your employer PAYE scheme reference in the payslip booklet HMRC provided. Contact HMRC or your accountant if you do not have access to the booklet.
-                </p>
+
+        <details class="govuk-details" role="group" data-module="govuk-details">
+            <summary class="govuk-details__summary" role="button" aria-controls="details-content-01">
+                <span class="govuk-details__summary-text">
+                    Find your accounts office and <abbr>PAYE</abbr> scheme reference numbers
+                </span>
+            </summary>
+            <div class="govuk-details__text" id="details-content-01" aria-hidden="true">
+                You can find your 13-character accounts office reference number on the letter <abbr title="Her Majesty's Revenue and Customs">HMRC</abbr> sent you when you first registered as an employer. You will find your employer <abbr>PAYE</abbr> scheme reference in the payslip booklet <abbr>HMRC</abbr> provided. Contact HMRC or your accountant if you do not have access to the booklet.
             </div>
         </details>
-        <br />
+
+
         <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
             @Html.AntiForgeryToken()
-            <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
-                <p>
-                    <fieldset>
-                        <legend class="form-label-bold">
-                            <span>You can add a PAYE scheme later if you need more time, we can still create your account for you.</span>
-                            <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
-                                Tell us if you want to add a PAYE scheme
-                            </span>
-                        </legend>
-                        <label for="want-to-add-paye-scheme" class="block-label">
-                            <input type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
-                            Use Government Gateway log in
-                        </label>
-                        <label for="want-to-add-paye-scheme-aorn" class="block-label">
-                            <input type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
-                            Use accounts office reference number and employer PAYE scheme reference. <b>You should only use this if your payroll for your organisation is under £3 million.</b>
-                        </label>
-                        <label for="do-not-want-to-add-paye-scheme" class="block-label">
-                            <input type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
-                            No, I’ll do this later
-                        </label>
-                    </fieldset>
-                </p>
-                <p>
-                    <div class="notice">
-                        <i class="icon icon-important">
-                            <span class="visuallyhidden">Warning</span>
-                        </i>
-                        <strong class="bold-small">
-                            Before you continue, you must make sure you have authority to add PAYE schemes to the account for this organisation
-                        </strong>
+            <div class="govuk-form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
+
+                <fieldset class="govuk-fieldset" aria-describedby="have-not-got-everything">
+
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
+                        <h1 class="govuk-fieldset__heading">
+                            <span>You can add a <abbr>PAYE</abbr> scheme later if you need more time, we can still create your account for you. </span>
+                        </h1>
+                    </legend>
+
+                    <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                        Tell us if you want to add a <abbr>PAYE</abbr> scheme
+                    </span>
+
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
+                            <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme">
+                                Use Government Gateway log in
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
+                            <label class="govuk-label govuk-radios__label" for="want-to-add-paye-scheme-aorn">
+                                Use accounts office reference number and employer <abbr>PAYE</abbr> scheme reference. <b>You should only use this if your payroll for your organisation is under &pound;3 million</b>.
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
+                            <label class="govuk-radios__input" for="do-not-want-to-add-paye-scheme">
+                                No, I'll do this later
+                            </label>
+                        </div>
                     </div>
-                </p>
+                </fieldset>
+            </div>
 
-                <button class="button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
+            <div class="govuk-warning-text">
+                <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+                <strong class="govuk-warning-text__text">
+                    <span class="govuk-warning-text__assistive">Warning</span>
+                    Before you continue, you must make sure you have authority to add <abbr>PAYE</abbr> schemes to the account for this organisation
+                </strong>
+            </div>
 
+            <div class="govuk-form-group">
+                <button class="govuk-button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
             </div>
         </form>
     </div>
