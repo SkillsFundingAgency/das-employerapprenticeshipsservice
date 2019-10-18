@@ -1,9 +1,9 @@
-﻿using MediatR;
-using SFA.DAS.Authorization;
+using MediatR;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnections
 {
-    public class GetTransferConnectionsQuery : AccountMessage, IAsyncRequest<GetTransferConnectionsResponse>
+    public class GetTransferConnectionsQuery : IAsyncRequest<GetTransferConnectionsResponse>
     {
+        public string HashedAccountId { get; set; }
     }
 }

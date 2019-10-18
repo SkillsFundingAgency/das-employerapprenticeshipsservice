@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation
 {
@@ -13,12 +13,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation
             _hmrcService = hmrcService;
         }
 
-
         public Task<GetGatewayInformationResponse> Handle(GetGatewayInformationQuery message)
         {
             var returnUrl = _hmrcService.GenerateAuthRedirectUrl(message.ReturnUrl);
 
-            return Task.FromResult(new GetGatewayInformationResponse {Url = returnUrl});
+            return Task.FromResult(new GetGatewayInformationResponse { Url = returnUrl });
         }
     }
 }

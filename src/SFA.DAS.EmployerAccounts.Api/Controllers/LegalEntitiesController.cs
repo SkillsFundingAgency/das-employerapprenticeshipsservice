@@ -66,9 +66,11 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [Route("{legalEntityId}", Name = "GetLegalEntity")]
         [ApiAuthorize(Roles = "ReadAllEmployerAccountBalances")]
         [HttpNotFoundForNullModel]
-        public async Task<IHttpActionResult> GetLegalEntity([FromUri] GetLegalEntityQuery query)
+        public async Task<IHttpActionResult> GetLegalEntity(
+            string hashedAccountId,
+            long legalEntityId)
         {
-            var response = await _mediator.SendAsync(query);
+            var response = await _mediator.SendAsync(new GetLegalEntityQuery(hashedAccountId, legalEntityId));
             return Ok(response.LegalEntity);
         }
     }

@@ -49,14 +49,14 @@
                     <h3 class="heading-medium"><a href="@Url.EmployerCommitmentsAction("apprentices/home")">Apprentices</a></h3>
                     <p>Add apprentices, update details of existing apprentices and authorise payments to training providers.</p>
                 </div>
-                @if (Html.IsAuthorized(FeatureType.Recruitments))
+                @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
                 {
                     <div class="card">
                         <h3 class="heading-medium"><a href="@Url.EmployerRecruitAction()">Recruitment</a></h3>
                         <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprenticeship.</p>
                     </div>
                 }
-                @if (Html.IsAuthorized(FeatureType.ProviderRelationships))
+                @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))
                 {
                     <div class="card">
                         <h3 class="heading-medium"><a href="@Url.ProviderRelationshipsAction("providers")">Training provider permissions</a></h3>
@@ -128,7 +128,7 @@
             <nav>
                 <ul class="js-tabs" role="tablist">
                     <li role="tab" id="tab-tasks" aria-controls="pane-tasks"><a href="#pane-tasks">Tasks</a></li>
-                    @if (Html.IsAuthorized(FeatureType.Activities))
+                    @if (Html.IsAuthorized("EmployerFeature.Activities"))
                     {
                         <li role="tab" id="tab-activity" aria-controls="pane-activity"><a href="#pane-activity">Activity</a></li>
                     }
@@ -197,7 +197,7 @@
                         <p>You do not have any tasks</p>
                     }
                 </div>
-                @if (Html.IsAuthorized(FeatureType.Activities))
+                @if (Html.IsAuthorized("EmployerFeature.Activities"))
                 {
                     <div class="js-tab-pane" id="pane-activity" role="tabpanel">
                         @Html.Action("Latest", "Activities")

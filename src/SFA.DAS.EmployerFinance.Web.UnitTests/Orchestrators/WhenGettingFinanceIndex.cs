@@ -18,10 +18,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
-using TransactionItemType = SFA.DAS.EmployerFinance.Models.Transaction.TransactionItemType;
-using TransactionLine = SFA.DAS.EmployerFinance.Models.Transaction.TransactionLine;
 
 namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 {
@@ -32,7 +29,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private const long AccountId = 1234;
 
         private Mock<IAccountApiClient> _accountApiClient;
-        private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private GetEmployerAccountResponse _response;
@@ -51,7 +47,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             {
                 Account = new Account
                 {
-                    HashedId = HashedAccountId,
+                    Id = AccountId,
                     Name = "Test Account"
                 }
             };
@@ -63,8 +59,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             _hashingService.Setup(h => h.DecodeValue(HashedAccountId)).Returns(AccountId);
 
-            _employerAccountsConfiguration = new EmployerAccountsConfiguration();
-
             _orchestrator = new EmployerAccountTransactionsOrchestrator(_accountApiClient.Object, _mediator.Object, _currentTime.Object, Mock.Of<ILog>());
         }
 
@@ -74,7 +68,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         public async Task ThenShouldDetermineIfEmployerIsLevyOrNonLevy(string apprenticeshipEmployerType, bool isLevy)
         {
             //Arrange
-            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId))
+            _accountApiClient.Setup(c => c.GetAccount(AccountId))
                 .ReturnsAsync(new AccountDetailViewModel
                 {
                     ApprenticeshipEmployerType = apprenticeshipEmployerType
@@ -82,10 +76,9 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
             var getAccountFinanceOverviewQuery = new GetAccountFinanceOverviewQuery
             {
-                AccountHashedId = HashedAccountId
+                AccountHashedId = HashedAccountId,
+                AccountId = AccountId
             };
-
-            _employerAccountsConfiguration.ReservationsBaseUrl = "http://example.com";
 
             _mediator.Setup(m => m.SendAsync(It.IsAny<GetAccountFinanceOverviewQuery>()))
                 .ReturnsAsync(new GetAccountFinanceOverviewResponse());

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Moq;
@@ -57,7 +56,8 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.UnitTests.EventHandlers.Emplo
             {
                 AccountId = AccountId,
                 UserRef = UserRef,
-                Created = Created};
+                Created = Created
+            };
 
             Handler = new CreatedAccountEventHandler(ReadStoreMediator.Object);
         }

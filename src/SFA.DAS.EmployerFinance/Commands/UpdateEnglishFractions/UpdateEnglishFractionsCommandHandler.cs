@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Levy;
+using SFA.DAS.Hmrc;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions
@@ -35,10 +35,10 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions
             }
 
             DateTime? dateFrom = null;
-            if (existingFractions?.OrderByDescending(x=>x.DateCalculated).FirstOrDefault()?.DateCalculated != null 
-                && existingFractions?.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated != DateTime.MinValue)
+            if (existingFractions.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated != null 
+                && existingFractions.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated != DateTime.MinValue)
             {
-                dateFrom = existingFractions?.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated.AddDays(-1);
+                dateFrom = existingFractions.OrderByDescending(x => x.DateCalculated).FirstOrDefault()?.DateCalculated.AddDays(-1);
             }
 
 
@@ -55,9 +55,7 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions
 
                 foreach (var fraction in calculations.Fractions)
                 {
-                    decimal amount;
-
-                    if (decimal.TryParse(fraction.Value, out amount))
+                    if (decimal.TryParse(fraction.Value, out _))
                     {
                         fractions.Add(
                             new DasEnglishFraction
@@ -83,7 +81,6 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions
             {
                 await _englishFractionRepository.CreateEmployerFraction(englishFraction, englishFraction.EmpRef);
             }
-            
         }
 
         private static bool TheFractionIsOlderOrEqualToTheUpdateDate(UpdateEnglishFractionsCommand message, List<DasEnglishFraction> existingFractions)
@@ -97,8 +94,8 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions
     {
         public bool Equals(DasEnglishFraction source, DasEnglishFraction target)
         {
-            return source.EmpRef.Equals(target.EmpRef) &&
-                   source.DateCalculated.Equals(target.DateCalculated);
+            return source.EmpRef.Equals(target?.EmpRef) &&
+                   source.DateCalculated.Equals(target?.DateCalculated);
         }
 
         public int GetHashCode(DasEnglishFraction obj)

@@ -27,7 +27,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         private const long AccountId = 1234;
 
         private Mock<IAccountApiClient> _accountApiClient;
-        private EmployerAccountsConfiguration _employerAccountsConfiguration;
         private Mock<IMediator> _mediator;
         private EmployerAccountTransactionsOrchestrator _orchestrator;
         private GetEmployerAccountResponse _response;
@@ -46,7 +45,6 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
             {
                 Account = new Account
                 {
-                    HashedId = HashedAccountId,
                     Name = "Test Account"
                 }
             };
@@ -226,7 +224,7 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
         [Test]
         public async Task ThenAggregatedLevyTransactionShouldHaveCorrectAmount()
         {
-            //Arrange
+            //Arrange           
             var levyTransactions = new List<LevyDeclarationTransactionLine>
             {
                 CreateLevyTransaction(new DateTime(2017,5,18), 200),
@@ -258,6 +256,15 @@ namespace SFA.DAS.EmployerFinance.Web.UnitTests.Orchestrators
 
         private void SetupGetTransactionsResponse(int year, int month, IEnumerable<TransactionLine> transactions)
         {
+            _accountApiClient.Setup(s => s.GetAccount(HashedAccountId))
+            .Returns(Task.FromResult(
+                new EAS.Account.Api.Types.AccountDetailViewModel
+                {
+                    HashedAccountId = HashedAccountId,
+                    AccountId = AccountId
+                })
+            );
+
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountTransactionsQuery>()))
                 .ReturnsAsync(new GetEmployerAccountTransactionsResponse
                 {

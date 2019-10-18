@@ -2,13 +2,18 @@
 using SFA.DAS.EmployerFinance.Attributes;
 using SFA.DAS.EmployerFinance.Messages;
 using System.ComponentModel.DataAnnotations;
-using SFA.DAS.Authorization;
+using AutoMapper;
+using SFA.DAS.Authorization.ModelBinding;
 using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
 {
-    public class GetTransactionsDownloadQuery : MembershipMessage, IAsyncRequest<GetTransactionsDownloadResponse>
+    public class GetTransactionsDownloadQuery : IAuthorizationContextModel, IAsyncRequest<GetTransactionsDownloadResponse>
     {
+        [IgnoreMap]
+        [Required]
+        public long AccountId { get; set; }
+
         [Display(Name = "Start date")]
         [Required]
         [Month, Year, Date]

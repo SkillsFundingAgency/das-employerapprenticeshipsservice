@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Binders;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -9,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         public static void RegisterBinders(ModelBinderDictionary binders)
         {
-            binders.DefaultBinder = new MessageModelBinder(() => DependencyResolver.Current.GetService<ICallerContextProvider>());
+            binders.UseAuthorizationModelBinder();
             binders.Add(typeof(string), new TrimStringModelBinder());
         }
     }

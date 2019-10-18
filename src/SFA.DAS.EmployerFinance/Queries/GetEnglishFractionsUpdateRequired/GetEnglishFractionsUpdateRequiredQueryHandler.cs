@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerFinance.Data;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetEnglishFractionsUpdateRequired
 {
@@ -15,7 +15,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEnglishFractionsUpdateRequired
         {
             _hmrcService = hmrcService;
             _englishFractionRepository = englishFractionRepository;
-            
         }
 
         public async Task<GetEnglishFractionUpdateRequiredResponse> Handle(GetEnglishFractionUpdateRequiredRequest message)

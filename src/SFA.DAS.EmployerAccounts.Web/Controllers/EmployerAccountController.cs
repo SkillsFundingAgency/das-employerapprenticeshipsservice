@@ -4,7 +4,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NLog.Logger;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,7 +11,7 @@ using System.Web.Mvc;
 using MediatR;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PayeRefData;
 using SFA.DAS.EmployerAccounts.Models.Account;
@@ -21,7 +20,7 @@ using SFA.DAS.EmployerAccounts.Web.Models;
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [RoutePrefix("accounts")]
-    [AuthoriseActiveUser]
+    [DasAuthorize]
     public class EmployerAccountController : BaseController
     {
         private readonly EmployerAccountOrchestrator _employerAccountOrchestrator;
@@ -30,6 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
+        private const int AddPayeNowAorn = 3;
         private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
         private readonly string _hashedAccountIdCookieName;
         private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
@@ -160,6 +160,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{HashedAccountId}/getApprenticeshipFunding")]
         [Route("getApprenticeshipFunding")]
         public ActionResult GetApprenticeshipFunding()
         {
@@ -174,13 +175,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("{HashedAccountId}/getApprenticeshipFunding")]
         [Route("getApprenticeshipFunding")]
         public async Task<ActionResult> GetApprenticeshipFunding(int? choice)
         {
             switch (choice ?? 0)
             {
                 case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
-                case AddPayeNow: return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
+                case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
                 default:
                 {
                     var model = new

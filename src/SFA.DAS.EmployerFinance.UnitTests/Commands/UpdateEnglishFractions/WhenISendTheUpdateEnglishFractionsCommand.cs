@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using HMRC.ESFA.Levy.Api.Types;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerFinance.Commands.UpdateEnglishFractions;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Queries.GetEnglishFractionsUpdateRequired;
+using SFA.DAS.Hmrc;
 using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                     CalculatedAt = DateTime.Today.AddDays(-20),
                     Fractions = new List<Fraction>
                     {
-                        new Fraction {Region = "England", Value = "0.45"}
+                        new Fraction { Region = "England", Value = "0.45" }
                     }
                 },
                 new FractionCalculation
@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                     CalculatedAt = DateTime.Today.AddDays(-10),
                     Fractions = new List<Fraction>
                     {
-                        new Fraction {Region = "England", Value = "0.5"}
+                        new Fraction { Region = "England", Value = "0.5" }
                     }
                 },
                 new FractionCalculation
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                     CalculatedAt = DateTime.Today.AddDays(-5),
                     Fractions = new List<Fraction>
                     {
-                        new Fraction {Region = "England", Value = "0.55"}
+                        new Fraction { Region = "England", Value = "0.55" }
                     }
                 },
                 new FractionCalculation
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                     CalculatedAt = DateTime.Today,
                     Fractions = new List<Fraction>
                     {
-                        new Fraction {Region = "England", Value = "0.6"}
+                        new Fraction { Region = "England", Value = "0.6" }
                     }
                 }
             };
@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
         {
             //Assign
             _englishFractionRepository.Setup(
-                x => x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(), It.IsAny<string>()))
+                    x => x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(), It.IsAny<string>()))
                 .Returns(Task.Run(() => { }));
 
             _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
@@ -111,7 +111,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
             await _handler.Handle(new UpdateEnglishFractionsCommand
             {
                 EmployerReference = _employerReference,
-                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true}
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { UpdateRequired = true }
             });
 
             //Assert
@@ -123,8 +123,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                 _employerReference), Times.Once);
 
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
-               It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[3])),
-               _employerReference), Times.Once);
+                It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[3])),
+                _employerReference), Times.Once);
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
             _fractionCalculations[2].Fractions[0].Value = "this is not an amount";
 
             _englishFractionRepository.Setup(
-                x => x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(), It.IsAny<string>()))
+                    x => x.CreateEmployerFraction(It.IsAny<DasEnglishFraction>(), It.IsAny<string>()))
                 .Returns(Task.Run(() => { }));
 
             _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference))
@@ -160,8 +160,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                 _employerReference), Times.Never);
 
             _englishFractionRepository.Verify(x => x.CreateEmployerFraction(
-               It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[3])),
-               _employerReference), Times.Once);
+                It.Is<DasEnglishFraction>(fraction => IsSameAsFractionCalculation(fraction, _fractionCalculations[3])),
+                _employerReference), Times.Once);
         }
 
         [Test]
@@ -175,23 +175,24 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                 {
                     Empref = _employerReference,
                     FractionCalculations = new List<FractionCalculation>
-            {
-                new FractionCalculation
-                {
-                    CalculatedAt = DateTime.Today.AddDays(-20),
-                    Fractions = new List<Fraction>
                     {
-                        new Fraction {Region = "England", Value = "0.45"}
+                        new FractionCalculation
+                        {
+                            CalculatedAt = DateTime.Today.AddDays(-20),
+                            Fractions = new List<Fraction>
+                            {
+                                new Fraction { Region = "England", Value = "0.45" }
+                            }
+                        },
+                        new FractionCalculation
+                        {
+                            CalculatedAt = DateTime.Today.AddDays(-10),
+                            Fractions = new List<Fraction>
+                            {
+                                new Fraction { Region = "England", Value = "0.5" }
+                            }
+                        }
                     }
-                },
-                new FractionCalculation
-                {
-                    CalculatedAt = DateTime.Today.AddDays(-10),
-                    Fractions = new List<Fraction>
-                    {
-                        new Fraction {Region = "England", Value = "0.5"}
-                    }
-                }}
                 });
 
 
@@ -216,7 +217,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
             await _handler.Handle(new UpdateEnglishFractionsCommand
             {
                 EmployerReference = _employerReference,
-                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { DateCalculated = new DateTime(2016,01,01),UpdateRequired = false}
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { DateCalculated = new DateTime(2016, 01, 01), UpdateRequired = false }
             });
 
             //Assert
@@ -238,7 +239,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
             await _handler.Handle(new UpdateEnglishFractionsCommand
             {
                 EmployerReference = _employerReference,
-                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { DateCalculated = new DateTime(2016, 01, 01), UpdateRequired = true}
+                EnglishFractionUpdateResponse = new GetEnglishFractionUpdateRequiredResponse { DateCalculated = new DateTime(2016, 01, 01), UpdateRequired = true }
             });
 
             //Assert
@@ -255,13 +256,17 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
                     Empref = _employerReference,
                     FractionCalculations = _fractionCalculations
                 });
-            _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference)).ReturnsAsync(new List<DasEnglishFraction> {new DasEnglishFraction
+
+            _englishFractionRepository.Setup(x => x.GetAllEmployerFractions(_employerReference)).ReturnsAsync(new List<DasEnglishFraction>
             {
-                DateCalculated = new DateTime(2016,01,01),
-                 EmpRef = _employerReference,
+                new DasEnglishFraction
+                {
+                    DateCalculated = new DateTime(2016, 01, 01),
+                    EmpRef = _employerReference,
                     Amount = 0.45M,
                     Id = "10"
-            } });
+                }
+            });
 
             //Act
             await _handler.Handle(new UpdateEnglishFractionsCommand
@@ -300,7 +305,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
         public async Task ThenIfThereAreFractionsAndTheFlagIsSetToUpdateThenTheDateIsPassedAsAFilterParameter()
         {
             //Arrange
-            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference,It.IsAny<DateTime?>()))
+            _hmrcService.Setup(x => x.GetEnglishFractions(_employerReference, It.IsAny<DateTime?>()))
                 .ReturnsAsync(new EnglishFractionDeclarations
                 {
                     Empref = _employerReference,
@@ -317,9 +322,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
             });
 
             //Assert
-            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference,DateTime.Today.AddDays(-11)), Times.Once);
-            
-
+            _hmrcService.Verify(x => x.GetEnglishFractions(_employerReference, DateTime.Today.AddDays(-11)), Times.Once);
         }
 
         private static bool IsSameAsFractionCalculation(DasEnglishFraction fraction, FractionCalculation fractionCalculation)
@@ -330,7 +333,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.UpdateEnglishFractions
             var fractionCalculationAmount = fractionCalculation.Fractions.First().Value;
 
             return fractiondate.Equals(fractionCalculation.CalculatedAt) &&
-                    fractionAmountString.Equals(fractionCalculationAmount);
+                   fractionAmountString.Equals(fractionCalculationAmount);
         }
     }
 }

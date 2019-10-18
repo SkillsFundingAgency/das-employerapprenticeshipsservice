@@ -21,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
         private SettingsController _controller;
         private Mock<Web.Orchestrators.UserSettingsOrchestrator> _orchestrator;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
         private const string ExpectedRedirectUrl = "http://redirect.local.test";
@@ -34,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
             _orchestrator = new Mock<Web.Orchestrators.UserSettingsOrchestrator>();
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
@@ -50,8 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAccountOr
                 It.IsAny<List<UserNotificationSetting>>()))
                 .Returns(() => Task.FromResult(new Unit()));
 
-            _controller = new SettingsController(_owinWrapper.Object, _orchestrator.Object, _featureToggle.Object, 
-                _userViewTestingService.Object, _flashMessage.Object)
+            _controller = new SettingsController(_owinWrapper.Object, _orchestrator.Object, _userViewTestingService.Object, _flashMessage.Object)
             {
                 ControllerContext = _controllerContext.Object,
                 Url = new UrlHelper(new RequestContext(_httpContext.Object, new RouteData()), _routes)

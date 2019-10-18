@@ -30,8 +30,8 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.AutoConfiguration;
-using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
+using SFA.DAS.EmployerUsers.WebClientComponents;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {

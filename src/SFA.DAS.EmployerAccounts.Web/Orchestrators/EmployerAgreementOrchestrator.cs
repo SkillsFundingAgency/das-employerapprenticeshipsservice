@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;

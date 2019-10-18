@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetGatewayInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
@@ -43,13 +44,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
         {
             //Arrange
             var redirectUrl = "myUrl";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetGatewayInformationQuery>())).ReturnsAsync(new GetGatewayInformationResponse {Url = "someurl"});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetGatewayInformationQuery>())).ReturnsAsync(new GetGatewayInformationResponse { Url = "someurl" });
 
             //Act
             await _employerAccountOrchestrator.GetGatewayUrl(redirectUrl);
 
             //Assert
-            _mediator.Verify(x=>x.SendAsync(It.Is<GetGatewayInformationQuery>(c=>c.ReturnUrl.Equals(redirectUrl))));
+            _mediator.Verify(x => x.SendAsync(It.Is<GetGatewayInformationQuery>(c => c.ReturnUrl.Equals(redirectUrl))));
         }
 
         [Test]
@@ -57,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
         {
             //Arrange
             var expectedAuthToken = "123";
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation()});
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>())).ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation() });
 
             //Act
             await _employerAccountOrchestrator.GetHmrcEmployerInformation(expectedAuthToken, string.Empty);
@@ -74,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.HmrcOrchestratorT
             var expectedEmpRef = "123/456789";
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetHmrcEmployerInformationQuery>()))
-                .ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation(), Empref = expectedEmpRef});
+                .ReturnsAsync(new GetHmrcEmployerInformationResponse { EmployerLevyInformation = new EmpRefLevyInformation(), Empref = expectedEmpRef });
           
             //Act
             var result = await _employerAccountOrchestrator.GetHmrcEmployerInformation("123", scenarioUserEmail);

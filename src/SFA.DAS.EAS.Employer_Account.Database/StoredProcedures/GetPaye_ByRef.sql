@@ -3,7 +3,7 @@
 AS
 
 Select TOP 1
-	paye.Ref as EmpRef,
+	paye.Ref as Ref,
     paye.Name as RefName
 from 
 	employer_account.Paye paye
