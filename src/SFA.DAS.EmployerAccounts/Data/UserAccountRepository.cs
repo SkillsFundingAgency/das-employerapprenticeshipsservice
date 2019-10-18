@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@email", email, DbType.String);
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email;",
+                sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Email = @email;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@id", id, DbType.Int64);
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Id = @id;",
+                sql: "SELECT Id, CONVERT(NVARCHAR(50), UserRef) AS UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Id = @id;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User];",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -101,7 +101,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@email", emailAddress, DbType.String);
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Email = @email",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
