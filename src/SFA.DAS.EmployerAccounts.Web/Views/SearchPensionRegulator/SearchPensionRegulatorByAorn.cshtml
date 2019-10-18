@@ -72,5 +72,15 @@
 </div>
 
 @section breadcrumb {
-    <a href="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName)" class="govuk-back-link">Back</a>
+    <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="back-link">Back</a>
 }
+
+@section pageSpecificJS {
+    <script type="text/javascript">
+        $(function () {
+            sfa.homePage.init();
+        });
+    </script>
+}
+
+@Html.SetZenDeskLabels(ZenDeskLabels.EnteredTheWrongPAYESchemeDetails)
