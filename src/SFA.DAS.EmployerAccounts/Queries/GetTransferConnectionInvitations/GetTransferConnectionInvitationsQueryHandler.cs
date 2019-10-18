@@ -32,7 +32,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitations
 
             return new GetTransferConnectionInvitationsResponse
             {
-                TransferConnectionInvitations = transferConnectionInvitations
+                TransferConnectionInvitations = transferConnectionInvitations,
+                AccountId = message.AccountId
             };
         }
     }

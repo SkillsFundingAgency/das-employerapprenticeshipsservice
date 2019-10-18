@@ -94,13 +94,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferRequestsTests
             _employerCommitmentApi.Setup(c => c.GetTransferRequests(_account1.HashedId)).ReturnsAsync(_transferRequests);
             _hashingService.Setup(h => h.DecodeValue(_account1.HashedId)).Returns(_account1.Id);
             _hashingService.Setup(h => h.DecodeValue(_account2.HashedId)).Returns(_account2.Id);
+            _hashingService.Setup(h => h.HashValue(_account1.Id)).Returns(_account1.HashedId);
+            _hashingService.Setup(h => h.HashValue(_account2.Id)).Returns(_account2.HashedId);
 
             _handler = new GetTransferRequestsQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _configurationProvider, _employerCommitmentApi.Object, _hashingService.Object);
 
             _query = new GetTransferRequestsQuery
             {
-                AccountId = _account1.Id,
-                AccountHashedId = _account1.HashedId
+                AccountId = _account1.Id
             };
         }
 

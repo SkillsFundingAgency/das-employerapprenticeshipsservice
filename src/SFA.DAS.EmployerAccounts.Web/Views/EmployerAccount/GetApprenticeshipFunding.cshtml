@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @{ViewBag.PageID = "get-apprenticeship-funding"; }
-@{ViewBag.Title = "Get Apprenticeship Funding"; }
+@{ViewBag.Title = "Add a PAYE Scheme"; }
 @{ViewBag.HideNav = true; }
 
 @{
@@ -12,17 +12,14 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">
-            Get apprenticeship funding
+            Add a PAYE Scheme
         </h1>
-        <p>If you’re ready to pay for your apprenticeship training, you can do this now by adding the PAYE scheme for your organisation.</p>
+        <p>We need you to add the PAYE scheme for your organisation.</p>
         <p>
-            If you do not need to get apprenticeship funding yet, you can still register an account.          
-        </p>
-        <p>
-            To get apprenticeship funding now, you can use either of the following:
+            You can do this by using either of the following:
             <ul class="list list-bullet">
-                <li>the Government Gateway login for your PAYE scheme</li>
-                <li>your accounts office reference number and employer PAYE scheme reference</li>
+                <li>the Government Gateway login for your organisation</li>
+                <li>your accounts office reference number for your organisation</li>
             </ul>
         </p>
         <details role="group">
@@ -33,8 +30,8 @@
                     <a rel="external" target="_blank" href="https://www.gov.uk/log-in-register-hmrc-online-services/problems-signing-in">get help signing in</a>
                 </p>
             </div>
-        </details>  
-        <br/>
+        </details>
+        <br />
         <details role="group">
             <summary role="button" aria-controls="details-content-0" aria-expanded="false"><span class="summary">Find your accounts office and PAYE scheme reference numbers</span></summary>
             <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="true">
@@ -46,29 +43,45 @@
                 </p>
             </div>
         </details>
-        <br/>
+        <br />
         <form method="POST" action="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
-                <fieldset>
-                    <legend class="form-label-bold">
-                        <span>Do you want to add a PAYE scheme to get apprenticeship funding?</span>
-                        <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
-                            Tell us if you want to add a PAYE scheme
-                        </span>
-                    </legend>
-                    <label for="want-to-add-paye-scheme" class="block-label">
-                        <input type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
-                        Yes, add my PAYE scheme details now
-                    </label>
-                    <label for="do-not-want-to-add-paye-scheme" class="block-label">
-                        <input type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
-                        No, I’ll do this later
-                    </label>
-                </fieldset>
-            </div>
-            <div class="form-group">
-                <button class="button" type="submit" id="submit-confirm-who-you-are-button">Continue</button>
+                <p>
+                    <fieldset>
+                        <legend class="form-label-bold">
+                            <span>You can add a PAYE scheme later if you need more time, we can still create your account for you.</span>
+                            <span class="error-message js-hidden @hiddenClass" aria-hidden="true" id="have-not-got-everything">
+                                Tell us if you want to add a PAYE scheme
+                            </span>
+                        </legend>
+                        <label for="want-to-add-paye-scheme" class="block-label">
+                            <input type="radio" name="choice" id="want-to-add-paye-scheme" value="2" />
+                            Use Government Gateway log in
+                        </label>
+                        <label for="want-to-add-paye-scheme-aorn" class="block-label">
+                            <input type="radio" name="choice" id="want-to-add-paye-scheme-aorn" value="3" />
+                            Use accounts office reference number and employer PAYE scheme reference. <b>You should only use this if your payroll for your organisation is under £3 million.</b>
+                        </label>
+                        <label for="do-not-want-to-add-paye-scheme" class="block-label">
+                            <input type="radio" name="choice" id="do-not-want-to-add-paye-scheme" value="1" />
+                            No, I’ll do this later
+                        </label>
+                    </fieldset>
+                </p>
+                <p>
+                    <div class="notice">
+                        <i class="icon icon-important">
+                            <span class="visuallyhidden">Warning</span>
+                        </i>
+                        <strong class="bold-small">
+                            Before you continue, you must make sure you have authority to add PAYE schemes to the account for this organisation
+                        </strong>
+                    </div>
+                </p>
+
+                <button class="button" type="submit" id="submit-add-a-paye-scheme-button">Continue</button>
+
             </div>
         </form>
     </div>
@@ -82,3 +95,4 @@
     </script>
 }
 
+@Html.SetZenDeskLabels(ZenDeskLabels.AddPAYESchemesToYourAccount, ZenDeskLabels.ApprenticeshipFunding)

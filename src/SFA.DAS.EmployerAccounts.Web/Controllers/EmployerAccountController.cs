@@ -29,6 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private ICookieStorageService<HashedAccountIdModel> _accountCookieStorage;
         private const int AddPayeLater = 1;
         private const int AddPayeNow = 2;
+        private const int AddPayeNowAorn = 3;
         private readonly ICookieStorageService<ReturnUrlModel> _returnUrlCookieStorageService;
         private readonly string _hashedAccountIdCookieName;
         private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
@@ -159,6 +160,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{HashedAccountId}/getApprenticeshipFunding")]
         [Route("getApprenticeshipFunding")]
         public ActionResult GetApprenticeshipFunding()
         {
@@ -173,13 +175,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Route("{HashedAccountId}/getApprenticeshipFunding")]
         [Route("getApprenticeshipFunding")]
         public async Task<ActionResult> GetApprenticeshipFunding(int? choice)
         {
             switch (choice ?? 0)
             {
                 case AddPayeLater: return RedirectToAction(ControllerConstants.SkipRegistrationActionName);
-                case AddPayeNow: return RedirectToAction(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName);
+                case AddPayeNow: return RedirectToAction(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName);
+                case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
                 default:
                 {
                     var model = new
