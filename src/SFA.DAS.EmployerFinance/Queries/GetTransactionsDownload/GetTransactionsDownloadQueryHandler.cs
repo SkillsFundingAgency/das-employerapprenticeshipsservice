@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
-using SFA.DAS.EmployerFinance.Queries.GetEmployerAccount;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
@@ -13,16 +14,16 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
     {
         private readonly ITransactionFormatterFactory _transactionsFormatterFactory;
         private readonly ITransactionRepository _transactionRepository;
-        private readonly IMediator _mediator;
+        private readonly IAccountApiClient _accountApiClient;
 
         public GetTransactionsDownloadQueryHandler(
             ITransactionFormatterFactory transactionsFormatterFactory, 
             ITransactionRepository transactionRepository,
-            IMediator mediator)
+            IAccountApiClient accountApiClient)
         {
             _transactionsFormatterFactory = transactionsFormatterFactory;
             _transactionRepository = transactionRepository;
-            _mediator = mediator;
+            _accountApiClient = accountApiClient;
         }
 
         public async Task<GetTransactionsDownloadResponse> Handle(GetTransactionsDownloadQuery message)
@@ -36,15 +37,12 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
                 throw new ValidationException("There are no transactions in the date range");
             }
 
-            var accountResponse = await _mediator.SendAsync(new GetEmployerAccountHashedQuery
-            {
-                HashedAccountId = message.AccountHashedId,
-                UserId = message.UserRef.ToString()
-            });
+            var accountResponse = await _accountApiClient.GetAccount(message.AccountId);
+            var apprenticeshipEmployerTypeEnum = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResponse.ApprenticeshipEmployerType, true);
 
             var fileFormatter = _transactionsFormatterFactory.GetTransactionsFormatterByType(
                 message.DownloadFormat.Value,
-                accountResponse.Account.ApprenticeshipEmployerType);
+                apprenticeshipEmployerTypeEnum);
 
             return new GetTransactionsDownloadResponse
             {
