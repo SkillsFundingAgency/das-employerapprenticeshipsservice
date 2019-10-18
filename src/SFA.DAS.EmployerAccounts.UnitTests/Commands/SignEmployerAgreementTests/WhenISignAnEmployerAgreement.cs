@@ -18,6 +18,8 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing;
 using SFA.DAS.Validation;
@@ -94,6 +96,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _mediator = new Mock<IMediator>();
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>())).ReturnsAsync(new GetUserByRefResponse { User = new User { CorrelationId = "CORRELATION_ID" } });
 
             _commintmentService = new Mock<ICommitmentService>();
 
