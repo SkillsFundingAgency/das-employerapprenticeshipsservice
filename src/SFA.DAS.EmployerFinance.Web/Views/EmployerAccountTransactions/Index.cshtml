@@ -139,29 +139,29 @@
         </h2>
         <p>View payments made into and out of your apprenticeship service account. </p>
     </div>
-    @if (Model.Data.IsLevyEmployer)
+
+
+    <div class="column-half">
+        <h2 class="heading-medium">
+            <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions")">
+                Download transactions
+            </a>
+        </h2>
+        <p>Download your financial transactions within a specific date range. </p>
+    </div>
+
+    @if (Model.Data.IsLevyEmployer && Html.IsAuthorized("EmployerFeature.Projections"))
     {
         <div class="column-half">
             <h2 class="heading-medium">
-                <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions")">
-                    Download transactions
+                <a title="Funding projection" href="@Url.EmployerProjectionsAction("forecasting/projections")">
+                    Funding projection
                 </a>
             </h2>
-            <p>Download your financial transactions within a specific date range. </p>
+            <p>View funding projection to plan your future spending. </p>
         </div>
-
-        if (Html.IsAuthorized("EmployerFeature.Projections"))
-        {
-            <div class="column-half">
-                <h2 class="heading-medium">
-                    <a title="Funding projection" href="@Url.EmployerProjectionsAction("forecasting/projections")">
-                        Funding projection
-                    </a>
-                </h2>
-                <p>View funding projection to plan your future spending. </p>
-            </div>
-        }
     }
+
     <div class="column-half">
         <h2 class="heading-medium">
             <a title="Manage transfers" href="@Url.EmployerAccountsAction("transfers")">
