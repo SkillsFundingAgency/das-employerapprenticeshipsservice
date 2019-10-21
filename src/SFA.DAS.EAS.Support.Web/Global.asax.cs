@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Web;
-using System.Web.Configuration;
+using System.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -56,8 +56,7 @@ namespace SFA.DAS.EAS.Support.Web
 
         private void SetupApplicationInsights()
         {
-            TelemetryConfiguration.Active.InstrumentationKey =
-                WebConfigurationManager.AppSettings["InstrumentationKey"];
+            TelemetryConfiguration.Active.InstrumentationKey =ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
 
             TelemetryConfiguration.Active.TelemetryInitializers.Add(new ApplicationInsightsInitializer());
         }
