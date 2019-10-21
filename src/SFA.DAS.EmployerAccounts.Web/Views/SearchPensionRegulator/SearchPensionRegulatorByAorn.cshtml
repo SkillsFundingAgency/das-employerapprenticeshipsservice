@@ -54,7 +54,7 @@
                                     <span class="error-message" id="error-message-aorn">@Model.AornError</span>
                                 }
                             </label>
-                        <input class="form-control uppercase" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
+                            <input class="form-control uppercase" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
                         </div>
                         <div class="form-group @(!string.IsNullOrEmpty(Model.PayeRefError) ? "error" : "")">
                             <label for="payeRef">
@@ -65,7 +65,7 @@
                                     <span class="error-message" id="error-message-payeRef">@Model.PayeRefError</span>
                                 }
                             </label>
-                        <input class="form-control uppercase" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
+                            <input class="form-control uppercase" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
                         </div>
                     </fieldset>
                 </div>
@@ -80,7 +80,7 @@
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <a href="@Url.Action(ControllerConstants.WaysToAddPayeSchemeActionName, ControllerConstants.EmployerAccountPayeControllerName)" class="back-link">Back</a>
+        <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="back-link">Back</a>
     </div>
 }
 
@@ -91,3 +91,5 @@
         });
     </script>
 }
+
+@Html.SetZenDeskLabels(ZenDeskLabels.EnteredTheWrongPAYESchemeDetails)
