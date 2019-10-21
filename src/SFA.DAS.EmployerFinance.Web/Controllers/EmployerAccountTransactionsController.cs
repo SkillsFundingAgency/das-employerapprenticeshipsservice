@@ -76,7 +76,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [ImportModelStateFromTempData]
-        [LevyEmployerTypeOnly]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload()
         {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 
 namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
@@ -12,5 +13,6 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
         string FileExtension { get; }
 
         DownloadFormatType DownloadFormatType { get; }
+        ApprenticeshipEmployerType ApprenticeshipEmployerType { get; }
     }
 }
