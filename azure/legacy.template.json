@@ -390,5 +390,18 @@
             ]
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "uiAppServiceName": {
+            "type": "string",
+            "value": "[variables('uiAppServiceName')]"
+        },
+        "apiAppServiceName": {
+            "type": "string",
+            "value": "[variables('apiAppServiceName')]"
+        },
+        "supportAppServiceName": {
+            "type": "string",
+            "value": "[variables('supportAppServiceName')]"
+        }
+    }
 }
