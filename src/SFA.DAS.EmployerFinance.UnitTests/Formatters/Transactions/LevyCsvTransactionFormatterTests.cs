@@ -6,9 +6,9 @@ using SFA.DAS.EmployerFinance.Formatters.TransactionDowloads;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
 {
-    public class CsvTransactionFormatterTests : BaseFormatterTest
+    public class LevyCsvTransactionFormatterTests : BaseFormatterTest
     {
-        public override ITransactionFormatter PaymentFormatter => new CsvTransactionFormatter();
+        public override ITransactionFormatter PaymentFormatter => new LevyCsvTransactionFormatter();
 
         public override string ExpectedMimeType => "text/csv";
 
