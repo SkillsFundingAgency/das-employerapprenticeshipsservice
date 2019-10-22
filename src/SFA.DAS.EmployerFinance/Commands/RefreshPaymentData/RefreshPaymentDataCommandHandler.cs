@@ -12,7 +12,7 @@ using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Provider.Events.Api.Types;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData

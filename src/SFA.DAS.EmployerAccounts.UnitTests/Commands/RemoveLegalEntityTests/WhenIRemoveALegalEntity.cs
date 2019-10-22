@@ -17,7 +17,7 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests

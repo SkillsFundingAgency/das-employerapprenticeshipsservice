@@ -1,12 +1,13 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using Microsoft.Azure.Documents;
 using NServiceBus.Persistence;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
-using SFA.DAS.NServiceBus.ClientOutbox;
-using SFA.DAS.NServiceBus.SqlServer.ClientOutbox;
+using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.UnitOfWork;
 using StructureMap;
 
@@ -33,5 +34,6 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
             return new EmployerAccountsDbContext(sqlSession.Connection, sqlSession.Transaction);
         }
+
     }
 }

@@ -6,11 +6,11 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.Startup;
 using SFA.DAS.EmployerFinance.Web.App_Start;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.SqlServer;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 
 namespace SFA.DAS.EmployerFinance.Web
@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.Web
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString, container)
-                .UseErrorQueue()
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.Web-error")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())

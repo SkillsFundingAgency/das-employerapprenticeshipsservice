@@ -28,13 +28,13 @@ using SFA.DAS.Audit.Client;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights;
 using SFA.DAS.AutoConfiguration;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.SqlServer;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
+using SFA.DAS.NServiceBus.Configuration;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -144,7 +144,7 @@ namespace SFA.DAS.EAS.Web
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString, container)
-                .UseErrorQueue()
+                .UseErrorQueue("SFA.DAS.EAS.Web-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())

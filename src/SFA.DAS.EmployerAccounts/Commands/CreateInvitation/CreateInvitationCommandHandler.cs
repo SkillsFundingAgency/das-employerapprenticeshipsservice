@@ -11,7 +11,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Notifications.Api.Types;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.TimeProvider;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;

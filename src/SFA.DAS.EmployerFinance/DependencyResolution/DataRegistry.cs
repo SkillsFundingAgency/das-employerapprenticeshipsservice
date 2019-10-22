@@ -1,10 +1,11 @@
-﻿using System.Data.Common;
+﻿using System;
+using System.Data.Common;
 using System.Data.SqlClient;
 using NServiceBus.Persistence;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.NServiceBus.ClientOutbox;
-using SFA.DAS.NServiceBus.SqlServer.ClientOutbox;
+using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
 using SFA.DAS.UnitOfWork;
 using StructureMap;
 
