@@ -81,8 +81,13 @@ namespace SFA.DAS.EmployerAccounts.Web
             {
                 conf.Run(context =>
                 {
+                    // for first iteration of this work, allow deep linking from the support console to the teams view
+                    // as this is the only action they will currently perform.
+                    var hashedAccountId = context.Request.Query.Get("HashedAccountId");
+                    var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
+                    
                     context.Authentication.Challenge(new AuthenticationProperties
-                    { RedirectUri = "/service/index", IsPersistent = true },
+                    { RedirectUri = requestRedirect, IsPersistent = true },
                         "Staff"
                     );
 

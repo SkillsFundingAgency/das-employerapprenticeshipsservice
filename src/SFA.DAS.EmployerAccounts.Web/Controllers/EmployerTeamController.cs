@@ -92,6 +92,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {
+            // Get account owner userId and set on HttpContext
+            if (HttpContext.User.IsInRole("Tier2User"))
+            {
+                var accountOwner = await _employerTeamOrchestrator.GetAccountOwner(hashedAccountId);
+                ((ClaimsIdentity)HttpContext.User.Identity).AddClaim(new Claim("sub", accountOwner.UserRef));
+            }
 
             var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
