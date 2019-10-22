@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
         public async Task StartAsync()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
-                .UseErrorQueue("SFA.DAS.EmployerAccounts.Jobs-error")
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.Jobs-errors")
                 .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
                 .UseLicense(_employerAccountsConfiguration.NServiceBusLicense)
                 .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())

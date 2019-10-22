@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers.TestHarness
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
                 .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
-                .UseErrorQueue("SFA.DAS.EmployerAccounts.MessageHandlers-error")
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.MessageHandlers-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(_employerAccountsConfiguration.NServiceBusLicense))
                 .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())

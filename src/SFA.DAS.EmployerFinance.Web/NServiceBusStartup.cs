@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.Web
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString, container)
-                .UseErrorQueue("SFA.DAS.EmployerAccounts.Web-error")
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.Web-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())

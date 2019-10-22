@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.MessageHandlers")
                 .UseAzureServiceBusTransport(() => _container.GetInstance<EmployerFinanceConfiguration>().ServiceBusConnectionString, _container)
-                .UseErrorQueue("SFA.DAS.EmployerFinance.MessageHandlers-error")
+                .UseErrorQueue("SFA.DAS.EmployerFinance.MessageHandlers-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())

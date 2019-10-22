@@ -142,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
-                .UseErrorQueue("SFA.DAS.EmployerAccounts.Web-error")
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.Web-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())

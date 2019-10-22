@@ -92,7 +92,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
                 var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
                     .UseAzureServiceBusTransport()
-                    .UseErrorQueue("SFA.DAS.EmployerFinance.AcceptanceTests-error")
+                    .UseErrorQueue("SFA.DAS.EmployerFinance.AcceptanceTests-errors")
                     .UseInstallers()
                     .UseLicense(WebUtility.HtmlDecode(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense))
                     .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())

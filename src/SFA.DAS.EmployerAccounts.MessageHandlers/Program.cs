@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.MessageHandlers")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
-                .UseErrorQueue("SFA.DAS.EmployerAccounts.MessageHandlers-error")
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.MessageHandlers-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
