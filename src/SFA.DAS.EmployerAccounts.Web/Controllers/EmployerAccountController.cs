@@ -57,6 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("gatewayInform", Order = 1)]
         public ActionResult GatewayInform(string hashedAccountId)
         {
+            SetZenDeskWidgetToShown();
             if (!string.IsNullOrWhiteSpace(hashedAccountId))
             {
                 _accountCookieStorage.Delete(_hashedAccountIdCookieName);
@@ -164,6 +165,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("getApprenticeshipFunding")]
         public ActionResult GetApprenticeshipFunding()
         {
+            SetZenDeskWidgetToShown();
             PopulateViewBagWithExternalUserId();
             var model = new
             {
@@ -186,6 +188,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 case AddPayeNowAorn: return RedirectToAction(ControllerConstants.SearchUsingAornActionName, ControllerConstants.SearchPensionRegulatorControllerName);
                 default:
                 {
+                    SetZenDeskWidgetToShown();
                     var model = new
                     {
                         HideHeaderSignInLink = true,
@@ -220,6 +223,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("payeerror")]
         public ViewResult PayeError(bool? notFound)
         {
+            SetZenDeskWidgetToShown();
             ViewBag.NotFound = notFound ?? false;
             return View();
         }
@@ -228,6 +232,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("summary")]
         public ViewResult Summary()
         {
+            SetZenDeskWidgetToShown();
             var result = _employerAccountOrchestrator.GetSummaryViewModel(HttpContext);
             return View(result);
         }

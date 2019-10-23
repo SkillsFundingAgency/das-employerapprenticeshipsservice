@@ -151,5 +151,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             _flashMessage.Delete(FlashMessageCookieName);
         }
+
+        protected void SetZenDeskWidgetToShown()
+        {
+            ViewBag.ShowZenDeskWidget = true;
+        }
     }
 }

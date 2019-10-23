@@ -107,6 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements/{agreementId}/about-your-agreement")]
         public async Task<ActionResult> AboutYourAgreement(string agreementId, string hashedAccountId)
         {
+            SetZenDeskWidgetToShown();
             var agreement = await _orchestrator.GetById(
                 agreementId, 
                 hashedAccountId,
@@ -121,6 +122,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements/{agreementId}/sign-your-agreement")]
         public async Task<ActionResult> SignAgreement(GetEmployerAgreementRequest request)
         {
+            SetZenDeskWidgetToShown();
             request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             var response = await _mediator.SendAsync(request);
@@ -144,6 +146,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (choice == null)
             {
+                SetZenDeskWidgetToShown();
                 agreement.Data.NoChoiceSelected = true;
                 return View(ControllerConstants.SignAgreementViewName, agreement.Data);
             }
@@ -191,6 +194,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             agreement.Exception = response.Exception;
             agreement.Status = response.Status;
 
+            SetZenDeskWidgetToShown();
             return View(ControllerConstants.SignAgreementViewName, agreement.Data);
         }
 
