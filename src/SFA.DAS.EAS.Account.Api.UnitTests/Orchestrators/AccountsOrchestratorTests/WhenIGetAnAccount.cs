@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 using SFA.DAS.EAS.Domain.Models.Transfers;
@@ -32,6 +33,10 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         private TransferAllowance _transferAllowance;
 
         private const decimal AccountBalance = 678.90M;
+        private const string HashedAgreementId = "ABC123";
+
+        private AccountDetailViewModel _accountDetailViewModel;
+        private AccountBalance _accountBalanceResult;
 
 
         [SetUp]
@@ -45,9 +50,11 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
             _apiService = new Mock<IEmployerAccountsApiService>();
             _orchestrator = new AccountsOrchestrator(_mediator.Object, _log.Object, _mapper, _hashingService.Object, _apiService.Object);
         
+            _accountDetailViewModel = new AccountDetailViewModel { AccountId = 1, ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString() };
+
             _apiService
                 .Setup(x => x.GetAccount("ABC123", It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new AccountDetailViewModel { AccountId = 1 })
+                .ReturnsAsync(_accountDetailViewModel)
                 .Verifiable("Get account was not called"); 
 
             _mediator
@@ -55,11 +62,13 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
                 .ReturnsAsync(new GetTransferAllowanceResponse { TransferAllowance = _transferAllowance })
                 .Verifiable("Get transfer balance was not called");
 
+            _accountBalanceResult = new AccountBalance { Balance = AccountBalance };
+
             _mediator
                 .Setup(x => x.SendAsync(It.IsAny<GetAccountBalancesRequest>()))
                 .ReturnsAsync(new GetAccountBalancesResponse
                 {
-                    Accounts = new List<AccountBalance> { new AccountBalance { Balance = AccountBalance } }
+                    Accounts = new List<AccountBalance> { _accountBalanceResult }
                 })
                 .Verifiable("Get account balance was not called");
         }
@@ -67,11 +76,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         [Test]
         public async Task ThenARequestShouldMakeCallsToGetBalances()
         {
-            //Arrange
-            const string hashedAgreementId = "ABC123";
-
             //Act
-            await _orchestrator.GetAccount(hashedAgreementId);
+            await _orchestrator.GetAccount(HashedAgreementId);
 
             //Assert
             _mediator.VerifyAll();
@@ -80,11 +86,8 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         [Test]
         public async Task ThenResponseShouldHaveBalanceSet()
         {
-            //Arrange
-            const string hashedAgreementId = "ABC123";
-
             //Act
-            var result = await _orchestrator.GetAccount(hashedAgreementId);
+            var result = await _orchestrator.GetAccount(HashedAgreementId);
 
             //Assert
             Assert.AreEqual(AccountBalance, result.Data.Balance);
@@ -93,14 +96,51 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         [Test]
         public async Task ThenResponseShouldHaveTransferAllowanceSet()
         {
-            //Arrange
-            const string hashedAgreementId = "ABC123";
-
             //Act
-            var result = await _orchestrator.GetAccount(hashedAgreementId);
+            var result = await _orchestrator.GetAccount(HashedAgreementId);
 
             //Assert
             Assert.AreEqual(_transferAllowance.RemainingTransferAllowance, result.Data.RemainingTransferAllowance);
+        }
+
+        [Test]
+        public async Task AndTheAccountHasALevyOverrideThenTheyShouldNotBeAllowedPaymentOnTheService()
+        {
+            _accountBalanceResult.LevyOverride = false;
+
+            var response = await _orchestrator.GetAccount(HashedAgreementId);
+
+            Assert.IsFalse(response.Data.IsAllowedPaymentOnService);
+        }
+
+        [Test]
+        public async Task AndTheAccountHasAnEoIAgreementThenTheyShouldBeAllowedPaymentOnTheService()
+        {
+            _accountDetailViewModel.AccountAgreementType = AccountAgreementType.NonLevyExpressionOfInterest;
+
+            var response = await _orchestrator.GetAccount(HashedAgreementId);
+
+            Assert.IsTrue(response.Data.IsAllowedPaymentOnService);
+        }
+
+        [Test]
+        public async Task AndTheEmployerTypeIsLevyThenTheyShouldBeAllowedPaymentOnTheService()
+        {
+            _accountDetailViewModel.ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy.ToString();
+
+            var response = await _orchestrator.GetAccount(HashedAgreementId);
+
+            Assert.IsTrue(response.Data.IsAllowedPaymentOnService);
+        }
+
+        [Test]
+        public async Task AndTheEmployerTypeIsNoneLevyThenTheyShouldNotBeAllowedPaymentOnTheService()
+        {
+            _accountDetailViewModel.ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy.ToString();
+
+            var response = await _orchestrator.GetAccount(HashedAgreementId);
+
+            Assert.IsFalse(response.Data.IsAllowedPaymentOnService);
         }
 
         private IMapper ConfigureMapper()

@@ -57,43 +57,43 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
         }
 
         [Test]
-        public async Task AndTheAccountHasALevyOverrideThenTheyShouldNotBeAllowedOnTheService()
+        public async Task AndTheAccountHasALevyOverrideThenTheyShouldNotBeAllowedPaymentOnTheService()
         {
             _expectedAccountBalance.LevyOverride = false;
 
-            var response = _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
+            var response = await _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
 
-            Assert.IsFalse(response.Result.Data.Data.First().IsAllowedOnService);
+            Assert.IsFalse(response.Data.Data.First().IsAllowedPaymentOnService);
         }
 
         [Test]
-        public async Task AndTheAccountHasAnEoIAgreementThenTheyShouldBeAllowedOnTheService()
+        public async Task AndTheAccountHasAnEoIAgreementThenTheyShouldBeAllowedPaymentOnTheService()
         {
             _expectedAccount.AccountAgreementType = AccountAgreementType.NonLevyExpressionOfInterest;
 
-            var response = _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
+            var response = await _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
 
-            Assert.IsTrue(response.Result.Data.Data.First().IsAllowedOnService);
+            Assert.IsTrue(response.Data.Data.First().IsAllowedPaymentOnService);
         }
 
         [Test]
-        public async Task AndTheEmployerTypeIsLevyThenTheyShouldBeAllowedOnTheService()
+        public async Task AndTheEmployerTypeIsLevyThenTheyShouldBeAllowedPaymentOnTheService()
         {
             _expectedAccount.ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy;
 
-            var response = _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
+            var response = await _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
 
-            Assert.IsTrue(response.Result.Data.Data.First().IsAllowedOnService);
+            Assert.IsTrue(response.Data.Data.First().IsAllowedPaymentOnService);
         }
 
         [Test]
-        public async Task AndTheEmployerTypeIsNoneLevyThenTheyShouldNotBeAllowedOnTheService()
+        public async Task AndTheEmployerTypeIsNoneLevyThenTheyShouldNotBeAllowedPaymentOnTheService()
         {
             _expectedAccount.ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy;
 
             var response = _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
 
-            Assert.IsFalse(response.Result.Data.Data.First().IsAllowedOnService);
+            Assert.IsFalse(response.Result.Data.Data.First().IsAllowedPaymentOnService);
         }
     }
 }

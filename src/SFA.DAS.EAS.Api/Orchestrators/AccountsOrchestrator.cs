@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using MediatR;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EAS.Application.Queries.AccountTransactions.GetAccountBalances;
@@ -61,7 +62,8 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                     account.Balance = accountBalance.Balance;
                     account.RemainingTransferAllowance = accountBalance.RemainingTransferAllowance;
                     account.StartingTransferAllowance = accountBalance.StartingTransferAllowance;
-                    account.IsAllowedOnService = IsAccountAllowedOnService(account, accountBalance.LevyOverride);
+                    account.IsAllowedPaymentOnService = IsAccountAllowedPaymentOnService(account.AccountAgreementType, account.ApprenticeshipEmployerType, accountBalance.LevyOverride);
+                    account.IsLevyPayer = account.IsAllowedPaymentOnService;
                 }
             });
 
@@ -71,19 +73,19 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             };
         }
 
-        private bool IsAccountAllowedOnService(AccountWithBalanceViewModel account, bool? levyOverride)
+        private bool IsAccountAllowedPaymentOnService(AccountAgreementType accountAgreementType, ApprenticeshipEmployerType apprenticeshipEmployerType, bool? levyOverride)
         {
             if (levyOverride.HasValue)
             {
                 return levyOverride.Value;
             }
 
-            if (account.AccountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest)
+            if (accountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest)
             {
                 return true;
             }
 
-            return account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy;
+            return apprenticeshipEmployerType == ApprenticeshipEmployerType.Levy;
         }
 
         private Dictionary<long, AccountBalance> BuildAccountBalanceHash(List<AccountBalance> accountBalances)
@@ -122,14 +124,18 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 return new OrchestratorResponse<AccountDetailViewModel> { Data = null };
             }
 
-            var accountBalanceTask = GetBalanceForAccount(accountResult.AccountId);
+            var accountBalanceTask = GetAccountBalance(accountResult.AccountId);
             var transferBalanceTask = GetTransferAllowanceForAccount(accountResult.AccountId);
 
             await Task.WhenAll(accountBalanceTask, transferBalanceTask).ConfigureAwait(false);
 
-            accountResult.Balance = accountBalanceTask.Result;
+            accountResult.Balance = accountBalanceTask.Result?.Balance ?? 0;
             accountResult.RemainingTransferAllowance = transferBalanceTask.Result.RemainingTransferAllowance ?? 0;
             accountResult.StartingTransferAllowance = transferBalanceTask.Result.StartingTransferAllowance ?? 0;
+            accountResult.IsAllowedPaymentOnService = IsAccountAllowedPaymentOnService(
+                accountResult.AccountAgreementType,
+                (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResult.ApprenticeshipEmployerType), 
+                accountBalanceTask.Result.LevyOverride);
 
             return new OrchestratorResponse<AccountDetailViewModel> { Data = accountResult };
         }
@@ -174,7 +180,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             };
         }
 
-        private async Task<decimal> GetBalanceForAccount(long accountId)
+        private async Task<AccountBalance> GetAccountBalance(long accountId)
         {
             var balanceResult = await _mediator.SendAsync(new GetAccountBalancesRequest
             {
@@ -182,7 +188,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             });
 
             var account = balanceResult?.Accounts?.SingleOrDefault();
-            return account?.Balance ?? 0;
+            return account;
         }
 
         private async Task<TransferAllowance> GetTransferAllowanceForAccount(long accountId)

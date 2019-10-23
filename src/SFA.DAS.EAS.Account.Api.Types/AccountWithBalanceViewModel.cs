@@ -30,7 +30,7 @@ namespace SFA.DAS.EAS.Account.Api.Types
 
         [Obsolete("Use AllowedOnService instead")]
         public bool IsLevyPayer { get; set; }
-        public bool IsAllowedOnService { get; set; }
+        public bool IsAllowedPaymentOnService { get; set; }
         public AccountAgreementType AccountAgreementType { get; set; }
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
 
