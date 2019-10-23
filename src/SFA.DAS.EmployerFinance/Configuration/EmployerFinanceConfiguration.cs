@@ -31,6 +31,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public int FundsExpiryPeriod { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
         public string ReservationsBaseUrl { get; set; }
-        public string ZenDeskHelpCentreUrl { get; set; } = "https://esfa1567428279.zendesk.com/hc/";
+        public string ZenDeskHelpCentreUrl { get; set; }
     }
 }
