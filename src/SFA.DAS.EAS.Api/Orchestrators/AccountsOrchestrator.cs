@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Application.Services.EmployerAccountsApi;
 
 namespace SFA.DAS.EAS.Account.Api.Orchestrators
@@ -60,6 +61,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                     account.Balance = accountBalance.Balance;
                     account.RemainingTransferAllowance = accountBalance.RemainingTransferAllowance;
                     account.StartingTransferAllowance = accountBalance.StartingTransferAllowance;
+                    account.IsAllowedOnService = IsAccountAllowedOnService(account, accountBalance.LevyOverride);
                 }
             });
 
@@ -67,6 +69,21 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
             {
                 Data = accountsResult
             };
+        }
+
+        private bool IsAccountAllowedOnService(AccountWithBalanceViewModel account, bool? levyOverride)
+        {
+            if (levyOverride.HasValue)
+            {
+                return levyOverride.Value;
+            }
+
+            if (account.AccountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest)
+            {
+                return true;
+            }
+
+            return account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy;
         }
 
         private Dictionary<long, AccountBalance> BuildAccountBalanceHash(List<AccountBalance> accountBalances)
