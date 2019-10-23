@@ -337,7 +337,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 viewModel.ViewName = "SignAgreement";
             }
             else if (
-                _authorizationService.IsAuthorized("EmployerFeature.ReserveCallToAction")
+                _authorizationService.IsAuthorized("EmployerFeature.ReserveFundsCallToAction")
                 && !model.HasReservations 
                 && model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
             {
