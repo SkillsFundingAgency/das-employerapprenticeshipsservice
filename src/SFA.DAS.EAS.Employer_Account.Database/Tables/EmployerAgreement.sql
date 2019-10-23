@@ -17,6 +17,6 @@ CREATE UNIQUE INDEX [IX_EmployerAgreement_LegalEntity]
 ON [employer_account].[EmployerAgreement] (AccountLegalEntityId, TemplateId)
 WHERE StatusId <> 5
 GO
-CREATE UNIQUE INDEX [IX_EmployerAgreement_LegalEntityStatus]
+CREATE INDEX [IX_EmployerAgreement_LegalEntityStatus]
 ON [employer_account].[EmployerAgreement] (AccountLegalEntityId, StatusId)
 GO
