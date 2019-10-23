@@ -46,7 +46,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            SetZenDeskWidgetToShown();
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             if (!string.IsNullOrWhiteSpace(userId))
