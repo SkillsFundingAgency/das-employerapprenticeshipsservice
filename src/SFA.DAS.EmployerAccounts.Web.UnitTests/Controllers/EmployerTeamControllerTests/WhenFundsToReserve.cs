@@ -34,8 +34,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockPortalClient = new Mock<IPortalClient>();
 
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
+            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.ReserveCallToAction")).Returns(false);
 
-           _controller = new EmployerTeamController(
+            _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
@@ -61,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("Empty", (result.Model as dynamic).ViewName);
         }
 
         [Test]
