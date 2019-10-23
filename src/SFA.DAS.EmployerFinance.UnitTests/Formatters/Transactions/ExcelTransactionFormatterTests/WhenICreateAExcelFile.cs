@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions.ExcelTransac
         public void Arrange()
         {
             _excelService = new Mock<IExcelService>();
-            _formatter = new ExcelTransactionFormatter(_excelService.Object);
+            _formatter = new LevyExcelTransactionFormatter(_excelService.Object);
 
             _transactionLine = new TransactionDownloadLine
             {
