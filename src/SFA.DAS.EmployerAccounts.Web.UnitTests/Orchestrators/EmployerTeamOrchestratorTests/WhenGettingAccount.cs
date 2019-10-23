@@ -42,6 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private Mock<IMapper> _mapper;
         private List<AccountTask> _tasks;
         private AccountTask _testTask;
+
         [SetUp]
         public void Arrange()
         {
@@ -268,7 +269,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenShouldReturnCorrectApprenticeshipEmployerTypeFromAccountApi(ApprenticeshipEmployerType expectedApprenticeshipEmployerType, string apiApprenticeshipEmployerType)
         {
             //Arrange
-            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
+            _accountApiClient
+                .Setup(c => c.GetAccount(HashedAccountId))
+                .ReturnsAsync(new AccountDetailViewModel
                 { ApprenticeshipEmployerType = apiApprenticeshipEmployerType });
 
             //Act

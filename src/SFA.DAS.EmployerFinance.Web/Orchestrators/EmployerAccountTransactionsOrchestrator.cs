@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
+using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.Models.Levy;
