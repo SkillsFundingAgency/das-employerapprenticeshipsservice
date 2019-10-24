@@ -12,7 +12,7 @@ using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
 {
-    public class WhenFundsToReserve
+    public class WhenAgreementToSign
     {
         private EmployerTeamController _controller;
 
@@ -32,7 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
-
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
 
@@ -46,14 +45,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonLevyTheCheckFundingViewIsReturnedAtRow1Panel1()
+        public void ThenTheSignAgreementViewIsReturnedAtRow1Panel1()
         {
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 1;
-            model.AgreementsToSign = false;
-            model.ReservationsCount = 0;
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            model.AgreementsToSign = true;
             model.AccountViewModel = new Model.Account();
             model.AccountViewModel.Providers.Add(new Model.Provider());
 
@@ -62,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("SignAgreement", (result.Model as dynamic).ViewName);
         }
     }
 }

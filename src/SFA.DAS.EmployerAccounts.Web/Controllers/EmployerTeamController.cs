@@ -332,16 +332,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "AddPAYE";
             }
-            else if (model.AgreementsToSign)
+            else if(_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
-                viewModel.ViewName = "SignAgreement";
-            }
-            else if (
-                _authorizationService.IsAuthorized("EmployerFeature.ReserveFundsCallToAction")
-                && !model.HasReservations 
-                && model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
-            {
-                viewModel.ViewName = "CheckFunding";
+                if (model.AgreementsToSign)
+                {
+                    viewModel.ViewName = "SignAgreement";
+                }
+                else if (!model.HasReservations&& model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
+                {
+                    viewModel.ViewName = "CheckFunding";
+                }
             }
 
             if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
