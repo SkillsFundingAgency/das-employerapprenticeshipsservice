@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props')" />
@@ -95,8 +95,8 @@
     <PackageReference Include="SFA.DAS.Logging">
       <Version>1.0.5</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer">
       <Version>15.0.25</Version>

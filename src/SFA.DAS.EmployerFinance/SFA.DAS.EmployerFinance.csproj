@@ -22,6 +22,7 @@
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.Authorization.WebApi" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
+    <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="2.1.716" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="2.1.716" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
@@ -33,12 +34,12 @@
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.0.0.36524" />
     <PackageReference Include="sfa.das.HashingService" Version="1.0.183" />
-    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.13" />
+    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.16" />
     <PackageReference Include="SFA.DAS.Http" Version="1.2.4" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap" Version="3.0.0.63765" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
