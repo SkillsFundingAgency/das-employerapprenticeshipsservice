@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Mappings
         {
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfiles(typeof(HealthCheckMappings));
+                c.AddProfile<HealthCheckMappings>();
                 c.AddProfile<AccountMappings>();
                 c.AddProfile<AgreementMappings>();
                 c.AddProfile<EmploymentAgreementStatusMappings>();

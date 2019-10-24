@@ -1,9 +1,8 @@
 using SFA.DAS.Commitments.Api.Client.Configuration;
-using SFA.DAS.Http.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
-    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration, IAzureActiveDirectoryClientConfiguration, IJwtClientConfiguration
+    public class CommitmentsApiClientConfiguration : ICommitmentsApiClientConfiguration
     {
         public string BaseUrl { get; set; }
         public string ClientToken { get; set; }
