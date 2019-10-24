@@ -10,6 +10,9 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -19,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
+        private const int InvitationComplete = 4;
         private const int ReviewAgreementLater = 1;
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
@@ -149,6 +153,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
+
+            var user = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = userInfo });
+
+            if (!string.IsNullOrWhiteSpace(user.User.CorrelationId))
+            {
+                var getProviderInvitationQueryResponse = await _mediator.SendAsync(new GetProviderInvitationQuery
+                {
+                    CorrelationId = Guid.Parse(user.User.CorrelationId)
+                });
+
+                if (getProviderInvitationQueryResponse.Result?.Status < InvitationComplete)
+                {
+                    return Redirect(@Url.ProviderRelationshipsAction($"providers/invitation/{user.User.CorrelationId}"));
+                }
+            }
 
             if (response.Status == HttpStatusCode.OK)
             {

@@ -10,6 +10,8 @@
 
         public string EmployerEmail { get; set; }
 
+        public int Status { get; set; }
+
         public string Ukprn { get; set; }
     }
 }
