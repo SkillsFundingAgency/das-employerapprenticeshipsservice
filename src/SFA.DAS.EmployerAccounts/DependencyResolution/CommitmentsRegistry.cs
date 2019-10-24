@@ -1,10 +1,8 @@
 ﻿using System.Net.Http;
-using SFA.DAS.Activities.Configuration;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
@@ -27,14 +25,15 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         {
             var config = context.GetInstance<CommitmentsApiClientConfiguration>();
 
-            var httpClient = new HttpClientBuilder()
-                .WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
-                .WithHandler(new RequestIdMessageRequestHandler())
-                .WithHandler(new SessionIdMessageRequestHandler())
-                .WithDefaultHeaders()
-                .Build();
+            var httpClientBuilder = string.IsNullOrWhiteSpace(config.ClientId)
+                ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config))
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config));
 
-            return httpClient;
+            return httpClientBuilder
+                    .WithDefaultHeaders()
+                    .WithHandler(new RequestIdMessageRequestHandler())
+                    .WithHandler(new SessionIdMessageRequestHandler())
+                    .Build();
         }
     }
 }

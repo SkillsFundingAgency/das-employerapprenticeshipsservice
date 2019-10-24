@@ -16,7 +16,6 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<INotificationsApi>().Use<NotificationsApi>().Ctor<HttpClient>().Is(c => GetHttpClient(c));
             For<INotificationsApiClientConfiguration>().Use(c => c.GetInstance<NotificationsApiClientConfiguration>());
             For<NotificationsApiClientConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<NotificationsApiClientConfiguration>(ConfigurationKeys.NotificationsApiClient)).Singleton();
-
         }
 
         private HttpClient GetHttpClient(IContext context)
@@ -25,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
             var httpClient = string.IsNullOrWhiteSpace(config.ClientId)
                 ? new HttpClientBuilder().WithBearerAuthorisationHeader(new JwtBearerTokenGenerator(config)).Build()
-                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config)).Build();
+                : new HttpClientBuilder().WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config)).Build();
 
             return httpClient;
         }
