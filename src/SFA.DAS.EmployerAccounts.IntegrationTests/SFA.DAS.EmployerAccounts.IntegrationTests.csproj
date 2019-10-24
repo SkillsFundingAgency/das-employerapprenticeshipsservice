@@ -97,8 +97,8 @@
     <Reference Include="SFA.DAS.Configuration.AzureTableStorage, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Configuration.AzureTableStorage.3.0.75\lib\netstandard2.0\SFA.DAS.Configuration.AzureTableStorage.dll</HintPath>
     </Reference>
-    <Reference Include="SFA.DAS.NLog.Logger, Version=1.1.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.1.5\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
+    <Reference Include="SFA.DAS.NLog.Logger, Version=1.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SFA.DAS.NLog.Logger.1.2.1\lib\net45\SFA.DAS.NLog.Logger.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Sql.Client, Version=1.0.0.44965, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.Sql.Client.1.0.0.44965\lib\net45\SFA.DAS.Sql.Client.dll</HintPath>
