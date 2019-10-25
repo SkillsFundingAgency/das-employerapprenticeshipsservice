@@ -1,7 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;

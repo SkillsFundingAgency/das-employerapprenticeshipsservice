@@ -68,6 +68,9 @@
       <Version>2.4.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging">
+      <Version>2.1.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.1" />
     <PackageReference Include="Microsoft.Owin" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.0.1" />
@@ -78,7 +81,7 @@
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.20</Version>
+      <Version>6.0.23</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
       <Version>6.0.20</Version>
@@ -103,13 +106,16 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.1641</Version>
+      <Version>1.6.2515</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2103</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
+    <PackageReference Include="SFA.DAS.Http">
+      <Version>3.2.28</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Logging">
       <Version>1.0.5</Version>
     </PackageReference>

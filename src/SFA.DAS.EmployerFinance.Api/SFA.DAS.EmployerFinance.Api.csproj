@@ -62,6 +62,9 @@
     <PackageReference Include="SFA.DAS.Authentication">
       <Version>1.0.2</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.Authorization">
+      <Version>6.0.23</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.WebApi">
       <Version>6.0.20</Version>
     </PackageReference>
