@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SFA.DAS.Authentication;
+using SFA.DAS.Hmrc.Configuration;
 using SFA.DAS.Messaging.AzureServiceBus.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Configuration

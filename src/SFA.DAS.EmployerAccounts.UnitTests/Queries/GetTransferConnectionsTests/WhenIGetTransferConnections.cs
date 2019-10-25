@@ -116,7 +116,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetTransferConnectionsTests
 
             _query = new GetTransferConnectionsQuery
             {
-                AccountId = _receiverAccount.Id
+                HashedAccountId = _receiverAccount.HashedId
             };
         }
 

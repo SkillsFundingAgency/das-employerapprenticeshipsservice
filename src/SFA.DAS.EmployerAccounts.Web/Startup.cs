@@ -137,8 +137,6 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
             UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
-
-            FeatureToggles.Features.BooleanToggleValueProvider = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<IBooleanToggleValueProvider>();
         }
 
         private WsFederationAuthenticationOptions GetADFSOptions()

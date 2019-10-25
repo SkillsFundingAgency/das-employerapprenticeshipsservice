@@ -33,7 +33,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
 
         public async Task<GetTransferRequestsResponse> Handle(GetTransferRequestsQuery message)
         {
-            var transferRequests = await _employerCommitmentApi.GetTransferRequests(message.AccountHashedId);
+            var accountHashedId = _hashingService.HashValue(message.AccountId);
+            var transferRequests = await _employerCommitmentApi.GetTransferRequests(accountHashedId);
 
             var accountIds = transferRequests
                 .SelectMany(r => new[] { r.HashedSendingEmployerAccountId, r.HashedReceivingEmployerAccountId })
@@ -55,13 +56,14 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
                     TransferCost = r.TransferCost,
                     TransferRequestHashedId = r.HashedTransferRequestId
                 })
-                .OrderBy(r => r.ReceiverAccount.Id == message.AccountId.Value ? r.SenderAccount.Name : r.ReceiverAccount.Name)
+                .OrderBy(r => r.ReceiverAccount.Id == message.AccountId ? r.SenderAccount.Name : r.ReceiverAccount.Name)
                 .ThenBy(r => r.CreatedDate)
                 .ToList();
 
             return new GetTransferRequestsResponse
             {
-                TransferRequests = transferRequestsData
+                TransferRequests = transferRequestsData,
+                AccountId = message.AccountId
             };
         }
     }

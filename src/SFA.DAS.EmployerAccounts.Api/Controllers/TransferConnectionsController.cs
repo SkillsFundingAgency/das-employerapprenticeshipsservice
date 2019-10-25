@@ -18,9 +18,9 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         }
         
         [Route]
-        public async Task<IHttpActionResult> GetTransferConnections([FromUri] GetTransferConnectionsQuery query)
+        public async Task<IHttpActionResult> GetTransferConnections(string hashedAccountId)
         {
-            var response = await _mediator.SendAsync(query);
+            var response = await _mediator.SendAsync( new GetTransferConnectionsQuery{ HashedAccountId = hashedAccountId});
             return Ok(response.TransferConnections);
         }
     }

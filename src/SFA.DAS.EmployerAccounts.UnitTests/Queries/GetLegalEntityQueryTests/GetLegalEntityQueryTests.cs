@@ -80,12 +80,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
 
         public Task<GetLegalEntityResponse> Handle()
         {
-            return Handler.Handle(new GetLegalEntityQuery
-            {
-                AccountId = Account.Id,
-                AccountHashedId = Account.HashedId,
-                LegalEntityId = LegalEntity.Id
-            });
+            return Handler.Handle(
+                new GetLegalEntityQuery(
+                    Account.HashedId,
+                    LegalEntity.Id
+                ));
         }
 
         public GetLegalEntityQueryTestsFixture SetAccount()

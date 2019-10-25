@@ -1,10 +1,14 @@
 ﻿using System.Collections.Generic;
+using AutoMapper;
+using SFA.DAS.Authorization.ModelBinding;
 using SFA.DAS.EmployerAccounts.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class TransferConnectionInvitationsViewModel : DAS.Authorization.Mvc.AccountViewModel
+    public class TransferConnectionInvitationsViewModel : IAuthorizationContextModel
     {
+        public long AccountId { get; set; }
+
         public IEnumerable<TransferConnectionInvitationDto> TransferConnectionInvitations { get; set; }
     }
 }

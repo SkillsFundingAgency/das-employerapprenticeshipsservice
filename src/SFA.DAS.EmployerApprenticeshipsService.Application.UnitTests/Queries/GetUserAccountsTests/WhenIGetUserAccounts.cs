@@ -3,9 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
+
 using SFA.DAS.EAS.Application.Queries.GetUserAccounts;
 using SFA.DAS.EAS.Domain.Data.Repositories;
+using SFA.DAS.EAS.Domain.Models;
 using SFA.DAS.EAS.Domain.Models.Account;
 
 namespace SFA.DAS.EAS.Application.UnitTests.Queries.GetUserAccountsTests

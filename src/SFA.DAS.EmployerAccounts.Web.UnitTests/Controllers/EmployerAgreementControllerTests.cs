@@ -201,7 +201,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
     {
         public Mock<EmployerAgreementOrchestrator> Orchestrator;
         public Mock<IAuthenticationService> OwinWrapper;
-        public Mock<IAuthorizationService> FeatureToggle;
         public Mock<IMultiVariantTestingService> UserViewTestingService;
         public Mock<ICookieStorageService<FlashMessageViewModel>> FlashMessage;
         public Mock<IMediator> Mediator;
@@ -211,7 +210,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         {
             Orchestrator = new Mock<EmployerAgreementOrchestrator>();
             OwinWrapper = new Mock<IAuthenticationService>();
-            FeatureToggle = new Mock<IAuthorizationService>();
             UserViewTestingService = new Mock<IMultiVariantTestingService>();
             FlashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             OwinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Constants.UserId);
@@ -273,7 +271,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             var controller = new EmployerAgreementController(
                 OwinWrapper.Object,
                 Orchestrator.Object,
-                FeatureToggle.Object,
                 UserViewTestingService.Object,
                 FlashMessage.Object,
                 Mediator.Object,

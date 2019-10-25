@@ -31,10 +31,10 @@ namespace SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation
         public async Task<long> Handle(SendTransferConnectionInvitationCommand message)
         {
             var receiverAccountId = _publicHashingService.DecodeValue(message.ReceiverAccountPublicHashedId);
-            var senderAccount = await _employerAccountRepository.GetAccountById(message.AccountId.Value);
+            var senderAccount = await _employerAccountRepository.GetAccountById(message.AccountId);
             var receiverAccount = await _employerAccountRepository.GetAccountById(receiverAccountId);
-            var senderUser = await _userRepository.GetUserByRef(message.UserRef.Value);
-            var senderAccountTransferAllowance = await _transferAllowanceService.GetTransferAllowance(message.AccountId.Value);
+            var senderUser = await _userRepository.GetUserByRef(message.UserRef);
+            var senderAccountTransferAllowance = await _transferAllowanceService.GetTransferAllowance(message.AccountId);
             var transferConnectionInvitation = senderAccount.SendTransferConnectionInvitation(receiverAccount, senderUser, senderAccountTransferAllowance.RemainingTransferAllowance ?? 0);
 
             await _transferConnectionInvitationRepository.Add(transferConnectionInvitation);

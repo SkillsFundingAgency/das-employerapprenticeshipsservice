@@ -7,11 +7,13 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
@@ -38,6 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private Mock<IMapper> _mapper;
         private List<AccountTask> _tasks;
         private AccountTask _testTask;
+
         [SetUp]
         public void Arrange()
         {
@@ -134,7 +137,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object);
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
         }
         
         [Test]
@@ -242,7 +245,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenShouldReturnCorrectApprenticeshipEmployerTypeFromAccountApi(ApprenticeshipEmployerType expectedApprenticeshipEmployerType, string apiApprenticeshipEmployerType)
         {
             //Arrange
-            _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
+            _accountApiClient
+                .Setup(c => c.GetAccount(HashedAccountId))
+                .ReturnsAsync(new AccountDetailViewModel
                 { ApprenticeshipEmployerType = apiApprenticeshipEmployerType });
 
             //Act

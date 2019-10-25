@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.Validation;
 using SFA.DAS.Authorization;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole
 {

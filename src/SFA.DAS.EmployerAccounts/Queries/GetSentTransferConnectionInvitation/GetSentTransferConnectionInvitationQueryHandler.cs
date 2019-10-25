@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSentTransferConnectionInvitation
             var transferConnectionInvitation = await _db.Value.TransferConnectionInvitations
                 .Where(i =>
                     i.Id == message.TransferConnectionInvitationId.Value &&
-                    i.SenderAccount.Id == message.AccountId.Value &&
+                    i.SenderAccount.Id == message.AccountId &&
                     i.Status == TransferConnectionInvitationStatus.Pending
                 )
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)

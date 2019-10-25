@@ -8,6 +8,7 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
@@ -61,20 +62,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
             if (employerAgreement.StatusId == EmployerAgreementStatus.Pending)
             {
                 lastSignedAgreement = _database.Value.Agreements
-                                               .OrderByDescending(x => x.Template.VersionNumber)
-                                               .ProjectTo<AgreementDto>(_configurationProvider)
-                                               .FirstOrDefault(x => x.AccountId.Equals(accountId) &&
-                                                                    x.LegalEntityId.Equals(employerAgreement.LegalEntityId) &&
-                                                                    x.StatusId == EmployerAgreementStatus.Signed);
+                                            .Where(x => x.AccountLegalEntityId == employerAgreement.LegalEntity.AccountLegalEntityId && x.StatusId == EmployerAgreementStatus.Signed)
+                                            .OrderByDescending(x => x.TemplateId)
+                                            .ProjectTo<AgreementDto>(_configurationProvider)
+                                            .FirstOrDefault();
             }
 
             if (employerAgreement.StatusId != EmployerAgreementStatus.Signed)
             {
-                employerAgreement.SignedByName = _database.Value.Memberships
-                    .Where(m => m.AccountId == accountId && m.User.Ref.ToString() == message.ExternalUserId)
-                    .AsEnumerable()
-                    .Select(m => m.User.FullName)
-                    .Single();
+                employerAgreement.SignedByName = GetUserFullName(message.ExternalUserId);
             }
 
             employerAgreement.HashedAccountId = _hashingService.HashValue(employerAgreement.AccountId);
@@ -93,6 +89,16 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
                 EmployerAgreement = employerAgreement,
                 LastSignedAgreement = lastSignedAgreement
             };
+        }
+
+        private string GetUserFullName(string userId)
+        {
+            var externalUserId = Guid.Parse(userId);
+            var user = _database.Value.Users
+                .Where(m => m.Ref == externalUserId)
+                .Select(m => m)
+                .Single();
+            return user.FullName;
         }
     }
 }

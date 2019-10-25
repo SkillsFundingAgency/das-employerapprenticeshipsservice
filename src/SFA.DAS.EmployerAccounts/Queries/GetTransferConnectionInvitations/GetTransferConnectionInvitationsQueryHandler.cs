@@ -24,15 +24,16 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitations
         public async Task<GetTransferConnectionInvitationsResponse> Handle(GetTransferConnectionInvitationsQuery message)
         {
             var transferConnectionInvitations = await _db.Value.TransferConnectionInvitations
-                .Where(i => i.SenderAccount.Id == message.AccountId.Value && !i.DeletedBySender || i.ReceiverAccount.Id == message.AccountId.Value && !i.DeletedByReceiver)
-                .OrderBy(i => i.ReceiverAccount.Id == message.AccountId.Value ? i.SenderAccount.Name : i.ReceiverAccount.Name)
+                .Where(i => i.SenderAccount.Id == message.AccountId && !i.DeletedBySender || i.ReceiverAccount.Id == message.AccountId && !i.DeletedByReceiver)
+                .OrderBy(i => i.ReceiverAccount.Id == message.AccountId ? i.SenderAccount.Name : i.ReceiverAccount.Name)
                 .ThenBy(i => i.CreatedDate)
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)
                 .ToListAsync();
 
             return new GetTransferConnectionInvitationsResponse
             {
-                TransferConnectionInvitations = transferConnectionInvitations
+                TransferConnectionInvitations = transferConnectionInvitations,
+                AccountId = message.AccountId
             };
         }
     }

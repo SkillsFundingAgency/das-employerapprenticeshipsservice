@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.NLog.Logger;
 
@@ -115,7 +115,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
-        [Authorize]
+        [DasAuthorize]
         [Route("SaveAndSearch")]
         public async Task<ActionResult> SaveAndSearch(string returnUrl)
         {
@@ -140,7 +140,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
-        // [AuthoriseActiveUser]
+        [DasAuthorize]
         [HttpGet]
         [Route("accounts")]
         public async Task<ActionResult> ViewAccounts()
@@ -159,7 +159,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
-        [Authorize]
+        [DasAuthorize]
         [HttpGet]
         [Route("register/new")]
         public async Task<ActionResult> HandleNewRegistration()
@@ -168,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
-        [Authorize]
+        [DasAuthorize]
         [HttpGet]
         [Route("password/change")]
         public ActionResult HandlePasswordChanged(bool userCancelled = false)
@@ -186,7 +186,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
-        [Authorize]
+        [DasAuthorize]
         [HttpGet]
         [Route("email/change")]
         public async Task<ActionResult> HandleEmailChanged(bool userCancelled = false)
@@ -213,7 +213,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
-        [Authorize]
+        [DasAuthorize]
         [Route("signIn")]
         public ActionResult SignIn()
         {

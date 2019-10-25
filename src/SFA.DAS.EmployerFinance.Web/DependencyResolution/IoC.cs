@@ -1,3 +1,6 @@
+using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
@@ -28,10 +31,11 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<MediatorRegistry>();
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
-                c.AddRegistry<RepositoriesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<StartupRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
+                c.AddRegistry<EmployerUserRolesAuthorizationRegistry>();
             });
         }
     }

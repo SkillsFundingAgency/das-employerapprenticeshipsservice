@@ -3,6 +3,7 @@ using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.Validation;
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccount
 {
@@ -10,13 +11,16 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccount
     {
         private readonly IEmployerAccountRepository _employerAccountRepository;
         private readonly IValidator<GetEmployerAccountHashedQuery> _validator;
+        private readonly IHashingService _hashingService;
 
         public GetEmployerAccountHashedHandler(
             IEmployerAccountRepository employerAccountRepository,
-            IValidator<GetEmployerAccountHashedQuery> validator)
+            IValidator<GetEmployerAccountHashedQuery> validator,
+            IHashingService hashingService)
         {
             _employerAccountRepository = employerAccountRepository;
             _validator = validator;
+            _hashingService = hashingService;
         }
 
         public async Task<GetEmployerAccountResponse> Handle(GetEmployerAccountHashedQuery message)
@@ -33,7 +37,8 @@ namespace SFA.DAS.EmployerFinance.Queries.GetEmployerAccount
                 throw new UnauthorizedAccessException();
             }
 
-            var employerAccount = await _employerAccountRepository.GetAccountByHashedId(message.HashedAccountId);
+            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
+            var employerAccount = await _employerAccountRepository.GetAccountById(accountId);
 
             return new GetEmployerAccountResponse
             {

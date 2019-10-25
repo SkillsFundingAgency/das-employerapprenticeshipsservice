@@ -79,10 +79,10 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                         var empref = _objectContext.GetEmpRef();
 
                         return c.Resolve<IMessageSession>().Send(new ImportAccountLevyDeclarationsCommand
-                        {
-                            AccountId = account.Id,
-                            PayeRef = empref
-                        });
+                        (
+                            account.Id,
+                            empref
+                        ));
                     },
 
                     // step 2: wait for the levy declaration process to finish writing the transactions...

@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 using SFA.DAS.EmployerAccounts.Commands.SendNotification;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.UnitTests.Fakes;
