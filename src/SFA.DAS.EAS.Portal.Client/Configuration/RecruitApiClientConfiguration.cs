@@ -1,8 +1,8 @@
-﻿using SFA.DAS.Http;
+﻿using SFA.DAS.Http.Configuration;
 
 namespace SFA.DAS.EAS.Portal.Client.Configuration
 {
-    public class RecruitApiClientConfiguration : IAzureADClientConfiguration
+    public class RecruitApiClientConfiguration : IAzureActiveDirectoryClientConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string TimeoutTimeSpan { get; set; }
