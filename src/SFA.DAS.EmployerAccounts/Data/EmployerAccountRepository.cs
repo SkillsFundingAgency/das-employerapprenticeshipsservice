@@ -43,9 +43,11 @@ namespace SFA.DAS.EmployerAccounts.Data
                 sql: $"select count(*) from [employer_account].[Account] a;",
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<Account>(
-                sql: $"select a.* from [employer_account].[Account] a ORDER BY a.Id OFFSET {offset} ROWS FETCH NEXT {pageSize} ROWS ONLY;",
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction);
+            var result = _db.Value.Accounts
+                .Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
+                .OrderBy(x => x.Id)
+                .Skip(offset)
+                .Take(pageSize);
 
             return new Accounts<Account>
             {

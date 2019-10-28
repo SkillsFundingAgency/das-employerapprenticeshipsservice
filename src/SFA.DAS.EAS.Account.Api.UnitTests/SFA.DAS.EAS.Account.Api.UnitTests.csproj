@@ -422,6 +422,7 @@
     <Compile Include="Controllers\EmployerAccountsControllerTests\WhenIGetAnAccount.cs" />
     <Compile Include="Controllers\StatisticsControllerTests\WhenIGetTheStatistics.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\AccountsOrchestratorTestsBase.cs" />
+    <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAccounts.cs" />
     <Compile Include="Orchestrators\AccountsOrchestratorTests\WhenIGetAnAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
