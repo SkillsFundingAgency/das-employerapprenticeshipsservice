@@ -191,6 +191,9 @@
     <PackageReference Include="SFA.DAS.Support.Shared">
       <Version>2.1.70</Version>
     </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
+      <Version>4.0.3.308261200</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
