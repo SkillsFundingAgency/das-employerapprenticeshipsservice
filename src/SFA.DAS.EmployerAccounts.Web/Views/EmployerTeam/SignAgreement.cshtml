@@ -1,0 +1,5 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+
+<h3 class="das-panel__heading">Accept your agreement to access apprenticeship funding</h3>
+<p>Accept your agreement with the Education and Skills Funding Agency to access funding for apprenticeship training.</p>
+<p><a href="@Url.Action("AboutYourAgreement", "EmployerAgreement", new { agreementId = Model.PendingAgreements.FirstOrDefault().HashedAgreementId, hashedAccountId = Model.HashedAccountId })" class="das-panel__link">Accept your agreement</a> </p>

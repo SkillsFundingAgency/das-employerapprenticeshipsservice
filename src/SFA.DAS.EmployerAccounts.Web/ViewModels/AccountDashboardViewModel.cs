@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string EmployerAccountType { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedUserId { get; set; }
-        public int OrgainsationCount { get; set; }
+        public int OrganisationCount { get; set; }
         public int PayeSchemeCount { get; set; }
         public int RequiresAgreementSigning { get; set; }
         public bool ShowAcademicYearBanner { get; set; }
@@ -35,12 +35,14 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.SelectMany(org => org.Reservations).FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.SelectMany(org => org.Reservations)?.LastOrDefault();
         public string ReservedFundingOrgName => AccountViewModel?.Organisations?.Where(org => org.Reservations.Contains(ReservedFundingToShow)).Select(org => org.Name).FirstOrDefault();
         public bool ShowSavedFavourites { get; set; }
-        public bool ShowReservations => AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Count > 0;
+        public bool HasReservations => AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Count > 0 || ReservationsCount > 0;
+        public bool HasPayeScheme => PayeSchemeCount > 0;
         public bool HasSingleProvider => AccountViewModel?.Providers?.Count == 1;
         public bool HasMultipleProviders => AccountViewModel?.Providers?.Count > 1;
         // already returned in Account.ApprenticeshipEmployerType, but we want to transition to calling the api, rather than going direct to the db
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
         public AgreementInfoViewModel AgreementInfo { get; set; }
-        
+        public int ReservationsCount { get; set; }
+
     }
 }

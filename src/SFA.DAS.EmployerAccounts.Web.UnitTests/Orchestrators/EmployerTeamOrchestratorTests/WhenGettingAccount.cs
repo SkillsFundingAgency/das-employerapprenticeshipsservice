@@ -16,10 +16,12 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
+using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -128,7 +130,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
-            
+
+            _mediator.Setup(m => m.SendAsync(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId)))
+                    .ReturnsAsync(new GetReservationsResponse
+                    {
+                        Reservations = new List<Reservation>
+                        {
+                             new Reservation
+                             {
+                                 AccountId = 123
+                             }
+                        }
+                    });
+
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _accountApiClient = new Mock<IAccountApiClient>();
@@ -148,9 +162,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             Assert.IsNotNull(actual.Data);
-            Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrgainsationCount);
+            Assert.AreEqual(_accountStats.OrganisationCount, actual.Data.OrganisationCount);
             Assert.AreEqual(_accountStats.PayeSchemeCount, actual.Data.PayeSchemeCount);
             Assert.AreEqual(_accountStats.TeamMemberCount, actual.Data.TeamMemberCount);
+        }
+
+        [Test]
+        public async Task ThenShouldGetReservationsCount()
+        {
+            // Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(1, actual.Data.ReservationsCount);
         }
 
         [Test]
