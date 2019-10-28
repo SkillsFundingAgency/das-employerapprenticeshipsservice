@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props')" />
@@ -72,6 +72,9 @@
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
+    <PackageReference Include="SFA.DAS.Authentication">
+      <Version>1.0.2</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization">
       <Version>6.0.20</Version>
     </PackageReference>
@@ -128,6 +131,10 @@
       <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
       <Project>{aa299f18-d0ca-43a2-ae4d-54cb6c48ea70}</Project>
       <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
@@ -135,10 +142,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj">
       <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>
       <Name>SFA.DAS.EmployerFinance</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
-      <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
-      <Name>SFA.DAS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -72,7 +72,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Messages\SFA.DAS.EmployerAccounts.Messages.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj" />
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

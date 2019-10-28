@@ -33,7 +33,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

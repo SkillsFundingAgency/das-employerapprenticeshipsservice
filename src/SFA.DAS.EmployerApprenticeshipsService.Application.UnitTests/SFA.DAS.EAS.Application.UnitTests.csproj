@@ -408,10 +408,6 @@
       <Project>{C5880F73-59D6-4C59-A1A2-DBA38D13E8DC}</Project>
       <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
-      <Project>{8DD6E754-567C-46E3-A071-B1049380EA6C}</Project>
-      <Name>SFA.DAS</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
