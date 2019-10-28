@@ -420,6 +420,18 @@
     <PackageReference Include="Microsoft.Azure.KeyVault.Core">
       <Version>2.0.4</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions">
+      <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory">
+      <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging">
+      <Version>2.1.0</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Options">
+      <Version>2.1.0</Version>
+    </PackageReference>
     <PackageReference Include="Moq">
       <Version>4.5.28</Version>
     </PackageReference>
@@ -488,6 +500,9 @@
     </PackageReference>
     <PackageReference Include="StructureMap">
       <Version>4.7.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Buffers">
+      <Version>4.4.0</Version>
     </PackageReference>
     <PackageReference Include="System.Net.Http">
       <Version>4.3.4</Version>

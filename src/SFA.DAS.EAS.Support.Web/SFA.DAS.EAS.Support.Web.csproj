@@ -166,6 +166,17 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.WebHost">
       <Version>5.2.3</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.Azure.KeyVault.Core">
+      <Version>2.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <Version>1.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Net.Compilers">
+      <Version>2.6.1</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Configuration">
       <Version>1.0.0.53229</Version>
     </PackageReference>
@@ -186,6 +197,9 @@
     </PackageReference>
     <PackageReference Include="StructureMap.WebApi2">
       <Version>3.0.4.125</Version>
+    </PackageReference>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
+      <Version>4.0.3.308261200</Version>
     </PackageReference>
     <PackageReference Include="WebActivatorEx">
       <Version>2.0.5</Version>
