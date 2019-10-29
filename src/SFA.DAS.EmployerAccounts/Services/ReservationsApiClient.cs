@@ -1,8 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.Http;
 using System.Net.Http;
+using SFA.DAS.Authentication.Extensions.Legacy;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
