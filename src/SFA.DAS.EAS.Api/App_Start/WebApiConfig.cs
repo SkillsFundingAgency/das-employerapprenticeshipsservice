@@ -27,10 +27,10 @@ namespace SFA.DAS.EAS.Account.Api
             {
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
-                c.AddRegistry<CachesRegistry>();
-                c.AddRegistry<CommitmentsRegistry>();
+                c.AddRegistry<CachesRegistry>();                
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DateTimeRegistry>();
+                c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
