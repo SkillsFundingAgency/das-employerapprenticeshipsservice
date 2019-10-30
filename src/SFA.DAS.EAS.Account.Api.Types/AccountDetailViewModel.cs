@@ -31,5 +31,6 @@ namespace SFA.DAS.EAS.Account.Api.Types
         public AccountAgreementType AccountAgreementType { get; set; }
 		
 		public string ApprenticeshipEmployerType { get; set; }
+        public bool IsAllowedPaymentOnService { get; set; }
     }
 }
