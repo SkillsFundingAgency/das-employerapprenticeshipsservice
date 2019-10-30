@@ -1,8 +1,8 @@
 ﻿@model EmployerAgreementViewModel
 
 @{
-    var hiddenClass = Model.NoChoiceSelected ? "" : "hidden";
-    var errorClass = Model.NoChoiceSelected ? "error" : "";
+//var hiddenClass = Model.NoChoiceSelected ? "" : "hidden";
+//var errorClass = Model.NoChoiceSelected ? "error" : "";
 }
 
 <script type="text/javascript" src="@Url.Content("../../../../dist/javascripts/jquery-1.11.0.min.js")"></script>
@@ -89,17 +89,17 @@
         <!-- Background -->
         <div class="clause">
             <h3 class="heading-medium" id="background">Background</h3>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">A.</h3><!--todo these unused classes can go-->
+                    <h3>A.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>This Agreement sets out the terms for use of the Apprenticeship Service by the Employer and the obligations by which the Employer agrees to be bound.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">B.</h3>
+                    <h3>B.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>This Agreement applies to all employers including those that pay the Apprenticeship Levy as well as those employers that do not pay the Apprenticeship Levy.</p>
@@ -109,7 +109,7 @@
 
         <!-- 1 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="1">1.</h3>
                 </div>
@@ -117,49 +117,49 @@
                     <h3 class="heading-medium">Agreed Terms</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">1.1.</h3>
+                    <h3>1.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Terms in this Agreement which are defined have the first letter of each word capitalised and are set out in Schedule 1 (Definitions and Interpretation).</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">1.2.</h3>
+                    <h3>1.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Unless the context requires otherwise, words in the singular shall include the plural and in the plural shall include the singular.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">1.3.</h3>
+                    <h3>1.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>A reference to a statute or statutory provision is a reference to it as amended, extended or re-enacted from time to time.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">1.4.</h3>
+                    <h3>1.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>A reference to a person or body includes a reference to its successor.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">1.5.</h3>
+                    <h3>1.5.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>A reference to the Employer shall also include a Connected Employer unless the context requires otherwise and the actions and non-actions of a Connected Employer shall be deemed to be the actions and non-actions of the Employer.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">1.6.</h3>
+                    <h3>1.6.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Any words following the terms “including”, “include”, “in particular”, “for example” or any similar expression shall be construed as illustrative and shall not limit the sense of the words, description, definition, phrase or term preceding those terms.</p>
@@ -169,7 +169,7 @@
 
         <!-- 2 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="2">2.</h3>
                 </div>
@@ -177,17 +177,17 @@
                     <h3 class="heading-medium">Commencement and Duration</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="2-1">2.1.</h3>
+                    <h3 id="2-1">2.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>This Agreement will start on the date the Employer enters into this Agreement on <a target="_blank" href="https://accounts.manage-apprenticeships.service.gov.uk" class="govuk-link govuk-link--no-visited-state">https://accounts.manage-apprenticeships.service.gov.uk</a> and will continue in force unless terminated earlier as set out in Clause 14.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">2.2.</h3>
+                    <h3>2.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>By entering into this Agreement, the Employer is agreeing to be legally bound by its terms and conditions.</p>
@@ -197,7 +197,7 @@
 
         <!-- 3 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="3">3.</h3>
                 </div>
@@ -205,25 +205,25 @@
                     <h3 class="heading-medium">Purpose and Use of Funding</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">3.1.</h3>
+                    <h3>3.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Subject to Funding being available and any applicable Spend Controls, the Employer, or the Training Provider on behalf of the Employer, may access Funding for an Apprenticeship through the Employer’s Apprenticeship Service Account.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">3.2.</h3>
+                    <h3>3.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer acknowledges and accepts that the Funding which is made available through the Employer’s Apprenticeship Service Account is solely to support the Training and End-Point Assessment of Apprentices.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">3.3.</h3>
+                    <h3>3.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The use of Funding must at all times comply with the Funding Rules.</p>
@@ -233,7 +233,7 @@
 
         <!-- 4 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="4">4.</h3>
                 </div>
@@ -241,57 +241,57 @@
                     <h3 class="heading-medium">Payments and Approvals</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">4.1.</h3>
+                    <h3>4.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer and Training Provider must agree the Apprenticeship Details before the Apprenticeship begins and this information must be recorded on the Apprenticeship Service Account.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">4.2.</h3>
+                    <h3>4.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>In order for the ESFA to pay the Training Provider, the Employer or the Training Provider, on behalf of the Employer, must keep the Apprenticeship Details up to date on the Apprenticeship Service and the Employer must use the Apprenticeship Service to approve the Apprenticeship Details.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">4.3.</h3>
+                    <h3>4.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The ESFA will check the Apprenticeship Details submitted by the Training Provider against the information on the Apprenticeship Service. If the Apprenticeship Details do not match, or the Employer has not approved the Apprenticeship Details on the Apprenticeship Service, the ESFA will not make the payment to the Training Provider.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">4.4.</h3>
+                    <h3>4.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The ESFA reserves the right to change or discontinue all or any part of the Apprenticeship Service at any time.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">4.5.</h3>
+                    <h3>4.5.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The ESFA reserves the right to limit or remove an Employer’s access to the Apprenticeship Service if there are reasonable grounds for concluding that the Employer has breached this Agreement and / or the Funding Rules.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">4.6.</h3>
+                    <h3>4.6.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer agrees to pay the Training Provider directly for any Employer Co-Investment which is payable in accordance with the Funding Rules.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">4.7.</h3>
+                    <h3>4.7.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Where the Employer's liability to pay Employer Co-Investment occurs after the cost of Training has been paid in full from the Apprenticeship Service Account, (for example, where a change in the Employer’s tax liability reduces the amount of Funding that was previously in the Apprenticeship Service Account), the Employer agrees to pay upon request the Employer's Co-Investment to the ESFA.</p>
@@ -301,7 +301,7 @@
 
         <!-- 5 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="5">5.</h3>
                 </div>
@@ -309,9 +309,9 @@
                     <h3 class="heading-medium">Requirements</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.</h3>
+                    <h3>5.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>An Employer must:</p>
@@ -319,7 +319,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="5-1-1">5.1.1.</h3>
+                    <h3 id="5-1-1">5.1.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>ensure that information on the Apprenticeship Service Account is accurate and that it is kept up to date, including the review and approval of information entered by the Training Provider on the Employer’s behalf;</p>
@@ -327,7 +327,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.2.</h3>
+                    <h3>5.1.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>comply at all times with the Funding Rules;</p>
@@ -335,7 +335,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.3.</h3>
+                    <h3>5.1.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>assist and co-operate with the Training Provider and / or End-Point Assessment Organisation to enable them to deliver the Training in compliance with the Funding Rules and the contract for services entered into between the Employer and the Training Provider;</p>
@@ -343,7 +343,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.4.</h3>
+                    <h3>5.1.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>pay the Employer Co-Investment promptly when it is liable to pay it and as agreed with the Training Provider;</p>
@@ -351,7 +351,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.5.</h3>
+                    <h3>5.1.5.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>promptly inform the ESFA by contacting the Helpdesk (08000 150600 or <a href="mailto: helpdesk@manage-apprenticeships.service.gov.uk" class="govuk-link govuk-link--no-visited-state">helpdesk@manage-apprenticeships.service.gov.uk</a>) of any concerns that the Employer might have about the Training delivered to the Apprentice and / or the Training Provider;</p>
@@ -359,7 +359,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.6.</h3>
+                    <h3>5.1.6.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>have procedures in place to deal with conflicts of interest in relation to the Apprenticeship Training;</p>
@@ -367,7 +367,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.7.</h3>
+                    <h3>5.1.7.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>have procedures and processes in place to deal with the prevention of fraud and / or administrative malfunction;</p>
@@ -375,7 +375,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="5-1-8">5.1.8.</h3>
+                    <h3 id="5-1-8">5.1.8.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>upon request, supply the Training Provider with any information it may reasonably require in relation to any Apprentice or the delivery of Training;</p>
@@ -383,7 +383,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="5-1-9">5.1.9.</h3>
+                    <h3 id="5-1-9">5.1.9.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>have a contract for services with a Training Provider for the provision of Training to the Apprentice;</p>
@@ -391,7 +391,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.10.</h3>
+                    <h3>5.1.10.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>inform the Training Provider of any change in the Employer’s or any Apprentice’s circumstances which might affect the Training, the Funding or any other issue connected with the contract for services within 10 Working Days;</p>
@@ -399,7 +399,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.11.</h3>
+                    <h3>5.1.11.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>ensure all financial and other information disclosed to the ESFA is true and accurate;</p>
@@ -407,7 +407,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.12.</h3>
+                    <h3>5.1.12.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>ensure that it has the appropriate registrations with the Information Commissioner’s Office for controlling and / or processing data and that it maintains them for the duration of this Agreement;</p>
@@ -415,7 +415,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.13.</h3>
+                    <h3>5.1.13.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>adhere to the Computer Misuse Act 1990;</p>
@@ -423,7 +423,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">5.1.14.</h3>
+                    <h3>5.1.14.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>comply with Legislation and Guidance relating to Health and Safety and Safeguarding;</p>
@@ -431,7 +431,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="5-1-15">5.1.15.</h3>
+                    <h3 id="5-1-15">5.1.15.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>not commit a Prohibited Act.</p>
@@ -441,7 +441,7 @@
 
         <!-- 6 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="6">6.</h3>
                 </div>
@@ -449,17 +449,17 @@
                     <h3 class="heading-medium">Information, Audit and Reporting</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">6.1.</h3>
+                    <h3>6.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall, upon request, supply any documents, information, data, reports, accounts, records or written or verbal explanations whether held in physical and / or electronic form which may be reasonably required by the ESFA or its authorised representatives or auditors in connection with this Agreement or the Apprenticeship Service, including in relation to any Apprentice, Training Provider or PAYE scheme of the Employer.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">6.2.</h3>
+                    <h3>6.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall assist and co-operate with the ESFA in relation to any audit or investigation and shall grant the ESFA or its authorised representatives or auditors access to its premises at any reasonable time, with or without notice, to examine, remove and / or copy any relevant documents and records (including electronic records) and to interview the Employer's and any Connected Employer's employees or staff carrying out activities in connection with this Agreement or any Apprentice receiving Training under this Agreement.</p>
@@ -469,7 +469,7 @@
 
         <!-- 7 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="7">7.</h3>
                 </div>
@@ -477,53 +477,53 @@
                     <h3 class="heading-medium">Intellectual Property Rights</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">7.1.</h3>
+                    <h3>7.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The ESFA and the Employer agree that all rights, title and interest in or to any information, data, reports, documents, procedures, forecasts, technology, Know-How and any other Intellectual Property Rights whatsoever owned by either the ESFA or the Employer before the Commencement Date or developed by either party during the Term of this Agreement, shall remain the property of that party.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">7.2.</h3>
+                    <h3>7.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Subject to Clause 7.3 below, the Employer may not use any Intellectual Property Rights belonging to the ESFA or the Crown without prior written consent from the ESFA.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="7-3">7.3.</h3>
+                    <h3 id="7-3">7.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer may use the Apprenticeships Logo for the purposes of advertising and marketing its Apprenticeships without obtaining prior consent from the ESFA.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="7-4">7.4.</h3>
+                    <h3 id="7-4">7.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Where the ESFA has allowed the Employer to use any of its Intellectual Property Rights in connection with this Agreement, the Employer shall immediately cease to use such Intellectual Property Rights upon request or upon termination of this Agreement.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">7.5.</h3>
+                    <h3>7.5.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>In the event of Clause 7.4 applying, the Employer must at the election of the ESFA either return or destroy such Intellectual Property Rights as requested by the ESFA and, where relevant, shall put arrangements in place to ensure that any Connected Employer also complies with the provisions of this Clause 7.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     &nbsp;
                 </div>
                 <div class="clause-column-content">
                     <div class="call-to-action">
-                        <p class="govuk-body govuk-!-font-weight-bold">Guidance note on intellectual property rights</p>
+                        <h4 class="heading-small">Guidance note on intellectual property rights</h4>
                         <p>This clause does not give ESFA any rights to the employer’s intellectual property (IP) or to use it. It just protects ESFA’s own IP.</p>
                     </div>
                 </div>
@@ -533,7 +533,7 @@
 
         <!-- 8 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="8">8.</h3>
                 </div>
@@ -541,17 +541,17 @@
                     <h3 class="heading-medium">Confidentiality</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.1.</h3>
+                    <h3>8.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Subject to Clause 9 (Freedom of Information), each party shall during the Term of this Agreement and afterwards keep secret and confidential all Intellectual Property Rights or Know-How or other business, technical or commercial information disclosed to it as a result of the Agreement. Each party shall not disclose the same to any person except to the extent necessary to perform its obligations in accordance with the terms of this Agreement or except as expressly authorised in writing by the other party.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.2.</h3>
+                    <h3>8.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The obligation of confidentiality contained in this clause shall not apply or shall cease to apply to any Intellectual Property Rights, Know-How or other business, technical or commercial information which:</p>
@@ -559,7 +559,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.2.1.</h3>
+                    <h3>8.2.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>at the time of its disclosure by the disclosing party is already in the public domain or which subsequently enters the public domain other than by breach of the terms of this Agreement by the receiving party;</p>
@@ -567,7 +567,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.2.2.</h3>
+                    <h3>8.2.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>is already known to the receiving party as evidenced by written records at the time of its disclosure by the disclosing party and was not otherwise acquired by the receiving party from the disclosing party under any obligations of confidence; or</p>
@@ -575,15 +575,15 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.2.3.</h3>
+                    <h3>8.2.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>is at any time after the date of this Agreement acquired by the receiving party from a third party having the right to disclose the same to the receiving party without breach of the obligations owed by that party to the disclosing party.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.3.</h3>
+                    <h3>8.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>As an exemption to the duty of confidentiality set out in this Clause 8, the ESFA may disclose confidential information obtained from the Employer:</p>
@@ -591,7 +591,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.3.1.</h3>
+                    <h3>8.3.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>to any other Central Government Body, Non-Departmental or Quasi Government Body or agency, central or local;</p>
@@ -599,7 +599,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.3.2.</h3>
+                    <h3>8.3.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>to Parliament and Parliamentary Committees or if required by any Parliamentary reporting requirement; or</p>
@@ -607,27 +607,27 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.3.3.</h3>
+                    <h3>8.3.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>to any professional adviser, consultant, contractor or other person engaged by the ESFA directly in connection with this Agreement, provided that such information is treated as confidential by the receiving party.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">8.4.</h3>
+                    <h3>8.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall, where relevant, put in place arrangements for ensuring that any Connected Employer complies with the provisions of this Clause 8 as though it were a party to this Agreement.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     &nbsp;
                 </div>
                 <div class="clause-column-content">
                     <div class="call-to-action">
-                        <p class="govuk-body govuk-!-font-weight-bold">Guidance note on confidentiality</p>
+                        <h4 class="heading-small">Guidance note on confidentiality</h4>
                         <p>ESFA has the right to share information with:</p>
                         <ul class="govuk-list govuk-list--bullet">
                             <li>any of their contractors or consultants</li>
@@ -643,7 +643,7 @@
 
         <!-- 9 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="9">9.</h3>
                 </div>
@@ -651,17 +651,17 @@
                     <h3 class="heading-medium">Freedom of Information</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="9-1">9.1.</h3>
+                    <h3 id="9-1">9.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer acknowledges that the ESFA is subject to the requirements of the Freedom of Information Act 2000 (FOIA) and the Environmental Information Regulations 2004 (EIRs).</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">9.2.</h3>
+                    <h3>9.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer will:</p>
@@ -669,7 +669,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">9.2.1.</h3>
+                    <h3>9.2.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>provide all necessary assistance and co-operation as reasonably requested by the ESFA to enable the ESFA to comply with its obligations under the FOIA and EIRs;</p>
@@ -677,7 +677,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">9.2.2.</h3>
+                    <h3>9.2.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>transfer to the ESFA all requests for information relating to this Agreement that it receives as soon as practicable and in any event within 2 Working Days of receipt;</p>
@@ -685,7 +685,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">9.2.3.</h3>
+                    <h3>9.2.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>within 5 Working Days (or such other period as the ESFA may specify) of the ESFA's request for information, provide the ESFA with a copy of all information belonging to the ESFA that is in the Employer’s possession or control and is relevant to the request; and </p>
@@ -693,31 +693,31 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">9.2.4.</h3>
+                    <h3>9.2.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>not respond directly to a request for information unless authorised in writing to do so by the ESFA.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="9-3">9.3.</h3>
+                    <h3 id="9-3">9.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer acknowledges that the ESFA may be required under the FOIA and EIRs to disclose information without consulting or obtaining consent from the Employer. The ESFA shall take reasonable steps to notify the Employer of a request for information to the extent that it is permissible and reasonably practical for it to do so. Nonetheless and regardless of any other provision in this agreement, the ESFA shall be responsible for determining in its absolute discretion whether any information is exempt from disclosure in accordance with the FOIA and / or the EIRs.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">9.4.</h3>
+                    <h3>9.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Where the Employer is also subject to the requirements of FOIA and the EIRs, the ESFA agrees to assist and co-operate with the Employer in relation to any request for information, in the same manner described in Clauses 9.1 to 9.3 above.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">9.5.</h3>
+                    <h3>9.5.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall, where relevant, put in place arrangements for ensuring that any Connected Employer complies with the provisions of this Clause 9 as though it were a party to this Agreement.</p>
@@ -727,7 +727,7 @@
 
         <!-- 10 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="10">10.</h3>
                 </div>
@@ -735,37 +735,37 @@
                     <h3 class="heading-medium">Data Protection</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">10.1.</h3>
+                    <h3>10.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall comply with the Data Protection Legislation.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">10.2.</h3>
+                    <h3>10.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall make arrangements for ensuring that any person that is working with them or for them including employees, consultants, freelance workers and Connected Employers complies with the Data Protection Legislation.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">10.3.</h3>
+                    <h3>10.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall notify the Training Provider of any suspected or actual breach of Apprentice personal data.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     &nbsp;
                 </div>
                 <div class="clause-column-content">
                     <div class="call-to-action">
-                        <p class="govuk-body govuk-!-font-weight-bold">Guidance note on data protection</p>
+                        <h4 class="heading-small">Guidance note on data protection</h4>
                         <p>Both the employer and ESFA must comply with UK data protection regulations as updated and amended, including:</p>
                         <ul class="govuk-list govuk-list--bullet">
                             <li>the Data Protection Act 1998</li>
@@ -781,7 +781,7 @@
 
         <!-- 11 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="11">11.</h3>
                 </div>
@@ -789,17 +789,17 @@
                     <h3 class="heading-medium">Anti-Discrimination</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="11-1">11.1.</h3>
+                    <h3 id="11-1">11.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Parties shall not unlawfully discriminate within the meaning and scope of Equalities Legislation.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">11.2.</h3>
+                    <h3>11.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall take all reasonable steps to make sure that all people and bodies involved on behalf of the Employer in delivering the Training comply with Clause 11.1.</p>
@@ -809,7 +809,7 @@
 
         <!-- 12 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="12">12.</h3>
                 </div>
@@ -817,45 +817,45 @@
                     <h3 class="heading-medium">Limitation of Liability</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="12-1">12.1.</h3>
+                    <h3 id="12-1">12.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Subject to Clause 12.3, the ESFA accepts no liability whatsoever for any consequences, whether direct or indirect, that may come about as a result of the actions and / or omissions of the Employer or a Connected Employer in relation to this Agreement, or their respective obligations to third parties, including but not limited to under a contract for services between the Employer and a Training Provider.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">12.2.</h3>
+                    <h3>12.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer on behalf of itself and any Connected Employer shall indemnify and not hold the ESFA and the people or bodies working on its behalf responsible for any claims, demands, actions, costs, expenses, losses, damages and all other liabilities arising or incurred as a result of this Agreement including but not limited to under a contract for services between the Employer and a Training Provider.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number" id="12-3">12.3.</h3>
+                    <h3 id="12-3">12.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Neither party seeks to limit or exclude its own liability for death or personal injury caused by its own negligence, fraud, fraudulent misrepresentation or any other liability which cannot be limited or excluded by law.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">12.4.</h3>
+                    <h3>12.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Subject to Clauses 12.1 and 12.3 above, the ESFA's liability under this Agreement is limited to paying the Funding in accordance with the Funding Rules.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     &nbsp;
                 </div>
                 <div class="clause-column-content">
                     <div class="call-to-action">
-                        <p class="govuk-body govuk-!-font-weight-bold">Guidance note on limitation of liability</p>
+                        <h4 class="heading-small">Guidance note on limitation of liability</h4>
                         <p>Some employers have asked for their liability under the agreement to be capped.</p>
                         <p>ESFA’s responsibility through the service is to direct funds for apprenticeships, so the employer agreement covers our complete liability for this. The employer’s responsibility is far wider. For example, employing an apprentice, supporting the successful delivery of the apprenticeship, being responsible for instructing who receives funds and what they purchase. It would therefore not be acceptable to expose ESFA to any legal or financial risk arising from the employer’s activities.</p>
                         <p>ESFA is not doing anything which could give rise to any risk for the employer, so this provision does not apply equally to both parties. As a public sector organisation, ESFA has a responsibility to manage taxpayers’ money effectively, and it would be imprudent to agree to accept any risk from the activities of the employer in this situation. The Crown must, however, apply proper and reasonable care when enforcing this agreement. While a number of organisations have raised this concern, ESFA’s responsibility is often taken into account when employers decide to sign the agreement.</p>
@@ -867,7 +867,7 @@
 
         <!-- 13 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="13">13.</h3>
                 </div>
@@ -875,9 +875,9 @@
                     <h3 class="heading-medium">Withholding, Suspension and Repayment of Funding</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.1.</h3>
+                    <h3>13.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Without prejudice to the ESFA's other rights and remedies, the ESFA may at its discretion withhold or suspend payment of Funding for the Training if:</p>
@@ -885,7 +885,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.1.1.</h3>
+                    <h3>13.1.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the Employer materially breaches any of the terms or conditions set out in this Agreement;</p>
@@ -893,7 +893,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.1.2.</h3>
+                    <h3>13.1.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the ESFA becomes aware of any fraud, financial irregularity, dishonesty or negligence by the Employer, or the Training Provider in connection with this Agreement;</p>
@@ -901,7 +901,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.1.3.</h3>
+                    <h3>13.1.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>any employee or other individual carrying out activities on behalf of the Employer or a Connected Employer has (a) acted dishonestly or negligently at any time in connection with this Agreement or (b) taken any actions which, in the reasonable opinion of the ESFA, bring or are likely to bring the ESFA's name, brand or reputation or the Apprenticeships brand into disrepute;</p>
@@ -909,7 +909,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.1.4.</h3>
+                    <h3>13.1.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the Employer was not entitled to Funding under the Funding Rules in relation to one or more Apprenticeship;</p>
@@ -917,7 +917,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.1.5.</h3>
+                    <h3>13.1.5.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>there occurs, in respect of the Employer or a relevant Connected Employer, any Insolvency Event or Change of Control which, in the reasonable opinion of the ESFA, may affect the Employer's ability to comply with its obligations under this Agreement;</p>
@@ -925,31 +925,31 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.1.6.</h3>
+                    <h3>13.1.6.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the Employer fails to comply with any of the terms and conditions set out in this Agreement (including requirements in the Funding Rules) and fails to rectify any such failure within 30 days of receiving written notice detailing the failure;</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.2.</h3>
+                    <h3>13.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The ESFA reserves the right to recover from the Employer any Funding paid to a Training Provider where the payment of Funding or any arrangement between the Employer and the Training Provider breaches the Funding Rules or the entitlement to Funding was based on wrong, inaccurate or misleading information. The ESFA will act reasonably and proportionately in exercising its discretion to recover any sum from the Employer under this clause.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.3.</h3>
+                    <h3>13.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The ESFA may retain or set off any sums owed to it by the Employer which have become due and payable against any sums due to the Employer under this Agreement or any other agreement which the Employer has with the ESFA.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">13.4 .</h3>
+                    <h3>13.4 .</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer shall make any payments due to the ESFA without any deduction.</p>
@@ -960,7 +960,7 @@
 
         <!-- 14 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="14">14.</h3>
                 </div>
@@ -968,9 +968,9 @@
                     <h3 class="heading-medium">Termination</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.</h3>
+                    <h3>14.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Without prejudice to the ESFA's other rights and remedies, the ESFA may terminate this Agreement with immediate effect by giving written notice to the Employer if:</p>
@@ -978,7 +978,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.1.</h3>
+                    <h3>14.1.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the Employer commits a breach of any of Clauses 5.1.9 to 5.1.15;</p>
@@ -986,7 +986,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.2.</h3>
+                    <h3>14.1.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the Employer commits a breach of this Agreement which is irremediable or which it fails to remedy before the deadline specified in a written request from the ESFA requiring the breach to be remedied;</p>
@@ -994,7 +994,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.3.</h3>
+                    <h3>14.1.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the Employer repeatedly breaches any of the terms of this Agreement in such a manner as to reasonably justify the opinion that its conduct is inconsistent with it having the intention or ability to give effect to the terms of this Agreement;</p>
@@ -1002,7 +1002,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.4.</h3>
+                    <h3>14.1.4.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the Employer commits a material breach of any term of this Agreement including but not limited to Clauses 5.1.1 to 5.1.8;</p>
@@ -1010,7 +1010,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.5.</h3>
+                    <h3>14.1.5.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>the ESFA becomes aware of any fraud or financial irregularity by the Employer or a Connected Employer in connection with this Agreement or any other Agreement with the Crown;</p>
@@ -1018,7 +1018,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.6.</h3>
+                    <h3>14.1.6.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>any employee or other individual carrying out activities on behalf of the Employer or a Connected Employer has (a) acted dishonestly or negligently at any time in connection with this Agreement or (b) taken any actions which, in the reasonable opinion of the ESFA, bring or are likely to bring the ESFA's name, brand or reputation or the Apprenticeships brand into disrepute;</p>
@@ -1026,35 +1026,35 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.1.7.</h3>
+                    <h3>14.1.7.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>any Insolvency Event or Change of Control which, in the reasonable opinion of the ESFA, may affect the Employer's ability to comply with its obligations under this Agreement.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.2.</h3>
+                    <h3>14.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Without affecting any other right or remedy available to it, either party may terminate this Agreement for any reason by giving not less than 30 days' notice in writing to the other party, or such shorter or longer notice period as may be mutually agreed in writing between them.</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">14.3.</h3>
+                    <h3>14.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Following the termination of this Agreement, the following clauses shall remain in full force and effect: Schedule (Definitions and Interpretation), 6 (Information, Audit and Reporting), 7 (Intellectual Property Rights), 9 (Freedom of Information), 10 (Data Protection), 12 (Limitation of Liability), 13 (Withholding, Suspension and Repayment of Funding), 18 (Notices), 19 (Dispute Resolution), 21 (Joint and Several Liability) and 22 (Governing Law).</p>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     &nbsp;
                 </div>
                 <div class="clause-column-content">
                     <div class="call-to-action">
-                        <p class="govuk-body govuk-!-font-weight-bold">Guidance note on termination</p>
+                        <h4 class="heading-small">Guidance note on termination</h4>
                         <p>Both the employer and ESFA can end the agreement for any reason, by giving 30 days’ notice. </p>
                         <p>ESFA also has the right to immediately end the agreement, for reasons such as:</p>
                         <ul class="govuk-list govuk-list--bullet">
@@ -1070,7 +1070,7 @@
 
         <!-- 15 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="15">15.</h3>
                 </div>
@@ -1078,9 +1078,9 @@
                     <h3 class="heading-medium">Assignment</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">15.1.</h3>
+                    <h3>15.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The Employer may not, without the prior written consent of the ESFA, assign, transfer, sub-contract, or in any other way make over to any third party the benefit and / or the burden of this Agreement.</p>
@@ -1090,7 +1090,7 @@
 
         <!-- 16 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="16">16.</h3>
                 </div>
@@ -1098,9 +1098,9 @@
                     <h3 class="heading-medium">Variation</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">16.1.</h3>
+                    <h3>16.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>The ESFA fully reserves the right to vary the terms of this Agreement. The Employer will be asked to confirm its acceptance of the new terms and conditions through the Apprenticeship Service Account.</p>
@@ -1110,7 +1110,7 @@
 
         <!-- 17 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="17">17.</h3>
                 </div>
@@ -1118,9 +1118,9 @@
                     <h3 class="heading-medium">Waiver</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">17.1.</h3>
+                    <h3>17.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>No failure or delay by either party to exercise any right or remedy under this Agreement shall be construed as a waiver of any other right or remedy.</p>
@@ -1130,7 +1130,7 @@
 
         <!-- 18 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="18">18.</h3>
                 </div>
@@ -1138,9 +1138,9 @@
                     <h3 class="heading-medium">Notices</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">18.1.</h3>
+                    <h3>18.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>All notices and communications in relation to this Agreement shall be in writing and personally delivered, emailed, or sent by first class post to the address of the relevant party, as referred to above or in the case of an email address or correspondence address, as notified by the relevant party in writing. The notice or communication will be considered delivered as follows:</p>
@@ -1148,7 +1148,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">18.1.1.</h3>
+                    <h3>18.1.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>if personally delivered, when handed over to the addressee;</p>
@@ -1156,7 +1156,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">18.1.2.</h3>
+                    <h3>18.1.2.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>if sent by email, on the day the email is sent if sent on a Working Day and before 5.00 pm, otherwise the email will be considered delivered at 9.00 am on the next Working Day;</p>
@@ -1164,7 +1164,7 @@
             </div>
             <div class="clause-sub-row clause-sub-sub-row">
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">18.1.3.</h3>
+                    <h3>18.1.3.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>if sent by first class post, on the second Working Day after the day on which it is posted.</p>
@@ -1174,7 +1174,7 @@
 
         <!-- 19 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="19">19.</h3>
                 </div>
@@ -1182,9 +1182,9 @@
                     <h3 class="heading-medium">Dispute Resolution</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">19.1.</h3>
+                    <h3>19.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Any complaint or dispute arising in relation to this Agreement shall be resolved in accordance with ESFA's official complaints procedure which can be accessed at <a target="_blank" href="https://www.gov.uk/government/organisations/education-and-skills-funding-agency/about/complaints-procedure" class="govuk-link govuk-link--no-visited-state">https://www.gov.uk/government/organisations/education-and-skills-funding-agency/about/complaints-procedure</a>.</p>
@@ -1194,7 +1194,7 @@
 
         <!-- 20 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="20">20.</h3>
                 </div>
@@ -1202,9 +1202,9 @@
                     <h3 class="heading-medium">No Partnership or Agency</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">20.1.</h3>
+                    <h3>20.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>This Agreement shall not create any partnership or joint venture between the ESFA and the Employer, nor any relationship of principal and agent, nor authorise any party to make or enter into any commitments for or on behalf of the other party.</p>
@@ -1214,7 +1214,7 @@
 
         <!-- 21 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="21">21.</h3>
                 </div>
@@ -1222,9 +1222,9 @@
                     <h3 class="heading-medium">Joint and Several Liability</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">21.1.</h3>
+                    <h3>21.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>Where the Employer is not a company nor any other separate legal entity, the individuals who enter into and sign this Agreement on behalf of the Employer shall be jointly and severally liable for the Employer's obligations and liabilities arising under this Agreement.</p>
@@ -1234,7 +1234,7 @@
 
         <!-- 22 -->
         <div class="clause">
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
                     <h3 class="heading-medium" id="22">22.</h3>
                 </div>
@@ -1242,9 +1242,9 @@
                     <h3 class="heading-medium">Governing Law</h3>
                 </div>
             </div>
-            <div class="clause-sub-row">
+            <div>
                 <div class="clause-column-fig">
-                    <h3 class="govuk-body para-number">22.1.</h3>
+                    <h3>22.1.</h3>
                 </div>
                 <div class="clause-column-content">
                     <p>This Agreement shall be governed by and construed in accordance with the law of England and Wales and the parties irrevocably submit to the exclusive jurisdiction of the English and Welsh courts.</p>
@@ -1255,7 +1255,7 @@
         <div class="clause">
             <h3 class="heading-medium" id="schedule1">Schedule 1</h3>
             <h3 class="govuk-heading-m" id="definitions">Definitions and Interpretation</h3>
-            <div class="clause-sub-row">
+            <div>
 
                 <p>In this Agreement the following terms shall have the following meanings:</p>
                 <p><strong class="govuk-!-font-weight-bold">Apprentice</strong>: a person who works under an Apprenticeship Agreement.</p>
