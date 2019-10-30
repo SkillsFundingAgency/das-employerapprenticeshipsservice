@@ -160,8 +160,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{HashedAccountId}/getApprenticeshipFunding")]
-        [Route("getApprenticeshipFunding")]
+        [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0)]
+        [Route("getApprenticeshipFunding", Order = 1)]
         public ActionResult GetApprenticeshipFunding()
         {
             PopulateViewBagWithExternalUserId();
@@ -175,8 +175,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("{HashedAccountId}/getApprenticeshipFunding")]
-        [Route("getApprenticeshipFunding")]
+        [Route("{HashedAccountId}/getApprenticeshipFunding", Order = 0)]
+        [Route("getApprenticeshipFunding", Order = 1)]
         public async Task<ActionResult> GetApprenticeshipFunding(int? choice)
         {
             switch (choice ?? 0)

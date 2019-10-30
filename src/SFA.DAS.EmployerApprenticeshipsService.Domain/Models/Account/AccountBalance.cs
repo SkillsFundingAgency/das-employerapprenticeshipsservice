@@ -7,5 +7,6 @@
         public decimal RemainingTransferAllowance { get; set; }
         public decimal StartingTransferAllowance { get; set; }
         public int IsLevyPayer { get; set; }
+        public bool? LevyOverride { get; set; }
     }
 }

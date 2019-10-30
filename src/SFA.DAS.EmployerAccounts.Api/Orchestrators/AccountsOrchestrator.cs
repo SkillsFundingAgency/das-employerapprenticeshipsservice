@@ -73,7 +73,8 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
                     AccountName = account.Name,
                     AccountHashId = account.HashedId,
                     PublicAccountHashId = account.PublicHashedId,
-                    IsLevyPayer = ((ApprenticeshipEmployerType) account.ApprenticeshipEmployerType) == ApprenticeshipEmployerType.Levy
+                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)account.ApprenticeshipEmployerType,
+                    AccountAgreementType = GetAgreementType(account.AccountLegalEntities.SelectMany(x => x.Agreements).Select(x => x.Template.AgreementType).Distinct().ToList())
                 };
 
                 data.Add(accountModel);
@@ -145,14 +146,13 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
                 LegalEntities = new ResourceList(accountResult.Account.LegalEntities.Select(x => new Resource { Id = x.ToString() })),
                 PayeSchemes = new ResourceList(accountResult.Account.PayeSchemes.Select(x => new Resource { Id = x })),
                 ApprenticeshipEmployerType = accountResult.Account.ApprenticeshipEmployerType.ToString(),
-                AccountAgreementType = GetAgreementType(accountResult)
+                AccountAgreementType = GetAgreementType(accountResult.Account.AccountAgreementTypes)
             };
         }
 
-        private static AccountAgreementType GetAgreementType(GetEmployerAccountDetailByHashedIdResponse accountResult)
+        private static AccountAgreementType GetAgreementType(List<AgreementType> agreementTypes)
         {
-            var agreementTypeGroup = accountResult.Account.AccountAgreementTypes?
-                .GroupBy(x => x);
+            var agreementTypeGroup = agreementTypes?.GroupBy(x => x);
 
             if (agreementTypeGroup == null || !agreementTypeGroup.Any())
             {
