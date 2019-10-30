@@ -1,7 +1,9 @@
 ﻿
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.PanelViewModel<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
 
-<div class="das-panel @(Model.Data.ApprenticeshipAdded ? "" : "das-panel--featured")">
-
-    @Html.Action(Model.ViewName, new { model = Model.Data })
-</div>
+@if (!Model.ViewName.Equals("Empty"))
+{
+    <div class="das-panel @(Model.Data.ApprenticeshipAdded ? "" : "das-panel--featured")">
+        @Html.Action(Model.ViewName, new { model = Model.Data })
+    </div>
+}

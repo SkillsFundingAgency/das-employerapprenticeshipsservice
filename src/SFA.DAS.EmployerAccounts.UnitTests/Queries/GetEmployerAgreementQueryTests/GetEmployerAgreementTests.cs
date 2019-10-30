@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
     {
         const long AccountId = 1;
         const long LegalEntityId = 2;
+        const long AccountLegalEntityId = 3;
         const string HashedAccountId = "ACC123";
 
         [Test]
@@ -33,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return RunAsync(
                 arrange: fixtures => fixtures
                     .WithAccount(AccountId, HashedAccountId)
-                    .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
+                    .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
                     .WithUser(AccountId, "Buck", "Rogers", out user)
                     .WithCallerAsUnauthorizedUser(),
                 act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
@@ -49,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return RunAsync(
                 arrange: fixtures => fixtures
                     .WithAccount(AccountId, HashedAccountId)
-                    .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
+                    .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
                     .WithUser(AccountId, "Buck", "Rogers", out user)
                     .WithInvalidRequest(),
                 act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
@@ -78,8 +79,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return RunAsync(
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
-                                        .WithAgreement(AccountId, LegalEntityId, 1, EmployerAgreementStatus.Pending, out expectedAgreement)
-                                        .WithAgreement(AccountId, LegalEntityId, 2, EmployerAgreementStatus.Pending, out _)
+                                        .WithAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 1, EmployerAgreementStatus.Pending, out expectedAgreement)
+                                        .WithAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, EmployerAgreementStatus.Pending, out _)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, expectedAgreement.Id, user.Ref),
                 assert: fixtures => Assert.AreEqual(expectedAgreement.Id, fixtures.Response.EmployerAgreement.Id));
@@ -95,9 +96,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return RunAsync(
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, 1, DateTime.Now.AddDays(-60), out _)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, 2, DateTime.Now.AddDays(-30), out latestSignedAgreement)
-                                        .WithPendingAgreement(AccountId, LegalEntityId, 3, out pendingAgreement)
+                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 1, DateTime.Now.AddDays(-60), out _)
+                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, DateTime.Now.AddDays(-30), out latestSignedAgreement)
+                                        .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
                 assert: fixtures =>
@@ -116,7 +117,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return RunAsync(
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
-                                        .WithPendingAgreement(AccountId, LegalEntityId, 3, out pendingAgreement)
+                                        .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
                 assert: fixtures =>
@@ -133,8 +134,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
                                         .WithAccount(AccountId + 1, "XXX123")
-                                        .WithPendingAgreement(AccountId, LegalEntityId, 3, out latestAgreement)
-                                        .WithSignedAgreement(AccountId + 1, LegalEntityId, 2, DateTime.Now.AddDays(-30), out _)
+                                        .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out latestAgreement)
+                                        .WithSignedAgreement(AccountId + 1, LegalEntityId, AccountLegalEntityId + 1, 2, DateTime.Now.AddDays(-30), out _)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
                 assert: fixtures =>
@@ -150,8 +151,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return RunAsync(
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, 3, DateTime.Now.AddDays(-10), out latestAgreement)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, 2, DateTime.Now.AddDays(-20), out _)
+                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-10), out latestAgreement)
+                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, DateTime.Now.AddDays(-20), out _)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
                 assert: fixtures =>
@@ -167,7 +168,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return RunAsync(
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
-                                        .WithPendingAgreement(AccountId, LegalEntityId, 2, out latestAgreement)
+                                        .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, out latestAgreement)
                                         .WithUser(AccountId, "Buck", "Rogers", out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
                 assert: fixtures => Assert.AreEqual(user.FullName, fixtures.Response.EmployerAgreement.SignedByName));
@@ -241,27 +242,27 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return this;
         }
 
-        public GetEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, int agreementVersion)
+        public GetEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion)
         {
-            EmployerAgreementBuilder.WithPendingAgreement(accountId, legalEntityId, agreementVersion);
+            EmployerAgreementBuilder.WithPendingAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion);
             return this;
         }
 
-        public GetEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, int agreementVersion, out EmployerAgreement employerAgreement)
+        public GetEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion, out EmployerAgreement employerAgreement)
         {
-            EmployerAgreementBuilder.WithPendingAgreement(accountId, legalEntityId, agreementVersion, out employerAgreement);
+            EmployerAgreementBuilder.WithPendingAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion, out employerAgreement);
             return this;
         }
 
-        public GetEmployerAgreementTestFixtures WithSignedAgreement(long accountId, long legalEntityId, int agreementVersion,DateTime signedTime, out EmployerAgreement employerAgreement)
+        public GetEmployerAgreementTestFixtures WithSignedAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion,DateTime signedTime, out EmployerAgreement employerAgreement)
         {
-            EmployerAgreementBuilder.WithSignedAgreement(accountId, legalEntityId, agreementVersion, signedTime, out employerAgreement);
+            EmployerAgreementBuilder.WithSignedAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion, signedTime, out employerAgreement);
             return this;
         }
 
-        public GetEmployerAgreementTestFixtures WithAgreement(long accountId, long legalEntityId, int agreementVersion, EmployerAgreementStatus status, out EmployerAgreement employerAgreement)
+        public GetEmployerAgreementTestFixtures WithAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion, EmployerAgreementStatus status, out EmployerAgreement employerAgreement)
         {
-            EmployerAgreementBuilder.WithAgreement(accountId, legalEntityId, agreementVersion, status, out employerAgreement);
+            EmployerAgreementBuilder.WithAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion, status, out employerAgreement);
 
             return this;
         }
