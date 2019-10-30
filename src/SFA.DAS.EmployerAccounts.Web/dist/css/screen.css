@@ -981,6 +981,16 @@ ol {
   list-style-type: decimal;
   padding-left: 20px; }
 
+.list-lower-alpha {
+    list-style-type: lower-alpha;
+    padding-left: 20px;
+}
+
+.list-lower-roman {
+    list-style-type: lower-roman;
+    padding-left: 20px;
+}
+
 table {
   border-collapse: collapse;
   border-spacing: 0;
