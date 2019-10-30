@@ -1,8 +1,8 @@
 ﻿@model EmployerAgreementViewModel
 
 @{
-//var hiddenClass = Model.NoChoiceSelected ? "" : "hidden";
-//var errorClass = Model.NoChoiceSelected ? "error" : "";
+    var hiddenClass = Model.NoChoiceSelected ? "" : "hidden";
+    var errorClass = Model.NoChoiceSelected ? "error" : "";
 }
 
 <script type="text/javascript" src="@Url.Content("../../../../dist/javascripts/jquery-1.11.0.min.js")"></script>
@@ -46,35 +46,35 @@
     <div class="column-one-quarter">
         <div>
             @*<div class="contents-column">*@
-                <p id="sections-title">Clauses of the agreement</p>
-                <br />
-                <ol class="list">
-                    <li><a class="contents-link" href="#background">Background </a></li>
-                    <li><a class="contents-link" href="#1"><span class="number">1. </span>Agreed Terms</a></li>
-                    <li><a class="contents-link" href="#2"><span class="number">2. </span>Commencement and Duration</a></li>
-                    <li><a class="contents-link" href="#3"><span class="number">3. </span>Purpose and Use of Funding</a></li>
-                    <li><a class="contents-link" href="#4"><span class="number">4. </span>Payments and Approvals</a></li>
-                    <li><a class="contents-link" href="#5"><span class="number">5. </span>Requirements</a></li>
-                    <li><a class="contents-link" href="#6"><span class="number">6. </span>Information, Audit and Reporting</a></li>
-                    <li><a class="contents-link" href="#7"><span class="number">7. </span>Intellectual Property Rights</a></li>
-                    <li><a class="contents-link" href="#8"><span class="number">8. </span>Confidentiality</a></li>
-                    <li><a class="contents-link" href="#9"><span class="number">9. </span>Freedom of Information</a></li>
-                    <li><a class="contents-link" href="#10"><span class="number">10. </span>Data Protection</a></li>
-                    <li><a class="contents-link" href="#11"><span class="number">11. </span>Anti-Discrimination</a></li>
-                    <li><a class="contents-link" href="#12"><span class="number">12. </span>Limitation of Liability</a></li>
-                    <li><a class="contents-link" href="#13"><span class="number">13. </span>Withholding, Suspension and Repayment of Funding</a></li>
-                    <li><a class="contents-link" href="#14"><span class="number">14. </span>Termination</a></li>
-                    <li><a class="contents-link" href="#15"><span class="number">15. </span>Assignment</a></li>
-                    <li><a class="contents-link" href="#16"><span class="number">16. </span>Variation</a></li>
-                    <li><a class="contents-link" href="#17"><span class="number">17. </span>Waiver</a></li>
-                    <li><a class="contents-link" href="#18"><span class="number">18. </span>Notices</a></li>
-                    <li><a class="contents-link" href="#19"><span class="number">19. </span>Dispute Resolution</a></li>
-                    <li><a class="contents-link" href="#20"><span class="number">20. </span>No Partnership or Agency</a></li>
-                    <li><a class="contents-link" href="#21"><span class="number">21. </span>Joint and Several Liability</a></li>
-                    <li><a class="contents-link" href="#22"><span class="number">22. </span>Governing Law</a></li>
-                    <li><a class="contents-link" href="#schedule1">Schedule 1</a></li>
-                    <li><a class="contents-link" href="#definitions">Definitions and Interpretation</a></li>
-                </ol>
+            <p id="sections-title">Clauses of the agreement</p>
+            <br />
+            <ol class="list">
+                <li><a class="contents-link" href="#background">Background </a></li>
+                <li><a class="contents-link" href="#1"><span class="number">1. </span>Agreed Terms</a></li>
+                <li><a class="contents-link" href="#2"><span class="number">2. </span>Commencement and Duration</a></li>
+                <li><a class="contents-link" href="#3"><span class="number">3. </span>Purpose and Use of Funding</a></li>
+                <li><a class="contents-link" href="#4"><span class="number">4. </span>Payments and Approvals</a></li>
+                <li><a class="contents-link" href="#5"><span class="number">5. </span>Requirements</a></li>
+                <li><a class="contents-link" href="#6"><span class="number">6. </span>Information, Audit and Reporting</a></li>
+                <li><a class="contents-link" href="#7"><span class="number">7. </span>Intellectual Property Rights</a></li>
+                <li><a class="contents-link" href="#8"><span class="number">8. </span>Confidentiality</a></li>
+                <li><a class="contents-link" href="#9"><span class="number">9. </span>Freedom of Information</a></li>
+                <li><a class="contents-link" href="#10"><span class="number">10. </span>Data Protection</a></li>
+                <li><a class="contents-link" href="#11"><span class="number">11. </span>Anti-Discrimination</a></li>
+                <li><a class="contents-link" href="#12"><span class="number">12. </span>Limitation of Liability</a></li>
+                <li><a class="contents-link" href="#13"><span class="number">13. </span>Withholding, Suspension and Repayment of Funding</a></li>
+                <li><a class="contents-link" href="#14"><span class="number">14. </span>Termination</a></li>
+                <li><a class="contents-link" href="#15"><span class="number">15. </span>Assignment</a></li>
+                <li><a class="contents-link" href="#16"><span class="number">16. </span>Variation</a></li>
+                <li><a class="contents-link" href="#17"><span class="number">17. </span>Waiver</a></li>
+                <li><a class="contents-link" href="#18"><span class="number">18. </span>Notices</a></li>
+                <li><a class="contents-link" href="#19"><span class="number">19. </span>Dispute Resolution</a></li>
+                <li><a class="contents-link" href="#20"><span class="number">20. </span>No Partnership or Agency</a></li>
+                <li><a class="contents-link" href="#21"><span class="number">21. </span>Joint and Several Liability</a></li>
+                <li><a class="contents-link" href="#22"><span class="number">22. </span>Governing Law</a></li>
+                <li><a class="contents-link" href="#schedule1">Schedule 1</a></li>
+                <li><a class="contents-link" href="#definitions">Definitions and Interpretation</a></li>
+            </ol>
         </div>
     </div>
 
@@ -1356,63 +1356,48 @@
 
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+    
+        <p class="hgroup"><a href="#" target="_blank">Download the agreement</a> (PDF, XXXKB)</p>
 
-    </div>
-
-</div>
-
-
-
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-one-quarter">
-        &nbsp;
-    </div>
-    <div class="govuk-grid-column-three-quarters">
-
-        <p class="govuk-body" style="margin-bottom: 40px"><a href="#" target="_blank" class="govuk-link govuk-link--no-visited-state">Download the agreement</a> (PDF, XXXKB)</p>
-
-        <div class="govuk-warning-text">
-            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-            <strong class="govuk-warning-text__text govuk-!-font-weight-bold">
-                <span class="govuk-warning-text__assistive">Warning</span>
-                The agreement is legally binding. If ASSURANCE AEROSPACE LTD breaches the terms, we could stop them hiring apprentices, claim back funding or close its account.
+        <div class="notice">
+            <i class="icon icon-important">
+                <span class="visually-hidden">Warning</span>
+            </i>
+            <strong class="bold-small">
+                The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaks it, we could close their account and stop them running apprenticeships.
             </strong>
         </div>
+        <form method="post" action="@Url.Action("Sign", "EmployerAgreement")#no-choice-selected">
+            @Html.AntiForgeryToken()
+            <div class="form-group @errorClass">
+                <fieldset>
 
-        <form action="agreementSign" method="post" class="form">
-
-            <!-- RADIOS -->
-            <div class="govuk-form-group ">
-                <fieldset class="govuk-fieldset">
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-                        Do you accept the employer agreement on behalf of ASSURANCE AEROSPACE LTD?
+                    <legend>
+                        <h1 class="heading-medium">Do you accept the agreement?</h1>
+                        <span class="hint">
+                            By accepting, you confirm that ASSURANCE AEROSPACE LTD agrees to the terms and conditions and is entering into a legally binding agreement with ESFA.
+                        </span>
+                        <span class="error-message @hiddenClass" aria-hidden="true" id="no-choice-selected">
+                            Please select an option to continue
+                        </span>
                     </legend>
 
-                    <span class="govuk-hint">
-                        By accepting, you confirm that ASSURANCE AEROSPACE LTD agrees to the terms and conditions and is entering into a legally binding agreement with ESFA.
-                    </span>
-                    <div class="govuk-radios" name="agreementSign" id="agreementSign">
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="agreementSign-1" name="agreementSign" type="radio" value="yesSign">
-                            <label class="govuk-label govuk-radios__label" for="agreementSign-1">
-                                Yes, I accept the agreement
-                            </label>
-                        </div>
-                        <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" id="agreementSign-2" name="agreementSign" type="radio" value="noSignLater">
-                            <label class="govuk-label govuk-radios__label" for="agreementSign-2">
+                    <label for="want-to-sign" class="block-label">
+                        <input type="radio" name="choice" id="want-to-sign" value="2" />
+                        Yes, I accept the agreement
+                    </label>
+                    <label for="do-not-want-to-sign" class="block-label">
+                        <input type="radio" name="choice" id="do-not-want-to-sign" value="1" />
+                        Not yet, I’ll finish creating an account first
+                    </label>
 
-                                Not yet, I’ll finish creating an account first
-
-                            </label>
-                        </div>
-                    </div>
                 </fieldset>
+                <br />
+                <input class="button" type="submit" value="Continue" />
             </div>
-
-            <button class="govuk-button">Continue</button>
-
         </form>
 
     </div>
+
 </div>
+

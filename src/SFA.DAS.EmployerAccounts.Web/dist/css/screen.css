@@ -4999,3 +4999,8 @@ hr.dashboard-heading-separator {
             width: 88%;
         }
 }
+
+.hint {
+    margin-top: -5px;
+    color: #6f777b;
+}
