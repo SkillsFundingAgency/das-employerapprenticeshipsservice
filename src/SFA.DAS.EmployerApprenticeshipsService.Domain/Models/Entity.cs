@@ -1,6 +1,6 @@
 ﻿using System;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Context;
 
 namespace SFA.DAS.EAS.Domain.Models
 {
@@ -8,7 +8,12 @@ namespace SFA.DAS.EAS.Domain.Models
     {
         protected void Publish<T>(Action<T> action) where T : Event, new()
         {
-            UnitOfWorkContext.AddEvent(action);
+            UnitOfWorkContext.AddEvent<object>(() =>
+            {
+                var message = new T();
+                action(message);
+                return message;
+            });
         }
     }
 }

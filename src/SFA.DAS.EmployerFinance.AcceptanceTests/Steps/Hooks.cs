@@ -20,6 +20,7 @@ using SFA.DAS.Testing.AzureStorageEmulator;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using TechTalk.SpecFlow;
+using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 {

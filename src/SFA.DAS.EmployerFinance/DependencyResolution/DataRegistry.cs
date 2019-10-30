@@ -6,7 +6,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
-using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Context;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
@@ -22,8 +22,8 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
         private EmployerFinanceDbContext GetDbContext(IContext context)
         {
             var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
-            var clientSession = unitOfWorkContext.TryGet<IClientOutboxTransaction>();
-            var serverSession = unitOfWorkContext.TryGet<SynchronizedStorageSession>();
+            var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
+            var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
             var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();
 
             return new EmployerFinanceDbContext(sqlSession.Connection, sqlSession.Transaction);

@@ -15,6 +15,7 @@ using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.MessageHandlers
 {

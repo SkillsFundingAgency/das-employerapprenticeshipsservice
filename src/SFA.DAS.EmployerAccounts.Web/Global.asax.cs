@@ -33,6 +33,7 @@ using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {

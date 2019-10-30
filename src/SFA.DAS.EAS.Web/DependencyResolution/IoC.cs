@@ -1,11 +1,11 @@
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.UnitOfWork.EntityFramework;
-using SFA.DAS.UnitOfWork.NServiceBus;
-using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {

@@ -106,13 +106,13 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework">
-      <Version>1.0.17</Version>
+      <Version>9.0.13</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.Mvc">
-      <Version>1.0.17</Version>
+      <Version>9.0.13</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus">
-      <Version>1.0.17</Version>
+      <Version>9.0.13</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Validation.Mvc">
       <Version>5.1.167</Version>
