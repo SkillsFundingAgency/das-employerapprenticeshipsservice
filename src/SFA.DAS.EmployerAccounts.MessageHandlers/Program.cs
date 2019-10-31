@@ -57,6 +57,11 @@ namespace SFA.DAS.EmployerAccounts.MessageHandlers
        
             var endpoint = await Endpoint.Start(endpointConfiguration).ConfigureAwait(false);
 
+            container.Configure(c =>
+            {
+                c.For<IMessageSession>().Use(endpoint);
+            });
+
             while (!cancellationToken.IsCancellationRequested)
             {
                 await Task.Delay(3000, cancellationToken).ConfigureAwait(false);

@@ -1,8 +1,6 @@
 ﻿using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
-using SFA.DAS.UnitOfWork.NServiceBus;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
 using StructureMap;
 
