@@ -12,13 +12,13 @@
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Do you accept the employer agreement on behalf of ASSURANCE AEROSPACE LTD?</h1>
+        <h1 class="heading-xlarge">Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName</h1>
 
         <p>The points to note and guidance notes are not part of the employer agreement.</p>
 
         <div class="grey-background">
             <h2 class="heading-medium">Points to note</h2>
-            <p>ASSURANCE AEROSPACE LTD must:</p>
+            <p>@Model.EmployerAgreement.LegalEntityName must:</p>
             <ul class="list list-bullet">
                 <li>only use the funding made available through their apprenticeship service account to train and assess apprentices</li>
                 <li>have a contract with their training provider, so the provider can carry out apprenticeship training</li>
@@ -26,13 +26,13 @@
             </ul>
             <p>ESFA will:</p>
             <ul class="list list-bullet">
-                <li>consider an application by ASSURANCE AEROSPACE LTD and / or their training provider for funding in accordance with the apprenticeship funding rules</li>
-                <li>pay the funding directly to ASSURANCE AEROSPACE LTD’s training provider (if they are eligible)</li>
+                <li>consider an application by @Model.EmployerAgreement.LegalEntityName and / or their training provider for funding in accordance with the apprenticeship funding rules</li>
+                <li>pay the funding directly to @Model.EmployerAgreement.LegalEntityName’s training provider (if they are eligible)</li>
             </ul>
             <p>ESFA can:</p>
             <ul class="list list-bullet">
-                <li>suspend payments, claim back funding or close ASSURANCE AEROSPACE LTD’s account if they breach the terms of the agreement</li>
-                <li>vary the terms of the agreement - if this happens, ASSURANCE AEROSPACE LTD can accept the new terms or close their account (by giving ESFA 30 days’ notice)</li>
+                <li>suspend payments, claim back funding or close @Model.EmployerAgreement.LegalEntityName’s account if they breach the terms of the agreement</li>
+                <li>vary the terms of the agreement - if this happens, @Model.EmployerAgreement.LegalEntityName can accept the new terms or close their account (by giving ESFA 30 days’ notice)</li>
             </ul>
         </div>
     </div>
@@ -45,7 +45,6 @@
 
     <div class="column-one-quarter">
         <div>
-            @*<div class="contents-column">*@
             <p id="sections-title">Clauses of the agreement</p>
             <br />
             <ol class="list">
@@ -80,9 +79,9 @@
 
     <div class="column-two-thirds">
 
-        <h2 class="heading-large">Agreement between ASSURANCE AEROSPACE LTD and ESFA</h2>
+        <h2 class="heading-large">Agreement between @Model.EmployerAgreement.LegalEntityName and ESFA</h2>
 
-        <p class="lede">Updated on XX December 2019.</p>
+        <p class="lede">Updated on 9th December 2019.</p>
 
         <p>For use of the Apprenticeship Service to access funded apprenticeship training</p>
 
@@ -1375,7 +1374,7 @@
                     <legend>
                         <h1 class="heading-medium">Do you accept the agreement?</h1>
                         <span class="hint">
-                            By accepting, you confirm that ASSURANCE AEROSPACE LTD agrees to the terms and conditions and is entering into a legally binding agreement with ESFA.
+                            By accepting, you confirm that @Model.EmployerAgreement.LegalEntityName agrees to the terms and conditions and is entering into a legally binding agreement with ESFA.
                         </span>
                         <span class="error-message @hiddenClass" aria-hidden="true" id="no-choice-selected">
                             Please select an option to continue
