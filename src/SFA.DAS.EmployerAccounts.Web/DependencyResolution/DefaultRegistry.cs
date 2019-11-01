@@ -9,6 +9,7 @@ using SFA.DAS.Authorization.Context;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.Authorization.Handlers;
 
+
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
     public class DefaultRegistry : Registry
