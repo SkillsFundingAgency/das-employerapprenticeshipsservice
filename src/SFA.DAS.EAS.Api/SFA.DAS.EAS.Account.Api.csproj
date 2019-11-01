@@ -144,6 +144,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Owin.Host.SystemWeb">
+      <Version>3.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Owin.Security.ActiveDirectory">
       <Version>3.0.1</Version>
     </PackageReference>
