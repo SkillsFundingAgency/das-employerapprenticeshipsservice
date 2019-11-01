@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerFinance.Data
             parameters.Add("@accountId", employerId, DbType.Int64);
 
             var result = await _db.Value.Database.Connection.QueryAsync<Paye>(
-                sql: "[employer_account].[GetPayeSchemesAddedByGovernmentGateway_ByAccountId]",
+                sql: "[employer_financial].[GetPayeSchemesAddedByGovernmentGateway_ByAccountId]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure);
