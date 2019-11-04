@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
                 await GetLevyForNoneAornPayeSchemes(payeScheme, context);
 
-                _logger.Info($"Account Paye scheme created - Account Id: {payeScheme.AccountId}; Emp Ref: {payeScheme.Ref}");
+                _logger.Info($"Account Paye scheme created - Account Id: {payeScheme.AccountId}; Emp Ref: {payeScheme.EmpRef}");
             }
             catch (Exception ex)
             {
@@ -41,9 +41,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         {
             if (string.IsNullOrEmpty(payeScheme.Aorn))
             {
-                await context.SendLocal(new ImportAccountLevyDeclarationsCommand(payeScheme.AccountId, payeScheme.Ref));
+                await context.SendLocal(new ImportAccountLevyDeclarationsCommand(payeScheme.AccountId, payeScheme.EmpRef));
 
-                _logger.Info($"Requested levy for - Account Id: {payeScheme.AccountId}; Emp Ref: {payeScheme.Ref}");
+                _logger.Info($"Requested levy for - Account Id: {payeScheme.AccountId}; Emp Ref: {payeScheme.EmpRef}");
             }
         }
     }

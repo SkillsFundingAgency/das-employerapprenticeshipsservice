@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("help")]
         public ActionResult Help()
         {
-            return View();
+            return RedirectPermanent(_configuration.ZenDeskHelpCentreUrl);
         }
 
         [Authorize]
