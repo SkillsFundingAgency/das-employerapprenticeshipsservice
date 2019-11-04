@@ -87,8 +87,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
             objectContainer.Resolve<Mock<IPayeRepository>>().Setup(x => x.GetPayeSchemeByRef(It.IsAny<string>()))
                 .ReturnsAsync(new Paye
                 {
-                    Ref = empRef,
-                    RefName = empRef
+                    EmpRef = empRef,
+                    Name = empRef
                 });
 
 
