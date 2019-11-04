@@ -38,5 +38,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public bool CanSkipRegistrationSteps { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
         public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
+        public string ZenDeskHelpCentreUrl { get; set; }
     }
 }
