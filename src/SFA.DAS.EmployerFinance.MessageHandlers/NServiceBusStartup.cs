@@ -12,7 +12,6 @@ using SFA.DAS.NServiceBus.SqlServer;
 using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
-
 namespace SFA.DAS.EmployerFinance.MessageHandlers
 {
     public class NServiceBusStartup : IStartup

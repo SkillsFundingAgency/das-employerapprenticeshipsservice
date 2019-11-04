@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
 
             await _handler.Handle(new CreateAccountPayeCommand(accountId, empRef, name, aorn), _context.Object);
 
-            _payeRepository.Verify(x => x.CreatePayeScheme(It.Is<Paye>(y => y.Aorn == aorn && y.AccountId == accountId && y.Ref == empRef && y.RefName == name)));
+            _payeRepository.Verify(x => x.CreatePayeScheme(It.Is<Paye>(y => y.Aorn == aorn && y.AccountId == accountId && y.EmpRef == empRef && y.Name == name)));
         }
 
         [Test]

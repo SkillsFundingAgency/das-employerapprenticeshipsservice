@@ -5,16 +5,16 @@ namespace SFA.DAS.EmployerFinance.Models.Paye
     public class Paye
     {
         [Key]
-        public string Ref { get; set; }
+        public string EmpRef { get; set; }
         public long AccountId { get; set; }  
-        public string RefName { get; set; }
+        public string Name { get; set; }
         public string Aorn { get; set; }
 
         public Paye(string empRef, long accountId, string name, string aorn)
         {
-            Ref = empRef;
+            EmpRef = empRef;
             AccountId = accountId;
-            RefName = name;
+            Name = name;
             Aorn = aorn;
         }
 

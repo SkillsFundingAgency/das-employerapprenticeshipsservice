@@ -88,8 +88,8 @@ namespace SFA.DAS.EmployerFinance.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", paye.AccountId, DbType.Int64);
-            parameters.Add("@empRef", paye.Ref, DbType.String);
-            parameters.Add("@name", paye.RefName, DbType.String);
+            parameters.Add("@empRef", paye.EmpRef, DbType.String);
+            parameters.Add("@name", paye.Name, DbType.String);
             parameters.Add("@aorn", paye.Aorn, DbType.String);
 
             await _db.Value.Database.Connection.ExecuteAsync(
