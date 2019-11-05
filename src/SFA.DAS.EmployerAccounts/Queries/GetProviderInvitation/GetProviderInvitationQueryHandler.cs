@@ -18,17 +18,17 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
         {
             _configuration = configuration;         
             _httpService = httpServiceFactory.Create(
-                configuration.ProviderRelationsApi.ClientId,
-                configuration.ProviderRelationsApi.ClientSecret,
-                configuration.ProviderRelationsApi.IdentifierUri,
-                configuration.ProviderRelationsApi.Tenant
+                configuration.ProviderRegistrationsApi.ClientId,
+                configuration.ProviderRegistrationsApi.ClientSecret,
+                configuration.ProviderRegistrationsApi.IdentifierUri,
+                configuration.ProviderRegistrationsApi.Tenant
             );
         }
 
         public async Task<GetProviderInvitationResponse> Handle(GetProviderInvitationQuery message)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}invitations/{message.CorrelationId.ToString()}";
+            var url = $"{baseUrl}api/invitations/{message.CorrelationId.ToString()}";
             var json = await _httpService.GetAsync(url, false);
 
             return new GetProviderInvitationResponse
@@ -39,9 +39,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation
 
         private string GetBaseUrl()
         {
-            var baseUrl = _configuration.ProviderRelationsApi.BaseUrl.EndsWith("/")
-                ? _configuration.ProviderRelationsApi.BaseUrl
-                : _configuration.ProviderRelationsApi.BaseUrl + "/";
+            var baseUrl = _configuration.ProviderRegistrationsApi.BaseUrl.EndsWith("/")
+                ? _configuration.ProviderRegistrationsApi.BaseUrl
+                : _configuration.ProviderRegistrationsApi.BaseUrl + "/";
 
             return baseUrl;
         }
