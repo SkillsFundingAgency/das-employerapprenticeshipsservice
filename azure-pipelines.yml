@@ -25,26 +25,25 @@ steps:
   inputs:
     updateAssemblyInfo: true
 
-- task: NuGetToolInstaller@0
-  displayName: 'Use NuGet 4.x'
-  inputs:
-    versionSpec: 4.x
-
-- task: NuGetCommand@2
-  displayName: 'NuGet restore'
-  inputs:
-    restoreSolution: 'src/**.sln'
-
 - task: VSBuild@1
-  displayName: 'Build solutions'
+  displayName: 'Restore solutions'
   inputs:
-    solution: 'src/**.sln'
+    solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+    msbuildArgs: '/t:restore'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     clean: true
 
+- task: VSBuild@1
+  displayName: 'Build solutions'
+  inputs:
+    solution: 'src/SFA.DAS.EAS.sln'
+    vsVersion: 15.0
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
   inputs:
