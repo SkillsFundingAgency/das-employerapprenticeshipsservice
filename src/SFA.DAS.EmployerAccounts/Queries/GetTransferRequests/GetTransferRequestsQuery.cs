@@ -9,10 +9,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
     {
         [IgnoreMap]
         [Required]
-        public string AccountHashedId { get; set; }
-
-        [IgnoreMap]
-        [Required]
         public long AccountId { get; set; }
     }
 }

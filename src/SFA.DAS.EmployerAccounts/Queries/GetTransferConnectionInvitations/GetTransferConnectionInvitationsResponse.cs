@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitations
     public class GetTransferConnectionInvitationsResponse
     {
         public IEnumerable<TransferConnectionInvitationDto> TransferConnectionInvitations { get; set; }
+        public long AccountId { get; set; }
     }
 }

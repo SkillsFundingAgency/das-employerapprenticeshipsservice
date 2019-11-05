@@ -70,40 +70,41 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
             return this;
         }
 
-        public EmployerAgreementBuilder WithAgreement(EmployerAgreement employerAgreement, long accountId, long legalEntityId)
+        public EmployerAgreementBuilder WithAgreement(EmployerAgreement employerAgreement, long accountId, long legalEntityId, long accountLegalEntityId)
         {
-            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId);
+            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId, accountLegalEntityId);
             return WithAgreement(employerAgreement, accountLegalEntity);
         }
 
-        public EmployerAgreementBuilder WithSignedAgreement(long accountId, long legalEntityId, int agreementVersion, DateTime signeDateTime, out EmployerAgreement employerAgreement)
+        public EmployerAgreementBuilder WithSignedAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion, DateTime signeDateTime, out EmployerAgreement employerAgreement)
         {
-            WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Signed, out employerAgreement);
+            WithAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion, EmployerAgreementStatus.Signed, out employerAgreement);
             employerAgreement.SignedDate = signeDateTime;
             return this;
         }
 
-        public EmployerAgreementBuilder WithPendingAgreement(long accountId, long legalEntityId, int agreementVersion)
+        public EmployerAgreementBuilder WithPendingAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion)
         {
-            return WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Pending);
+            return WithAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion, EmployerAgreementStatus.Pending);
         }
 
-        public EmployerAgreementBuilder WithPendingAgreement(long accountId, long legalEntityId, int agreementVersion, out EmployerAgreement employerAgreement)
+        public EmployerAgreementBuilder WithPendingAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion, out EmployerAgreement employerAgreement)
         {
-            return WithAgreement(accountId, legalEntityId, agreementVersion, EmployerAgreementStatus.Pending, out employerAgreement);
+            return WithAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion, EmployerAgreementStatus.Pending, out employerAgreement);
         }
 
-        public EmployerAgreementBuilder WithAgreement(long accountId, long legalEntityId, int agreementVersion, EmployerAgreementStatus status, out EmployerAgreement employerAgreement)
+        public EmployerAgreementBuilder WithAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion, EmployerAgreementStatus status, out EmployerAgreement employerAgreement)
         {
             var template = EnsureTemplate(agreementVersion);
-            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId);
+            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId, accountLegalEntityId);
 
             employerAgreement = new EmployerAgreement
             {
                 Id = EmployerAgreements.Count + 1000, // offset from account Ids so that hashing mock won't get clashing ids
                 Template = template,
                 TemplateId = template.Id,
-                StatusId = status
+                StatusId = status,
+                AccountLegalEntityId = accountLegalEntityId
             };
 
             template.Agreements.Add(employerAgreement);
@@ -126,16 +127,9 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
             return this;
         }
 
-        public EmployerAgreementBuilder WithAgreement(long accountId, long legalEntityId, int agreementVersion, EmployerAgreementStatus status)
+        public EmployerAgreementBuilder WithAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion, EmployerAgreementStatus status)
         {
-            return WithAgreement(accountId, legalEntityId, agreementVersion, status, out _);
-        }
-
-        public EmployerAgreementBuilder RemoveAccountLegalEntity(long accountId, long legalEntityId)
-        {
-            var accountLegalEntity = EnsureAccountLegalEntity(accountId, legalEntityId);
-            accountLegalEntity.Deleted = DateTime.Now;
-            return this;
+            return WithAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion, status, out _);
         }
 
         public EmployerAgreementBuilder EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
@@ -236,7 +230,7 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
             var template = AgreementTemplates.FirstOrDefault(ag => ag.VersionNumber == agreementVersion);
             if (template == null)
             {
-                AgreementTemplates.Add(template = new AgreementTemplate { VersionNumber = agreementVersion });
+                AgreementTemplates.Add(template = new AgreementTemplate { VersionNumber = agreementVersion, Id = agreementVersion });
             }
 
             return template;
@@ -272,7 +266,7 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
             HashingServiceMock.Setup(c => c.HashValue(id)).Returns(hashValue);
         }
 
-        private AccountLegalEntity EnsureAccountLegalEntity(long accountId, long legalEntityId)
+        private AccountLegalEntity EnsureAccountLegalEntity(long accountId, long legalEntityId, long accountLegalEntityId)
         {
             var accountLegalEntity = AccountLegalEntities.FirstOrDefault(ale => ale.AccountId == accountId && ale.LegalEntityId == legalEntityId);
 
@@ -286,7 +280,8 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
                     AccountId = accountId,
                     LegalEntityId = legalEntityId,
                     Account = account,
-                    LegalEntity = legalEntity
+                    LegalEntity = legalEntity,
+                    Id = accountLegalEntityId
                 });
 
                 account.AccountLegalEntities.Add(accountLegalEntity);

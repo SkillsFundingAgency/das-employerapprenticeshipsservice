@@ -4558,3 +4558,66 @@ hr.dashboard-heading-separator {
 
 .das-favourites-link__count {
   font-weight: bold; }
+
+.das-panel {
+    padding: 20px;
+    background: #fff;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 641px) {
+    .das-panel {
+        margin-bottom: 30px;
+        padding: 30px;
+    }
+}
+
+.das-panel--featured {
+    background: #005ea5;
+    color: #fff;
+    margin-top: 20px;
+}
+
+    .das-panel--featured > p {
+        color: #fff;
+    }
+
+        .das-panel--featured > p:last-child {
+            margin-bottom: 0;
+        }
+
+    .das-panel--featured > dl {
+        color: #fff;
+        font-size: 1em;
+    }
+
+        .das-panel--featured > dl > dd.das-definition-list__definition {
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+    .das-panel--featured .das-panel__link {
+        color: #fff;
+        font-weight: 700;
+    }
+
+        .das-panel--featured .das-panel__link:hover {
+            text-decoration: non;
+        }
+
+        .das-panel--featured .das-panel__link:focus {
+            color: #000;
+        }
+
+.das-panel__heading {
+    font-size: 19px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 24px;
+}
+
+.das-panel--featured .das-panel__heading {
+    font-size: 24px;
+    font-size: 36px;
+    line-height: 1.2;
+}

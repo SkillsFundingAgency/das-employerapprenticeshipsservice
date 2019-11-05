@@ -14,30 +14,17 @@
     @Html.Partial(Model.EmployerAgreement.TemplatePartialViewName + "_changes");
 }
 
-<div class="grid-row" id="publication-banner">
-    <div class="column-third">
-        <div class="sfa-logo">
-            <h1>
-                <span class="organisation-logo">
-                    <span>
-                        Education &amp; Skills <br>
-                        Funding Agency
-                    </span>
-                </span>
-            </h1>
-        </div>
-    </div>
-    <div class="column-two-thirds">
-        <a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank" class="download">Save this agreement as a PDF</a>
-    </div>
-</div>
-
-@Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName)
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" class="back-link">Back</a></li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
+            <li class="govuk-breadcrumbs__list-item">
+                <a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" class="govuk-breadcrumbs__link govuk-back-link">Back</a>
+            </li>
         </ol>
     </div>
 }
+
+@Html.Partial(@Model.EmployerAgreement.TemplatePartialViewName)
+@Html.SetZenDeskLabels(ZenDeskLabels.ReviewTheEmployerAgreement)
