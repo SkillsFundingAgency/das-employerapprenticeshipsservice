@@ -11,15 +11,16 @@ using SFA.DAS.EmployerFinance.AcceptanceTests.Extensions;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.StructureMap;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.SqlServer;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.Testing.AzureStorageEmulator;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using TechTalk.SpecFlow;
+using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 {
@@ -92,7 +93,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
 
                 var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerFinance.AcceptanceTests")
                     .UseAzureServiceBusTransport()
-                    .UseErrorQueue()
+                    .UseErrorQueue("SFA.DAS.EmployerFinance.AcceptanceTests-errors")
                     .UseInstallers()
                     .UseLicense(WebUtility.HtmlDecode(_container.GetInstance<EmployerFinanceConfiguration>().NServiceBusLicense))
                     .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())

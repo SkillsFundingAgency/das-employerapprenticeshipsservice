@@ -12,11 +12,12 @@
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="2.1.0" />
     <PackageReference Include="NLog.Extensions.Logging" Version="1.4.0" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Apprenticeships.Api.Client" Version="0.11.98" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
+    <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.20" />
@@ -42,16 +43,16 @@
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.0.0.35919" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.0.0.35919" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
-    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Provider.Events.Api.Client" Version="2.1.30" />
     <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.39" />
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.1.16" />
-    <PackageReference Include="SFA.DAS.UnitOfWork" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
-    <PackageReference Include="System.Net.Http" Version="4.3.3" />
+    <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
     <PackageReference Include="Z.EntityFramework.Plus.QueryFuture.EF6" Version="1.7.19" />
   </ItemGroup>
@@ -61,7 +62,6 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Account.Api.Types\SFA.DAS.EAS.Account.Api.Types.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Messages\SFA.DAS.EmployerFinance.Messages.csproj" />
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -18,6 +18,7 @@ using SFA.DAS.Events.Api.Client;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Managers;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
