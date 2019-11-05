@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
 {

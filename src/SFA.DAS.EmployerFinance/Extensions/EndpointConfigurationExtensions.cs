@@ -2,7 +2,7 @@
 using NServiceBus;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
-using SFA.DAS.NServiceBus.AzureServiceBus;
+using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.Extensions
@@ -13,15 +13,28 @@ namespace SFA.DAS.EmployerFinance.Extensions
         {
             var isDevelopment = container.GetInstance<IEnvironmentService>().IsCurrent(DasEnv.LOCAL);
 
-            config.UseAzureServiceBusTransport(isDevelopment, connectionStringBuilder, r =>
+            if (isDevelopment)
             {
-                r.RouteToEndpoint(
-                    typeof(ImportLevyDeclarationsCommand).Assembly,
-                    typeof(ImportLevyDeclarationsCommand).Namespace,
-                    "SFA.DAS.EmployerFinance.MessageHandlers");
-            });
+                var transport = config.UseTransport<LearningTransport>();
+                transport.Transactions(TransportTransactionMode.ReceiveOnly);
+                ConfigureRouting(transport.Routing());
+            }
+
+            else
+            {
+                config.UseAzureServiceBusTransport(connectionStringBuilder(), ConfigureRouting);
+            }
 
             return config;
         }
-    }
+
+        private static void ConfigureRouting(RoutingSettings routing)
+        {
+            routing.RouteToEndpoint(
+                typeof(ImportLevyDeclarationsCommand).Assembly,
+                typeof(ImportLevyDeclarationsCommand).Namespace,
+                "SFA.DAS.EmployerFinance.MessageHandlers"
+            );
+        }
+    }    
 }
