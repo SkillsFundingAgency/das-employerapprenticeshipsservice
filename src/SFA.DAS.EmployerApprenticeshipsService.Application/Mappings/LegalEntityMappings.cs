@@ -2,7 +2,6 @@
 using AutoMapper;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Domain.Models.Account;
 using EmployerAgreementStatus = SFA.DAS.EAS.Domain.Models.EmployerAgreement.EmployerAgreementStatus;
 
@@ -14,22 +13,6 @@ namespace SFA.DAS.EAS.Application.Mappings
         {
             long accountId = 0;
             string accountHashedId = null;
-
-            CreateMap<AccountSpecificLegalEntity, AccountSpecificLegalEntityDto>()
-                .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address));
-
-            CreateMap<AccountLegalEntity, AccountSpecificLegalEntityDto>()
-                .ForMember(d => d.RegisteredAddress, o => o.MapFrom(l => l.Address))
-                .ForMember(d => d.Id, o => o.MapFrom(l => l.LegalEntityId))
-                .ForMember(d => d.DateOfIncorporation, o => o.MapFrom(l => l.LegalEntity.DateOfIncorporation))
-                .ForMember(d => d.Code, o => o.MapFrom(l => l.LegalEntity.Code))
-                .ForMember(d => d.Sector, o => o.MapFrom(l => l.LegalEntity.Sector))
-                .ForMember(d => d.Status, o => o.MapFrom(l => l.LegalEntity.Status))
-                .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
-                .ForMember(d => d.PublicSectorDataSource, o => o.MapFrom(l => l.LegalEntity.PublicSectorDataSource))
-                .ForMember(d => d.Source, o => o.MapFrom(l => l.LegalEntity.Source))
-                .ForMember(d => d.AccountLegalEntityId, o => o.MapFrom(l => l.Id))
-                .ForMember(d => d.AccountLegalEntityPublicHashedId, o => o.MapFrom(l => l.PublicHashedId));
           
             CreateMap<AccountLegalEntity, LegalEntityViewModel>()
                 .ForMember(d => d.Agreements, o => o.MapFrom(l => l.Agreements.Where(a =>

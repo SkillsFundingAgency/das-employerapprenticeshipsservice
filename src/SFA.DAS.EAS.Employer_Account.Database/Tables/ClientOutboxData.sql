@@ -5,7 +5,8 @@
 	[CreatedAt] DATETIME NOT NULL,
 	[Dispatched] BIT NOT NULL DEFAULT(0),
 	[DispatchedAt] DATETIME NULL,
-	[Operations] NVARCHAR(MAX) NOT NULL
+	[Operations] NVARCHAR(MAX) NOT NULL, 
+    [PersistenceVersion] VARCHAR(23) NOT NULL DEFAULT '1.0.0'
 )
 GO
 

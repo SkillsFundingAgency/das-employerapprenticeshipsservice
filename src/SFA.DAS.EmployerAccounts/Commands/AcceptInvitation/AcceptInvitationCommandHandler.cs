@@ -12,7 +12,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.TimeProvider;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;

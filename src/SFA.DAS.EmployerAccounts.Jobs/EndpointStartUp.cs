@@ -4,11 +4,11 @@ using NServiceBus;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.SqlServer;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Jobs
@@ -30,6 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Jobs
         public async Task StartAsync()
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Jobs")
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.Jobs-errors")
                 .UseAzureServiceBusTransport(() => _employerAccountsConfiguration.ServiceBusConnectionString, _container)
                 .UseLicense(_employerAccountsConfiguration.NServiceBusLicense)
                 .UseSqlServerPersistence(() => _container.GetInstance<DbConnection>())

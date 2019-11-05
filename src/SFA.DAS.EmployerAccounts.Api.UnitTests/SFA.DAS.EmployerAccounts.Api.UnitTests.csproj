@@ -20,7 +20,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api\SFA.DAS.EmployerAccounts.Api.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.TestCommon\SFA.DAS.EmployerAccounts.TestCommon.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

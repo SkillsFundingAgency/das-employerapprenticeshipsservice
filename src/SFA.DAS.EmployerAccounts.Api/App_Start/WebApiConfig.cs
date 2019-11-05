@@ -1,18 +1,16 @@
 ﻿using System.Net.Http.Headers;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
-using System.Web.Http.ModelBinding;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
-using SFA.DAS.Authorization.WebApi;
 using SFA.DAS.Authorization.WebApi.Extensions;
 using SFA.DAS.EmployerAccounts.Api.DependencyResolution;
 using SFA.DAS.EmployerAccounts.Api.ExceptionLoggers;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework;
-using SFA.DAS.UnitOfWork.NServiceBus;
-using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
-using SFA.DAS.UnitOfWork.WebApi;
+using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.WebApi.Extensions;
 using SFA.DAS.Validation.WebApi;
 using WebApi.StructureMap;
 

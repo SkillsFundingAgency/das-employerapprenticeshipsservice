@@ -30,12 +30,12 @@ namespace SFA.DAS.EmployerFinance.Commands.UpdatePayeInformation
 
             var scheme = await _payeRepository.GetPayeSchemeByRef(message.PayeRef);
 
-            if (!string.IsNullOrEmpty(scheme?.RefName))
+            if (!string.IsNullOrEmpty(scheme?.Name))
             {
                 return;
             }
 
-            var result = await _hmrcService.GetEmprefInformation(scheme?.Ref);
+            var result = await _hmrcService.GetEmprefInformation(scheme?.EmpRef);
 
             if (string.IsNullOrEmpty(result?.Employer?.Name?.EmprefAssociatedName))
             {

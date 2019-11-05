@@ -264,7 +264,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("help")]
         public ActionResult Help()
         {
-            return View();
+            return RedirectPermanent(_configuration.ZenDeskHelpCentreUrl);
         }
 
         [HttpGet]
