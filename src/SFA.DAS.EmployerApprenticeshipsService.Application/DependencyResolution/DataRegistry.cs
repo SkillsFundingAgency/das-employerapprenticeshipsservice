@@ -3,9 +3,9 @@ using System.Data.SqlClient;
 using NServiceBus.Persistence;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.NServiceBus.ClientOutbox;
-using SFA.DAS.NServiceBus.SqlServer.ClientOutbox;
-using SFA.DAS.UnitOfWork;
+using SFA.DAS.EmployerFinance.Extensions;
+using SFA.DAS.NServiceBus.Features.ClientOutbox.Data;
+using SFA.DAS.UnitOfWork.Context;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution
@@ -22,8 +22,8 @@ namespace SFA.DAS.EAS.Application.DependencyResolution
         private EmployerAccountsDbContext GetDbContext(IContext context)
         {
             var unitOfWorkContext = context.GetInstance<IUnitOfWorkContext>();
-            var clientSession = unitOfWorkContext.TryGet<IClientOutboxTransaction>();
-            var serverSession = unitOfWorkContext.TryGet<SynchronizedStorageSession>();
+            var clientSession = unitOfWorkContext.Find<IClientOutboxTransaction>();
+            var serverSession = unitOfWorkContext.Find<SynchronizedStorageSession>();
             var sqlSession = clientSession?.GetSqlSession() ?? serverSession.GetSqlSession();
 
             return new EmployerAccountsDbContext(sqlSession.Connection, sqlSession.Transaction);
