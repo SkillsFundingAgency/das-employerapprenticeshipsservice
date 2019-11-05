@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Configuration
 {
-    public class ProviderRelationsConfiguration
+    public class ProviderRegistrationsConfiguration
     {
         public string BaseUrl { get; set; }
         public string ClientId { get; set; }
