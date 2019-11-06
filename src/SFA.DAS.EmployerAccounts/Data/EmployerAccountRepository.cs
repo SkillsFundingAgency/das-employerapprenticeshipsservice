@@ -82,56 +82,48 @@ namespace SFA.DAS.EmployerAccounts.Data
         }
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
-        {        
-            var accountDetail = await _db.Value.Accounts
-                .Where(ac => ac.HashedId == hashedAccountId)
-                .Select(ac => new AccountDetail
-                {
-                    AccountId = ac.Id,
-                    HashedId = ac.HashedId,
-                    PublicHashedId = ac.PublicHashedId,
-                    Name = ac.Name,
-                    CreatedDate = ac.CreatedDate,
-                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType) ac.ApprenticeshipEmployerType
-                }).FirstOrDefaultAsync();
+        {
+            var account = await _db.Value.Accounts.Include(x => x.AccountLegalEntities.Select(y => y.Agreements)).SingleAsync(x => x.HashedId == hashedAccountId);
 
-            if (accountDetail == null)
-            {             
+            if (account == null)
+            {
                 return null;
             }
 
-            accountDetail.OwnerEmail = await _db.Value.Memberships
+            var accountDetail = new AccountDetail
+            {
+                AccountId = account.Id,
+                HashedId = account.HashedId,
+                PublicHashedId = account.PublicHashedId,
+                Name = account.Name,
+                CreatedDate = account.CreatedDate,
+                ApprenticeshipEmployerType = (ApprenticeshipEmployerType)account.ApprenticeshipEmployerType
+            };
+
+            var activeLegalEntities = account.AccountLegalEntities.Where(x =>
+                x.Deleted == null && x.Agreements.Any(ea =>
+                    ea.StatusId == EmployerAgreementStatus.Pending ||
+                    ea.StatusId == EmployerAgreementStatus.Signed));
+
+            accountDetail.LegalEntities = activeLegalEntities.Select(x => x.Id).ToList();
+            accountDetail.AccountAgreementTypes = account.AccountLegalEntities.SelectMany(x => x.Agreements).Select(x => x.Template.AgreementType).Distinct().ToList();
+
+            var ownerEmailTask = _db.Value.Memberships
                 .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
                 .OrderBy(m => m.CreatedDate)
                 .Select(m => m.User.Email)
                 .FirstOrDefaultAsync();
 
-            accountDetail.PayeSchemes = await _db.Value.AccountHistory
+            var payeSchemesTask = _db.Value.AccountHistory
                 .Where(ach => ach.AccountId == accountDetail.AccountId)
                 .Select(ach => ach.PayeRef)
                 .ToListAsync();
 
-            accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
-                .Where(ale => ale.AccountId == accountDetail.AccountId
-                              && ale.Deleted == null
-                              && ale.Agreements.Any(ea =>
-                                  ea.StatusId == EmployerAgreementStatus.Pending ||
-                                  ea.StatusId == EmployerAgreementStatus.Signed))
-                .Select(ale => ale.LegalEntityId)
-                .ToListAsync();
+            await Task.WhenAll(ownerEmailTask, payeSchemesTask);
 
-            var templateIds = await _db.Value.Agreements
-                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId))
-                .Select(x => x.TemplateId)
-                .ToListAsync()
-                .ConfigureAwait(false);
+            accountDetail.OwnerEmail = ownerEmailTask.Result;
+            accountDetail.PayeSchemes = payeSchemesTask.Result;
 
-            accountDetail.AccountAgreementTypes = await _db.Value.AgreementTemplates
-                .Where(x => templateIds.Contains(x.Id))
-                .Select(x => x.AgreementType)
-                .ToListAsync()
-                .ConfigureAwait(false);
-              
             return accountDetail;
         }
 
