@@ -58,7 +58,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
             var storageConnectionString = ConfigurationManager.AppSettings["ConfigurationStorageConnectionString"] ??
                                           "UseDevelopmentStorage=true";
 
-            var configurationRepository = new AzureTableStorageConfigurationRepository(storageConnectionString); ;
+            var configurationRepository = new AzureTableStorageConfigurationRepository(storageConnectionString);
 
             var configurationOptions = new ConfigurationOptions(ServiceName, environment, Version);
 
