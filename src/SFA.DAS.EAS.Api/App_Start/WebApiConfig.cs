@@ -7,7 +7,7 @@ using SFA.DAS.EAS.Account.Api.DependencyResolution;
 using SFA.DAS.EAS.Account.Api.ExceptionLoggers;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using WebApi.StructureMap;
-using SFA.DAS.Authorization.WebApi.Extensions;
+//using SFA.DAS.Authorization.WebApi.Extensions;
 
 namespace SFA.DAS.EAS.Account.Api
 {
@@ -18,9 +18,9 @@ namespace SFA.DAS.EAS.Account.Api
             config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
             config.MapHttpAttributeRoutes();
             config.Services.Add(typeof(IExceptionLogger), new ErrorLogger());
-            config.Services.UseAuthorizationModelBinder();
-            config.Filters.AddAuthorizationFilter();
-            config.Filters.AddUnauthorizedAccessExceptionFilter();
+            //config.Services.UseAuthorizationModelBinder();
+            //config.Filters.AddAuthorizationFilter();
+            //config.Filters.AddUnauthorizedAccessExceptionFilter();
 
 
             config.UseStructureMap(c =>

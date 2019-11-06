@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOwner
 {
@@ -16,8 +17,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOwner
 
         public async Task<GetAccountOwnerResponse> Handle(GetAccountOwnerQuery message)
         {
-            var accounts = await _repository.GetAccountTeamMembers(message.HashedAccountId);
-            return new GetAccountOwnerResponse { TeamMembers = accounts.First(tm => tm.Role == DAS.Authorization.Role.Owner) };
+            var accounts = await _repository.GetAccountTeamMembers(message.HashedAccountId);            
+            return new GetAccountOwnerResponse { TeamMembers = accounts.First(tm => tm.Role == Role.Owner) };
         }
     }
 }
