@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly IPortalClient _portalClient;
+        //private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
@@ -43,13 +43,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthenticationService owinWrapper,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
-            IAuthorizationService authorizationService)
+            EmployerTeamOrchestrator employerTeamOrchestrator
+            //,IPortalClient portalClient
+            ,IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
-            _portalClient = portalClient;
+            //_portalClient = portalClient;
             _authorizationService = authorizationService;
         }
 
@@ -76,22 +76,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             var hasPayeScheme = HasPayeScheme(response.Data);
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage") || !hasPayeScheme && !HasOrganisation(response.Data))
-            {
-                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
-                {
-                    HashedAccountId = hashedAccountId,
-                    MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
-                });
-                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
-                response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
-                response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage") || !hasPayeScheme && !HasOrganisation(response.Data)) { }
+            //{
+            //    response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
+            //    {
+            //        HashedAccountId = hashedAccountId,
+            //        MaxNumberOfVacancies = hasPayeScheme ? 2 : 0
+            //    });
+            //    response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
+            //    response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+            //    response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
 
-                if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
-                    response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
+            //    if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
+            //        response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
 
-                return View("v2/Index", "_Layout_v2", response);
-            }
+            //    return View("v2/Index", "_Layout_v2", response);
+            //}
 
             return View(response);
         }

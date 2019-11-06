@@ -14,7 +14,6 @@
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />

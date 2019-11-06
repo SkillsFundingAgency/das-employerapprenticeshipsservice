@@ -299,13 +299,10 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SFA.DAS.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.6.0.20\lib\net462\SFA.DAS.Authorization.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.1.0.0\lib\net462\SFA.DAS.Authorization.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.Authorization.Features, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.Features.6.0.20\lib\netstandard2.0\SFA.DAS.Authorization.Features.dll</HintPath>
-    </Reference>
-    <Reference Include="SFA.DAS.Authorization.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SFA.DAS.Authorization.Mvc.6.0.20\lib\net462\SFA.DAS.Authorization.Mvc.dll</HintPath>
+      <HintPath>..\packages\SFA.DAS.Authorization.Features.0.7.1\lib\netstandard2.0\SFA.DAS.Authorization.Features.dll</HintPath>
     </Reference>
     <Reference Include="SFA.DAS.AutoConfiguration, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SFA.DAS.AutoConfiguration.2.0.1\lib\net462\SFA.DAS.AutoConfiguration.dll</HintPath>
@@ -1191,6 +1188,10 @@
     <Content Include="src\sass\_tasks.scss" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\das-authorization\src\SFA.DAS.Authorization.Mvc\SFA.DAS.Authorization.Mvc.csproj">
+      <Project>{4399a7e7-9bd1-4a2d-b127-a687ffa3ad42}</Project>
+      <Name>SFA.DAS.Authorization.Mvc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Application\SFA.DAS.EAS.Application.csproj">
       <Project>{0226F97A-704E-49B0-A100-B75FEEC9C8AD}</Project>
       <Name>SFA.DAS.EAS.Application</Name>
