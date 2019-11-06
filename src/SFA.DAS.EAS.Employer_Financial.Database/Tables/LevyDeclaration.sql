@@ -21,13 +21,10 @@
 
 GO
 
-CREATE INDEX [IX_LevyDeclaration_SubmissionId] ON [employer_financial].[LevyDeclaration] (SubmissionId)
-GO
-
 CREATE INDEX [IX_LevyDeclaration_EmpRef] ON [employer_financial].[LevyDeclaration] (EmpRef,PayrollYear,PayrollMonth,EndOfYearAdjustment) 
 GO
 
-CREATE INDEX [IX_LevyDeclaration_Account_Payroll] ON [employer_financial].[LevyDeclaration] (AccountId,PayrollMonth,PayrollYear)
+CREATE INDEX [IX_LevyDeclaration_Account_Payroll] ON [employer_financial].[LevyDeclaration] (AccountId,PayrollMonth,PayrollYear) INCLUDE (LevyDueYTD)
 GO
 
 CREATE UNIQUE NONCLUSTERED INDEX [IDX_UNIQUE_LevyDeclaration_SubmissionId] ON [employer_financial].[LevyDeclaration] (SubmissionId)
