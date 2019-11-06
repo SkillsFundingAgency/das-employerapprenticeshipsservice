@@ -13,15 +13,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
     public class DefaultAuthorizationHandler : IDefaultAuthorizationHandler
     {
-        private const  string Tier2User = "Tier2User";
+        private const string Tier2User = "Tier2User";
 
         public Task<AuthorizationResult> GetAuthorizationResultDefault(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
             var authorizationResult = new AuthorizationResult();
             authorizationContext.TryGet<RouteData>("RouteData", out var routeData);
-            authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);            
-            var link = routeData.Route as Route;            
-            var userRoleClaims = claimsIdentity.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);            
+            authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
+            var link = routeData.Route as Route;
+            var userRoleClaims = claimsIdentity.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
 
             if (userRoleClaims.Any(claim => claim.Value == Tier2User))
             {
@@ -42,4 +42,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         }
     }
+    
 }

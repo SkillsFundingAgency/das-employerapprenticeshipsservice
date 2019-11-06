@@ -27,14 +27,15 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-
-           var authorizationService =  For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
-            For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>()
-           .Ctor<IAuthorizationContextProvider>().Is(authorizationService);
             
-            
-            //For<IDefaultAuthorizationHandler>().Use<DefaultAuthorizationHandler>();
+            var authorizationService = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>().Ctor<IAuthorizationContextProvider>().Is(authorizationService);
 
+            //TO DO : Use this for Default Handler
+            // var authorizationService = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            // For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>()
+            //.Ctor<IAuthorizationContextProvider>().Is(authorizationService);
+            //For<IDefaultAuthorizationHandler>().Use<SFA.DAS.EmployerAccounts.Web.Authorization.DefaultAuthorizationHandler>();
             //For<IAuthorizationHandler>().Use<AuthorizationHandler>();
             //For<IHttpContextAccessor>().Use<HttpContextAccessor>();
         }
