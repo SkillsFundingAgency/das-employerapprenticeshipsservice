@@ -16,8 +16,8 @@
     )
 GO
 
-CREATE INDEX [IX_AccountTransferSenderAccountId]
-ON [employer_financial].[AccountTransfers]([SenderAccountId] ASC)
+CREATE INDEX [IX_AccountTransferSenderAccountId_CreatedDate]
+ON [employer_financial].[AccountTransfers]([SenderAccountId] ASC, CreatedDate)
 GO
 
 CREATE INDEX [IX_AccountTransferReceiverTransfers]
