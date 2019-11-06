@@ -1,6 +1,6 @@
-using Microsoft.Azure;
-using SFA.DAS.TokenService.Api.Client;
+using System.Configuration;
 using System.Security.Cryptography.X509Certificates;
+using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EmployerFinance.Configuration
 {
@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
                 store.Open(OpenFlags.ReadOnly);
                 try
                 {
-                    var thumbprint = CloudConfigurationManager.GetSetting("TokenServiceCertificateThumbprint");
+                    var thumbprint = ConfigurationManager.AppSettings["TokenServiceCertificateThumbprint"];
 
                     if (string.IsNullOrEmpty(thumbprint))
                     {
@@ -37,6 +37,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
             }
             set { }
         }
+
         public string DatabaseConnectionString { get; set; }
         public string ServiceBusConnectionString { get; set; }
     }

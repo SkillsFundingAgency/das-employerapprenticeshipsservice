@@ -1,7 +1,5 @@
 ﻿using FluentValidation.Mvc;
-using Microsoft.Azure;
 using NLog;
-using NLog.Targets;
 using NServiceBus;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;

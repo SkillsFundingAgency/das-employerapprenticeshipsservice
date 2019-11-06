@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -88,7 +88,7 @@ namespace SFA.DAS.EAS.Web
 
                 try
                 {
-                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var thumbprint = ConfigurationManager.AppSettings["TokenCertificateThumbprint"];
                     var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
 
                     if (certificates.Count < 1)

@@ -199,9 +199,6 @@
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
       <Version>5.0.5</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager">
-      <Version>3.2.3</Version>
-    </PackageReference>
     <PackageReference Include="NServiceBus.Persistence.Sql">
       <Version>4.1.1</Version>
     </PackageReference>
