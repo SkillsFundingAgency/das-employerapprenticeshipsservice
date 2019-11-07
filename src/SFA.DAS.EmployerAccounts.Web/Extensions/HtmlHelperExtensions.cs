@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Interfaces;
+﻿using SFA.DAS.EmployerAccounts.Web.Helpers;
 using System;
 using System.IO;
 using System.Linq;
@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 return false;
             }
 
-            return true; // TODO: testing set back to return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals("Tier2User"));
+            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
         }
 
         public static HtmlHelper GetHtmlHelper(this Controller controller)
