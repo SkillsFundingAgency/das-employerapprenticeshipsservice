@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.Data
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
-            var account = await _db.Value.Accounts.Include(x => x.AccountLegalEntities.Select(y => y.Agreements)).SingleAsync(x => x.HashedId == hashedAccountId);
+            var account = await _db.Value.Accounts.Include(x => x.AccountLegalEntities.Select(y => y.Agreements)).SingleOrDefaultAsync(x => x.HashedId == hashedAccountId);
 
             if (account == null)
             {
