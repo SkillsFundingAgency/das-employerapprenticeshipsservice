@@ -1,6 +1,10 @@
-﻿using System;
+﻿using SFA.DAS.EmployerAccounts.Interfaces;
+using System;
+using System.IO;
 using System.Linq;
+using System.Security.Claims;
 using System.Web.Mvc;
+using System.Web.Mvc.Html;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -21,6 +25,41 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 .Aggregate("", (x, y) => x + y);
 
             return new MvcHtmlString(htmlAddress);
+        }
+
+        public static MvcHtmlString RenderSupportBanner(this HtmlHelper htmlHelper, dynamic model)
+        {
+            if(htmlHelper.IsSupportUser())
+            {
+                return htmlHelper.Action("SupportUserBanner", new { model = model.Data });
+            }
+
+            return MvcHtmlString.Empty;
+        }
+
+
+        public static bool IsSupportUser(this HtmlHelper htmlHelper)
+        {
+            if (!(htmlHelper.ViewContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            return true; // TODO: testing set back to return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals("Tier2User"));
+        }
+
+        public static HtmlHelper GetHtmlHelper(this Controller controller)
+        {
+            var viewContext = new ViewContext(controller.ControllerContext, new FakeView(), controller.ViewData, controller.TempData, TextWriter.Null);
+            return new HtmlHelper(viewContext, new ViewPage());
+        }
+
+        private class FakeView : IView
+        {
+            public void Render(ViewContext viewContext, TextWriter writer)
+            {
+                throw new InvalidOperationException();
+            }
         }
     }
 }

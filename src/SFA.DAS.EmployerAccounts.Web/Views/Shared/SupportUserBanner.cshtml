@@ -1,0 +1,11 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.SupportUserBannerViewModel
+
+<div class="header-wrapper">
+    <div class="header-proposition">
+        <div class="content">
+            <a id="proposition-name" href="/">
+                Apprenticeship service console: You are viewing as @(Model.Account?.Name ?? string.Empty) (account ID:  @(Model.Account?.Id.ToString() ?? string.Empty))
+            </a>
+        </div>
+    </div>
+</div>

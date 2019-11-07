@@ -323,6 +323,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
 
+            response.TeamMember.HashedAccountId = hashedAccountId;
 
             return new OrchestratorResponse<TeamMember>
             {
@@ -570,6 +571,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 IsUser = teamMember.IsUser,
                 Id = teamMember.Id,
                 AccountId = teamMember.AccountId,
+                HashedAccountId = teamMember.HashedAccountId,
                 Email = teamMember.Email,
                 Name = teamMember.Name,
                 Role = teamMember.Role,

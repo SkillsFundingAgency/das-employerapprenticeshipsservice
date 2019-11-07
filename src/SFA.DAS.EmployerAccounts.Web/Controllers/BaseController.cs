@@ -8,6 +8,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -150,6 +151,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public void RemoveFlashMessageFromCookie()
         {
             _flashMessage.Delete(FlashMessageCookieName);
+        }
+
+        public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
+        {   
+            return PartialView("empty");
         }
     }
 }
