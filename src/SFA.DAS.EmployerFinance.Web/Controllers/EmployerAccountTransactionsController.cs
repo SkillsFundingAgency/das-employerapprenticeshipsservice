@@ -68,13 +68,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View(viewModel);
         }
 
-        [HttpGet]
-        [Route("finance/employer-guidance")]
-        public async Task<ActionResult> EmployerGuidanceR02()
-        {
-            return View();
-        }
-
         [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
         public ActionResult TransactionsDownload()

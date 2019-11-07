@@ -632,7 +632,6 @@
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Shared\BadRequest.cshtml" />
     <Content Include="src\sass\_finance.scss" />
-    <Content Include="Views\EmployerAccountTransactions\EmployerGuidanceR02.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
