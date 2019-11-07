@@ -82,9 +82,11 @@
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="DependencyResolution\StructureMapWebApiDependencyResolver.cs" />
     <Compile Include="DependencyResolution\StructureMapWebApiDependencyScope.cs" />
+    <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Models\AccountDetailViewModel.cs" />
     <Compile Include="Models\ChallengeViewModel.cs" />
     <Compile Include="Models\FinanceViewModel.cs" />
@@ -153,6 +155,10 @@
     <ProjectReference Include="..\SFA.DAS.EAS.Support.Infrastructure\SFA.DAS.EAS.Support.Infrastructure.csproj">
       <Project>{9a31db97-209c-48ef-ae2a-b4a4f761f670}</Project>
       <Name>SFA.DAS.EAS.Support.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
+      <Project>{b520a3e4-8259-4309-94d4-4a99fd32d2f7}</Project>
+      <Name>SFA.DAS.EmployerAccounts</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

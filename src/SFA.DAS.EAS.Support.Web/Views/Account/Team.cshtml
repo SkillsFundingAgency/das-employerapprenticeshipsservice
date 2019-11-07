@@ -1,5 +1,5 @@
-﻿@using SFA.DAS.EAS.Support.Core.Models
-@using SFA.DAS.EAS.Support.Web.Models
+﻿@using SFA.DAS.EAS.Support.Web.Models
+@using SFA.DAS.EAS.Support.Web.Extensions
 @model AccountDetailViewModel
 
 @if (Model.Account != null)
@@ -12,43 +12,44 @@
     {
         <table class="responsive">
             <thead>
-            <tr>
-                <th scope="col" class="">Name</th>
-                <th scope="col" class="">Email</th>
-                <th scope="col" class="">Role</th>
-                <th scope="col" class="">Status</th>
-            </tr>
+                <tr>
+                    <th scope="col" class="">Name</th>
+                    <th scope="col" class="">Email</th>
+                    <th scope="col" class="">Role</th>
+                    <th scope="col" class="">Status</th>
+                </tr>
             </thead>
             <tbody>
-            @foreach (var item in Model.Account.TeamMembers)
-            {
-                <tr>
-                    @if (string.IsNullOrWhiteSpace(item.UserRef))
-                    {
-                        <td data-label="User Name" id="Name">@item.Name</td>
-                    }
-                    else
-                    {
-                        <td data-label="User Name" id="Name">
-                            <a href="@string.Format(Model.AccountUri, item.UserRef)">@item.Name</a>
-                        </td>
-                    }
-                    <td data-label="User Email" id="Email">@item.Email</td>
-                    <td data-label="User Role" id="Role">@item.Role</td>
-                    <td data-label="User Status" id="Status">@item.Status.GetTeamMemberStatus()</td>
+                @foreach (var item in Model.Account.TeamMembers)
+                {
+                    <tr>
+                        @if (string.IsNullOrWhiteSpace(item.UserRef))
+                        {
+                            <td data-label="User Name" id="Name">@item.Name</td>
+                        }
+                        else
+                        {
+                            <td data-label="User Name" id="Name">
+                                <a href="@string.Format(Model.AccountUri, item.UserRef)">@item.Name</a>
+                            </td>
+                        }
+                        <td data-label="User Email" id="Email">@item.Email</td>
+                        <td data-label="User Role" id="Role">@item.Role</td>
+                        <td data-label="User Status" id="Status">@item.Status.GetTeamMemberStatus()</td>
 
-                </tr>
-            }
+                    </tr>
+                }
             </tbody>
         </table>
-        <button class="button">Change team members or roles</button>
-    }
-    else
-    {
+        //@string.Format(Model.AccountUri + "/login/staff/", Model.Account.HashedAccountId)
+        <a href="@Url.EmployerAccountsAction("teams/view")" class="govuk-button">Change team members or roles</a>
+        }
+        else
+        {
         <p>No Team members available</p>
-    }
-}
-else
-{
-    <p>Account not found</p>
-}
+        }
+        }
+        else
+        {
+        <p>Account not found</p>
+        }
