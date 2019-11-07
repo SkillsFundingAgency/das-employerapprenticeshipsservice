@@ -119,7 +119,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 Role = Role.Owner,
                 FirstName = "Fred",
                 LastName = "Bloggs",
-                UserRef = Guid.NewGuid().ToString()
+                UserRef = Guid.NewGuid()
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))

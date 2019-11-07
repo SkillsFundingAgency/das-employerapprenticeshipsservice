@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-            var ownerExternalUserId = Guid.Parse(owner.UserRef);
+            var ownerExternalUserId = owner.UserRef;
 
             var createParams = new CreateLegalEntityWithAgreementParams
             {

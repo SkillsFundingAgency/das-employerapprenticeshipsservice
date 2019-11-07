@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@AccountId", accountId, DbType.Int64);
-            parameters.Add("@externalUserId", externalUserId, DbType.String);
+            parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
             var result = await _db.Value.Database.Connection.QueryAsync<MembershipView>(
                 sql: "SELECT * FROM [employer_account].[MembershipView] m WHERE m.AccountId = @AccountId AND UserRef = @externalUserId;",
@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-            parameters.Add("@externalUserId", externalUserId, DbType.String);
+            parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
             var result = await _db.Value.Database.Connection.QueryAsync<MembershipView>(
                 sql: "[employer_account].[GetTeamMember]",

@@ -26,12 +26,10 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-            parameters.Add("@externalUserId", externalUserId, DbType.String);
+            parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
             const string sql = @"select tm.* from [employer_account].[GetTeamMembers] tm 
-                join [employer_account].[Membership] m on m.AccountId = tm.AccountId
-                join [employer_account].[User] u on u.Id = m.UserId
-                where u.UserRef = @externalUserId and tm.hashedId = @hashedAccountId";
+                where tm.UserRef = @externalUserId and tm.hashedId = @hashedAccountId";
 
             var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
                 sql: sql,

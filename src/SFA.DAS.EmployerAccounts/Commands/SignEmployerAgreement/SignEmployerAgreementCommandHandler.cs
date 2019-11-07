@@ -135,7 +135,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
         private Task PublishAgreementSignedMessage(
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, string currentUserRef, AgreementType agreementType, int versionNumber)
+            bool cohortCreated, string currentUserName, Guid currentUserRef, AgreementType agreementType, int versionNumber)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
             {
@@ -146,7 +146,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
                 CohortCreated = cohortCreated,
                 Created = DateTime.UtcNow,
                 UserName = currentUserName,
-                UserRef = Guid.Parse(currentUserRef),
+                UserRef = currentUserRef,
                 AgreementType = agreementType,
                 SignedAgreementVersion = versionNumber
             });

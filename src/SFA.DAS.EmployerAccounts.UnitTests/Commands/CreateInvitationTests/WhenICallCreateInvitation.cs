@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
         private const string NameOfPersonBeingInvited = "Invited User";
 
 
-        private static readonly string ExpectedExternalUserId = Guid.NewGuid().ToString();
+        private static readonly Guid ExpectedExternalUserId = Guid.NewGuid();
 
         [SetUp]
         public void Setup()
@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
             _invitationRepository.Setup(x => x.Create(It.IsAny<Invitation>())).ReturnsAsync(ExpectedInvitationId);
 
             _membershipRepository = new Mock<IMembershipRepository>();
-            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId))
+            _membershipRepository.Setup(x => x.GetCaller(ExpectedHashedId, ExpectedExternalUserId.ToString()))
                                  .ReturnsAsync(new MembershipView
                                  {
                                      AccountId = ExpectedAccountId,
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateInvitationTests
                 EmailOfPersonBeingInvited = ExpectedCallerEmail,
                 NameOfPersonBeingInvited = NameOfPersonBeingInvited,
                 RoleOfPersonBeingInvited = Role.Owner,
-                ExternalUserId = ExpectedExternalUserId
+                ExternalUserId = ExpectedExternalUserId.ToString()
             };
             DateTimeProvider.Current = new FakeTimeProvider(DateTime.UtcNow);
         }

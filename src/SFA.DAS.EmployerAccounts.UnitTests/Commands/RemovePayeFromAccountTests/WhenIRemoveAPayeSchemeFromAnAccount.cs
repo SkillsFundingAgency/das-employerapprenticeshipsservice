@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemovePayeFromAccountTests
             _mockMembershipRepository = new Mock<IMembershipRepository>();
 
             _mockMembershipRepository.Setup(a => a.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
-                .Returns(Task.FromResult(new MembershipView { FirstName = UserFirstName, LastName = UserLastName, AccountId = AccountId, UserRef = UserRef.ToString() }));
+                .Returns(Task.FromResult(new MembershipView { FirstName = UserFirstName, LastName = UserLastName, AccountId = AccountId, UserRef = UserRef }));
 
             _handler = new RemovePayeFromAccountCommandHandler(
                 _mediator.Object,
