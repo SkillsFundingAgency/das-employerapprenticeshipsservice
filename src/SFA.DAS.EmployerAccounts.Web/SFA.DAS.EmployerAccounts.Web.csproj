@@ -300,6 +300,7 @@
     <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
+    <Compile Include="ViewModels\SupportUserHeaderViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
@@ -809,8 +810,9 @@
     <Content Include="Views\EmployerTeam\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\CheckFunding.cshtml" />
     <Content Include="src\sass\_interim-homepage.scss" />
-    <Content Include="Views\Shared\SupportUserBanner.cshtml" />
     <Content Include="Views\Shared\Empty.cshtml" />
+    <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

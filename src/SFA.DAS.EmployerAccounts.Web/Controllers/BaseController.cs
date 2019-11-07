@@ -154,7 +154,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
-        {   
+        {
+            if (this.GetHtmlHelper().IsSupportUser())
+            {
+                return PartialView("_SupportUserBanner", new SupportUserBannerViewModel());
+            }
+
             return PartialView("empty");
         }
     }

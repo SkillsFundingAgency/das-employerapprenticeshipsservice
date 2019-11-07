@@ -436,3 +436,67 @@ a#link-settings {
     top: 3px;
     display: block;
 }
+
+/* Support user view of service and transact BANNER - Starts */
+#global-header {
+    #service-console-header {
+        &, a {
+            color: $white;
+        }
+
+        .header-logo {
+            padding-left: 14px;
+        }
+
+        .heading-large {
+            margin: 0;
+        }
+
+        .header-proposition {
+            text-align: right;
+        }
+
+        @include media(desktop) {
+            .header-global {
+                width: 66.66%;
+            }
+
+            .header-proposition {
+                width: 33.33%;
+                line-height: 4rem;
+            }
+        }
+
+        @include media(mobile) {
+            .header-proposition {
+                text-align: left;
+            }
+        }
+    }
+
+    #service-console-msg {
+        background-color: $white;
+
+        #global-header-bar {
+            background-color: $govuk-blue;
+        }
+
+        .header-wrapper {
+            background-color: $white;
+            padding: 0 14px;
+
+            .content {
+                padding: 14px;
+
+                p {
+                    margin: 0;
+
+                    span {
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+    }
+}
+/* Support user view of service and transact BANNER - Ends */

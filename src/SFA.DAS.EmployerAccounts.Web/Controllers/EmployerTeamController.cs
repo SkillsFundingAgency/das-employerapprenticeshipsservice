@@ -340,7 +340,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     account = response.Data.Account;
                 }
 
-                return PartialView(new SupportUserBannerViewModel() { Account = account });
+                return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });
             }
 
             return base.SupportUserBanner(model);
