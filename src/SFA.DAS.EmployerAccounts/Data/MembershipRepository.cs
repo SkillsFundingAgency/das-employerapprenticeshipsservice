@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@externalUserId", externalUserId, DbType.String);
 
             var result = await _db.Value.Database.Connection.QueryAsync<MembershipView>(
-                sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.Id = @AccountId AND UserRef = @externalUserId;",
+                sql: "SELECT * FROM [employer_account].[MembershipView] m WHERE m.AccountId = @AccountId AND UserRef = @externalUserId;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
