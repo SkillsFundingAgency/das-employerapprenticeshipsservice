@@ -37,7 +37,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return MvcHtmlString.Empty;
         }
 
-
         public static bool IsSupportUser(this HtmlHelper htmlHelper)
         {
             if (!(htmlHelper.ViewContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
