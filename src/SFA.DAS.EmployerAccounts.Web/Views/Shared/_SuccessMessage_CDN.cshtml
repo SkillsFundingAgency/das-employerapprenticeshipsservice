@@ -10,7 +10,33 @@
 @if (!string.IsNullOrEmpty(viewModel?.FlashMessage?.Message) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.SubMessage) || !string.IsNullOrEmpty(viewModel?.FlashMessage?.Headline))
 {
 
-    <div class="govuk-grid-row notification-wrapper">
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+        @if (!string.IsNullOrWhiteSpace(viewModel.FlashMessage.Headline))
+        {
+            <h2 class="govuk-error-summary__title" id="error-summary-title">
+                @viewModel.FlashMessage.Headline
+            </h2>
+        }
+        <div class="govuk-error-summary__body">
+            @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
+            {
+                <p class="govuk-body">@Html.Raw(viewModel.FlashMessage.SubMessage)</p>
+            }
+            @if (viewModel.FlashMessage.ErrorMessages.Any())
+            {
+                <ul class="govuk-list govuk-error-summary__list">
+                    @foreach (var errorMessage in viewModel.FlashMessage.ErrorMessages)
+                    {
+                        <li>
+                            <a href="#@errorMessage.Key">@errorMessage.Value</a>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    @*<div class="govuk-grid-row notification-wrapper">
         <div class="govuk-grid-column-two-thirds">
             <div class="@viewModel.FlashMessage.SeverityCssClass" tabindex="-1">
                 @if (!string.IsNullOrWhiteSpace(viewModel.FlashMessage.Headline))
@@ -50,5 +76,6 @@
             </div>
 
         </div>
-    </div>
+    </div>*@
+
 }
