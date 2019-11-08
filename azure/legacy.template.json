@@ -378,7 +378,7 @@
                             },
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                "value": "[reference('support-app-insights').outputs.InstrumentationKey.value]"
+                                "value": "[reference('support-app-insights', '2015-05-01').outputs.InstrumentationKey.value]"
                             }
                         ]
                     },
