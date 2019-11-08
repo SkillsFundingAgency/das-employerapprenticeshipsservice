@@ -273,7 +273,7 @@
       <Version>0.11.39</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
-      <Version>1.1.74</Version>
+      <Version>1.1.82</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Sql.Client">
       <Version>1.0.0.32930</Version>
