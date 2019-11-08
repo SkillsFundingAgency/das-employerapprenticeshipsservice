@@ -336,8 +336,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     {
                         account = null;
                     }
-
-                    account = response.Data.Account;
+                    else
+                    {
+                        account = response.Data.Account;
+                    }
                 }
 
                 return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });
