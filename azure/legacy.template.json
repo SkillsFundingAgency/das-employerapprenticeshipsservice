@@ -66,6 +66,9 @@
         "deploySupportSite": {
             "type": "bool",
             "defaultValue": true
+        },
+        "tokenCertificateThumbprint": {
+            "type": "string"
         }
     },
     "variables": {
@@ -188,6 +191,14 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('ui-app-insights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "WEBSITE_LOAD_CERTIFICATES",
+                                "value": "[parameters('tokenCertificateThumbprint')]"
+                            },
+                            {
+                                "name": "TokenCertificateThumbprint",
+                                "value": "[parameters('tokenCertificateThumbprint')]"
                             }
                         ]
                     },
@@ -308,7 +319,7 @@
                 }
             }
         },
-        {            
+        {
             "apiVersion": "2017-05-10",
             "name": "support-app-service-certificate",
             "condition": "[and(greater(length(parameters('supportCustomHostname')), 0), parameters('deploySupportSite'))]",
