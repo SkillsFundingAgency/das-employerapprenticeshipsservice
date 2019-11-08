@@ -54,13 +54,18 @@
             "defaultValue": ""
         },
         "supportCertificateName": {
-            "type": "string"
+            "type": "string",
+            "defaultValue": ""
         },
         "keyVaultResourceGroupName": {
             "type": "string"
         },
         "keyVaultName": {
             "type": "string"
+        },
+        "deploySupportSite": {
+            "type": "bool",
+            "defaultValue": true
         }
     },
     "variables": {
@@ -285,6 +290,7 @@
         {
             "apiVersion": "2019-05-01",
             "name": "support-app-insights",
+            "condition": "[parameters('deploySupportSite')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
@@ -302,10 +308,10 @@
                 }
             }
         },
-        {
-            "condition": "[greater(length(parameters('supportCustomHostname')), 0)]",
+        {            
             "apiVersion": "2017-05-10",
             "name": "support-app-service-certificate",
+            "condition": "[and(greater(length(parameters('supportCustomHostname')), 0), parameters('deploySupportSite'))]",
             "resourceGroup": "[parameters('sharedBackendAppServicePlanResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
@@ -330,6 +336,7 @@
         {
             "apiVersion": "2019-05-01",
             "name": "support-app-service",
+            "condition": "[parameters('deploySupportSite')]",
             "type": "Microsoft.Resources/deployments",
             "properties": {
                 "mode": "Incremental",
