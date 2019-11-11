@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             else
             {                
                 httpClient = new HttpClientBuilder()
-               .WithBearerAuthorisationHeader(new AzureADBearerTokenGenerator(config))
+               .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
                .WithHandler(new RequestIdMessageRequestHandler())
                .WithHandler(new SessionIdMessageRequestHandler())
                .WithDefaultHeaders()
