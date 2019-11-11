@@ -2,13 +2,13 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
+
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
 {
     public class WhenICallCreateLegalEntityWhenNotAccountOwner : CreateLegalEntityCommandTests
     {
-
         [SetUp]
         public override void Arrange()
         {

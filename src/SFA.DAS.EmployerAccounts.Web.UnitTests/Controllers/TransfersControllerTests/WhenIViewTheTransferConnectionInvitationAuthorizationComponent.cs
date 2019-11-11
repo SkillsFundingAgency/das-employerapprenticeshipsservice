@@ -4,6 +4,8 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.EmployerFeatures.Errors;
+using SFA.DAS.Authorization.Results;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Mappings;
@@ -25,7 +27,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.TransfersController
         public void Arrange()
         {
             _query = new GetTransferConnectionInvitationAuthorizationQuery();
-            _response = new GetTransferConnectionInvitationAuthorizationResponse { AuthorizationResult = AuthorizationResult.FeatureAgreementNotSigned, IsValidSender = true,TransferAllowancePercentage = .25m };
+            var authResult = new AuthorizationResult();
+            authResult.AddError(new EmployerFeatureAgreementNotSigned());
+            _response = new GetTransferConnectionInvitationAuthorizationResponse { AuthorizationResult = authResult, IsValidSender = true,TransferAllowancePercentage = .25m };
             _mapperConfig = new MapperConfiguration(c => c.AddProfile<TransferMappings>());
             _mapper = _mapperConfig.CreateMapper();
             _mediator = new Mock<IMediator>();

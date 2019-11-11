@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -20,6 +19,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
+using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.Exceptions;
@@ -30,6 +30,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization.Services;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -38,15 +40,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
-        private readonly IMapper _mapper;        
+        private readonly IMapper _mapper;
+        private readonly IAuthorizationService _authorizationService;
 
-        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient, IMapper mapper)
+        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient, IMapper mapper, IAuthorizationService authorizationService)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
             _mapper = mapper;
+            _authorizationService = authorizationService;
         }
 
         //Needed for tests
@@ -142,45 +146,52 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string accountId, string externalUserId)
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
         {
             try
             {
-                var apiGetAccountTask = _accountApiClient.GetAccount(accountId);
+                var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     UserId = externalUserId
                 });
 
-                var userRoleResponseTask = GetUserAccountRole(accountId, externalUserId);
+                var userRoleResponseTask = GetUserAccountRole(hashedAccountId, externalUserId);
 
                 var userResponseTask = _mediator.SendAsync(new GetTeamMemberQuery
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     TeamMemberId = externalUserId
                 });
 
                 var accountStatsResponseTask = _mediator.SendAsync(new GetAccountStatsQuery
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
 
                 var agreementsResponseTask = _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
 
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
+                var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
+                                
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);                
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
                 var userResponse = userResponseTask.Result;
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
+                var reservationsResponse = reservationsResponseTask.Result;
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
                 {
@@ -199,20 +210,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     UserRole = userRoleResponse.UserRole,
                     HashedUserId = externalUserId,
                     UserFirstName = userResponse.User.FirstName,
-                    OrgainsationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
+                    OrganisationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     TeamMembersInvited = accountStatsResponse?.Stats?.TeamMembersInvited ?? 0,
                     ShowWizard = showWizard,
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
-                    HashedAccountId = accountId,
+                    HashedAccountId = hashedAccountId,
                     RequiresAgreementSigning = pendingAgreements.Count(),
                     AgreementsToSign = pendingAgreements.Count() > 0,
-                    SignedAgreementCount= agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
+                    SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true),
-                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel)
+                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
+                    ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
+                    ReservationsCount = reservationsResponse.Reservations.Count()
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
@@ -238,7 +251,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.InternalServerError,
-                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {accountId}", ex)
+                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {hashedAccountId}", ex)
                 };
             }
             catch (Exception ex)

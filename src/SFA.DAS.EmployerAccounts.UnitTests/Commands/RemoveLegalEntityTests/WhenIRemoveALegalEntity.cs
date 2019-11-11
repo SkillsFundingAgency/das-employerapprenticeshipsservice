@@ -11,14 +11,13 @@ using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Events.Agreement;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.Events.Api.Types;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
@@ -34,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IHashingService> _hashingService;
         private Mock<IGenericEventFactory> _genericEventHandler;
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
-        private Mock<IAgreementService> _agreementService;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEventPublisher> _eventPublisher;
 
@@ -66,9 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                     LegalEntityName = ExpectedLegalEntityName,
                     Status = EmployerAgreementStatus.Signed
                 });
-
-            _agreementService = new Mock<IAgreementService>();
-
+            
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedEmployerAgreementId)).Returns(ExpectedEmployerAgreementId);
@@ -95,7 +91,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 _hashingService.Object,
                 _genericEventHandler.Object,
                 _employerAgreementEventFactory.Object,
-                _agreementService.Object,
                 _membershipRepository.Object,
                 _eventPublisher.Object);
         }

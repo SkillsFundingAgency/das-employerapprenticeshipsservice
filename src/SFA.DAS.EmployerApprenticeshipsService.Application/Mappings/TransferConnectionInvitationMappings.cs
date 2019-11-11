@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
 using SFA.DAS.EAS.Account.Api.Types;
-using SFA.DAS.EAS.Application.Dtos;
 using SFA.DAS.EAS.Domain.Models.TransferConnections;
 
 namespace SFA.DAS.EAS.Application.Mappings

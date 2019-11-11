@@ -6,21 +6,20 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Events.Agreement;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
-using SFA.DAS.NServiceBus.Testing;
+using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
@@ -42,7 +41,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         private AgreementSignedEvent _agreementEvent;
         private Mock<ICommitmentService> _commintmentService;
         private TestableEventPublisher _eventPublisher;
-        private Mock<IAgreementService> _agreementService;
 
         private const long AccountId = 223344;
         private const long AgreementId = 123433;
@@ -104,8 +102,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
 
             _eventPublisher = new TestableEventPublisher();
 
-            _agreementService = new Mock<IAgreementService>();
-
             _handler = new SignEmployerAgreementCommandHandler(
                 _membershipRepository.Object,
                 _agreementRepository.Object,
@@ -115,8 +111,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 _genericEventFactory.Object,
                 _mediator.Object,
                 _eventPublisher,
-                _commintmentService.Object,
-                _agreementService.Object);
+                _commintmentService.Object);
 
             _owner = new MembershipView
             {
@@ -246,14 +241,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             message.UserName.Should().Be(_owner.FullName());
             message.UserRef.Should().Be(_owner.UserRef);
             message.AgreementType.Should().Be(AgreementType);
-        }
-
-        [Test]
-        public async Task TheShouldInvalidateAccountAgreementCache()
-        {
-            await _handler.Handle(_command);
-
-            _agreementService.Verify(s => s.RemoveFromCacheAsync(AccountId));
         }
     }
 }

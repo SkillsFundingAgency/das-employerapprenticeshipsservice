@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetRejectedTransferConnectionInvitati
             var transferConnectionInvitation = await _db.Value.TransferConnectionInvitations
                 .Where(i =>
                     i.Id == message.TransferConnectionInvitationId.Value &&
-                    i.ReceiverAccount.Id == message.AccountId.Value &&
+                    i.ReceiverAccount.Id == message.AccountId &&
                     i.Status == TransferConnectionInvitationStatus.Rejected
                 )
                 .ProjectTo<TransferConnectionInvitationDto>(_configurationProvider)

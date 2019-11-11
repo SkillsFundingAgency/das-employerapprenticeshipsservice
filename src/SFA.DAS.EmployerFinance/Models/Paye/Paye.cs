@@ -7,9 +7,17 @@ namespace SFA.DAS.EmployerFinance.Models.Paye
         [Key]
         public string EmpRef { get; set; }
         public long AccountId { get; set; }  
+        public string Name { get; set; }
+        public string Aorn { get; set; }
 
-        public string AccessToken { get; set; }
-        public string RefreshToken { get; set; }
-        public string RefName { get; set; }
+        public Paye(string empRef, long accountId, string name, string aorn)
+        {
+            EmpRef = empRef;
+            AccountId = accountId;
+            Name = name;
+            Aorn = aorn;
+        }
+
+        public Paye() { }
     }
 }

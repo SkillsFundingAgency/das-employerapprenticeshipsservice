@@ -3,6 +3,7 @@
 @using SFA.DAS.EmployerFinance.Models.Transaction
 @using SFA.DAS.EmployerFinance.Models.Transfers
 @using SFA.DAS.EmployerFinance.Web.Extensions
+@using SFA.DAS.Common.Domain.Types;
 @model OrchestratorResponse<TransactionViewResultViewModel>
 
 @{
@@ -31,7 +32,7 @@
             <span class="heading-secondary">@displayingMonthDate.ToGdsFormatWithoutDay()</span>
         </h1>
 
-        @if (Model.Data.IsLatestMonth)
+        @if (Model.Data.IsLatestMonth && Model.Data.Account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy.ToString())
         {
             <div class="data-wrap">
                 <div class="data">
@@ -74,7 +75,7 @@
                     <span>No transactions.</span>
                 }
             </p>
-            if (!Model.Data.AccountHasPreviousTransactions)
+            if (!Model.Data.AccountHasPreviousTransactions && Model.Data.Account.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy.ToString())
             {
 
                 <details>

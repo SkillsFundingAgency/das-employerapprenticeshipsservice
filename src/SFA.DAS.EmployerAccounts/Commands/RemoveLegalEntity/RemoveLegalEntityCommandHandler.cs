@@ -7,13 +7,12 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
@@ -29,7 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
-        private readonly IAgreementService _agreementService;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEventPublisher _eventPublisher;
 
@@ -41,7 +39,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             IHashingService hashingService,
             IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
-            IAgreementService agreementService,
             IMembershipRepository membershipRepository,
             IEventPublisher eventPublisher)
         {
@@ -52,7 +49,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _employerAgreementEventFactory = employerAgreementEventFactory;
-            _agreementService = agreementService;
             _membershipRepository = membershipRepository;
             _eventPublisher = eventPublisher;
         }
@@ -78,8 +74,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
 
             await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreementId);
-
-            await _agreementService.RemoveFromCacheAsync(accountId);
 
             await AddAuditEntry(accountId, message.HashedLegalAgreementId);
 

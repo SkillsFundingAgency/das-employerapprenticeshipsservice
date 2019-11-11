@@ -9,7 +9,6 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web;
 using SFA.DAS.EmployerFinance.Web.App_Start;
 using SFA.DAS.EmployerFinance.Web.Authentication;
-using SFA.DAS.EmployerFinance.Web.Orchestrators;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
@@ -33,7 +32,6 @@ namespace SFA.DAS.EmployerFinance.Web
 
         public void Configuration(IAppBuilder app)
         {
-            var authenticationOrchestrator = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<AuthenticationOrchestrator>();
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerFinanceConfiguration>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
@@ -64,7 +62,7 @@ namespace SFA.DAS.EmployerFinance.Web
                 TokenValidationMethod = config.Identity.UseCertificate ? TokenValidationMethod.SigningKey : TokenValidationMethod.BinarySecret,
                 AuthenticatedCallback = identity =>
                 {
-                    PostAuthentiationAction(identity, authenticationOrchestrator, constants);
+                    PostAuthentiationAction(identity, constants);
                 }
             });
 
@@ -106,14 +104,11 @@ namespace SFA.DAS.EmployerFinance.Web
             };
         }
 
-        private static void PostAuthentiationAction(ClaimsIdentity identity, AuthenticationOrchestrator authenticationOrchestrator, Constants constants)
+        private static void PostAuthentiationAction(ClaimsIdentity identity, Constants constants)
         {
             Logger.Info("Retrieving claims from OIDC server.");
 
             var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-            var email = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Email())?.Value;
-            var firstName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.GivenName())?.Value;
-            var lastName = identity.Claims.FirstOrDefault(claim => claim.Type == constants.FamilyName())?.Value;
 
             Logger.Info($"Retrieved claims from OIDC server for user with external ID '{userRef}'.");
 
@@ -121,8 +116,6 @@ namespace SFA.DAS.EmployerFinance.Web
             identity.AddClaim(new Claim(ClaimTypes.Name, identity.Claims.First(c => c.Type == constants.DisplayName()).Value));
             identity.AddClaim(new Claim("sub", identity.Claims.First(c => c.Type == constants.Id()).Value));
             identity.AddClaim(new Claim("email", identity.Claims.First(c => c.Type == constants.Email()).Value));
-
-            Task.Run(async () => await authenticationOrchestrator.SaveIdentityAttributes(userRef, email, firstName, lastName)).Wait();
         }
     }
 

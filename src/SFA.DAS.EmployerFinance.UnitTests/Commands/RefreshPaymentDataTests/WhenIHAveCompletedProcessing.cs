@@ -12,7 +12,7 @@ using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus.Testing;
+using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.Testing;
 using SFA.DAS.Validation;
 

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerFinance.Models.Account;
+﻿using SFA.DAS.EAS.Account.Api.Types;
 using System;
 
 namespace SFA.DAS.EmployerFinance.Web.ViewModels
@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerFinance.Web.ViewModels
         }
 
         public DateTime CurrentTime { get; }
-        public Account Account { get; set; }
+        public AccountDetailViewModel Account { get; set; }
         public TransactionViewModel Model { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }

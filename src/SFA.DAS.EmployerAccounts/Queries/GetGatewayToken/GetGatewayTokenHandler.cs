@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
+using SFA.DAS.Hmrc;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken
 {
@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetGatewayToken
 
         public async Task<GetGatewayTokenQueryResponse> Handle(GetGatewayTokenQuery message)
         {
-            var response =  await _hmrcService.GetAuthenticationToken(message.RedirectUrl, message.AccessCode);
+            var response = await _hmrcService.GetAuthenticationToken(message.RedirectUrl, message.AccessCode);
 
             return new GetGatewayTokenQueryResponse
             {

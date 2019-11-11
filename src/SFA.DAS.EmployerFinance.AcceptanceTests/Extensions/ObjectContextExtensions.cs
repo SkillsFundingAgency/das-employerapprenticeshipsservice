@@ -31,8 +31,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
                 var account = new Account
                 {
-                    Id = accountId,
-                    HashedId = hashingService.HashValue(accountId)
+                    Id = accountId
                 };
 
                 if (objectContext.KeyExists<Account>())

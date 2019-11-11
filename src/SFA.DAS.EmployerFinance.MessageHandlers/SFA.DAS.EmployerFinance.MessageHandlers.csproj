@@ -19,13 +19,13 @@
     <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.32" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.890" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
-    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
-    <PackageReference Include="StructureMap" Version="4.6.1" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
+    <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
 

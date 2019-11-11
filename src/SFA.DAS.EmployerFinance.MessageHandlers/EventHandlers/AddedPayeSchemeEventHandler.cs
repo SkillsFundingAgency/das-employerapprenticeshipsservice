@@ -9,17 +9,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.EventHandlers
     {
         public async Task Handle(AddedPayeSchemeEvent message, IMessageHandlerContext context)
         {
+            await context.SendLocal(new CreateAccountPayeCommand(message.AccountId, message.PayeRef, message.SchemeName, message.Aorn));
+
             if (SchemeWasAddedViaAornRoute(message))
             {
                 return;
             }
 
-            await context.SendLocal(
-                new ImportAccountLevyDeclarationsCommand
-                {
-                    AccountId = message.AccountId,
-                    PayeRef = message.PayeRef,
-                });
+            await context.SendLocal(new ImportAccountLevyDeclarationsCommand(message.AccountId, message.PayeRef));
         }
 
         private static bool SchemeWasAddedViaAornRoute(AddedPayeSchemeEvent message)

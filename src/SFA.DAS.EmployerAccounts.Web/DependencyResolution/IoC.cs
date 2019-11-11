@@ -1,14 +1,16 @@
 using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Activities.Client;
+using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
+using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework;
-using SFA.DAS.UnitOfWork.NServiceBus;
-using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
-using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
 using ConfigurationRegistry = SFA.DAS.EmployerAccounts.DependencyResolution.ConfigurationRegistry;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -22,6 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<ApprenticeshipLevyRegistry>();
                 c.AddRegistry<AuditRegistry>();
                 c.AddRegistry<AuthorizationRegistry>();
+                c.AddRegistry<EmployerUserRolesAuthorizationRegistry>();
                 c.AddRegistry<CachesRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
@@ -33,7 +36,6 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
                 c.AddRegistry<HashingRegistry>();
-                c.AddRegistry<HmrcRegistry>();
                 c.AddRegistry<LoggerRegistry>();
                 c.AddRegistry<MapperRegistry>();
                 c.AddRegistry<MediatorRegistry>();
@@ -42,14 +44,16 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
-                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();                
                 c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<PortalClientRegistry>();
                 c.AddRegistry<PensionsRegulatorRegistry>();
+                c.AddRegistry<ReservationsApiClientRegistry>();
                 c.AddRegistry<DefaultRegistry>();
+                c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
             });
         }
     }

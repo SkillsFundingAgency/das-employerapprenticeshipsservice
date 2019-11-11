@@ -9,6 +9,7 @@ using SFA.DAS.Authorization;
 using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Jobs.RunOnceJobs;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;

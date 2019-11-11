@@ -8,17 +8,19 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview;
 using SFA.DAS.EmployerFinance.Web.ViewModels;
 using SFA.DAS.Validation.Mvc;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerFinance.Web.Filters;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAccountTransactionsController : BaseController
     {
@@ -66,16 +68,14 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return View(viewModel);
         }
 
-        [ValidateMembership]
         [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]
-        public ActionResult TransactionsDownload(string hashedAccountId)
+        public ActionResult TransactionsDownload()
         {
             return View(new TransactionDownloadViewModel());
         }
 
         [HttpPost]
-        [ValidateMembership]
         [ValidateAntiForgeryToken]
         [ValidateModelState]
         [Route("finance/downloadtransactions")]
@@ -141,11 +141,11 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public async Task<ActionResult> CourseFrameworkPaymentSummary(string hashedAccountId, long ukprn, string courseName,
             int? courseLevel, int? pathwayCode, DateTime fromDate, DateTime toDate)
         {
-            var viewModel = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
+            var orchestratorResponse = await _accountTransactionsOrchestrator.GetCoursePaymentSummary(
                 hashedAccountId, ukprn, courseName, courseLevel, pathwayCode,
                 fromDate, toDate, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(ControllerConstants.CoursePaymentSummaryViewName, viewModel);
+            return View(ControllerConstants.CoursePaymentSummaryViewName, orchestratorResponse.Data);
         }
 
         [Route("finance/transfer/details")]

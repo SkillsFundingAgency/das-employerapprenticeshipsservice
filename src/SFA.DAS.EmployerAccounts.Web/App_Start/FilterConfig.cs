@@ -1,8 +1,7 @@
 ﻿using SFA.DAS.EmployerAccounts.Web.Filters;
 using System.Web.Mvc;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
-using SFA.DAS.UnitOfWork.Mvc;
+using SFA.DAS.Authorization.Mvc.Extensions;
+using SFA.DAS.UnitOfWork.Mvc.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -11,10 +10,9 @@ namespace SFA.DAS.EmployerAccounts.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.AddUnitOfWorkFilter();
-            filters.Add(new ValidateFeatureFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
             filters.Add(new GoogleAnalyticsFilter());
-            filters.Add(new ViewModelFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
-            filters.Add(new HandleErrorFilter());
+            filters.AddAuthorizationFilter();
+            filters.AddUnauthorizedAccessExceptionFilter();
         }
     }
 }

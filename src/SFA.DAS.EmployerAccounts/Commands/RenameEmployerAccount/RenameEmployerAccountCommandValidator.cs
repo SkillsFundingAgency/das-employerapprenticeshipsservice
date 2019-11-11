@@ -3,6 +3,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount
 {

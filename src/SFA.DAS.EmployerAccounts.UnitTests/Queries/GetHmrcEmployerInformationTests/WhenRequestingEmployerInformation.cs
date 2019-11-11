@@ -5,10 +5,10 @@ using HMRC.ESFA.Levy.Api.Types;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EAS.Infrastructure.Interfaces.Services;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Queries.GetHmrcEmployerInformation;
 using SFA.DAS.EmployerAccounts.Queries.GetPayeSchemeInUse;
+using SFA.DAS.Hmrc;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
@@ -45,7 +45,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
 
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetPayeSchemeInUseQuery>())).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = new PayeScheme { Ref = ExpectedEmprefInUse } });
-            _mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c=>c.Empref==ExpectedEmpref))).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null});
+            _mediator.Setup(x => x.SendAsync(It.Is<GetPayeSchemeInUseQuery>(c => c.Empref == ExpectedEmpref))).ReturnsAsync(new GetPayeSchemeInUseResponse { PayeScheme = null });
             
             _getHmrcEmployerInformationHandler = new GetHmrcEmployerInformationHandler(_validator.Object, _hmrcService.Object, _mediator.Object, _logger.Object);
         }
@@ -58,7 +58,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
 
             //Assert
             _validator.Verify(x => x.Validate(It.IsAny<GetHmrcEmployerInformationQuery>()), Times.Once);
-
         }
 
         [Test]
@@ -87,7 +86,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         [Test]
         public async Task ThenTheResponseReturnsThePopulatedHmrcEmployerInformation()
         {
-            
             //Act
             var actual = await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthToken });
 
@@ -131,8 +129,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetHmrcEmployerInformationT
         public void ThenAnNotFoundExceptionIsRetrunedIfTheEmprefIsEmpty()
         {
             //Act Assert
-            Assert.ThrowsAsync<NotFoundException>(async ()=> await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenNoScheme }));
-            
+            Assert.ThrowsAsync<NotFoundException>(async () => await _getHmrcEmployerInformationHandler.Handle(new GetHmrcEmployerInformationQuery { AuthToken = ExpectedAuthTokenNoScheme }));
         }
     }
 }

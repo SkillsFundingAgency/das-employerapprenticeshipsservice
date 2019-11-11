@@ -41,14 +41,14 @@ namespace SFA.DAS.EmployerFinance.Queries.GetAccountFinanceOverview
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
            
-            var currentBalance = await GetAccountBalance(query.AccountId.Value);
-            var earliestFundsToExpireTask = GetExpiringFunds(query.AccountId.Value);
-            var projectedCalculations = await _dasForecastingService.GetProjectedCalculations(query.AccountId.Value);
-            var totalSpendForLastYear = await GetTotalSpendForLastYear(query.AccountId.Value);
+            var currentBalance = await GetAccountBalance(query.AccountId);
+            var earliestFundsToExpireTask = GetExpiringFunds(query.AccountId);
+            var projectedCalculations = await _dasForecastingService.GetProjectedCalculations(query.AccountId);
+            var totalSpendForLastYear = await GetTotalSpendForLastYear(query.AccountId);
 
             var response = new GetAccountFinanceOverviewResponse
             {
-                AccountId = query.AccountId.Value,
+                AccountId = query.AccountId,
                 CurrentFunds = currentBalance,
                 FundsIn = projectedCalculations?.FundsIn ?? 0,
                 FundsOut = projectedCalculations?.FundsOut ?? 0,

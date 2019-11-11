@@ -18,7 +18,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControlle
         private Mock<InvitationOrchestrator> _invitationOrchestrator;
         private InvitationController _controller;
         private Mock<IAuthenticationService> _owinWrapper;
-        private Mock<IAuthorizationService> _featureToggle;
         private Mock<IMultiVariantTestingService> _userViewTestingService;
         private EmployerAccountsConfiguration _configuration;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _flashMessage;
@@ -29,7 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControlle
             base.Arrange();
 
             _owinWrapper = new Mock<IAuthenticationService>();
-            _featureToggle = new Mock<IAuthorizationService>();
             _userViewTestingService = new Mock<IMultiVariantTestingService>();
             _flashMessage = new Mock<ICookieStorageService<FlashMessageViewModel>>();
 
@@ -38,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.InvitationControlle
             _configuration = new EmployerAccountsConfiguration();
 
             _controller = new InvitationController(
-                _invitationOrchestrator.Object, _owinWrapper.Object, _featureToggle.Object, 
+                _invitationOrchestrator.Object, _owinWrapper.Object, 
                 _userViewTestingService.Object, _configuration, _flashMessage.Object);
         }
 

@@ -1,8 +1,7 @@
 ﻿using System.Web.Mvc;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
+using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.EmployerFinance.Web.Filters;
-using SFA.DAS.UnitOfWork.Mvc;
+using SFA.DAS.UnitOfWork.Mvc.Extensions;
 
 namespace SFA.DAS.EmployerFinance.Web
 {
@@ -11,10 +10,9 @@ namespace SFA.DAS.EmployerFinance.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.AddUnitOfWorkFilter();
-            filters.Add(new ValidateFeatureFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
+            filters.AddAuthorizationFilter();
+            filters.AddUnauthorizedAccessExceptionFilter();
             filters.Add(new GoogleAnalyticsFilter());
-            filters.Add(new ViewModelFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
-            filters.Add(new HandleErrorFilter());
         }
     }
 }

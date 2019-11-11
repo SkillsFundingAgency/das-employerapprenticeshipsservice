@@ -14,18 +14,24 @@
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.20" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
-    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.2103" />
+    <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.16" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Testing.AzureStorageEmulator" Version="3.0.99" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
+    <PackageReference Include="SFA.DAS.EmployerAccounts.Types" Version="1.6.2103" />
     <PackageReference Include="SpecFlow" Version="2.4.1" />
     <PackageReference Include="SpecFlow.Tools.MsBuild.Generation" Version="2.4.1" />
-    <PackageReference Include="StructureMap" Version="4.6.1" />
+    <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
 
@@ -40,7 +46,6 @@
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.MessageHandlers\SFA.DAS.EmployerFinance.MessageHandlers.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Web\SFA.DAS.EmployerFinance.Web.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerFinance\SFA.DAS.EmployerFinance.csproj" />
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

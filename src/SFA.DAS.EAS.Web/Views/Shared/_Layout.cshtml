@@ -2,6 +2,8 @@
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EAS.Web
+@using SFA.DAS.EAS.Web.Extensions
+@using SFA.DAS.EAS.Web.Helpers
 @using SFA.DAS.EAS.Web.ViewModels
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -56,7 +58,7 @@
     <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
     <!--<![endif]-->
 
-    @Html.Partial("GoogleAnalyticsInfo")
+    @*@Html.Partial("GoogleAnalyticsInfo")*@
 
     <!-- This is from individual pages -->
     @RenderSection("gaDataLayer", required: false)
@@ -171,7 +173,7 @@
                     <ul id="global-nav-links">
                         <li><a href="@Url.Action("Index", "EmployerTeam")" class="@(ViewBag.Section == "home" ? "selected" : "")" role="menuitem">Home</a></li>
                         <li><a href="@Url.Action("Index", "EmployerAccountTransactions")" class="@(ViewBag.Section == "finance" ? "selected" : "")" role="menuitem">Finance</a></li>
-                        @if (Html.IsAuthorized(FeatureType.Recruitments))
+                        @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
                         {
                             <li><a href="@Url.EmployerRecruitAction()" role="menuitem">Recruitment</a></li>
                         }
@@ -188,16 +190,13 @@
         @RenderSection("breadcrumb", required: false)
         @if (HttpContext.Current.User.Identity.IsAuthenticated)
         {
-            <div class="grid-row">
-                <div class="column-full">
-                    <div class=" info-summary">
-                        <h2 class="heading-medium">Unable to see your payment transactions?</h2>
-                        <p>This doesn’t affect your payments to training providers.</p>
-                        <p>We will update this notice when transactions are visible again.
-                        </p>
-                    </div>
+        <div class="grid-row">
+            <div class="column-full">
+                <div class=" info-summary">
+                    <p>You may see transactions in your account around the 17 October. This is a result of the extra data return providers are required to make in October, relating to training delivered up until 31 July 2019.</p>
                 </div>
             </div>
+        </div>
         }
         @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
         @RenderBody()

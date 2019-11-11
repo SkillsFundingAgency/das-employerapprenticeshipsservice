@@ -20,15 +20,11 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Api\SFA.DAS.EmployerAccounts.Api.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.TestCommon\SFA.DAS.EmployerAccounts.TestCommon.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj" />
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Http">
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.7\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <ItemGroup>

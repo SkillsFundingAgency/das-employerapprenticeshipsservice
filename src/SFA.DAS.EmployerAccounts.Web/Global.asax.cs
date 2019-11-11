@@ -7,8 +7,6 @@ using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Logging;
 using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.StructureMap;
 using SFA.DAS.Web.Policy;
 using System;
 using System.Collections.Generic;
@@ -21,8 +19,10 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.SqlServer;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using System.Configuration;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -30,8 +30,10 @@ using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.AutoConfiguration;
-using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
+using SFA.DAS.EmployerUsers.WebClientComponents;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -141,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EmployerAccounts.Web")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerAccountsConfiguration>().ServiceBusConnectionString, container)
-                .UseErrorQueue()
+                .UseErrorQueue("SFA.DAS.EmployerAccounts.Web-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerAccountsConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())

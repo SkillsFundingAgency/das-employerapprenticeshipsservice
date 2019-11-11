@@ -26,5 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Models.EmployerAgreement
         public long AccountLegalEntityId { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
         public AgreementType AgreementType { get; set; }
+        public int VersionNumber { get; set; }
     }
 }

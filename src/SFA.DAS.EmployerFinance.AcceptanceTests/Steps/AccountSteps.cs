@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Steps
                 .ReturnsAsync(new Paye
                 {
                     EmpRef = empRef,
-                    RefName = empRef
+                    Name = empRef
                 });
 
 

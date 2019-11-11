@@ -3,6 +3,8 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountPayeSchemes;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountPAYESchemes

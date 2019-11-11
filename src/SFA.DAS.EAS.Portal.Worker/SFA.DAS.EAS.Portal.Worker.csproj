@@ -21,7 +21,7 @@
     <PackageReference Include="Scrutor" Version="3.0.2" />
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages" Version="2.1.1507" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="10.0.1" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.ProviderRelationships.Messages" Version="3.0.2" />
     <PackageReference Include="SFA.DAS.Providers.Api.Client" Version="0.11.174" />
   </ItemGroup>

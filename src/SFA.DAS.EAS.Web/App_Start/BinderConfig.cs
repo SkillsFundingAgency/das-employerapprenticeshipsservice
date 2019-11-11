@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
-using SFA.DAS.Binders;
+using SFA.DAS.Authorization.Mvc.Extensions;
+using SFA.DAS.EAS.Web.Binders;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -9,7 +8,7 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterBinders(ModelBinderDictionary binders)
         {
-            binders.DefaultBinder = new MessageModelBinder(() => DependencyResolver.Current.GetService<ICallerContextProvider>());
+            binders.UseAuthorizationModelBinder();
             binders.Add(typeof(string), new TrimStringModelBinder());
         }
     }

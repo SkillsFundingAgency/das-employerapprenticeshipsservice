@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using MediatR;
 using Moq;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Features;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTests
@@ -34,7 +29,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         protected Mock<ILegalEntityEventFactory> LegalEntityEventFactory;
         protected Mock<IHashingService> HashingService;
         protected Mock<IAccountLegalEntityPublicHashingService> AccountLegalEntityPublicHashingService;
-        protected Mock<IAgreementService> AgreementService;
         protected Mock<IEmployerAgreementRepository> EmployerAgreementRepository;
         protected Mock<IValidator<CreateLegalEntityCommand>> Validator;
         protected Mock<IAuthorizationService> AuthorizationService;
@@ -66,7 +60,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             GenericEventFactory = new Mock<IGenericEventFactory>();
             LegalEntityEventFactory = new Mock<ILegalEntityEventFactory>();
             HashingService = new Mock<IHashingService>();
-            AgreementService = new Mock<IAgreementService>();
             AccountLegalEntityPublicHashingService = new Mock<IAccountLegalEntityPublicHashingService>();
             EmployerAgreementRepository = new Mock<IEmployerAgreementRepository>();
             EventPublisher = new Mock<IEventPublisher>();
@@ -83,7 +76,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 EventPublisher.Object,
                 HashingService.Object,
                 AccountLegalEntityPublicHashingService.Object,
-                AgreementService.Object,
                 EmployerAgreementRepository.Object,
                 Validator.Object,
                 AuthorizationService.Object

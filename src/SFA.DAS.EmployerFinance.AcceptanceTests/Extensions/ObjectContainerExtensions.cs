@@ -7,7 +7,7 @@ using MediatR;
 using Moq;
 using NServiceBus;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.AcceptanceTests.TestRepositories;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
@@ -18,6 +18,7 @@ using SFA.DAS.Events.Api.Client;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Managers;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
@@ -46,7 +47,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             objectContainer.RegisterMock<ICurrentDateTime>(container);
             objectContainer.RegisterMock<IEmployerAccountRepository>(container);
             objectContainer.RegisterMock<IEventsApi>(container);
-            objectContainer.RegisterMock<IMembershipRepository>(container);
             objectContainer.RegisterMock<IPayeRepository>(container);
         }
 

@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization.EmployerUserRoles.Options;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.Validation;
 
@@ -7,11 +9,11 @@ namespace SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTran
 {
     public class FindEmployerAccountLevyDeclarationTransactionsQueryValidator : IValidator<FindEmployerAccountLevyDeclarationTransactionsQuery>
     {
-        private readonly IMembershipRepository _membershipRepository;
+        private readonly IAuthorizationService _authorizationService;
 
-        public FindEmployerAccountLevyDeclarationTransactionsQueryValidator(IMembershipRepository membershipRepository)
+        public FindEmployerAccountLevyDeclarationTransactionsQueryValidator(IAuthorizationService authorizationService)
         {
-            _membershipRepository = membershipRepository;
+            _authorizationService = authorizationService;
         }
 
         public ValidationResult Validate(FindEmployerAccountLevyDeclarationTransactionsQuery item)
@@ -43,8 +45,7 @@ namespace SFA.DAS.EmployerFinance.Queries.FindEmployerAccountLevyDeclarationTran
             if (!result.IsValid())
                 return result;
 
-            var caller = await _membershipRepository.GetCaller(item.HashedAccountId, item.ExternalUserId);
-            result.IsUnauthorized = caller == null;
+            result.IsUnauthorized = !_authorizationService.IsAuthorized(EmployerUserRole.Any);
 
             return result;
         }

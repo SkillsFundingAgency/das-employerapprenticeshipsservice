@@ -7,6 +7,7 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
@@ -20,7 +21,7 @@ using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.HashingService;
-using SFA.DAS.NServiceBus.Testing;
+using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.Validation;
 using IAccountEventFactory = SFA.DAS.EmployerAccounts.Factories.IAccountEventFactory;
 
@@ -86,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _accountEventFactory = new Mock<IAccountEventFactory>();
 
             _mockAuthorizationService = new Mock<IAuthorizationService>();
-            _mockAuthorizationService.Setup(x => x.IsAuthorized(FeatureType.ExpressionOfInterest)).Returns(false);
+            _mockAuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(false);
 
             _mockMembershipRepository = new Mock<IMembershipRepository>();
             _mockMembershipRepository.Setup(r => r.GetCaller(It.IsAny<long>(), It.IsAny<string>()))
@@ -203,7 +204,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                 Aorn = "Aorn"
             };
 
-            _mockAuthorizationService.Setup(x => x.IsAuthorized(FeatureType.ExpressionOfInterest)).Returns(eoiWhitelisted);
+            _mockAuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(eoiWhitelisted);
 
             _accountRepository.Setup(x => x.CreateAccount(It.IsAny<CreateAccountParams>())).ReturnsAsync(new CreateAccountResult { AccountId = accountId, LegalEntityId = 0L, EmployerAgreementId = 0L });
 

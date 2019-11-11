@@ -1,10 +1,11 @@
 ﻿using System.Web.Mvc;
 using Microsoft.Azure;
+using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
-    [Authorize]
+    [DasAuthorize]
     [RoutePrefix("accounts/{hashedAccountId}/apprentices/manage")]
     public class EmployerManageApprenticesController : Controller
     {

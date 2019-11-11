@@ -12,7 +12,7 @@ using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.HashingService;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 using Entity = SFA.DAS.Audit.Types.Entity;
 
