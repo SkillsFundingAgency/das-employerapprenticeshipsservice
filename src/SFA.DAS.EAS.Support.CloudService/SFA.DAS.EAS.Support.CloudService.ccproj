@@ -51,12 +51,6 @@
       <UpdateDiagnosticsConnectionStringOnPublish>True</UpdateDiagnosticsConnectionStringOnPublish>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SFA.DAS.EAS.Support.WebContent\" />
-  </ItemGroup>
-  <ItemGroup>
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.Support.WebContent\diagnostics.wadcfgx" />
-  </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>
