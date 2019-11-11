@@ -4,6 +4,7 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -104,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
                 Template = template,
                 TemplateId = template.Id,
                 StatusId = status,
-                AccountLegalEntityId = accountLegalEntityId
+                AccountLegalEntityId = accountLegalEntityId,
             };
 
             template.Agreements.Add(employerAgreement);
@@ -197,7 +198,7 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
             return this;
         }
 
-        public EmployerAgreementBuilder WithUser(long accountId, string firstName, string lastName, out User user)
+        public EmployerAgreementBuilder WithUser(long accountId, string firstName, string lastName, Role role, out User user)
         {
             var account = GetAccount(accountId);
 
@@ -217,7 +218,8 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
                 UserId = user.Id,
                 User = user,
                 AccountId = account.Id,
-                Account = account
+                Account = account,
+                Role = role
             };
 
             Memberships.Add(membership);

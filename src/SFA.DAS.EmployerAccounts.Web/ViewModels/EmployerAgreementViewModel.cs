@@ -5,8 +5,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
     public class EmployerAgreementViewModel
     {
         public EmployerAgreementView EmployerAgreement { get; set; }
-        public EmployerAgreementView PreviouslySignedEmployerAgreement { get; set; }
-
+        
         /// <summary>
         ///     Indicates whether the organisation that signed the agreement can be looked up by id
         ///     in reference data. e.g. if the organisation that signed the agreement were a
@@ -15,6 +14,5 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         ///     up the company.
         /// </summary>
         public bool OrganisationLookupPossible { get; set; }
-        public bool NoChoiceSelected { get; set; }
     }
 }

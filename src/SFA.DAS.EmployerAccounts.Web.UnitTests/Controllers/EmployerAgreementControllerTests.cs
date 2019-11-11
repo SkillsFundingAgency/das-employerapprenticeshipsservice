@@ -192,7 +192,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     var viewResult = result as ViewResult;
                     Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
                     Assert.AreEqual(fixtures.GetAgreementToSignViewModel, viewResult.Model);
-                    Assert.IsTrue(((EmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
+                    Assert.IsTrue(((SignEmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
                 });
         }
     }
@@ -225,8 +225,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
             GetAgreementToSignViewModel = new EmployerAgreementViewModel
             {
-                EmployerAgreement = new EmployerAgreementView(),
-                PreviouslySignedEmployerAgreement = new EmployerAgreementView()
+                EmployerAgreement = new EmployerAgreementView()
             };
         }
 

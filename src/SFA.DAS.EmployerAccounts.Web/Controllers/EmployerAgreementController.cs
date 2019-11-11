@@ -10,6 +10,8 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -123,8 +125,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
-            var response = await _mediator.SendAsync(request);
-            var viewModel = _mapper.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response);
+            var viewModel = await GetSignedAgreementViewModel(request);
 
             return View(viewModel);
         }
@@ -140,15 +141,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
+            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
 
             if (choice == null)
             {
-                agreement.Data.NoChoiceSelected = true;
-                return View(ControllerConstants.SignAgreementViewName, agreement.Data);
+                agreement.NoChoiceSelected = true;
+                return View(ControllerConstants.SignAgreementViewName, agreement);
             }
 
-            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.Data.EmployerAgreement.LegalEntityName);
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.EmployerAgreement.LegalEntityName);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -160,7 +161,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 ActionResult result;
 
-                if (agreement.Data.EmployerAgreement.AgreementType == AgreementType.NonLevyExpressionOfInterest)
+                if (agreement.EmployerAgreement.AgreementType == AgreementType.NonLevyExpressionOfInterest)
                 {
                     flashMessage.Headline = "Memorandum of Understanding signed";
                     flashMessage.Message = "You’ve successfully signed the Memorandum of Understanding for your organisation.";
@@ -188,10 +189,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return result;
             }
 
-            agreement.Exception = response.Exception;
-            agreement.Status = response.Status;
-
-            return View(ControllerConstants.SignAgreementViewName, agreement.Data);
+            return View(ControllerConstants.SignAgreementViewName, agreement);
         }
 
         [HttpGet]
@@ -270,6 +268,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
+        }
+
+        private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
+        {
+            var response = await _mediator.SendAsync(request);
+            var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(response);
+
+            var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest { AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId });
+            viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
+            return viewModel;
         }
     }
 }

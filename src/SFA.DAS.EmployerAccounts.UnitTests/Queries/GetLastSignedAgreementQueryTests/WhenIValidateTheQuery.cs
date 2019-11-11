@@ -6,42 +6,43 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTests
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLastSignedAgreementQueryTests
 {
     public class WhenIValidateTheQuery
     {
-        private GetEmployerAgreementQueryValidator _validator;
-        private GetEmployerAgreementRequest _query;
+        private GetLastSignedAgreementQueryValidator _validator;
+        private GetLastSignedAgreementRequest _query;
         
         [SetUp]
         public void Arrange()
         {
-            _query = new GetEmployerAgreementRequest
+            _query = new GetLastSignedAgreementRequest
             {
-                ExternalUserId = "ASDABASD",
-                HashedAccountId = "ASDANSDLKN123",
-                AgreementId = "123EDADS"
             };
 
-            _validator = new GetEmployerAgreementQueryValidator();
+            _validator = new GetLastSignedAgreementQueryValidator();
         }
 
         [Test]
         public async Task ThenIfTheFieldsAreEmptyThenValidationFails()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetEmployerAgreementRequest());
+            var result = await _validator.ValidateAsync(_query);
 
             //Assert
             Assert.IsFalse(result.IsValid());
         }
 
         [Test]
-        public async Task ThenIfAllFieldsArePopulatedAndTheMemberIsPartOfTheAccountThenTheRequestIsValid()
+        public async Task ThenIfAllFieldsArePopulatedThenTheRequestIsValid()
         {
-            
+            //Arrange
+            _query.AccountLegalEntityId = 12342345;
+
+
             //Act
             var result = await _validator.ValidateAsync(_query);
 
