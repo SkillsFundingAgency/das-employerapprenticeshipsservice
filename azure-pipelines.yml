@@ -26,7 +26,7 @@ steps:
     updateAssemblyInfo: true
 
 - task: VSBuild@1
-  displayName: 'Restore solutions'
+  displayName: 'Restore solution EAS'
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 15.0
@@ -36,9 +36,28 @@ steps:
     clean: true
 
 - task: VSBuild@1
-  displayName: 'Build solutions'
+  displayName: 'Restore solution EAS Portal'
+  inputs:
+    solution: 'src/SFA.DAS.EAS.Portal.sln'
+    vsVersion: 15.0
+    msbuildArgs: '/t:restore'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+    clean: true
+
+- task: VSBuild@1
+  displayName: 'Build solution EAS'
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
+    vsVersion: 15.0
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: VSBuild@1
+  displayName: 'Build solution EAS Portal'
+  inputs:
+    solution: 'src/SFA.DAS.EAS.Portal.sln'
     vsVersion: 15.0
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
