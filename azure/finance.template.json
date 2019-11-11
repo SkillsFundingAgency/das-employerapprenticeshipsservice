@@ -65,10 +65,6 @@
         },
         "keyVaultName": {
             "type": "string"
-        },
-        "keyVaultCertificateName": {
-            "type": "string",
-            "defaultValue": ""
         }
     },
     "variables": {
@@ -370,14 +366,6 @@
                             {
                                 "name": "StorageConnectionString",
                                 "value": "[parameters('storageConnectionString')]"
-                            },
-                            {
-                                "name": "WEBSITE_LOAD_CERTIFICATES",
-                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
-                            },
-                            {
-                                "name": "TokenServiceCertificateThumbprint",
-                                "value": "[reference('TokenServiceCert').outputs.certificateThumbprint.value]"
                             }
                         ]
                     },
@@ -403,33 +391,6 @@
             "dependsOn": [
                 "WorkerAppServicePlan"
             ]
-        },
-        {
-            "apiVersion": "2017-05-10",
-            "name": "TokenServiceCert",
-            "condition": "[and(and(greater(length(parameters('keyVaultCertificateName')),0), greater(length(parameters('keyVaultName')),0)), greater(length(parameters('keyVaultResourceGroupName')),0))]",
-            "type": "Microsoft.Resources/deployments",
-            "properties": {
-                "mode": "Incremental",
-                "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-certificate.json')]",
-                    "contentVersion": "1.0.0.0"
-                },
-                "parameters": {
-                    "keyVaultCertificateName": {
-                        "value": "[parameters('keyVaultCertificateName')]"
-                    },
-                    "keyVaultName": {
-                        "value": "[parameters('keyVaultName')]"
-                    },
-                    "keyVaultResourceGroup": {
-                        "value": "[parameters('keyVaultResourceGroupName')]"
-                    },
-                    "serverFarmId": {
-                        "value": "[reference('WorkerAppServicePlan').outputs.appServicePlanId.value]"
-                    }
-                }
-            }
         }
     ],
     "outputs": {
