@@ -71,7 +71,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
 
         private async Task<bool> UserIsAuthorizedToSignUnsignedAgreement(AgreementDto employerAgreement, GetEmployerAgreementRequest message)
         {
-            var caller = await _database.Value.Memberships.Where(x => x.AccountId == employerAgreement.AccountId && x.User.Ref == Guid.Parse(message.ExternalUserId)).SingleOrDefaultAsync();
+            var userRef = Guid.Parse(message.ExternalUserId);
+            var caller = await _database.Value.Memberships.Where(x => x.AccountId == employerAgreement.AccountId && x.User.Ref == userRef).SingleOrDefaultAsync();
             
             if (caller == null)
             {
