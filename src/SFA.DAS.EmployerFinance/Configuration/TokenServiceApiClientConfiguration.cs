@@ -1,5 +1,3 @@
-using System.Configuration;
-using System.Security.Cryptography.X509Certificates;
 using SFA.DAS.TokenService.Api.Client;
 
 namespace SFA.DAS.EmployerFinance.Configuration
