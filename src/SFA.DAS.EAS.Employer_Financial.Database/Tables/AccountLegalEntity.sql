@@ -7,3 +7,6 @@
 	[SignedAgreementId] BIGINT NULL,
 	[PendingAgreementId] BIGINT NULL
 )
+GO
+
+CREATE INDEX [IX_AccountLegalEntity_AccountLegalEntityId] ON [employer_financial].[AccountLegalEntity] ([AccountId], [LegalEntityId])
