@@ -433,15 +433,15 @@
         }
     ],
     "outputs": {
-        "uiAppServiceName": {
+        "legacyUIAppServiceName": {
             "type": "string",
             "value": "[variables('uiAppServiceName')]"
         },
-        "apiAppServiceName": {
+        "legacyApiAppServiceName": {
             "type": "string",
             "value": "[variables('apiAppServiceName')]"
         },
-        "supportAppServiceName": {
+        "legacySupportAppServiceName": {
             "type": "string",
             "value": "[variables('supportAppServiceName')]"
         }
