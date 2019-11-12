@@ -136,15 +136,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
-
+            
             if (choice == null)
             {
+                var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
                 agreement.NoChoiceSelected = true;
                 return View(ControllerConstants.SignAgreementViewName, agreement);
             }
 
-            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow, agreement.EmployerAgreement.LegalEntityName);
+            var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow);
 
             if (response.Status == HttpStatusCode.OK)
             {
@@ -156,7 +156,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 ActionResult result;
 
-                if (agreement.EmployerAgreement.AgreementType == AgreementType.NonLevyExpressionOfInterest)
+                if (response.Data.SignedAgreementType == AgreementType.NonLevyExpressionOfInterest)
                 {
                     flashMessage.Headline = "Memorandum of Understanding signed";
                     flashMessage.Message = "You’ve successfully signed the Memorandum of Understanding for your organisation.";
@@ -184,7 +184,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return result;
             }
 
-            return View(ControllerConstants.SignAgreementViewName, agreement);
+            return RedirectToAction(ControllerConstants.SignAgreementActionName, new GetEmployerAgreementRequest { AgreementId = agreementId, ExternalUserId = userInfo, HashedAccountId = hashedAccountId });
         }
 
         [HttpGet]

@@ -5,9 +5,11 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.HashingService;
+using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTests
@@ -15,8 +17,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
     public class WhenIGetTheEmployerAgreement : QueryBaseTest<GetEmployerAgreementPdfQueryHandler, GetEmployerAgreementPdfRequest, GetEmployerAgreementPdfResponse>
     {
         private Mock<IPdfService> _pdfService;
-        private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
         private Mock<IHashingService> _hashingService;
+        private Mock<EmployerAccountsDbContext> _db;
+        private DbSetStub<EmployerAgreement> _employerAgreementDbSet;
+
         public override GetEmployerAgreementPdfRequest Query { get; set; }
         public override GetEmployerAgreementPdfQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetEmployerAgreementPdfRequest>> RequestValidator { get; set; }
@@ -31,9 +35,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
 
             Query = new GetEmployerAgreementPdfRequest {HashedAccountId = "123RED", HashedLegalAgreementId = "668YUT",UserId = "1234RFV"};
 
-            _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedEmployerAgreementId))
-                .ReturnsAsync(new EmployerAgreementView {TemplatePartialViewName = ExpectedAgreementFileName });
+            _db = new Mock<EmployerAccountsDbContext>();
+            var employerAgreement = new EmployerAgreement { Id = ExpectedEmployerAgreementId, Template = new AgreementTemplate { PartialViewName = ExpectedAgreementFileName }};
+            _employerAgreementDbSet = new DbSetStub<EmployerAgreement>(employerAgreement);
+            _db.Setup(d => d.Agreements).Returns(_employerAgreementDbSet);
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue("668YUT")).Returns(ExpectedEmployerAgreementId);
@@ -41,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementPdfTest
             _pdfService = new Mock<IPdfService>();
             _pdfService.Setup(x => x.SubsituteValuesForPdf(It.IsAny<string>())).ReturnsAsync(new MemoryStream());
 
-            RequestHandler = new GetEmployerAgreementPdfQueryHandler(RequestValidator.Object, _pdfService.Object, _employerAgreementRepository.Object, _hashingService.Object);
+            RequestHandler = new GetEmployerAgreementPdfQueryHandler(RequestValidator.Object, _pdfService.Object, _hashingService.Object, new Lazy<EmployerAccountsDbContext>(() => _db.Object));
         }
 
         [Test]

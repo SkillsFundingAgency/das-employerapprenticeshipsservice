@@ -36,9 +36,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
                 validationResult.AddError(nameof(item.ExternalUserId));
 
-            if (string.IsNullOrWhiteSpace(item.OrganisationName))
-                validationResult.AddError(nameof(item.OrganisationName));
-
             if (item.SignedDate == default(DateTime))
                 validationResult.AddError(nameof(item.SignedDate));
 
@@ -48,19 +45,19 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             }
 
             var agreementId = _hashingService.DecodeValue(item.HashedAgreementId);
-            var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
+            var employerAgreementStatus = await _employerAgreementRepository.GetEmployerAgreementStatus(agreementId);
 
-            if (agreement == null)
+            if (employerAgreementStatus == null)
             {
-                validationResult.AddError(nameof(agreement), "Agreement does not exist");
+                validationResult.AddError(nameof(employerAgreementStatus), "Agreement does not exist");
                 return validationResult;
             }
 
-            if (agreement.Status == EmployerAgreementStatus.Signed ||
-                agreement.Status == EmployerAgreementStatus.Expired ||
-                agreement.Status == EmployerAgreementStatus.Superseded)
+            if (employerAgreementStatus == EmployerAgreementStatus.Signed ||
+                employerAgreementStatus == EmployerAgreementStatus.Expired ||
+                employerAgreementStatus == EmployerAgreementStatus.Superseded)
             {
-                validationResult.AddError(nameof(agreement.Status),$"Agreement status is {agreement.Status}");
+                validationResult.AddError(nameof(employerAgreementStatus),$"Agreement status is {employerAgreementStatus}");
                 return validationResult;
             }
             

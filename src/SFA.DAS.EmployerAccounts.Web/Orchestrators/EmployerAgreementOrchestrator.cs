@@ -17,8 +17,10 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementType;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
+using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -132,8 +134,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedId, string externalUserId,
-            DateTime signedDate, string companyName)
+        public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedId, string externalUserId, DateTime signedDate)
         {
             try
             {
@@ -142,21 +143,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedId,
                     ExternalUserId = externalUserId,
                     SignedDate = signedDate,
-                    HashedAgreementId = agreementid,
-                    OrganisationName = companyName
+                    HashedAgreementId = agreementid
                 });
 
-                var agreements = await _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
-                {
+                var unsignedAgreementTask = _mediator.SendAsync(new GetUnsignedEmployerAgreementRequest
+                { 
                     ExternalUserId = externalUserId,
                     HashedAccountId = hashedId
                 });
+
+                var agreementTypeTask = _mediator.SendAsync(new GetEmployerAgreementTypeRequest { HashedAgreementId = agreementid });
+
+                await Task.WhenAll(unsignedAgreementTask, agreementTypeTask);
 
                 return new OrchestratorResponse<SignAgreementViewModel>
                 {
                     Data = new SignAgreementViewModel
                     {
-                        HasFurtherPendingAgreements = agreements.HasPendingAgreements
+                        HasFurtherPendingAgreements = !string.IsNullOrEmpty(unsignedAgreementTask.Result.HashedAgreementId),
+                        SignedAgreementType = agreementTypeTask.Result.AgreementType
                     }
                 };
             }

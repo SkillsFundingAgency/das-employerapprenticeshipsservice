@@ -166,5 +166,10 @@ namespace SFA.DAS.EmployerAccounts.Data
             var agreements = legalEntities.SelectMany(x => x.Agreements).ToList();
             return agreements;
         }
+
+        public async Task<EmployerAgreementStatus?> GetEmployerAgreementStatus(long agreementId)
+        {
+            return await _db.Value.Agreements.Where(x => x.Id == agreementId).Select(x => x.StatusId).SingleOrDefaultAsync();
+        }
     }
 }
