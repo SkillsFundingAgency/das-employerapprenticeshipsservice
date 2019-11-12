@@ -26,39 +26,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
             return new MvcHtmlString(htmlAddress);
         }
-
-        public static MvcHtmlString RenderSupportBanner(this HtmlHelper htmlHelper, dynamic model)
-        {
-            if(htmlHelper.IsSupportUser())
-            {
-                return htmlHelper.Action("SupportUserBanner", new { model = model.Data });
-            }
-
-            return MvcHtmlString.Empty;
-        }
-
-        public static bool IsSupportUser(this HtmlHelper htmlHelper)
-        {
-            if (!(htmlHelper.ViewContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
-            {
-                return false;
-            }
-
-            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
-        }
-
-        public static HtmlHelper GetHtmlHelper(this Controller controller)
-        {
-            var viewContext = new ViewContext(controller.ControllerContext, new FakeView(), controller.ViewData, controller.TempData, TextWriter.Null);
-            return new HtmlHelper(viewContext, new ViewPage());
-        }
-
-        private class FakeView : IView
-        {
-            public void Render(ViewContext viewContext, TextWriter writer)
-            {
-                throw new InvalidOperationException();
-            }
-        }
     }
 }

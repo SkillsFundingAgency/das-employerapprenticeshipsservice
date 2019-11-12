@@ -98,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonAuthenticatedSupportUserTheEmptyViewIsReturned()
+        public void ThenForNonAuthenticatedSupportUserTheEmptyResultIsReturned()
         {
             // Arrange
             _isAuthenticated = false;
@@ -107,14 +107,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new TestModel(_hashedAccountId);
             
             //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+            var result = _controller.SupportUserBanner(model) as EmptyResult;
 
             //Assert
-            Assert.AreEqual("empty", result.ViewName);
+            Assert.IsNotNull(result);
         }
 
         [Test]
-        public void ThenForNonAuthenticatedNonSupportUserTheEmptyViewIsReturned()
+        public void ThenForNonAuthenticatedNonSupportUserTheEmptyResultIsReturned()
         {
             // Arrange
             _isAuthenticated = false;
@@ -123,10 +123,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new TestModel(_hashedAccountId);
 
             //Act
-            var result = _controller.SupportUserBanner(model) as PartialViewResult;
+            var result = _controller.SupportUserBanner(model) as EmptyResult;
 
             //Assert
-            Assert.AreEqual("empty", result.ViewName);
+            Assert.IsNotNull(result);
         }
 
         [Test]

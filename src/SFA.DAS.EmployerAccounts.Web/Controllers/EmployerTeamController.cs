@@ -323,8 +323,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
-        {
-            if (this.GetHtmlHelper().IsSupportUser())
+        {   
+            if (IsSupportUser(this))
             {
                 EmployerAccounts.Models.Account.Account account = null;
 
@@ -345,7 +345,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });
             }
 
-            return base.SupportUserBanner(model);
+            return new EmptyResult();
         }
 
         [ChildActionOnly]
