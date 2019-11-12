@@ -42,8 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            var accountLegalEntities = _db.Value.AccountLegalEntities.ToList();
-
             var pendingAgreementId = await _db.Value.AccountLegalEntities
                 .Where(x => x.AccountId == accountId && x.PendingAgreementId != null)
                 .Select(x => x.PendingAgreementId).SingleOrDefaultAsync();
