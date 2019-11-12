@@ -29,6 +29,7 @@
         <p class="govuk-body govuk-!-margin-bottom-6">Select an account or add a new one.</p>
 
         <table class="govuk-table">
+            <caption class="govuk-visually-hidden">Accounts list with permissions</caption>
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header">Account name</th>
@@ -44,7 +45,7 @@
                         <span class="das-no-wrap">
                             @account.Name
                         </span>
-                        <span class="account-id">
+                        <span class="govuk-caption-m">
                             Account ID: @account.PublicHashedId
                         </span>
                     </td>
@@ -52,7 +53,7 @@
                         @RoleStrings.GetRoleDescription(account.RoleName)
                     </td>
                     <td class="govuk-table__cell">
-                        <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})" 
+                        <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})"
                            aria-label="View account homepage for @account.Name" title="View account homepage for @account.Name" class="govuk-link">
                             Open <span class="das-no-wrap">@account.Name</span> account homepage
                         </a>
