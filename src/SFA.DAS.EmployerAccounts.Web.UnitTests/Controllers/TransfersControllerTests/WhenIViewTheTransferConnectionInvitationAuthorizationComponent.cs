@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.EmployerFeatures.Errors;
 using SFA.DAS.Authorization.Results;
+using SFA.DAS.EmployerAccounts.Authorisation;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthorization;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Mappings;
