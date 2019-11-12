@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var hashedLegalEntityId = _hashingService.HashValue((long)agreement.LegalEntityId);
             await Task.WhenAll(
                 AddAuditEntry(message, agreement.AccountId, agreementId),
-                _employerAgreementRepository.SetAccountLegalEntityAgreementDetails(agreement.AccountLegalEntityId, null, null, agreementId, agreement.VersionNumber),
+                _employerAgreementRepository.SetAccountLegalEntityAgreementDetails(agreement.AccountLegalEntityId, null, null, agreement.Id, agreement.VersionNumber),
                 PublishEvents(message, hashedLegalEntityId, agreement, owner)
             );
         }
