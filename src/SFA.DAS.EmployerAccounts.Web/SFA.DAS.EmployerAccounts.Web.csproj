@@ -83,9 +83,6 @@
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
-    <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.20</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
       <Version>6.0.20</Version>
     </PackageReference>
@@ -163,6 +160,8 @@
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
+    <Compile Include="Authorization\DefaultAuthorizationHandler.cs" />
+    <Compile Include="Authorization\ImpersonationAuthorizationContext.cs" />
     <Compile Include="Authorization\RouteValueKeys.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
@@ -402,6 +401,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="public\images\icon-important.png" />
+    <Content Include="SFA.DAS.Authorization.csproj" />
     <Content Include="src\govuk_frontend_toolkit\images\accordian-arrow-2x.png" />
     <Content Include="src\govuk_frontend_toolkit\images\accordian-arrow.png" />
     <Content Include="src\govuk_frontend_toolkit\images\arrow-sprite.png" />
@@ -809,6 +809,10 @@
     <Content Include="src\sass\_interim-homepage.scss" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\das-authorization\src\SFA.DAS.Authorization\SFA.DAS.Authorization.csproj">
+      <Project>{72916734-7C30-4F1D-8151-802753C2C051}</Project>
+      <Name>SFA.DAS.Authorization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
       <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Client</Name>
