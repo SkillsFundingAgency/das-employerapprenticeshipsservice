@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -77,41 +78,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return RunAsync(
                 arrange: fixtures =>
                 {
-                    fixtures.Orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
+                    fixtures.Mediator.Setup(x => x.SendAsync(It.Is<GetUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId)))
+                        .ReturnsAsync(new GetUnsignedEmployerAgreementResponse
                         {
-                            Data = new EmployerAgreementListViewModel
-                            {
-                                EmployerAgreementsData = new GetAccountEmployerAgreementsResponse
-                                {
-                                    EmployerAgreements = new List<EmployerAgreementStatusDto>
-                                    {
-                                        new EmployerAgreementStatusDto
-                                        {
-                                            Pending = new PendingEmployerAgreementDetailsDto
-                                            {
-                                                HashedAgreementId = fixtures.HashedAgreementId,
-                                                Id = 123
-                                            }
-                                        },
-                                        new EmployerAgreementStatusDto
-                                        {
-                                            Signed = new SignedEmployerAgreementDetailsDto
-                                            {
-                                                HashedAgreementId = "JH4545",
-                                                Id = 456
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            HashedAgreementId = fixtures.HashedAgreementId
                         });
                 },
                 act: fixtures => fixtures.ViewUnsignedAgreements(),
                 assert: (fixtures, result) =>
                 {
                     fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-                    fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
                     Assert.IsNotNull(result);
                     Assert.AreEqual(result.RouteValues["action"], "AboutYourAgreement");
                     Assert.AreEqual(result.RouteValues["agreementId"], fixtures.HashedAgreementId);
