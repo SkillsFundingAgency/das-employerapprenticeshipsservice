@@ -41,8 +41,10 @@
                 }
             </tbody>
         </table>
-        //@string.Format(Model.AccountUri + "/login/staff/", Model.Account.HashedAccountId)
-        <a href="@Url.EmployerAccountsAction("teams/view")" class="govuk-button">Change team members or roles</a>
+        <br/>
+        <a href="@Url.EmployerAccountsAction($"{Model.Account.HashedAccountId}/teams/view")" class="button" target="_blank">Change team members or roles</a>
+        <br/>                                                                                                                  
+        <span>(opens in a new window)</span>                                                                                                                  
         }
         else
         {

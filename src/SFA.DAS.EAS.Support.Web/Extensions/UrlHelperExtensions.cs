@@ -1,6 +1,6 @@
 using System.Web.Mvc;
 using SFA.DAS.EAS.Support.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EAS.Support.Web.Configuration;
 
 namespace SFA.DAS.EAS.Support.Web.Extensions
 {
@@ -8,8 +8,8 @@ namespace SFA.DAS.EAS.Support.Web.Extensions
     {
         public static string EmployerAccountsAction(this UrlHelper helper, string path)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var baseUrl = configuration.EmployerAccountsBaseUrl;
+            var configuration = DependencyResolver.Current.GetService<IWebConfiguration>();
+            var baseUrl = configuration.EmployerAccountsConfiguration.EmployerAccountsBaseUrl;
 
             return AccountAction(helper, baseUrl, path);
         }
