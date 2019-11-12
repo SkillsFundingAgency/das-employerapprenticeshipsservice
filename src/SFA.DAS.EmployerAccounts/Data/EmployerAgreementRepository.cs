@@ -171,5 +171,14 @@ namespace SFA.DAS.EmployerAccounts.Data
         {
             return await _db.Value.Agreements.Where(x => x.Id == agreementId).Select(x => x.StatusId).SingleOrDefaultAsync();
         }
+
+        public async Task SetAccountLegalEntityAgreementDetails(long accountLegalEntityId, long? pendingAgreementId, int? pendingAgreementVersion, long? signedAgreementId, int? signedAgreementVersion)
+        {
+            var legalEntity = await _db.Value.AccountLegalEntities.SingleAsync(x => x.Id == accountLegalEntityId);
+            legalEntity.PendingAgreementId = pendingAgreementId;
+            legalEntity.PendingAgreementVersion = pendingAgreementVersion;
+            legalEntity.SignedAgreementId = signedAgreementId;
+            legalEntity.SignedAgreementVersion = signedAgreementVersion;
+        }
     }
 }
