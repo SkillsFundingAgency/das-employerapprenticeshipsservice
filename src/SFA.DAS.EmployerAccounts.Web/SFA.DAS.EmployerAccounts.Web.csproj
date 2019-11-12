@@ -810,7 +810,6 @@
     <Content Include="Views\EmployerTeam\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\CheckFunding.cshtml" />
     <Content Include="src\sass\_interim-homepage.scss" />
-    <Content Include="Views\Shared\Empty.cshtml" />
     <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
   </ItemGroup>
