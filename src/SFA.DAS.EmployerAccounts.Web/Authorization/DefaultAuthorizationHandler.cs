@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
     {
         private const string Tier2User = "Tier2User";
 
-        public Task<AuthorizationResult> GetAuthorizationResultDefault(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
+        public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
             var authorizationResult = new AuthorizationResult();
             authorizationContext.TryGet<RouteData>("RouteData", out var routeData);
