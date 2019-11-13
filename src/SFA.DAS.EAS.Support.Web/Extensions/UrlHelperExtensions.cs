@@ -6,18 +6,18 @@ namespace SFA.DAS.EAS.Support.Web.Extensions
 {
     public static class UrlHelperExtensions
     {
-        public static string EmployerAccountsAction(this UrlHelper helper, string path)
+        public static string StaffLoginAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<IWebConfiguration>();
             var baseUrl = configuration.EmployerAccountsConfiguration.EmployerAccountsBaseUrl;
 
-            return AccountAction(helper, baseUrl, path);
+            return StaffAction(helper, baseUrl, path);
         }
 
-        private static string AccountAction(UrlHelper helper, string baseUrl, string path)
+        private static string StaffAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-            var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
+            var accountPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
 
             return Action(baseUrl, accountPath);
         }
