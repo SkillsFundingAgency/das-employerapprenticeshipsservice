@@ -33,6 +33,7 @@ using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountOwner;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -192,7 +193,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
                                 
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);                
+                //await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -210,7 +212,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
-                var accountDetailViewModel = apiGetAccountTask.Result;
+                //var accountDetailViewModel = apiGetAccountTask.Result;
+                var accountDetailViewModel = new AccountDetailViewModel { ApprenticeshipEmployerType = "0" }; // apiGetAccountTask.Result;
 
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -232,7 +235,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true),
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
+                    //ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"), TO DO : check
                     ReservationsCount = reservationsResponse.Reservations.Count()
                 };
 

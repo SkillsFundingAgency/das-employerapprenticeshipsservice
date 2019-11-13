@@ -144,6 +144,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             });
 
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
+            //JwtSecurityTokenHandler.DefaultInboundClaimTypeMap = new Dictionary<string, string>();
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
