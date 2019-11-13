@@ -69,6 +69,12 @@
         },
         "tokenCertificateName": {
             "type": "string"
+        },
+        "apiIdaAudience": {
+            "type": "string"
+        },
+        "apiIdaTenant": {
+            "type": "string"
         }
     },
     "variables": {
@@ -306,6 +312,14 @@
                             {
                                 "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                 "value": "[reference('api-app-insights').outputs.InstrumentationKey.value]"
+                            },
+                            {
+                                "name": "idaAudience",
+                                "value": "[parameters('apiIdaAudience')]"
+                            },
+                            {
+                                "name": "idaTenant",
+                                "value": "[parameters('apiIdaTenant')]"
                             }
                         ]
                     },
