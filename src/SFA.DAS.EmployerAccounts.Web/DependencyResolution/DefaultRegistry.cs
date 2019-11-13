@@ -26,8 +26,8 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For<ILoggingContext>().Use(c => HttpContext.Current == null ? null : new LoggingContext(new HttpContextWrapper(HttpContext.Current)));
             For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
-            For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
-            
+            For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));            
+
             var authorizationService = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>().Ctor<IAuthorizationContextProvider>().Is(authorizationService);
 

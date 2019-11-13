@@ -74,18 +74,21 @@
     <PackageReference Include="Microsoft.Extensions.Logging">
       <Version>2.2.0</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Protocols">
+      <Version>5.6.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.1" />
     <PackageReference Include="Microsoft.Owin" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.Security.WsFederation">
+      <Version>3.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Web.Infrastructure">
       <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
-    <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.20</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
       <Version>6.0.20</Version>
     </PackageReference>
@@ -151,6 +154,7 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -163,6 +167,8 @@
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
+    <Compile Include="Authorization\DefaultAuthorizationHandler.cs" />
+    <Compile Include="Authorization\ImpersonationAuthorizationContext.cs" />
     <Compile Include="Authorization\RouteValueKeys.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
@@ -809,6 +815,10 @@
     <Content Include="src\sass\_interim-homepage.scss" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\das-authorization\src\SFA.DAS.Authorization\SFA.DAS.Authorization.csproj">
+      <Project>{e17c0fde-17dd-4f02-9f5f-717e1152905d}</Project>
+      <Name>SFA.DAS.Authorization</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
       <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Client</Name>
@@ -860,7 +870,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52645</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44344/</IISUrl>
+          <IISUrl>https://localhost:44347/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
