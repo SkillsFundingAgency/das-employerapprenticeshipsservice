@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Messages.Events;
-using SFA.DAS.NServiceBus.Testing;
+using SFA.DAS.NServiceBus.Testing.Services;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTests
 {

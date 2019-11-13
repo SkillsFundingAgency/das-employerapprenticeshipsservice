@@ -19,7 +19,7 @@ using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
-using SFA.DAS.NServiceBus.Testing;
+using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests

@@ -64,28 +64,28 @@
     <PackageReference Include="Microsoft.AspNet.WebPages">
       <Version>3.2.4</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions">
-      <Version>2.2.0</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core">
       <Version>2.4.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
-    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.0.5</Version>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
+      <Version>2.2.0</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.IdentityModel.Protocol.Extensions">
-      <Version>1.0.0</Version>
+    <PackageReference Include="Microsoft.Extensions.Logging">
+      <Version>2.2.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.1" />
     <PackageReference Include="Microsoft.Owin" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
-    <PackageReference Include="Microsoft.Owin.Security.WsFederation">
-      <Version>3.0.1</Version>
+    <PackageReference Include="Microsoft.Web.Infrastructure">
+      <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
+    <PackageReference Include="SFA.DAS.Authorization">
+      <Version>6.0.20</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
       <Version>6.0.20</Version>
     </PackageReference>
@@ -93,7 +93,7 @@
       <Version>6.0.20</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
-      <Version>1.2.0</Version>
+      <Version>6.0.20</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.AutoConfiguration">
       <Version>2.0.1</Version>
@@ -124,15 +124,15 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
-    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
+    <PackageReference Include="SFA.DAS.NServiceBus.SqlServer" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.Reservations.Messages">
       <Version>0.1.0</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="1.0.17" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="1.0.17" />
-    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="1.0.17" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.Mvc" Version="9.0.13" />
+    <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.Validation.Mvc">
       <Version>5.1.167</Version>
     </PackageReference>
@@ -151,7 +151,6 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
-    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -164,8 +163,6 @@
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
-    <Compile Include="Authorization\DefaultAuthorizationHandler.cs" />
-    <Compile Include="Authorization\ImpersonationAuthorizationContext.cs" />
     <Compile Include="Authorization\RouteValueKeys.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
@@ -772,10 +769,10 @@
     <Content Include="Views\EmployerTeam\V2\Row1Panel2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row2Panel2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row2Panel1.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\SignAgreement.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\V2SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissions.cshtml" />
     <Content Include="Views\EmployerTeam\V2\AccountSettings.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\CheckFunding.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\V2CheckFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissionsDenied.cshtml" />
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
     <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
@@ -785,7 +782,7 @@
     <Content Include="Views\EmployerTeam\V2\SearchBar.cshtml" />
     <Content Include="Views\EmployerTeam\V2\MostActiveLinks.cshtml" />
     <Content Include="Views\EmployerTeam\V2\PrePayeRecruitment.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\AddPaye.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\V2AddPaye.cshtml" />
     <Content Include="Views\EmployerTeam\V2\OtherTasksPanel.cshtml" />
     <Content Include="Views\EmployerTeam\V2\SingleProvider.cshtml" />
     <Content Include="Views\EmployerTeam\V2\ProviderPermissionsMultiple.cshtml" />
@@ -803,12 +800,15 @@
     <Content Include="Views\Shared\_Layout_CDN.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage_CDN.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
+    <Content Include="Views\EmployerTeam\V2\Empty.cshtml" />
+    <Content Include="Views\EmployerTeam\Tasks.cshtml" />
+    <Content Include="Views\EmployerTeam\Dashboard.cshtml" />
+    <Content Include="Views\EmployerTeam\AddPAYE.cshtml" />
+    <Content Include="Views\EmployerTeam\SignAgreement.cshtml" />
+    <Content Include="Views\EmployerTeam\CheckFunding.cshtml" />
+    <Content Include="src\sass\_interim-homepage.scss" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\das-authorization\src\SFA.DAS.Authorization\SFA.DAS.Authorization.csproj">
-      <Project>{e17c0fde-17dd-4f02-9f5f-717e1152905d}</Project>
-      <Name>SFA.DAS.Authorization</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
       <Project>{0f0122d6-36f6-4d6c-856e-3daae1b13464}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Client</Name>
@@ -837,10 +837,6 @@
       <Project>{01ac2bc2-ac01-400f-ab8f-548dd5c0ee74}</Project>
       <Name>SFA.DAS.EAS.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
-      <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
-      <Name>SFA.DAS</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
@@ -864,7 +860,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>52645</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44347/</IISUrl>
+          <IISUrl>https://localhost:44344/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

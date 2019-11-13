@@ -3,7 +3,7 @@ using MediatR;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerFinance.Events.ProcessDeclaration
 {

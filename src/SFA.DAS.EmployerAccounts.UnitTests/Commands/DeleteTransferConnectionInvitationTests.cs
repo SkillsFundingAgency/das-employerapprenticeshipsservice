@@ -12,6 +12,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
 using SFA.DAS.Testing;
 using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Context;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
 {

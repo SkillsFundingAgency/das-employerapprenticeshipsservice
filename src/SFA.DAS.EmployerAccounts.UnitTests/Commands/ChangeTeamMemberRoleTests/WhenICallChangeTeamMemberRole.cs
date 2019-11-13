@@ -12,7 +12,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Types.Models;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.ChangeTeamMemberRoleTests

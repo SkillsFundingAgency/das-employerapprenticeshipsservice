@@ -1,11 +1,11 @@
 using SFA.DAS.Activities.Client;
 using SFA.DAS.EAS.Application.DependencyResolution;
 using SFA.DAS.EAS.Infrastructure.Data;
-using SFA.DAS.UnitOfWork.EntityFramework;
-using SFA.DAS.UnitOfWork.NServiceBus;
-using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
 using SFA.DAS.Authorization.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
 
 namespace SFA.DAS.EAS.Web.DependencyResolution
 {
@@ -22,7 +22,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<CommitmentsRegistry>();
                 c.AddRegistry<ConfigurationRegistry>();
                 c.AddRegistry<DataRegistry>();
-                c.AddRegistry<DateTimeRegistry>();
                 c.AddRegistry<EntityFrameworkUnitOfWorkRegistry<EmployerAccountsDbContext>>();
                 c.AddRegistry<EventsRegistry>();
                 c.AddRegistry<ExecutionPoliciesRegistry>();
@@ -36,7 +35,6 @@ namespace SFA.DAS.EAS.Web.DependencyResolution
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
                 c.AddRegistry<RepositoriesRegistry>();
-                c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<ValidationRegistry>();

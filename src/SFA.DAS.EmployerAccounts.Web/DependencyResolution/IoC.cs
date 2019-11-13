@@ -6,11 +6,11 @@ using SFA.DAS.Authorization.EmployerFeatures.DependencyResolution.StructureMap;
 using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.EAS.Portal.Client.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerAccounts.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework;
-using SFA.DAS.UnitOfWork.NServiceBus;
-using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
 using StructureMap;
 using ConfigurationRegistry = SFA.DAS.EmployerAccounts.DependencyResolution.ConfigurationRegistry;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -44,13 +44,14 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<NServiceBusClientUnitOfWorkRegistry>();
                 c.AddRegistry<NServiceBusUnitOfWorkRegistry>();
                 c.AddRegistry<ReferenceDataRegistry>();
-                c.AddRegistry<RepositoriesRegistry>();
+                c.AddRegistry<RepositoriesRegistry>();                
                 c.AddRegistry<ServicesRegistry>();
                 c.AddRegistry<TokenServiceRegistry>();
                 c.AddRegistry<TasksRegistry>();
                 c.AddRegistry<ValidationRegistry>();
                 c.AddRegistry<PortalClientRegistry>();
                 c.AddRegistry<PensionsRegulatorRegistry>();
+                c.AddRegistry<ReservationsApiClientRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
             });

@@ -6,7 +6,7 @@ using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Events.ProcessDeclaration;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Services;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Events.ProcessDeclarationTests
 {
