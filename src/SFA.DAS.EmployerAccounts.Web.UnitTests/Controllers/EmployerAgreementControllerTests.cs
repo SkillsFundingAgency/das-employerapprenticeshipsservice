@@ -226,7 +226,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public Task WhenDoYouWantToView_WhenISelectNow_ThenTheAgreementIsShown()
         {
             return RunAsync(
-                act: fixtures => fixtures.WhenDoYouWantToView(1, new WhenDoYouWantToViewViewModel()),
+                act: fixtures => fixtures.WhenDoYouWantToView(1, new WhenDoYouWantToViewViewModel { EmployerAgreement = new EmployerAgreementView() }),
                 assert: (fixtures, actualResult) =>
                 {
                     Assert.IsNotNull(actualResult);
@@ -238,7 +238,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public Task WhenDoYouWantToView_WhenISelectLater_ThenTheHomepageIsShown()
         {
             return RunAsync(
-                act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel()),
+                act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel{ EmployerAgreement = new EmployerAgreementView() }),
                 assert: (fixtures, actualResult) =>
                 {
                     Assert.IsNotNull(actualResult);
@@ -382,7 +382,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public async Task<RedirectToRouteResult> WhenDoYouWantToView(int? choice, WhenDoYouWantToViewViewModel model)
         {
             var controller = CreateController();
-            return await controller.WhenDoYouWantToView(choice, model) as RedirectToRouteResult;
+            return await controller.WhenDoYouWantToView(choice, model.EmployerAgreement.HashedAgreementId, model.EmployerAgreement.HashedAccountId) as RedirectToRouteResult;
         }
     }
 }
