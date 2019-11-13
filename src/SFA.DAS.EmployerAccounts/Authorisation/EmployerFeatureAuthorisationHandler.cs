@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                 {
                     var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
 
-                    var agreements = await _mediator.SendAsync(new GetEmployerAgreementsByAccountIdRequest { AccountId = accountId.Value }).ConfigureAwait(false);
+                    var agreements = await _mediator.SendAsync(new GetEmployerAgreementsByAccountIdRequest { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
 
                     var minAgreementVersion = agreements.EmployerAgreements.
                         Where(a => a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Signed &&

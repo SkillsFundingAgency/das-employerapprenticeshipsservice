@@ -75,10 +75,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementsByAcco
         public void ThenShouldThrowExceptionIfRequestIsInvalid()
         {
             //Arrange
+            var mockRepository = new Mock<IEmployerAgreementRepository>();
+            var handler = new GetEmployerAgreementsByAccountIdRequestHandler(mockRepository.Object, new GetEmployerAgreementsByAccountIdRequestValidator());
             var query = new GetEmployerAgreementsByAccountIdRequest();
 
             //Assert
-            Assert.ThrowsAsync<InvalidRequestException>(() => RequestHandler.Handle(query));
+            Assert.ThrowsAsync<InvalidRequestException>(() => handler.Handle(query));
         }
     }
 }

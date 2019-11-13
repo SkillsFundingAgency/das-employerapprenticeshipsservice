@@ -8,12 +8,15 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.Authorization.EmployerFeatures.Models;
-using SFA.DAS.Authorization.Features.Models;
 using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.Authorization.Handlers;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.EmployerAccounts.AuthorisationExtensions;
+using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Testing;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementsByAccountId;
+using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
 {
@@ -24,24 +27,65 @@ namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
         [Test]
         public Task GetAuthorizationResult_WhenOptionsAreNotAvailable_ThenShouldReturnValidAuthorizationResult()
         {
-            //return TestAsync(f => f.GetAuthorizationResult(), (f, r) => r.Should().NotBeNull().And.Match<AuthorizationResult>(r2 => r2.IsAuthorized));
+            return RunAsync(f => f.GetAuthorizationResult(), (f, r) => r.Should().NotBeNull().And.Match<AuthorizationResult>(r2 => r2.IsAuthorized));
         }
 
         [Test]
         public Task GetAuthorizationResult_WhenAndedOptionsAreAvailable_ThenShouldThrowNotImplementedException()
         {
-           //return TestExceptionAsync(f => f.SetAndedOptions(), f => f.GetAuthorizationResult(), (f, r) => r.Should().Throw<NotImplementedException>());
+            return RunAsync(f => f.SetAndedOptions(), f => f.GetAuthorizationResult(), (f, r) => r.ShouldThrow<NotImplementedException>());
         }
 
         [Test]
         public Task GetAuthorizationResult_WhenOredOptionIsAvailable_ThenShouldThrowNotImplementedException()
         {
-           // return TestExceptionAsync(f => f.SetOredOption(), f => f.GetAuthorizationResult(), (f, r) => r.Should().Throw<NotImplementedException>());
+            return RunAsync(f => f.SetOredOption(), f => f.GetAuthorizationResult(), (f, r) => r.ShouldThrow<NotImplementedException>());
         }
+
+        [Test]
+        public Task GetAuthorizationResult_WhenOptionsAreAvailableAndAgreementVersionNotSet_ThenShouldReturnAuthorized()
+        {
+            return RunAsync(
+                f => f.SetOption().SetAgreementVersion(),
+                f => f.GetAuthorizationResult(),
+                (f, r) => r.Should().NotBeNull().And.Match<AuthorizationResult>(r2 => r2.IsAuthorized));
+        }
+
+        [Test]
+        public Task GetAuthorizationResult_WhenOptionsAreAvailableAndAgreementVersionSetAndAgreementNotSigned_ThenShouldReturnUnauthorized()
+        {
+            return RunAsync(
+                f => f.SetOption().SetAgreementVersion(1).SetAuthorizationContextValues().SetMediatorResponse(),
+                f => f.GetAuthorizationResult(),
+                (f, r) => r.Should().NotBeNull().And.Match<AuthorizationResult>(r2 => !r2.IsAuthorized));
+        }
+
+        [Test]
+        public Task GetAuthorizationResult_WhenOptionsAreAvailableAndAgreementVersionSetAndAgreementSignedButNotHighEnoughVersion_ThenShouldReturnUnauthorized()
+        {
+            return RunAsync(
+                f => f.SetOption().SetAgreementVersion(2).SetAuthorizationContextValues().SetMediatorResponse(1, EmployerAgreementStatus.Signed),
+                f => f.GetAuthorizationResult(),
+                (f, r) => r.Should().NotBeNull().And.Match<AuthorizationResult>(r2 => !r2.IsAuthorized));
+        }
+
+        [Test]
+        public Task GetAuthorizationResult_WhenOptionsAreAvailableAndAgreementVersionSetAndAgreementSignedWithHighEnoughVersion_ThenShouldReturnAuthorized()
+        {
+            return RunAsync(
+                f => f.SetOption().SetAgreementVersion(2).SetAuthorizationContextValues().SetMediatorResponse(2, EmployerAgreementStatus.Signed),
+                f => f.GetAuthorizationResult(),
+                (f, r) => r.Should().NotBeNull().And.Match<AuthorizationResult>(r2 => r2.IsAuthorized));
+        }
+
     }
 
     public class EmployerFeatureAuthorisationHandlerTestsFixture
     {
+        public const string UserEmail = "MyTestEmail@example.com";
+        public const long AccountId = 12;
+        public const int AgreementVersion = 1;
+
         public List<string> Options { get; set; }
         public IAuthorizationContext AuthorizationContext { get; set; }
         public IAuthorizationHandler Handler { get; set; }
@@ -62,12 +106,6 @@ namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
             return Handler.GetAuthorizationResult(Options, AuthorizationContext);
         }
 
-        public EmployerFeatureAuthorisationHandlerTestsFixture SetNonFeatureOptions()
-        {
-            Options.AddRange(new[] { "Foo", "Bar" });
-
-            return this;
-        }
 
         public EmployerFeatureAuthorisationHandlerTestsFixture SetAndedOptions()
         {
@@ -90,11 +128,41 @@ namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
             return this;
         }
 
-        public EmployerFeatureAuthorisationHandlerTestsFixture SetFeatureToggle(bool isEnabled, bool? isAccountIdWhitelisted = null, bool? isUserEmailWhitelisted = null)
+        public EmployerFeatureAuthorisationHandlerTestsFixture SetAuthorizationContextValues(long? accountId = AccountId, string userEmail = UserEmail)
+        {
+            AuthorizationContext.AddEmployerFeatureValues(accountId, userEmail);
+
+            return this;
+        }
+
+        public EmployerFeatureAuthorisationHandlerTestsFixture SetMediatorResponse(int agreementVersion = AgreementVersion, EmployerAgreementStatus agreementStatus = EmployerAgreementStatus.Pending)
+        {
+            var response = new GetEmployerAgreementsByAccountIdResponse
+            {
+                EmployerAgreements = new List<EmployerAgreement>
+                {
+                    new EmployerAgreement
+                    {
+                        StatusId = agreementStatus,
+                        AccountLegalEntity = new AccountLegalEntity
+                        {
+                            SignedAgreementVersion = agreementVersion
+                        }
+
+                    }
+                }
+            };
+
+            Mediator.Setup(s => s.SendAsync(It.Is<GetEmployerAgreementsByAccountIdRequest>(q => q.AccountId == AccountId))).ReturnsAsync(response);
+
+            return this;
+        }
+
+        public EmployerFeatureAuthorisationHandlerTestsFixture SetAgreementVersion(long? agreementVersion = null)
         {
             var option = Options.Single();
 
-            FeatureTogglesService.Setup(s => s.GetFeatureToggle(option)).Returns(new FeatureToggle { Feature = "ProviderRelationships", IsEnabled = isEnabled });
+            FeatureTogglesService.Setup(s => s.GetFeatureToggle(option)).Returns(new EmployerFeatureToggle { Feature = "ProviderRelationships", EnabledByAgreementVersion = agreementVersion });
 
             return this;
         }
