@@ -20,10 +20,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             var authorizationResult = new AuthorizationResult();
             authorizationContext.TryGet<RouteData>("RouteData", out var routeData);
             authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
-            var link = routeData.Route as Route;
-            var userRoleClaims = claimsIdentity.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
+            var link = routeData?.Route as Route;
+            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
 
-            if (userRoleClaims.Any(claim => claim.Value == Tier2User))
+            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value == Tier2User))
             {
                 if (!link.Url.ToString().ToLower().Contains("accounts/{hashedaccountid}/teams/view"))
                 {
