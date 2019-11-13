@@ -19,123 +19,128 @@
 
 <h1 class="heading-xlarge">Finance</h1>
 
-<h2 class="heading-medium">Projections</h2>
+@if (Model.Data.IsLevyEmployer)
+{
+    <h2 class="heading-medium">Projections</h2>
 
-<div class="grid-row">
-    <div class="column-one-third">
-        @{
-            var expected = Model.Data.FundingExpected.ToString("C0", culture);
-            var expectedClass = string.Empty;
-
-            if (expected.Length > 8)
-            {
-                expectedClass = "long";
-            }
-            if (expected.Length > 10)
-            {
-                expectedClass = "longer";
-            }
-        }
-        <div class="finance-figure finance-figure--future @expectedClass" aria-labelledby="lbl-estimated-future-funding">@expected</div>
-        <p class="finance-figure__label" id="lbl-estimated-future-funding">Estimated total funding for the next 12 months (based on funds entering your Apprenticeship service account, including the 10% top up)</p>
-    </div>
-    <div class="column-one-third">
-        @{
-            var estimatedSpending = Model.Data.ProjectedSpend.ToString("C0", culture);
-            var estimatedSpendingClass = string.Empty;
-
-            if (estimatedSpending.Length > 8)
-            {
-                estimatedSpendingClass = "long";
-            }
-            if (estimatedSpending.Length > 10)
-            {
-                estimatedSpendingClass = "longer";
-            }
-        }
-        <div class="finance-figure finance-figure--planned @estimatedSpendingClass" aria-labelledby="lbl-estimated-spending">@estimatedSpending</div>
-        <p class="finance-figure__label" id="lbl-estimated-spending">Estimated planned spending for the next 12 months</p>
-    </div>
-</div>
-
-<h2 class="heading-medium">Current</h2>
-
-<div class="grid-row current-funds">
-    <div class="column-one-third">
-        @{
-            var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
-            var balanceClass = string.Empty;
-
-            if (balance.Length > 8)
-            {
-                balanceClass = "long";
-            }
-            if (balance.Length > 10)
-            {
-                balanceClass = "longer";
-            }
-        }
-        <div class="finance-figure @balanceClass" aria-labelledby="lbl-current-funds">@balance</div>
-        <p class="finance-figure__label" id="lbl-current-funds">Current funds</p>
-    </div>
-    <div class="column-one-third">
-        @{
-            var currentSpend = Model.Data.TotalSpendForLastYear.ToString("C0", culture);
-            var currentSpendClass = string.Empty;
-
-            if (currentSpend.Length > 8)
-            {
-                currentSpendClass = "long";
-            }
-            if (currentSpend.Length > 10)
-            {
-                currentSpendClass = "longer";
-            }
-        }
-        <div class="finance-figure @currentSpendClass" aria-labelledby="lbl-current-spent-funds">@currentSpend</div>
-        <p class="finance-figure__label" id="lbl-current-spent-funds">Funds spent in the last 12 months</p>
-    </div>
-    @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiringFunds > 0 && Model.Data.ExpiryDate.HasValue)
-    {
+    <div class="grid-row">
         <div class="column-one-third">
             @{
-                var expiringFunds = Model.Data.ExpiringFunds.Value.ToString("C0", culture);
+                var expected = Model.Data.FundingExpected.ToString("C0", culture);
+                var expectedClass = string.Empty;
 
-                var expiringFundsClass = string.Empty;
-
-                if (expiringFunds.Length > 8)
+                if (expected.Length > 8)
                 {
-                    expiringFundsClass = "long";
+                    expectedClass = "long";
                 }
-                if (expiringFunds.Length > 10)
+                if (expected.Length > 10)
                 {
-                    expiringFundsClass = "longer";
+                    expectedClass = "longer";
                 }
             }
-            <div class="finance-figure finance-figure--expiring @expiringFundsClass" aria-labelledby="lbl-current-funds-expiring">@expiringFunds</div>
-            @{
-                var expiryDate = Model.Data.ExpiryDate.Value.ToString("MMMM yyyy");
-            }
-            <p class="finance-figure__label" id="lbl-current-funds-expiring">Current funds due to expire in @expiryDate</p>
+            <div class="finance-figure finance-figure--future @expectedClass" aria-labelledby="lbl-estimated-future-funding">@expected</div>
+            <p class="finance-figure__label" id="lbl-estimated-future-funding">Estimated total funding for the next 12 months (based on funds entering your Apprenticeship service account, including the 10% top up)</p>
         </div>
-    }
-</div>
+        <div class="column-one-third">
+            @{
+                var estimatedSpending = Model.Data.ProjectedSpend.ToString("C0", culture);
+                var estimatedSpendingClass = string.Empty;
 
-<div class="panel panel-border-wide">
-    <p>This is a new feature &mdash; your <a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank" title="Link to a feedback survey, opens in a new window">feedback</a> will help us improve it. </p>
-</div>
+                if (estimatedSpending.Length > 8)
+                {
+                    estimatedSpendingClass = "long";
+                }
+                if (estimatedSpending.Length > 10)
+                {
+                    estimatedSpendingClass = "longer";
+                }
+            }
+            <div class="finance-figure finance-figure--planned @estimatedSpendingClass" aria-labelledby="lbl-estimated-spending">@estimatedSpending</div>
+            <p class="finance-figure__label" id="lbl-estimated-spending">Estimated planned spending for the next 12 months</p>
+        </div>
+    </div>
 
-<hr>
+    <h2 class="heading-medium">Current</h2>
+
+    <div class="grid-row current-funds">
+        <div class="column-one-third">
+            @{
+                var balance = Model.Data.CurrentLevyFunds.ToString("C0", culture);
+                var balanceClass = string.Empty;
+
+                if (balance.Length > 8)
+                {
+                    balanceClass = "long";
+                }
+                if (balance.Length > 10)
+                {
+                    balanceClass = "longer";
+                }
+            }
+            <div class="finance-figure @balanceClass" aria-labelledby="lbl-current-funds">@balance</div>
+            <p class="finance-figure__label" id="lbl-current-funds">Current funds</p>
+        </div>
+        <div class="column-one-third">
+            @{
+                var currentSpend = Model.Data.TotalSpendForLastYear.ToString("C0", culture);
+                var currentSpendClass = string.Empty;
+
+                if (currentSpend.Length > 8)
+                {
+                    currentSpendClass = "long";
+                }
+                if (currentSpend.Length > 10)
+                {
+                    currentSpendClass = "longer";
+                }
+            }
+            <div class="finance-figure @currentSpendClass" aria-labelledby="lbl-current-spent-funds">@currentSpend</div>
+            <p class="finance-figure__label" id="lbl-current-spent-funds">Funds spent in the last 12 months</p>
+        </div>
+        @if (Model.Data.ExpiringFunds.HasValue && Model.Data.ExpiringFunds > 0 && Model.Data.ExpiryDate.HasValue)
+        {
+            <div class="column-one-third">
+                @{
+                    var expiringFunds = Model.Data.ExpiringFunds.Value.ToString("C0", culture);
+
+                    var expiringFundsClass = string.Empty;
+
+                    if (expiringFunds.Length > 8)
+                    {
+                        expiringFundsClass = "long";
+                    }
+                    if (expiringFunds.Length > 10)
+                    {
+                        expiringFundsClass = "longer";
+                    }
+                }
+                <div class="finance-figure finance-figure--expiring @expiringFundsClass" aria-labelledby="lbl-current-funds-expiring">@expiringFunds</div>
+                @{
+                    var expiryDate = Model.Data.ExpiryDate.Value.ToString("MMMM yyyy");
+                }
+                <p class="finance-figure__label" id="lbl-current-funds-expiring">Current funds due to expire in @expiryDate</p>
+            </div>
+        }
+    </div>
+
+    <div class="panel panel-border-wide">
+        <p>This is a new feature &mdash; your <a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank" title="Link to a feedback survey, opens in a new window">feedback</a> will help us improve it. </p>
+    </div>
+
+    <hr>
+}
 
 <div class="grid-row">
     <div class="column-half">
         <h2 class="heading-medium">
-            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { year = now.Year, month = now.Month })">
+            <a title="View transactions" href="@Url.Action("TransactionsView", "EmployerAccountTransactions", new { year=now.Year, month=now.Month })">
                 View transactions
             </a>
         </h2>
         <p>View payments made into and out of your apprenticeship service account. </p>
     </div>
+
+
     <div class="column-half">
         <h2 class="heading-medium">
             <a title="Download transactions" href="@Url.Action("TransactionsDownload", "EmployerAccountTransactions")">
@@ -144,7 +149,8 @@
         </h2>
         <p>Download your financial transactions within a specific date range. </p>
     </div>
-    @if (Html.IsAuthorized("EmployerFeature.Projections"))
+
+    @if (Model.Data.IsLevyEmployer && Html.IsAuthorized("EmployerFeature.Projections"))
     {
         <div class="column-half">
             <h2 class="heading-medium">
@@ -155,13 +161,14 @@
             <p>View funding projection to plan your future spending. </p>
         </div>
     }
+
     <div class="column-half">
         <h2 class="heading-medium">
             <a title="Manage transfers" href="@Url.EmployerAccountsAction("transfers")">
                 Transfers
             </a>
         </h2>
-        <p>Connect with other employers and send or receive transfer funds. </p>
+        <p>Connect with other employers and @(Model.Data.IsLevyEmployer ? "send or" : "") receive transfer funds. </p>
     </div>
 </div>
 

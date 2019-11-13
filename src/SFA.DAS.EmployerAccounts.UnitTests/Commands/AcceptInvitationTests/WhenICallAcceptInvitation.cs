@@ -15,7 +15,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.NServiceBus.Testing;
+using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.TimeProvider;
 using SFA.DAS.Validation;
 

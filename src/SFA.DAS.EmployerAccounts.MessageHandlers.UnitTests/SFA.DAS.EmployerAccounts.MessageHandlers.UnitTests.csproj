@@ -19,7 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.MessageHandlers\SFA.DAS.EmployerAccounts.MessageHandlers.csproj" />
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj" />
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj" />
   </ItemGroup>
 
   <ItemGroup>

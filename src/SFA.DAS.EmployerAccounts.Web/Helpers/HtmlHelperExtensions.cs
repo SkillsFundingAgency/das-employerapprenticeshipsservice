@@ -29,14 +29,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
             return result.View != null;
         }
-
-        public static MvcHtmlString SetZenDeskSuggestion(this HtmlHelper html, string suggestion)
+        public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
-            return MvcHtmlString.Create($"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ search: '{suggestion}' }});</script>");
+            var apiCallString =
+                $"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ labels: [";
+
+            var first = true;
+            foreach (var label in labels)
+            {
+                if (!first) apiCallString += ",";
+                first = false;
+
+                apiCallString += $"'{label}'";
+            }
+            
+            apiCallString += "] });</script>";
+
+            return MvcHtmlString.Create(apiCallString);
         }
     }
 
-    public static class ZenDeskSuggestions
+    public static class ZenDeskLabels
     {
         public static string RegisterForAnApprenticeshipServiceAccount = "Register for an apprenticeship service account";
         public static string AddPAYESchemesToYourAccount = "Add PAYE schemes to your account";

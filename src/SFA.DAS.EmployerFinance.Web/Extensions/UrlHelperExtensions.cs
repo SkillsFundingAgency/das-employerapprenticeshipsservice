@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 
         public static string ReservationsAction(this UrlHelper helper, string path)
         {
-            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
             var baseUrl = configuration.ReservationsBaseUrl;
 
             return AccountAction(helper, baseUrl, path);

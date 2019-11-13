@@ -72,17 +72,23 @@
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
+    <PackageReference Include="SFA.DAS.Authentication">
+      <Version>1.0.2</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.15</Version>
+      <Version>6.0.20</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
-      <Version>6.0.15</Version>
+      <Version>6.0.20</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.15</Version>
+      <Version>6.0.20</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
-      <Version>6.0.15</Version>
+      <Version>6.0.20</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.Authorization.WebApi">
+      <Version>6.0.20</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.AutoConfiguration">
       <Version>2.0.1</Version>
@@ -92,21 +98,21 @@
     <PackageReference Include="SFA.DAS.Logging">
       <Version>1.0.5</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.0.0.56651" />
-    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.0.0.47445" />
-    <PackageReference Include="SFA.DAS.NServiceBus" Version="2.0.12" />
+    <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
+    <PackageReference Include="SFA.DAS.NServiceBus" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.NServiceBus.SqlServer">
-      <Version>2.0.12</Version>
+      <Version>15.0.25</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.OidcMiddleware" Version="2.0.0.61553" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework">
-      <Version>1.0.17</Version>
+      <Version>9.0.13</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.Mvc">
-      <Version>1.0.17</Version>
+      <Version>9.0.13</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork.NServiceBus">
-      <Version>1.0.17</Version>
+      <Version>9.0.13</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Validation.Mvc">
       <Version>5.1.167</Version>
@@ -125,6 +131,10 @@
       <Project>{8AFB0BBE-1E53-488C-A971-D236DF9EAA77}</Project>
       <Name>SFA.DAS.EAS.Account.Api.Types</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerApprenticeshipsService.Domain\SFA.DAS.EAS.Domain.csproj">
+      <Project>{EC415CDA-9294-4967-BD27-AA900985427D}</Project>
+      <Name>SFA.DAS.EAS.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerFinance.Api.Client\SFA.DAS.EmployerFinance.Api.Client.csproj">
       <Project>{aa299f18-d0ca-43a2-ae4d-54cb6c48ea70}</Project>
       <Name>SFA.DAS.EmployerFinance.Api.Client</Name>
@@ -133,16 +143,9 @@
       <Project>{c5880f73-59d6-4c59-a1a2-dba38d13e8dc}</Project>
       <Name>SFA.DAS.EmployerFinance</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SFA.DAS\SFA.DAS.csproj">
-      <Project>{8dd6e754-567c-46e3-a071-b1049380ea6c}</Project>
-      <Name>SFA.DAS</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="SFA.DAS.Authorization.EmployerFeatures">
-      <HintPath>..\packages\SFA.DAS.Authorization.EmployerFeatures.6.0.1\lib\netstandard2.0\SFA.DAS.Authorization.EmployerFeatures.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
@@ -171,6 +174,7 @@
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
+    <Compile Include="Filters\LevyEmployerTypeOnly.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Global.asax.cs">

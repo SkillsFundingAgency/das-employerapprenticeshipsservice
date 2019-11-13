@@ -15,7 +15,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult Index(string hashedAccountId)
         {
             return Redirect(Url.EmployerFinanceAction("finance"));
-        } 
+        }
+
+        [Route("finance/employer-guidance")]
+        public ActionResult EmployerGuidanceR02()
+        {
+            return Redirect(Url.EmployerFinanceAction("finance/employer-guidance"));
+        }
 
         [ImportModelStateFromTempData]
         [Route("finance/downloadtransactions")]

@@ -10,7 +10,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.TransferConnections;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.UnitTests.Builders;
-using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Context;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RejectTransferConnectionInvitation
 {

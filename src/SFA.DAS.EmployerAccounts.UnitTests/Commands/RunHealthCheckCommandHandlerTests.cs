@@ -9,7 +9,7 @@ using SFA.DAS.EmployerAccounts.Commands.RunHealthCheckCommand;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Testing;
-using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Context;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Commands
 {

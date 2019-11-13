@@ -1,9 +1,9 @@
 ﻿using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
-using SFA.DAS.UnitOfWork;
-using SFA.DAS.UnitOfWork.EntityFramework;
-using SFA.DAS.UnitOfWork.NServiceBus;
-using SFA.DAS.UnitOfWork.NServiceBus.ClientOutbox;
+using SFA.DAS.UnitOfWork.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
+using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.AcceptanceTests.DependencyResolution

@@ -52,11 +52,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="SFA.DAS.EAS.Account.ApiContent\" />
     <Folder Include="Configuration" />
-  </ItemGroup>
-  <ItemGroup>
-    <DiagnosticsConfiguration Include="SFA.DAS.EAS.Account.ApiContent\diagnostics.wadcfgx" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

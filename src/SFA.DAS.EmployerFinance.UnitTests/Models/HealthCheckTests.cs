@@ -8,6 +8,7 @@ using SFA.DAS.EmployerFinance.Models;
 using SFA.DAS.EmployerFinance.UnitTests.Builders;
 using SFA.DAS.Testing;
 using SFA.DAS.UnitOfWork;
+using SFA.DAS.UnitOfWork.Context;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Models
 {

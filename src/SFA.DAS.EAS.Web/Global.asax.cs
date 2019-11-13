@@ -28,23 +28,20 @@ using SFA.DAS.Audit.Client;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.ApplicationInsights;
 using SFA.DAS.AutoConfiguration;
-using SFA.DAS.NServiceBus;
-using SFA.DAS.NServiceBus.NewtonsoftJsonSerializer;
-using SFA.DAS.NServiceBus.NLog;
-using SFA.DAS.NServiceBus.SqlServer;
-using SFA.DAS.NServiceBus.StructureMap;
+using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
+using SFA.DAS.NServiceBus.Configuration.NLog;
+using SFA.DAS.NServiceBus.SqlServer.Configuration;
+using SFA.DAS.NServiceBus.Configuration.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
+using SFA.DAS.NServiceBus.Configuration;
+using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EAS.Web
 {
     public class MvcApplication : HttpApplication
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-#pragma warning disable 169
-        private static readonly RedisTarget RedisTarget; // Required to ensure assembly is copied to output.
-#pragma warning restore 169
-
         private IEndpointInstance _endpoint;
 
         protected void Application_Start()
@@ -144,7 +141,7 @@ namespace SFA.DAS.EAS.Web
         {
             var endpointConfiguration = new EndpointConfiguration("SFA.DAS.EAS.Web")
                 .UseAzureServiceBusTransport(() => container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().ServiceBusConnectionString, container)
-                .UseErrorQueue()
+                .UseErrorQueue("SFA.DAS.EAS.Web-errors")
                 .UseInstallers()
                 .UseLicense(WebUtility.HtmlDecode(container.GetInstance<EmployerApprenticeshipsServiceConfiguration>().NServiceBusLicense))
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())

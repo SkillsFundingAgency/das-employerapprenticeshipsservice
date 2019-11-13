@@ -20,23 +20,35 @@
     }
 }
 
-    <h1 class="heading-secondary dashboard-heading">
-        Account ID: @Model.Data.Account.PublicHashedId
-    </h1>
-    <p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
+<h1 class="heading-secondary dashboard-heading">
+    Account ID: @Model.Data.Account.PublicHashedId
+</h1>
+<p class="heading-xlarge dashboard-heading-company">@Model.Data.Account.Name</p>
 
-    <a href="@Url.FavouritesAction("apprenticeships")" class="das-favourites-link govuk-body">
-        <span class="das-favourites-link__icon">
+<a href="@Url.FavouritesAction("apprenticeships")" class="das-favourites-link govuk-body">
+    <span class="das-favourites-link__icon">
         <svg class="icon" focusable="false" aria-hidden="true">
             <use xlink:href="#icon-favourite" />
-        </svg></span>
-        <span class="das-favourites-link__text">View saved favourites</span>
-    </a>
+        </svg>
+    </span>
+    <span class="das-favourites-link__text">View saved favourites</span>
+</a>
 
-    <hr class="dashboard-heading-separator" />
+<hr class="dashboard-heading-separator" />
 
+@if (!Model.Data.HasPayeScheme && Model.Data.OrganisationCount == 0)
+{
     <div class="grid-row">
         <div class="column-two-thirds">
+            @Html.Action("Row1Panel1", new { model = Model.Data })
+        </div>
+    </div>
+}
+else
+{
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            @Html.Action("Row1Panel1", new { model = Model.Data })
             <section class="dashboard-section">
                 <div class="grid-row">
                     <div class="column-two-thirds">
@@ -86,13 +98,10 @@
                         </div>
                     }
 
-                    @if (Model.Data.ShowManageYourLevyLink())
-                    {
-                        <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
-                            <p>View your financial transactions, connect with other employers and send or receive transfer funds.</p>
-                        </div>
-                    }
+                    <div class="card">
+                        <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
+                        <p>View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
+                    </div>
                 </div>
             </section>
 
@@ -210,7 +219,7 @@
             </section>
         </div>
     </div>
-
+}
 
 
 

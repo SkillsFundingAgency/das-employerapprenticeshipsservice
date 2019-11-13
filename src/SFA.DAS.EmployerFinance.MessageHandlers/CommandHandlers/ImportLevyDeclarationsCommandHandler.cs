@@ -39,12 +39,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
                 foreach (var scheme in schemes.SchemesList)
                 {
-                    _logger.Debug($"Creating update levy account message for account {account.Name} (ID: {account.Id}) scheme {scheme.Ref}");
+                    _logger.Debug($"Creating update levy account message for account {account.Name} (ID: {account.Id}) scheme {scheme.EmpRef}");
 
                     tasks.Add(context.SendLocal<ImportAccountLevyDeclarationsCommand>(c =>
                     {
                         c.AccountId = account.Id;
-                        c.PayeRef = scheme.Ref;
+                        c.PayeRef = scheme.EmpRef;
                     }));
                 }
             }

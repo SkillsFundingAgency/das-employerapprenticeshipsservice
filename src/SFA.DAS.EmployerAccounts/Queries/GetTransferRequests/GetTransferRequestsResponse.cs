@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetTransferRequests
     public class GetTransferRequestsResponse
     {
         public IEnumerable<TransferRequestDto> TransferRequests { get; set; }
+        public long AccountId { get; set; }
     }
 }

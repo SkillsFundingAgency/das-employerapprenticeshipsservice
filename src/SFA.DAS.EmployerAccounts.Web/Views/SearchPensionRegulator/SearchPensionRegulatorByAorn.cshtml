@@ -6,82 +6,73 @@
 @{
     ViewBag.GaData.Vpv = "/accounts/pensionregulator/search-by-aorn";
 }
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 @model SearchPensionRegulatorByAornViewModel
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
         @if (Model.IsLocked)
         {
-            <h1 class="heading-xlarge">
-                Sorry
-            </h1>
-
-            <p>Due to incorrect attempts, this has been disabled for <span class="bold-small">@Model.RemainingLock minute@(Model.RemainingLock > 1 ? "s" : "").</span></p>
-
-            <p><a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)">Try adding your PAYE scheme via Government Gateway</a></p>
+            <h1 class="govuk-heading-xl">Sorry</h1>
+            <p class="govuk-body">Due to incorrect attempts, this has been disabled for <span class="govuk-!-font-weight-bold">@Model.RemainingLock minute@(Model.RemainingLock > 1 ? "s" : "").</span></p>
+            <p class="govuk-body"><a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link">Try adding your PAYE scheme via Government Gateway</a></p>
         }
         else
         {
             if (Model.RemainingAttempts != Model.AllowedAttempts)
             {
-                <div class="error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
-                    <h2 class="heading-medium error-summary-heading" id="error-summary-heading">
+                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                    <h2 class="govuk-error-summary__title" id="error-summary-title" id="error-summary-heading">
                         There is a problem
                     </h2>
-                    <br />
-                    <p class="error-message">
-                        You have @(Model.RemainingAttempts) attempt@(Model.RemainingAttempts > 1 ? "s" : "") remaining to enter a valid PAYE scheme and accounts office reference
-                    </p>
+                    <div class="govuk-error-summary__body">
+                        <span class="govuk-error-message">
+                            You have @(Model.RemainingAttempts) attempt@(Model.RemainingAttempts > 1 ? "s" : "") remaining to enter a valid PAYE scheme and accounts office reference
+                        </span>
+                    </div>
                 </div>
             }
 
-            <h1 class="heading-xlarge">
-                Enter your PAYE scheme details
-            </h1>
-
-            <p>Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
+            <h1 class="govuk-heading-xl">Enter your PAYE scheme details</h1>
+            <p class="govuk-body">Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
 
             <form method="POST" action="@Url.Action(ControllerConstants.SearchUsingAornActionName)">
                 @Html.AntiForgeryToken()
-                <div class="form-group" id="aorn-details-form">
-                    <fieldset>
-                        <div class="form-group @(!string.IsNullOrEmpty(Model.AornError) ? "error" : "")">
-                            <label for="aorn">
-                                <span class="form-label-bold">Accounts office reference number</span>
-                                <span class="form-hint">For example, 123PA12345678</span>
-                                @if (!string.IsNullOrEmpty(Model.AornError))
-                                {
-                                    <span class="error-message" id="error-message-aorn">@Model.AornError</span>
-                                }
-                            </label>
-                            <input class="form-control uppercase" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
-                        </div>
-                        <div class="form-group @(!string.IsNullOrEmpty(Model.PayeRefError) ? "error" : "")">
-                            <label for="payeRef">
-                                <span class="form-label-bold">Employer PAYE scheme reference</span>
-                                <span class="form-hint">For example, 123/AB12345</span>
-                                @if (!string.IsNullOrEmpty(Model.PayeRefError))
-                                {
-                                    <span class="error-message" id="error-message-payeRef">@Model.PayeRefError</span>
-                                }
-                            </label>
-                            <input class="form-control uppercase" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
-                        </div>
-                    </fieldset>
+
+                <fieldset class="govuk-fieldset" id="aorn-details-form">
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.AornError) ? "govuk-form-group--error" : "")">
+                        <label class="govuk-label govuk-!-font-weight-bold" for="aorn">Accounts office reference number</label>
+                        <span class="govuk-hint">For example, 123PA12345678</span>
+                        @if (!string.IsNullOrEmpty(Model.AornError))
+                        {
+                            <span class="govukerror-message" id="error-message-aorn">@Model.AornError</span>
+                        }
+                        <input class="govuk-input govuk-!-width-three-quarters" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
+                    </div>
+
+                    <div class="govuk-form-group @(!string.IsNullOrEmpty(Model.PayeRefError) ? "govuk-form-group--error" : "")">
+                        <label class="govuk-label govuk-!-font-weight-bold" for="payeRef">Employer PAYE scheme reference</label>
+                        <span class="govuk-hint">For example, 123/AB12345</span>
+                        @if (!string.IsNullOrEmpty(Model.PayeRefError))
+                        {
+                            <span class="govukerror-message" id="error-message-payeRef">@Model.PayeRefError</span>
+                        }
+                        <input class="govuk-input govuk-!-width-three-quarters" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
+                    </div>
+                </fieldset>
+
+                <div class="govuk-form-group">
+                    <button class="govuk-button" type="submit" id="submit-aorn-details">Continue</button>
+                    <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link das-link--button-aligned">Skip this step for now</a>
                 </div>
-                <div class="form-group">
-                    <button class="button" type="submit" id="submit-aorn-details">Continue</button>
-                    <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="button button-link">Skip this step for now</a>
-                </div>
+
             </form>
         }
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("GetApprenticeshipFunding", "EmployerAccount")" class="back-link">Back</a>
-    </div>
+    <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-back-link">Back</a>
 }
 
 @section pageSpecificJS {
@@ -92,4 +83,4 @@
     </script>
 }
 
-@Html.SetZenDeskSuggestion(ZenDeskSuggestions.EnteredTheWrongPAYESchemeDetails)
+@Html.SetZenDeskLabels(ZenDeskLabels.EnteredTheWrongPAYESchemeDetails)

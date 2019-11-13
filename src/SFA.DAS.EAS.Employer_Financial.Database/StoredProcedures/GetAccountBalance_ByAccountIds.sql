@@ -12,7 +12,8 @@ AS
 			WHEN HasDeclaredLevy = 1 AND AmountLevyDeclared > 0 THEN 1
 			WHEN HasDeclaredLevy = 1 AND AmountLevyDeclared = 0 THEN 1 -- this needs to go back to 0 after month 1
 			ELSE 1
-		END IsLevyPayer
+		END IsLevyPayer,
+		IsLevyPayer AS LevyOverride
 	FROM @AccountIds acc
 	OUTER APPLY
 	(
