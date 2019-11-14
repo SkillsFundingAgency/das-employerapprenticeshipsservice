@@ -112,20 +112,6 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.ToList();
         }
 
-        public Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId)
-        {
-            var parameters = new DynamicParameters();
-
-            parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@legalEntityId", legalEntityId, DbType.Int64);
-
-            return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "[employer_account].[EvaluateEmployerLegalEntityAgreementStatus]",
-                param: parameters,
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
-                commandType: CommandType.StoredProcedure);
-        }
-
         public async Task<AccountLegalEntityModel> GetAccountLegalEntity(long accountLegalEntityId)
         {
             var parameters = new DynamicParameters();
