@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
                 authorizationContext.Set("ClaimsIdentity", claimsIdentity);
                 var route = _httpContext.Request.RequestContext.RouteData.Route as Route;                                
                 var resource = new Resource { Value = route?.Url };
-                authorizationContext.Set("Resource", resource.Value);
+                authorizationContext.Set("Resource", resource);
                 
                 return authorizationContext;           
             }
@@ -55,6 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             return _authorizationContextProvider.GetAuthorizationContext();
         }
     }    
+
 
     public class Resource
     {
