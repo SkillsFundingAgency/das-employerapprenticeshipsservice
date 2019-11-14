@@ -138,28 +138,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
-        }     
-     
-        [HttpGet]
-        [Route("register")]
-        [Route("invitation/{correlationId}")]
-        public async Task<ActionResult> RegisterUser(string correlationId)
-        {
-            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
-            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
-            var c = new Constants(_configuration.Identity);
-
-            if (!string.IsNullOrWhiteSpace(correlationId))
-            {
-                var invitation = await _homeOrchestrator.GetProviderInvitation(Guid.Parse(correlationId));
-
-                if (invitation.Data != null)
-                {
-                    return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={invitation.Data.EmployerFirstName}&lastname={invitation.Data.EmployerLastName}&email={invitation.Data.EmployerEmail}");
-                }
-            }
-
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [DasAuthorize]
@@ -180,6 +158,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return RedirectToAction(ControllerConstants.IndexActionName);
+        }
+
+        [HttpGet]
+        [Route("register")]
+        [Route("register/{correlationId}")]
+        public async Task<ActionResult> RegisterUser(Guid? correlationId)
+        {
+            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
+            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
+            var c = new Constants(_configuration.Identity);
+
+            if (!correlationId.HasValue) return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
+
+            var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
+
+            return invitation.Data != null
+                ? new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={invitation.Data.EmployerFirstName}&lastname={invitation.Data.EmployerLastName}&email={invitation.Data.EmployerEmail}")
+                : new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [DasAuthorize]
