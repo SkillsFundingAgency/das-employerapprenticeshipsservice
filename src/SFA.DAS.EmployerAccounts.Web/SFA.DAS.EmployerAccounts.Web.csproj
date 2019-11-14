@@ -182,8 +182,6 @@
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
-    <Compile Include="Authorization\DefaultAuthorizationHandler.cs" />
-    <Compile Include="Authorization\ImpersonationAuthorizationContext.cs" />
     <Compile Include="Authorization\RouteValueKeys.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />

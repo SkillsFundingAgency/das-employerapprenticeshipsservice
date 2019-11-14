@@ -28,8 +28,8 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));            
 
-            var authorizationService = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
-            For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>().Ctor<IAuthorizationContextProvider>().Is(authorizationService);
+            For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            //For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>().Ctor<IAuthorizationContextProvider>().Is(authorizationService);
 
             //TO DO : Use this for Default Handler
             // var authorizationService = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
