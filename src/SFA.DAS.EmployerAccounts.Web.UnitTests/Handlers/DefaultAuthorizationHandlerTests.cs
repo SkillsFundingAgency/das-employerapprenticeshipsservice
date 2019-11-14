@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         public void Test_AuthorizationContext_View_Page()
         {
             //Arrange
-            AuthorizationContextTestsFixture.SetData(TeamViewUrl);
+            AuthorizationContextTestsFixture.SetDataWithResource(TeamViewUrl);
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
@@ -97,8 +97,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         protected Mock<HttpRequestBase> MockRequestBase;
         protected Mock<HttpResponseBase> MockResponseBase;
         public Mock<IRouteHandler> MockRouteHandler { get; set; }
-        public const string Tier2User = "Tier2User";
-      
+        public const string Tier2User = "Tier2User";        
+        public const string TeamViewUrl = "accounts/{hashedaccountid}/teams/view";        
 
 
         public AuthorizationContextTestsFixture()
@@ -109,7 +109,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
             MockContextBase = new Mock<HttpContextBase>();
             MockRequestBase = new Mock<HttpRequestBase>();
             MockResponseBase = new Mock<HttpResponseBase>();
-            MockRouteHandler = new Mock<IRouteHandler>();
+            MockRouteHandler = new Mock<IRouteHandler>();            
             MockContextBase.Setup(x => x.Request).Returns(MockRequestBase.Object);
             MockContextBase.Setup(x => x.Response).Returns(MockResponseBase.Object);
         }
@@ -133,6 +133,25 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
                 }
             }
 
+            return this;
+        }
+        public AuthorizationContextTestsFixture SetDataWithResource(string url)
+        {
+
+            var resource = new Resource();
+            resource.Value = url;
+            AuthorizationContext.Set("Resource", resource);            
+
+            var claimsIdentity = new ClaimsIdentity(new[]
+            {
+                new Claim(DasClaimTypes.Id, "UserRef"),
+                new Claim(DasClaimTypes.Email, "Email"),
+                new Claim("sub", "UserRef"),
+            });
+            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, Tier2User));
+            var principal = new ClaimsPrincipal(claimsIdentity);
+            MockContextBase.Setup(c => c.User).Returns(principal);
+            AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
             return this;
         }
 

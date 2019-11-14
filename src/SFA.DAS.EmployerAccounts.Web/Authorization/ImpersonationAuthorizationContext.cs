@@ -7,6 +7,7 @@ using System.Linq;
 using SFA.DAS.EmployerAccounts.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Routing;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
@@ -16,10 +17,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private readonly IAuthorizationContextProvider _authorizationContextProvider;
         private readonly IEmployerAccountTeamRepository _employerAccountTeamRepository;
 
-
         public ImpersonationAuthorizationContext(HttpContextBase httpContext,
             IAuthorizationContextProvider authorizationContextProvider,
-            IEmployerAccountTeamRepository employerAccountTeamRepository)
+            IEmployerAccountTeamRepository employerAccountTeamRepository)            
         {
             _httpContext = httpContext;
             _authorizationContextProvider = authorizationContextProvider;
@@ -31,12 +31,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             if (_httpContext.User.IsInRole("Tier2User"))
             {
                 //string hashedAccountId = "JRML7V";
-
                 if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                 {
                     throw new UnauthorizedAccessException();
                 }
-
+                
                 var teamMembers = Task.Run(() => _employerAccountTeamRepository.GetAccountTeamMembers(accountHashedId?.ToString())).Result;
                 var accountOwner = teamMembers.First(tm => tm.Role == Role.Owner);
                 var claimsIdentity = (ClaimsIdentity)_httpContext.User.Identity;
@@ -46,11 +45,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
                 var authorizationContext = _authorizationContextProvider.GetAuthorizationContext();
                 authorizationContext.Set("ClaimsIdentity", claimsIdentity);
-                authorizationContext.Set("RouteData", _httpContext.Request.RequestContext.RouteData);
-                return authorizationContext;
+                var route = _httpContext.Request.RequestContext.RouteData.Route as Route;                                
+                var resource = new Resource { Value = route?.Url };
+                authorizationContext.Set("Resource", resource.Value);
+                
+                return authorizationContext;           
             }
 
             return _authorizationContextProvider.GetAuthorizationContext();
         }
+    }    
+
+    public class Resource
+    {
+        public string  Value { get; set; }       
     }
+    
 }
