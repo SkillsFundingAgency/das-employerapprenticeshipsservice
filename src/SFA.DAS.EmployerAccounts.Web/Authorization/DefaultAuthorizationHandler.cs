@@ -4,27 +4,25 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization.Results;
 using System.Collections.Generic;
-using SFA.DAS.Authorization.Errors;
-using System.Web.Routing;
 using SFA.DAS.Authorization.Handlers;
+using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
     public class DefaultAuthorizationHandler : IDefaultAuthorizationHandler
-    {
-        private const string Tier2User = "Tier2User";      
+    {       
 
         public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
             var authorizationResult = new AuthorizationResult();
-            authorizationContext.TryGet<RouteData>("RouteData", out var routeData);
+            authorizationContext.TryGet<Resource>("Resource", out var resource);
             authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
-            var link = routeData?.Route as Route;
+            var resourceValue = resource != null ? resource.Value : "default";
             var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
 
-            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value == Tier2User))
+            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value == RouteValueKeys.Tier2User))
             {
-                if (!link.Url.ToString().ToLower().Contains("accounts/{hashedaccountid}/teams/view"))
+                if (!resourceValue.ToLower().Contains(RouteValueKeys.TeamViewRoute))
                 {
                     authorizationResult.AddError(new Tier2UserAccesNotGranted());
                 }
@@ -32,14 +30,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
             return Task.FromResult(authorizationResult);
         }
-    }
-
-    public class Tier2UserAccesNotGranted : AuthorizationError
-    {
-        public Tier2UserAccesNotGranted() : base("Tier2 User permission is not granted")
-        {
-
-        }
-    }
+    }   
 
 }
