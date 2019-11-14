@@ -16,25 +16,25 @@ namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail
         {
             _configuration = configuration;         
             _httpService = httpServiceFactory.Create(
-                configuration.ProviderRelationsApi.ClientId,
-                configuration.ProviderRelationsApi.ClientSecret,
-                configuration.ProviderRelationsApi.IdentifierUri,
-                configuration.ProviderRelationsApi.Tenant
+                configuration.ProviderRegistrationsApi.ClientId,
+                configuration.ProviderRegistrationsApi.ClientSecret,
+                configuration.ProviderRegistrationsApi.IdentifierUri,
+                configuration.ProviderRegistrationsApi.Tenant
             );
         }
 
         protected override async Task HandleCore(UnsubscribeProviderEmailQuery message)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}unsubscribe/{message.CorrelationId.ToString()}";
+            var url = $"{baseUrl}api/unsubscribe/{message.CorrelationId.ToString()}";
             await _httpService.GetAsync(url, false);
         }
 
         private string GetBaseUrl()
         {
-            var baseUrl = _configuration.ProviderRelationsApi.BaseUrl.EndsWith("/")
-                ? _configuration.ProviderRelationsApi.BaseUrl
-                : _configuration.ProviderRelationsApi.BaseUrl + "/";
+            var baseUrl = _configuration.ProviderRegistrationsApi.BaseUrl.EndsWith("/")
+                ? _configuration.ProviderRegistrationsApi.BaseUrl
+                : _configuration.ProviderRegistrationsApi.BaseUrl + "/";
 
             return baseUrl;
         }
