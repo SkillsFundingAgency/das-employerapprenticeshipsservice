@@ -47,7 +47,7 @@
 					@agreementType=0,
 					@accountLegalEntityId=@accountLegalEntityId OUTPUT,
 					@accountLegalEntityCreated=@accountLegalEntityCreated OUTPUT,
-					@agreementVersion = @agreementVersion INT
+					@agreementVersion = @agreementVersion OUTPUT
 
 			EXEC [Employer_account].[UpdateAccountLegalEntity_SetPublicHashedId] 
 					@accountLegalEntityId=@accountLegalEntityId,
