@@ -94,25 +94,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return View(response);
             }
 
-            //if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-            //{
-            //    response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
-            //    {
-            //        HashedAccountId = hashedAccountId,
-            //        MaxNumberOfVacancies = response.Data.HasPayeScheme ? 2 : 0
-            //    });
-            //    response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
-            //    response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
-            //    response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
+            {
+                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
+                {
+                    HashedAccountId = hashedAccountId,
+                    MaxNumberOfVacancies = response.Data.HasPayeScheme ? 2 : 0
+                });
+                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
+                response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
+                response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
 
-            //    if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
-            //        response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
+                if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
+                    response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
 
-            //    if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-            //    {
-            //        return View("v2/Index", "_Layout_v2", response);
-            //    }
-            //}
+                if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
+                {
+                    return View("v2/Index", "_Layout_v2", response);
+                }
+            }
 
             if (!response.Data.HasPayeScheme)
             {             
