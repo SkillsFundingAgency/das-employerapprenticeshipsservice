@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        //private readonly IPortalClient _portalClient;
+        private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
@@ -53,21 +53,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator
-            //,IPortalClient portalClient
+            ,IPortalClient portalClient
             ,IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
-            //_portalClient = portalClient;
+            _portalClient = portalClient;
             _authorizationService = authorizationService;
         }
 
         [HttpGet]
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
-        {
-
-
+        {           
             // Get account owner userId and set on HttpContext
             //if (HttpContext.User.IsInRole("Tier2User"))
             //{
@@ -77,16 +75,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             //    ((ClaimsIdentity)HttpContext.User.Identity).AddClaim(new Claim(DasClaimTypes.Id, accountOwner.UserRef));
             //    ((ClaimsIdentity)HttpContext.User.Identity).AddClaim(new Claim(DasClaimTypes.Email, accountOwner.Email));
             //}
-
-
             PopulateViewBagWithExternalUserId();
             SetZenDeskWidgetToHidden();
-            // Get account owner userId and set on HttpContext
-            if (HttpContext.User.IsInRole("Tier2User"))
-            {
-                var accountOwner = _employerTeamOrchestrator.GetAccountOwner(hashedAccountId);
-            }
-
             var response = await GetAccountInformation(hashedAccountId);
 
             if (response.Status != HttpStatusCode.OK)
