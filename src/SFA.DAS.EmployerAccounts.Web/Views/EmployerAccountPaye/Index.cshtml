@@ -14,71 +14,80 @@
     ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-schemes-index";
 }
 
-<div class="grid-row header-index">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">PAYE schemes</h1>
-        <p>You'll need to add all the PAYE schemes you intend to use to pay for apprenticeship training.</p>
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl govuk-!-margin-bottom-6"><abbr>PAYE</abbr> schemes</h1>
     </div>
-    <div class="column-one-third pull-right">
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <p class="govuk-body">You'll need to add all the <abbr>PAYE</abbr> schemes you intend to use to pay for apprenticeship training.</p>
+    </div>
+    <div class="govuk-grid-column-one-third">
         <form action="@Url.Action("GatewayInform")" method="GET">
-            <input class="button action-add" id="addNewPaye" type="submit" value="Add new scheme">
+            <input class="govuk-button das-float-right" id="addNewPaye" type="submit" value="Add new scheme">
         </form>
     </div>
 </div>
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
         @if (Model.Data.PayeSchemes.Any())
         {
-            <table>
-                <thead>
-                    <tr>
-                        <th scope="col">Added PAYE schemes</th>
-                        <th scope="col">English %</th>
-                        <th scope="col"><span class="vh">Action</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var scheme in Model.Data.PayeSchemes)
+        <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-visually-hidden">Table of <abbr>PAYE</abbr> schemes</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Added <abbr>PAYE</abbr> schemes</th>
+                    <th scope="col" class="govuk-table__header"><span class="das-no-wrap">English %</span></th>
+                    <th scope="col" class="govuk-table__header">Action</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                @foreach (var scheme in Model.Data.PayeSchemes)
                     {
                         var englishFractionPercentage = (scheme.EnglishFraction?.Amount ?? 1);
-                        <tr>
-                            <td>
-                                @scheme.Ref
-                                <span class="secondary-text">@scheme.Name</span>
-                            </td>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">
+                        @scheme.Ref
+                        <span class="secondary-text">@scheme.Name</span>
+                    </td>
 
-                            @if (englishFractionPercentage == 1)
+                    @if (englishFractionPercentage == 1)
                             {
-                                <td>100%</td>
+                    <td class="govuk-table__cell">100%</td>
                             }
                             else if (englishFractionPercentage == 0)
                             {
-                                <td>0%</td>
+                    <td class="govuk-table__cell">0%</td>
                             }
                             else
                             {
-                                <td>@englishFractionPercentage.ToString("P3")</td>
+                    <td class="govuk-table__cell">@englishFractionPercentage.ToString("P3")</td>
                             }
 
-                            <td class="link-right">
-                                <a aria-label="Details for PAYE scheme @scheme.Ref"
-                                   title="Details for PAYE scheme @scheme.Ref"
-                                   href="@Url.Action("Details", new {empRef = scheme.Ref.FormatPayeForUrl()})">Details<span class="vh"> for PAYE scheme @scheme.Ref</span></a>
-                            </td>
-                        </tr>
+                    <td class="govuk-table__cell">
+                        <a href="@Url.Action("Details", new {empRef = scheme.Ref.FormatPayeForUrl()})" class="govuk-link" 
+                           aria-label="Details for PAYE scheme @scheme.Ref" title="Details for PAYE scheme @scheme.Ref">
+                            Details for <abbr>PAYE</abbr> scheme @scheme.Ref
+                        </a>
+                    </td>
+                </tr>
                     }
-                </tbody>
-            </table>
+            </tbody>
+        </table>
 
 
-            @Html.Partial("_WhatIsEnglishPercentage")
+        @Html.Partial("_WhatIsEnglishPercentage")
         }
         else
         {
-            <div class="panel panel-no-records">
-                <p>There are no PAYE schemes associated with this organisation.</p>
-            </div>
+        
+        <p class="govuk-body">There are no <abbr>PAYE</abbr> schemes associated with this organisation.</p>
+        
         }
     </div>
 </div>
@@ -98,10 +107,14 @@
 }
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-            <li>PAYE schemes</li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
+            <li class="govuk-breadcrumbs__list-item">
+                <a href="@Url.Action("Index", "EmployerTeam")" class="govuk-breadcrumbs__link">Home</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item">
+                <abbr>PAYE</abbr> schemes
+            </li>
         </ol>
     </div>
 }
