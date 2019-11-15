@@ -133,22 +133,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAgreementId = agreementid
                 });
 
-                var unsignedAgreementTask = _mediator.SendAsync(new GetUnsignedEmployerAgreementRequest
+                var unsignedAgreement = await _mediator.SendAsync(new GetUnsignedEmployerAgreementRequest
                 { 
                     ExternalUserId = externalUserId,
                     HashedAccountId = hashedId
                 });
 
-                var agreementTypeTask = _mediator.SendAsync(new GetEmployerAgreementTypeRequest { HashedAgreementId = agreementid });
-
-                await Task.WhenAll(unsignedAgreementTask, agreementTypeTask);
+                var agreementType = await _mediator.SendAsync(new GetEmployerAgreementTypeRequest { HashedAgreementId = agreementid });
 
                 return new OrchestratorResponse<SignAgreementViewModel>
                 {
                     Data = new SignAgreementViewModel
                     {
-                        HasFurtherPendingAgreements = !string.IsNullOrEmpty(unsignedAgreementTask.Result.HashedAgreementId),
-                        SignedAgreementType = agreementTypeTask.Result.AgreementType
+                        HasFurtherPendingAgreements = !string.IsNullOrEmpty(unsignedAgreement.HashedAgreementId),
+                        SignedAgreementType = agreementType.AgreementType
                     }
                 };
             }
