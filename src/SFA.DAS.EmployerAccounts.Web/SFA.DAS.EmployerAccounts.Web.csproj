@@ -160,9 +160,6 @@
     <PackageReference Include="WebEssentials.AspNetCore.CdnTagHelpers">
       <Version>1.0.16</Version>
     </PackageReference>
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt">
-      <Version>4.0.2.206221351</Version>
-    </PackageReference>
     <PackageReference Include="WebGrease" Version="1.5.2" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
   </ItemGroup>
