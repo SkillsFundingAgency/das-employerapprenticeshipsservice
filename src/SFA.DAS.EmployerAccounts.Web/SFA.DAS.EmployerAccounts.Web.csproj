@@ -171,6 +171,7 @@
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CookieConsentController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactions.cs" />
@@ -810,6 +811,7 @@
     <Content Include="Views\EmployerTeam\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\CheckFunding.cshtml" />
     <Content Include="src\sass\_interim-homepage.scss" />
+    <Content Include="Views\CookieConsent\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
