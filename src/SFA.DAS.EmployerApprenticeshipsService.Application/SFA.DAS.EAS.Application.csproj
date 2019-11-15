@@ -210,7 +210,7 @@
       <Version>1.0.0.20553</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.0.2</Version>
+      <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
       <Version>6.0.20</Version>

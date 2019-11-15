@@ -60,7 +60,7 @@
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.0.2</Version>
+      <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.WebApi">
       <Version>6.0.20</Version>
