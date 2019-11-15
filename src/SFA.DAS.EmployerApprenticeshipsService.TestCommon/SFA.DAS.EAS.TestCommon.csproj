@@ -160,7 +160,7 @@
       <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Api.Client">
-      <Version>2.1.716</Version>
+      <Version>4.1.355</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain">
       <Version>1.4.276</Version>
@@ -199,10 +199,10 @@
       <Version>1.2.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Notifications.Api.Client">
-      <Version>2.0.0.35919</Version>
+      <Version>2.2.37</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Notifications.Api.Types">
-      <Version>2.0.0.35919</Version>
+      <Version>2.2.37</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Sql.Client">
       <Version>1.0.0.32930</Version>
