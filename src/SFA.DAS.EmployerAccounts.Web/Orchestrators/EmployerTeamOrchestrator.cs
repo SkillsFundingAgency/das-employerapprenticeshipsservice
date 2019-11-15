@@ -160,7 +160,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
-                //var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
+                var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
                 {
@@ -188,38 +188,38 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                //var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
-                //{
-                //    HashedAccountId = hashedAccountId,
-                //    ExternalUserId = externalUserId
-                //});
+                var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
 
-                //await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
-                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
+                //await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
                 var userResponse = userResponseTask.Result;
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
-                var reservationsResponse = new GetReservationsResponse()
-                {
-                    Reservations = new List<Reservation>(10)
-                };
-                var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
-                {
-                    AccountId = accountResponse.Account.Id,
-                    ExternalUserId = externalUserId
-                });//reservationsResponseTask.Result;
-
+                var reservationsResponse = reservationsResponseTask.Result;
+                //var reservationsResponse = new GetReservationsResponse()
+                //{
+                //    Reservations = new List<Reservation>(10)
+                //};
+               var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
+               {
+                   AccountId = accountResponse.Account.Id,
+                   ExternalUserId = externalUserId
+               }); ;
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
-                var accountDetailViewModel = new AccountDetailViewModel()
-                {
-                    ApprenticeshipEmployerType = "1"
-                };//apiGetAccountTask.Result;
-
+                //var accountDetailViewModel = new AccountDetailViewModel()
+                //{
+                //    ApprenticeshipEmployerType = "1"
+                //};//apiGetAccountTask.Result;
+                var accountDetailViewModel = apiGetAccountTask.Result;
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
@@ -227,8 +227,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedUserId = externalUserId,
                     UserFirstName = userResponse.User.FirstName,
                     OrganisationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
-                    //PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
-                    PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount + 1 ?? 0,
+                    PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
+                    //PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount + 1 ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     TeamMembersInvited = accountStatsResponse?.Stats?.TeamMembersInvited ?? 0,
                     ShowWizard = showWizard,
