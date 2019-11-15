@@ -213,7 +213,7 @@
       <Version>1.0.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.20</Version>
+      <Version>6.0.33</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Api.Client">
       <Version>2.1.716</Version>
@@ -273,7 +273,7 @@
       <Version>0.11.39</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
-      <Version>1.1.74</Version>
+      <Version>1.1.82</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Sql.Client">
       <Version>1.0.0.32930</Version>

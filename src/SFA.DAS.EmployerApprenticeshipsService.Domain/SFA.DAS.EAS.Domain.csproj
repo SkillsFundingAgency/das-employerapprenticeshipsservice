@@ -254,7 +254,7 @@
       <Version>2.1.30</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
-      <Version>1.1.74</Version>
+      <Version>1.1.82</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Types">
       <Version>1.8.12</Version>
