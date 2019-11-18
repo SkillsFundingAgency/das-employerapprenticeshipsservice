@@ -81,5 +81,6 @@
         public const string WhenDoYouWantToView = "WhenDoYouWantToView";
         public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
         public const string Settings = "Settings";
+        public const string Details = "Details";
     }
 }

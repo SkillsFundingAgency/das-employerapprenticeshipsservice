@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("settings")]
         [Route("settings/{saved}")]
-        public ActionResult Settings(bool? saved = null)
+        public ActionResult Settings(bool saved = false)
         {
             return View(new { Saved = saved });
         }
@@ -43,11 +43,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction("Settings", new { saved = true });
         }
 
-        //[HttpGet]
-        //[Route("details")]
-        //public ActionResult Details()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        [Route("details")]
+        public ActionResult Details()
+        {
+            return View();
+        }
     }
 }
