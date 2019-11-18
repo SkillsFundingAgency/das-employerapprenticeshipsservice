@@ -20,10 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         public List<string> Options { get; set; }
         public IAuthorizationContext AuthorizationContext { get; set; }
         public DefaultAuthorizationHandler SutDefaultAuthorizationHandler { get; set; }
-        public AuthorizationContextTestsFixture AuthorizationContextTestsFixture { get; set; }
-        public const string TeamViewUrl =  "accounts/{hashedaccountid}/teams/view";
-        public const string HomeUrl = "accounts/{hashedaccountid}/teams";
-        
+        public AuthorizationContextTestsFixture AuthorizationContextTestsFixture { get; set; }        
 
         [SetUp]
         public void Arrange()
@@ -49,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenAllowTheUserToViewTeamPage()
         {
             //Arrange
-            AuthorizationContextTestsFixture.SetData(TeamViewUrl);
+            AuthorizationContextTestsFixture.SetData(AuthorizationConstants.TeamViewRoute);
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
@@ -63,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenDontAllowTheUserToViewHomePage()
         {
             //Arrange
-            AuthorizationContextTestsFixture.SetData(HomeUrl);
+            AuthorizationContextTestsFixture.SetData(AuthorizationConstants.TeamRoute);
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
@@ -83,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         protected Mock<HttpRequestBase> MockRequestBase;
         protected Mock<HttpResponseBase> MockResponseBase;
         protected Mock<IRouteHandler> MockRouteHandler { get; set; }
-        protected const string Tier2User = "Tier2User";        
+            
 
 
         public AuthorizationContextTestsFixture()
@@ -102,7 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         {
 
             var resource = new Resource { Value = url  };
-            AuthorizationContext.Set("Resource", resource);
+            AuthorizationContext.Set("Resource", resource);            
 
             var claimsIdentity = new ClaimsIdentity(new[]
             {
@@ -110,7 +107,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
                 new Claim(DasClaimTypes.Email, "Email"),
                 new Claim("sub", "UserRef"),
             });
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, Tier2User));
+            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
