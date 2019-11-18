@@ -1,10 +1,9 @@
-﻿using SFA.DAS.Http;
+﻿using SFA.DAS.Http.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Interfaces
 {
-    public interface IReservationsClientApiConfiguration : IAzureADClientConfiguration
+    public interface IReservationsClientApiConfiguration : IAzureActiveDirectoryClientConfiguration
     {
-        string ApiBaseUrl { get; }
         bool UseStub { get; set; }
     }
 }

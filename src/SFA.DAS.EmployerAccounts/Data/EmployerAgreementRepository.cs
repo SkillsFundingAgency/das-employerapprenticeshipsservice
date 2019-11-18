@@ -161,7 +161,8 @@ namespace SFA.DAS.EmployerAccounts.Data
                               && ale.Agreements.Any(ea =>
                                   ea.StatusId == EmployerAgreementStatus.Pending ||
                                   ea.StatusId == EmployerAgreementStatus.Signed))
-                .ToListAsync();
+                .ToListAsync()
+                .ConfigureAwait(false);
 
             var agreements = legalEntities.SelectMany(x => x.Agreements).ToList();
             return agreements;
