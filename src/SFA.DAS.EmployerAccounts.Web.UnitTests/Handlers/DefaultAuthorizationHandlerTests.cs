@@ -72,7 +72,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
 
     }
 
-
     public class AuthorizationContextTestsFixture
     {
         public IAuthorizationContext AuthorizationContext { get; set; }
@@ -80,8 +79,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         protected Mock<HttpRequestBase> MockRequestBase;
         protected Mock<HttpResponseBase> MockResponseBase;
         protected Mock<IRouteHandler> MockRouteHandler { get; set; }
-            
-
 
         public AuthorizationContextTestsFixture()
         {           
@@ -93,11 +90,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
             MockContextBase.Setup(x => x.Request).Returns(MockRequestBase.Object);
             MockContextBase.Setup(x => x.Response).Returns(MockResponseBase.Object);
         }
-
       
         public AuthorizationContextTestsFixture SetData(string url)
         {
-
             var resource = new Resource { Value = url  };
             AuthorizationContext.Set("Resource", resource);            
 
