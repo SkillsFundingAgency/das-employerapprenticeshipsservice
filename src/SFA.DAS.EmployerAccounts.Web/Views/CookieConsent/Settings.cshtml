@@ -1,28 +1,31 @@
-﻿<div class="grid-row">
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@{
+    var savedClass = Model?.GetType().GetProperty("Saved") != null ? "" : "hidden";
+    var analyticsConsentOnChecked = Request.Cookies["analyticsConsent"]?.Value == "True" || Request.Cookies["analyticsConsent"] == null ? "checked" : "";
+    var marketingConsentOnChecked = Request.Cookies["marketingConsent"]?.Value == "True" ? "checked" : "";
+    var analyticsConsentOffChecked = Request.Cookies["analyticsConsent"]?.Value == "False" ? "checked" : "";
+    var marketingConsentOffChecked = Request.Cookies["marketingConsent"]?.Value == "False" || Request.Cookies["marketingConsent"] == null ? "checked" : "";
+}
+<div class="grid-row">
 
     <div class="column-two-thirds">
-
-        <div class="notification das-cookie-banner__confirmation" data-cookie-confirmation="true">
-            <section aria-live="polite" role="region">
-                <h2 class="heading-medium">Your cookie settings were saved</h2>
-            </section>
-        </div>
+        <p>
+            <div class="@savedClass" data-cookie-confirmation="true">
+                <section aria-live="polite" role="region">
+                    <div style="width: 66.6%; background: #00703c; padding: 10px 20px 20px 20px; text-align: center; min-width: 220px;">
+                        <h2 style="color: #fff;" class="heading-medium">Your cookie settings were saved</h2>
+                    </div>
+                </section>
+            </div>
+        </p>
 
         <header class="page-header">
             <div>
                 <h1 class="heading-xlarge">
-                    Cookies on Finding Apprenticeship Training
+                    Cookies
                 </h1>
             </div>
         </header>
-
-        <div class="das-cookie-settings__no-js">
-            <p>We use Javascript to set most of our cookies. Unfortunately Javascript is not running on your browser, so you cannot change your settings. You can try:</p>
-            <ul>
-                <li>reloading the page</li>
-                <li>turning on Javascript in your browser</li>
-            </ul>
-        </div>
 
         <p>
             Cookies are files saved on your phone, tablet or computer when you visit a website.
@@ -40,10 +43,8 @@
         </p>
 
 
-
-
-
-        <form data-module="cookie-settings">
+        <form method="POST" action="@Url.Action(ControllerConstants.Settings)">
+            @Html.AntiForgeryToken()
 
             <div class="form-group">
                 <fieldset class="inline" aria-describedby="hint-cookie-1">
@@ -73,13 +74,13 @@
                         <p>If you register an account with the Find an apprenticeship service or the Manage apprenticeships service, both provided by the Education and Skills Funding Agency, the information collected using analytics cookies will be linked to your account to help us make the service work better for you.</p>
                     </div>
 
-                    <label for="radio-cookie-analytics-0" class="block-label selection-button-radio selected">
-                        <input type="radio" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-0" value="on">
+                    <label for="radio-cookie-analytics-0" class="block-label selection-button-radio">
+                        <input type="radio" name="analyticsConsent" id="radio-cookie-analytics-0" value="true" @analyticsConsentOnChecked>
                         On
                     </label>
 
                     <label for="radio-cookie-analytics-1" class="block-label selection-button-radio">
-                        <input type="radio" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-1" value="off">
+                        <input type="radio" name="analyticsConsent" id="radio-cookie-analytics-1" value="false" @analyticsConsentOffChecked>
                         Off
                     </label>
 
@@ -98,12 +99,12 @@
                     </div>
 
                     <label for="radio-cookie-marketing-0" class="block-label selection-button-radio">
-                        <input type="radio" name="cookies-MarketingConsent" id="radio-cookie-marketing-0" value="on">
+                        <input type="radio" name="marketingConsent" id="radio-cookie-marketing-0" value="true" @marketingConsentOnChecked>
                         On
                     </label>
 
-                    <label for="radio-cookie-marketing-1" class="block-label selection-button-radio selected">
-                        <input type="radio" name="cookies-MarketingConsent" id="radio-cookie-marketing-1" value="off">
+                    <label for="radio-cookie-marketing-1" class="block-label selection-button-radio">
+                        <input type="radio" name="marketingConsent" id="radio-cookie-marketing-1" value="false" @marketingConsentOffChecked>
                         Off
                     </label>
 
@@ -119,10 +120,10 @@
                 <li>remember your progress through a form</li>
             </ul>
             <p>They always need to be on.</p>
-            <p><a href="/cookie-details">Find out more about cookies on this service</a></p>
+            <p><a href="/cookieconsent/details">Find out more about cookies on this service</a></p>
 
 
-            <button class="govuk-button" type="submit" id="btn-save-cookie-settings">Save changes</button>
+            <button class="button" type="submit" id="btn-save-cookie-settings">Save changes</button>
         </form>
 
 
