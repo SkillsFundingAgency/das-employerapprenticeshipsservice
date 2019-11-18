@@ -10,16 +10,6 @@
 @{ ViewBag.GaData.Vpv = "/page-auth-homepage"; }
 @{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
-@if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
-{
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        <div class="panel panel-error">
-            @Model.Data.ErrorMessage
-        </div>
-    </div>
-</div>
-}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         @if (Model.Data.Accounts.AccountList.Count != 0)

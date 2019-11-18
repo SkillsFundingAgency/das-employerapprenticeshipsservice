@@ -31,7 +31,7 @@
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
                     <th class="govuk-table__header" scope="col">Date</th>
-                    <th class="govuk-table__header" scope="col"><span class="das-no-wrap">English %</span></th>
+                    <th class="govuk-table__header govuk-table__header--numeric" scope="col"><span class="das-no-wrap">English %</span></th>
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
@@ -42,7 +42,7 @@
                             <td class="govuk-table__cell">
                                 <span class="das-no-wrap">@fraction.DateCalculated.ToString("dd MMM yy")</span>
                             </td>
-                            <td class="govuk-table__cell">
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
                                 @if (fraction.Amount == 1) {
                                     @:100%
                                 }
@@ -60,7 +60,7 @@
                         <td class="govuk-table__cell">
                             <span class="das-no-wrap"> @Model.Data.EmpRefAdded.ToString("dd MMM yy")</span>
                         </td>
-                        <td class="govuk-table__cell">
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
                             100%
                         </td>
                     </tr>
