@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Routing;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            if (_httpContext.User.IsInRole("Tier2User"))
+            if (_httpContext.User.IsInRole(AuthorizationConstants.Tier2User))
             {                
                 if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                 {
@@ -46,9 +47,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
                 authorizationContext.Set("ClaimsIdentity", claimsIdentity);
                 var route = _httpContext.Request.RequestContext.RouteData.Route as Route;
                 var resource = new Resource { Value = route?.Url };
-                authorizationContext.Set("Resource", resource);
-                return authorizationContext;
-            }
+                authorizationContext.Set("Resource", resource);             
+                return authorizationContext;            }
 
             return _authorizationContextProvider.GetAuthorizationContext();
         }
@@ -57,5 +57,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         {
             public string Value { get; set; }
         }
+
     }
 }

@@ -18,11 +18,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             authorizationContext.TryGet<Resource>("Resource", out var resource);
             authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
             var resourceValue = resource != null ? resource.Value : "default";
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
+            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);            
 
-            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value == RouteValueKeys.Tier2User))
+
+            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value == AuthorizationConstants.Tier2User))
             {
-                if (!resourceValue.ToLower().Contains(RouteValueKeys.TeamViewRoute))
+                if (!resourceValue.ToLower().Contains(AuthorizationConstants.TeamViewRoute))
                 {
                     authorizationResult.AddError(new Tier2UserAccesNotGranted());
                 }
@@ -30,6 +31,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
             return Task.FromResult(authorizationResult);
         }
-    }   
-
+    }
 }

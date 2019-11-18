@@ -159,6 +159,7 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
+    <Compile Include="Authorization\AuthorizationConstants.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
     <Compile Include="Authorization\DefaultAuthorizationHandler.cs" />
     <Compile Include="Authorization\ImpersonationAuthorizationContext.cs" />
