@@ -98,7 +98,7 @@
       <Version>5.0.5</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.5.3</Version>
+      <Version>4.6.8</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.AutoConfiguration">
       <Version>2.0.1</Version>

@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.5.11" />
+    <PackageReference Include="NLog" Version="4.6.8" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
     <PackageReference Include="SFA.DAS.UnitOfWork.EntityFramework" Version="9.0.13" />
