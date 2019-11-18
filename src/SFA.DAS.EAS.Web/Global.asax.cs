@@ -31,10 +31,8 @@ using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
-using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using SFA.DAS.NServiceBus.Configuration;
-using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -147,8 +145,7 @@ namespace SFA.DAS.EAS.Web
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
                 .UseOutbox()
-                .UseStructureMapBuilder(container)
-                .UseUnitOfWork();
+                .UseStructureMapBuilder(container);
 
             _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 
