@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
@@ -23,16 +21,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [HttpGet]
         [Route("settings")]
-        public ActionResult Settings()
+        [Route("settings/{saved}")]
+        public ActionResult Settings(bool? saved = null)
         {
-            return View();
+            return View(new { Saved = saved });
         }
 
         [HttpPost]
         [Route("settings")]
-        public ActionResult Settings()
+        public ActionResult Settings(bool analyticsConsent, bool marketingConsent)
         {
-            return View();
+            var cookies = new List<HttpCookie>
+            {
+                new HttpCookie("CookieConsent", true.ToString()),
+                new HttpCookie("AnalyticsConsent", analyticsConsent.ToString()),
+                new HttpCookie("MarketingConsent", marketingConsent.ToString())
+            };
+
+            cookies.ForEach(x => ControllerContext.HttpContext.Response.Cookies.Add(x));
+
+            return RedirectToAction("Settings", new { saved = true });
         }
+
+        //[HttpGet]
+        //[Route("details")]
+        //public ActionResult Details()
+        //{
+        //    return View();
+        //}
     }
 }
