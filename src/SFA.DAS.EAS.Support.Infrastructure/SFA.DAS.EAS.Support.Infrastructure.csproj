@@ -66,6 +66,7 @@
     <Compile Include="Services\LevySubmissionsRepository.cs" />
     <Compile Include="Services\LevyTokenHttpClientMaker.cs" />
     <Compile Include="Settings\AccountApiConfiguration.cs" />
+    <Compile Include="Settings\EmployerAccountsConfiguration.cs" />
     <Compile Include="Settings\HashingServiceConfig.cs" />
     <Compile Include="Settings\HmrcApiBaseUrlConfig.cs" />
     <Compile Include="Settings\IHmrcApiBaseUrlConfig.cs" />
@@ -108,6 +109,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.HashingService">
       <Version>1.0.183</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.Messaging.AzureServiceBus.StructureMap">
+      <Version>3.1.120</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger">
       <Version>1.2.1</Version>

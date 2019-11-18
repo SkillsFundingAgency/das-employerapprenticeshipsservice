@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -29,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication
 
         public bool IsUserAuthenticated()
         {
-            return HttpContext.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
+            return _httpContext.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
         }
 
         public void SignOutUser()
