@@ -24,7 +24,7 @@
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.20" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
+    <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
     <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.33" />
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.33" />
