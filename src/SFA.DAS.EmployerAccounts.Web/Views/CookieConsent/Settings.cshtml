@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @{
-    var savedClass = Model?.GetType().GetProperty("Saved") != null ? "" : "hidden";
+    var savedClass = Model?.GetType().GetProperty("Saved").GetValue(Model) ? "" : "hidden";
     var analyticsConsentOnChecked = Request.Cookies["analyticsConsent"]?.Value == "True" || Request.Cookies["analyticsConsent"] == null ? "checked" : "";
     var marketingConsentOnChecked = Request.Cookies["marketingConsent"]?.Value == "True" ? "checked" : "";
     var analyticsConsentOffChecked = Request.Cookies["analyticsConsent"]?.Value == "False" ? "checked" : "";
@@ -120,7 +120,7 @@
                 <li>remember your progress through a form</li>
             </ul>
             <p>They always need to be on.</p>
-            <p><a href="/cookieconsent/details">Find out more about cookies on this service</a></p>
+            <p><a href="@Url.Action(ControllerConstants.Details)">Find out more about cookies on this service</a></p>
 
 
             <button class="button" type="submit" id="btn-save-cookie-settings">Save changes</button>

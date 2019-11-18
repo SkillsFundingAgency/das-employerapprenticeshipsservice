@@ -81,5 +81,6 @@
         public const string WaysToAddPayeSchemeActionName = "WaysToAdd";
         public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
         public const string Settings = "Settings";
+        public const string Details = "Details";
     }
 }
