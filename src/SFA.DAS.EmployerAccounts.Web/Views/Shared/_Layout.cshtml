@@ -106,11 +106,7 @@
             </p>
         </div>
     <![endif]-->
-    <div id="global-cookie-message">
-        <p>
-            GOV.UK uses cookies to make the site simpler. <a href="@Url.Action(ControllerConstants.PrivacyActionName, ControllerConstants.HomeControllerName)">Find out more about cookies</a>
-        </p>
-    </div>
+    @Html.Partial("_CookieBanner");
     <div id="svg-defs" aria-hidden="true">
         @Html.Partial("_SVGSprite")
     </div>
