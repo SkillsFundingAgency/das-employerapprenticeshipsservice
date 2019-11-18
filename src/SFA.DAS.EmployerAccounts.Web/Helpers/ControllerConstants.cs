@@ -82,5 +82,6 @@
         public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
         public const string Settings = "Settings";
         public const string Details = "Details";
+        public const string CookieConsent = "CookieConsent";
     }
 }

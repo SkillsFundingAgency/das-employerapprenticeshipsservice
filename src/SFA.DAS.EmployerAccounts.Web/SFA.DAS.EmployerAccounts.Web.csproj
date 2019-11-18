@@ -813,6 +813,7 @@
     <Content Include="src\sass\_interim-homepage.scss" />
     <Content Include="Views\CookieConsent\Settings.cshtml" />
     <Content Include="Views\CookieConsent\Details.cshtml" />
+    <Content Include="Views\Shared\_CookieBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
