@@ -43,7 +43,7 @@
                 <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header">Added <abbr>PAYE</abbr> schemes</th>
                     <th scope="col" class="govuk-table__header"><span class="das-no-wrap">English %</span></th>
-                    <th scope="col" class="govuk-table__header">Action</th>
+                    <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
@@ -72,7 +72,7 @@
                     <td class="govuk-table__cell">
                         <a href="@Url.Action("Details", new {empRef = scheme.Ref.FormatPayeForUrl()})" class="govuk-link" 
                            aria-label="Details for PAYE scheme @scheme.Ref" title="Details for PAYE scheme @scheme.Ref">
-                            Details for <abbr>PAYE</abbr> scheme @scheme.Ref
+                            Details <span class="govuk-visually-hidden">for <abbr>PAYE</abbr> scheme @scheme.Ref</span>
                         </a>
                     </td>
                 </tr>

@@ -24,7 +24,7 @@
                 <tr class="govuk-table__row">
                     <th scope="col" class="govuk-table__header">Account name</th>
                     <th scope="col" class="govuk-table__header">What you can do</th>
-                    <th scope="col" class="govuk-table__header">Select account</th>
+                    <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select account</span></th>
                 </tr>
             </thead>
             <tbody class="govuk-table__body">
@@ -45,7 +45,7 @@
                     <td class="govuk-table__cell">
                         <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})"
                            aria-label="View account homepage for @account.Name" title="View account homepage for @account.Name" class="govuk-link">
-                            Open <span class="das-no-wrap">@account.Name</span> account homepage
+                            Open <span class="govuk-visually-hidden">@account.Name account homepage</span>
                         </a>
                     </td>
                 </tr>
