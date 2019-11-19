@@ -93,6 +93,10 @@ else
                     @if (Model.Data.ShowYourFundingReservationsLink())
                     {
                         <div class="card">
+                            <h3 class="heading-medium"><a href="@Url.ReservationsAction("reservations/start")">Reserve apprenticeship funding</a></h3>
+                            <p>Reserve funding for apprenticeship training and assessment.</p>
+                        </div>
+                        <div class="card">
                             <h3 class="heading-medium"><a href="@Url.ReservationsAction("reservations/manage")">Your funding reservations</a></h3>
                             <p>Reserve and manage funding.</p>
                         </div>
