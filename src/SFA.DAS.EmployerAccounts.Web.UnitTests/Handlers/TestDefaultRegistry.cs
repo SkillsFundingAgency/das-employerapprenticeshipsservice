@@ -1,67 +1,18 @@
-﻿using NUnit.Framework;
+﻿using Moq;
+using NUnit.Framework;
+using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.Authorization.Results;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
+using SFA.DAS.HashingService;
 using StructureMap;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
 {
-    public class TestDefaultRegistry : Registry
-    {
-       
-
-        public TestDefaultRegistry()
-        {
-
-            For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();
-            For<IDefaultAuthorizationHandler>().Use<TestDefaultAuthorizationHandler>();
-            //For<IAuthorizationContextProvider>().Use<TestAuthorizationContextProvider>();
-            //For<IAuthorizationContextProvider>().Use<TestImpersonationAuthorizationContext>();
-
-            var authorizationContextProvider = For<IAuthorizationContextProvider>().Use<TestAuthorizationContextProvider>();
-            For<IAuthorizationContextProvider>().Use<TestImpersonationAuthorizationContext>()
-           .Ctor<IAuthorizationContextProvider>().Is(authorizationContextProvider);
-
-        }
-
-    }
-
-    public class TestDefaultAuthorizationHandler : IDefaultAuthorizationHandler
-    {
-        public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
-        {
-            throw new NotImplementedException();
-            //return  Task.FromResult(new AuthorizationResult());
-        }
-    }
-
-    public class TestAuthorizationContextProvider : IAuthorizationContextProvider
-    {
-        public IAuthorizationContext GetAuthorizationContext()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class TestImpersonationAuthorizationContext : IAuthorizationContextProvider
-    {
-        public IAuthorizationContext GetAuthorizationContext()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class DefaultRegistryResolved 
+    public class DefaultRegistryResolved
     {
         public IContainer Container { get; set; }
-        
 
         [SetUp]
         public void Arrange()
@@ -77,44 +28,32 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         public void ThenTheAuditApiClientForSupportUserTypeIsReturned()
         {
             //Act
-            var instance = Container.GetInstance<IDefaultAuthorizationHandler>();
-
-            //Assert
-            Assert.IsInstanceOf<TestDefaultAuthorizationHandler>(instance);
-        }
-
-        //[Test]
-        //public void ThenTheAuditApiClientForSupportUserTypeIsReturned1()
-        //{
-        //    //Act
-        //    var instance = Container.GetInstance<IDefaultAuthorizationHandler>();
-
-        //    //Assert
-        //    Assert.IsInstanceOf<Authorization.DefaultAuthorizationHandler>(instance);
-        //}
-
-        [Test]
-        public void ThenTheAuditApiClientForSupportUserTypeIsReturned2()
-        {
-            //Act
             var instance = Container.GetInstance<IAuthorizationContextProvider>();
 
             //Assert
-            Assert.IsInstanceOf<TestImpersonationAuthorizationContext>(instance);
+            Assert.IsInstanceOf<ImpersonationAuthorizationContext>(instance);
         }
 
 
-        //[Test]
-        //public void ThenTheAuditApiClientForSupportUserTypeIsReturned3()
-        //{
-        //    //Act
-        //    var instance = Container.GetInstance<IAuthorizationContextProvider>();
+        private class TestDefaultRegistry : Registry
+        {
+            private Mock<HttpContextBase> MockHttpContextBase;
+            private Mock<IHashingService> MockHashingService;
+            private Mock<IEmployerAccountTeamRepository> MockEmployerAccountTeamRepository;
+            private Mock<IAuthenticationService> MockAuthenticationService;
 
-        //    //Assert
-        //    Assert.IsInstanceOf<TestAuthorizationContextProvider>(instance);
-        //}
+            public TestDefaultRegistry()
+            {
+                MockHttpContextBase = new Mock<HttpContextBase>();
+                MockHashingService = new Mock<IHashingService>();
+                MockEmployerAccountTeamRepository = new Mock<IEmployerAccountTeamRepository>();
+                MockAuthenticationService = new Mock<IAuthenticationService>();
 
+                For<HttpContextBase>().Use(() => MockHttpContextBase.Object);
+                For<IHashingService>().Use(() => MockHashingService.Object);
+                For<IEmployerAccountTeamRepository>().Use(() => MockEmployerAccountTeamRepository.Object);
+                For<IAuthenticationService>().Use(() => MockAuthenticationService.Object);
+            }
+        }
     }
-
-
 }
