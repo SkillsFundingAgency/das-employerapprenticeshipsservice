@@ -8,72 +8,66 @@
 @{ ViewBag.HideNav = true; }
 @{ ViewBag.HideAccounts = "true"; }
 @{ ViewBag.GaData.Vpv = "/page-auth-homepage"; }
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
-@if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
-{
-    <div class="grid-row">
-        <div class="column-full">
-            <div class="panel panel-error">
-                @Model.Data.ErrorMessage
-            </div>
-        </div>
-    </div>
-}
-<div class="grid-row">
-    <div class="column-full">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         @if (Model.Data.Accounts.AccountList.Count != 0)
         {
-            <h1 class="heading-xlarge" id="Levy-accounts">Your accounts</h1>
-            <p>Select an account or add a new one.</p>
-            <table class="responsive">
-                <thead>
-                    <tr>
-                        <th scope="col" class="tw-30">Account name</th>
-                        <th scope="col">What you can do</th>
-                        <th scope="col">
-                            <span class="vh">Select account</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var account in Model.Data.Accounts.AccountList)
+        <h1 class="govuk-heading-xl" id="Levy-accounts">Your accounts</h1>
+
+        <p class="govuk-body govuk-!-margin-bottom-6">Select an account or add a new one.</p>
+
+        <table class="govuk-table das-table--responsive">
+            <caption class="govuk-visually-hidden">Table of accounts with permissions</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Account name</th>
+                    <th scope="col" class="govuk-table__header">What you can do</th>
+                    <th scope="col" class="govuk-table__header">Select account</th>
+                </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+                @foreach (var account in Model.Data.Accounts.AccountList)
                     {
-                        <tr>
-                            <td data-label="Account name">
-                                <span class="force-word-wrap">
-                                    @account.Name
-                                </span>
-                                <span class="account-id">
-                                    Account ID: @account.PublicHashedId
-                                </span>
-                            </td>
-                            <td data-label="What you can do">
-                                @RoleStrings.GetRoleDescription(account.RoleName)
-                            </td>
-                            <td class="link-right">
-                                <a aria-label="View account homepage for @account.Name"
-                                   title="View account homepage for @account.Name"
-                                   href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})">
-                                    Open<span class="vh"> @account.Name account homepage</span>
-                                </a>
-                            </td>
-                        </tr>
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" data-label="Account name">
+                        <span class="das-no-wrap">
+                            @account.Name
+                        </span>
+                        <span class="govuk-caption-m">
+                            Account ID: @account.PublicHashedId
+                        </span>
+                    </td>
+                    <td class="govuk-table__cell" data-label="What you can do">
+                        @RoleStrings.GetRoleDescription(account.RoleName)
+                    </td>
+                    <td class="govuk-table__cell">
+                        <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})"
+                           aria-label="View account homepage for @account.Name" title="View account homepage for @account.Name" class="govuk-link">
+                            Open <span class="das-no-wrap">@account.Name</span> account homepage
+                        </a>
+                    </td>
+                </tr>
                     }
-                </tbody>
-            </table>
-            <p>
-                <a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)" class="button" id="add_new_account" aria-label="Add new account">Add new account</a>
-            </p>
+            </tbody>
+        </table>
+
+        <p class="govuk-body">
+            <a href="@Url.Action(ControllerConstants.GatewayInformActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-button" id="add_new_account" aria-label="Add new account">Add new account</a>
+        </p>
         }
         @if (Model.Data.Accounts.AccountList.Count != 0 && Model.Data.Invitations > 0)
         {
-            <h2 class="heading-medium">Invitations</h2>
-            <p>
-                You have <strong class="bold-small">@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
-            </p>
-            <p>
-                <a href="@Url.Action("All", "Invitation")" class="link">View Invitations</a>
-            </p>
+        <h2 class="govuk-heading-m">Invitations</h2>
+
+        <p class="govuk-body">
+            You have <strong>@Model.Data.Invitations</strong> pending invitation@(Model.Data.Invitations == 1 ? "" : "s") to employer accounts.
+        </p>
+
+        <p class="govuk-body">
+            <a href="@Url.Action("All", "Invitation")" class="govuk-link">View Invitations</a>
+        </p>
         }
     </div>
 </div>
