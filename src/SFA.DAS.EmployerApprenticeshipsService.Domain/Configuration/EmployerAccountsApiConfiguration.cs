@@ -1,9 +1,8 @@
-﻿
-using SFA.DAS.Http;
+﻿using SFA.DAS.Http.Configuration;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
-    public class EmployerAccountsApiConfiguration : IAzureADClientConfiguration
+    public class EmployerAccountsApiConfiguration : IAzureActiveDirectoryClientConfiguration
     {
         public string BaseUrl { get; set; }
         public string ClientId { get; set; }
@@ -11,5 +10,6 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string IdentifierUri { get; set; }
         public string Tenant { get; set; }
         public string TimeoutTimeSpan { get; set; }
+        public string ApiBaseUrl => BaseUrl;
     }
 }
