@@ -292,7 +292,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (returnUrlCookie != null && !returnUrlCookie.Value.IsNullOrWhiteSpace())
                 return Redirect(returnUrlCookie.Value);
 
-            return RedirectToAction(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
+            return RedirectToAction(ControllerConstants.WhenDoYouWantToView, ControllerConstants.EmployerAgreementControllerName, new { hashedAccountId = response.Data.EmployerAgreement.HashedAccountId, agreementId = response.Data.EmployerAgreement.HashedAgreementId });
         }
 
         [HttpGet]

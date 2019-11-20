@@ -34,7 +34,7 @@
     </script>
 
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-
+    @Html.Partial("_CookieBanner")
     <header class="govuk-header das-header--employer das-header--has-user-nav" role="banner" data-module="header">
         <div class="govuk-header__container govuk-width-container">
             <div class="govuk-header__logo">
@@ -106,7 +106,10 @@
                             <a href="https://www.surveymonkey.co.uk/r/2JPLQ9T" target="_blank" class="govuk-footer__link">Feedback</a>
                         </li>
                         <li class="govuk-footer__inline-list-item">
-                            <a href="@Url.Action("Privacy", "Home")" class="govuk-footer__link">Privacy and cookies</a>
+                            <a href="@Url.Action("Privacy", "Home")" class="govuk-footer__link">Privacy</a>
+                        </li>
+                        <li class="govuk-footer__inline-list-item">
+                            <a href="@Url.Action("Settings", "CookieConsent")" class="govuk-footer__link">Cookies</a>
                         </li>
                         <li class="govuk-footer__inline-list-item">Built by the <a href="http://gov.uk/sfa" target="_blank" class="govuk-footer__link">Education and Skills Funding Agency</a></li>
                     </ul>

@@ -258,7 +258,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
 #if DEBUG
         [Route("CreateLegalAgreement/{showSubFields}")]
-        public ActionResult ShowLegalAgreement(bool showSubFields)
+        public ActionResult ShowLegalAgreement(bool showSubFields) //call this  with false
         {
             return View(ControllerConstants.LegalAgreementViewName, showSubFields);
         }
