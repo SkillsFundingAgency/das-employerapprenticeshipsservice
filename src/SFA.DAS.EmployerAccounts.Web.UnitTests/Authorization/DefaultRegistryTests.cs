@@ -2,28 +2,17 @@
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Context;
-using SFA.DAS.Authorization.Handlers;
-using SFA.DAS.Authorization.Results;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using StructureMap;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {
-   
-   
     public class DefaultRegistryResolved 
     {
         public IContainer Container { get; set; }
-        
 
         [SetUp]
         public void Arrange()
@@ -31,12 +20,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
             Container = new Container(c =>
             {
                 c.AddRegistry<EmployerAccounts.Web.DependencyResolution.DefaultRegistry>();
-                c.AddRegistry<TestDefaultRegistry>();
+                c.AddRegistry<DefaultRegistryTests>();
             });
-        }
+        }        
 
         [Test]
-        public void ThenTheAuditApiClientForSupportUserTypeIsReturned()
+        public void AuthorizationContext_WhenResolvingIAuthorizationContextProvider_ThenReturnInstnaceOfImpersonationAuthorizationContext()
         {
             //Act
             var instance = Container.GetInstance<IAuthorizationContextProvider>();
@@ -45,15 +34,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
             Assert.IsInstanceOf<ImpersonationAuthorizationContext>(instance);
         }
 
-
-        private class TestDefaultRegistry : Registry
+        private class DefaultRegistryTests : Registry
         {
-            private Mock<HttpContextBase> MockHttpContextBase;
-            private Mock<IHashingService> MockHashingService;
-            private Mock<IEmployerAccountTeamRepository> MockEmployerAccountTeamRepository;
-            private Mock<IAuthenticationService> MockAuthenticationService;
+            private readonly Mock<HttpContextBase> MockHttpContextBase;
+            private readonly Mock<IHashingService> MockHashingService;
+            private readonly Mock<IEmployerAccountTeamRepository> MockEmployerAccountTeamRepository;
+            private readonly Mock<IAuthenticationService> MockAuthenticationService;
 
-            public TestDefaultRegistry()
+            public DefaultRegistryTests()
             {
                 MockHttpContextBase = new Mock<HttpContextBase>();
                 MockHashingService = new Mock<IHashingService>();
@@ -67,12 +55,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
             }
         }
 
-
-
     }
-
-
-
-
 
 }
