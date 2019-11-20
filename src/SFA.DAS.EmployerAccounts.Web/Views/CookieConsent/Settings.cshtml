@@ -1,10 +1,10 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @{
     var savedClass = Model?.GetType().GetProperty("Saved").GetValue(Model) ? "" : "hidden";
-    var analyticsConsentOnChecked = Request.Cookies["analyticsConsent"]?.Value == "True" || Request.Cookies["analyticsConsent"] == null ? "checked" : "";
-    var marketingConsentOnChecked = Request.Cookies["marketingConsent"]?.Value == "True" ? "checked" : "";
-    var analyticsConsentOffChecked = Request.Cookies["analyticsConsent"]?.Value == "False" ? "checked" : "";
-    var marketingConsentOffChecked = Request.Cookies["marketingConsent"]?.Value == "False" || Request.Cookies["marketingConsent"] == null ? "checked" : "";
+    var analyticsConsentOnChecked = Request.Cookies["analyticsConsent"]?.Value == "true" || Request.Cookies["analyticsConsent"] == null ? "checked" : "";
+    var marketingConsentOnChecked = Request.Cookies["marketingConsent"]?.Value == "true" ? "checked" : "";
+    var analyticsConsentOffChecked = Request.Cookies["analyticsConsent"]?.Value == "false" ? "checked" : "";
+    var marketingConsentOffChecked = Request.Cookies["marketingConsent"]?.Value == "false" || Request.Cookies["marketingConsent"] == null ? "checked" : "";
 }
 <div class="grid-row">
 

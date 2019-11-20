@@ -33,9 +33,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var cookies = new List<HttpCookie>
             {
-                new HttpCookie("CookieConsent", true.ToString()),
-                new HttpCookie("AnalyticsConsent", analyticsConsent.ToString()),
-                new HttpCookie("MarketingConsent", marketingConsent.ToString())
+                new HttpCookie("CookieConsent", true.ToString().ToLower()),
+                new HttpCookie("AnalyticsConsent", analyticsConsent.ToString().ToLower()),
+                new HttpCookie("MarketingConsent", marketingConsent.ToString().ToLower())
             };
 
             cookies.ForEach(x => ControllerContext.HttpContext.Response.Cookies.Add(x));
