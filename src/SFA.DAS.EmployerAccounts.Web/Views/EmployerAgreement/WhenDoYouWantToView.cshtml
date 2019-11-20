@@ -25,23 +25,23 @@
         <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
             @Html.AntiForgeryToken()
             <div class="form-group @errorClass" id="do-you-want-to-add-paye-scheme-form">
-                <p>
-                    <fieldset>
-                        <span class="error-message @hiddenClass" aria-hidden="true" id="select-option">
-                            Select whether you want to view the employer agreement now or later
-                        </span>
-                        <label for="view-it-now" class="block-label">
-                            <input type="radio" name="choice" id="view-it-now" value="1" />
-                            I'll view it now
-                        </label>
-                        <label for="view-it-later" class="block-label">
-                            <input type="radio" name="choice" id="view-it-later" value="2" />
-                            I'll view it later, after I have created an account
-                        </label>
+                
+                <fieldset>
+                    <span class="error-message @hiddenClass" aria-hidden="true" id="select-option">
+                        Select whether you want to view the employer agreement now or later
+                    </span>
+                    <label for="view-it-now" class="block-label">
+                        <input type="radio" name="choice" id="view-it-now" value="1" />
+                        I'll view it now
+                    </label>
+                    <label for="view-it-later" class="block-label">
+                        <input type="radio" name="choice" id="view-it-later" value="2" />
+                        I'll view it later, after I have created an account
+                    </label>
                     </fieldset>
-                </p>
-
-                <button class="button" type="submit" id="submit-when-do-you-want-to-view-button">Continue</button>
+                
+                <p></p>
+                <p><button class="button" type="submit" id="submit-when-do-you-want-to-view-button">Continue</button></p>
 
             </div>
         </form>
