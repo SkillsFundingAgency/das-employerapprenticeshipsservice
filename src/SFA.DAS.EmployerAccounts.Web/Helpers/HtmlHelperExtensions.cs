@@ -47,6 +47,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
             return MvcHtmlString.Create(apiCallString);
         }
+
+        public static MvcHtmlString SetZenDeskSearchString(this HtmlHelper html, string searchString)
+        {
+            var apiCallString =
+                $"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ search: '{searchString}' }});</script>";
+
+            return MvcHtmlString.Create(apiCallString);
+        }
     }
 
     public static class ZenDeskLabels
