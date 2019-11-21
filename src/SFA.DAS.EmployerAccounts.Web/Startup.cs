@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
 
             // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
-            app.UseWsFederationAuthentication(GetADFSOptions());
+            app.UseWsFederationAuthentication(GetADFSOptions(config));
 
             app.Map($"/login/staff", conf =>
             {
@@ -138,13 +138,13 @@ namespace SFA.DAS.EmployerAccounts.Web
             UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
         }
 
-        private WsFederationAuthenticationOptions GetADFSOptions()
+        private WsFederationAuthenticationOptions GetADFSOptions(EmployerAccountsConfiguration config)
         {
             return new WsFederationAuthenticationOptions
             {
                 AuthenticationType = "Staff",
-                Wtrealm = "https://localhost:44344",
-                MetadataAddress = "https://adfs.preprod.skillsfunding.service.gov.uk/FederationMetadata/2007-06/FederationMetadata.xml",
+                Wtrealm = config.EmployerAccountsBaseUrl,
+                MetadataAddress = config.AdfsMetadata,
                 Notifications = Notifications()
             };
         }
