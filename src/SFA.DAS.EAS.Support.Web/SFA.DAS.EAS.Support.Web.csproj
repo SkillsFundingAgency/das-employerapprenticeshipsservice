@@ -157,6 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
@@ -176,6 +177,9 @@
       <Version>2.6.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Configuration">
       <Version>1.0.0.53229</Version>
@@ -206,6 +210,9 @@
     </PackageReference>
     <PackageReference Include="WebGrease">
       <Version>1.5.2</Version>
+    </PackageReference>
+    <PackageReference Include="WindowsAzure.Storage">
+      <Version>8.7.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>
