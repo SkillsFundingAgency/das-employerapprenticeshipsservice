@@ -9,7 +9,7 @@ namespace SFA.DAS.EAS.Support.Web.Extensions
         public static string StaffLoginAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<IWebConfiguration>();
-            var baseUrl = configuration.EmployerAccountsConfiguration.AccountsCustomHostname;
+            var baseUrl = configuration.EmployerAccountsConfiguration.EmployerAccountsBaseUrl;
 
             return StaffAction(helper, baseUrl, path);
         }
