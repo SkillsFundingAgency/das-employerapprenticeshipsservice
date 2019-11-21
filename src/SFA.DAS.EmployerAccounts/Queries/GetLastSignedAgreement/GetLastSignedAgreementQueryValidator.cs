@@ -12,7 +12,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement
 
         public ValidationResult Validate(GetLastSignedAgreementRequest item)
         {
-            throw new NotImplementedException();
+            var task = Task.Run(async () => await ValidateAsync(item));
+            return task.Result;
         }
 
         public async Task<ValidationResult> ValidateAsync(GetLastSignedAgreementRequest item)

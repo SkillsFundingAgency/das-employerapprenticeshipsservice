@@ -16,7 +16,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
 
         public ValidationResult Validate(GetUnsignedEmployerAgreementRequest item)
         {
-            throw new NotImplementedException();
+            var task = Task.Run(async () => await ValidateAsync(item));
+            return task.Result;
         }
 
         public async Task<ValidationResult> ValidateAsync(GetUnsignedEmployerAgreementRequest item)

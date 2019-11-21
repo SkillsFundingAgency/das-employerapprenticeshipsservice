@@ -8,7 +8,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementType
     {
         public ValidationResult Validate(GetEmployerAgreementTypeRequest item)
         {
-            throw new NotImplementedException();
+            var task = Task.Run(async () => await ValidateAsync(item));
+            return task.Result;
         }
 
         public async Task<ValidationResult> ValidateAsync(GetEmployerAgreementTypeRequest item)
