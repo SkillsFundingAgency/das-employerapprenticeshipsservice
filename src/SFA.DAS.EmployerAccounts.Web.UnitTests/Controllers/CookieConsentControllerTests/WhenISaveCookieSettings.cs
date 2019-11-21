@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.CookieConsentContro
         {
             _cookieConsentController.Settings(_expectedAnalyticsConsent, _expectedMarketingConsent);
             Assert.That(_cookieCollection.Get("AnalyticsConsent"), Is.Not.Null);
-            Assert.That(_cookieCollection.Get("AnalyticsConsent").Value, Is.EqualTo(_expectedAnalyticsConsent.ToString()));
+            Assert.That(_cookieCollection.Get("AnalyticsConsent").Value, Is.EqualTo(_expectedAnalyticsConsent.ToString().ToLower()));
         }
 
         [Test]
@@ -54,7 +54,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.CookieConsentContro
         {
             _cookieConsentController.Settings(_expectedAnalyticsConsent, _expectedMarketingConsent);
             Assert.That(_cookieCollection.Get("MarketingConsent"), Is.Not.Null);
-            Assert.That(_cookieCollection.Get("MarketingConsent").Value, Is.EqualTo(_expectedAnalyticsConsent.ToString()));
+            Assert.That(_cookieCollection.Get("MarketingConsent").Value, Is.EqualTo(_expectedAnalyticsConsent.ToString().ToLower()));
+        }
+
+        [Test]
+        public void ThenTheSeenCookieMessageCookieIsSet()
+        {
+            _cookieConsentController.Settings(_expectedAnalyticsConsent, _expectedMarketingConsent);
+            Assert.That(_cookieCollection.Get("DAS-SeenCookieMessage"), Is.Not.Null);
+            Assert.That(_cookieCollection.Get("DAS-SeenCookieMessage").Value, Is.EqualTo(true.ToString().ToLower()));
+        }
+
+        [Test]
+        public void ThenTheCookieConsentMessageCookieIsSet()
+        {
+            _cookieConsentController.Settings(_expectedAnalyticsConsent, _expectedMarketingConsent);
+            Assert.That(_cookieCollection.Get("CookieConsent"), Is.Not.Null);
+            Assert.That(_cookieCollection.Get("CookieConsent").Value, Is.EqualTo(true.ToString().ToLower()));
         }
     }
 }
