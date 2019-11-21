@@ -8,13 +8,15 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("service")]
     public class HomeController : Controller
     {
+        private const string GoogleTag = "_ga";
+
         [Route("~/")]
         [Route]
         [Route("Index")]
         public ActionResult Index()
         {
-            return Redirect(Url.EmployerAccountsAction("service/index", false));
-        }
+            return Redirect(Url.EmployerAccountsAction($"service/index?{GetTrackerQueryString()}", false));
+        }        
 
         [AuthoriseActiveUser]
         [HttpGet]
@@ -87,6 +89,12 @@ namespace SFA.DAS.EAS.Web.Controllers
         public ActionResult ServiceStartPage()
         {
             return Redirect(Url.EmployerAccountsAction("service/start", false));
+        }
+
+        private string GetTrackerQueryString()
+        {
+            var trackerValue = Url.RequestContext.HttpContext.Request.QueryString[GoogleTag];
+            return trackerValue == null ? string.Empty : $"{GoogleTag}={trackerValue}";
         }
     }
 }
