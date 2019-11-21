@@ -83,7 +83,9 @@ namespace SFA.DAS.EmployerAccounts.Data
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
         {
-            var account = await _db.Value.Accounts.Include(x => x.AccountLegalEntities.Select(y => y.Agreements)).SingleOrDefaultAsync(x => x.HashedId == hashedAccountId);
+            var account = await _db.Value.Accounts
+                .Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
+                .SingleOrDefaultAsync(x => x.HashedId == hashedAccountId);
 
             if (account == null)
             {
@@ -108,21 +110,15 @@ namespace SFA.DAS.EmployerAccounts.Data
             accountDetail.LegalEntities = activeLegalEntities.Select(x => x.Id).ToList();
             accountDetail.AccountAgreementTypes = account.AccountLegalEntities.SelectMany(x => x.Agreements).Select(x => x.Template.AgreementType).Distinct().ToList();
 
-            var ownerEmailTask = _db.Value.Memberships
-                .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
+            accountDetail.OwnerEmail = account.Memberships
+                .Where(m => m.Role == Role.Owner)
                 .OrderBy(m => m.CreatedDate)
                 .Select(m => m.User.Email)
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
 
-            var payeSchemesTask = _db.Value.AccountHistory
-                .Where(ach => ach.AccountId == accountDetail.AccountId)
+            accountDetail.PayeSchemes = account.AccountHistory
                 .Select(ach => ach.PayeRef)
-                .ToListAsync();
-
-            await Task.WhenAll(ownerEmailTask, payeSchemesTask);
-
-            accountDetail.OwnerEmail = ownerEmailTask.Result;
-            accountDetail.PayeSchemes = payeSchemesTask.Result;
+                .ToList();
 
             return accountDetail;
         }
