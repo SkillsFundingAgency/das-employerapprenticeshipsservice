@@ -19,7 +19,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement
         {
             var validationResult = new ValidationResult();
 
-            if (item.AccountLegalEntityId == 0)
+            if (item.AccountLegalEntityId <= 0)
             {
                 validationResult.AddError(nameof(item.AccountLegalEntityId));
             }
