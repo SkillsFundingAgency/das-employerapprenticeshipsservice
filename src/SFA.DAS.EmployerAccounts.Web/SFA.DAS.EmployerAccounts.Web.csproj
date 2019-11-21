@@ -814,7 +814,6 @@
     <Content Include="src\sass\_interim-homepage.scss" />
     <Content Include="Views\CookieConsent\Settings.cshtml" />
     <Content Include="Views\CookieConsent\Details.cshtml" />
-    <Content Include="Views\Shared\_CookieBannerCDN.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
   </ItemGroup>
