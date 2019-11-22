@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
             var apiCallString =
-                "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ labels: [";
+                "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', { labels: [";
 
             var first = true;
             foreach (var label in labels)
