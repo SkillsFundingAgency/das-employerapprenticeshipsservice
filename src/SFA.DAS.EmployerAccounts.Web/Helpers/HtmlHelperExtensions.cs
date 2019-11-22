@@ -24,34 +24,37 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return isAuthorized;
         }
 
-        public static MvcHtmlString RenderReturnToHomePageButton(this HtmlHelper htmlHelper, string accountId)
-        { 
-           var tier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User);
-           bool IsTier2User = tier2User ?? false;
-           bool IsAccountIdSet = accountId != null;
-
-            var homePageButton = $"<a class=\"button\" href=\"";              
-            homePageButton += IsTier2User && IsAccountIdSet ? $"accounts/" + accountId + "/teams/view\"" : (IsAccountIdSet ? $"accounts/" + accountId + "/teams\"" : $"/\"");
-            homePageButton += IsTier2User && IsAccountIdSet ? $">Return to your team </a>" : (IsAccountIdSet ? $">Go back to the account home page</a>" : $">Go back to the service home page</a>");           
-            
-            return MvcHtmlString.Create(homePageButton);
-        }
-
-
-        public static MvcHtmlString RenderReturnToHomePageLinkForBreadcrumbSection(this HtmlHelper htmlHelper, string accountId)
+        public static string ReturnToHomePageButtonHref(this HtmlHelper htmlHelper, string accountId)
         {
-            var tier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User);
-            bool IsTier2User = tier2User ?? false;
-            bool IsAccountIdSet = accountId != null;
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            bool isAccountIdSet = accountId != null;
 
-            var homePageButton = $"<a href=\"";
-            homePageButton += IsTier2User && IsAccountIdSet ? $"accounts/" + accountId + "/teams/view" : $"/";
-            homePageButton += $"\" class=\"back - link\">";
-            homePageButton += IsTier2User && IsAccountIdSet ? $"Return to your team</a>" : (IsAccountIdSet ? $"Back to the homepage</a>" : $"Back</a>");
-
-            return MvcHtmlString.Create(homePageButton);
+            return isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : isAccountIdSet ? $"accounts/{accountId}/teams": "/";
         }
 
+        public static string ReturnToHomePageButtonText(this HtmlHelper htmlHelper, string accountId)
+        {
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            bool isAccountIdSet = accountId != null;
+
+            return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Go back to the account home page" : "Go back to the service home page";
+        }
+
+        public static string ReturnToHomePageLinkHref(this HtmlHelper htmlHelper, string accountId)
+        {
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            bool isAccountIdSet = accountId != null;
+
+            return  isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : "/";
+        }
+
+        public static string ReturnToHomePageLinkHrefText(this HtmlHelper htmlHelper, string accountId)
+        {
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            bool isAccountIdSet = accountId != null;
+
+            return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Back to the homepage" : "Back";
+        }
 
         public static bool ViewExists(this HtmlHelper html, string viewName)
         {

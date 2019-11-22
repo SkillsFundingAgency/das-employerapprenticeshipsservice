@@ -1,6 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using System.Security.Claims;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 
@@ -12,147 +12,95 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         private Mock<IViewDataContainer> MockViewDataContainer;
         private Mock<ViewContext> MockViewContext;        
         private  Mock<HttpContextBase> MockContextBase;
-        private const string Tier2User = "Tier2User";
+        private const string Tier2User = "Tier2User";        
+        private Mock<IPrincipal> MockIPrincipal;        
 
         [SetUp]
         public void Arrange()
         {
+            MockIPrincipal = new Mock<IPrincipal>();           
             MockViewDataContainer = new Mock<IViewDataContainer>();
-            MockContextBase = new Mock<HttpContextBase>();
-            var claimsIdentity = new ClaimsIdentity(new[]            {
-
-                new Claim("sub", "UserRef"),
-            });
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, Tier2User));
-            var principal = new ClaimsPrincipal(claimsIdentity);
-            MockContextBase.Setup(c => c.User).Returns(principal);
+            MockContextBase = new Mock<HttpContextBase>();          
+            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
+            MockContextBase.Setup(c => c.User).Returns(MockIPrincipal.Object);
             MockViewContext = new Mock<ViewContext>();
             MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);          
         }
 
 
-        [Test]
-        public void RenderReturnToHomePageButton_WhenUserInRoleIsTier2UserAndAccountIdSet_ThenRenderLinkToReturnToTeamViewPage()
-        {
-            //Arrange  
-            var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
-
-            //Act
-            var result = Helpers.HtmlHelperExtensions.RenderReturnToHomePageButton(htmlHelper, "12345");
-
-            //Assert
-            Assert.AreEqual("<a class=\"button\" href=\"accounts/12345/teams/view\">Return to your team </a>", result.ToHtmlString());            
-        }
-
-
-        [Test]
-        public void RenderReturnToHomePageButton_WhenUserInRoleIsNotTier2UserAndAccountIdSet_ThenRenderLinkToReturnToTeamPage()
+        [TestCase(false, null, "Back")]
+        [TestCase(true, null, "Back")]
+        [TestCase(true, "12345", "Return to your team")]
+        [TestCase(false, "12345", "Back to the homepage")]
+        public void RenderReturnToHomePageLinkText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnLinkText(bool isTier2User,
+            string accountId, string expectedText)
         {
             //Arrange            
-            var claimsIdentity = new ClaimsIdentity(new[]            {
-
-                new Claim("sub", "UserRef"),
-            });            
-            var principal = new ClaimsPrincipal(claimsIdentity);
-            MockContextBase.Setup(c => c.User).Returns(principal);
-            MockViewContext = new Mock<ViewContext>();
-            MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
-            var result = Helpers.HtmlHelperExtensions.RenderReturnToHomePageButton(htmlHelper, "12345");
-
-            //Assert
-            Assert.AreEqual("<a class=\"button\" href=\"accounts/12345/teams\">Go back to the account home page</a>", result.ToHtmlString());
-        }
-
-        [Test]
-        public void RenderReturnToHomePageButton_WhenUserInRoleIsNotTier2UserAndAccountIdNotSet_ThenRenderLinkToReturnToServicePage()
-        {
-            //Arrange  
-            MockViewDataContainer = new Mock<IViewDataContainer>();
-            MockContextBase = new Mock<HttpContextBase>();
-            var claimsIdentity = new ClaimsIdentity(new[]            {
-
-                new Claim("sub", "UserRef"),
-            });
-            var principal = new ClaimsPrincipal(claimsIdentity);
-            MockContextBase.Setup(c => c.User).Returns(principal);
-            MockViewContext = new Mock<ViewContext>();
-            MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
-            var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
-
-            //Act
-            var result = Helpers.HtmlHelperExtensions.RenderReturnToHomePageButton(htmlHelper, null);
-
-            //Assert
-            Assert.AreEqual("<a class=\"button\" href=\"/\">Go back to the service home page</a>", result.ToHtmlString());
-        }
-        
-
-        [Test]
-        public void RenderReturnToHomePageLinkForBreadcrumbSection_WhenUserInRoleIsTier2UserAndAccountIdSet_ThenRenderLinkToReturnToTeamViewPage()
-        { 
-            //Arrange             
-            var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
-
-            //Act
-            var result = Helpers.HtmlHelperExtensions.RenderReturnToHomePageLinkForBreadcrumbSection(htmlHelper, "12345");
+            var result = Helpers.HtmlHelperExtensions.ReturnToHomePageLinkHrefText(htmlHelper, accountId);
 
             //Assert                       
-            Assert.AreEqual("<a href=\"accounts/12345/teams/view\" class=\"back - link\">Return to your team</a>", result.ToHtmlString());
+            Assert.AreEqual(expectedText, result);
         }
 
-
-        [Test]
-        public void RenderReturnToHomePageLinkForBreadcrumbSection_WhenUserInRoleIsNotTier2UserAndAccountIdSet_ThenRenderLinkToReturnToHomePage()
-        {
-            //Arrange           
-            var claimsIdentity = new ClaimsIdentity(new[] { new Claim("sub", "UserRef") });            
-            var principal = new ClaimsPrincipal(claimsIdentity);
-            MockContextBase.Setup(c => c.User).Returns(principal);
-            MockViewContext = new Mock<ViewContext>();
-            MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
-            var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
-
-            //Act
-            var result = Helpers.HtmlHelperExtensions.RenderReturnToHomePageLinkForBreadcrumbSection(htmlHelper, "12345");
-
-            //Assert                       
-            Assert.AreEqual("<a href=\"/\" class=\"back - link\">Back to the homepage</a>", result.ToHtmlString());
-        }
-        
-
-        [Test]
-        public void RenderReturnToHomePageLinkForBreadcrumbSection_WhenUserInRoleIsTier2UserAndAccountIdNotSet_ThenRenderLinkToReturnToHomePage()
+        [TestCase(false, null, "/")]
+        [TestCase(true, null, "/")]
+        [TestCase(true, "12345", "accounts/12345/teams/view")]
+        [TestCase(false, "12345", "/")]
+        public void RenderReturnToHomePageLinkText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnLink(bool isTier2User,
+           string accountId, string expectedLink)
         {
             //Arrange            
+            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
-            var result = Helpers.HtmlHelperExtensions.RenderReturnToHomePageLinkForBreadcrumbSection(htmlHelper, null);
+            var result = Helpers.HtmlHelperExtensions.ReturnToHomePageLinkHref(htmlHelper, accountId);
 
             //Assert                       
-            Assert.AreEqual("<a href=\"/\" class=\"back - link\">Back</a>", result.ToHtmlString());
+            Assert.AreEqual(expectedLink, result);
         }
 
 
-        [Test]
-        public void RenderReturnToHomePageLinkForBreadcrumbSection_WhenUserInRoleIsNotTier2UserAndAccountIdIsNotSet_ThenRenderLinkToReturnToHomePage()
+        [TestCase(false, null, "Go back to the service home page")]
+        [TestCase(true, null, "Go back to the service home page")]
+        [TestCase(true, "12345", "Return to your team")]
+        [TestCase(false, "12345", "Go back to the account home page")]
+        public void ReturnToHomePageButtonText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnButtonText(bool isTier2User,
+            string accountId, string expectedText)
         {
             //Arrange            
-            var claimsIdentity = new ClaimsIdentity(new[] { new Claim("sub", "UserRef") });            
-            var principal = new ClaimsPrincipal(claimsIdentity);
-            MockContextBase.Setup(c => c.User).Returns(principal);
-            MockViewContext = new Mock<ViewContext>();
-            MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
-            var result = Helpers.HtmlHelperExtensions.RenderReturnToHomePageLinkForBreadcrumbSection(htmlHelper, null);
+            var result = Helpers.HtmlHelperExtensions.ReturnToHomePageButtonText(htmlHelper, accountId);
 
             //Assert                       
-            Assert.AreEqual("<a href=\"/\" class=\"back - link\">Back</a>", result.ToHtmlString());
+            Assert.AreEqual(expectedText, result);
         }
+
+
+        [TestCase(false, null, "/")]
+        [TestCase(true, null, "/")]
+        [TestCase(true, "12345", "accounts/12345/teams/view")]
+        [TestCase(false, "12345", "accounts/12345/teams")]
+        public void ReturnToHomePageButtonHreft_WhenTheUserRoleAndAccountIdHasValues_ThenReturnButtonHref(bool isTier2User,
+         string accountId, string expectedLink)
+        {
+            //Arrange            
+            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
+            var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
+
+            //Act
+            var result = Helpers.HtmlHelperExtensions.ReturnToHomePageButtonHref(htmlHelper, accountId);
+
+            //Assert                       
+            Assert.AreEqual(expectedLink, result);
+        }
+
     }
 }

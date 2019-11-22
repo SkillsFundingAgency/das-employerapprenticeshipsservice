@@ -15,14 +15,14 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <p>If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.</p>
-            @Html.RenderReturnToHomePageButton((string)ViewBag.AccountId)
+        <a class="button" href="@Html.ReturnToHomePageButtonHref((string)ViewBag.AccountId))">@Html.ReturnToHomePageButtonText((string)ViewBag.AccountId))</a>
     </div>
 </div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">           
-             @Html.RenderReturnToHomePageLinkForBreadcrumbSection((string)ViewBag.AccountId)          
+        <ol role="navigation">
+            <li><a href="@{Html.ReturnToHomePageLinkHref((string)ViewBag.AccountId);}" class="back-link">"@{Html.ReturnToHomePageLinkHrefText((string)ViewBag.AccountId);}"</a></li>
         </ol>
     </div>
 }
