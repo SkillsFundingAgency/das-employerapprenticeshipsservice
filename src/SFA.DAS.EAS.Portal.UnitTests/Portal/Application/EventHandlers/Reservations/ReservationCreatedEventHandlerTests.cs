@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.EventHandlers.Reservations;
@@ -36,12 +37,19 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
             return TestAsync(f => f.ArrangeAccountDocumentContainsOrganisation(), f => f.Handle(),
                 f => f.VerifyAccountDocumentSavedWithReservation());
         }
-        
+
         [Test]
-        public Task Handle_WhenAccountDoesContainOrganisationAndTheReservation_ThenAccountDocumentIsNotSavedWiththeDuplicateReservation()
+        public Task Handle_WhenAccountDoesContainOrganisationAndTheReservationAlreadyexists_ThenAccountDocumentIsNotSavedWiththeDuplicateReservation()
         {
             return TestAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Handle(),
                 f => f.VerifyAccountDocumentNotSavedWithReservation());
+        }
+
+        [Test]
+        public Task Handle_WhenAccountDoesContainOrganisationAndTheReservationAlreadyexists_ThenTheDuplicateReservationEventIsLogged()
+        {
+            return TestAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Handle(),
+                f => f.VerifyDuplicateReservationEventIsLogged());
         }
     }
 
@@ -124,6 +132,12 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
             Helper.AccountDocumentService.Verify(s => s.Save(
                 It.Is<AccountDocument>(d => AccountIsAsExpected(d)), It.IsAny<CancellationToken>()),
                 Times.Never);
+        }
+
+        public void VerifyDuplicateReservationEventIsLogged()
+        {
+            //just check a warning is logged
+            Helper.Logger.Verify(s => s.Log(LogLevel.Warning, It.IsAny<EventId>(), It.IsAny<object>(), It.IsAny<Exception>(), It.IsAny<Func<object, Exception, string>>()), Times.Once);
         }
 
         private bool AccountIsAsExpected(AccountDocument document)

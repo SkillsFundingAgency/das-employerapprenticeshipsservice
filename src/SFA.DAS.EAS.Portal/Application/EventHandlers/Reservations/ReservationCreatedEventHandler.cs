@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.EAS.Portal.Application.Services.AccountDocumentService;
+using SFA.DAS.EAS.Portal.Client.Database.Models;
 using SFA.DAS.EAS.Portal.TypesExtensions;
 using SFA.DAS.Reservations.Messages;
 
@@ -32,7 +33,11 @@ namespace SFA.DAS.EAS.Portal.Application.EventHandlers.Reservations
                     isExistingReservation = existingOrganisation.Reservations.Any(r => r.Id.Equals(reservationCreatedEvent.Id));
                 });
 
-            if (!isExistingReservation)
+            if (isExistingReservation)
+            {
+                LogDuplicateReservationCreatedEventWarning(reservationCreatedEvent);
+            }
+            else
             {
                 organisation.Reservations.Add(new Client.Types.Reservation
                 {
@@ -45,6 +50,21 @@ namespace SFA.DAS.EAS.Portal.Application.EventHandlers.Reservations
 
                 await _accountDocumentService.Save(accountDocument, cancellationToken);
             }
+        }
+
+        private void LogDuplicateReservationCreatedEventWarning(ReservationCreatedEvent reservationCreatedEvent)
+        {
+            _logger.Log(LogLevel.Warning,
+                $@"Received {nameof(ReservationCreatedEvent)} with 
+                    Id:{reservationCreatedEvent.Id}, 
+                    AccountId:{reservationCreatedEvent.AccountId},
+                    AccountLegalEntityId:{reservationCreatedEvent.AccountLegalEntityId},
+                    AccountLegalEntityName:{reservationCreatedEvent.AccountLegalEntityName},
+                    CourseId:{reservationCreatedEvent.CourseId},
+                    CourseName:{reservationCreatedEvent.CourseName},
+                    StartDate:{reservationCreatedEvent.StartDate},
+                    EndDate:{reservationCreatedEvent.EndDate},
+                    when {nameof(AccountDocument)} already contains a reservation with that Id.");
         }
     }
 }
