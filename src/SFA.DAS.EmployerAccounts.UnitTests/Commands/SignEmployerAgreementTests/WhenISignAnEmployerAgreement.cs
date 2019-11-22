@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _mediator = new Mock<IMediator>();
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetUserByRefQuery>())).ReturnsAsync(new GetUserByRefResponse { User = new User { CorrelationId = "CORRELATION_ID" } });
+            _mediator.Setup(x => x.SendAsync(It.Is<GetUserByRefQuery>(s => s.UserRef == _command.ExternalUserId ))).ReturnsAsync(new GetUserByRefResponse { User = new User { CorrelationId = "CORRELATION_ID" } });
 
             _commintmentService = new Mock<ICommitmentService>();
 
