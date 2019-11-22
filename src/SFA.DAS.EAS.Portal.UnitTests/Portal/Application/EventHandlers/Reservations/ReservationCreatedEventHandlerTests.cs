@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Portal.Application.EventHandlers.Reservations;
@@ -39,10 +38,10 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
         }
         
         [Test]
-        public Task Handle_WhenAccountDoesContainOrganisationAndReservation_ThenExceptionIsThrown()
+        public Task Handle_WhenAccountDoesContainOrganisationAndTheReservation_ThenAccountDocumentIsNotSavedWiththeDuplicateReservation()
         {
-            return TestExceptionAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Handle(),
-                (f, r) => r.Should().Throw<Exception>().Where(ex => ex.Message.StartsWith("Received ReservationCreatedEvent with")));
+            return TestAsync(f => f.ArrangeAccountDocumentContainsReservation(), f => f.Handle(),
+                f => f.VerifyAccountDocumentNotSavedWithReservation());
         }
     }
 
@@ -119,7 +118,14 @@ namespace SFA.DAS.EAS.Portal.UnitTests.Portal.Application.EventHandlers.Reservat
                 It.Is<AccountDocument>(d => AccountIsAsExpected(d)),It.IsAny<CancellationToken>()),
                 Times.Once);
         }
-        
+
+        public void VerifyAccountDocumentNotSavedWithReservation()
+        {
+            Helper.AccountDocumentService.Verify(s => s.Save(
+                It.Is<AccountDocument>(d => AccountIsAsExpected(d)), It.IsAny<CancellationToken>()),
+                Times.Never);
+        }
+
         private bool AccountIsAsExpected(AccountDocument document)
         {
             var expectedAccount = Helper.GetExpectedAccount(Helper.OriginalMessage.AccountId);
