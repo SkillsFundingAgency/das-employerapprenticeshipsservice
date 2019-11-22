@@ -13,3 +13,6 @@
 GO
 
 CREATE NONCLUSTERED INDEX [IX_Membership_AccountIdRoleId] ON [employer_account].[Membership] ([AccountId], [Role]) INCLUDE ([CreatedDate]) WITH (ONLINE = ON)
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Membership_UserId] ON [employer_account].[Membership] ([UserId])
