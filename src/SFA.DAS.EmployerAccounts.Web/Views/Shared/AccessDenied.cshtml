@@ -1,4 +1,6 @@
-﻿@{
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers;
+
+@{
     ViewBag.PageID = "page-access-denied";
     ViewBag.Title = "Access denied";
     ViewBag.HideNav = true;
@@ -13,21 +15,14 @@
 <div class="grid-row">
     <div class="column-two-thirds">
         <p>If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.</p>
-        @if (ViewBag.AccountId != null)
-        {
-            <a class="button" href="@Url.Action("Index", "EmployerTeam", new {accountId = ViewBag.AccountId})">Go back to the account home page</a>
-        }
-        else
-        {
-            <a class="button" href="/">Go back to the service home page</a>
-        }
+            @Html.RenderReturnToHomePageButton((string)ViewBag.AccountId)
     </div>
 </div>
 
 @section breadcrumb {
     <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/" class="back-link">Back to the homepage</a></li>
+        <ol role="navigation">           
+             @Html.RenderReturnToHomePageLinkForBreadcrumbSection((string)ViewBag.AccountId)          
         </ol>
     </div>
 }
