@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Mvc;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.Authorization.Services;
 
@@ -32,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
             var apiCallString =
-                $"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ labels: [";
+                "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ labels: [";
 
             var first = true;
             foreach (var label in labels)
@@ -40,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
                 if (!first) apiCallString += ",";
                 first = false;
 
-                apiCallString += $"'{label}'";
+                apiCallString += $"'{ EscapeApostrophes(label) }'";
             }
             
             apiCallString += "] });</script>";
@@ -48,22 +50,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return MvcHtmlString.Create(apiCallString);
         }
 
-        public static MvcHtmlString SetZenDeskSearchString(this HtmlHelper html, string searchString)
+        private static string EscapeApostrophes(string input)
         {
-            var apiCallString =
-                $"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ search: '{searchString}' }});</script>";
-
-            return MvcHtmlString.Create(apiCallString);
+            return input.Replace("'", @"\'");
         }
-    }
-
-    public static class ZenDeskLabels
-    {
-        public static string RegisterForAnApprenticeshipServiceAccount = "Register for an apprenticeship service account";
-        public static string AddPAYESchemesToYourAccount = "Add PAYE schemes to your account";
-        public static string ApprenticeshipFunding = "Apprenticeship funding";
-        public static string EnteredTheWrongPAYESchemeDetails = "Entered the wrong PAYE scheme details";
-        public static string UseYourGovernmentGatewayDetails = "Use your Government Gateway details";
-        public static string ReviewTheEmployerAgreement = "Review the employer agreement";
     }
 }
