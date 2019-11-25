@@ -8,8 +8,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Routing;
-using System.Collections.Generic;
-using SFA.DAS.NLog.Logger;
+
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
@@ -18,17 +17,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private readonly HttpContextBase _httpContext;
         private readonly IAuthorizationContextProvider _authorizationContextProvider;
         private readonly IEmployerAccountTeamRepository _employerAccountTeamRepository;
-        private readonly ILog _logger;
 
         public ImpersonationAuthorizationContext(HttpContextBase httpContext,
             IAuthorizationContextProvider authorizationContextProvider,
-            IEmployerAccountTeamRepository employerAccountTeamRepository,
-            ILog logger)
+            IEmployerAccountTeamRepository employerAccountTeamRepository)
         {
             _httpContext = httpContext;
             _authorizationContextProvider = authorizationContextProvider;
             _employerAccountTeamRepository = employerAccountTeamRepository;
-            _logger = logger;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
@@ -36,7 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             if (!_httpContext.User.IsInRole(AuthorizationConstants.Tier2User))
                 return _authorizationContextProvider.GetAuthorizationContext();
 
-            _logger.Info($"IsTier2User : {_httpContext.User.IsInRole(AuthorizationConstants.Tier2User)}");
             
             if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
             {
@@ -55,7 +50,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             var route = _httpContext.Request.RequestContext.RouteData.Route as Route;
             var resource = new Resource { Value = route?.Url };
             authorizationContext.Set("Resource", resource);   
-            _logger.Info($"AuthorizationContext:{authorizationContext} ");
             return authorizationContext;
         }
 

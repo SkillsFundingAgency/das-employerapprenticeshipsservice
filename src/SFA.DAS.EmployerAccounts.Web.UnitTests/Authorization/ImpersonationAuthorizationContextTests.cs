@@ -28,7 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         private Mock<IEmployerAccountTeamRepository> MockEmployerAccountTeamRepository;
         private TeamMember _teamMember;
         public virtual ICollection<TeamMember> TeamMembers { get; set; }
-        public Mock<ILog> MockILog { get; set; }
 
         [SetUp]
         public void Arrange()
@@ -45,7 +44,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             MockAuthorizationContextProvider = new Mock<IAuthorizationContextProvider>();
             MockContextBase = new Mock<HttpContextBase>();
             MockRouteHandler = new Mock<IRouteHandler>();
-            MockILog = new Mock<ILog>();
 
             MockContextBase.Setup(x => x.User.IsInRole(AuthorizationConstants.Tier2User)).Returns(true);
             var routeBase = new Route(AuthorizationConstants.TeamViewRoute, MockRouteHandler.Object);
@@ -62,8 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             SutImpersonationAuthorizationContext = new ImpersonationAuthorizationContext
               (MockContextBase.Object,
               MockAuthorizationContextProvider.Object,
-              MockEmployerAccountTeamRepository.Object,
-              MockILog.Object);
+              MockEmployerAccountTeamRepository.Object);
 
             var claimsIdentity = new ClaimsIdentity(new[]
             {

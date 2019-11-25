@@ -22,15 +22,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         public IAuthorizationContext AuthorizationContext { get; set; }
         public DefaultAuthorizationHandler SutDefaultAuthorizationHandler { get; set; }
         public AuthorizationContextTestsFixture AuthorizationContextTestsFixture { get; set; }
-        public Mock<ILog> MockILog { get; set; }
 
         [SetUp]
         public void Arrange()
         {
-            MockILog = new Mock<ILog>();
             AuthorizationContextTestsFixture = new AuthorizationContextTestsFixture();
             Options = new List<string>();
-            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockILog.Object);
+            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler();
             AuthorizationContext = new AuthorizationContext();
         }
 
