@@ -1,62 +1,24 @@
 ﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Authentication;
 using StructureMap;
-using System.Threading.Tasks;
+using Moq;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.DependencyResolution.AuditRegistry
 {
     public class TestRegistry : Registry
     {
+        private Mock<IEnvironmentService> _mockEnvironmentService;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
+
         public TestRegistry()
         {
-            For<IEnvironmentService>().Use<TestEnvironmentService>();
-            For<IAuthenticationService>().Use<TestAuthenticationService>();
-        }
+            _mockEnvironmentService = new Mock<IEnvironmentService>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
 
-        public class TestEnvironmentService : IEnvironmentService
-        {
-            public string GetVariable(string variableName)
-            {
-                throw new System.NotImplementedException();
-            }
+            _mockEnvironmentService.Setup(m => m.IsCurrent(It.IsAny<DasEnv>())).Returns(true);
 
-            public bool IsCurrent(params DasEnv[] environment)
-            {
-                return true;
-            }
-        }
-
-        public class TestAuthenticationService : IAuthenticationService
-        {
-            public string GetClaimValue(string key)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public bool HasClaim(string type, string value)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public bool IsUserAuthenticated()
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public void SignOutUser()
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public bool TryGetClaimValue(string key, out string value)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public Task UpdateClaims()
-            {
-                throw new System.NotImplementedException();
-            }
+            For<IEnvironmentService>().Use(_mockEnvironmentService.Object);
+            For<IAuthenticationService>().Use(_mockAuthenticationService.Object);
         }
     }
 }
