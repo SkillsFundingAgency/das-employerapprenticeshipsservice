@@ -29,28 +29,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            if (_httpContext.User.IsInRole(AuthorizationConstants.Tier2User))
-            {                
-                if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
-                {
-                    throw new UnauthorizedAccessException();
-                }
+            if (!_httpContext.User.IsInRole(AuthorizationConstants.Tier2User))
+                return _authorizationContextProvider.GetAuthorizationContext();
+            
+            if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
+            {
+                throw new UnauthorizedAccessException();
+            }
 
-                var teamMembers = Task.Run(() => _employerAccountTeamRepository.GetAccountTeamMembers(accountHashedId?.ToString())).Result;
-                var accountOwner = teamMembers.First(tm => tm.Role == Role.Owner);
-                var claimsIdentity = (ClaimsIdentity)_httpContext.User.Identity;
-                claimsIdentity.AddClaim(new Claim("sub", accountOwner.UserRef));
-                claimsIdentity.AddClaim(new Claim(DasClaimTypes.Id, accountOwner.UserRef));
-                claimsIdentity.AddClaim(new Claim(DasClaimTypes.Email, accountOwner.Email));
+            var teamMembers = Task.Run(() => _employerAccountTeamRepository.GetAccountTeamMembers(accountHashedId?.ToString())).Result;
+            var accountOwner = teamMembers.First(tm => tm.Role == Role.Owner);
+            var claimsIdentity = (ClaimsIdentity)_httpContext.User.Identity;
+            claimsIdentity.AddClaim(new Claim("sub", accountOwner.UserRef));
+            claimsIdentity.AddClaim(new Claim(DasClaimTypes.Id, accountOwner.UserRef));
+            claimsIdentity.AddClaim(new Claim(DasClaimTypes.Email, accountOwner.Email));
 
-                var authorizationContext = _authorizationContextProvider.GetAuthorizationContext();
-                authorizationContext.Set("ClaimsIdentity", claimsIdentity);
-                var route = _httpContext.Request.RequestContext.RouteData.Route as Route;
-                var resource = new Resource { Value = route?.Url };
-                authorizationContext.Set("Resource", resource);             
-                return authorizationContext;            }
-
-            return _authorizationContextProvider.GetAuthorizationContext();
+            var authorizationContext = _authorizationContextProvider.GetAuthorizationContext();
+            authorizationContext.Set("ClaimsIdentity", claimsIdentity);
+            var route = _httpContext.Request.RequestContext.RouteData.Route as Route;
+            var resource = new Resource { Value = route?.Url };
+            authorizationContext.Set("Resource", resource);             
+            return authorizationContext;
         }
 
         public class Resource

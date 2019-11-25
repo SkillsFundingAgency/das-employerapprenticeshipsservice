@@ -12,7 +12,7 @@ using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {
     [TestFixture]
     public class DefaultAuthorizationHandlerTests

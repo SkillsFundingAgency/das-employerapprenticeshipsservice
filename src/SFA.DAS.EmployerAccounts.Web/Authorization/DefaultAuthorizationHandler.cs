@@ -20,16 +20,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             var resourceValue = resource != null ? resource.Value : "default";
             var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
 
-
             if (userRoleClaims == null || userRoleClaims.All(claim => claim.Value != AuthorizationConstants.Tier2User))
                 return Task.FromResult(authorizationResult);
 
-           if (!CheckAllowedResourceList(resourceValue))
-           {
-               authorizationResult.AddError(new Tier2UserAccesNotGranted());
-           }
+            if (!CheckAllowedResourceList(resourceValue))
+            {
+                authorizationResult.AddError(new Tier2UserAccesNotGranted());
+            }
 
-           return Task.FromResult(authorizationResult);
+            return Task.FromResult(authorizationResult);
         }
 
         public bool CheckAllowedResourceList(string resourceValue)
@@ -50,9 +49,5 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             return resourceList;
         }
     }
-
-
-
-
 
 }
