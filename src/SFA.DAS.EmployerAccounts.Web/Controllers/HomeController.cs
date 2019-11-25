@@ -46,15 +46,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("Index")]
         public async Task<ActionResult> Index()
         {
-            //var isStaff = HttpContext.User.IsInRole("Tier2User");
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             OrchestratorResponse<UserAccountsViewModel> accounts;
 
-            //if (isStaff)
-            //{
-            //    accounts = await _homeOrchestrator.GetAccounts();
-            //}
             if (!string.IsNullOrWhiteSpace(userId))
             {
                 await OwinWrapper.UpdateClaims();
@@ -76,11 +71,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else
             {
-                //var isStaff = HttpContext.User.IsInRole("Tier2User");
-                //if (isStaff)
-                //{
-                //    await _homeOrchestrator.GetAccounts();
-                //}
                 var model = new
                 {
                     HideHeaderSignInLink = true
