@@ -85,9 +85,11 @@ namespace SFA.DAS.EmployerAccounts.Web
                     var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
                     
                     context.Authentication.Challenge(new AuthenticationProperties
-                    { RedirectUri = requestRedirect, IsPersistent = true },
-                        "Staff"
-                    );
+                    { 
+                        RedirectUri = requestRedirect, 
+                        IsPersistent = true 
+                    },
+                    "Staff");
 
                     context.Response.StatusCode = 401;
                     return context.Response.WriteAsync(string.Empty);
@@ -145,7 +147,8 @@ namespace SFA.DAS.EmployerAccounts.Web
                 AuthenticationType = "Staff",
                 Wtrealm = config.EmployerAccountsBaseUrl,
                 MetadataAddress = config.AdfsMetadata,
-                Notifications = Notifications()
+                Notifications = Notifications(),
+                Wreply = config.EmployerAccountsBaseUrl
             };
         }
 
