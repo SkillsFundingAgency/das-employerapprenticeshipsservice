@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Web.Routing;
 using System.Web;
 using System.Security.Claims;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -20,14 +21,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         public List<string> Options { get; set; }
         public IAuthorizationContext AuthorizationContext { get; set; }
         public DefaultAuthorizationHandler SutDefaultAuthorizationHandler { get; set; }
-        public AuthorizationContextTestsFixture AuthorizationContextTestsFixture { get; set; }        
+        public AuthorizationContextTestsFixture AuthorizationContextTestsFixture { get; set; }
+        public Mock<ILog> MockILog { get; set; }
 
         [SetUp]
         public void Arrange()
         {
+            MockILog = new Mock<ILog>();
             AuthorizationContextTestsFixture = new AuthorizationContextTestsFixture();
             Options = new List<string>();
-            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler();
+            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockILog.Object);
             AuthorizationContext = new AuthorizationContext();
         }
 
@@ -141,7 +144,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         public AuthorizationContextTestsFixture SetData(string url)
         {
 
-            var resource = new Resource { Value = url  };
+            var resource = new Resource { Value = url };
             AuthorizationContext.Set("Resource", resource);            
 
             var claimsIdentity = new ClaimsIdentity(new[]
