@@ -18,18 +18,41 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             authorizationContext.TryGet<Resource>("Resource", out var resource);
             authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
             var resourceValue = resource != null ? resource.Value : "default";
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);            
+            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
 
 
-            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value == AuthorizationConstants.Tier2User))
-            {
-                if (!resourceValue.ToLower().Contains(AuthorizationConstants.TeamViewRoute))
-                {
-                    authorizationResult.AddError(new Tier2UserAccesNotGranted());
-                }
-            }
+            if (userRoleClaims == null || userRoleClaims.All(claim => claim.Value != AuthorizationConstants.Tier2User))
+                return Task.FromResult(authorizationResult);
 
-            return Task.FromResult(authorizationResult);
+           if (!CheckAllowedResourceList(resourceValue))
+           {
+               authorizationResult.AddError(new Tier2UserAccesNotGranted());
+           }
+
+           return Task.FromResult(authorizationResult);
+        }
+
+        public bool CheckAllowedResourceList(string resourceValue)
+        {
+            var resourceList = ResourceList.GetListOfAllowedResources();
+
+            return resourceList.Any(res => res == resourceValue);
         }
     }
+
+
+    public static class ResourceList
+    {
+        public static IList<string> GetListOfAllowedResources()
+        {
+            var resourceList = new List<string> { AuthorizationConstants.TeamViewRoute, AuthorizationConstants.TeamInvite, AuthorizationConstants.TeamReview };
+
+            return resourceList;
+        }
+    }
+
+
+
+
+
 }

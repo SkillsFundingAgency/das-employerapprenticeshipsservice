@@ -57,6 +57,49 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Handlers
         }
 
         [Test]
+        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenAllowTheUserToViewTeamInvitePage()
+        {
+            //Arrange
+            AuthorizationContextTestsFixture.SetData(AuthorizationConstants.TeamInvite);
+
+            //Act
+            AuthorizationContextTestsFixture.AuthorizationContext.ToString();
+
+            //Assert
+            var authorizationResult = SutDefaultAuthorizationHandler.GetAuthorizationResult(Options, AuthorizationContextTestsFixture.AuthorizationContext);
+            authorizationResult.Result.IsAuthorized.Should().Be(true);
+        }
+
+
+        [Test]
+        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenAllowTheUserToViewTeamReviewPage()
+        {
+            //Arrange
+            AuthorizationContextTestsFixture.SetData(AuthorizationConstants.TeamReview);
+
+            //Act
+            AuthorizationContextTestsFixture.AuthorizationContext.ToString();
+
+            //Assert
+            var authorizationResult = SutDefaultAuthorizationHandler.GetAuthorizationResult(Options, AuthorizationContextTestsFixture.AuthorizationContext);
+            authorizationResult.Result.IsAuthorized.Should().Be(true);
+        }
+
+        [Test]
+        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenDontAllowTheUserToViewTeamPage()
+        {
+            //Arrange
+            AuthorizationContextTestsFixture.SetData(AuthorizationConstants.TeamRoute);
+
+            //Act
+            AuthorizationContextTestsFixture.AuthorizationContext.ToString();
+
+            //Assert
+            var authorizationResult = SutDefaultAuthorizationHandler.GetAuthorizationResult(Options, AuthorizationContextTestsFixture.AuthorizationContext);
+            authorizationResult.Result.IsAuthorized.Should().Be(false);
+        }
+
+        [Test]
         public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenDontAllowTheUserToViewHomePage()
         {
             //Arrange
