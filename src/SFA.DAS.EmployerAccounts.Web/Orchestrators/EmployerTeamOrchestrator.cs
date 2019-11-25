@@ -202,22 +202,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
                 var reservationsResponse = reservationsResponseTask.Result;
-                //var reservationsResponse = new GetReservationsResponse()
-                //{
-                //    Reservations = new List<Reservation>(10)
-                //};
-               var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
-               {
+                var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
+                {
                    AccountId = accountResponse.Account.Id,
                    ExternalUserId = externalUserId
-               }); ;
+                }); 
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
-                //var accountDetailViewModel = new AccountDetailViewModel()
-                //{
-                //    ApprenticeshipEmployerType = "1"
-                //};//apiGetAccountTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -227,7 +219,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     UserFirstName = userResponse.User.FirstName,
                     OrganisationCount = accountStatsResponse?.Stats?.OrganisationCount ?? 0,
                     PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount ?? 0,
-                    //PayeSchemeCount = accountStatsResponse?.Stats?.PayeSchemeCount + 1 ?? 0,
                     TeamMemberCount = accountStatsResponse?.Stats?.TeamMemberCount ?? 0,
                     TeamMembersInvited = accountStatsResponse?.Stats?.TeamMembersInvited ?? 0,
                     ShowWizard = showWizard,
