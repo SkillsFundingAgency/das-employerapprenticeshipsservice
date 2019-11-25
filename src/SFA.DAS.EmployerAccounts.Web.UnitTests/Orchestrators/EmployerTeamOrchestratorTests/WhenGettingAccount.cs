@@ -280,5 +280,35 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.AreEqual(expectedApprenticeshipEmployerType, model.Data.ApprenticeshipEmployerType);
         }
+
+        [TestCase("Levy", 2, TestName = "Levy Task")]
+        [TestCase("NonLevy", 1, TestName = "Non Levy Task")]
+        public async Task ThenShouldReturnEmployerTypeAppropriateAccountsTasks(string apiApprenticeshipEmployerType, int tasksCount)
+        {
+            //Arrange
+            _tasks.Add(new AccountTask
+            {
+                Type = "LevyDeclarationDue",
+                ItemsDueCount = 1
+            });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTasksQuery>()))
+                .ReturnsAsync(new GetAccountTasksResponse
+                {
+                    Tasks = _tasks
+                });
+
+            _accountApiClient
+                .Setup(c => c.GetAccount(HashedAccountId))
+                .ReturnsAsync(new AccountDetailViewModel
+                { ApprenticeshipEmployerType = apiApprenticeshipEmployerType });
+
+            //Act
+            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert
+            Assert.AreEqual(tasksCount, actual.Data.Tasks.Count);
+            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountTasksQuery>(r => r.AccountId.Equals(AccountId))), Times.Once);
+        }
     }
 }

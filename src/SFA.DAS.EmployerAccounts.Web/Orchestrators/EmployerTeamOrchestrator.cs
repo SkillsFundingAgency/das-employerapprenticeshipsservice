@@ -183,8 +183,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
-                                
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);                
+
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -227,6 +227,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
                     ReservationsCount = reservationsResponse.Reservations.Count()
                 };
+                
+                if (viewModel.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+                {
+                    var levyReminderTask = tasks.FirstOrDefault(t => t.Type == "LevyDeclarationDue");
+                    tasks.Remove(levyReminderTask);
+                }
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
                 // we could blat over the existing flag, but it's much nicer to store the enum (as above) rather than a byte!
