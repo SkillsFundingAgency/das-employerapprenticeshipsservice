@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         public bool CheckAllowedResourceList(string resourceValue)
         {
             var resourceList = ResourceList.GetListOfAllowedResources();
-            return resourceList.Any(res => res == resourceValue);
+            return resourceList.Any(res => res.ToLower().ToString() == resourceValue.ToLower());
         }
     }
 
