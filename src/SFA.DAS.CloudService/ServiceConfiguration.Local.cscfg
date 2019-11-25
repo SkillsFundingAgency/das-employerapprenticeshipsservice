@@ -6,7 +6,7 @@
       <Setting name="ConfigurationStorageConnectionString" value="UseDevelopmentStorage=true" />
       <Setting name="CurrentTime" value="" />
       <Setting name="EmployerCommitmentsBaseUrl" value="" />
-      <Setting name="EmployerAccountsWebBaseUrl" value="https://localhost:44347/" />
+      <Setting name="EmployerAccountsWebBaseUrl" value="https://localhost:44344/" />
       <Setting name="EmployerFinanceWebBaseUrl" value="https://localhost:44304/" />
       <Setting name="EmployerRecruitBaseUrl" value="http://localhost:5020/" />
       <Setting name="EmployerProjectionsBaseUrl" value="http://localhost:50770/" />

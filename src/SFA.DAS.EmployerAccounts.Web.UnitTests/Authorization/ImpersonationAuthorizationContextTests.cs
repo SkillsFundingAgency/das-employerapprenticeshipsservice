@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using System;
 using System.Linq;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {

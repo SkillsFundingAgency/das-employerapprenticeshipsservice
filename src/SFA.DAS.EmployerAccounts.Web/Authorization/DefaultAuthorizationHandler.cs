@@ -6,11 +6,13 @@ using SFA.DAS.Authorization.Results;
 using System.Collections.Generic;
 using SFA.DAS.Authorization.Handlers;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
     public class DefaultAuthorizationHandler : IDefaultAuthorizationHandler
     {
+
         public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
             var authorizationResult = new AuthorizationResult();
@@ -24,13 +26,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             if (!CheckAllowedResourceList(resourceValue)) {
                 authorizationResult.AddError(new Tier2UserAccesNotGranted());
             }
+
             return Task.FromResult(authorizationResult);
         }
 
         public bool CheckAllowedResourceList(string resourceValue)
         {
             var resourceList = ResourceList.GetListOfAllowedResources();
-            return resourceList.Any(res => res == resourceValue);
+            return resourceList.Any(res => res.ToLower().ToString() == resourceValue.ToLower());
         }
     }
 
