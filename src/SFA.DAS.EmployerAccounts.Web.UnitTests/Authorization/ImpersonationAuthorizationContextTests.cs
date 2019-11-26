@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 using SFA.DAS.NLog.Logger;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {
@@ -46,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             MockRouteHandler = new Mock<IRouteHandler>();
 
             MockContextBase.Setup(x => x.User.IsInRole(AuthorizationConstants.Tier2User)).Returns(true);
-            var routeBase = new Route(AuthorizationConstants.TeamViewRoute, MockRouteHandler.Object);
+            var routeBase = new Route(AuthorizedTier2Route.TeamViewRoute, MockRouteHandler.Object);
             var routeData = new RouteData(routeBase, MockRouteHandler.Object);
             routeData.Values.Add(RouteValueKeys.AccountHashedId, "ABC123");
             MockContextBase.Setup(x => x.Request.RequestContext.RouteData).Returns(routeData);
@@ -87,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 
             result.TryGet<Resource>("Resource", out var resource);
             var resourceValue = resource != null ? resource.Value : "default";
-            Assert.AreEqual(AuthorizationConstants.TeamViewRoute, resourceValue);
+            Assert.AreEqual(AuthorizedTier2Route.TeamViewRoute, resourceValue);
 
             Assert.IsInstanceOf<IAuthorizationContext>(result);
         }
@@ -97,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         public void GetAuthorizationContext_WhenAccountHashedIdKeyIsNotRight_ThenThrowUnauthorizedAccessException()
         {
             //Arrange       
-            var routeBase = new Route(AuthorizationConstants.TeamViewRoute, MockRouteHandler.Object);
+            var routeBase = new Route(AuthorizedTier2Route.TeamViewRoute, MockRouteHandler.Object);
             var routeData = new RouteData(routeBase, MockRouteHandler.Object);
             routeData.Values.Add("HashedAccountId123", "value1");
 

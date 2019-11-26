@@ -39,29 +39,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         private bool IsAllowedResourceList(string resourceValue)
         {
-            var resourceList = ResourceList.GetListOfAllowedResources();
-            return resourceList.Any(res => res.ToLower().ToString() == resourceValue.ToLower());
+            var resourceList = _authorisationResourceRepository.Get();
+            return resourceList.Any(res => res.Url.Equals(resourceValue, StringComparison.OrdinalIgnoreCase));
         }
-    }
-
-    public static class ResourceList
-    {
-        public static IList<string> GetListOfAllowedResources()
-        {
-            var resourceList = new List<string> 
-            { 
-                AuthorizationConstants.TeamViewRoute, 
-                AuthorizationConstants.TeamInvite, 
-                AuthorizationConstants.TeamReview,
-                AuthorizationConstants.TeamMemberRoleChange,
-                AuthorizationConstants.TeamInviteComplete,
-                AuthorizationConstants.TeamMemberRemove,
-                AuthorizationConstants.TeamMemberInviteResend,
-                AuthorizationConstants.TeamMemberInviteCancel
-            };
-
-            return resourceList;
-        }
-    }
+    }   
 
 }

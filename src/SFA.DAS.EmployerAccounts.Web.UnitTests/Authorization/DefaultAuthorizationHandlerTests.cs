@@ -15,6 +15,7 @@ using System;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Services;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {
@@ -26,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         public DefaultAuthorizationHandler SutDefaultAuthorizationHandler { get; set; }
         public AuthorizationContextTestsFixture AuthorizationContextTestsFixture { get; set; }
         private Mock<IAuthorisationResourceRepository> MockIAuthorisationResourceRepository { get; set; }
-        private List<ResourceRoute> resourceList { get; set; }
+        private List<ResourceRoute> resourceList { get; set; }        
 
         [SetUp]
         public void Arrange()
@@ -44,23 +45,27 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         [Test]
         public async Task GetAuthorizationResult_WhenTheUserInRoleIsNotTier2_ThenAuthorizedTheUser()
         {
-            //Act            
+            //Act                        
             var authorizationResult = await SutDefaultAuthorizationHandler.GetAuthorizationResult(Options, AuthorizationContext);
 
             //Assert
             authorizationResult.IsAuthorized.Should().Be(true);
         }
-       
 
-        [TestCase(AuthorizationConstants.TeamViewRoute, true)]
-        [TestCase(AuthorizationConstants.TeamInvite, true)]
-        [TestCase(AuthorizationConstants.TeamReview, true)]
-        [TestCase(AuthorizationConstants.TeamMemberRoleChange, true)]
-        [TestCase(AuthorizationConstants.TeamRoute, false)]
+        
+        [TestCase(AuthorizedTier2Route.TeamViewRoute, true)]        
+        [TestCase(AuthorizedTier2Route.TeamInvite, true)]
+        [TestCase(AuthorizedTier2Route.TeamInviteComplete, true)]
+        [TestCase(AuthorizedTier2Route.TeamMemberRemove, true)]
+        [TestCase(AuthorizedTier2Route.TeamReview, true)]
+        [TestCase(AuthorizedTier2Route.TeamMemberRoleChange, true)]
+        [TestCase(AuthorizedTier2Route.TeamMemberInviteResend, true)]
+        [TestCase(AuthorizedTier2Route.TeamMemberInviteCancel, true)]
+        [TestCase(AuthorizedTier2Route.TeamRoute, false)]
         public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenAllowTheUserToViewTeamPage(string url, bool expected)
         {
             //Arrange
-            AuthorizationContextTestsFixture.SetData(url);
+             AuthorizationContextTestsFixture.SetData(url);
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
