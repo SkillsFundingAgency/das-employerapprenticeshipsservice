@@ -231,7 +231,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true),
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    //ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"), TO DO : check
+                    ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
                     ReservationsCount = reservationsResponse.Reservations.Count()
                 };
 

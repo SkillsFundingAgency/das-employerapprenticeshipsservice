@@ -70,19 +70,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 LastName = lastName,
                 FirstName = firstName
             });
-        }
-
-        public virtual async Task<OrchestratorResponse<UserAccountsViewModel>> GetAccounts()
-        {
-            var getUserAccountsQueryResponse = await _mediator.SendAsync(new GetUserAccountsQuery());
-
-            return new OrchestratorResponse<UserAccountsViewModel>
-            {
-                Data = new UserAccountsViewModel
-                {
-                    Accounts = getUserAccountsQueryResponse.Accounts
-                }
-            };
-        }
+        }       
     }
 }
