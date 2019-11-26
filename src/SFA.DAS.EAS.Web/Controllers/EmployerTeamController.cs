@@ -60,7 +60,7 @@ namespace SFA.DAS.EAS.Web.Controllers
 
 
         [HttpGet]
-        [Route("{email}/review/")]
+        [Route("{email}/review")]
         public ActionResult Review(string hashedAccountId, string email)
         {
             return Redirect(Url.EmployerAccountsAction($"teams/{email}/review?{Request.QueryString}"));

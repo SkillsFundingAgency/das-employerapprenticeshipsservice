@@ -41,7 +41,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
     {
         public static IList<string> GetListOfAllowedResources()
         {
-            var resourceList = new List<string> { AuthorizationConstants.TeamViewRoute, AuthorizationConstants.TeamInvite, AuthorizationConstants.TeamReview };
+            var resourceList = new List<string> 
+            { 
+                AuthorizationConstants.TeamViewRoute, 
+                AuthorizationConstants.TeamInvite, 
+                AuthorizationConstants.TeamReview,
+                AuthorizationConstants.TeamMemberRoleChange
+            };
             return resourceList;
         }
     }

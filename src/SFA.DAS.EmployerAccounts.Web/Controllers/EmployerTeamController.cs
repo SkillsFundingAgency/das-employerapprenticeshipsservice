@@ -302,7 +302,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{email}/review/")]
+        [Route("{email}/review")]
         public async Task<ActionResult> Review(string hashedAccountId, string email)
         {
             var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
