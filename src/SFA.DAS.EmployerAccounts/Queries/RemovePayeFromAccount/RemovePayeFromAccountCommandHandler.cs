@@ -92,7 +92,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount
         }
 
 
-        private Task QueuePayeRemovedMessage(string payeRef, long accountId, string organisationName, string userName, string userRef)
+        private Task QueuePayeRemovedMessage(string payeRef, long accountId, string organisationName, string userName, Guid userRef)
         {
             return _eventPublisher.Publish(new DeletedPayeSchemeEvent
             {
@@ -100,7 +100,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.RemovePayeFromAccount
                 PayeRef = payeRef,
                 OrganisationName = organisationName,
                 UserName = userName,
-                UserRef = Guid.Parse(userRef),
+                UserRef = userRef,
                 Created = DateTime.UtcNow
             });
         }

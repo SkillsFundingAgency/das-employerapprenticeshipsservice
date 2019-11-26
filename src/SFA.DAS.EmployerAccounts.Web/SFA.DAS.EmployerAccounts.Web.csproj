@@ -244,6 +244,7 @@
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
+    <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />

@@ -15,3 +15,4 @@ GO
 
 ALTER TABLE [employer_account].[UserAornFailedAttempts] CHECK CONSTRAINT [FK_UserAornFailedAttempt_User]
 GO
+CREATE NONCLUSTERED INDEX [IX_UserAornFailedAttempts_UserId] ON [employer_account].[UserAornFailedAttempts] ([UserId])

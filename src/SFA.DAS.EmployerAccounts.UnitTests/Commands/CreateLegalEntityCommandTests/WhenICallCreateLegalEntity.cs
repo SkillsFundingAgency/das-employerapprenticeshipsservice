@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                 Email = "test@test.com",
                 FirstName = "Bob",
                 LastName = "Green",
-                UserRef = Command.ExternalUserId,
+                UserRef = Guid.Parse(Command.ExternalUserId),
                 Role = Role.Owner,
             };
 
@@ -158,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
                    e.AccountLegalEntityPublicHashedId.Equals(ExpectedAccountLegalEntityPublicHashString) &&
                    e.OrganisationName.Equals(Command.Name) &&
                    e.UserName.Equals(_owner.FullName()) &&
-                   e.UserRef.Equals(Guid.Parse(_owner.UserRef)) &&
+                   e.UserRef.Equals(_owner.UserRef) &&
                    e.OrganisationReferenceNumber.Equals(_agreementView.LegalEntityCode) &&
                    e.OrganisationAddress.Equals(_agreementView.LegalEntityAddress) &&
                    e.OrganisationType.ToString().Equals(_agreementView.LegalEntitySource.ToString());
