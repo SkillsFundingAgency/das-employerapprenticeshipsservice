@@ -44,7 +44,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             claimsIdentity.AddClaim(new Claim("sub", accountOwner.UserRef));
             claimsIdentity.AddClaim(new Claim(DasClaimTypes.Id, accountOwner.UserRef));
             claimsIdentity.AddClaim(new Claim(DasClaimTypes.Email, accountOwner.Email));
-            claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, accountOwner.UserRef)); // to validate antiforgery
 
             var authorizationContext = _authorizationContextProvider.GetAuthorizationContext();
             authorizationContext.Set("ClaimsIdentity", claimsIdentity);

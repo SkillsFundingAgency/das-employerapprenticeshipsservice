@@ -228,6 +228,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
                 notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
                 notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
             }
             catch (Exception ex)
             {
