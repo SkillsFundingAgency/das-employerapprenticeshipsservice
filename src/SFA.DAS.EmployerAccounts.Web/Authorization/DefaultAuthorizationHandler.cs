@@ -47,8 +47,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
                 AuthorizationConstants.TeamInvite, 
                 AuthorizationConstants.TeamReview,
                 AuthorizationConstants.TeamMemberRoleChange,
-                AuthorizationConstants.TeamInviteComplete
+                AuthorizationConstants.TeamInviteComplete,
+                AuthorizationConstants.TeamMemberRemove,
+                AuthorizationConstants.TeamMemberInviteResend,
+                AuthorizationConstants.TeamMemberInviteCancel
             };
+
             return resourceList;
         }
     }

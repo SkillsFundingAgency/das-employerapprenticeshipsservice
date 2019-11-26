@@ -45,7 +45,7 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{email}/remove/")]
+        [Route("{email}/remove")]
         public ActionResult Remove(string hashedAccountId, string email)
         {
             return Redirect(Url.EmployerAccountsAction($"teams/{email}/remove?{Request.QueryString}"));
