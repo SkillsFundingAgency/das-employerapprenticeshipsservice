@@ -3,6 +3,8 @@ using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.HashingService;
 using StructureMap;
@@ -32,6 +34,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 
             //Assert
             Assert.IsInstanceOf<ImpersonationAuthorizationContext>(instance);
+        }
+
+        [Test]
+        public void AuthorizationContext_WhenResolvingIAuthorisationResourceRepository_ThenReturnInstanceOfAuthorisationResourceRepository()
+        {
+            //Act
+            var instance = Container.GetInstance<IAuthorisationResourceRepository>();
+
+            //Assert
+            Assert.IsInstanceOf<AuthorisationResourceRepository>(instance);
         }
 
         private class DefaultRegistryTests : Registry

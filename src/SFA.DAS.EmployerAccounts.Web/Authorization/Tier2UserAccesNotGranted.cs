@@ -2,9 +2,9 @@
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
-    public class Tier2UserAccesNotGranted : AuthorizationError
+    public class Tier2UserAccessNotGranted : AuthorizationError
     {
-        public Tier2UserAccesNotGranted() : base("Tier2 User permission is not granted")
+        public Tier2UserAccessNotGranted() : base("Tier2 User permission is not granted")
         {
 
         }
