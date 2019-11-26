@@ -228,7 +228,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{email}/remove/")]
+        [Route("{email}/remove")]
         public async Task<ActionResult> Remove(string hashedAccountId, string email)
         {
             var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
