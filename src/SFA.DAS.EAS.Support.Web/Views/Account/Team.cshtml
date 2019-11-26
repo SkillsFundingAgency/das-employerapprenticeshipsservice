@@ -42,7 +42,10 @@
             </tbody>
         </table>
         <br/>
-        <a href="@Url.StaffLoginAction($"login/staff?HashedAccountId={Model.Account.HashedAccountId}")" class="button" target="_blank">Change team members or roles</a>
+        <span asp-show="Model.Account.IsTier2User">
+            <a href="@Url.StaffLoginAction($"login/staff?HashedAccountId={Model.Account.HashedAccountId}")" class="button" target="_blank">Change team members or roles</a>
+        </span>
+        
         <br/>                                                                                                                  
         <span>(opens in a new window)</span>                                                                                                                  
     }

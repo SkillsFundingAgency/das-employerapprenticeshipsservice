@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.EAS.Support.ApplicationServices.Models;
 using SFA.DAS.EAS.Support.ApplicationServices.Services;
+using SFA.DAS.EAS.Support.Web.Helpers;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.EAS.Support.Web.Services;
 using SFA.DAS.NLog.Logger;
@@ -16,16 +18,19 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         private readonly IPayeLevySubmissionsHandler _payeLevySubmissionsHandler;
         private readonly ILog _log;
         private readonly IPayeLevyMapper _payeLevyMapper;
+        private readonly HttpContextBase _httpContext;
 
         public AccountController(IAccountHandler accountHandler,
             IPayeLevySubmissionsHandler payeLevySubmissionsHandler,
             ILog log,
-            IPayeLevyMapper payeLevyDeclarationMapper)
+            IPayeLevyMapper payeLevyDeclarationMapper,
+            HttpContextBase httpContext)
         {
             _accountHandler = accountHandler;
             _payeLevySubmissionsHandler = payeLevySubmissionsHandler;
             _log = log;
             _payeLevyMapper = payeLevyDeclarationMapper;
+            _httpContext = httpContext;
         }
 
         [Route("account/{id}")]
@@ -88,7 +93,8 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 var vm = new AccountDetailViewModel
                 {
                     Account = response.Account,
-                    AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}"
+                    AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
+                    IsTier2User = _httpContext.User.IsInRole(ControllerConstants.Tier2User)
                 };
 
                 return View(vm);
