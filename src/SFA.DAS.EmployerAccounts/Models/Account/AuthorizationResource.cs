@@ -1,9 +1,8 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Models.Account
 {
-    public class ResourceRoute
+    public class AuthorizationResource
     {
         public string Name { get; set; }
-        public string Url { get; set; }
-
+        public string Value { get; set; }
     }
 }

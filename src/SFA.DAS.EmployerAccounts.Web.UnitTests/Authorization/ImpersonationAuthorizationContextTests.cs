@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             MockRouteHandler = new Mock<IRouteHandler>();
 
             MockContextBase.Setup(x => x.User.IsInRole(AuthorizationConstants.Tier2User)).Returns(true);
-            var routeBase = new Route(AuthorizedTier2Route.TeamViewRoute, MockRouteHandler.Object);
+            var routeBase = new Route("teams/view", MockRouteHandler.Object);
             var routeData = new RouteData(routeBase, MockRouteHandler.Object);
             routeData.Values.Add(RouteValueKeys.AccountHashedId, "ABC123");
             MockContextBase.Setup(x => x.Request.RequestContext.RouteData).Returns(routeData);
@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 
             result.TryGet<Resource>("Resource", out var resource);
             var resourceValue = resource != null ? resource.Value : "default";
-            Assert.AreEqual(AuthorizedTier2Route.TeamViewRoute, resourceValue);
+            Assert.AreEqual("teams/view", resourceValue);
 
             Assert.IsInstanceOf<IAuthorizationContext>(result);
         }
@@ -98,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         public void GetAuthorizationContext_WhenAccountHashedIdKeyIsNotRight_ThenThrowUnauthorizedAccessException()
         {
             //Arrange       
-            var routeBase = new Route(AuthorizedTier2Route.TeamViewRoute, MockRouteHandler.Object);
+            var routeBase = new Route("teams/view", MockRouteHandler.Object);
             var routeData = new RouteData(routeBase, MockRouteHandler.Object);
             routeData.Values.Add("HashedAccountId123", "value1");
 

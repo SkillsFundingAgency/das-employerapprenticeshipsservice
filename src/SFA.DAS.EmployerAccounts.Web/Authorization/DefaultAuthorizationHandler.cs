@@ -8,6 +8,7 @@ using SFA.DAS.Authorization.Handlers;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 using System;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.Authorization.Errors;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
@@ -22,26 +23,53 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
-            var authorizationResult = new AuthorizationResult();
-            authorizationContext.TryGet<Resource>("Resource", out var resource);
-            authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
-            var resourceValue = resource != null ? resource.Value : "default";
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
-            if (userRoleClaims == null || userRoleClaims.All(claim => claim.Value != AuthorizationConstants.Tier2User))
-                return Task.FromResult(authorizationResult);
-
-            if (!IsAllowedResourceList(resourceValue)) {
-                authorizationResult.AddError(new Tier2UserAccessNotGranted());
+            if (!IsTier2User(authorizationContext)){
+                return IsAuthorizedResult();
             }
 
-            return Task.FromResult(authorizationResult);
+            if (!IsAuthorized(GetResource(authorizationContext), authorizationContext)) {
+                return IsNotAuthorizedResult(new Tier2UserAccessNotGranted());
+            }
+
+            return IsAuthorizedResult();
         }     
 
-        private bool IsAllowedResourceList(string resourceValue)
+
+        private Task<AuthorizationResult> IsAuthorizedResult()
         {
-            var resourceList = _authorisationResourceRepository.Get();
-            return resourceList.Any(res => res.Url.Equals(resourceValue, StringComparison.OrdinalIgnoreCase));
+            return Task.FromResult(new AuthorizationResult());
         }
+
+        private Task<AuthorizationResult> IsNotAuthorizedResult(AuthorizationError authorizationError)
+        {
+            return Task.FromResult(new AuthorizationResult().AddError(authorizationError));
+        }
+
+        private bool IsAuthorized(string resourceValue, IAuthorizationContext authorizationContext)
+        {
+            authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
+            var resourceList = _authorisationResourceRepository.Get(claimsIdentity);
+            return resourceList.Any(res => res.Value.Equals(resourceValue, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private string GetResource(IAuthorizationContext authorizationContext)
+        {
+            authorizationContext.TryGet<Resource>("Resource", out var resource);
+            return resource != null ? resource.Value : "default";
+        }
+
+        private bool IsTier2User(IAuthorizationContext authorizationContext)
+        {
+            authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
+            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
+            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(AuthorizationConstants.Tier2User, StringComparison.OrdinalIgnoreCase)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
     }   
 
 }
