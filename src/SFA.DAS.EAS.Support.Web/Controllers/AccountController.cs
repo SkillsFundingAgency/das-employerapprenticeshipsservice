@@ -94,7 +94,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 {
                     Account = response.Account,
                     AccountUri = $"/resource/index/{{0}}?key={SupportServiceResourceKey.EmployerUser}",
-                    IsTier2User = _httpContext.User.IsInRole(ControllerConstants.Tier2User)
+                    IsTier2User = _httpContext.User.IsInRole(AuthorizationConstants.Tier2User)
                 };
 
                 return View(vm);
