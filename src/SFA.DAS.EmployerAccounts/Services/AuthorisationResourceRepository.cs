@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         public IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity)
         {
             var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
-            if (userRoleClaims == null || userRoleClaims.All(claim => claim.Value != Tier2User))
+            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(Tier2User, StringComparison.OrdinalIgnoreCase)))            
             {
                 return new List<AuthorizationResource>
                 {
