@@ -5,7 +5,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.Infrastructure.Settings;
 using SFA.DAS.EAS.Support.Web.Configuration;
-using SFA.DAS.EAS.Support.Web.Controllers;
 using SFA.DAS.EAS.Support.Web.Extensions;
 
 namespace SFA.DAS.EAS.Support.Web.Tests.Extensions
@@ -14,8 +13,6 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Extensions
     public class WhenTestingUrlHelperExtensions
     {
         private WebConfiguration _configuration;
-        private Mock<IDependencyResolver> _dependancyResolver;
-        protected AccountController Controller;
         private UrlHelper _urlHelper;
 
         [SetUp]
@@ -28,9 +25,10 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Extensions
                     EmployerAccountsBaseUrl = "https://localhost:44344"
                 }
             };
-            _dependancyResolver=new Mock<IDependencyResolver>();
-            _dependancyResolver.Setup(r => r.GetService(typeof(IWebConfiguration))).Returns(_configuration);
-            DependencyResolver.SetResolver(_dependancyResolver.Object);
+            
+            var dependancyResolver=new Mock<IDependencyResolver>();
+            dependancyResolver.Setup(r => r.GetService(typeof(IWebConfiguration))).Returns(_configuration);
+            DependencyResolver.SetResolver(dependancyResolver.Object);
 
             var routes = new RouteCollection();
             var request = new Mock<HttpRequestBase>(MockBehavior.Strict);
