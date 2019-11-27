@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private bool IsAllowedResourceList(string resourceValue)
         {
             var resourceList = _authorisationResourceRepository.Get();
-            return resourceList.Any(res => res.Url.Equals(resourceValue, StringComparison.OrdinalIgnoreCase));
+            return resourceList.Any(res => res.Url.Equals(resourceValue, StringComparison.InvariantCultureIgnoreCase));
         }
     }   
 

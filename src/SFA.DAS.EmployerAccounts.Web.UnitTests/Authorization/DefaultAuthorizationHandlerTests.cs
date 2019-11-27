@@ -1,21 +1,19 @@
-﻿using Moq;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Routing;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization.Context;
-using System.Collections.Generic;
-using FluentAssertions;
-using System.Threading.Tasks;
-using System.Web.Routing;
-using System.Web;
-using System.Security.Claims;
-using SFA.DAS.EmployerAccounts.Web.Authorization;
-using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
-using SFA.DAS.EmployerUsers.WebClientComponents;
-using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
-using System;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Services;
-using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Web.Authorization;
+using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
+using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {
@@ -131,12 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             var resource = new Resource { Value = url };
             AuthorizationContext.Set("Resource", resource);
 
-            var claimsIdentity = new ClaimsIdentity(new[]
-            {
-                new Claim(DasClaimTypes.Id, "UserRef"),
-                new Claim(DasClaimTypes.Email, "Email"),
-                new Claim("sub", "UserRef"),
-            });
+            var claimsIdentity = new ClaimsIdentity(new List<Claim>());
             claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
@@ -148,12 +141,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         ////Tests missing for if Tier2User user and no Reseource set in the context.
         public AuthorizationContextTestsFixture SetDataTier2UserNoResource()
         {
-            var claimsIdentity = new ClaimsIdentity(new[]
-            {
-                new Claim(DasClaimTypes.Id, "UserRef"),
-                new Claim(DasClaimTypes.Email, "Email"),
-                new Claim("sub", "UserRef"),
-            });
+            var claimsIdentity = new ClaimsIdentity(new List<Claim>());
             claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
@@ -165,13 +153,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         //Tests missing for when ClaimsIdentity in context but not a Tier2User user.
         public AuthorizationContextTestsFixture SetDataNotTier2User()
         {
-            var claimsIdentity = new ClaimsIdentity(new[]
-            {
-                new Claim(DasClaimTypes.Id, "UserRef"),
-                new Claim(DasClaimTypes.Email, "Email"),
-                new Claim("sub", "UserRef"),
-            });
-            
+            var claimsIdentity = new ClaimsIdentity(new List<Claim>());
+
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
