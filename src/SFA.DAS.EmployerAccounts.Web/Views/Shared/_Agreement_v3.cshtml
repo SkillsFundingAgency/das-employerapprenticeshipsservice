@@ -1234,7 +1234,7 @@
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input" id="do-not-want-to-sign" name="choice" type="radio" value="1">
                             <label class="govuk-label govuk-radios__label" for="do-not-want-to-sign">
-                                Not yet, I'll finish creating an account first
+                                Not yet@(Model.LegalEntitiesCount == 1 ? ", I'll finish creating an account first" : "")
                             </label>
                         </div>
                     </div>
