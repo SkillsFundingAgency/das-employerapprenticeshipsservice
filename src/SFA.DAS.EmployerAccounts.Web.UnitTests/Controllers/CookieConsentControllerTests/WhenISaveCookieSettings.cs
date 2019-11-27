@@ -58,14 +58,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.CookieConsentContro
         }
 
         [Test]
-        public void ThenTheSeenCookieMessageCookieIsSet()
-        {
-            _cookieConsentController.Settings(_expectedAnalyticsConsent, _expectedMarketingConsent);
-            Assert.That(_cookieCollection.Get("DAS-SeenCookieMessage"), Is.Not.Null);
-            Assert.That(_cookieCollection.Get("DAS-SeenCookieMessage").Value, Is.EqualTo(true.ToString().ToLower()));
-        }
-
-        [Test]
         public void ThenTheCookieConsentMessageCookieIsSet()
         {
             _cookieConsentController.Settings(_expectedAnalyticsConsent, _expectedMarketingConsent);

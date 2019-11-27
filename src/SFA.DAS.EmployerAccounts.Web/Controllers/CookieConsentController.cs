@@ -37,7 +37,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var cookies = new List<HttpCookie>
             {
                 new HttpCookie("CookieConsent", true.ToString().ToLower()),
-                new HttpCookie("DAS-SeenCookieMessage", true.ToString().ToLower()),
                 new HttpCookie("AnalyticsConsent", analyticsConsent.ToString().ToLower()),
                 new HttpCookie("MarketingConsent", marketingConsent.ToString().ToLower())
             };
