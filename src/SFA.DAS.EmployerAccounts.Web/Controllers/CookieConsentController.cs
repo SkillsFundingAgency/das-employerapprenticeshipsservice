@@ -20,15 +20,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("settings")]
-        [Route("settings/{saved}")]
+        [Route("{HashedAccountId}/settings/{saved}", Order = 0)]
+        [Route("{HashedAccountId}/settings", Order = 1)]
+        [Route("settings/{saved}", Order = 2)]
+        [Route("settings", Order = 3)]
         public ActionResult Settings(bool saved = false)
         {
             return View(new { Saved = saved });
         }
 
         [HttpPost]
-        [Route("settings")]
+        [Route("{HashedAccountId}/settings", Order = 0)]
+        [Route("settings", Order = 1)]
         public ActionResult Settings(bool analyticsConsent, bool marketingConsent)
         {
             var cookies = new List<HttpCookie>
@@ -45,7 +48,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("details")]
+        [Route("{HashedAccountId}/details", Order = 0)]
+        [Route("details", Order = 1)]
         public ActionResult Details()
         {
             return View();
