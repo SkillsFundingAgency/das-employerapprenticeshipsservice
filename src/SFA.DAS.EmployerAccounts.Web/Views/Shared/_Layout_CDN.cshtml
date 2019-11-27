@@ -100,7 +100,7 @@
     <script>
         document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
-
+    @Html.Partial("_CookieBanner")
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <!--[if lt IE 8]>
@@ -257,7 +257,12 @@
                         </li>
                         <li class="govuk-footer__inline-list-item">
                             <a class="govuk-footer__link" href="@Url.Action("Privacy", "Home")">
-                                Privacy and cookies
+                                Privacy
+                            </a>
+                        </li>
+                        <li class="govuk-footer__inline-list-item">
+                            <a class="govuk-footer__link" href="@Url.Action("Settings", "CookieConsent")">
+                                Cookies
                             </a>
                         </li>
                         <li class="govuk-footer__inline-list-item">
