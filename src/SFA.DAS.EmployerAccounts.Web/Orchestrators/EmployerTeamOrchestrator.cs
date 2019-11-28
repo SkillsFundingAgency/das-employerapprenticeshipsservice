@@ -13,7 +13,6 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountOwner;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
@@ -33,8 +32,6 @@ using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Reservations;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountOwner;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -54,13 +51,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _accountApiClient = accountApiClient;
             _mapper = mapper;
             _authorizationService = authorizationService;
-        }
-
-        internal async Task<TeamMember> GetAccountOwner(string hashedAccountId)
-        {
-            var accountMembersResponse = await _mediator.SendAsync(new GetAccountOwnerQuery { HashedAccountId = hashedAccountId });
-
-            return accountMembersResponse.TeamMembers;
         }
 
         //Needed for tests
