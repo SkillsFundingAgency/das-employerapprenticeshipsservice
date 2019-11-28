@@ -2,6 +2,7 @@
 @using SFA.DAS.Authorization
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Helpers
+@using SFA.DAS.EmployerAccounts.Interfaces
 
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
@@ -111,6 +112,7 @@
         @Html.Partial("_SVGSprite")
     </div>
     <header role="banner" id="global-header" class="with-proposition">
+        @Html.Action("SupportUserBanner", new { model = Model.Data})
         <div class="header-wrapper">
             <div class="header-global">
                 <div class="header-logo">

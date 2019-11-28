@@ -8,6 +8,8 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
+using System.Security.Claims;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -150,6 +152,29 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public void RemoveFlashMessageFromCookie()
         {
             _flashMessage.Delete(FlashMessageCookieName);
+        }
+
+        /// <summary>
+        /// Default implementation for the SupportUserBanner.  Can be overridden to render based on the available IAccountIdentifier model.
+        /// </summary>
+        public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
+        {
+            if (IsSupportUser(this))
+            {
+                return PartialView("_SupportUserBanner", new SupportUserBannerViewModel());
+            }
+
+            return new EmptyResult();
+        }
+
+        public static bool IsSupportUser(BaseController controller)
+        {
+            if (!(controller.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
         }
     }
 }
