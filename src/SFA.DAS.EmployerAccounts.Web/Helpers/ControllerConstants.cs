@@ -80,6 +80,9 @@
         public const string UserRefClaimKeyName = "sub";
         public const string WaysToAddPayeSchemeActionName = "WaysToAdd";
         public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
+        public const string Settings = "Settings";
+        public const string Details = "Details";
+        public const string CookieConsent = "CookieConsent";
         public const string Tier2UserClaim = "Tier2User";        
     }
 }
