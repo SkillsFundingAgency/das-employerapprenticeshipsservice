@@ -100,7 +100,7 @@
     <script>
         document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
     </script>
-
+    @Html.Partial("_CookieBanner")
     <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
 
     <!--[if lt IE 8]>
@@ -141,7 +141,7 @@
                 <nav class="das-user-navigation" id="das-user-navigation">
                     <ul class="das-user-navigation__list" role="menu">
                         <li role="menuitem" class="das-user-navigation__list-item">
-                            <a href="@Url.Action(ControllerConstants.HelpActionName, ControllerConstants.HomeControllerName)" class="das-user-navigation__link">Help</a>
+                            <a href="@Url.Action(ControllerConstants.HelpActionName, ControllerConstants.HomeControllerName)" class="das-user-navigation__link" target="_blank">Help</a>
                         </li>
                         @if (HttpContext.Current.User.Identity.IsAuthenticated)
                         {
@@ -246,7 +246,7 @@
                     <h2 class="govuk-visually-hidden">Support links</h2>
                     <ul class="govuk-footer__inline-list">
                         <li class="govuk-footer__inline-list-item">
-                            <a class="govuk-footer__link" href="@Url.Action("Help", "Home")">
+                            <a class="govuk-footer__link" href="@Url.Action("Help", "Home")" target="_blank">
                                 Help
                             </a>
                         </li>
@@ -257,7 +257,12 @@
                         </li>
                         <li class="govuk-footer__inline-list-item">
                             <a class="govuk-footer__link" href="@Url.Action("Privacy", "Home")">
-                                Privacy and cookies
+                                Privacy
+                            </a>
+                        </li>
+                        <li class="govuk-footer__inline-list-item">
+                            <a class="govuk-footer__link" href="@Url.Action("Settings", "CookieConsent")">
+                                Cookies
                             </a>
                         </li>
                         <li class="govuk-footer__inline-list-item">
