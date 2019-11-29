@@ -51,7 +51,12 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Configuration
                 {
                     AllowedCharacters = "",
                     Hashstring = ""
+                },
+                EmployerAccountsConfiguration = new EmployerAccountsConfiguration 
+                { 
+                    EmployerAccountsBaseUrl = "--- configuration value goes here ---"
                 }
+
             };
         }
 
