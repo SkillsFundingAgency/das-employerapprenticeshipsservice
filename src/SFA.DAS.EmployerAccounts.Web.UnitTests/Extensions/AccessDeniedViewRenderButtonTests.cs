@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
-            var result = Helpers.HtmlHelperExtensions.ReturnToHomePageLinkHrefText(htmlHelper, accountId);
+            var result = Helpers.HtmlHelperExtensions.ReturnToHomePageLinkText(htmlHelper, accountId);
 
             //Assert                       
             Assert.AreEqual(expectedText, result);
