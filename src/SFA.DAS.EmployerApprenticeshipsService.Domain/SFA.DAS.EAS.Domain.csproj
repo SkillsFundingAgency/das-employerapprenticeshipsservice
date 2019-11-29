@@ -257,7 +257,7 @@
       <Version>1.1.82</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Types">
-      <Version>1.8.12</Version>
+      <Version>1.8.43</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.TokenService.Api.Client">
       <Version>1.1.16</Version>
