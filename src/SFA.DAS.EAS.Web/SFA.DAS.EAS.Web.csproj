@@ -608,7 +608,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
-      <Version>6.0.44</Version>
+      <Version>6.0.46</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents">
       <Version>1.0.0.4388</Version>
