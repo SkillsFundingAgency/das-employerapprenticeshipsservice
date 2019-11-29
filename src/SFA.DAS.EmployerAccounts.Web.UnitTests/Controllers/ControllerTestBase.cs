@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         protected Mock<HttpRequestBase> _httpRequest;
         protected Mock<HttpContextBase> _httpContext;
         protected Mock<ControllerContext> _controllerContext;
-        private Mock<HttpResponseBase> _httpResponse;
+        protected Mock<HttpResponseBase> _httpResponse;
         protected RouteCollection _routes;
         protected Mock<ILog> Logger;
         protected Mock<IMediator> Mediator;
