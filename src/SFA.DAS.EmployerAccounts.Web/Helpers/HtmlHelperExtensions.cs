@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return  isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : "/";
         }
 
-        public static string ReturnToHomePageLinkHrefText(this HtmlHelper htmlHelper, string accountId)
+        public static string ReturnToHomePageLinkText(this HtmlHelper htmlHelper, string accountId)
         {
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             bool isAccountIdSet = accountId != null;
