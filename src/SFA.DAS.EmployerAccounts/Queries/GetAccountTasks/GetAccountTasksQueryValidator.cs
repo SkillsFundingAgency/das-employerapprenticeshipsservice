@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks
             }
             if (item.AccountId == default(int))
             {
-                validationResult.AddError(nameof(item.AccountId), "Account Id must be supplied");
+                validationResult.AddError(nameof(item.AccountId), "Account id must be supplied");
             }
             if (string.IsNullOrWhiteSpace(item.ExternalUserId))
             {
