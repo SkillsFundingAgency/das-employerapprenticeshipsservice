@@ -138,25 +138,44 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var accounts = await _homeOrchestrator.GetUserAccounts(OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
             return View(ControllerConstants.IndexActionName, accounts);
-        }     
-     
-        [HttpGet]
-        [Route("register")]
-        public ActionResult RegisterUser()
-        {
-            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
-            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
-            var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [DasAuthorize]
         [HttpGet]
-        [Route("register/new")]
-        public async Task<ActionResult> HandleNewRegistration()
+        [Route("register/new/{correlationId?}")]
+        public async Task<ActionResult> HandleNewRegistration(string correlationId = null)
         {
             await OwinWrapper.UpdateClaims();
+
+            if (!string.IsNullOrWhiteSpace(correlationId))
+            {
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName, correlationId);
+            }
+
             return RedirectToAction(ControllerConstants.IndexActionName);
+        }
+
+        [HttpGet]
+        [Route("register")]
+        [Route("register/{correlationId}")]
+        public async Task<ActionResult> RegisterUser(Guid? correlationId)
+        {
+            var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
+            var authority = System.Web.HttpContext.Current.Request.Url.Authority;
+            var c = new Constants(_configuration.Identity);
+
+            if (!correlationId.HasValue) return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
+
+            var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
+
+            return invitation.Data != null
+                ? new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={invitation.Data.EmployerFirstName}&lastname={invitation.Data.EmployerLastName}&email={invitation.Data.EmployerEmail}")
+                : new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [DasAuthorize]

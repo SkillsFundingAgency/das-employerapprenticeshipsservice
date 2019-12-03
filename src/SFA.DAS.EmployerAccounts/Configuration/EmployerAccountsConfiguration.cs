@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
         public PensionRegulatorConfiguration PensionRegulatorApi { get; set; }
+        public ProviderRegistrationsConfiguration ProviderRegistrationsApi { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
