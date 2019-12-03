@@ -182,6 +182,10 @@
       <Project>{51f0ba52-dccd-4e6a-9f84-3bdfd501a06b}</Project>
       <Name>SFA.DAS.EmployerAccounts.ReadStore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj">
+      <Project>{d3aa1caa-4367-48a2-b796-fc392b9bec49}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Types</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{b520a3e4-8259-4309-94d4-4a99fd32d2f7}</Project>
       <Name>SFA.DAS.EmployerAccounts</Name>
