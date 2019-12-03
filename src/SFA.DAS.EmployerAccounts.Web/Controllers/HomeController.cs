@@ -275,6 +275,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        [Route("unsubscribe/{correlationId}")]
+        public ActionResult Unsubscribe()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("unsubscribe/{correlationId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Unsubscribe(bool? unsubscribe, string correlationId)
+        {
+            if (unsubscribe == null || unsubscribe == false) return View();
+
+            await _homeOrchestrator.Unsubscribe(Guid.Parse(correlationId));
+
+            return View(ControllerConstants.UnsubscribedViewName);
+        }
+
 #if DEBUG
         [Route("CreateLegalAgreement/{showSubFields}")]
         public ActionResult ShowLegalAgreement(bool showSubFields)

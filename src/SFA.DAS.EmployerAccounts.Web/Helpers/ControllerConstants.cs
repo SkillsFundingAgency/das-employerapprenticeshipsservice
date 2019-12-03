@@ -73,6 +73,7 @@
         public const string SignOutActionName = "SignOut";
         public const string SkipRegistrationActionName = "SkipRegistration";
         public const string SummaryActionName = "Summary";
+        public const string UnsubscribedViewName = "Unsubscribed";
         public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";

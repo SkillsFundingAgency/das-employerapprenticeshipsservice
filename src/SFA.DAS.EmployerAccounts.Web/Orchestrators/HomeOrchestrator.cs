@@ -4,6 +4,7 @@ using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
 using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
@@ -86,6 +87,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
 
             return new OrchestratorResponse<ProviderInvitationViewModel>();
+        }
+
+        public virtual async Task Unsubscribe(Guid correlationId)
+        {
+            await _mediator.SendAsync(new UnsubscribeProviderEmailQuery
+            {
+                CorrelationId = correlationId
+            });
         }
 
         public virtual async Task SaveUpdatedIdentityAttributes(string userRef, string email, string firstName, string lastName, string correlationId = null)

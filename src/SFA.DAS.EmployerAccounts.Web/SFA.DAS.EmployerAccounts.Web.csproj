@@ -805,6 +805,8 @@
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_Layout_CDN.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage_CDN.cshtml" />
+    <Content Include="Views\Home\Unsubscribe.cshtml" />
+    <Content Include="Views\Home\Unsubscribed.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Empty.cshtml" />
     <Content Include="Views\EmployerTeam\Tasks.cshtml" />
