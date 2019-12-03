@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             var caller = await _membershipRepository.GetCaller(createAccountResult.AccountId, message.ExternalUserId);
 
             var createdByName = caller.FullName();
-            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref, message.Aorn, message.EmployerRefName);
+            await PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref, message.Aorn, message.EmployerRefName, userResponse.User.CorrelationId);
 
             await PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId);
 
@@ -185,7 +185,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef, string aorn, string schemeName)
+        private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef, string aorn, string schemeName, string correlationId)
         {
             return _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
@@ -195,7 +195,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 UserRef = userRef,
                 Created = DateTime.UtcNow,
                 Aorn = aorn,
-                SchemeName = schemeName
+                SchemeName = schemeName,
+                CorrelationId = correlationId
             });
         }
 

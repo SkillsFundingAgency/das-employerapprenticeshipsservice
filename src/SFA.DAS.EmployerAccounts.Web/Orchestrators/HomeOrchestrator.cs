@@ -81,7 +81,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         EmployerFirstName = getProviderInvitationQueryResponse.Result.EmployerFirstName,
                         EmployerLastName = getProviderInvitationQueryResponse.Result.EmployerLastName,
                         EmployerOrganisation = getProviderInvitationQueryResponse.Result.EmployerOrganisation,
-                        Ukprn = getProviderInvitationQueryResponse.Result.Ukprn
+                        Ukprn = getProviderInvitationQueryResponse.Result.Ukprn,
+                        Status = getProviderInvitationQueryResponse.Result.Status
                     }
                 };
             }

@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Services;
 using SFA.DAS.Validation;
@@ -61,6 +62,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         {
             await ValidateRequest(message);
             var owner = await VerifyUserIsAccountOwner(message);
+            var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
             var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
 
@@ -74,13 +76,13 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
             await _employerAgreementRepository.EvaluateEmployerLegalEntityAgreementStatus(accountId, agreement.LegalEntityId);
 
-            var hashedLegalEntityId = _hashingService.HashValue((long) agreement.LegalEntityId);
+            var hashedLegalEntityId = _hashingService.HashValue(agreement.LegalEntityId);
 
-            await PublishEvents(message, hashedLegalEntityId, accountId, agreement, agreementId, owner);
+            await PublishEvents(message, hashedLegalEntityId, accountId, agreement, agreementId, owner, userResponse.User.CorrelationId);
         }
 
         private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, long accountId,
-            EmployerAgreementView agreement, long agreementId, MembershipView owner)
+            EmployerAgreementView agreement, long agreementId, MembershipView owner, string correlationId)
         {
             await PublishLegalGenericEvent(message, hashedLegalEntityId);
 
@@ -89,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var accountHasCommitments = commitments?.Any() ?? false;
 
             await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId,
-                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType, agreement.VersionNumber);
+                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType, agreement.VersionNumber, correlationId);
         }
 
         private async Task PublishLegalGenericEvent(SignEmployerAgreementCommand message, string hashedLegalEntityId)
@@ -100,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
             var genericEvent = _genericEventFactory.Create(agreementEvent);
 
-            await _mediator.SendAsync(new PublishGenericEventCommand {Event = genericEvent});
+            await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
         private async Task<MembershipView> VerifyUserIsAccountOwner(SignEmployerAgreementCommand message)
@@ -135,7 +137,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
         private Task PublishAgreementSignedMessage(
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, string currentUserRef, AgreementType agreementType, int versionNumber)
+            bool cohortCreated, string currentUserName, string currentUserRef, 
+            AgreementType agreementType, int versionNumber, string correlationId)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
             {
@@ -148,13 +151,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
                 UserName = currentUserName,
                 UserRef = Guid.Parse(currentUserRef),
                 AgreementType = agreementType,
-                SignedAgreementVersion = versionNumber
+                SignedAgreementVersion = versionNumber,
+                CorrelationId = correlationId
             });
         }
 
         private async Task AddAuditEntry(SignEmployerAgreementCommand message, long accountId, long agreementId)
         {
-            await _mediator.SendAsync<Unit>(new CreateAuditCommand
+            await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
                 {
