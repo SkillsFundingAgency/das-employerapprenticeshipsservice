@@ -52,14 +52,14 @@
     }
 
     window.GOVUK.setConsentCookie = function (options) {
-        var cookieConsent = window.GOVUK.getConsentCookie()
+        var DASSeenCookieMessage = window.GOVUK.getConsentCookie()
 
-        if (!cookieConsent) {
-            cookieConsent = JSON.parse(JSON.stringify(DEFAULT_COOKIE_CONSENT))
+        if (!DASSeenCookieMessage) {
+            DASSeenCookieMessage = JSON.parse(JSON.stringify(DEFAULT_COOKIE_CONSENT))
         }
 
         for (var cookieType in options) {
-            cookieConsent[cookieType] = options[cookieType]
+            DASSeenCookieMessage[cookieType] = options[cookieType]
 
             // Delete cookies of that type if consent being set to false
             if (!options[cookieType]) {
@@ -75,7 +75,7 @@
             }
         }
 
-        window.GOVUK.setCookie('cookie_policy', JSON.stringify(cookieConsent), { days: 365 })
+        window.GOVUK.setCookie('cookie_policy', JSON.stringify(DASSeenCookieMessage), { days: 365 })
     }
 
     window.GOVUK.setCookie = function (name, value, options) {
@@ -174,8 +174,8 @@ CookieSettings.prototype.submitSettingsForm = function (event) {
         }
     }
 
-    if (!window.GOVUK.cookie("CookieConsent")) {
-        window.GOVUK.setCookie("CookieConsent", true, { days: 365 })
+    if (!window.GOVUK.cookie("DASSeenCookieMessage")) {
+        window.GOVUK.setCookie("DASSeenCookieMessage", true, { days: 365 })
     }
 
     this.showConfirmationMessage()
@@ -206,7 +206,7 @@ CookieBanner.prototype.start = function () {
 
     this.$module.hideCookieMessage = this.hideCookieMessage.bind(this)
     this.$module.showConfirmationMessage = this.showConfirmationMessage.bind(this)
-    this.$module.setCookieConsent = this.setCookieConsent.bind(this)
+    this.$module.setDASSeenCookieMessage = this.setDASSeenCookieMessage.bind(this)
 
     this.$module.cookieBanner = document.querySelector('.das-cookie-banner')
     this.$module.cookieBannerConfirmationMessage = this.$module.querySelector('.das-cookie-banner__confirmation')
@@ -222,12 +222,12 @@ CookieBanner.prototype.setupCookieMessage = function () {
 
     this.$acceptCookiesLink = this.$module.querySelector('button[data-accept-cookies]')
     if (this.$acceptCookiesLink) {
-        this.$acceptCookiesLink.addEventListener('click', this.$module.setCookieConsent)
+        this.$acceptCookiesLink.addEventListener('click', this.$module.setDASSeenCookieMessage)
     }
 
-    if (!window.GOVUK.cookie('CookieConsent')) {
-        if (window.GOVUK.cookie('CookieConsent') === true) {
-            window.GOVUK.cookie('CookieConsent', false, { days: 365 })
+    if (!window.GOVUK.cookie('DASSeenCookieMessage')) {
+        if (window.GOVUK.cookie('DASSeenCookieMessage') === true) {
+            window.GOVUK.cookie('DASSeenCookieMessage', false, { days: 365 })
         }
     }
     this.showCookieMessage()
@@ -235,7 +235,7 @@ CookieBanner.prototype.setupCookieMessage = function () {
 
 CookieBanner.prototype.showCookieMessage = function () {
     if (!this.isInCookiesPage() && !this.isInIframe()) {
-        var showCookieBanner = (this.$module && window.GOVUK.cookie('CookieConsent') !== 'true')
+        var showCookieBanner = (this.$module && window.GOVUK.cookie('DASSeenCookieMessage') !== 'true')
         if (showCookieBanner) {
             this.$module.style.display = 'block'
         }
@@ -245,18 +245,18 @@ CookieBanner.prototype.showCookieMessage = function () {
 CookieBanner.prototype.hideCookieMessage = function (event) {
     if (this.$module) {
         this.$module.style.display = 'none'
-        window.GOVUK.cookie('CookieConsent', true, { days: 365 })
+        window.GOVUK.cookie('DASSeenCookieMessage', true, { days: 365 })
     }
     if (event.target) {
         event.preventDefault()
     }
 }
 
-CookieBanner.prototype.setCookieConsent = function () {
+CookieBanner.prototype.setDASSeenCookieMessage = function () {
     window.GOVUK.approveAllCookieTypes()
     this.$module.showConfirmationMessage()
     this.$module.cookieBannerConfirmationMessage.focus()
-    window.GOVUK.cookie('CookieConsent', true, { days: 365 })
+    window.GOVUK.cookie('DASSeenCookieMessage', true, { days: 365 })
 }
 
 CookieBanner.prototype.showConfirmationMessage = function () {
