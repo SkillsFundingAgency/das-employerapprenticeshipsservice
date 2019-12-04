@@ -171,6 +171,7 @@
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CookieConsentController.cs" />
     <Compile Include="Controllers\EmployerAccountController.cs" />
     <Compile Include="Controllers\EmployerAccountPayeController.cs" />
     <Compile Include="Controllers\EmployerAccountTransactions.cs" />
@@ -380,6 +381,7 @@
     <Content Include="dist\javascripts\apprentice\dropdown.js" />
     <Content Include="dist\javascripts\apprentice\select2.min.js" />
     <Content Include="dist\javascripts\character-limit.js" />
+    <Content Include="dist\javascripts\cookiebanner.js" />
     <Content Include="dist\javascripts\govuk-template.js" />
     <Content Include="dist\javascripts\ie.js" />
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
@@ -813,6 +815,10 @@
     <Content Include="Views\EmployerTeam\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\CheckFunding.cshtml" />
     <Content Include="src\sass\_interim-homepage.scss" />
+    <Content Include="Views\CookieConsent\Settings.cshtml" />
+    <Content Include="Views\CookieConsent\Details.cshtml" />
+    <Content Include="src\sass\_cookiebanner.scss" />
+    <Content Include="Views\Shared\_CookieBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
