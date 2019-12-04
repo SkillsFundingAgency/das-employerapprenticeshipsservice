@@ -160,7 +160,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 FlashMessage = GetFlashMessageViewModelFromCookie(),
                 Data = new InviteTeamMemberNextStepsViewModel
                 {
-                    UserShownWizard = userShownWizard
+                    UserShownWizard = userShownWizard,
+                     HashedAccountId = hashedAccountId 
                 }
             };
 
