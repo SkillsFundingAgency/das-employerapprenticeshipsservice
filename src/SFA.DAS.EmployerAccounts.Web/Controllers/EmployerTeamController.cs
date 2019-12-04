@@ -201,6 +201,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
         {
             var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
+            invitation.Data.HashedAccountId = hashedAccountId;
 
             return View(invitation);
         }
