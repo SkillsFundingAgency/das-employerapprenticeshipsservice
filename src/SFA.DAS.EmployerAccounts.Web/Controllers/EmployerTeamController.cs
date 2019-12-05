@@ -19,7 +19,6 @@ using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
 
-
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
     [DasAuthorize]
@@ -41,9 +40,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthenticationService owinWrapper,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
-            IAuthorizationService authorizationService)
+            EmployerTeamOrchestrator employerTeamOrchestrator
+            ,IPortalClient portalClient
+            ,IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
@@ -54,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
-        {
+        {  
             PopulateViewBagWithExternalUserId();
             SetZenDeskWidgetToHidden();
             var response = await GetAccountInformation(hashedAccountId);
@@ -96,7 +95,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("view")]
         public async Task<ActionResult> ViewTeam(string hashedAccountId)
         {
-
             var response = await _employerTeamOrchestrator.GetTeamMembers(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
@@ -230,7 +228,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{email}/remove/")]
+        [Route("{email}/remove")]
         public async Task<ActionResult> Remove(string hashedAccountId, string email)
         {
             var response = await _employerTeamOrchestrator.Review(hashedAccountId, email);
@@ -304,7 +302,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{email}/review/")]
+        [Route("{email}/review")]
         public async Task<ActionResult> Review(string hashedAccountId, string email)
         {
             var invitation = await _employerTeamOrchestrator.GetTeamMemberWhetherActiveOrNot(hashedAccountId, email, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));

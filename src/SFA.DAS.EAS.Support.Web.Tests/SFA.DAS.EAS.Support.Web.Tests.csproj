@@ -68,6 +68,7 @@
     <Compile Include="Controllers\Challenge\WhenCallingIndexPost.cs" />
     <Compile Include="Controllers\Challenge\WhenTestingChallengeController.cs" />
     <Compile Include="Controllers\Account\WhenTestingHeaderGet.cs" />
+    <Compile Include="Extensions\WhenTestingUrlHelperExtensions.cs" />
     <Compile Include="Services\WhenTestingChallengeHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\Account\WhenTestingAccountController.cs" />

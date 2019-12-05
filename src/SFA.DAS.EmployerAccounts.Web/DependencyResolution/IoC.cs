@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<ReservationsApiClientRegistry>();
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
-                c.AddRegistry<EmployerAccountAuthorisationExtensionRegistry>();
+                c.AddRegistry<AuthorisationRegistry>();
             });
         }
     }
