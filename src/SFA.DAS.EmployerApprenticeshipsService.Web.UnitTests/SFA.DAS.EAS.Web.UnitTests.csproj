@@ -158,7 +158,7 @@
       <Version>1.2.71</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.0.2</Version>
+      <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
       <Version>6.0.33</Version>
