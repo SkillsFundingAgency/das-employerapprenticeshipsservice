@@ -83,5 +83,6 @@
         public const string Settings = "Settings";
         public const string Details = "Details";
         public const string CookieConsent = "CookieConsent";
+        public const string Tier2UserClaim = "Tier2User";        
     }
 }

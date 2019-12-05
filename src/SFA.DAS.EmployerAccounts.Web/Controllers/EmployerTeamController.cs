@@ -84,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             if (!response.Data.HasPayeScheme)
-            {             
+            {
                 ViewBag.HideNav = true;
             }
 
@@ -160,7 +160,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 FlashMessage = GetFlashMessageViewModelFromCookie(),
                 Data = new InviteTeamMemberNextStepsViewModel
                 {
-                    UserShownWizard = userShownWizard
+                    UserShownWizard = userShownWizard,
+                     HashedAccountId = hashedAccountId 
                 }
             };
 
@@ -200,6 +201,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Cancel(string email, string invitationId, string hashedAccountId)
         {
             var invitation = await _employerTeamOrchestrator.GetInvitation(invitationId);
+            invitation.Data.HashedAccountId = hashedAccountId;
 
             return View(invitation);
         }
@@ -322,6 +324,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
+        {   
+            if (IsSupportUser(this))
+            {
+                EmployerAccounts.Models.Account.Account account = null;
+
+                if (model != null && model.HashedAccountId != null)
+                {
+                    var response = AsyncHelper.RunSync(() => GetAccountInformation(model.HashedAccountId));
+
+                    if (response.Status != HttpStatusCode.OK)
+                    {
+                        account = null;
+                    }
+                    else
+                    {
+                        account = response.Data.Account;
+                    }
+                }
+
+                return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });
+            }
+
+            return new EmptyResult();
+        }
+
+        [ChildActionOnly]
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
@@ -330,13 +359,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "AddPAYE";
             }
-            else if(_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
+            else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
                 if (model.AgreementsToSign)
                 {
                     viewModel.ViewName = "SignAgreement";
                 }
-                else if (!model.HasReservations&& model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
+                else if (!model.HasReservations && model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
                 {
                     viewModel.ViewName = "CheckFunding";
                 }
@@ -367,7 +396,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     viewModel.ViewName = "V2AddPAYE";
                 }
             }
-            
+
             return PartialView(viewModel);
         }
 
@@ -414,7 +443,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
             {
                 viewModel.ViewName = "FinancialTransactions";
-            }        
+            }
 
             return PartialView(viewModel);
         }
@@ -494,7 +523,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult Dashboard(AccountDashboardViewModel model)
-        { 
+        {
             return PartialView(model);
         }
 
@@ -578,7 +607,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 Status = vacancy.Status.ToString()
             };
 
-            switch(vacancy.Status)
+            switch (vacancy.Status)
             {
                 case EAS.Portal.Client.Types.VacancyStatus.Closed:
                     viewModel.Applications = ApplicationsDisplay(vacancy);
@@ -618,7 +647,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
-                
+
         [ChildActionOnly]
         public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
         {
@@ -648,7 +677,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             Cohort cohort = model.AccountViewModel.Organisations.FirstOrDefault()?.Cohorts?.FirstOrDefault();
             Apprenticeship apprenticeship = cohort?.Apprenticeships?.FirstOrDefault();
-            
+
             var viewModel = new ApprenticeDetailsViewModel
             {
                 ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",

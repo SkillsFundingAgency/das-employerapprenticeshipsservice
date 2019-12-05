@@ -146,7 +146,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
+        public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
         {
             try
             {
@@ -183,8 +183,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
-
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
+                                
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);                
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -192,15 +192,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
                 var reservationsResponse = reservationsResponseTask.Result;
+
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
                 {
-                   AccountId = accountResponse.Account.Id,
-                   ExternalUserId = externalUserId
-                }); 
+                    AccountId = accountResponse.Account.Id,
+                    ExternalUserId = externalUserId
+                });
+
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
                 var accountDetailViewModel = apiGetAccountTask.Result;
+
                 var viewModel = new AccountDashboardViewModel
                 {
                     Account = accountResponse.Account,
@@ -320,6 +323,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
 
+            response.TeamMember.HashedAccountId = hashedAccountId;
 
             return new OrchestratorResponse<TeamMember>
             {
@@ -567,12 +571,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 IsUser = teamMember.IsUser,
                 Id = teamMember.Id,
                 AccountId = teamMember.AccountId,
+                HashedAccountId = teamMember.HashedAccountId,
                 Email = teamMember.Email,
                 Name = teamMember.Name,
                 Role = teamMember.Role,
                 Status = teamMember.Status,
                 ExpiryDate = teamMember.ExpiryDate
             };
-        }
+        }       
     }
 }

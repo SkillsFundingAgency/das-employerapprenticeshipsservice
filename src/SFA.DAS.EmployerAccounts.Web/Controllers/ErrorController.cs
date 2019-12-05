@@ -1,10 +1,20 @@
 ﻿using System.Net;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {
+        public ErrorController(
+            IAuthenticationService owinWrapper, 
+            IMultiVariantTestingService multiVariantTestingService, 
+            ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+        }
+
         [Route("accessdenied")]
         public ActionResult AccessDenied()
         {

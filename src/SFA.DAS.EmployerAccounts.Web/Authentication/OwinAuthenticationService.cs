@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication
 
         public string GetClaimValue(string key)
         {
-            var claimIdentity = ((ClaimsIdentity)HttpContext.Current.User.Identity).Claims.FirstOrDefault(c => c.Type == key);
+            var claimIdentity = ((ClaimsIdentity)_httpContext.User.Identity).Claims.FirstOrDefault(c => c.Type == key);
             return claimIdentity == null ? "" : claimIdentity.Value;
         }
 
