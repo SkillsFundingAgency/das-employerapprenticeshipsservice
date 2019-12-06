@@ -20,11 +20,11 @@ namespace SFA.DAS.EmployerAccounts.Services
             _logger = logger;
         }
 
-        public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId)
+        public async Task<IEnumerable<TaskDto>> GetAccountTasks(long accountId, string externalUserId, ApprenticeshipEmployerType applicableToApprenticeshipEmployerType)
         {
             try
             {
-                return await _apiClient.GetTasks(accountId.ToString(), externalUserId);
+                return await _apiClient.GetTasks(accountId.ToString(), externalUserId, applicableToApprenticeshipEmployerType);
             }
             catch (Exception ex)
             {
