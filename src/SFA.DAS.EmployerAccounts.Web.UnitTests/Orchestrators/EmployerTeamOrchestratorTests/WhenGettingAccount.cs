@@ -184,6 +184,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
+            _mediator.Verify(m => m.SendAsync(It.IsAny<GetAccountTasksQuery>()), Times.Once);
             Assert.IsNotNull(actual.Data);
             Assert.Contains(_testTask, actual.Data.Tasks.ToArray());
         }

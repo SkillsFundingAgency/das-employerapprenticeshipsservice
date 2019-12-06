@@ -3,7 +3,7 @@
 @using SFA.DAS.Common.Domain.Types
 @using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@using SFA.DAS.Tasks.API.Types.Enums
+@using TasksEnum = SFA.DAS.Tasks.API.Types.Enums
 @using SFA.DAS.EmployerAccounts.Web.Extensions
 
 @model SFA.DAS.EmployerAccounts.Web.OrchestratorResponse<SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel>
@@ -165,7 +165,7 @@ else
                                                     Levy declaration due by 19 @DateTime.Now.ToString("MMMM")
                                                 </p>
                                                 <form action="@Url.Action("DismissTask", "Task")" method="POST">
-                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TaskType), TaskType.LevyDeclarationDue)" />
+                                                    <input type="hidden" name="taskType" value="@Enum.GetName(typeof(TasksEnum.TaskType), TasksEnum.TaskType.LevyDeclarationDue)" />
                                                     <button class="button-link" type="submit">Dismiss this message</button>
                                                 </form>
                                                 break;
