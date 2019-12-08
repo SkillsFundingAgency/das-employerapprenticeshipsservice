@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System.Web;
+using NLog;
+using System.Web.Mvc;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.Authorization.Services;
 
@@ -7,6 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
     public static class HtmlHelperExtensions
     {
         public const string Tier2User = "Tier2User";
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public static AuthorizationResult GetAuthorizationResult(this HtmlHelper htmlHelper, string featureType)
         {
@@ -26,34 +29,66 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
         public static string ReturnToHomePageButtonHref(this HtmlHelper htmlHelper, string accountId)
         {
+            if (string.IsNullOrEmpty(accountId))
+            {
+                accountId = GetContextAccountId();
+            }          
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
-            bool isAccountIdSet = accountId != null;
-
-            return isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : isAccountIdSet ? $"accounts/{accountId}/teams": "/";
-        }
+            bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
+            Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
+            return isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : isAccountIdSet ? $"accounts/{accountId}/teams" : "/";
+        }        
 
         public static string ReturnToHomePageButtonText(this HtmlHelper htmlHelper, string accountId)
         {
+            if (string.IsNullOrEmpty(accountId))
+            {
+                accountId = GetContextAccountId();
+            }
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
-            bool isAccountIdSet = accountId != null;
+            bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
+            Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
 
             return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Go back to the account home page" : "Go back to the service home page";
         }
 
         public static string ReturnToHomePageLinkHref(this HtmlHelper htmlHelper, string accountId)
         {
+            if (string.IsNullOrEmpty(accountId))
+            {
+                accountId = GetContextAccountId();
+            }
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
-            bool isAccountIdSet = accountId != null;
+            bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
+            Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
 
-            return  isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : "/";
+            return isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : "/";
         }
 
         public static string ReturnToHomePageLinkText(this HtmlHelper htmlHelper, string accountId)
         {
+
+            if (string.IsNullOrEmpty(accountId))
+            {
+                accountId = GetContextAccountId();
+            }
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
-            bool isAccountIdSet = accountId != null;
+            bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
+            Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
 
             return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Back to the homepage" : "Back";
+        }
+
+        public static string GetContextAccountId()
+        {
+            string contextAccountId = string.Empty;
+            string[] url = HttpContext.Current.Request.RawUrl.Split('/');
+            if (url != null &&  url.Length > 2)
+            {
+                if (url[2] != null) { contextAccountId = url[2]; }
+            }
+
+            return contextAccountId;
         }
 
         public static bool ViewExists(this HtmlHelper html, string viewName)

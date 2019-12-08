@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+using System.IO;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
@@ -11,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
     {
         private Mock<IViewDataContainer> MockViewDataContainer;
         private Mock<ViewContext> MockViewContext;        
-        private  Mock<HttpContextBase> MockContextBase;
+        private Mock<HttpContextBase> MockContextBase;
         private const string Tier2User = "Tier2User";        
         private Mock<IPrincipal> MockIPrincipal;        
 
@@ -24,7 +25,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
             MockContextBase.Setup(c => c.User).Returns(MockIPrincipal.Object);
             MockViewContext = new Mock<ViewContext>();
-            MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);          
+            MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
+            HttpContext.Current = new HttpContext(
+                                  new HttpRequest("", "http://tempuri.org/accounts", ""),
+                                  new HttpResponse(new StringWriter()));
         }
 
 
@@ -91,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         public void ReturnToHomePageButtonHreft_WhenTheUserRoleAndAccountIdHasValues_ThenReturnButtonHref(bool isTier2User,
          string accountId, string expectedLink)
         {
-            //Arrange            
+            //Arrange          
             MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
@@ -102,5 +106,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             Assert.AreEqual(expectedLink, result);
         }
 
+        [TestCase("G6M7RV")]
+        [TestCase("")]
+        public void GetContextAccountId_WhenAccountIdIsNull_ThenGetAccountIdFromHttpCntext(string accountId)
+        {
+            //Arrange
+            string url = $"http://tempuri.org/accounts/{accountId}";
+            HttpContext.Current = new HttpContext(
+                                 new HttpRequest("", url , ""),
+                                 new HttpResponse(new StringWriter()));
+            //Act
+            var result = Helpers.HtmlHelperExtensions.GetContextAccountId();
+
+            //Assert
+            Assert.AreEqual(result, accountId);
+        }
     }
 }
