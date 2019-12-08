@@ -28,12 +28,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         }
 
         public static string ReturnToHomePageButtonHref(this HtmlHelper htmlHelper, string accountId)
-        {
-            if (string.IsNullOrEmpty(accountId))
+        {                    
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            if (isTier2User && string.IsNullOrEmpty(accountId))
             {
                 accountId = GetContextAccountId();
-            }          
-            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
             return isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : isAccountIdSet ? $"accounts/{accountId}/teams" : "/";
@@ -41,11 +41,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
         public static string ReturnToHomePageButtonText(this HtmlHelper htmlHelper, string accountId)
         {
-            if (string.IsNullOrEmpty(accountId))
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            if (isTier2User && string.IsNullOrEmpty(accountId))
             {
                 accountId = GetContextAccountId();
             }
-            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
 
@@ -54,11 +54,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
         public static string ReturnToHomePageLinkHref(this HtmlHelper htmlHelper, string accountId)
         {
-            if (string.IsNullOrEmpty(accountId))
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            if (isTier2User && string.IsNullOrEmpty(accountId))
             {
                 accountId = GetContextAccountId();
             }
-            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
 
@@ -66,13 +66,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         }
 
         public static string ReturnToHomePageLinkText(this HtmlHelper htmlHelper, string accountId)
-        {
-
-            if (string.IsNullOrEmpty(accountId))
+        {           
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
+            if (isTier2User && string.IsNullOrEmpty(accountId))
             {
                 accountId = GetContextAccountId();
             }
-            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
 
