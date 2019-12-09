@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetClaimsHashedAccountId();
+                accountId = GetContextAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetClaimsHashedAccountId();
+                accountId = GetContextAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetClaimsHashedAccountId();
+                accountId = GetContextAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetClaimsHashedAccountId();
+                accountId = GetContextAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
             Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
@@ -95,6 +95,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             var hashedAccountId = claim?.Value;
             Logger.Debug($"GetClaimsHashedAccountId :: HashedAccountId : {hashedAccountId} ");
             return (!string.IsNullOrEmpty(hashedAccountId)) ? hashedAccountId : string.Empty;
+        }
+
+        public static string GetContextAccountId()
+        {
+            string contextAccountId = string.Empty;
+            string[] url = HttpContext.Current.Request.RawUrl.Split('/');
+            if (url != null && url.Length > 2)
+            {
+                if (url[2] != null) { contextAccountId = url[2]; }
+            }
+
+            return contextAccountId;
         }
 
         public static bool ViewExists(this HtmlHelper html, string viewName)

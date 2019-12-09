@@ -131,6 +131,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 
         [TestCase("G6M7RV")]
         [TestCase("")]
+        public void GetContextAccountId_WhenAccountIdIsNull_ThenGetAccountIdFromHttpCntext(string accountId)
+        {
+            //Arrange
+            string url = $"http://tempuri.org/accounts/{accountId}";
+            HttpContext.Current = new HttpContext(
+                                 new HttpRequest("", url, ""),
+                                 new HttpResponse(new StringWriter()));
+            //Act
+            var result = Helpers.HtmlHelperExtensions.GetContextAccountId();
+
+            //Assert
+            Assert.AreEqual(result, accountId);
+        }
+
+
+        [TestCase("G6M7RV")]
+        [TestCase("")]
         public void GetClaimsHashedAccountId_WhenAccountIdIsNull_ThenGetHashedAccountIdFromClaims(string actualHashedAccountId)
         {
             //Arrange           
