@@ -3,13 +3,16 @@ using NLog;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.Authorization.Services;
+using System.Security.Claims;
+using System.Linq;
+using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers
 {
     public static class HtmlHelperExtensions
     {
         public const string Tier2User = "Tier2User";
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();        
 
         public static AuthorizationResult GetAuthorizationResult(this HtmlHelper htmlHelper, string featureType)
         {
@@ -32,11 +35,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetContextAccountId();
+                accountId = GetClaimsHashedAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
-            Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
-            return isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : isAccountIdSet ? $"accounts/{accountId}/teams" : "/";
+            Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
+            return isTier2User && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : isAccountIdSet ? $"/accounts/{accountId}/teams" : "/";
         }        
 
         public static string ReturnToHomePageButtonText(this HtmlHelper htmlHelper, string accountId)
@@ -44,10 +47,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetContextAccountId();
+                accountId = GetClaimsHashedAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
-            Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
+            Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
 
             return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Go back to the account home page" : "Go back to the service home page";
         }
@@ -57,12 +60,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetContextAccountId();
+                accountId = GetClaimsHashedAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
-            Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
+            Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
 
-            return isTier2User && isAccountIdSet ? $"accounts/{accountId}/teams/view" : "/";
+            return isTier2User && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : "/";
         }
 
         public static string ReturnToHomePageLinkText(this HtmlHelper htmlHelper, string accountId)
@@ -70,24 +73,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
             if (isTier2User && string.IsNullOrEmpty(accountId))
             {
-                accountId = GetContextAccountId();
+                accountId = GetClaimsHashedAccountId();
             }
             bool isAccountIdSet = !string.IsNullOrEmpty(accountId);
-            Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} RawUrl : {HttpContext.Current.Request.RawUrl} ");
+            Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ClaimsIdentity : { HttpContext.Current.User.Identity as ClaimsIdentity} ");
 
-            return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Back to the homepage" : "Back";
+            return isTier2User && isAccountIdSet ? "Back" : isAccountIdSet ? "Back to the homepage" : "Back";
         }
 
-        public static string GetContextAccountId()
+        public static string ReturnParagraphContent(this HtmlHelper htmlHelper)
         {
-            string contextAccountId = string.Empty;
-            string[] url = HttpContext.Current.Request.RawUrl.Split('/');
-            if (url != null &&  url.Length > 2)
-            {
-                if (url[2] != null) { contextAccountId = url[2]; }
-            }
+            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
 
-            return contextAccountId;
+            return isTier2User ? "You do not have permission to access this part of the service." : "If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.";
+        }
+
+        public static string GetClaimsHashedAccountId()
+        {
+            var identity = HttpContext.Current.User.Identity as ClaimsIdentity;
+            var claim = identity?.Claims.FirstOrDefault(c => c.Type == RouteValueKeys.AccountHashedId);
+            var hashedAccountId = claim?.Value;
+            Logger.Debug($"GetClaimsHashedAccountId :: HashedAccountId : {hashedAccountId} ");
+            return (!string.IsNullOrEmpty(hashedAccountId)) ? hashedAccountId : string.Empty;
         }
 
         public static bool ViewExists(this HtmlHelper html, string viewName)
