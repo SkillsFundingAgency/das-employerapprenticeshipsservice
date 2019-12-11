@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Web.Filters;
 using System.Web.Mvc;
-using SFA.DAS.Authorization.Mvc.Extensions;
 using SFA.DAS.UnitOfWork.Mvc.Extensions;
 using SFA.DAS.Authorization.Mvc.Filters;
 using System;
@@ -17,37 +16,32 @@ namespace SFA.DAS.EmployerAccounts.Web
         {
             filters.AddUnitOfWorkFilter();
             filters.Add(new GoogleAnalyticsFilter());            
-            filters.AddEasAuthorizationFilter();
-            filters.AddEasUnauthorizedAccessExceptionFilter();            
+            filters.AddDasEmployerAccountsAuthorizationFilter();
+            filters.AddDasEmployerAccountsUnauthorizedAccessExceptionFilter();            
         }
     }
 
-    public class EasUnauthorizedAccessExceptionFilter : IExceptionFilter
+    public class DasEmployerAccountsUnauthorizedAccessExceptionFilter : UnauthorizedAccessExceptionFilter
     {
-        public void OnException(ExceptionContext filterContext)
-        {            
+        public override void OnException(ExceptionContext filterContext) 
+        {
+            base.OnException(filterContext);
             if (filterContext.Exception is UnauthorizedAccessException)
-            {               
-                if (filterContext.HttpContext.User.IsInRole(AuthorizationConstants.Tier2User))
+            {
+                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) && filterContext.HttpContext.User.IsInRole(AuthorizationConstants.Tier2User))
                 {
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
                         filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
                     }
                 }
-                else
-                {
-                    filterContext.Result = new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-                    filterContext.ExceptionHandled = true;
-                }
-               
             }
         }
     }
 
-    public class EasAuthorizationFilter : AuthorizationFilter
+    public class DasEmployerAccountsAuthorizationFilter : AuthorizationFilter
     {       
-        public EasAuthorizationFilter(Func<IAuthorizationService> authorizationService) : base(authorizationService)
+        public DasEmployerAccountsAuthorizationFilter(Func<IAuthorizationService> authorizationService) : base(authorizationService)
         {           
         }
         
@@ -72,15 +66,15 @@ namespace SFA.DAS.EmployerAccounts.Web
 
     public static class GlobalFilterCollectionExtensions
     {
-        public static void AddEasAuthorizationFilter(this GlobalFilterCollection filters)
+        public static void AddDasEmployerAccountsAuthorizationFilter(this GlobalFilterCollection filters)
         {
-            filters.Add(new EasAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
+            filters.Add(new DasEmployerAccountsAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
         }
 
 
-        public static void AddEasUnauthorizedAccessExceptionFilter(this GlobalFilterCollection filters)
+        public static void AddDasEmployerAccountsUnauthorizedAccessExceptionFilter(this GlobalFilterCollection filters)
         {
-            filters.Add(new EasUnauthorizedAccessExceptionFilter());
+            filters.Add(new DasEmployerAccountsUnauthorizedAccessExceptionFilter());
         }
     }
 }
