@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         private const string TeamMemberRoleChange = "accounts/{hashedaccountid}/teams/{email}/role/change";
         private const string TeamMemberInviteResend = "accounts/{hashedaccountid}/teams/resend";
         private const string TeamMemberInviteCancel = "accounts/{hashedaccountid}/teams/{invitationId}/cancel";
+        private const string ErrorAccessDenied = "error/accessdenied/{hashedaccountid}";
         private const string Tier2User = "Tier2User";
 
         public IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity)
@@ -34,6 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Services
                     new AuthorizationResource { Name = nameof(TeamMemberRoleChange), Value = TeamMemberRoleChange },
                     new AuthorizationResource { Name = nameof(TeamMemberInviteResend), Value = TeamMemberInviteResend },
                     new AuthorizationResource { Name = nameof(TeamMemberInviteCancel), Value = TeamMemberInviteCancel },
+                    new AuthorizationResource { Name = nameof(ErrorAccessDenied), Value = ErrorAccessDenied },
                 };
             }
 
