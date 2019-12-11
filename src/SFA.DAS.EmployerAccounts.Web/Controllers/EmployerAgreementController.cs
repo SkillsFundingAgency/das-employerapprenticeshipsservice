@@ -10,6 +10,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -127,6 +128,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var response = await _mediator.SendAsync(request);
             var viewModel = _mapper.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response);
+            var entities = await _mediator.SendAsync(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
+
+            viewModel.LegalEntitiesCount = entities.LegalEntitiesCount;
 
             return View(viewModel);
         }
