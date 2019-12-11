@@ -1,5 +1,5 @@
 ﻿using MediatR;
-
+    
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId
 {
     public class GetAccountLegalEntitiesCountByHashedAccountIdRequest : IAsyncRequest<GetAccountLegalEntitiesCountByHashedAccountIdResponse>

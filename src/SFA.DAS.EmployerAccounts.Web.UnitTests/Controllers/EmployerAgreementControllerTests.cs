@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -302,15 +303,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
         public EmployerAgreementControllerTestFixtures WithUnsignedEmployerAgreement()
         {
-            var response = new GetEmployerAgreementResponse
+            var agreementResponse = new GetEmployerAgreementResponse
             {
                 EmployerAgreement = new AgreementDto()
             };
 
-            Mediator.Setup(x => x.SendAsync(GetAgreementRequest))
-                .ReturnsAsync(response);
+            var entitiesCountResponse = new GetAccountLegalEntitiesCountByHashedAccountIdResponse
+            {
+                LegalEntitiesCount = 1
+            };
 
-            Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response))
+            Mediator.Setup(x => x.SendAsync(GetAgreementRequest))
+                .ReturnsAsync(agreementResponse);
+
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>()))
+                .ReturnsAsync(entitiesCountResponse);
+
+            Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(agreementResponse))
                 .Returns(GetAgreementToSignViewModel);
 
             Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
