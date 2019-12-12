@@ -16,19 +16,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
         }
 
-        [DasAuthorize]       
-        [Route("error/accessdenied/{HashedAccountId}")]
+        [Route("accessdenied")]
         public ActionResult AccessDenied(string hashedAccountId)
+        
         {
             ViewBag.AccountId = hashedAccountId;
 
-            return AccessDenied();
-        }
-
-
-        [Route("accessdenied")]
-        public ActionResult AccessDenied()
-        {
             Response.StatusCode = (int)HttpStatusCode.Forbidden;
 
             return View();
