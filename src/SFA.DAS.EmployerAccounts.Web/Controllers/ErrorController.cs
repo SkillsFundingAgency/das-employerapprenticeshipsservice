@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {    
+   
     public class ErrorController : BaseController
     {
         public ErrorController(
@@ -16,15 +17,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
         }
 
+        [DasAuthorize]
+        [Route("error/accessdenied/{HashedAccountId}")]
+        public ActionResult AccessDenied(string hashedAccountId)
+        {
+            ViewBag.AccountId = hashedAccountId;
 
-        //[DasAuthorize]
-        //[Route("error/accessdenied/{HashedAccountId}")]
-        //public ActionResult AccessDenied(string hashedAccountId)
-        //{
-        //    ViewBag.AccountId = hashedAccountId;
-
-        //    return View();
-        //}
+            return View();
+        }
 
 
         [Route("accessdenied")]
@@ -50,5 +50,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return View();
         }
+       
     }
 }

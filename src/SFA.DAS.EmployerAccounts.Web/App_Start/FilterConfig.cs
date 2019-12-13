@@ -26,16 +26,22 @@ namespace SFA.DAS.EmployerAccounts.Web
         public override void OnException(ExceptionContext filterContext) 
         {
             base.OnException(filterContext);
+            
             if (filterContext.Exception is UnauthorizedAccessException)
             {
+                
                 if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) && filterContext.HttpContext.User.IsInRole(AuthorizationConstants.Tier2User))
-                {
+                {   
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
-                        //filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied",  hashedAccountId = accountHashedId  }));
-                       filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Restrict", action = $"Refuse", hashedAccountId = accountHashedId }));
-                        //filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
+                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
+
                     }
+                    else
+                    {
+                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied" }));
+                    }
+
                 }
             }
         }
@@ -57,9 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 {
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
-                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Restrict", action = $"Refuse", hashedAccountId = accountHashedId }));                        
-                        //filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
-
+                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
                     }
                 }
                 
