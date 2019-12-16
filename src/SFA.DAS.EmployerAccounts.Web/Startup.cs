@@ -1,4 +1,12 @@
-﻿using Microsoft.Azure;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IdentityModel.Tokens;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -6,22 +14,14 @@ using NLog;
 using Owin;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Models;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
                 try
                 {
-                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var thumbprint = ConfigurationManager.AppSettings["TokenCertificateThumbprint"];
                     var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
 
                     if (certificates.Count < 1)
