@@ -1,6 +1,6 @@
-﻿using SFA.DAS.EmployerFinance.Interfaces;
-using System;
-using Microsoft.Azure;
+﻿using System;
+using System.Configuration;
+using SFA.DAS.EmployerFinance.Interfaces;
 
 namespace SFA.DAS.EmployerFinance.Time
 {
@@ -12,8 +12,8 @@ namespace SFA.DAS.EmployerFinance.Time
 
         public CurrentDateTime()
         {
-            var setting = CloudConfigurationManager.GetSetting("CurrentTime");
-            
+            var setting = ConfigurationManager.AppSettings["CurrentTime"];
+
             if (DateTime.TryParse(setting, out var now))
             {
                 _now = now;
