@@ -1,7 +1,5 @@
 ﻿using FluentValidation.Mvc;
-using Microsoft.Azure;
 using NLog;
-using NLog.Targets;
 using NServiceBus;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.Audit.Types;
@@ -10,6 +8,7 @@ using SFA.DAS.EAS.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.Web.Policy;
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Net;
@@ -32,10 +31,8 @@ using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
-using SFA.DAS.UnitOfWork.NServiceBus;
 using StructureMap;
 using SFA.DAS.NServiceBus.Configuration;
-using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -55,7 +52,7 @@ namespace SFA.DAS.EAS.Web
             FluentValidationModelValidatorProvider.Configure();
             LoggingConfig.ConfigureLogging();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
-            TelemetryConfiguration.Active.InstrumentationKey = CloudConfigurationManager.GetSetting("InstrumentationKey");
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
             WebMessageBuilders.Register();
             WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
             WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
@@ -103,7 +100,7 @@ namespace SFA.DAS.EAS.Web
         {
             var exception = Server.GetLastError();
 
-            if (exception is HttpException httpException && httpException.GetHttpCode() == (int) HttpStatusCode.NotFound)
+            if (exception is HttpException httpException && httpException.GetHttpCode() == (int)HttpStatusCode.NotFound)
             {
                 return;
             }
@@ -148,8 +145,7 @@ namespace SFA.DAS.EAS.Web
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
                 .UseOutbox()
-                .UseStructureMapBuilder(container)
-                .UseUnitOfWork();
+                .UseStructureMapBuilder(container);
 
             _endpoint = Endpoint.Start(endpointConfiguration).GetAwaiter().GetResult();
 

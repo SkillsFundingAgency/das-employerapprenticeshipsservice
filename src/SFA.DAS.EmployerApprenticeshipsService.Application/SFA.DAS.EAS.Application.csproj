@@ -213,7 +213,7 @@
       <Version>1.0.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.33</Version>
+      <Version>6.0.46</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Api.Client">
       <Version>4.1.355</Version>
@@ -279,10 +279,10 @@
       <Version>1.0.0.32930</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Client">
-      <Version>1.8.12</Version>
+      <Version>1.8.44</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Types">
-      <Version>1.8.12</Version>
+      <Version>1.8.44</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.TimeProvider">
       <Version>1.0.0.3956</Version>
