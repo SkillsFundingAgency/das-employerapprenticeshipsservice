@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,41 +25,46 @@ namespace SFA.DAS.EAS.Portal.Application.EventHandlers.Reservations
         public async Task Handle(ReservationCreatedEvent reservationCreatedEvent, CancellationToken cancellationToken = default)
         {
             var accountDocument = await _accountDocumentService.GetOrCreate(reservationCreatedEvent.AccountId, cancellationToken);
-
+            bool isExistingReservation = false;
             var organisation = accountDocument.Account.GetOrAddOrganisation(reservationCreatedEvent.AccountLegalEntityId,
                 addedOrganisation => addedOrganisation.Name = reservationCreatedEvent.AccountLegalEntityName,
                 existingOrganisation =>
                 {
-                    var existingReservation = existingOrganisation.Reservations.FirstOrDefault(r => r.Id.Equals(reservationCreatedEvent.Id));
-                    if (existingReservation != null)
-                        throw DuplicateReservationCreatedEventException(reservationCreatedEvent);
+                    isExistingReservation = existingOrganisation.Reservations.Any(r => r.Id.Equals(reservationCreatedEvent.Id));
                 });
-            
-            organisation.Reservations.Add(new Client.Types.Reservation
+
+            if (isExistingReservation)
             {
-                Id = reservationCreatedEvent.Id,
-                CourseCode = reservationCreatedEvent.CourseId,
-                CourseName = reservationCreatedEvent.CourseName,
-                StartDate = reservationCreatedEvent.StartDate,
-                EndDate = reservationCreatedEvent.EndDate
-            });
-            
-            await _accountDocumentService.Save(accountDocument, cancellationToken);
+                LogDuplicateReservationCreatedEventWarning(reservationCreatedEvent);
+            }
+            else
+            {
+                organisation.Reservations.Add(new Client.Types.Reservation
+                {
+                    Id = reservationCreatedEvent.Id,
+                    CourseCode = reservationCreatedEvent.CourseId,
+                    CourseName = reservationCreatedEvent.CourseName,
+                    StartDate = reservationCreatedEvent.StartDate,
+                    EndDate = reservationCreatedEvent.EndDate
+                });
+
+                await _accountDocumentService.Save(accountDocument, cancellationToken);
+            }
         }
-        
-        private Exception DuplicateReservationCreatedEventException(ReservationCreatedEvent reservationCreatedEvent)
+
+        private void LogDuplicateReservationCreatedEventWarning(ReservationCreatedEvent reservationCreatedEvent)
         {
-            return new Exception(
+            _logger.Log(LogLevel.Warning,
                 $@"Received {nameof(ReservationCreatedEvent)} with 
-Id:{reservationCreatedEvent.Id}, 
-AccountId:{reservationCreatedEvent.AccountId},
-AccountLegalEntityId:{reservationCreatedEvent.AccountLegalEntityId},
-AccountLegalEntityName:{reservationCreatedEvent.AccountLegalEntityName},
-CourseId:{reservationCreatedEvent.CourseId},
-CourseName:{reservationCreatedEvent.CourseName},
-StartDate:{reservationCreatedEvent.StartDate},
-EndDate:{reservationCreatedEvent.EndDate},
-when {nameof(AccountDocument)} already contains a reservation with that Id.");
+                    Id:{reservationCreatedEvent.Id}, 
+                    AccountId:{reservationCreatedEvent.AccountId},
+                    AccountLegalEntityId:{reservationCreatedEvent.AccountLegalEntityId},
+                    AccountLegalEntityName:{reservationCreatedEvent.AccountLegalEntityName},
+                    CourseId:{reservationCreatedEvent.CourseId},
+                    CourseName:{reservationCreatedEvent.CourseName},
+                    StartDate:{reservationCreatedEvent.StartDate},
+                    EndDate:{reservationCreatedEvent.EndDate},
+                    when {nameof(AccountDocument)} already contains a reservation with that Id.");
         }
     }
 }
