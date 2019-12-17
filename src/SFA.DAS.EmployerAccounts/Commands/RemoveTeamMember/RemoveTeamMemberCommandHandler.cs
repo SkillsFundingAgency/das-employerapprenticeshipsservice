@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "DELETED",
-                    Description = $"User {owner.Email} with role {owner.Role} has removed user {teamMember.UserId} with role {teamMember.Role} from account {owner.AccountId}",
+                    Description = $"User {owner.Email} with role {owner.Role} has removed user {teamMember.User?.Email ?? teamMember.UserId.ToString()} with role {teamMember.Role} from account {owner.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         new PropertyUpdate {PropertyName = "AccountId", NewValue = owner.AccountId.ToString()},
