@@ -6,6 +6,7 @@ using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 
@@ -44,8 +45,14 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@accountId", accountId, DbType.Int64);
             parameters.Add("@userId", userId, DbType.Int64);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<Membership>(
-                sql: "SELECT * FROM [employer_account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+            var result = await _db.Value.Database.Connection.QueryAsync<Membership, User, Membership>(
+                sql: "SELECT m.*, u.Email FROM [employer_account].[Membership] m INNER JOIN [employer_account].[User] u ON m.UserId = u.Id WHERE m.AccountId = @accountId AND m.UserId = @userId;",
+                (membership, user) =>
+                {
+                    membership.User = user;
+                    return membership;
+                },
+                splitOn: "UserId",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
