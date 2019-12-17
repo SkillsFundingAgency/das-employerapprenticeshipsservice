@@ -112,9 +112,6 @@
     <PackageReference Include="System.IdentityModel.Tokens.Jwt">
       <Version>4.0.3.308261200</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>1.1.16</Version>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

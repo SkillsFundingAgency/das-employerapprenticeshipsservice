@@ -1,6 +1,6 @@
-﻿using Microsoft.Azure;
-using NLog;
+﻿using System.Configuration;
 using System.Linq;
+using NLog;
 
 namespace SFA.DAS.EmployerFinance.Web.Logging
 {
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerFinance.Web.Logging
 
         private static LogLevel GetLogLevelFromConfigurationManager()
         {
-            var settingValue = CloudConfigurationManager.GetSetting("LogLevel");
+            var settingValue = ConfigurationManager.AppSettings["LogLevel"];
             return LogLevel.FromString(settingValue);
         }
     }
