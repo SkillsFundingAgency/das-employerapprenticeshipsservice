@@ -43,8 +43,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Configuration
                         ClientId = "",
                         ClientSecret = "",
                         IdentifierUri = "",
-                        Tenant = "",
-                        LevyTokenCertificatethumprint = ""
+                        Tenant = ""
                      }
                 },
                 HashingService = new HashingServiceConfig

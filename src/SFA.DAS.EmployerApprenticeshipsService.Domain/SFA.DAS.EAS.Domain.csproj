@@ -199,9 +199,6 @@
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
       <Version>5.0.5</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager">
-      <Version>3.2.3</Version>
-    </PackageReference>
     <PackageReference Include="NServiceBus.Persistence.Sql">
       <Version>4.1.1</Version>
     </PackageReference>
@@ -257,10 +254,10 @@
       <Version>1.1.82</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Types">
-      <Version>1.8.12</Version>
+      <Version>1.8.44</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>1.1.16</Version>
+      <Version>2.1.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.UnitOfWork">
       <Version>9.0.13</Version>

@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.Validation;
+using TasksEnums = SFA.DAS.Tasks.API.Types.Enums;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks
 {
@@ -32,7 +34,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTasks
 
         private async Task<AccountTask[]> GetTasks(GetAccountTasksQuery message)
         {
-            var tasks = await _taskService.GetAccountTasks(message.AccountId, message.ExternalUserId);
+            var apprenticeshipEmployerType = 
+                message.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy 
+                    ? TasksEnums.ApprenticeshipEmployerType.Levy 
+                    : TasksEnums.ApprenticeshipEmployerType.NonLevy;
+
+            var tasks = await _taskService.GetAccountTasks(message.AccountId, message.ExternalUserId, apprenticeshipEmployerType);
 
             var accountTasks = tasks.Select(x => new AccountTask
             {

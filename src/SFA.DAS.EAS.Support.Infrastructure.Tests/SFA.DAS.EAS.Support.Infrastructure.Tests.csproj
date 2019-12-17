@@ -134,9 +134,6 @@
     <PackageReference Include="SFA.DAS.NLog.Logger">
       <Version>1.2.1</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>1.1.16</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
