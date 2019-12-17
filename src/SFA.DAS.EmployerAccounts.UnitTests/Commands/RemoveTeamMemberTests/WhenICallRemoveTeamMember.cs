@@ -233,5 +233,56 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
                     c.EasAuditMessage.AffectedEntity.Type.Equals("Membership"))));
         }
 
+        [Test]
+        public async Task ThenTheAuditPopulatesUserIdWhenUserEmailNotPresent()
+        {
+            // Arrange
+            _user.Email = null;
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("UserId") && y.NewValue.Equals(_teamMember.UserId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Role") && y.NewValue.Equals(_teamMember.Role.ToString())) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} with role {_owner.Role} has removed user {_teamMember.UserId} with role {_teamMember.Role} from account {_owner.AccountId}"))));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_owner.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    c.EasAuditMessage.AffectedEntity.Id.Equals(_teamMember.UserId.ToString()) &&
+                    c.EasAuditMessage.AffectedEntity.Type.Equals("Membership"))));
+        }
+
+        [Test]
+        public async Task ThenTheAuditPopulatesUserEmailWhenPresent()
+        {
+            // Arrange
+            _user.Email = "test123@test,com";
+
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("AccountId") && y.NewValue.Equals(_owner.AccountId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("UserId") && y.NewValue.Equals(_teamMember.UserId.ToString())) != null &&
+                      c.EasAuditMessage.ChangedProperties.SingleOrDefault(y => y.PropertyName.Equals("Role") && y.NewValue.Equals(_teamMember.Role.ToString())) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.Description.Equals($"User {_owner.Email} with role {_owner.Role} has removed user {_teamMember.User.Email} with role {_teamMember.Role} from account {_owner.AccountId}"))));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                      c.EasAuditMessage.RelatedEntities.SingleOrDefault(y => y.Id.Equals(_owner.AccountId.ToString()) && y.Type.Equals("Account")) != null)));
+
+            _mediator.Verify(x => x.SendAsync(It.Is<CreateAuditCommand>(c =>
+                    c.EasAuditMessage.AffectedEntity.Id.Equals(_teamMember.UserId.ToString()) &&
+                    c.EasAuditMessage.AffectedEntity.Type.Equals("Membership"))));
+        }
     }
 }
