@@ -165,8 +165,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api.IntegrationTests", "SFA.DAS.EmployerAccounts.Api.IntegrationTests\SFA.DAS.EmployerAccounts.Api.IntegrationTests.csproj", "{BD68EB2C-A486-42B2-8685-776B164FD860}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.Authorization", "..\..\das-authorization\src\SFA.DAS.Authorization\SFA.DAS.Authorization.csproj", "{72916734-7C30-4F1D-8151-802753C2C051}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
