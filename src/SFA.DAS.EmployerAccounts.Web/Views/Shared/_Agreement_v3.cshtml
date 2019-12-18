@@ -7,16 +7,12 @@
     var errorClassMsg = Model.NoChoiceSelected ? "govuk-error-message" : "";
 }
 
-
-<!--script type="text/javascript" src="@Url.Content("../../../../dist/javascripts/jquery-1.11.0.min.js")"></script>
-<script type="text/javascript" src="@Url.Content("../../../../dist/javascripts/accordion.js")"></script>
-<link href="@Url.Content("../../../../dist/css/accordion.css")" rel="stylesheet" type="text/css" />
-<link href="@Url.Content("../../../../dist/css/legal/legal-agreement.css")" rel="stylesheet" type="text/css" /-->
-
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName<span>?</span></h1>
+        @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
+        {
+            <h1 class="govuk-heading-xl">Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName<span>?</span></h1>
+        }
 
         <p class="govuk-body govuk-!-margin-bottom-6">The points to note and guidance notes are not part of the employer agreement.</p>
 
