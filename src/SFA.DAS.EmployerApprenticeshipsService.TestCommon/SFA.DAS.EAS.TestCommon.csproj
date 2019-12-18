@@ -207,9 +207,6 @@
     <PackageReference Include="SFA.DAS.Sql.Client">
       <Version>1.0.0.32930</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>1.1.16</Version>
-    </PackageReference>
     <PackageReference Include="SpecFlow">
       <Version>2.4.1</Version>
     </PackageReference>

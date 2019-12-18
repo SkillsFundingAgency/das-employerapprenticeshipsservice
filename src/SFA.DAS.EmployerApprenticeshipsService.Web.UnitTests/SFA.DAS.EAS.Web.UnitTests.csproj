@@ -162,7 +162,7 @@
       <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.33</Version>
+      <Version>6.0.46</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Commitments.Api.Types">
       <Version>4.1.355</Version>

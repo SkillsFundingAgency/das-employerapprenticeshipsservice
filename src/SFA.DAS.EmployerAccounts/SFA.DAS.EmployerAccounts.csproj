@@ -25,6 +25,7 @@
     <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
     <PackageReference Include="SFA.DAS.Authorization" Version="6.0.48" />
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.48" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.48" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355" />
@@ -56,7 +57,7 @@
     <PackageReference Include="SFA.DAS.Sql.Client" Version="1.0.0.32930" />
     <PackageReference Include="SFA.DAS.Tasks.Api.Client" Version="1.8.44" />
     <PackageReference Include="SFA.DAS.Tasks.API.Types" Version="1.8.44" />
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="1.1.16" />
+    <PackageReference Include="SFA.DAS.TokenService.Api.Client" Version="2.1.1" />    
     <PackageReference Include="SFA.DAS.UnitOfWork" Version="9.0.13" />
     <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
     <PackageReference Include="StructureMap" Version="4.7.1" />

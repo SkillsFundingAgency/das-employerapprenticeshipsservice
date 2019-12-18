@@ -48,9 +48,6 @@
   <ItemGroup>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="StartUp\FindPrivateKey.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -94,7 +91,6 @@
     <Compile Include="Services\ChallengeHelper.cs" />
     <Compile Include="Services\IPayeLevyMapper.cs" />
     <Compile Include="Services\PayeLevyMapper.cs" />
-    <Compile Include="WebRole.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -102,19 +98,13 @@
     <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\PayeSchemes.cshtml" />
     <Content Include="Views\Challenge\Index.cshtml" />
-    <Content Include="StartUp\IIS.bat">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StartUp\IIS.PS1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="StartUp\Powershell.msi">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Views\Account\SubHeader.cshtml" />
     <Content Include="Views\Account\PayeSchemeLevySubmissions.cshtml" />
     <Content Include="Views\Error\Error.cshtml" />
     <Content Include="Views\Account\Team.cshtml" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="NLog.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -155,13 +145,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.8.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.Web">
-      <Version>2.11.1</Version>
+      <Version>2.11.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi.WebHost">
       <Version>5.2.3</Version>
@@ -209,9 +197,6 @@
     </PackageReference>
     <PackageReference Include="WebGrease">
       <Version>1.5.2</Version>
-    </PackageReference>
-    <PackageReference Include="WindowsAzure.Storage">
-      <Version>8.7.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>

@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             var result = await _db.Value.Database.Connection.QueryAsync<Membership, User, Membership>(
                 sql: "SELECT m.*, u.Email FROM [employer_account].[Membership] m INNER JOIN [employer_account].[User] u ON m.UserId = u.Id WHERE m.AccountId = @accountId AND m.UserId = @userId;",
-                (membership, user) =>
+                map: (membership, user) =>
                 {
                     membership.User = user;
                     return membership;

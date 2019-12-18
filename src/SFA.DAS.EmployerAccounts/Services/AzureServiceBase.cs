@@ -1,10 +1,10 @@
-﻿using Microsoft.Azure;
-using Microsoft.WindowsAzure.Storage;
-using Newtonsoft.Json;
-using SFA.DAS.NLog.Logger;
+﻿using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.WindowsAzure.Storage;
+using Newtonsoft.Json;
 using SFA.DAS.AutoConfiguration;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         {
             try
             {
-                var storageAccount = CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+                var storageAccount = CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
                 var client = storageAccount.CreateCloudBlobClient();
                 var container = client.GetContainerReference(containerName);
                 var blob = container.GetBlobReference(blobName);

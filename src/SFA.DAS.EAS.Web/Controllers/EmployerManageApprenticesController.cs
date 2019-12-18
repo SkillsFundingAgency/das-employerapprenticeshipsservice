@@ -1,5 +1,5 @@
-﻿using System.Web.Mvc;
-using Microsoft.Azure;
+﻿using System.Configuration;
+using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Web.Helpers;
 
@@ -63,14 +63,13 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName).EndsWith("/")
-                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)
-                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName) + "/";
+            var baseUrl = ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName].EndsWith("/")
+                ? ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName]
+                : ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName] + "/";
 
             var path = Request.Url.AbsolutePath;
 
             return RedirectPermanent($"{baseUrl}{path}");
-
         }
     }
 }

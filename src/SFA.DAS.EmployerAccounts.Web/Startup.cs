@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
@@ -262,7 +263,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
                 try
                 {
-                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var thumbprint = ConfigurationManager.AppSettings["TokenCertificateThumbprint"];
                     var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
 
                     if (certificates.Count < 1)
