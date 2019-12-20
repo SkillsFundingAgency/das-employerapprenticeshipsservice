@@ -183,7 +183,7 @@ UNION ALL
 			and trans.PeriodEnd = tl.PeriodEnd			
 
 	  LEFT JOIN 
-	  (SELECT p3.AccountId, p3.PeriodEnd, m3.ProviderName
+	  (SELECT DISTINCT p3.AccountId, p3.PeriodEnd, m3.ProviderName
 		FROM [employer_financial].[Payment] p3
 		INNER JOIN [employer_financial].[PaymentMetaData] m3 
 			ON m3.Id = p3.PaymentMetaDataId
