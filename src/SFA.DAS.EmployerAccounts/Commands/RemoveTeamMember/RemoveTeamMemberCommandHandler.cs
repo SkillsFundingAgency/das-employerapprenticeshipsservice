@@ -61,22 +61,22 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember
             await _eventPublisher.Publish(new AccountUserRemovedEvent(teamMember.AccountId, message.UserRef, DateTime.UtcNow));
         }
 
-        private async Task AddAuditEntry(MembershipView owner, Membership teamMember)
+        private async Task AddAuditEntry(MembershipView owner, TeamMember teamMember)
         {
             await _mediator.SendAsync(new CreateAuditCommand
             {
                 EasAuditMessage = new EasAuditMessage
                 {
                     Category = "DELETED",
-                    Description = $"User {owner.Email} with role {owner.Role} has removed user {teamMember.User?.Email ?? teamMember.UserId.ToString()} with role {teamMember.Role} from account {owner.AccountId}",
+                    Description = $"User {owner.Email} with role {owner.Role} has removed user {teamMember.Email ?? teamMember.Id.ToString()} with role {teamMember.Role} from account {owner.AccountId}",
                     ChangedProperties = new List<PropertyUpdate>
                     {
                         new PropertyUpdate {PropertyName = "AccountId", NewValue = owner.AccountId.ToString()},
-                        new PropertyUpdate {PropertyName = "UserId", NewValue = teamMember.UserId.ToString()},
+                        new PropertyUpdate {PropertyName = "UserId", NewValue = teamMember.Id.ToString()},
                         new PropertyUpdate {PropertyName = "Role", NewValue = teamMember.Role.ToString()}
                     },
                     RelatedEntities = new List<Entity> { new Entity { Id = owner.AccountId.ToString(), Type = "Account" } },
-                    AffectedEntity = new Entity { Type = "Membership", Id = teamMember.UserId.ToString() }
+                    AffectedEntity = new Entity { Type = "Membership", Id = teamMember.Id.ToString() }
                 }
             });
         }
