@@ -262,7 +262,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveTeamMemberTests
         public async Task ThenTheAuditPopulatesUserEmailWhenPresent()
         {
             // Arrange
-            _user.Email = "test123@test,com";
+            _teamMember.Email = "test123@test.com";
 
             //Act
             await _handler.Handle(_command);
