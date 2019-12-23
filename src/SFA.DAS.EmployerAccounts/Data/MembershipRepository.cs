@@ -38,21 +38,21 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<Membership> Get(long userId, long accountId)
+        public async Task<TeamMember> Get(long userId, long accountId)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", accountId, DbType.Int64);
             parameters.Add("@userId", userId, DbType.Int64);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<Membership, User, Membership>(
-                sql: "SELECT m.*, u.Email FROM [employer_account].[Membership] m INNER JOIN [employer_account].[User] u ON m.UserId = u.Id WHERE m.AccountId = @accountId AND m.UserId = @userId;",
-                map: (membership, user) =>
-                {
-                    membership.User = user;
-                    return membership;
-                },
-                splitOn: "UserId",
+            var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
+                sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",
+                //map: (membership, user) =>
+                //{
+                //    membership.User = user;
+                //    return membership;
+                //},
+                //splitOn: "UserId",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
