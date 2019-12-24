@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
             var headerBuilder = new StringBuilder();
             headerBuilder.Append("Transaction date,");
             headerBuilder.Append("Transaction type,");
+            headerBuilder.Append("Description,");
             headerBuilder.Append("PAYE scheme,");
             headerBuilder.Append("Payroll month,");
             headerBuilder.Append("Levy declared,");
@@ -38,6 +39,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
             {
                 builder.Append($"{transaction.DateCreated:dd/MM/yyyy},");
                 builder.Append($"{transaction.TransactionType},");
+                builder.Append($"{transaction.Description},");
                 builder.Append($"{transaction.PayeScheme},");
                 builder.Append($"{transaction.PeriodEnd},");
                 builder.Append($"{transaction.LevyDeclaredFormatted},");
