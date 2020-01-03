@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.Azure;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Commands.CreateEnglishFractionCalculationDate;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
@@ -23,13 +23,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         private readonly ILog _logger;
         private readonly IDasAccountService _dasAccountService;
 
-        private static bool HmrcProcessingEnabled => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+        private static bool HmrcProcessingEnabled => ConfigurationManager.AppSettings["DeclarationsEnabled"]
             .Equals("both", StringComparison.CurrentCultureIgnoreCase);
 
-        private static bool DeclarationProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+        private static bool DeclarationProcessingOnly => ConfigurationManager.AppSettings["DeclarationsEnabled"]
             .Equals("declarations", StringComparison.CurrentCultureIgnoreCase);
 
-        private static bool FractionProcessingOnly => CloudConfigurationManager.GetSetting("DeclarationsEnabled")
+        private static bool FractionProcessingOnly => ConfigurationManager.AppSettings["DeclarationsEnabled"]
             .Equals("fractions", StringComparison.CurrentCultureIgnoreCase);
 
         public ImportAccountLevyDeclarationsCommandHandler(IMediator mediator, ILog logger, IDasAccountService dasAccountService)
@@ -57,14 +57,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 _logger.Debug($"Adding Levy Declarations of PAYE scheme {payeRef} to employer account {employerAccountId}");
 
                 await RefreshEmployerAccountLevyDeclarations(employerAccountId, payeSchemeDeclarations);
-
             }
             catch (Exception e)
             {
                 _logger.Error(e, $"An error occurred importing levy for accountid='{message.AccountId}'");
                 throw;
             }
-
         }
 
         private async Task RefreshEmployerAccountLevyDeclarations(long employerAccountId, ICollection<EmployerLevyData> payeSchemeDeclarations)
@@ -108,7 +106,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         private List<DasDeclaration> CreateDasDeclarations(GetHMRCLevyDeclarationResponse levyDeclarationQueryResult)
         {
             var declarations = new List<DasDeclaration>();
-
 
             foreach (var declaration in levyDeclarationQueryResult.LevyDeclarations.Declarations)
             {

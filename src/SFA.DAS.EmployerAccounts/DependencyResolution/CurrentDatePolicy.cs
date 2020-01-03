@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
-using Microsoft.Azure;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Time;
 using StructureMap;
@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
             if (currentDateTime != null)
             {
-                var cloudCurrentTime = CloudConfigurationManager.GetSetting("CurrentTime");
+                var cloudCurrentTime = ConfigurationManager.AppSettings["CurrentTime"];
 
                 if (!DateTime.TryParse(cloudCurrentTime, out var currentTime))
                 {
