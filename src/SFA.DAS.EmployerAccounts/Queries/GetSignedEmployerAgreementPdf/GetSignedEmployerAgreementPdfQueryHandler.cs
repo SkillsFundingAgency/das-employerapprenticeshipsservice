@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf
             var substituteValues = new Dictionary<string, string>
             {
                 { nameof(legalAgreement.SignedByName), legalAgreement.SignedByName },
-                { nameof(legalAgreement.SignedDate), legalAgreement.SignedDate.Value.ToString("dddd, MMMM MM, yyyy") },
+                { nameof(legalAgreement.SignedDate), legalAgreement.SignedDate.Value.ToString("d MMMM yyyy") },
                 { nameof(legalAgreement.LegalEntityName), legalAgreement.LegalEntityName }
             };
 
