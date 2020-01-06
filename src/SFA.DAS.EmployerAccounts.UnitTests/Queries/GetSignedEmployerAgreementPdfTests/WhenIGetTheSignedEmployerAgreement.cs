@@ -89,7 +89,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSignedEmployerAgreementP
             _pdfService.Verify(x=>x.SubsituteValuesForPdf($"{ExpectedLegalAgreementTemplateName}_Sub.pdf",It.Is<Dictionary<string,string>>(
                                                                                                 c=>c.ContainsValue(ExpectedSignedByName) 
                                                                                             && c.ContainsValue(ExpectedLegalEntityName) 
-                                                                                            && c.ContainsValue(_expectedSignedDate.ToString("dddd, MMMM MM, yyyy")) 
+                                                                                            && c.ContainsValue(_expectedSignedDate.ToString("d MMMM yyyy")) 
                                                                                             && c.ContainsValue(ExpectedLegalEntityAddress))));
             
         }
