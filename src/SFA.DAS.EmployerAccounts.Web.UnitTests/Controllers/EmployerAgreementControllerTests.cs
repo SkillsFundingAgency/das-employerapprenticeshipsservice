@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
+using Microsoft.Azure.Documents.SystemFunctions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -12,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -195,6 +197,56 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     Assert.IsTrue(((EmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
                 });
         }
+
+        [Test]
+        public Task WhenDoYouWantToView_WhenILandOnThePage_ThenTheLegalEntityNameIsCorrect()
+        {
+            return RunAsync(
+                arrange: fixtures =>
+                {
+                    fixtures.Orchestrator
+                        .Setup(x => x.GetById(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
+                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel>
+                        {
+                            Data = new EmployerAgreementViewModel { EmployerAgreement = new EmployerAgreementView { LegalEntityName = fixtures.LegalEntityName } }
+                        });
+                },
+                act: fixtures => fixtures.WhenDoYouWantToView(),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    var viewResult = actualResult as ViewResult;
+                    Assert.IsNotNull(viewResult);
+                    var actualModel = viewResult.Model as WhenDoYouWantToViewViewModel;
+                    Assert.IsNotNull(actualModel);
+                    Assert.That(actualModel.EmployerAgreement.LegalEntityName, Is.EqualTo(fixtures.LegalEntityName));
+                });
+        }
+
+        [Test]
+        public Task WhenDoYouWantToView_WhenISelectNow_ThenTheAgreementIsShown()
+        {
+            return RunAsync(
+                act: fixtures => fixtures.WhenDoYouWantToView(1, new WhenDoYouWantToViewViewModel { EmployerAgreement = new EmployerAgreementView() }),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    Assert.That(actualResult.RouteValues["action"], Is.EqualTo("SignAgreement"));
+                });
+        }
+
+        [Test]
+        public Task WhenDoYouWantToView_WhenISelectLater_ThenTheHomepageIsShown()
+        {
+            return RunAsync(
+                act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel{ EmployerAgreement = new EmployerAgreementView() }),
+                assert: (fixtures, actualResult) =>
+                {
+                    Assert.IsNotNull(actualResult);
+                    Assert.That(actualResult.RouteValues["action"], Is.EqualTo("Index"));
+                    Assert.That(actualResult.RouteValues["controller"], Is.EqualTo("EmployerTeam"));
+                });
+        }
     }
 
     public class EmployerAgreementControllerTestFixtures : FluentTestFixture
@@ -235,11 +287,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             public const string HashedAccountId = "ABC123";
             public const string UserId = "AFV456TGF";
             public const string HashedAgreementId = "789UHY";
+            public const string LegalEntityName = "FIFTEEN LIMITED";
         }
 
         public string HashedAccountId => Constants.HashedAccountId;
         public string UserId => Constants.UserId;
         public string HashedAgreementId => Constants.HashedAgreementId;
+        public string LegalEntityName => Constants.LegalEntityName;
 
         public GetEmployerAgreementRequest GetAgreementRequest { get; }
 
@@ -249,15 +303,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
         public EmployerAgreementControllerTestFixtures WithUnsignedEmployerAgreement()
         {
-            var response = new GetEmployerAgreementResponse
+            var agreementResponse = new GetEmployerAgreementResponse
             {
                 EmployerAgreement = new AgreementDto()
             };
 
-            Mediator.Setup(x => x.SendAsync(GetAgreementRequest))
-                .ReturnsAsync(response);
+            var entitiesCountResponse = new GetAccountLegalEntitiesCountByHashedAccountIdResponse
+            {
+                LegalEntitiesCount = 1
+            };
 
-            Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(response))
+            Mediator.Setup(x => x.SendAsync(GetAgreementRequest))
+                .ReturnsAsync(agreementResponse);
+
+            Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>()))
+                .ReturnsAsync(entitiesCountResponse);
+
+            Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(agreementResponse))
                 .Returns(GetAgreementToSignViewModel);
 
             Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
@@ -317,6 +379,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             var controller = CreateController();
             ViewResult = await controller.AboutYourAgreement(HashedAgreementId, HashedAccountId) as ViewResult;
             return ViewResult;
+        }
+
+        public async Task<ViewResult> WhenDoYouWantToView()
+        {
+            var controller = CreateController();
+            ViewResult = await controller.WhenDoYouWantToView(HashedAgreementId, HashedAccountId) as ViewResult;
+            return ViewResult;
+        }
+
+        public async Task<RedirectToRouteResult> WhenDoYouWantToView(int? choice, WhenDoYouWantToViewViewModel model)
+        {
+            var controller = CreateController();
+            return await controller.WhenDoYouWantToView(choice, model.EmployerAgreement.HashedAgreementId, model.EmployerAgreement.HashedAccountId) as RedirectToRouteResult;
         }
     }
 }
