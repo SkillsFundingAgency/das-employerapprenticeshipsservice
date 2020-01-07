@@ -14,8 +14,8 @@
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.51" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.51" />
+    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.2103" />

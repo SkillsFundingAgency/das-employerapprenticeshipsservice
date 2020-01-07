@@ -18,10 +18,10 @@
     <PackageReference Include="SFA.DAS.Apprenticeships.Api.Client" Version="0.11.98" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.51" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.51" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.51" />
-    <PackageReference Include="SFA.DAS.Authorization.WebApi" Version="6.0.51" />
+    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.WebApi" Version="6.0.52" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355" />
