@@ -171,7 +171,7 @@ else
                                                 break;
                                             case "AgreementToSign":
                                                 <p>
-                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to sign <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
+                                                    @task.ItemsDueCount agreement@(task.ItemsDueCount > 1 ? "s" : "") to accept <a href="@Url.Action("ViewUnsignedAgreements", "EmployerAgreement")">View agreements</a>
                                                 </p>
                                                 break;
                                             case "AddApprentices":
@@ -241,12 +241,12 @@ else
 
                 @if (Model.Data.UserRole == Role.Owner)
                 {
-                    <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">sign an agreement</a> to enable your organisations to spend funds.</p>
+                    <p>You need to <a href="@Url.Action("Index", "EmployerAgreement")">accept an agreement</a> to enable your organisations to spend funds.</p>
                 }
 
                 @if (Model.Data.UserRole == Role.Transactor)
                 {
-                    <p>An agreement needs to be signed to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
+                    <p>An agreement needs to be accepted to enable your organisations to spend funds. <a href="@Url.Action("Index", "EmployerAgreement")">View this agreement</a>.</p>
                 }
             </div>
         </section>

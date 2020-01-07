@@ -160,7 +160,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 FlashMessageViewModel flashMessage = new FlashMessageViewModel
                 {
-                    Headline = "Agreement(s) signed",
+                    Headline = "Agreement(s) accepted",
                     Severity = FlashMessageSeverityLevel.Success
                 };
 
@@ -168,13 +168,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (agreement.Data.EmployerAgreement.AgreementType == AgreementType.NonLevyExpressionOfInterest)
                 {
-                    flashMessage.Headline = "Memorandum of Understanding signed";
+                    flashMessage.Headline = "Memorandum of Understanding accepted";
                     flashMessage.Message = "You’ve successfully signed the Memorandum of Understanding for your organisation.";
                     result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 }
                 else if (response.Data.HasFurtherPendingAgreements)
                 {
-                    flashMessage.Message = "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
+                    flashMessage.Message = "You've successfully accepted an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
 
                     result = RedirectToAction(
                         ControllerConstants.IndexActionName,
@@ -184,8 +184,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else
                 {
-                    flashMessage.Headline = "All agreements signed";
-                    flashMessage.Message = "You’ve successfully signed your organisation agreement(s)";
+                    flashMessage.Headline = "All agreements accepted";
+                    flashMessage.Message = "You’ve successfully accepted your organisation agreement(s)";
                     result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 }
 

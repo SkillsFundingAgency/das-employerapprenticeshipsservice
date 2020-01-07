@@ -27,12 +27,12 @@
                     @if (!Model.Data.ShowWizard)
         {
             <label for="acceptAgreement" class="block-label">
-                <span class="form-label">Sign an agreement to allow @Model.Data.OrganisationName to spend funds</span>
+                <span class="form-label">Accept an agreement to allow @Model.Data.OrganisationName to spend funds</span>
                 <input type="radio" name="nextStep" value="agreement" id="acceptAgreement" />
             </label>
 
             <label for="teamMembers" class="block-label">
-                <span class="form-label">Check which team members can sign the agreement</span>
+                <span class="form-label">Check which team members can accept the agreement</span>
                 <input type="radio" name="nextStep" value="teamMembers" id="teamMembers" />
             </label>
 }
