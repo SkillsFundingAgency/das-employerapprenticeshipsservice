@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -12,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
         {
             string userId = null;
             string hashedAccountId = null;
-            string hashedLegalEntityId = null;
+            string agreementId = null;
             string userEmail = null;
             string userName = null;
 
@@ -29,9 +28,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
                 hashedAccountId = filterContext.ActionParameters["hashedAccountId"] as string;
             }
 
-            if (filterContext.ActionParameters.ContainsKey("hashedLegalEntityId"))
+            if (filterContext.ActionParameters.ContainsKey("agreementId"))
             {
-                hashedLegalEntityId = filterContext.ActionParameters["hashedLegalEntityId"] as string;
+                agreementId = filterContext.ActionParameters["agreementId"] as string;
             }
 
             
@@ -40,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
             {
                 UserId = userId,
                 Acc = hashedAccountId,
-                LegalEntityId = hashedLegalEntityId,
+                AgreementId = agreementId,
                 UserEmail = userEmail,
                 UserName = userName
             };
@@ -78,7 +77,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
             public string Vpv { get; set; }
             public string Acc { get; set; }
 
-            public string LegalEntityId { get; set; }
+            public string AgreementId { get; set; }
             public string LevyFlag { get; set; }
 
             public IDictionary<string, string> Extras { get; set; } = new Dictionary<string, string>();
