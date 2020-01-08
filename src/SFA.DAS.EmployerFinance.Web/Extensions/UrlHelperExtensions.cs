@@ -14,6 +14,19 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             return includedAccountId ? AccountAction(helper, baseUrl, path) : Action(baseUrl, path);
         }
 
+        public static string AccountsAction(this UrlHelper helper, string controller, string action, bool includedAccountId = true)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+            var baseUrl = configuration.EmployerAccountsBaseUrl;
+            if (includedAccountId)
+            {
+                var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+                return Action(baseUrl, controller, action, hashedAccountId?.ToString());
+            }
+
+            return Action(baseUrl, controller, action);
+        }
+
         public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
@@ -78,11 +91,33 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             return Action(baseUrl, accountPath);
         }
 
+        private static string Action(UrlHelper helper, string baseUrl, string path)
+        {
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var accountPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
+
+            return Action(baseUrl, accountPath);
+        }
+
         private static string Action(string baseUrl, string path)
         {
             var trimmedBaseUrl = baseUrl.TrimEnd('/');
 
             return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
+        }
+
+        private static string Action(string baseUrl, string controller, string action, string hashedAccountId)
+        {
+            var trimmedBaseUrl = baseUrl.TrimEnd('/');
+
+            return $"{trimmedBaseUrl}/{controller.TrimEnd('/')}/{hashedAccountId}/{action}".TrimEnd('/');
+        }
+
+        private static string Action(string baseUrl, string controller, string action)
+        {
+            var trimmedBaseUrl = baseUrl.TrimEnd('/');
+
+            return $"{trimmedBaseUrl}/{controller.TrimEnd('/')}/{action}".TrimEnd('/');
         }
     }
 }

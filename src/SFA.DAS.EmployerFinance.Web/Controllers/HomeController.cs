@@ -4,6 +4,7 @@ using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Web.Extensions;
 using SFA.DAS.EmployerFinance.Web.Helpers;
 using System.Web.Mvc;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
@@ -37,6 +38,14 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
             return Redirect(Url.LegacyEasAction("service/privacy"));
         }
 
+        [HttpGet]
+        [Route("{HashedAccountId}/cookieConsent", Order = 0)]
+        [Route("cookieConsent", Order = 1)]
+        public ActionResult CookieConsent()
+        {
+            return Redirect(Url.AccountsAction("cookieConsent", "settings"));
+        }       
+
         [Route("signOut")]
         public ActionResult SignOut()
         {
@@ -68,6 +77,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public ActionResult SignIn()
         {
             return RedirectToAction(ControllerConstants.IndexActionName);
-        }
+        }       
     }
 }

@@ -13,7 +13,8 @@ namespace SFA.DAS.EmployerFinance.Web
                       "~/dist/javascripts/selection-buttons.js",
                       "~/dist/javascripts/showhide-content.js",
                       "~/dist/javascripts/stacker.js",
-                      "~/dist/javascripts/app.js"));
+                      "~/dist/javascripts/app.js",
+                      "~/dist/javascripts/cookiebanner.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/apprentice").Include(
                       "~/dist/javascripts/apprentice/select2.min.js",
