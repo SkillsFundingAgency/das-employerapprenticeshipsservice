@@ -20,6 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
                 hashedAccountId = filterContext.ActionParameters["hashedAccountId"] as string;
             }
 
+
             filterContext.Controller.ViewBag.GaData = new GaData
             {
                 UserId = userId,
