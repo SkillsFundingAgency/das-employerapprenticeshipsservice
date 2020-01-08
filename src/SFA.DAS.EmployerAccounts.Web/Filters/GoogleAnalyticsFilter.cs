@@ -13,10 +13,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
             string userId = null;
             string hashedAccountId = null;
             string hashedLegalEntityId = null;
+            string userEmail = null;
+            string userName = null;
 
             var thisController = filterContext.Controller as BaseController;
             if (thisController != null)
+            {
                 userId = thisController.OwinWrapper.GetClaimValue(@"sub");
+                userEmail = thisController.OwinWrapper.GetClaimValue(@"email");
+                userName = $"{thisController.OwinWrapper.GetClaimValue(@"firstname")} {thisController.OwinWrapper.GetClaimValue(@"lastname")}";
+            }
 
             if (filterContext.ActionParameters.ContainsKey("hashedAccountId"))
             {
@@ -34,7 +40,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
             {
                 UserId = userId,
                 Acc = hashedAccountId,
-                LegalEntityId = hashedLegalEntityId
+                LegalEntityId = hashedLegalEntityId,
+                UserEmail = userEmail,
+                UserName = userName
             };
 
             base.OnActionExecuting(filterContext);
@@ -64,6 +72,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
             }
             public string DataLoaded { get; set; } = "dataLoaded";
             public string UserId { get; set; }
+            public string UserEmail { get; set; }
+            public string UserName { get; set; }
 
             public string Vpv { get; set; }
             public string Acc { get; set; }
