@@ -338,3 +338,74 @@
         display: none;
     }
 }
+
+/* *** "new" leaner styles for _Agreement_v3.cshtml: Starts *** */
+#agreement-list {
+    .grey-background,
+    .call-to-action {
+        background: #dee0e2;
+        padding: 20px 20px 10px;
+    }
+
+    .call-to-action {
+        margin-bottom: 24px;
+    }
+
+    ol.contents {
+        a {
+            display: table;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
+        span.number {
+            display: table-cell;
+            min-width: 1.5em;
+            padding-right: 0.3em;
+            margin-right: 5px;
+        }
+    }
+
+    ol .contents .govuk-list--number {
+        padding-left: 20px;
+        list-style-type: decimal;
+    }
+
+    .list-lower-alpha {
+        padding-left: 20px;
+        list-style: lower-alpha;
+    }
+
+    .list-lower-roman {
+        padding-left: 20px;
+        list-style: lower-roman;
+    }
+
+    .list-lower-alpha ol {
+        padding: 16px 0 6px 20px;
+    }
+
+    .govuk-heading-m {
+        width: inherit;
+        padding: 0;
+
+        span {
+            display: inline-block;
+            width: 9%;
+        }
+
+        .clause-column-fig {
+            float: left;
+            width: 10%;
+        }
+
+        .clause-column-content {
+            float: left;
+            width: 90%;
+        }
+    }
+}  
+/* *** "new" leaner styles for _Agreement_v3.cshtml: Ends *** */
