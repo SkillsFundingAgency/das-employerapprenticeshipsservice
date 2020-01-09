@@ -1,11 +1,14 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "uiAppServiceName": {
             "type": "string"
         },
-        "sharedAppServicePlanName": {
+        "sharedFrontendAppServicePlanName": {
+            "type": "string"
+        },
+        "sharedBackendAppServicePlanName": {
             "type": "string"
         },
         "sharedAppServicePlanResourceGroup": {
@@ -19,14 +22,6 @@
         },
         "workerAppServicePlanName": {
             "type": "string"
-        },
-        "aseHostingEnvironmentName": {
-            "type": "string",
-            "defaultValue": ""
-        },
-        "aseResourceGroup": {
-            "type": "string",
-            "defaultValue": ""
         },
         "environmentName": {
             "type": "string"
@@ -139,7 +134,7 @@
                         "value": "[parameters('keyVaultResourceGroupName')]"
                     },
                     "serverFarmId": {
-                        "value": "[resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedAppServicePlanName'))]"
+                        "value": "[resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedFrontendAppServicePlanName'))]"
                     }
                 }
             }
@@ -159,7 +154,7 @@
                         "value": "[parameters('uiAppServiceName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[parameters('sharedAppServicePlanName')]"
+                        "value": "[parameters('sharedFrontendAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[parameters('sharedAppServicePlanResourceGroup')]"
@@ -239,7 +234,7 @@
                         "value": "[parameters('keyVaultResourceGroupName')]"
                     },
                     "serverFarmId": {
-                        "value": "[resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedAppServicePlanName'))]"
+                        "value": "[resourceId(parameters('sharedAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedBackendAppServicePlanName'))]"
                     }
                 }
             }
@@ -259,7 +254,7 @@
                         "value": "[parameters('ApiAppServiceName')]"
                     },
                     "appServicePlanName": {
-                        "value": "[parameters('SharedAppServicePlanName')]"
+                        "value": "[parameters('sharedBackendAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[parameters('SharedAppServicePlanResourceGroup')]"
@@ -317,12 +312,6 @@
                 "parameters": {
                     "appServicePlanName": {
                         "value": "[parameters('workerAppServicePlanName')]"
-                    },
-                    "aseHostingEnvironmentName": {
-                        "value": "[parameters('aseHostingEnvironmentName')]"
-                    },
-                    "aseResourceGroup": {
-                        "value": "[parameters('aseResourceGroup')]"
                     },
                     "aspSize": {
                         "value": "1"
