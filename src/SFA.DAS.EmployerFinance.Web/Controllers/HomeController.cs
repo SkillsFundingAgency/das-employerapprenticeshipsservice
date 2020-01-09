@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("privacy", Order = 1)]
         public ActionResult Privacy()
         {
-            return Redirect(Url.AccountsAction("service", "privacy"));
+            return Redirect(Url.EmployerAccountsAction("service", "privacy"));
         }
 
         [HttpGet]
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("cookieConsent", Order = 1)]
         public ActionResult CookieConsent()
         {
-            return Redirect(Url.AccountsAction("cookieConsent", "settings"));
+            return Redirect(Url.EmployerAccountsAction("cookieConsent", "settings"));
         }
 
         [Route("signOut")]
