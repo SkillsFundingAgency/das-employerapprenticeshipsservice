@@ -59,7 +59,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions.ExcelTransac
                 new[]
                 {
                     _transactionLine.DateCreated.ToString(), _transactionLine.TransactionType, _transactionLine.Description,
-                    _transactionLine.PayeScheme, _transactionLine.PeriodEnd, _transactionLine.LevyDeclaredFormatted,
+                    _transactionLine.PayeScheme, "'" +  _transactionLine.PeriodEnd, _transactionLine.LevyDeclaredFormatted,
                     _transactionLine.EnglishFractionFormatted, _transactionLine.TenPercentTopUpFormatted,
                     _transactionLine.TrainingProvider, _transactionLine.Uln,
                     _transactionLine.Apprentice, _transactionLine.ApprenticeTrainingCourse,
