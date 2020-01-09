@@ -153,7 +153,7 @@ UNION ALL
 		NULL												AS Uln,
 		NULL												AS Apprentice,
 		trans.CourseName 									AS ApprenticeTrainingCourse,
-		trans.CourseLevel									AS ApprenticeTrainingCourseLevel,
+		meta.CourseLevel									AS ApprenticeTrainingCourseLevel,
 		SUM(tl.Amount)										AS PaidFromLevy,
 		SUM(tl.SfaCoInvestmentAmount)						AS EmployerContribution,
 		SUM(tl.EmployerCoInvestmentAmount)					AS GovermentContribution,
@@ -167,7 +167,7 @@ UNION ALL
   JOIN [employer_financial].[TransactionLineTypes] tlt
 				ON tl.TransactionType = tlt.TransactionType
   LEFT JOIN 
-	(SELECT tl2.AccountId, tr2.CourseName, tr2.CourseLevel, tl2.PeriodEnd
+	(SELECT tl2.AccountId, tr2.CourseName, tl2.PeriodEnd
 	 FROM [employer_financial].[TransactionLine] tl2
 
 		LEFT JOIN [employer_financial].[AccountTransfers] tr2
@@ -183,7 +183,7 @@ UNION ALL
 			and trans.PeriodEnd = tl.PeriodEnd			
 
 	  LEFT JOIN 
-	  (SELECT DISTINCT p3.AccountId, p3.PeriodEnd, m3.ProviderName
+	  (SELECT DISTINCT p3.AccountId, p3.PeriodEnd, m3.ProviderName, m3.ApprenticeshipCourseLevel as 'CourseLevel'
 		FROM [employer_financial].[Payment] p3
 		INNER JOIN [employer_financial].[PaymentMetaData] m3 
 			ON m3.Id = p3.PaymentMetaDataId
@@ -204,7 +204,7 @@ UNION ALL
 		tl.PeriodEnd, 
 		meta.ProviderName,
 		trans.CourseName,
-		trans.CourseLevel,
+		meta.CourseLevel,
 		tl.TransferSenderAccountId, 
 		tl.TransferSenderAccountName, 
 		tl.TransferReceiverAccountId, 
