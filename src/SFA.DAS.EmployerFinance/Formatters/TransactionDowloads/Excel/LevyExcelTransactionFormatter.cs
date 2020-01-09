@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
                 transaction.TransactionType,
                 transaction.Description,
                 transaction.PayeScheme,
-                transaction.PeriodEnd,
+                "'" + transaction.PeriodEnd,
                 transaction.LevyDeclaredFormatted,
                 transaction.EnglishFractionFormatted,
                 transaction.TenPercentTopUpFormatted,
