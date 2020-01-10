@@ -159,22 +159,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         /// </summary>
         public virtual ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
-            if (IsSupportUser(this))
-            {
-                return PartialView("_SupportUserBanner", new SupportUserBannerViewModel());
-            }
-
-            return new EmptyResult();
-        }
-
-        public static bool IsSupportUser(BaseController controller)
-        {
-            if (!(controller.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
-            {
-                return false;
-            }
-
-            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
+            return PartialView("_SupportUserBanner", new SupportUserBannerViewModel());
         }
     }
 }

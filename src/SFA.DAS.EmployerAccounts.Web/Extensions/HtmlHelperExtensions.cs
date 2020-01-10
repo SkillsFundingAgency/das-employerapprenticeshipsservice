@@ -1,10 +1,8 @@
-﻿using SFA.DAS.EmployerAccounts.Web.Helpers;
-using System;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
-using System.Web.Mvc.Html;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -25,6 +23,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 .Aggregate("", (x, y) => x + y);
 
             return new MvcHtmlString(htmlAddress);
+        }
+
+        public static bool IsSupportUser(this HtmlHelper htmlHelper)
+        {
+            if (!(htmlHelper.ViewContext.Controller.ControllerContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
         }
     }
 }
