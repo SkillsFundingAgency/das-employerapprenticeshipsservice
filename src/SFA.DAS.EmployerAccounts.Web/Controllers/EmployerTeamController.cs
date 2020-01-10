@@ -40,9 +40,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthenticationService owinWrapper,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator
-            ,IPortalClient portalClient
-            ,IAuthorizationService authorizationService)
+            EmployerTeamOrchestrator employerTeamOrchestrator,
+            IPortalClient portalClient,
+            IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route]
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
-        {  
+        {
             PopulateViewBagWithExternalUserId();
             SetZenDeskWidgetToHidden();
             var response = await GetAccountInformation(hashedAccountId);
@@ -161,7 +161,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 Data = new InviteTeamMemberNextStepsViewModel
                 {
                     UserShownWizard = userShownWizard,
-                     HashedAccountId = hashedAccountId 
+                    HashedAccountId = hashedAccountId
                 }
             };
 
@@ -325,29 +325,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
-        {   
-            if (IsSupportUser(this))
+        {
+            EmployerAccounts.Models.Account.Account account = null;
+
+            if (model != null && model.HashedAccountId != null)
             {
-                EmployerAccounts.Models.Account.Account account = null;
+                var response = AsyncHelper.RunSync(() => GetAccountInformation(model.HashedAccountId));
 
-                if (model != null && model.HashedAccountId != null)
+                if (response.Status != HttpStatusCode.OK)
                 {
-                    var response = AsyncHelper.RunSync(() => GetAccountInformation(model.HashedAccountId));
-
-                    if (response.Status != HttpStatusCode.OK)
-                    {
-                        account = null;
-                    }
-                    else
-                    {
-                        account = response.Data.Account;
-                    }
+                    account = null;
                 }
-
-                return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });
+                else
+                {
+                    account = response.Data.Account;
+                }
             }
 
-            return new EmptyResult();
+            return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });
         }
 
         [ChildActionOnly]
@@ -721,4 +716,3 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
     }
 }
- 
