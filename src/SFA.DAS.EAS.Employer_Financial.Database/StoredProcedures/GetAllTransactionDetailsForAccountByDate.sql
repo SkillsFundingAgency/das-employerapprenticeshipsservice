@@ -136,76 +136,151 @@ SELECT		DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)		AS DateCreated,
 
 UNION ALL
 	
-	SELECT 		
-		DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)		AS DateCreated,
-		tl.AccountId										AS AccountId,
-		tlt.[Description]									AS TransactionType,
-		NULL												AS PayeScheme,
-		NULL												AS PayrollYear,
-		NULL												AS PayrollMonth,
-		NULL												AS LevyDeclared,
-		NULL												AS EnglishFraction,
-		NULL												AS TenPercentTopUp,
-		CASE tlt.[Description]
-		 WHEN 'Payment' THEN meta.ProviderName	
-		 ELSE NULL
-		END													AS TrainingProvider,
-		NULL												AS Uln,
-		NULL												AS Apprentice,
-		trans.CourseName 									AS ApprenticeTrainingCourse,
-		meta.CourseLevel									AS ApprenticeTrainingCourseLevel,
-		SUM(tl.Amount)										AS PaidFromLevy,
-		SUM(tl.SfaCoInvestmentAmount)						AS EmployerContribution,
-		SUM(tl.EmployerCoInvestmentAmount)					AS GovermentContribution,
-		SUM(tl.Amount)										AS Total,
-		tl.TransferSenderAccountId							AS TransferSenderAccountId,
-		tl.TransferSenderAccountName						AS TransferSenderAccountName,
-		tl.TransferReceiverAccountId						AS TransferReceiverAccountId,
-		tl.TransferReceiverAccountName						AS TransferReceiverAccountName		 
-  FROM	[employer_financial].[TransactionLine] tl
+	-- sender transfers
+ SELECT     
+  DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)  AS DateCreated,  
+  tl.AccountId          AS AccountId,  
+  tlt.[Description]         AS TransactionType,  
+  NULL            AS PayeScheme,  
+  NULL            AS PayrollYear,  
+  NULL            AS PayrollMonth,  
+  NULL            AS LevyDeclared,  
+  NULL            AS EnglishFraction,  
+  NULL            AS TenPercentTopUp,  
+  CASE tlt.[Description]  
+   WHEN 'Payment' THEN meta.ProviderName   
+   ELSE NULL  
+  END             AS TrainingProvider,  
+  NULL            AS Uln,  
+  NULL            AS Apprentice,  
+  trans.CourseName          AS ApprenticeTrainingCourse,  
+  meta.CourseLevel         AS ApprenticeTrainingCourseLevel,  
+  SUM(tl.Amount)          AS PaidFromLevy,  
+  SUM(tl.SfaCoInvestmentAmount)      AS EmployerContribution,  
+  SUM(tl.EmployerCoInvestmentAmount)     AS GovermentContribution,  
+  SUM(tl.Amount)          AS Total,  
+  tl.TransferSenderAccountId       AS TransferSenderAccountId,  
+  tl.TransferSenderAccountName      AS TransferSenderAccountName,  
+  tl.TransferReceiverAccountId      AS TransferReceiverAccountId,  
+  tl.TransferReceiverAccountName      AS TransferReceiverAccountName     
+  FROM [employer_financial].[TransactionLine] tl  
+  
+  JOIN [employer_financial].[TransactionLineTypes] tlt  
+    ON tl.TransactionType = tlt.TransactionType  
+  
+  LEFT JOIN   
+ (SELECT tl2.AccountId, tr2.CourseName, tl2.PeriodEnd
+  FROM [employer_financial].[TransactionLine] tl2  
+  
+  LEFT JOIN [employer_financial].[AccountTransfers] tr2  
+   ON (tr2.SenderAccountId = tl2.AccountId and tr2.PeriodEnd = tl2.PeriodEnd)      
+  
+  WHERE tl2.AccountId = @AccountId
+  AND tl2.TransactionType = 4 -- Transfer  
+  ) as trans  
+   on trans.AccountId = tl.AccountId  
+   and trans.PeriodEnd = tl.PeriodEnd     
+  
+   LEFT JOIN   
+   (SELECT DISTINCT p3.AccountId, p3.PeriodEnd, m3.ProviderName, m3.ApprenticeshipCourseLevel as 'CourseLevel'  
+  FROM [employer_financial].[Payment] p3  
+  inner join [employer_financial].[TransactionLine] tl3
+	on tl3.AccountId = @AccountId
+	AND tl3.AccountId = tl3.TransferSenderAccountId
+	AND tl3.TransactionType IN (3,  4)
+  INNER JOIN [employer_financial].[PaymentMetaData] m3   
+   ON m3.Id = p3.PaymentMetaDataId  
+   AND p3.AccountId = tl3.TransferReceiverAccountId     
+  WHERE m3.ProviderName IS NOT NULL  
+   ) as meta  
+   on meta.AccountId = tl.TransferReceiverAccountId  
+   and meta.PeriodEnd = tl.PeriodEnd  
+  
+  WHERE tl.AccountId = @AccountId   
+  AND tl.AccountId = tl.TransferSenderAccountId
+  AND tl.TransactionType IN (3,  4) -- Payment and Transfer  
+  GROUP BY   
+  tl.DateCreated,   
+  tl.AccountId,   
+  tlt.[Description],  
+  tl.PeriodEnd,   
+  meta.ProviderName,  
+  trans.CourseName,  
+  meta.CourseLevel,  
+  tl.TransferSenderAccountId,   
+  tl.TransferSenderAccountName,   
+  tl.TransferReceiverAccountId,   
+  tl.TransferReceiverAccountName
+  
+  UNION
 
-  JOIN [employer_financial].[TransactionLineTypes] tlt
-				ON tl.TransactionType = tlt.TransactionType
-  LEFT JOIN 
-	(SELECT tl2.AccountId, tr2.CourseName, tl2.PeriodEnd
-	 FROM [employer_financial].[TransactionLine] tl2
-
-		LEFT JOIN [employer_financial].[AccountTransfers] tr2
-			ON (tr2.SenderAccountId = tl2.AccountId	and tr2.PeriodEnd = tl2.PeriodEnd) 
-			OR (tr2.ReceiverAccountId = tl2.AccountId and tr2.PeriodEnd = tl2.PeriodEnd)
-
-	 WHERE tl2.AccountId = @accountId 
-		AND tl2.DateCreated >= @fromDate 
-		AND tl2.DateCreated <= @toDate
-		AND tl2.TransactionType = 4 -- Transfer
-		) as trans
-			on trans.AccountId = tl.AccountId
-			and trans.PeriodEnd = tl.PeriodEnd			
-
-	  LEFT JOIN 
-	  (SELECT DISTINCT p3.AccountId, p3.PeriodEnd, m3.ProviderName, m3.ApprenticeshipCourseLevel as 'CourseLevel'
-		FROM [employer_financial].[Payment] p3
-		INNER JOIN [employer_financial].[PaymentMetaData] m3 
-			ON m3.Id = p3.PaymentMetaDataId
-			AND p3.AccountId = @accountId
-		WHERE m3.ProviderName IS NOT NULL
-	  ) as meta
-			on meta.AccountId = tl.AccountId
-			and meta.PeriodEnd = tl.PeriodEnd
-
-  WHERE tl.AccountId = @accountId 
-		AND tl.DateCreated >= @fromDate 
-		AND tl.DateCreated <= @toDate
-		AND tl.TransactionType IN (3,  4) -- Payment and Transfer
-  GROUP BY 
-		tl.DateCreated, 
-		tl.AccountId, 
-		tlt.[Description],
-		tl.PeriodEnd, 
-		meta.ProviderName,
-		trans.CourseName,
-		meta.CourseLevel,
-		tl.TransferSenderAccountId, 
-		tl.TransferSenderAccountName, 
-		tl.TransferReceiverAccountId, 
-		tl.TransferReceiverAccountName
+-- receiver transfers  
+ SELECT     
+  DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)  AS DateCreated,  
+  tl.AccountId          AS AccountId,  
+  tlt.[Description]         AS TransactionType,  
+  NULL            AS PayeScheme,  
+  NULL            AS PayrollYear,  
+  NULL            AS PayrollMonth,  
+  NULL            AS LevyDeclared,  
+  NULL            AS EnglishFraction,  
+  NULL            AS TenPercentTopUp,  
+  CASE tlt.[Description]  
+   WHEN 'Payment' THEN meta.ProviderName   
+   ELSE NULL  
+  END             AS TrainingProvider,  
+  NULL            AS Uln,  
+  NULL            AS Apprentice,  
+  trans.CourseName          AS ApprenticeTrainingCourse,  
+  meta.CourseLevel         AS ApprenticeTrainingCourseLevel,  
+  SUM(tl.Amount)          AS PaidFromLevy,  
+  SUM(tl.SfaCoInvestmentAmount)      AS EmployerContribution,  
+  SUM(tl.EmployerCoInvestmentAmount)     AS GovermentContribution,  
+  SUM(tl.Amount)          AS Total,  
+  tl.TransferSenderAccountId       AS TransferSenderAccountId,  
+  tl.TransferSenderAccountName      AS TransferSenderAccountName,  
+  tl.TransferReceiverAccountId      AS TransferReceiverAccountId,  
+  tl.TransferReceiverAccountName      AS TransferReceiverAccountName     
+  FROM [employer_financial].[TransactionLine] tl  
+  
+  JOIN [employer_financial].[TransactionLineTypes] tlt  
+    ON tl.TransactionType = tlt.TransactionType  
+  LEFT JOIN   
+ (SELECT tl2.AccountId, tr2.CourseName, tl2.PeriodEnd
+  FROM [employer_financial].[TransactionLine] tl2  
+  
+  LEFT JOIN [employer_financial].[AccountTransfers] tr2  
+   ON (tr2.ReceiverAccountId = tl2.AccountId and tr2.PeriodEnd = tl2.PeriodEnd)   
+  
+  WHERE tl2.AccountId = @AccountId   
+  AND tl2.TransactionType = 4 -- Transfer  
+  ) as trans  
+   on trans.AccountId = tl.AccountId  
+   and trans.PeriodEnd = tl.PeriodEnd     
+  
+   LEFT JOIN   
+   (SELECT DISTINCT p3.AccountId, p3.PeriodEnd, m3.ProviderName, m3.ApprenticeshipCourseLevel as 'CourseLevel'  
+  FROM [employer_financial].[Payment] p3  
+  INNER JOIN [employer_financial].[PaymentMetaData] m3   
+   ON m3.Id = p3.PaymentMetaDataId  
+   AND p3.AccountId = @AccountId  
+  WHERE m3.ProviderName IS NOT NULL  
+   ) as meta  
+   on meta.AccountId = tl.TransferReceiverAccountId  
+   and meta.PeriodEnd = tl.PeriodEnd  
+  
+  WHERE tl.AccountId = @AccountId   
+  AND tl.AccountId = tl.TransferReceiverAccountId
+  AND tl.TransactionType IN (3,  4) -- Payment and Transfer  
+  GROUP BY   
+  tl.DateCreated,   
+  tl.AccountId,   
+  tlt.[Description],  
+  tl.PeriodEnd,   
+  meta.ProviderName,  
+  trans.CourseName,  
+  meta.CourseLevel,  
+  tl.TransferSenderAccountId,   
+  tl.TransferSenderAccountName,   
+  tl.TransferReceiverAccountId,   
+  tl.TransferReceiverAccountName
