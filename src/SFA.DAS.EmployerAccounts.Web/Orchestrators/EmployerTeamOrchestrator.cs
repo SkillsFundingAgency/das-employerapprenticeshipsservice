@@ -146,11 +146,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
         {
             try
             {
-                //var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
+                var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
                 {
@@ -178,35 +178,34 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                //var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
-                //{
-                //    HashedAccountId = hashedAccountId,
-                //    ExternalUserId = externalUserId
-                //});
+                var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
 
-                await Task.WhenAll(accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
                 var userResponse = userResponseTask.Result;
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
-                //var reservationsResponse = reservationsResponseTask.Result;
+                var reservationsResponse = reservationsResponseTask.Result;
+                var accountDetailViewModel = apiGetAccountTask.Result;
+
+                var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
                 {
                     AccountId = accountResponse.Account.Id,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
+                    ApprenticeshipEmployerType = apprenticeshipEmployerType
                 });
 
                 var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
-                // var accountDetailViewModel = apiGetAccountTask.Result;
-                var accountDetailViewModel = new AccountDetailViewModel
-                {
-                    ApprenticeshipEmployerType = "1"
-                };
 
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -226,10 +225,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     AgreementsToSign = pendingAgreements.Count() > 0,
                     SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
-                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true),
+                    ApprenticeshipEmployerType = apprenticeshipEmployerType,
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
                     ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
-                    ReservationsCount = 0 //reservationsResponse.Reservations.Count()
+                    ReservationsCount = reservationsResponse.Reservations.Count()
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
@@ -327,7 +326,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
 
-            response.TeamMember.HashedAccountId = hashedAccountId;
 
             return new OrchestratorResponse<TeamMember>
             {
@@ -575,7 +573,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 IsUser = teamMember.IsUser,
                 Id = teamMember.Id,
                 AccountId = teamMember.AccountId,
-                // HashedAccountId = teamMember.HashedAccountId,
                 Email = teamMember.Email,
                 Name = teamMember.Name,
                 Role = teamMember.Role,
