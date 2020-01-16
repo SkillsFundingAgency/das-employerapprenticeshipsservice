@@ -287,7 +287,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Unsubscribe(bool? unsubscribe, string correlationId)
         {
-            if (unsubscribe == null || unsubscribe == false) return View();
+            if (unsubscribe == null || unsubscribe == false)
+            {
+                var model = new
+                {
+                    InError = true
+                };
+
+                return View(model);
+            }
 
             await _homeOrchestrator.Unsubscribe(Guid.Parse(correlationId));
 
