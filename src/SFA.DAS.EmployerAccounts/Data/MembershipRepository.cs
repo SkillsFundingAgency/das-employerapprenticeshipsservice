@@ -46,13 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@userId", userId, DbType.Int64);
 
             var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
-                sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",
-                //map: (membership, user) =>
-                //{
-                //    membership.User = user;
-                //    return membership;
-                //},
-                //splitOn: "UserId",
+                sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",               
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

@@ -79,10 +79,12 @@ namespace SFA.DAS.EmployerAccounts.Data
 
         public async Task<Accounts<Account>> GetAccounts()
         {
+            var accountList = await _db.Value.Accounts.ToListAsync();
+            
             return new Accounts<Account>
             {
-                AccountList = await _db.Value.Accounts.ToListAsync(),
-                AccountsCount = await _db.Value.Accounts.CountAsync()
+                AccountList = accountList,                
+                AccountsCount = accountList.Count()
             };
         }
 

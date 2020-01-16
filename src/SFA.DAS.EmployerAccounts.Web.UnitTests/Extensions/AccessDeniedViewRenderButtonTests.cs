@@ -196,44 +196,5 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             Assert.IsNotNull(result);
 
         }
-
-
-        //[TestCase("G6M7RV")]
-        //[TestCase("")]
-        //public void GetContextAccountId_WhenAccountIdIsNull_ThenGetAccountIdFromHttpCntext(string accountId)
-        //{
-        //    //Arrange
-        //    string url = $"http://tempuri.org/accounts/{accountId}";
-        //    HttpContext.Current = new HttpContext(
-        //                         new HttpRequest("", url, ""),
-        //                         new HttpResponse(new StringWriter()));
-        //    //Act
-        //    var result = Helpers.HtmlHelperExtensions.GetContextAccountId();
-
-        //    //Assert
-        //    Assert.AreEqual(result, accountId);
-        //}
-
-
-        //[TestCase("G6M7RV")]
-        //[TestCase("")]
-        //public void GetClaimsHashedAccountId_WhenAccountIdIsNull_ThenGetHashedAccountIdFromClaims(string actualHashedAccountId)
-        //{
-        //    //Arrange           
-        //   var claimsIdentity = new ClaimsIdentity(new[]
-        //   {
-        //        new Claim(HashedAccountId, actualHashedAccountId)                
-        //   });
-        //   //HttpContext.Current.User = new ClaimsPrincipal(claimsIdentity);
-        //   // MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
-        //   var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
-        //    htmlHelper.ViewContext.RequestContext.HttpContext.User = new ClaimsPrincipal(claimsIdentity);
-
-        //    //Act
-        //    var result = Helpers.HtmlHelperExtensions.GetClaimsHashedAccountId(htmlHelper);
-
-        //   //Assert
-        //   Assert.AreEqual(result, actualHashedAccountId);
-        //}
     }
 }
