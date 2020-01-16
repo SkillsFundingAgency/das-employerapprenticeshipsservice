@@ -174,7 +174,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
 
             return invitation.Data != null
-                ? new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={invitation.Data.EmployerFirstName}&lastname={invitation.Data.EmployerLastName}&email={invitation.Data.EmployerEmail}")
+                ? new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={Url.Encode(invitation.Data.EmployerFirstName)}&lastname={Url.Encode(invitation.Data.EmployerLastName)}&email={Url.Encode(invitation.Data.EmployerEmail)}")
                 : new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
