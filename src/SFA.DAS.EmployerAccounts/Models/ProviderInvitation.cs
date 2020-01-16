@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.EmployerAccounts.Models
+﻿using System;
+
+namespace SFA.DAS.EmployerAccounts.Models
 {
     public class ProviderInvitation
     {
@@ -13,5 +15,7 @@
         public int Status { get; set; }
 
         public string Ukprn { get; set; }
+
+        public DateTime SentDate { get; set; }
     }
 }
