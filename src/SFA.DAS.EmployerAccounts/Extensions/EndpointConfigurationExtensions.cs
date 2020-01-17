@@ -24,6 +24,11 @@ namespace SFA.DAS.EmployerAccounts.Extensions
             else
             {
                 config.UseAzureServiceBusTransport(connectionStringBuilder(), ConfigureRouting);
+                var conventions = config.Conventions();
+                conventions.DefiningCommandsAs(type =>
+                {
+                    return type.Namespace == typeof(SendEmailCommand).Namespace || type.Namespace == typeof(ImportLevyDeclarationsCommand).Namespace;
+                });
             }
 
             return config;
