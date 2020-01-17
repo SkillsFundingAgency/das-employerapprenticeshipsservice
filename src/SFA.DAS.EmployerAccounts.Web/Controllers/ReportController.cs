@@ -53,12 +53,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 if (invitation.Result != null)
                 {
-
                     await _mediator.SendAsync(new ReportTrainingProviderCommand(
                         invitation.Result.EmployerEmail,
                         DateTime.Now,
-                        "Provider Name Placeholder",
-                        "Provider Person Name Placeholder",
+                        invitation.Result.ProviderOrganisationName,
+                        invitation.Result.ProviderUserFullName,
                         invitation.Result.SentDate
                         )
                     ); ;

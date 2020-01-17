@@ -17,5 +17,9 @@ namespace SFA.DAS.EmployerAccounts.Models
         public string Ukprn { get; set; }
 
         public DateTime SentDate { get; set; }
+
+        public string ProviderOrganisationName { get; set; }
+
+        public string ProviderUserFullName { get; set; }
     }
 }
