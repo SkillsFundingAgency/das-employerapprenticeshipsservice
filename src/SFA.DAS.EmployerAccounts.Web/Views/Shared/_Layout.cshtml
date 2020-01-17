@@ -112,7 +112,10 @@
         @Html.Partial("_SVGSprite")
     </div>
     <header role="banner" id="global-header" class="with-proposition">
-        @Html.Action("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model })
+        @if (Html.IsSupportUser())
+        {
+            Html.RenderAction("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model });
+        }
         <div class="header-wrapper">
             <div class="header-global">
                 <div class="header-logo">

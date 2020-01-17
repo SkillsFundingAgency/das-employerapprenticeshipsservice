@@ -1,4 +1,5 @@
 ﻿using IdentityModel.Client;
+using MediatR;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -27,9 +28,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication
             return claimIdentity == null ? "" : claimIdentity.Value;
         }
 
+        public bool HasClaim(string type, string value)
+        {
+            return ((ClaimsIdentity)_httpContext.User.Identity).HasClaim(type, value);
+        }
+
         public bool IsUserAuthenticated()
         {
-            return HttpContext.Current.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
+            return _httpContext.GetOwinContext().Authentication.User.Identity.IsAuthenticated;
         }
 
         public void SignOutUser()

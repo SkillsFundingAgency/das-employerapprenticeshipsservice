@@ -98,38 +98,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonAuthenticatedSupportUserTheEmptyResultIsReturned()
-        {
-            // Arrange
-            _isAuthenticated = false;
-            _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
-
-            var model = new TestModel(_hashedAccountId);
-            
-            //Act
-            var result = _controller.SupportUserBanner(model) as EmptyResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
-        public void ThenForNonAuthenticatedNonSupportUserTheEmptyResultIsReturned()
-        {
-            // Arrange
-            _isAuthenticated = false;
-            _claims.Clear();
-
-            var model = new TestModel(_hashedAccountId);
-
-            //Act
-            var result = _controller.SupportUserBanner(model) as EmptyResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-        }
-
-        [Test]
         public void ThenForAuthenticatedSupportUserAndNullModelThe_SupportUserBannerViewIsReturnedWithANullAccount()
         {
             // Arrange
