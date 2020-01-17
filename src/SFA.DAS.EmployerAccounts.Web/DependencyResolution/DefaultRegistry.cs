@@ -7,6 +7,8 @@ using StructureMap;
 using System.Web;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
+using SFA.DAS.Authorization.Handlers;
+
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -26,7 +28,11 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             For(typeof(ICookieService<>)).Use(typeof(HttpCookieService<>));
             For(typeof(ICookieStorageService<>)).Use(typeof(CookieStorageService<>));
 
-            For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            var authorizationContextProvider = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
+            For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>()
+           .Ctor<IAuthorizationContextProvider>().Is(authorizationContextProvider);
+            For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();          
         }
     }
+    
 }

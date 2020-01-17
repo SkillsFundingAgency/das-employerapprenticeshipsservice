@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts
 {
@@ -17,9 +18,18 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUserAccounts
         {
             //TODO add validator.
             var userRef = message.UserRef;
+            var accounts = new Accounts<Account>();
 
-            var accounts = await _userAccountsRepository.GetAccountsByUserRef(userRef);
-            return new GetUserAccountsQueryResponse { Accounts = accounts };
+            if (!string.IsNullOrEmpty(userRef))
+            {
+                accounts = await _userAccountsRepository.GetAccountsByUserRef(userRef);
+            }
+            else
+            {
+                accounts = await _userAccountsRepository.GetAccounts();
+            }
+
+            return new GetUserAccountsQueryResponse {Accounts = accounts};
         }
     }
 }

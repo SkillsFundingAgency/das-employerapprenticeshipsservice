@@ -60,7 +60,11 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         [Route("balance")]
         public async Task<ActionResult> Index(GetAccountFinanceOverviewQuery query)
         {
+            _logger.Info($"EmployerAccountTransactionsController Index GetAccountFinanceOverviewQuery  AccountHashedId : {query.AccountHashedId} AccountId : {query.AccountId} ");
+
             var viewModel = await _accountTransactionsOrchestrator.Index(query);
+
+            _logger.Info($"After calling  _accountTransactionsOrchestrator ViewModel : {viewModel} viewModel.RedirectUrl : {viewModel.RedirectUrl} ");
 
             if (viewModel.RedirectUrl != null)
                 return Redirect(viewModel.RedirectUrl);
