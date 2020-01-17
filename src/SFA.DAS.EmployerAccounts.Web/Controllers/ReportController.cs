@@ -21,11 +21,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly IMediator _mediator;
         private readonly ILog _logger;
-                
-        public ReportController(IMediator mediator, 
-            ILog logger, IAuthenticationService owinWrapper, 
-            IMultiVariantTestingService multiVariantTestingService, 
-            ICookieStorageService<FlashMessageViewModel> flashMessage) 
+
+        public ReportController(IMediator mediator,
+            ILog logger, IAuthenticationService owinWrapper,
+            IMultiVariantTestingService multiVariantTestingService,
+            ICookieStorageService<FlashMessageViewModel> flashMessage)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _mediator = mediator;
@@ -51,16 +51,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     CorrelationId = correlationGuid
                 });
 
-                if(invitation.Result!= null)
-                
-                await _mediator.SendAsync(new ReportTrainingProviderCommand(
-                    invitation.Result.EmployerEmail,
-                    DateTime.Now,
-                    "Provider Name Placeholder",
-                    "Provider Person Name Placeholder",
-                    invitation.Result.SentDate
-                    )
-                );;
+                if (invitation.Result != null)
+                {
+
+                    await _mediator.SendAsync(new ReportTrainingProviderCommand(
+                        invitation.Result.EmployerEmail,
+                        DateTime.Now,
+                        "Provider Name Placeholder",
+                        "Provider Person Name Placeholder",
+                        invitation.Result.SentDate
+                        )
+                    ); ;
+                }
             }
 
             var model = new
