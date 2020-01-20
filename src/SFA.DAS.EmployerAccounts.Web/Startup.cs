@@ -56,6 +56,26 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
+            SetCookieAuthentication(app);
+
+            // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
+            app.UseWsFederationAuthentication(GetADFSOptions(config));
+
+            app.Map($"/login/staff", SetAuthenticationContextForStaffUser());
+
+            app.UseCodeFlowAuthentication(GetOidcMiddlewareOptions(config, accountDataCookieStorageService, hashedAccountIdCookieStorageService, constants));
+
+            app.Map($"/login", SetAuthenticationContext());
+
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+
+            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
+            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
+        }
+
+        private static void SetCookieAuthentication(IAppBuilder app)
+        {
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = Cookies,
@@ -80,21 +100,6 @@ namespace SFA.DAS.EmployerAccounts.Web
                 ExpireTimeSpan = new TimeSpan(0, 10, 0),
                 SlidingExpiration = true
             });
-
-            // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
-            app.UseWsFederationAuthentication(GetADFSOptions(config));
-
-            app.Map($"/login/staff", SetAuthenticationContextForStaffUser());
-
-            app.UseCodeFlowAuthentication(GetOidcMiddlewareOptions(config, accountDataCookieStorageService, hashedAccountIdCookieStorageService, constants));
-
-            app.Map($"/login", SetAuthenticationChallenge());
-
-            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
-            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-
-            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
-            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
         }
 
         private WsFederationAuthenticationOptions GetADFSOptions(EmployerAccountsConfiguration config)
@@ -249,7 +254,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             };
         }
 
-        private static Action<IAppBuilder> SetAuthenticationChallenge()
+        private static Action<IAppBuilder> SetAuthenticationContext()
         {
             return conf =>
             {
