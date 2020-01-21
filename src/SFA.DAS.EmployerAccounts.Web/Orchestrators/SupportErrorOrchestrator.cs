@@ -1,8 +1,10 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -31,14 +33,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Account = accountResponse.Account
                 };
 
-                //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
-                // we could blat over the existing flag, but it's much nicer to store the enum (as above) rather than a byte!
-                //viewModel.Account.ApprenticeshipEmployerType = (byte) ((ApprenticeshipEmployerType) Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true));
-
                 return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = viewModel
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse<AccountDashboardViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Data = new AccountDashboardViewModel(),
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new OrchestratorResponse<AccountDashboardViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized
                 };
             }
         }
