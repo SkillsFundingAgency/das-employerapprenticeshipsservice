@@ -79,7 +79,7 @@ namespace SFA.DAS.EAS.Account.Api.Orchestrators
                 return levyOverride.Value;
             }
 
-            if (accountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest)
+            if (accountAgreementType == AccountAgreementType.NonLevyExpressionOfInterest || accountAgreementType == AccountAgreementType.Combined)
             {
                 return true;
             }
