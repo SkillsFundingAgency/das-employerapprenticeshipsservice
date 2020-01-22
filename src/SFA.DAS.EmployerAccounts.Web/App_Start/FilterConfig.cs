@@ -7,6 +7,7 @@ using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using System.Net;
 using System.Web.Routing;
+using System.Security.Claims;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -31,10 +32,12 @@ namespace SFA.DAS.EmployerAccounts.Web
             {
                 
                 if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) && filterContext.HttpContext.User.IsInRole(AuthorizationConstants.Tier2User))
-                {   
-                    if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
+                {
+                    filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var hashedAccountIdObj);
+                    var hashedAccountId = hashedAccountIdObj != null ? hashedAccountIdObj.ToString() : ((ClaimsIdentity)filterContext.HttpContext.User.Identity).FindFirst("HashedAccountId")?.Value;
+                    if (!string.IsNullOrEmpty(hashedAccountId))
                     {
-                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
+                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{hashedAccountId}" }));
 
                     }
                     else
