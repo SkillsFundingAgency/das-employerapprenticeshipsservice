@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Extensions;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -18,8 +17,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("accounts/{HashedAccountId}/cookieConsent", Order = 0)]
         [Route("accounts/{HashedAccountId}/cookieConsent/settings", Order = 1)]
         public ActionResult CookieConsentWithHashedAccountId()
-        {   
-            return Redirect(Url.EmployerCookieConsentAction());            
+        {
+            return Redirect(Url.EmployerCookieConsentAction());
         }
 
     }
