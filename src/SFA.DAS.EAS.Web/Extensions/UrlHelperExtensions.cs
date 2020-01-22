@@ -46,12 +46,28 @@ namespace SFA.DAS.EAS.Web.Extensions
             return AccountAction(helper, baseUrl, "");
         }
 
+        public static string EmployerCookieConsentAction(this UrlHelper helper)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerApprenticeshipsServiceConfiguration>();
+            var baseUrl = configuration.EmployerRecruitBaseUrl;
+
+            return CookieConsentAction(helper, baseUrl);
+        }
+
         private static string AccountAction(UrlHelper helper, string baseUrl, string path)
         {
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
 
             return Action(baseUrl, accountPath);
+        }
+
+        private static string CookieConsentAction(UrlHelper helper, string baseUrl)
+        {
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var cookieConsentPath = hashedAccountId == null ? "cookieConsent/settings" : $"cookieConsent/{hashedAccountId}/settings";
+
+            return Action(baseUrl, cookieConsentPath);
         }
 
         private static string Action(string baseUrl, string path)
