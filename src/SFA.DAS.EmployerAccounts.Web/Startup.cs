@@ -26,6 +26,7 @@ using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -48,6 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         public void Configuration(IAppBuilder app)
         {
+           //Keep this
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>();
             var accountDataCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
             var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
@@ -56,10 +58,27 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
+            app.UseSupportConsoleAuthentication(new SupportConsoleAuthenticationOptions 
+            { 
+                AdfsOptions = new ADFSOptions
+                {
+                   
+                    MetadataAddress = config.AdfsMetadata , 
+                    Wreply = config.EmployerAccountsBaseUrl , 
+                    Wtrealm = config.EmployerAccountsBaseUrl ,
+                    BaseUrl = config.Identity.BaseAddress,
+                    ClientId = config.Identity.ClientId,
+                    ClientSecret  = config.Identity.ClientSecret,
+                    Scopes = config.Identity.Scopes,
+                    UseCertificate = config.Identity.UseCertificate
+                }
+            });
+
             SetCookieAuthentication(app);
 
             // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
             app.UseWsFederationAuthentication(GetADFSOptions(config));
+
 
             app.Map($"/login/staff", SetAuthenticationContextForStaffUser());
 
@@ -76,6 +95,8 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         private static void SetCookieAuthentication(IAppBuilder app)
         {
+            
+            
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = Cookies,
@@ -89,17 +110,17 @@ namespace SFA.DAS.EmployerAccounts.Web
                 AuthenticationMode = AuthenticationMode.Passive
             });
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = Staff,
-            });
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    AuthenticationType = Staff,
+            //});
 
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = Employer,
-                ExpireTimeSpan = new TimeSpan(0, 10, 0),
-                SlidingExpiration = true
-            });
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    AuthenticationType = Employer,
+            //    ExpireTimeSpan = new TimeSpan(0, 10, 0),
+            //    SlidingExpiration = true
+            //});
         }
 
         private WsFederationAuthenticationOptions GetADFSOptions(EmployerAccountsConfiguration config)
