@@ -35,21 +35,11 @@ namespace SFA.DAS.EmployerAccounts.Web
     public class Startup
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
-        private const string Cookies = "Cookies";
+        private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";        
         private const string TempState = "TempState";
-        private const string Staff = "Staff";
-        private const string Employer = "Employer";
-        private const string HashedAccountId = "HashedAccountId";
-        private const string ESF = "ESF";
-        private const string Tier2User = "Tier2User";
-        private const string ConsoleUser = "ConsoleUser";
-        private const string ESS = "ESS";
-        private const string serviceClaimType = "http://service/service";
 
         public void Configuration(IAppBuilder app)
-        {
-           //Keep this
+        {           
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>();
             var accountDataCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
             var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
@@ -57,6 +47,19 @@ namespace SFA.DAS.EmployerAccounts.Web
             var urlHelper = new UrlHelper();
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
+                ExpireTimeSpan = new TimeSpan(0, 10, 0),
+                SlidingExpiration = true
+            });
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = TempState,
+                AuthenticationMode = AuthenticationMode.Passive
+            });
 
             app.UseSupportConsoleAuthentication(new SupportConsoleAuthenticationOptions 
             { 
@@ -74,178 +77,14 @@ namespace SFA.DAS.EmployerAccounts.Web
                 }
             });
 
-            SetCookieAuthentication(app);
-
-            // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
-            app.UseWsFederationAuthentication(GetADFSOptions(config));
-
-
-            app.Map($"/login/staff", SetAuthenticationContextForStaffUser());
-
             app.UseCodeFlowAuthentication(GetOidcMiddlewareOptions(config, accountDataCookieStorageService, hashedAccountIdCookieStorageService, constants));
-
-            app.Map($"/login", SetAuthenticationContext());
 
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
             UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
-        }
-
-        private static void SetCookieAuthentication(IAppBuilder app)
-        {
-            
-            
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = Cookies,
-                ExpireTimeSpan = new TimeSpan(0, 10, 0),
-                SlidingExpiration = true
-            });
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions
-            {
-                AuthenticationType = TempState,
-                AuthenticationMode = AuthenticationMode.Passive
-            });
-
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions
-            //{
-            //    AuthenticationType = Staff,
-            //});
-
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions
-            //{
-            //    AuthenticationType = Employer,
-            //    ExpireTimeSpan = new TimeSpan(0, 10, 0),
-            //    SlidingExpiration = true
-            //});
-        }
-
-        private WsFederationAuthenticationOptions GetADFSOptions(EmployerAccountsConfiguration config)
-        {
-            return new WsFederationAuthenticationOptions
-            {
-                AuthenticationType = Staff,
-                Wtrealm = config.EmployerAccountsBaseUrl,
-                MetadataAddress = config.AdfsMetadata,
-                Notifications = Notifications(),
-                Wreply = config.EmployerAccountsBaseUrl
-            };
-        }
-
-        private WsFederationAuthenticationNotifications Notifications()
-        {
-            return new WsFederationAuthenticationNotifications
-            {
-                SecurityTokenValidated = OnSecurityTokenValidated,
-                SecurityTokenReceived = nx => OnSecurityTokenReceived(),
-                AuthenticationFailed = nx => OnAuthenticationFailed(nx),
-                MessageReceived = nx => OnMessageReceived(),
-                RedirectToIdentityProvider = nx => OnRedirectToIdentityProvider()
-            };
-        }
-
-        private Task OnSecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification)
-        {
-            Logger.Debug("SecurityTokenValidated");
-
-            try
-            {
-                var claimsIdentity = notification.AuthenticationTicket.Identity;
-
-                Logger.Debug("Authentication Properties", new Dictionary<string, object>
-                {
-                    {"claims", JsonConvert.SerializeObject(claimsIdentity.Claims.Select(x =>new {x.Value, x.ValueType, x.Type}))},
-                    {"authentication-type", claimsIdentity.AuthenticationType},
-                    {"role-type", claimsIdentity.RoleClaimType}
-                });
-
-                if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ESF))
-                {
-                    Logger.Debug("Adding Tier2 Role");
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier2User));
-
-                    Logger.Debug("Adding ConsoleUser Role");
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
-                }
-                else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ESS))
-                {
-                    Logger.Debug("Adding ConsoleUser Role");
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
-                }
-                else
-                {
-                    throw new SecurityTokenValidationException();
-                }
-
-                var firstName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
-                var lastName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
-                var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
-
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex, "IDAMS Authentication Callback Error");
-            }
-
-            Logger.Debug("End of callback");
-
-            return Task.FromResult(0);
-        }
-
-        private Task OnSecurityTokenReceived()
-        {
-            Logger.Debug("SecurityTokenReceived");
-            return Task.FromResult(0);
-        }
-
-        private Task OnAuthenticationFailed(AuthenticationFailedNotification<WsFederationMessage, WsFederationAuthenticationOptions> nx)
-        {
-            var logReport = $"AuthenticationFailed, State: {nx.State}, Exception: {nx.Exception.GetBaseException().Message}, Protocol Message: Wct {nx.ProtocolMessage.Wct},\r\nWfresh {nx.ProtocolMessage.Wfresh},\r\nWhr {nx.ProtocolMessage.Whr},\r\nWp {nx.ProtocolMessage.Wp},\r\nWpseudo{nx.ProtocolMessage.Wpseudo},\r\nWpseudoptr {nx.ProtocolMessage.Wpseudoptr},\r\nWreq {nx.ProtocolMessage.Wreq},\r\nWfed {nx.ProtocolMessage.Wfed},\r\nWreqptr {nx.ProtocolMessage.Wreqptr},\r\nWres {nx.ProtocolMessage.Wres},\r\nWreply{nx.ProtocolMessage.Wreply},\r\nWencoding {nx.ProtocolMessage.Wencoding},\r\nWtrealm {nx.ProtocolMessage.Wtrealm},\r\nWresultptr {nx.ProtocolMessage.Wresultptr},\r\nWauth {nx.ProtocolMessage.Wauth},\r\nWattrptr{nx.ProtocolMessage.Wattrptr},\r\nWattr {nx.ProtocolMessage.Wattr},\r\nWa {nx.ProtocolMessage.Wa},\r\nIsSignOutMessage {nx.ProtocolMessage.IsSignOutMessage},\r\nIsSignInMessage {nx.ProtocolMessage.IsSignInMessage},\r\nWctx {nx.ProtocolMessage.Wctx},\r\n";
-            Logger.Debug(logReport);
-            return Task.FromResult(0);
-        }
-
-        private Task OnMessageReceived()
-        {
-            Logger.Debug("MessageReceived");
-            return Task.FromResult(0);
-        }
-
-        private Task OnRedirectToIdentityProvider()
-        {
-            Logger.Debug("RedirectToIdentityProvider");
-            return Task.FromResult(0);
-        }
-
-        private static Action<IAppBuilder> SetAuthenticationContextForStaffUser()
-        {
-            return conf =>
-            {
-                conf.Run(context =>
-                {
-                    // for first iteration of this work, allow deep linking from the support console to the teams view
-                    // as this is the only action they will currently perform.
-                    var hashedAccountId = context.Request.Query.Get(HashedAccountId);
-                    var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
-
-                    context.Authentication.Challenge(new AuthenticationProperties
-                    {
-                        RedirectUri = requestRedirect,
-                        IsPersistent = true
-                    },
-                    Staff);
-
-                    context.Response.StatusCode = 401;
-                    return context.Response.WriteAsync(string.Empty);
-                });
-            };
-        }
+        }    
 
         private static OidcMiddlewareOptions GetOidcMiddlewareOptions(EmployerAccountsConfiguration config,
             ICookieStorageService<EmployerAccountData> accountDataCookieStorageService,
@@ -254,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web
         {
             return new OidcMiddlewareOptions
             {
-                AuthenticationType = Cookies,
+                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
                 BaseUrl = config.Identity.BaseAddress,
                 ClientId = config.Identity.ClientId,
                 ClientSecret = config.Identity.ClientSecret,
@@ -274,26 +113,6 @@ namespace SFA.DAS.EmployerAccounts.Web
                 }
             };
         }
-
-        private static Action<IAppBuilder> SetAuthenticationContext()
-        {
-            return conf =>
-            {
-                conf.Run(context =>
-                {
-                    context.Authentication.Challenge(new AuthenticationProperties
-                    {
-                        RedirectUri = "/service/index",
-                        IsPersistent = true
-                    },
-                    Cookies);
-
-                    context.Response.StatusCode = 401;
-                    return context.Response.WriteAsync(string.Empty);
-                });
-            };
-        }
-
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
         {
             if (!useCertificate)

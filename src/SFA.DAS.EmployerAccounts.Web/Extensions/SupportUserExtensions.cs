@@ -1,27 +1,25 @@
 ﻿using Microsoft.IdentityModel.Protocols;
+using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Notifications;
 using Microsoft.Owin.Security.WsFederation;
 using Newtonsoft.Json;
 using NLog;
 using Owin;
-using SFA.DAS.EmployerAccounts.Web.Authorization;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using NLog;
-using Microsoft.Owin.Security;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class SupportUserExtensions
-    {
-        private const string Cookies = "Cookies";
-        private const string TempState = "TempState";
+    {        
+        private const string Cookies = "Cookies";        
         private const string Staff = "Staff";
         private const string Employer = "Employer";
         private const string HashedAccountId = "HashedAccountId";
@@ -54,13 +52,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 Notifications = Notifications(),
                 Wreply = options.AdfsOptions.Wreply
             };
-            
+
+            //https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
             app.UseWsFederationAuthentication(WsFederationAuthenticationOptions);
 
             app.Map($"/login/staff", SetAuthenticationContextForStaffUser());
+          
+            app.Map($"/login", SetAuthenticationContext());
 
             return app;
-
         }
 
         private static WsFederationAuthenticationNotifications Notifications()
@@ -175,6 +175,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             };
         }
 
+        private static Action<IAppBuilder> SetAuthenticationContext()
+        {
+            return conf =>
+            {
+                conf.Run(context =>
+                {
+                    context.Authentication.Challenge(new AuthenticationProperties
+                    {
+                        RedirectUri = "/service/index",
+                        IsPersistent = true
+                    },
+                    Cookies);
+
+                    context.Response.StatusCode = 401;
+                    return context.Response.WriteAsync(string.Empty);
+                });
+            };
+        }
+
     }
 
 
@@ -188,14 +207,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public string Wtrealm { get; set; }
         public string MetadataAddress { get; set; }
         public string Wreply { get; set; }
-
         public string BaseUrl { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
-
         public string Scopes { get; set; }
-
         public bool UseCertificate { get; set; }
-
     }   
 }
