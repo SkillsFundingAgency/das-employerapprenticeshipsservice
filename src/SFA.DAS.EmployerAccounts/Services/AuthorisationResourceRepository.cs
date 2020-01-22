@@ -1,9 +1,12 @@
-﻿using SFA.DAS.EmployerAccounts.Interfaces;
+﻿using System;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using SFA.DAS.Authorization.Context;
+using System.Configuration;
+
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -22,9 +25,10 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity)
         {
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
-            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(Tier2User, StringComparison.OrdinalIgnoreCase)))            
-            {
+            //var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
+           //if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(Tier2User, StringComparison.OrdinalIgnoreCase)))            
+           if(IsSupportConsoleUser(claimsIdentity)) 
+           {
                 return new List<AuthorizationResource>
                 {
                     new AuthorizationResource { Name = nameof(TeamViewRoute), Value = TeamViewRoute },
@@ -40,6 +44,23 @@ namespace SFA.DAS.EmployerAccounts.Services
             }
 
             return new List<AuthorizationResource>();
+        }
+
+        private static bool IsSupportConsoleUser(ClaimsIdentity claimsIdentity)
+        {
+            string[] requiredRoles = ConfigurationManager.AppSettings["SupportConsoleUser"].Split(',');
+            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
+            if (userRoleClaims != null)
+            {
+                foreach (var requiredRole in requiredRoles)
+                {
+                    if (userRoleClaims.Any(claim => claim.Value.Equals(requiredRole, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

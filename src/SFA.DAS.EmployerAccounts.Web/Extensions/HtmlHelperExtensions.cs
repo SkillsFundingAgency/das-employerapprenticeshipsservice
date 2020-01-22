@@ -4,6 +4,7 @@ using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
 using SFA.DAS.MA.Shared.UI.Models.Links;
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
@@ -34,12 +35,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         public static bool IsSupportUser(this HtmlHelper htmlHelper)
         {
+            string[] requiredRoles = ConfigurationManager.AppSettings["SupportConsoleUser"].Split(',');
             if (!(htmlHelper.ViewContext.Controller.ControllerContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
             {
                 return false;
             }
 
-            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
+            foreach (var role in requiredRoles)
+            {
+                if (claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(role)))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)

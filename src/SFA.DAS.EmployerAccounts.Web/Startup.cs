@@ -98,6 +98,105 @@ namespace SFA.DAS.EmployerAccounts.Web
                 }
             };
         }
+
+        private WsFederationAuthenticationNotifications Notifications()
+        {
+            return new WsFederationAuthenticationNotifications
+            {
+                SecurityTokenValidated = OnSecurityTokenValidated,
+                SecurityTokenReceived = nx => OnSecurityTokenReceived(),
+                AuthenticationFailed = nx => OnAuthenticationFailed(nx),
+                MessageReceived = nx => OnMessageReceived(),
+                RedirectToIdentityProvider = nx => OnRedirectToIdentityProvider()
+            };
+        }
+
+        private Task OnRedirectToIdentityProvider()
+        {
+            Logger.Debug("RedirectToIdentityProvider");
+            return Task.FromResult(0);
+        }
+
+        private Task OnMessageReceived()
+        {
+            Logger.Debug("MessageReceived");
+            return Task.FromResult(0);
+        }
+
+        private Task OnSecurityTokenReceived()
+        {
+            Logger.Debug("SecurityTokenReceived");
+            return Task.FromResult(0);
+        }
+
+        private Task OnSecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification)
+        {
+            Logger.Debug("SecurityTokenValidated");
+
+            try
+            {
+                Logger.Debug("Authentication Properties", new Dictionary<string, object>
+                {
+                    {
+                        "claims",
+                        JsonConvert.SerializeObject(
+                            notification.AuthenticationTicket.Identity.Claims.Select(x =>new {x.Value, x.ValueType, x.Type}))
+                    },
+                    {
+                        "authentication-type",
+                        notification.AuthenticationTicket.Identity.AuthenticationType
+                    },
+                    {"role-type", notification.AuthenticationTicket.Identity.RoleClaimType}
+                });
+
+                const string serviceClaimType = "http://service/service";
+
+                if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, "ESF"))
+                {
+                    Logger.Debug("Adding Tier2 Role");
+                    notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Role, "Tier2User"));
+
+                    Logger.Debug("Adding ConsoleUser Role");
+                    notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Role, "ConsoleUser"));
+                }
+                else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, "ESS"))
+                {
+                    Logger.Debug("Adding Tier1 Role");
+                    notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Role, "Tier1User"));
+
+                    Logger.Debug("Adding ConsoleUser Role");
+                    notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Role, "ConsoleUser"));
+                }
+                else
+                {
+                    throw new SecurityTokenValidationException();
+                }
+
+                var firstName = notification.AuthenticationTicket.Identity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
+                var lastName = notification.AuthenticationTicket.Identity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
+                var userEmail = notification.AuthenticationTicket.Identity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
+
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "IDAMS Authentication Callback Error");
+            }
+
+            Logger.Debug("End of callback");
+
+            return Task.FromResult(0);
+        }
+
+        private Task OnAuthenticationFailed(AuthenticationFailedNotification<WsFederationMessage, WsFederationAuthenticationOptions> nx)
+        {
+            var logReport = $"AuthenticationFailed, State: {nx.State}, Exception: {nx.Exception.GetBaseException().Message}, Protocol Message: Wct {nx.ProtocolMessage.Wct},\r\nWfresh {nx.ProtocolMessage.Wfresh},\r\nWhr {nx.ProtocolMessage.Whr},\r\nWp {nx.ProtocolMessage.Wp},\r\nWpseudo{nx.ProtocolMessage.Wpseudo},\r\nWpseudoptr {nx.ProtocolMessage.Wpseudoptr},\r\nWreq {nx.ProtocolMessage.Wreq},\r\nWfed {nx.ProtocolMessage.Wfed},\r\nWreqptr {nx.ProtocolMessage.Wreqptr},\r\nWres {nx.ProtocolMessage.Wres},\r\nWreply{nx.ProtocolMessage.Wreply},\r\nWencoding {nx.ProtocolMessage.Wencoding},\r\nWtrealm {nx.ProtocolMessage.Wtrealm},\r\nWresultptr {nx.ProtocolMessage.Wresultptr},\r\nWauth {nx.ProtocolMessage.Wauth},\r\nWattrptr{nx.ProtocolMessage.Wattrptr},\r\nWattr {nx.ProtocolMessage.Wattr},\r\nWa {nx.ProtocolMessage.Wa},\r\nIsSignOutMessage {nx.ProtocolMessage.IsSignOutMessage},\r\nIsSignInMessage {nx.ProtocolMessage.IsSignInMessage},\r\nWctx {nx.ProtocolMessage.Wctx},\r\n";
+            Logger.Debug(logReport);
+            return Task.FromResult(0);
+        }
+
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
         {
             if (!useCertificate)

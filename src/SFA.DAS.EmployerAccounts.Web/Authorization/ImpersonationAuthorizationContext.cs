@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Routing;
+using System.Configuration;
 
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
@@ -29,10 +30,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            if (!_httpContext.User.IsInRole(AuthorizationConstants.Tier2User))
+            if (!Helpers.AccountTaskHelper.IsSupportConsoleUser(_httpContext.User))
                 return _authorizationContextProvider.GetAuthorizationContext();
 
-            
             if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
             {
                 throw new UnauthorizedAccessException();

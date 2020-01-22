@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using SFA.DAS.Authorization.Handlers;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 using System;
+using System.Web;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.Authorization.Errors;
 
@@ -14,16 +15,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
     public class DefaultAuthorizationHandler : IDefaultAuthorizationHandler
     {
+        private readonly HttpContextBase _httpContext;
         private IAuthorisationResourceRepository _authorisationResourceRepository;
 
-        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository)
+        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository, HttpContextBase httpContext)
         {
             _authorisationResourceRepository = authorisationResourceRepository;
+            _httpContext = httpContext;
         }
 
         public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
-            if (!IsTier2User(authorizationContext)){
+
+            //if (!IsTier2User(authorizationContext)){
+            //    return IsAuthorizedResult();
+            //}
+
+            if (!Helpers.AccountTaskHelper.IsSupportConsoleUser(_httpContext.User))
+            {
                 return IsAuthorizedResult();
             }
 
@@ -58,17 +67,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             return resource != null ? resource.Value : "default";
         }
 
-        private bool IsTier2User(IAuthorizationContext authorizationContext)
-        {
-            authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
-            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(AuthorizationConstants.Tier2User, StringComparison.OrdinalIgnoreCase)))
-            {
-                return true;
-            }
+        //private bool IsTier2User(IAuthorizationContext authorizationContext)
+        //{
+        //    authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
+        //    var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
+        //    //if (userRoleClaims != null)
+        //    //{
+        //    //  foreach (var requiredRole in requiredRoles)
+        //    //    {
+        //    //        if (userRoleClaims.Any(claim => claim.Value.Equals(requiredRole, StringComparison.OrdinalIgnoreCase)))
+        //    //        {
+        //    //            return true;
+        //    //        }
+        //    //    }
+        //    //}
+        //    if (userRoleClaims != null && userRoleClaims
+        //            .Any(claim => claim.Value.Equals(AuthorizationConstants.Tier2User, StringComparison.OrdinalIgnoreCase)))
+        //    {
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
     }   
 
