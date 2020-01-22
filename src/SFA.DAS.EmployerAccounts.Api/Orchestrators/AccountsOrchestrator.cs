@@ -152,14 +152,14 @@ namespace SFA.DAS.EmployerAccounts.Api.Orchestrators
 
         private static AccountAgreementType GetAgreementType(List<AgreementType> agreementTypes)
         {
-            var agreementTypeGroup = agreementTypes?.GroupBy(x => x);
+            var agreementTypeGroup = agreementTypes?.GroupBy(x => x).OrderByDescending(x => x.Key);
 
             if (agreementTypeGroup == null || !agreementTypeGroup.Any())
             {
                 return AccountAgreementType.Unknown;
             }
 
-            return agreementTypeGroup?.Count() > 1 ? AccountAgreementType.Inconsistent : (AccountAgreementType)Enum.Parse(typeof(AccountAgreementType), agreementTypeGroup?.FirstOrDefault()?.Key.ToString());
+            return (AccountAgreementType)Enum.Parse(typeof(AccountAgreementType), agreementTypeGroup?.FirstOrDefault()?.Key.ToString());
         }
     }
 }
