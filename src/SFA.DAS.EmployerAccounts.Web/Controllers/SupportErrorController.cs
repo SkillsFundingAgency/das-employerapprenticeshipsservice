@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             if (model != null && model.HashedAccountId != null)
             {
                 var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-                var response = AsyncHelper.RunSync(() => _orchestrator.GetAccount(model.HashedAccountId, externalUserId));
+                var response = AsyncHelper.RunSync(() => _orchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
 
                 account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
             }

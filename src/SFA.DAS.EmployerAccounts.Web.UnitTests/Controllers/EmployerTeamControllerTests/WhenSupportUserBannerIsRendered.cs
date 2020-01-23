@@ -136,11 +136,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
             var model = new TestModel(_hashedAccountId);
 
+            mockEmployerTeamOrchestrator
+                .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
+                .ReturnsAsync(_orchestratorResponse);
             //Act
             var result = _controller.SupportUserBanner(model) as PartialViewResult;
 
             //Assert
-            mockEmployerTeamOrchestrator.Verify(m => m.GetAccount(_hashedAccountId, It.IsAny<string>()), Times.Once);
+            mockEmployerTeamOrchestrator.Verify(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -150,6 +153,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _isAuthenticated = true;
             _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
             var model = new TestModel(_hashedAccountId);
+
+            mockEmployerTeamOrchestrator
+                .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
+                .ReturnsAsync(_orchestratorResponse);
 
             //Act
             var result = _controller.SupportUserBanner(model) as PartialViewResult;
@@ -169,6 +176,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockEmployerTeamOrchestrator
                .Setup(m => m.GetAccount(_hashedAccountId, It.IsAny<string>()))
                .ReturnsAsync(new OrchestratorResponse<AccountDashboardViewModel> { Status = System.Net.HttpStatusCode.BadRequest });
+
+            mockEmployerTeamOrchestrator
+                .Setup(m => m.GetAccountSummary(_hashedAccountId,It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<AccountDashboardViewModel> { Status = System.Net.HttpStatusCode.BadRequest });
 
             //Act
             var result = _controller.SupportUserBanner(model) as PartialViewResult;

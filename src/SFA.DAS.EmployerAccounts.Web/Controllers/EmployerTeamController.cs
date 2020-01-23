@@ -330,16 +330,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (model != null && model.HashedAccountId != null)
             {
-                var response = AsyncHelper.RunSync(() => GetAccountInformation(model.HashedAccountId));
+                var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
 
-                if (response.Status != HttpStatusCode.OK)
-                {
-                    account = null;
-                }
-                else
-                {
-                    account = response.Data.Account;
-                }
+                account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
             }
 
             return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });

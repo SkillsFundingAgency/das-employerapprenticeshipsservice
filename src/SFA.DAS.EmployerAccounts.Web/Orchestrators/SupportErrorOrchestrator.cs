@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
 
-        public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
+        public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
         {
             try
             {
