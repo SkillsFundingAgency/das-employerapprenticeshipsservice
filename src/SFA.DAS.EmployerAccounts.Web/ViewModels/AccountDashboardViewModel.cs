@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Portal.Client.Types;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class AccountDashboardViewModel
+    public class AccountDashboardViewModel : IAccountIdentifier
     {
         public EmployerAccounts.Models.Account.Account Account { get; set; }
         public string EmployerAccountType { get; set; }

@@ -52,11 +52,15 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
         public virtual async Task<OrchestratorResponse<FinanceDashboardViewModel>> Index(GetAccountFinanceOverviewQuery query)
         {
             var accountTask = _accountApiClient.GetAccount(query.AccountId);
+            _logger.Info("After GetAccount call");
             var getAccountFinanceOverviewTask = _mediator.SendAsync(query);
 
             var account = await accountTask;
 
             var getAccountFinanceOverview = await getAccountFinanceOverviewTask;
+
+            _logger.Info($"account : {account}  getAccountFinanceOverview: {getAccountFinanceOverview} ");
+            _logger.Info($" account.ApprenticeshipEmployerType: {account.ApprenticeshipEmployerType}  AccountHashedId: {query.AccountHashedId} CurrentLevyFunds: {getAccountFinanceOverview.CurrentFunds} ");
 
             var viewModel = new OrchestratorResponse<FinanceDashboardViewModel>
             {
@@ -73,6 +77,8 @@ namespace SFA.DAS.EmployerFinance.Web.Orchestrators
                     ProjectedSpend = getAccountFinanceOverview.FundsOut
                 }
             };
+
+            _logger.Info($"viewModel : {viewModel}");
 
             return viewModel;
         }
