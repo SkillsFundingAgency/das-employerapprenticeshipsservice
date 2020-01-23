@@ -8,18 +8,15 @@ using NLog;
 using Owin;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class SupportUserExtensions
-    {        
-        private const string Cookies = "Cookies";        
+    {  
         private const string Staff = "Staff";
         private const string Employer = "Employer";
         private const string HashedAccountId = "HashedAccountId";
@@ -28,10 +25,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         private const string ConsoleUser = "ConsoleUser";
         private const string ESS = "ESS";
         private const string serviceClaimType = "http://service/service";
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
+        private static ILogger Logger;
 
         public static IAppBuilder UseSupportConsoleAuthentication(this IAppBuilder app, SupportConsoleAuthenticationOptions options)
         {
+            if (app == null) { throw new ArgumentNullException(nameof(app)); }
+            if (options == null) { throw new ArgumentNullException(nameof(options)); }
+            Logger = options.AdfsOptions.Logger;
+
+            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
+
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = Staff,
@@ -186,16 +189,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                         RedirectUri = "/service/index",
                         IsPersistent = true
                     },
-                    Cookies);
+                    CookieAuthenticationDefaults.AuthenticationType);
 
                     context.Response.StatusCode = 401;
                     return context.Response.WriteAsync(string.Empty);
                 });
             };
         }
-
     }
-
 
     public class SupportConsoleAuthenticationOptions
     {
@@ -207,10 +208,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public string Wtrealm { get; set; }
         public string MetadataAddress { get; set; }
         public string Wreply { get; set; }
-        public string BaseUrl { get; set; }
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
+        public string BaseUrl { get; set; }      
         public string Scopes { get; set; }
         public bool UseCertificate { get; set; }
+        public ILogger Logger { get;  set; }
+
     }   
 }

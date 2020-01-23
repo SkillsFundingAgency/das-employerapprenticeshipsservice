@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.IdentityModel.Tokens;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using System.Web.Mvc;
-using Microsoft.IdentityModel.Protocols;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Notifications;
-using Microsoft.Owin.Security.WsFederation;
-using Newtonsoft.Json;
 using NLog;
 using Owin;
 using SFA.DAS.Authentication;
@@ -22,11 +9,20 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.IdentityModel.Tokens;
+using System.Linq;
+using System.Security.Claims;
+using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+using System.Web.Mvc;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -36,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";        
-        private const string TempState = "TempState";
+        private const string CookieAuthenticationTypeTempState = "TempState";
 
         public void Configuration(IAppBuilder app)
         {           
@@ -45,8 +41,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
-
-            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -57,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationType = TempState,
+                AuthenticationType = CookieAuthenticationTypeTempState,
                 AuthenticationMode = AuthenticationMode.Passive
             });
 
@@ -69,11 +63,10 @@ namespace SFA.DAS.EmployerAccounts.Web
                     MetadataAddress = config.AdfsMetadata , 
                     Wreply = config.EmployerAccountsBaseUrl , 
                     Wtrealm = config.EmployerAccountsBaseUrl ,
-                    BaseUrl = config.Identity.BaseAddress,
-                    ClientId = config.Identity.ClientId,
-                    ClientSecret  = config.Identity.ClientSecret,
+                    BaseUrl = config.Identity.BaseAddress,                 
                     Scopes = config.Identity.Scopes,
-                    UseCertificate = config.Identity.UseCertificate
+                    UseCertificate = config.Identity.UseCertificate,
+                    Logger = Logger
                 }
             });
 
