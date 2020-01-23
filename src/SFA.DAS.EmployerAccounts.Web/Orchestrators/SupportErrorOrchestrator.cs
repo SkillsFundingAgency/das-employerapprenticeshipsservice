@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
 
-        public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
+        public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
         {
             try
             {
@@ -28,12 +28,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     UserId = externalUserId
                 });
 
-                var viewModel = new AccountDashboardViewModel
+                var viewModel = new AccountSummaryViewModel
                 {
                     Account = accountResponse.Account
                 };
 
-                return new OrchestratorResponse<AccountDashboardViewModel>
+                return new OrchestratorResponse<AccountSummaryViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = viewModel
@@ -41,16 +41,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (InvalidRequestException ex)
             {
-                return new OrchestratorResponse<AccountDashboardViewModel>
+                return new OrchestratorResponse<AccountSummaryViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new AccountDashboardViewModel(),
+                    Data = new AccountSummaryViewModel(),
                     Exception = ex
                 };
             }
             catch (UnauthorizedAccessException)
             {
-                return new OrchestratorResponse<AccountDashboardViewModel>
+                return new OrchestratorResponse<AccountSummaryViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized
                 };

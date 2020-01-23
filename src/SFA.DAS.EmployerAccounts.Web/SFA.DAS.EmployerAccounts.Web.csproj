@@ -267,6 +267,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
