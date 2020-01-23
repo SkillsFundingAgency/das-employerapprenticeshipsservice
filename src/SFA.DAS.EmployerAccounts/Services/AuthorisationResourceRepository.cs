@@ -6,6 +6,8 @@ using System.Linq;
 using System.Security.Claims;
 using SFA.DAS.Authorization.Context;
 using System.Configuration;
+using System.Web.Mvc;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 
 namespace SFA.DAS.EmployerAccounts.Services
@@ -48,7 +50,8 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         private static bool IsSupportConsoleUser(ClaimsIdentity claimsIdentity)
         {
-            string[] requiredRoles = ConfigurationManager.AppSettings["SupportConsoleUser"].Split(',');
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var requiredRoles = configuration.SupportConsoleUsers.Split(',');
             var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
             if (userRoleClaims != null)
             {

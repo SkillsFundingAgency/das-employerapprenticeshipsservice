@@ -11,6 +11,8 @@ using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 using SFA.DAS.EmployerAccounts.Helpers;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -35,7 +37,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         public static bool IsSupportUser(this HtmlHelper htmlHelper)
         {
-            string[] requiredRoles = ConfigurationManager.AppSettings["SupportConsoleUser"].Split(',');
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var requiredRoles = configuration.SupportConsoleUsers.Split(',');
             if (!(htmlHelper.ViewContext.Controller.ControllerContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
             {
                 return false;
