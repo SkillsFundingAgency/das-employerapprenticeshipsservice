@@ -1,8 +1,9 @@
-﻿using SFA.DAS.EmployerAccounts.Models;
+﻿using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class InviteTeamMemberViewModel : ViewModelBase
+    public class InviteTeamMemberViewModel : ViewModelBase , IAccountIdentifier
     {
         public string HashedAccountId { get; set; }
         public string Name { get; set; }

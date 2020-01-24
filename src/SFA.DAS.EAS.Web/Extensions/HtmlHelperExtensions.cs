@@ -32,6 +32,6 @@ namespace SFA.DAS.EAS.Web.Extensions
             var isAuthorized = authorisationService.IsAuthorized(featureType);
 
             return isAuthorized;
-        }
+        }        
     }
 }
