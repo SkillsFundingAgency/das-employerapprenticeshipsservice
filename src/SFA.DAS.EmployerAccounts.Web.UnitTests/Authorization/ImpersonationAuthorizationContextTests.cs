@@ -13,9 +13,9 @@ using System.Web.Routing;
 using SFA.DAS.EmployerAccounts.Models;
 using System;
 using System.Linq;
-using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
-using SFA.DAS.NLog.Logger;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
+using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 {
@@ -29,6 +29,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         private Mock<IEmployerAccountTeamRepository> MockEmployerAccountTeamRepository;
         private TeamMember _teamMember;
         public virtual ICollection<TeamMember> TeamMembers { get; set; }
+        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
 
         [SetUp]
         public void Arrange()
@@ -40,6 +42,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
                 UserRef = Guid.NewGuid(),
                 Email = "vas@test.com"
             };
+            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
             MockEmployerAccountTeamRepository = new Mock<IEmployerAccountTeamRepository>();
             MockEmployerAccountTeamRepository.Setup(x => x.GetAccountTeamMembers(It.IsAny<string>()));
             MockAuthorizationContextProvider = new Mock<IAuthorizationContextProvider>();
@@ -61,7 +65,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             SutImpersonationAuthorizationContext = new ImpersonationAuthorizationContext
               (MockContextBase.Object,
               MockAuthorizationContextProvider.Object,
-              MockEmployerAccountTeamRepository.Object);
+              MockEmployerAccountTeamRepository.Object,
+              _mockConfig.Object,
+              _mockAuthenticationService.Object);
 
             var claimsIdentity = new ClaimsIdentity(new[]
             {

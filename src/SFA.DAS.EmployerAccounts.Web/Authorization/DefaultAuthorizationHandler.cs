@@ -7,35 +7,33 @@ using System.Collections.Generic;
 using SFA.DAS.Authorization.Handlers;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 using System;
-using System.Web;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.Authorization.Errors;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
     public class DefaultAuthorizationHandler : IDefaultAuthorizationHandler
     {
-        private readonly HttpContextBase _httpContext;
         private IAuthorisationResourceRepository _authorisationResourceRepository;
+        private readonly EmployerAccountsConfiguration _config;
+        private readonly IAuthenticationService _authenticationService;
 
-        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository, HttpContextBase httpContext)
+        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository, EmployerAccountsConfiguration config, IAuthenticationService authenticationService)
         {
             _authorisationResourceRepository = authorisationResourceRepository;
-            _httpContext = httpContext;
+            _config = config;
+            _authenticationService = authenticationService;
         }
 
         public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
-
-            //if (!IsTier2User(authorizationContext)){
-            //    return IsAuthorizedResult();
-            //}
-
-            if (!Helpers.AccountTaskHelper.IsSupportConsoleUser(_httpContext.User))
+            if (!_authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
             {
                 return IsAuthorizedResult();
             }
-
             if (!IsAuthorized(GetResource(authorizationContext), authorizationContext)) {
                 return IsNotAuthorizedResult(new Tier2UserAccessNotGranted());
             }

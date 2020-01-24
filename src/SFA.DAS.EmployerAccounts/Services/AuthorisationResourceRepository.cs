@@ -1,19 +1,19 @@
-﻿using System;
-using SFA.DAS.EmployerAccounts.Interfaces;
+﻿using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using SFA.DAS.Authorization.Context;
-using System.Configuration;
-using System.Web.Mvc;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
     public class AuthorisationResourceRepository : IAuthorisationResourceRepository
     {
+        private readonly IAuthenticationService _authenticationService;
+        private readonly EmployerAccountsConfiguration _config;
+
         private const string TeamViewRoute = "accounts/{hashedaccountid}/teams/view";
         private const string TeamInvite = "accounts/{hashedaccountid}/teams/invite";
         private const string TeamInviteComplete = "accounts/{hashedaccountid}/teams/invite/next";
@@ -23,13 +23,16 @@ namespace SFA.DAS.EmployerAccounts.Services
         private const string TeamMemberInviteResend = "accounts/{hashedaccountid}/teams/resend";
         private const string TeamMemberInviteCancel = "accounts/{hashedaccountid}/teams/{invitationId}/cancel";
         private const string ErrorAccessDenied = "error/accessdenied/{hashedaccountid}";
-        private const string Tier2User = "Tier2User";
+
+        public AuthorisationResourceRepository(IAuthenticationService authenticationService, EmployerAccountsConfiguration config)
+        {
+            _authenticationService = authenticationService;
+            _config = config;
+        }
 
         public IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity)
         {
-            //var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
-           //if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(Tier2User, StringComparison.OrdinalIgnoreCase)))            
-           if(IsSupportConsoleUser(claimsIdentity)) 
+            if(_authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
            {
                 return new List<AuthorizationResource>
                 {
@@ -44,26 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Services
                     new AuthorizationResource { Name = nameof(ErrorAccessDenied), Value = ErrorAccessDenied },
                 };
             }
-
             return new List<AuthorizationResource>();
-        }
-
-        private static bool IsSupportConsoleUser(ClaimsIdentity claimsIdentity)
-        {
-            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var requiredRoles = configuration.SupportConsoleUsers.Split(',');
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
-            if (userRoleClaims != null)
-            {
-                foreach (var requiredRole in requiredRoles)
-                {
-                    if (userRoleClaims.Any(claim => claim.Value.Equals(requiredRole, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
     }
 }

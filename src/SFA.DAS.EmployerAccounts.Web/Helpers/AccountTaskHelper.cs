@@ -1,11 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Models.Account;
+﻿using SFA.DAS.EmployerAccounts.Models.Account;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers
 {
@@ -26,23 +19,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
                 default: return int.MaxValue; //if its an usupported type we place it last
             }
-        }
-
-        public static bool IsSupportConsoleUser(IPrincipal user)
-        {
-            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var requiredRoles = configuration.SupportConsoleUsers.Split(',');
-            var currentRoles = ((ClaimsIdentity)user.Identity).Claims
-                .Where(c => c.Type == ClaimTypes.Role)
-                .Select(c => c.Value);
-            foreach (var role in requiredRoles)
-            {
-                if (currentRoles.Any(r => r.Equals(role, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
     }
 }

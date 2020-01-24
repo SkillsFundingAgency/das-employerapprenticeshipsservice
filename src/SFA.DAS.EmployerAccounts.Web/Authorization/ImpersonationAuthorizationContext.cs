@@ -8,7 +8,9 @@ using SFA.DAS.EmployerAccounts.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Routing;
-using System.Configuration;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
@@ -18,21 +20,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private readonly HttpContextBase _httpContext;
         private readonly IAuthorizationContextProvider _authorizationContextProvider;
         private readonly IEmployerAccountTeamRepository _employerAccountTeamRepository;
+        private readonly EmployerAccountsConfiguration _config;
+        private readonly IAuthenticationService _authenticationService;
 
         public ImpersonationAuthorizationContext(HttpContextBase httpContext,
             IAuthorizationContextProvider authorizationContextProvider,
-            IEmployerAccountTeamRepository employerAccountTeamRepository)
+            IEmployerAccountTeamRepository employerAccountTeamRepository, EmployerAccountsConfiguration config, 
+            IAuthenticationService authenticationService)
         {
             _httpContext = httpContext;
             _authorizationContextProvider = authorizationContextProvider;
             _employerAccountTeamRepository = employerAccountTeamRepository;
+            _config = config;
+            _authenticationService = authenticationService;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            if (!Helpers.AccountTaskHelper.IsSupportConsoleUser(_httpContext.User))
+            if (!_authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
                 return _authorizationContextProvider.GetAuthorizationContext();
-
+            
             if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
             {
                 throw new UnauthorizedAccessException();

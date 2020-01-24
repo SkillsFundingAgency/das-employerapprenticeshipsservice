@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using System.Collections.Generic;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using System.Security.Claims;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
 {
@@ -19,6 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
         private Mock<IAuthenticationService> _authenticationService;
         private Mock<IMediator> _mediator;
         private Mock<IMembershipRepository> _membershipRepository;
+        private Mock<EmployerAccountsConfiguration> _mockConfig;
         public override EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery Query { get; set; }
         public override GetAccountTeamMembersHandler RequestHandler { get; set; }
         public override Mock<IValidator<EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery>> RequestValidator { get; set; }
@@ -52,13 +54,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
                 .Setup(m => m.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new MembershipView { AccountId = AccountId});
 
+            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+
             RequestHandler = new GetAccountTeamMembersHandler(
                 RequestValidator.Object, 
                 _employerAccountTeamRepository.Object,
                 _authenticationService.Object,
                 _mediator.Object,
-                _membershipRepository.Object
-                );
+                _membershipRepository.Object,
+                _mockConfig.Object);
 
             Query = new EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery();
         }

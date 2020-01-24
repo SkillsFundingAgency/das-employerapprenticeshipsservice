@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Linq;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using System;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUser
 {
@@ -18,6 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
 
         private Mock<IAuditApiClient> _mockInnerClient;
         private Mock<IAuthenticationService> _mockAuthenticationService;
+        private Mock<EmployerAccountsConfiguration> _mockConfig;
 
         private string _impersonatedUser;
         private string _impersonatedUserEmail;
@@ -37,6 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
 
             _mockInnerClient = new Mock<IAuditApiClient>();
             _mockAuthenticationService = new Mock<IAuthenticationService>();
+            _mockConfig = new Mock<EmployerAccountsConfiguration>();
 
             _mockAuthenticationService
                 .Setup(m => m.GetClaimValue(DasClaimTypes.Id))
@@ -54,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
                 .Setup(m => m.GetClaimValue(ClaimTypes.Email))
                 .Returns(_supportUserEmail);
 
-            _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _mockAuthenticationService.Object);
+            _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _mockAuthenticationService.Object,_mockConfig.Object);
         }
 
         [Test]

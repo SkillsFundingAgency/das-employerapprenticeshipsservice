@@ -4,7 +4,6 @@ using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
 using SFA.DAS.MA.Shared.UI.Models.Links;
 using System;
-using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
@@ -12,7 +11,6 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -43,15 +41,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             {
                 return false;
             }
-
-            foreach (var role in requiredRoles)
-            {
-                if (claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(role)))
-                {
-                    return true;
-                }
-            }
-            return false;
+            
+            return requiredRoles.Any(role =>
+                claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(role)));
         }
 
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)

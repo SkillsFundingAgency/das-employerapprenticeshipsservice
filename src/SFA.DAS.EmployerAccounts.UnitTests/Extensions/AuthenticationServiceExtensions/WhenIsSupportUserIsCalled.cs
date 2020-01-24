@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
     public class WhenIsSupportUserIsCalled
     {
         private Mock<IAuthenticationService> _mockAuthenticationService;
-
+        
         [SetUp]
         public void Arrange()
         {
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
         {
 
             //Act
-            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportUser(_mockAuthenticationService.Object);
+            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object,It.IsAny<string>());
 
             //Assert
             _mockAuthenticationService.Verify(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "Tier2User"), Times.Once);
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
                 .Returns(true);
 
             //Act
-            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportUser(_mockAuthenticationService.Object);
+            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object, It.IsAny<string>());
 
             //Assert
             Assert.IsTrue(result);
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
                 .Returns(false);
 
             //Act
-            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportUser(_mockAuthenticationService.Object);
+            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object, It.IsAny<string>());
 
             //Assert
             Assert.IsFalse(result);
