@@ -5,6 +5,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
@@ -22,17 +24,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         private readonly Mock<HttpRequestBase> mockRequest = new Mock<HttpRequestBase>();
         private readonly Mock<HttpContextBase> mockContext = new Mock<HttpContextBase>();
         private readonly Mock<HttpResponseBase> mockResponse = new Mock<HttpResponseBase>();
+        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
 
         [SetUp]
         public void Arrange()
         {
+            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
             Exception = new UnauthorizedAccessException();
             ExceptionContext = new ExceptionContext();
             RouteData = new RouteData();
             mockContext.Setup(htx => htx.Request).Returns(mockRequest.Object);
             mockContext.Setup(htx => htx.Response).Returns(mockResponse.Object);
             mockContext.Setup(x => x.User.IsInRole(Tier2User)).Returns(true);
-            UnauthorizedAccessExceptionFilter = new DasEmployerAccountsUnauthorizedAccessExceptionFilter();
+            UnauthorizedAccessExceptionFilter = new DasEmployerAccountsUnauthorizedAccessExceptionFilter(_mockConfig.Object, _mockAuthenticationService.Object);
         }
 
 

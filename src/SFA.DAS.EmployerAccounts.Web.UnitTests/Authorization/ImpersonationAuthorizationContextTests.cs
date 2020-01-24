@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             MockContextBase = new Mock<HttpContextBase>();
             MockRouteHandler = new Mock<IRouteHandler>();
 
-            MockContextBase.Setup(x => x.User.IsInRole(AuthorizationConstants.Tier2User)).Returns(true);
+            //MockContextBase.Setup(x => x.User.IsInRole(AuthorizationConstants.Tier2User)).Returns(true);
             var routeBase = new Route("teams/view", MockRouteHandler.Object);
             var routeData = new RouteData(routeBase, MockRouteHandler.Object);
             routeData.Values.Add(RouteValueKeys.AccountHashedId, "ABC123");
@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
                 new Claim("sub", "UserRef"),
             });
 
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
+            //claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
         }
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             //Assert            
             result.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentityauthrorizationContext);
             var userRoleClaims = claimsIdentityauthrorizationContext?.Claims.Where(c => c.Type == claimsIdentityauthrorizationContext?.RoleClaimType);
-            Assert.IsTrue(userRoleClaims.Any(claim => claim.Value == AuthorizationConstants.Tier2User));
+            Assert.IsTrue(userRoleClaims.Any(claim => claim.Value == "Tier2User"));
 
             result.TryGet<Resource>("Resource", out var resource);
             var resourceValue = resource != null ? resource.Value : "default";

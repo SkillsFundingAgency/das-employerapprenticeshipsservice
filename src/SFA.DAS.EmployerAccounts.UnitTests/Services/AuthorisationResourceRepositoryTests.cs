@@ -3,6 +3,9 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Services;
 using System.Linq;
 using System.Security.Claims;
+using Moq;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services
 {
@@ -12,11 +15,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services
         private const string Tier2User = "Tier2User";
         private AuthorisationResourceRepository authorisationResourceRepository;
         private ClaimsIdentity claimsIdentity;
+        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
 
         [SetUp]
         public void SetUp()
         {
-            authorisationResourceRepository = new AuthorisationResourceRepository();
+
+            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
+            authorisationResourceRepository = new AuthorisationResourceRepository(_mockAuthenticationService.Object, _mockConfig.Object);
             claimsIdentity = new ClaimsIdentity();
         }        
 

@@ -8,6 +8,9 @@ using SFA.DAS.EmployerAccounts.Web.Authorization;
 using System.Net;
 using System.Web.Routing;
 using System.Security.Claims;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -24,6 +27,13 @@ namespace SFA.DAS.EmployerAccounts.Web
 
     public class DasEmployerAccountsUnauthorizedAccessExceptionFilter : UnauthorizedAccessExceptionFilter
     {
+        private readonly EmployerAccountsConfiguration _config;
+        private readonly IAuthenticationService _authenticationService;
+        public DasEmployerAccountsUnauthorizedAccessExceptionFilter(EmployerAccountsConfiguration config, IAuthenticationService authenticationService)
+        {
+            _config = config;
+            _authenticationService = authenticationService;
+        }
         public override void OnException(ExceptionContext filterContext) 
         {
             base.OnException(filterContext);
@@ -42,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                     }
                     else
                     {
-                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = "accessdenied" }));
                     }
 
                 }
@@ -51,9 +61,14 @@ namespace SFA.DAS.EmployerAccounts.Web
     }
 
     public class DasEmployerAccountsAuthorizationFilter : AuthorizationFilter
-    {       
-        public DasEmployerAccountsAuthorizationFilter(Func<IAuthorizationService> authorizationService) : base(authorizationService)
-        {           
+    {
+        private readonly EmployerAccountsConfiguration _config;
+        private readonly IAuthenticationService _authenticationService;
+        public DasEmployerAccountsAuthorizationFilter(Func<IAuthorizationService> authorizationService, EmployerAccountsConfiguration config, 
+            IAuthenticationService authenticationService) : base(authorizationService)
+        {
+            _config = config;
+            _authenticationService = authenticationService;
         }
         
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -62,16 +77,15 @@ namespace SFA.DAS.EmployerAccounts.Web
 
            if (filterContext.Result is HttpStatusCodeResult)
            {
-                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) && filterContext.HttpContext.User.IsInRole(AuthorizationConstants.Tier2User))
+                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) && 
+                    _authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
                 {
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
-                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
                     }
                 }
-                
-            }
-
+           }
         }
     }
 
@@ -79,13 +93,14 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         public static void AddDasEmployerAccountsAuthorizationFilter(this GlobalFilterCollection filters)
         {
-            filters.Add(new DasEmployerAccountsAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
+            filters.Add(new DasEmployerAccountsAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()
+                ,DependencyResolver.Current.GetService<EmployerAccountsConfiguration>(), DependencyResolver.Current.GetService<IAuthenticationService>()));
         }
 
 
         public static void AddDasEmployerAccountsUnauthorizedAccessExceptionFilter(this GlobalFilterCollection filters)
         {
-            filters.Add(new DasEmployerAccountsUnauthorizedAccessExceptionFilter());
+            filters.Add(new DasEmployerAccountsUnauthorizedAccessExceptionFilter(DependencyResolver.Current.GetService<EmployerAccountsConfiguration>(), DependencyResolver.Current.GetService<IAuthenticationService>()));
         }
     }
 }

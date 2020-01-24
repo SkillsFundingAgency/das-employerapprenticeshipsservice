@@ -64,13 +64,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 
             //Assert
             authorizationResult.IsAuthorized.Should().Be(true);
-        }        
-        
-        [Test]
-        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenAllowTheUserToViewTeamPage()
+        }
+
+        [Theory]
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void GetAuthorizationResult_WhenTheUserIsConsoleUser_ThenAllowTheUserToViewTeamPage(string role)
         {
             //Arrange
-             AuthorizationContextTestsFixture.SetData(testAuthorizationResource.Value);
+             AuthorizationContextTestsFixture.SetData(testAuthorizationResource.Value,role);
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
@@ -81,10 +83,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         }
 
         [Test]
-        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2AndResourceNotSet_ThenAuthorizedTheUser()
+        [Theory]
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2AndResourceNotSet_ThenAuthorizedTheUser(string role)
         {
             //Arrange
-            AuthorizationContextTestsFixture.SetDataTier2UserNoResource();
+            AuthorizationContextTestsFixture.SetDataTier2UserNoResource(role);
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
@@ -129,13 +134,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         }
 
 
-        public AuthorizationContextTestsFixture SetData(string url)
+        public AuthorizationContextTestsFixture SetData(string url, string role)
         {
             var resource = new Resource { Value = url };
             AuthorizationContext.Set("Resource", resource);
 
             var claimsIdentity = new ClaimsIdentity();
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
+            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, role));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
@@ -143,7 +148,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             return this;
         }
         
-        public AuthorizationContextTestsFixture SetDataTier2UserNoResource()
+        public AuthorizationContextTestsFixture SetDataTier2UserNoResource(string role)
         {
             var claimsIdentity = new ClaimsIdentity(new[]
             {
@@ -151,7 +156,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
                 new Claim(DasClaimTypes.Email, "Email"),
                 new Claim("sub", "UserRef"),
             });
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
+            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, role));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);

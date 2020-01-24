@@ -5,9 +5,11 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Authorization.Mvc.Filters;
 using SFA.DAS.Authorization.Services;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
@@ -16,6 +18,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
     [Parallelizable]
     public class DasEmployerAccountsAuthorizationFilterTests
     {
+        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
         public ActionExecutingContext ActionExecutingContext { get; set; }
         public Mock<ActionDescriptor> mockActionDescriptor { get; set; }
         public AuthorizationFilter AuthorizationFilter { get; set; }
@@ -27,12 +31,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         private readonly Mock<HttpRequestBase> mockRequest = new Mock<HttpRequestBase>();
         private readonly Mock<HttpContextBase> mockContext = new Mock<HttpContextBase>();
         private readonly Mock<HttpResponseBase> mockResponse = new Mock<HttpResponseBase>();
+
         public RouteData RouteData { get; set; }
 
 
         [SetUp]
         public void Arrange()
         {
+            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
             mockActionDescriptor = new Mock<ActionDescriptor>();
             ActionExecutingContext = new ActionExecutingContext { ActionDescriptor = mockActionDescriptor.Object };
             mockAuthorizationService = new Mock<IAuthorizationService>();
@@ -73,7 +80,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         public void OnActionExecuting_WhenActionIsExecutingAndControllerIsDecoratedWithDasAuthorizeAttributeAndControllerOptionsAreNotAuthorized_ThenReturnAccessDenied()
         {
             //Arrange           
-            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => mockAuthorizationService.Object);          
+            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => mockAuthorizationService.Object,_mockConfig.Object
+            ,_mockAuthenticationService.Object);          
             mockContext.Setup(x => x.User.IsInRole(Tier2User)).Returns(true);
             RouteData = new RouteData();
             RouteData.Values.Add(RouteValueKeys.AccountHashedId, HashedAccountId);
