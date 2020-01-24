@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             if (app == null) { throw new ArgumentNullException(nameof(app)); }
             if (options == null) { throw new ArgumentNullException(nameof(options)); }
-            Logger = options.AdfsOptions.Logger;
+            Logger = options.Logger;
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
@@ -201,6 +201,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     public class SupportConsoleAuthenticationOptions
     {
         public ADFSOptions AdfsOptions { get; set; }
+        public ILogger Logger { get; set; }
     }
 
     public class ADFSOptions
@@ -208,10 +209,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public string Wtrealm { get; set; }
         public string MetadataAddress { get; set; }
         public string Wreply { get; set; }
-        public string BaseUrl { get; set; }      
-        public string Scopes { get; set; }
-        public bool UseCertificate { get; set; }
-        public ILogger Logger { get;  set; }
-
+        public string BaseUrl { get; set; }
     }   
 }

@@ -63,11 +63,9 @@ namespace SFA.DAS.EmployerAccounts.Web
                     MetadataAddress = config.AdfsMetadata , 
                     Wreply = config.EmployerAccountsBaseUrl , 
                     Wtrealm = config.EmployerAccountsBaseUrl ,
-                    BaseUrl = config.Identity.BaseAddress,                 
-                    Scopes = config.Identity.Scopes,
-                    UseCertificate = config.Identity.UseCertificate,
-                    Logger = Logger
-                }
+                    BaseUrl = config.Identity.BaseAddress                     
+                },
+                Logger = Logger
             });
 
             app.UseCodeFlowAuthentication(GetOidcMiddlewareOptions(config, accountDataCookieStorageService, hashedAccountIdCookieStorageService, constants));
