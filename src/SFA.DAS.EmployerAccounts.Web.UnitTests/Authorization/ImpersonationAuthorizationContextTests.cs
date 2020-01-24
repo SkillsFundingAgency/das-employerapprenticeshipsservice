@@ -82,15 +82,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         }
 
         [Test]
-        public void GetAuthorizationContext_WhenClaimsIdentityAndResourceBeenSet_ThenReturnClaimsIdentityAndResource()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void GetAuthorizationContext_WhenClaimsIdentityAndResourceBeenSet_ThenReturnClaimsIdentityAndResource(string role)
         {
             //Act
             var result = SutImpersonationAuthorizationContext.GetAuthorizationContext();
 
             //Assert            
             result.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentityauthrorizationContext);
-            var userRoleClaims = claimsIdentityauthrorizationContext?.Claims.Where(c => c.Type == claimsIdentityauthrorizationContext?.RoleClaimType);
-            Assert.IsTrue(userRoleClaims.Any(claim => claim.Value == "Tier2User"));
+            var userRoleClaims = claimsIdentityauthrorizationContext?.Claims.Where(c => c.Type == claimsIdentityauthrorizationContext.RoleClaimType);
+            Assert.IsTrue(userRoleClaims.Any(claim => claim.Value == role));
 
             result.TryGet<Resource>("Resource", out var resource);
             var resourceValue = resource != null ? resource.Value : "default";

@@ -14,6 +14,7 @@ using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizati
 using System;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -29,18 +30,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         private Mock<IAuthorisationResourceRepository> MockIAuthorisationResourceRepository { get; set; }
         private List<AuthorizationResource> resourceList { get; set; }
         private AuthorizationResource testAuthorizationResource;
-        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private EmployerAccountsConfiguration _configuration;
         private Mock<IAuthenticationService> _mockAuthenticationService;
+        private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
 
         [SetUp]
         public void Arrange()
         {
-            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _configuration = new EmployerAccountsConfiguration
+            {
+                SupportConsoleUsers = SupportConsoleUsers
+            };
             _mockAuthenticationService = new Mock<IAuthenticationService>();
             AuthorizationContextTestsFixture = new AuthorizationContextTestsFixture();
             MockIAuthorisationResourceRepository = new Mock<IAuthorisationResourceRepository>();
             Options = new List<string>();
-            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockIAuthorisationResourceRepository.Object,_mockConfig.Object,_mockAuthenticationService.Object);
+            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockIAuthorisationResourceRepository.Object,_configuration,_mockAuthenticationService.Object);
             testAuthorizationResource = new AuthorizationResource
             {
                 Name = "Test",
@@ -53,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
 
             MockIAuthorisationResourceRepository.Setup(x => x.Get(It.IsAny<ClaimsIdentity>())).Returns(resourceList);
             AuthorizationContext = new AuthorizationContext();
-            }
+        }
         
 
         [Test]
@@ -170,7 +175,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
-
             return this;
         }
     }
