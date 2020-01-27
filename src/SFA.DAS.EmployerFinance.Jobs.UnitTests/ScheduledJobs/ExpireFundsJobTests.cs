@@ -15,9 +15,9 @@ namespace SFA.DAS.EmployerFinance.Jobs.UnitTests.ScheduledJobs
     public class ExpireFundsJobTests : FluentTest<ExpireFundsJobTestsFixture>
     {
         [Test]
-        public Task Run_WhenRunningJob_ThenShouldSendCommand()
+        public Task Run_WhenRunningJob_ThenShouldSendCommand_Hotfix_ShouldNotSendCommand()
         {
-            return RunAsync(f => f.Run(), f => f.MessageSession.Verify(s => s.Send(It.IsAny<ExpireFundsCommand>(), It.IsAny<SendOptions>()), Times.Once));
+            return RunAsync(f => f.Run(), f => f.MessageSession.Verify(s => s.Send(It.IsAny<ExpireFundsCommand>(), It.IsAny<SendOptions>()), Times.Never));
         }
     }
 
