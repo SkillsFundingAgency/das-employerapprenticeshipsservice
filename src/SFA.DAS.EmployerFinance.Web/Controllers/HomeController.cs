@@ -45,14 +45,6 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         public ActionResult CookieConsent()
         {
             return Redirect(Url.EmployerAccountsAction("cookieConsent"));
-        }
-
-        [HttpGet]
-        [Route("{HashedAccountId}/cookieConsent", Order = 0)]
-        [Route("cookieConsent", Order = 1)]
-        public ActionResult CookieConsent()
-        {
-            return Redirect(Url.EmployerAccountsAction("cookieConsent"));            
         }       
 
         [Route("signOut")]
