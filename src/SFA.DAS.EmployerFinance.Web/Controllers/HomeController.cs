@@ -32,10 +32,19 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
         }
 
         [HttpGet]
-        [Route("privacy")]
+        [Route("{HashedAccountId}/privacy", Order = 0)]
+        [Route("privacy", Order = 1)]
         public ActionResult Privacy()
         {
-            return Redirect(Url.LegacyEasAction("service/privacy"));
+            return Redirect(Url.EmployerAccountsAction("service", "privacy"));
+        }
+
+        [HttpGet]
+        [Route("{HashedAccountId}/cookieConsent", Order = 0)]
+        [Route("cookieConsent", Order = 1)]
+        public ActionResult CookieConsent()
+        {
+            return Redirect(Url.EmployerAccountsAction("cookieConsent"));
         }
 
         [HttpGet]
