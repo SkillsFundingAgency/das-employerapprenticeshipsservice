@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -63,10 +64,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         }
 
         [Test]
-        public void OnActionExecuting_WhenActionIsExecutingAndControllerIsDecoratedWithDasAuthorizeAttributeAndControllerOptionsAreNotAuthorized_ThenReturnStatusCodeForbidden()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void OnActionExecuting_WhenActionIsExecutingAndControllerIsDecoratedWithDasAuthorizeAttributeAndControllerOptionsAreNotAuthorized_ThenReturnStatusCodeForbidden(string role)
         {
             //Arrange
-           
+            _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
 
 
             //Act
@@ -86,7 +89,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         {
             //Arrange           
             AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => mockAuthorizationService.Object, _config
-            , _mockAuthenticationService.Object);          
+            , _mockAuthenticationService.Object);
+            _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
             mockContext.Setup(x => x.User.IsInRole(role)).Returns(true);
             RouteData = new RouteData();
             RouteData.Values.Add(RouteValueKeys.AccountHashedId, HashedAccountId);
