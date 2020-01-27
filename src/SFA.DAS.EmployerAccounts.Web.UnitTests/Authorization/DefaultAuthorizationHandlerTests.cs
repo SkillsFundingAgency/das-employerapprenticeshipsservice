@@ -14,7 +14,6 @@ using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizati
 using System;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -96,6 +95,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             //Arrange
             AuthorizationContextTestsFixture.SetDataTier2UserNoResource(role);
 
+            _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
+            
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
 
