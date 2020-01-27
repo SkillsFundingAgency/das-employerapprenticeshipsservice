@@ -64,30 +64,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             authorizationContext.TryGet<Resource>("Resource", out var resource);
             return resource != null ? resource.Value : "default";
         }
-
-        //private bool IsTier2User(IAuthorizationContext authorizationContext)
-        //{
-        //    authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
-        //    var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity.RoleClaimType);
-        //    //if (userRoleClaims != null)
-        //    //{
-        //    //  foreach (var requiredRole in requiredRoles)
-        //    //    {
-        //    //        if (userRoleClaims.Any(claim => claim.Value.Equals(requiredRole, StringComparison.OrdinalIgnoreCase)))
-        //    //        {
-        //    //            return true;
-        //    //        }
-        //    //    }
-        //    //}
-        //    if (userRoleClaims != null && userRoleClaims
-        //            .Any(claim => claim.Value.Equals(AuthorizationConstants.Tier2User, StringComparison.OrdinalIgnoreCase)))
-        //    {
-        //        return true;
-        //    }
-
-        //    return false;
-        //}
-
     }   
 
 }
