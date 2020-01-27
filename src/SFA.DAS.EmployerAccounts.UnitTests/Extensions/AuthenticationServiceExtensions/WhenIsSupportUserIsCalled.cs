@@ -8,7 +8,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
     public class WhenIsSupportUserIsCalled
     {
         private Mock<IAuthenticationService> _mockAuthenticationService;
-        
+        private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
+
         [SetUp]
         public void Arrange()
         {
@@ -20,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
         {
 
             //Act
-            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object,It.IsAny<string>());
+            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object, _supportConsoleUsers);
 
             //Assert
             _mockAuthenticationService.Verify(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "Tier2User"), Times.Once);
@@ -35,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
                 .Returns(true);
 
             //Act
-            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object, It.IsAny<string>());
+            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object, _supportConsoleUsers);
 
             //Assert
             Assert.IsTrue(result);
@@ -50,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Extensions.AuthenticationServiceExt
                 .Returns(false);
 
             //Act
-            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object, It.IsAny<string>());
+            var result = EmployerAccounts.Extensions.AuthenticationServiceExtensions.IsSupportConsoleUser(_mockAuthenticationService.Object, _supportConsoleUsers);
 
             //Assert
             Assert.IsFalse(result);

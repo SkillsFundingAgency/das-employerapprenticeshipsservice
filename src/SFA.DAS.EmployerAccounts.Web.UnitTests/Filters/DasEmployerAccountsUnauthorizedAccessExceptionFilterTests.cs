@@ -19,37 +19,43 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         public RouteData RouteData { get; set; }
         public DasEmployerAccountsUnauthorizedAccessExceptionFilter UnauthorizedAccessExceptionFilter { get; set; }
         public Exception Exception { get; set; }
-        private const string Tier2User = "Tier2User";
         private const string HashedAccountId = "HashedAccountId";
         private readonly Mock<HttpRequestBase> mockRequest = new Mock<HttpRequestBase>();
         private readonly Mock<HttpContextBase> mockContext = new Mock<HttpContextBase>();
         private readonly Mock<HttpResponseBase> mockResponse = new Mock<HttpResponseBase>();
-        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private EmployerAccountsConfiguration _config;
         private Mock<IAuthenticationService> _mockAuthenticationService;
+        private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
 
         [SetUp]
         public void Arrange()
         {
-            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _config = new EmployerAccountsConfiguration()
+            {
+                SupportConsoleUsers = SupportConsoleUsers
+            };
             _mockAuthenticationService = new Mock<IAuthenticationService>();
             Exception = new UnauthorizedAccessException();
             ExceptionContext = new ExceptionContext();
             RouteData = new RouteData();
             mockContext.Setup(htx => htx.Request).Returns(mockRequest.Object);
             mockContext.Setup(htx => htx.Response).Returns(mockResponse.Object);
-            mockContext.Setup(x => x.User.IsInRole(Tier2User)).Returns(true);
-            UnauthorizedAccessExceptionFilter = new DasEmployerAccountsUnauthorizedAccessExceptionFilter(_mockConfig.Object, _mockAuthenticationService.Object);
+            //mockContext.Setup(x => x.User.IsInRole(Tier2User)).Returns(true);
+            UnauthorizedAccessExceptionFilter = new DasEmployerAccountsUnauthorizedAccessExceptionFilter(_config, _mockAuthenticationService.Object);
         }
 
 
         [Test]
-        public void OnException_WhenAnUnauthorizedAccessExceptionIsThrownForTier2User_ThenReturnToAccessDenied()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void OnException_WhenAnUnauthorizedAccessExceptionIsThrownForTier2User_ThenReturnToAccessDenied(string role)
         {
             //Arrange            
             ExceptionContext.Exception = Exception;
             RouteData.Values.Add(RouteValueKeys.AccountHashedId, HashedAccountId);
             mockContext.Setup(x => x.Request.RequestContext.RouteData).Returns(RouteData);
             ExceptionContext.HttpContext = mockContext.Object;
+            _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
 
             //Act            
             UnauthorizedAccessExceptionFilter.OnException(ExceptionContext);
@@ -90,11 +96,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
 
         [Test]
         public void OnException_WhenAnUnauthorizedAccessExceptionIsThrownForTier2UserAndNoHashedAccountIdIsSet_AndNoClaimValueIsSet_ThenReturnToAccessDenied()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void OnException_WhenAnUnauthorizedAccessExceptionIsThrownForTier2UserAndNoHashedAccountIdIsSet_ThenReturnToAccessDenied(string role)
         {
             //Arrange            
             ExceptionContext.Exception = Exception;
             mockContext.Setup(x => x.Request.RequestContext.RouteData).Returns(RouteData);
             ExceptionContext.HttpContext = mockContext.Object;
+            _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
 
             //Act            
             UnauthorizedAccessExceptionFilter.OnException(ExceptionContext);

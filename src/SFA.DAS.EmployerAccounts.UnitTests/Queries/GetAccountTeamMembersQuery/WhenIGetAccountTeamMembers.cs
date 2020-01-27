@@ -20,7 +20,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
         private Mock<IAuthenticationService> _authenticationService;
         private Mock<IMediator> _mediator;
         private Mock<IMembershipRepository> _membershipRepository;
-        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
+        private EmployerAccountsConfiguration _config;
         public override EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery Query { get; set; }
         public override GetAccountTeamMembersHandler RequestHandler { get; set; }
         public override Mock<IValidator<EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery>> RequestValidator { get; set; }
@@ -54,7 +55,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
                 .Setup(m => m.GetCaller(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new MembershipView { AccountId = AccountId});
 
-            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _config = new EmployerAccountsConfiguration()
+            {
+                SupportConsoleUsers = SupportConsoleUsers
+            };
 
             RequestHandler = new GetAccountTeamMembersHandler(
                 RequestValidator.Object, 
@@ -62,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
                 _authenticationService.Object,
                 _mediator.Object,
                 _membershipRepository.Object,
-                _mockConfig.Object);
+                _config);
 
             Query = new EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery();
         }
@@ -97,11 +101,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
         }
 
         [Test]
-        public async Task ThenIfTheMessageIsValidAndTheCallerIsASupportUserThenTheMembershiprespositoryIsCalled()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public async Task ThenIfTheMessageIsValidAndTheCallerIsASupportUserThenTheMembershiprespositoryIsCalled(string role)
         {
             //Act
             _authenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "Tier2User"))
+                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(true);
 
             await RequestHandler.Handle(new EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery
@@ -115,11 +121,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountTeamMembersQuery
         }
 
         [Test]
-        public async Task ThenIfTheMessageIsValidAndTheCallerIsASupportUserThenTheAuditIsRaised()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public async Task ThenIfTheMessageIsValidAndTheCallerIsASupportUserThenTheAuditIsRaised(string role)
         {
             //Act
             _authenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "Tier2User"))
+                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(true);
 
             await RequestHandler.Handle(new EmployerAccounts.Queries.GetAccountTeamMembers.GetAccountTeamMembersQuery

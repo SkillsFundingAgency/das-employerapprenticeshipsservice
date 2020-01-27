@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
     [Parallelizable]
     public class DasEmployerAccountsAuthorizationFilterTests
     {
-        private Mock<EmployerAccountsConfiguration> _mockConfig;
+        private EmployerAccountsConfiguration _config;
         private Mock<IAuthenticationService> _mockAuthenticationService;
         public ActionExecutingContext ActionExecutingContext { get; set; }
         public Mock<ActionDescriptor> mockActionDescriptor { get; set; }
@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         public Mock<IAuthorizationService> mockAuthorizationService { get; set; }
         public string[] ActionOptions { get; set; }
         public string[] ControllerOptions { get; set; }
-        private const string Tier2User = "Tier2User";
+        private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
         private const string HashedAccountId = "HashedAccountId";
         private readonly Mock<HttpRequestBase> mockRequest = new Mock<HttpRequestBase>();
         private readonly Mock<HttpContextBase> mockContext = new Mock<HttpContextBase>();
@@ -38,7 +38,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         [SetUp]
         public void Arrange()
         {
-            _mockConfig = new Mock<EmployerAccountsConfiguration>();
+            _config = new EmployerAccountsConfiguration()
+            {
+                SupportConsoleUsers = SupportConsoleUsers
+            };
             _mockAuthenticationService = new Mock<IAuthenticationService>();
             mockActionDescriptor = new Mock<ActionDescriptor>();
             ActionExecutingContext = new ActionExecutingContext { ActionDescriptor = mockActionDescriptor.Object };
@@ -77,12 +80,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
 
 
         [Test]
-        public void OnActionExecuting_WhenActionIsExecutingAndControllerIsDecoratedWithDasAuthorizeAttributeAndControllerOptionsAreNotAuthorized_ThenReturnAccessDenied()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void OnActionExecuting_WhenActionIsExecutingAndControllerIsDecoratedWithDasAuthorizeAttributeAndControllerOptionsAreNotAuthorized_ThenReturnAccessDenied(string role)
         {
             //Arrange           
-            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => mockAuthorizationService.Object,_mockConfig.Object
-            ,_mockAuthenticationService.Object);          
-            mockContext.Setup(x => x.User.IsInRole(Tier2User)).Returns(true);
+            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => mockAuthorizationService.Object, _config
+            , _mockAuthenticationService.Object);          
+            mockContext.Setup(x => x.User.IsInRole(role)).Returns(true);
             RouteData = new RouteData();
             RouteData.Values.Add(RouteValueKeys.AccountHashedId, HashedAccountId);
             mockContext.Setup(x => x.Request.RequestContext.RouteData).Returns(RouteData);
