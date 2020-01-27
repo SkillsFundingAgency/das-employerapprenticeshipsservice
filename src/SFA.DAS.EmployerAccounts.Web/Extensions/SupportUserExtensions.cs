@@ -20,10 +20,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         private const string Staff = "Staff";
         private const string Employer = "Employer";
         private const string HashedAccountId = "HashedAccountId";
-        private const string ESF = "ESF";
+        private const string ServiceClaimTier2Role = "ESF";
         private const string Tier2User = "Tier2User";
         private const string ConsoleUser = "ConsoleUser";
-        private const string ESS = "ESS";
+        private const string ServiceClaimTier1Role = "ESS";
         private const string serviceClaimType = "http://service/service";
         private static ILogger Logger;
 
@@ -93,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                     {"role-type", claimsIdentity.RoleClaimType}
                 });
 
-                if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ESF))
+                if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier2Role))
                 {
                     Logger.Debug("Adding Tier2 Role");
                     claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier2User));
@@ -101,27 +101,39 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                     Logger.Debug("Adding ConsoleUser Role");
                     claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
                 }
-                else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ESS))
+                else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier1Role))
                 {
                     Logger.Debug("Adding ConsoleUser Role");
                     claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
                 }
                 else
                 {
+                    Logger.Error("Service Claim Type not available to identify the Role");
                     throw new SecurityTokenValidationException();
                 }
 
                 var firstName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
                 var lastName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
                 var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
-
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
+                
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
+
+                if (!string.IsNullOrEmpty(userEmail))
+                {
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
+                }
+                else
+                {
+                    Logger.Error("Upn not available in the claims to identify UserEmail");
+                    throw new SecurityTokenValidationException();
+                }
+                
             }
             catch (Exception ex)
             {
                 Logger.Error(ex, "IDAMS Authentication Callback Error");
+                throw new SecurityTokenValidationException();
             }
 
             Logger.Debug("End of callback");
