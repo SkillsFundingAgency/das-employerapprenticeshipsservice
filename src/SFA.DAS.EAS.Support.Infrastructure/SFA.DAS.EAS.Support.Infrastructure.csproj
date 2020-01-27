@@ -66,6 +66,7 @@
     <Compile Include="Services\LevySubmissionsRepository.cs" />
     <Compile Include="Services\LevyTokenHttpClientMaker.cs" />
     <Compile Include="Settings\AccountApiConfiguration.cs" />
+    <Compile Include="Settings\EmployerAccountsConfiguration.cs" />
     <Compile Include="Settings\HashingServiceConfig.cs" />
     <Compile Include="Settings\HmrcApiBaseUrlConfig.cs" />
     <Compile Include="Settings\IHmrcApiBaseUrlConfig.cs" />
@@ -95,10 +96,10 @@
       <Version>1.0.43</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.0.5</Version>
+      <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.5.3</Version>
+      <Version>4.6.8</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.AutoConfiguration">
       <Version>2.0.1</Version>
