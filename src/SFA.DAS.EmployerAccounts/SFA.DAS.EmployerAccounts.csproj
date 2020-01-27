@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -20,18 +20,19 @@
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
-    <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />
-    <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
+    <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />    
+    <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
     <PackageReference Include="SFA.DAS.Authentication.Extensions.Legacy" Version="1.0.29" />
-    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.46" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.46" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.46" />
+    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client" Version="1.6.1641" />
+    <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.EntityFramework" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.890" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />

@@ -30,25 +30,26 @@
             <tbody class="govuk-table__body">
                 @foreach (var account in Model.Data.Accounts.AccountList)
                     {
-                <tr class="govuk-table__row">
-                    <td class="govuk-table__cell" data-label="Account name">
-                        <span class="das-no-wrap">
-                            @account.Name
-                        </span>
-                        <span class="govuk-caption-m">
-                            Account ID: @account.PublicHashedId
-                        </span>
-                    </td>
-                    <td class="govuk-table__cell" data-label="What you can do">
-                        @RoleStrings.GetRoleDescription(account.RoleName)
-                    </td>
-                    <td class="govuk-table__cell">
-                        <a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})"
-                           aria-label="View account homepage for @account.Name" title="View account homepage for @account.Name" class="govuk-link">
-                            Open <span class="govuk-visually-hidden">@account.Name account homepage</span>
-                        </a>
-                    </td>
-                </tr>
+                        <tr>
+                            <td data-label="Account name">
+                                <span class="force-word-wrap">
+                                    @account.Name
+                                </span>
+                                <span class="account-id">
+                                    Account ID: @account.PublicHashedId
+                                </span>
+                            </td>
+                            <td data-label="What you can do">
+                                @RoleStrings.GetRoleDescription(account.RoleName)
+                            </td>
+                            <td class="link-right">
+                                <a aria-label="View account homepage for @account.Name"
+                                   title="View account homepage for @account.Name"
+                                   href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})">
+                                    Open<span class="vh"> @account.Name account homepage</span>
+                                </a>
+                            </td>
+                        </tr>
                     }
             </tbody>
         </table>
