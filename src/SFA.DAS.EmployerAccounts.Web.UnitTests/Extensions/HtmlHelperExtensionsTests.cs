@@ -1,73 +1,31 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
-using System;
-using System.Collections;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
     [TestFixture]
     public class HtmlHelperExtensionsTests
     {
-        private string expectedOutput;
-        private string actualOutput;
-        private EmployerAccountsConfiguration employerAccountsConfiguration;
-
-        [Test]
-        public void WhenICallSetZenDeskLabelsWithOutLabel_ThenTheOutputIsCorrect()
+        [TestCaseSource(nameof(LabelCases))]
+        public void WhenICallSetZenDeskLabelsWithLabels_ThenTheKeywordsAreCorrect(string[] labels, string keywords)
         {
-            //Arrange            
-            expectedOutput =
-                $"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ labels: [] }});</script>";
+            // Arrange
+            var expected = $"<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', {{ labels: [{keywords}] }});</script>";
 
-            //Act
-            actualOutput = HtmlHelperExtensions.SetZenDeskLabels(null).ToString();
+            // Act
+            var actual = HtmlHelperExtensions.SetZenDeskLabels(null, labels).ToString();
 
-            //Assert
-            Assert.AreEqual(expectedOutput, actualOutput);
+            // Assert
+            Assert.AreEqual(expected, actual);
         }
 
-        [TestCaseSource(typeof(StringArrayTestDataSource))]
-        public void WhenICallSetZenDeskLabelsWithLabels_ThenTheOutputIsCorrect(string[] labels)
+
+        private static readonly object[] LabelCases =
         {
-            //Arrange
-            var actualOutput = "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', { labels: [";
-
-            var first = true;
-            foreach (var label in labels)
-            {
-                if (!string.IsNullOrEmpty(label))
-                {
-                    if (!first) actualOutput += ",";
-                    first = false;
-
-                    actualOutput += $"'{ EscapeApostrophes(label) }'";
-                }
-            }
-
-            actualOutput += "] });</script>";
-
-            //Act
-            this.actualOutput = HtmlHelperExtensions.SetZenDeskLabels(null, labels).ToString();
-
-            //Assert
-            Assert.AreEqual(actualOutput, this.actualOutput);
-        }      
-
-        private static string EscapeApostrophes(string input)
-        {
-            return input.Replace("'", @"\'");
-        }
-
-    }
-
-    public class StringArrayTestDataSource : IEnumerable
-    {
-        public IEnumerator GetEnumerator()
-        {
-            yield return new string[] { "a string with multiple words", "the title of another page" };
-            yield return new string[] { "ass-dashboard" };
-            yield return new string[] { null };
-        }
+            new object[] { new string[] { "a string with multiple words", "the title of another page" }, "'a string with multiple words','the title of another page'"},
+            new object[] { new string[] { "eas-estimate-apprenticeships-you-could-fund" }, "'eas-estimate-apprenticeships-you-could-fund'"},
+            new object[] { new string[] { "eas-apostrophe's" }, @"'eas-apostrophe\'s'"},
+            new object[] { new string[] { null }, "''" }
+        };
     }
 }
