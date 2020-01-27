@@ -26,25 +26,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
-            var apiCallString =
-                "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', { labels: [";
+            var keywords = string.Join(",", labels
+                .Where(label => !string.IsNullOrEmpty(label))
+                .Select(label => $"'{EscapeApostrophes(label)}'"));
 
-            var isFirstLabel = true;
-            foreach (var label in labels)
-            {
-                if (!string.IsNullOrWhiteSpace(label))
-                {
-                    if (!isFirstLabel)
-                    {
-                        apiCallString += ",";
-                    }
-                    isFirstLabel = false;
-
-                    apiCallString += $"'{ EscapeApostrophes(label) }'";
-                }
-            }
-
-            apiCallString += "] });</script>";
+            // when there are no keywords default to empty string to prevent zen desk matching articles from the url
+            var apiCallString = "<script type=\"text/javascript\">zE('webWidget', 'helpCenter:setSuggestions', { labels: ["
+                + (!string.IsNullOrEmpty(keywords) ? keywords : "''")
+                + "] });</script>";
 
             return MvcHtmlString.Create(apiCallString);
         }
