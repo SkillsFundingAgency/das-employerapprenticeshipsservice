@@ -26,6 +26,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return new MvcHtmlString(htmlAddress);
         }
 
+        public static bool IsSupportUser(this HtmlHelper htmlHelper)
+        {
+            if (!(htmlHelper.ViewContext.Controller.ControllerContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
+            {
+                return false;
+            }
+
+            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
+        }
+
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)
         {
             var keywords = string.Join(",", labels
