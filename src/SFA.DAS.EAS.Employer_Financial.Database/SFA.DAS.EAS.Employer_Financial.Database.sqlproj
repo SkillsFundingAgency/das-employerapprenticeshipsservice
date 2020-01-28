@@ -195,6 +195,7 @@
     <Build Include="StoredProcedures\CreateAccountLegalEntity.sql" />
     <Build Include="StoredProcedures\SignAccountLegalEntityAgreement.sql" />
     <Build Include="StoredProcedures\RemoveAccountLegalEntity.sql" />
+    <Build Include="Tables\TransactionLine_EOF.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />
