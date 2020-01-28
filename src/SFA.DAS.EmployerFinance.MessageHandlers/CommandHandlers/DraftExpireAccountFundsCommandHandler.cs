@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var now = _currentDateTime.Now;
             var fundsIn = await _levyFundsInRepository.GetLevyFundsIn(message.AccountId);
             var fundsOut = await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId);
-            var existingExpiredFunds = await _expiredFundsRepository.Get(message.AccountId);
+            var existingExpiredFunds = await _expiredFundsRepository.GetDraft(message.AccountId);
 
             if(message.DateTo != null)
             {

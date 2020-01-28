@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture.NUnit3;
-using FluentAssertions;
 using Moq;
 using NServiceBus.MessageInterfaces.MessageMapper.Reflection;
 using NServiceBus.Testing;
@@ -42,7 +41,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         }
 
         [Test, MoqAutoData]
-        public async Task Then_The_Draft_Expired_Funds_Are_Created_From_The_Command_And_Only_Include_Values_Upto_The_Supplied_Date(
+        public async Task Then_The_Draft_Expired_Funds_Are_Created_From_The_Command_And_Only_Include_Values_Upto_The_Supplied_Date_And_Other_DraftExpiredFunds(
             DraftExpireAccountFundsCommand message,
             IDictionary<CalendarPeriod, decimal> expiredFund,
             LevyFundsIn levyOne,
@@ -79,6 +78,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             await handler.Handle(message, new TestableMessageHandlerContext(new MessageMapper()));
 
             expiredFunds.Verify(x=>x.GetExpiringFunds(It.Is<IDictionary<CalendarPeriod, decimal>>(c=>c.Count().Equals(1)), It.Is<IDictionary<CalendarPeriod, decimal>>(c => c.Count().Equals(1)), It.IsAny<IDictionary<CalendarPeriod, decimal>>(),It.IsAny<int>()));
+            expiredFundsRepository.Verify(x => x.GetDraft(message.AccountId), Times.Once);
             expiredFundsRepository.Verify(x => x.CreateDraft(message.AccountId, It.Is<IEnumerable<ExpiredFund>>(c=>c.Count().Equals(expiredFund.Count)), It.IsAny<DateTime>()));
         }
     }
