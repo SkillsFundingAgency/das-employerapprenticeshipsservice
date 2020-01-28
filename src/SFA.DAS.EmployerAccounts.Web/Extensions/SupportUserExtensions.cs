@@ -31,6 +31,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             if (app == null) { throw new ArgumentNullException(nameof(app)); }
             if (options == null) { throw new ArgumentNullException(nameof(options)); }
+            if (options.Logger == null) { throw new ArgumentNullException(nameof(options.Logger)); }
+
             Logger = options.Logger;
 
             app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
@@ -133,7 +135,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             catch (Exception ex)
             {
                 Logger.Error(ex, "IDAMS Authentication Callback Error");
-                throw new SecurityTokenValidationException();
+                throw new Exception();
             }
 
             Logger.Debug("End of callback");
