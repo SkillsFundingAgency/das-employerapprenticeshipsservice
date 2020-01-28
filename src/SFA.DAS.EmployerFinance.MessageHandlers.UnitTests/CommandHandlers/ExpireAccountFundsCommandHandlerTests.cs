@@ -87,7 +87,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             ExpiredFunds = new Dictionary<CalendarPeriod, decimal>
             {
                 { new CalendarPeriod(2018, 03), 1000 },
-                { new CalendarPeriod(2018, 04), 1000 }
+                { new CalendarPeriod(2018, 04), 1000 },
+                { new CalendarPeriod(2018, 05), 0 }
             };
 
             MockCurrentDateTime = new Mock<ICurrentDateTime>();
