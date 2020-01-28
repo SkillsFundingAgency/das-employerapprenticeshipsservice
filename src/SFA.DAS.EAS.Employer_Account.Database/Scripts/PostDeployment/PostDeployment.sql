@@ -12,8 +12,9 @@ Post-Deployment Script Template
 
 :r .\CreateAgreementTemplates.sql
 :r .\AML-3762-EOI-API.sql
-:r .\AML-2119-RestoreAgreementDetails.sql
 :r .\UpdateAgreementTemplateV3.sql
+-- Because of the way the script below is implemented it cancels execution of subsequent scripts under certain conditions.  Put any future scripts above this line...or fix the script below.
+:r .\AML-2119-RestoreAgreementDetails.sql
 
 IF (@@servername NOT LIKE '%pp%' AND @@servername NOT LIKE '%prd%' AND @@servername NOT LIKE '%mo%')
 BEGIN
