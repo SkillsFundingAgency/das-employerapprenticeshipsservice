@@ -2,8 +2,6 @@
 using SFA.DAS.EmployerAccounts.Models.Account;
 using System.Collections.Generic;
 using System.Security.Claims;
-using SFA.DAS.Authentication;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 
 
@@ -11,8 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 {
     public class AuthorisationResourceRepository : IAuthorisationResourceRepository
     {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly EmployerAccountsConfiguration _config;
+        private readonly IUserContext _userContext;
 
         private const string TeamViewRoute = "accounts/{hashedaccountid}/teams/view";
         private const string TeamInvite = "accounts/{hashedaccountid}/teams/invite";
@@ -24,15 +21,14 @@ namespace SFA.DAS.EmployerAccounts.Services
         private const string TeamMemberInviteCancel = "accounts/{hashedaccountid}/teams/{invitationId}/cancel";
         private const string ErrorAccessDenied = "error/accessdenied/{hashedaccountid}";
 
-        public AuthorisationResourceRepository(IAuthenticationService authenticationService, EmployerAccountsConfiguration config)
+        public AuthorisationResourceRepository(IUserContext userContext)
         {
-            _authenticationService = authenticationService;
-            _config = config;
+            _userContext = userContext;
         }
 
         public IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity)
         {
-            if(_authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
+            if(_userContext.IsSupportConsoleUser())
            {
                 return new List<AuthorizationResource>
                 {

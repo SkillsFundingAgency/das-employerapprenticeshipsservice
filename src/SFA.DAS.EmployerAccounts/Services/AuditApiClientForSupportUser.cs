@@ -6,24 +6,24 @@ using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using System.IdentityModel.Claims;
 using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
     public class AuditApiClientForSupportUser : IAuditApiClient
     {
         private readonly IAuditApiClient _client;
+        private readonly IUserContext _userContext;
         private readonly IAuthenticationService _authenticationService;
-        private readonly EmployerAccountsConfiguration _config;
-        public AuditApiClientForSupportUser(IAuditApiClient client, IAuthenticationService authenticationService, EmployerAccountsConfiguration config)
+
+        public AuditApiClientForSupportUser(IAuditApiClient client, IAuthenticationService authenticationService, IUserContext userContext)
         {
             _client = client;
             _authenticationService = authenticationService;
-            _config = config;
+            _userContext = userContext;
         }
         public Task Audit(AuditMessage message)
         {
-            if (_authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
+            if (_userContext.IsSupportConsoleUser())
             {
                 var impersonatedUser = _authenticationService.GetClaimValue(DasClaimTypes.Id);
                 var impersonatedUserEmail = _authenticationService.GetClaimValue(DasClaimTypes.Email);

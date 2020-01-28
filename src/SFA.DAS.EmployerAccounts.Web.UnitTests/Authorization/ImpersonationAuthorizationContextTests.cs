@@ -15,6 +15,7 @@ using System;
 using System.Linq;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
@@ -26,14 +27,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         protected Mock<HttpContextBase> MockContextBase;
         public ImpersonationAuthorizationContext SutImpersonationAuthorizationContext;
         protected Mock<IRouteHandler> MockRouteHandler { get; set; }
-        private Mock<IEmployerAccountTeamRepository> MockEmployerAccountTeamRepository;
+        private Mock<IEmployerAccountTeamRepository> _mockEmployerAccountTeamRepository;
         private TeamMember _teamMember;
-        private ClaimsIdentity claimsIdentity;
+        private ClaimsIdentity _claimsIdentity;
         public virtual ICollection<TeamMember> TeamMembers { get; set; }
         private EmployerAccountsConfiguration _configuration;
         private Mock<IAuthenticationService> _mockAuthenticationService;
         private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
-
+        private IUserContext _userContext;
 
         [SetUp]
         public void Arrange()
@@ -45,15 +46,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
                 UserRef = Guid.NewGuid(),
                 Email = "vas@test.com"
             };
-
+            
             _configuration = new EmployerAccountsConfiguration
             {
                 SupportConsoleUsers = SupportConsoleUsers
             };
 
             _mockAuthenticationService = new Mock<IAuthenticationService>();
-            MockEmployerAccountTeamRepository = new Mock<IEmployerAccountTeamRepository>();
-            MockEmployerAccountTeamRepository.Setup(x => x.GetAccountTeamMembers(It.IsAny<string>()));
+            _userContext = new UserContext(_mockAuthenticationService.Object,_configuration);
+            _mockEmployerAccountTeamRepository = new Mock<IEmployerAccountTeamRepository>();
+            _mockEmployerAccountTeamRepository.Setup(x => x.GetAccountTeamMembers(It.IsAny<string>()));
             MockAuthorizationContextProvider = new Mock<IAuthorizationContextProvider>();
             MockContextBase = new Mock<HttpContextBase>();
             MockRouteHandler = new Mock<IRouteHandler>();
@@ -67,16 +69,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             MockAuthorizationContextProvider.Setup(x => x.GetAuthorizationContext()).Returns(authorizationContext);
 
             TeamMembers = new List<TeamMember> { _teamMember };
-            MockEmployerAccountTeamRepository.Setup(x => x.GetAccountTeamMembers(It.IsAny<string>())).Returns(Task.FromResult(TeamMembers));
+            _mockEmployerAccountTeamRepository.Setup(x => x.GetAccountTeamMembers(It.IsAny<string>())).Returns(Task.FromResult(TeamMembers));
 
             SutImpersonationAuthorizationContext = new ImpersonationAuthorizationContext
               (MockContextBase.Object,
               MockAuthorizationContextProvider.Object,
-              MockEmployerAccountTeamRepository.Object,
-              _configuration,
-              _mockAuthenticationService.Object);
+              _mockEmployerAccountTeamRepository.Object, _userContext);
 
-            claimsIdentity = new ClaimsIdentity(new[]
+            _claimsIdentity = new ClaimsIdentity(new[]
             {
                 new Claim(DasClaimTypes.Id, "UserRef"),
                 new Claim(DasClaimTypes.Email, "Email"),
@@ -92,8 +92,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             //Act
             
             _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, role));
-            var principal = new ClaimsPrincipal(claimsIdentity);
+            _claimsIdentity.AddClaim(new Claim(_claimsIdentity.RoleClaimType, role));
+            var principal = new ClaimsPrincipal(_claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
 
             var result = SutImpersonationAuthorizationContext.GetAuthorizationContext();
@@ -122,7 +122,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             //Act
             try
             {
-                var result = SutImpersonationAuthorizationContext.GetAuthorizationContext();
+                SutImpersonationAuthorizationContext.GetAuthorizationContext();
             }
             catch (UnauthorizedAccessException ex)
             {

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 using Entity = SFA.DAS.Audit.Types.Entity;
 using SFA.DAS.EmployerAccounts.Extensions;
@@ -18,22 +16,19 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
         private readonly IEmployerAccountTeamRepository _repository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
-        private readonly IAuthenticationService _authenticationService;
-        private readonly EmployerAccountsConfiguration _config;
+        private readonly IUserContext _userContext;
 
         public GetAccountTeamMembersHandler(
             IValidator<GetAccountTeamMembersQuery> validator, 
             IEmployerAccountTeamRepository repository,
-            IAuthenticationService authenticationService,
             IMediator mediator, 
-            IMembershipRepository membershipRepository, EmployerAccountsConfiguration config)
+            IMembershipRepository membershipRepository, IUserContext userContext)
         {
             _validator = validator;
             _repository = repository;
-            _authenticationService = authenticationService;
             _mediator = mediator;
             _membershipRepository = membershipRepository;
-            _config = config;
+            _userContext = userContext;
         }
 
         public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message)
@@ -52,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
 
             var accounts = await _repository.GetAccountTeamMembersForUserId(message.HashedAccountId, message.ExternalUserId);
 
-            if (_authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
+            if (_userContext.IsSupportConsoleUser())
             {
                 await AuditAccess(message);
             }

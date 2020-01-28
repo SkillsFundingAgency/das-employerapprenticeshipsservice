@@ -7,10 +7,8 @@ using System.Collections.Generic;
 using SFA.DAS.Authorization.Handlers;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 using System;
-using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.Authorization.Errors;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
@@ -18,19 +16,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
     public class DefaultAuthorizationHandler : IDefaultAuthorizationHandler
     {
         private IAuthorisationResourceRepository _authorisationResourceRepository;
-        private readonly EmployerAccountsConfiguration _config;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IUserContext _userContext;
 
-        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository, EmployerAccountsConfiguration config, IAuthenticationService authenticationService)
+        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository,IUserContext userContext)
         {
             _authorisationResourceRepository = authorisationResourceRepository;
-            _config = config;
-            _authenticationService = authenticationService;
+            _userContext = userContext;
         }
 
         public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
-            if (!_authenticationService.IsSupportConsoleUser(_config.SupportConsoleUsers))
+            if (!_userContext.IsSupportConsoleUser())
             {
                 return IsAuthorizedResult();
             }

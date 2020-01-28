@@ -11,6 +11,7 @@ using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Authorization.Mvc.Filters;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
@@ -19,48 +20,47 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
     [Parallelizable]
     public class DasEmployerAccountsAuthorizationFilterTests
     {
-        private EmployerAccountsConfiguration _config;
         private Mock<IAuthenticationService> _mockAuthenticationService;
         public ActionExecutingContext ActionExecutingContext { get; set; }
-        public Mock<ActionDescriptor> mockActionDescriptor { get; set; }
+        public Mock<ActionDescriptor> MockActionDescriptor { get; set; }
         public AuthorizationFilter AuthorizationFilter { get; set; }
-        public Mock<IAuthorizationService> mockAuthorizationService { get; set; }
+        public Mock<IAuthorizationService> MockAuthorizationService { get; set; }
         public string[] ActionOptions { get; set; }
         public string[] ControllerOptions { get; set; }
-        private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
+        private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
         private const string HashedAccountId = "HashedAccountId";
+        private IUserContext _userContext ;
         private readonly Mock<HttpRequestBase> mockRequest = new Mock<HttpRequestBase>();
         private readonly Mock<HttpContextBase> mockContext = new Mock<HttpContextBase>();
         private readonly Mock<HttpResponseBase> mockResponse = new Mock<HttpResponseBase>();
-
+        private EmployerAccountsConfiguration _config;
         public RouteData RouteData { get; set; }
 
 
         [SetUp]
         public void Arrange()
         {
-            _config = new EmployerAccountsConfiguration()
-            {
-                SupportConsoleUsers = SupportConsoleUsers
-            };
             _mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockActionDescriptor = new Mock<ActionDescriptor>();
-            ActionExecutingContext = new ActionExecutingContext { ActionDescriptor = mockActionDescriptor.Object };
-            mockAuthorizationService = new Mock<IAuthorizationService>();
+            MockActionDescriptor = new Mock<ActionDescriptor>();
+            ActionExecutingContext = new ActionExecutingContext { ActionDescriptor = MockActionDescriptor.Object };
+            MockAuthorizationService = new Mock<IAuthorizationService>();
             ActionOptions = new string[0];
             ControllerOptions = new string[0];
+            _config = new EmployerAccountsConfiguration()
+            {
+                SupportConsoleUsers = _supportConsoleUsers
+            };
+            MockActionDescriptor.Setup(d => d.ControllerDescriptor.ControllerName).Returns(Guid.NewGuid().ToString());
+            MockActionDescriptor.Setup(d => d.ControllerDescriptor.GetCustomAttributes(typeof(DasAuthorizeAttribute), true)).Returns(new object[] { });
+            MockActionDescriptor.Setup(d => d.ActionName).Returns(Guid.NewGuid().ToString());
+            MockActionDescriptor.Setup(d => d.GetCustomAttributes(typeof(DasAuthorizeAttribute), true)).Returns(new object[] { });
 
-            mockActionDescriptor.Setup(d => d.ControllerDescriptor.ControllerName).Returns(Guid.NewGuid().ToString());
-            mockActionDescriptor.Setup(d => d.ControllerDescriptor.GetCustomAttributes(typeof(DasAuthorizeAttribute), true)).Returns(new object[] { });
-            mockActionDescriptor.Setup(d => d.ActionName).Returns(Guid.NewGuid().ToString());
-            mockActionDescriptor.Setup(d => d.GetCustomAttributes(typeof(DasAuthorizeAttribute), true)).Returns(new object[] { });
-
-            AuthorizationFilter = new AuthorizationFilter(() => mockAuthorizationService.Object);
+            AuthorizationFilter = new AuthorizationFilter(() => MockAuthorizationService.Object);
             ActionOptions = new[] { "Action.Option" };
-            mockActionDescriptor.Setup(d => d.GetCustomAttributes(typeof(DasAuthorizeAttribute), true)).Returns(new object[] { new DasAuthorizeAttribute(ActionOptions) });
+            MockActionDescriptor.Setup(d => d.GetCustomAttributes(typeof(DasAuthorizeAttribute), true)).Returns(new object[] { new DasAuthorizeAttribute(ActionOptions) });
             mockContext.Setup(htx => htx.Request).Returns(mockRequest.Object);
             mockContext.Setup(htx => htx.Response).Returns(mockResponse.Object);
-
+            _userContext = new UserContext(_mockAuthenticationService.Object,_config);
         }
 
         [Test]
@@ -88,8 +88,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         public void OnActionExecuting_WhenActionIsExecutingAndControllerIsDecoratedWithDasAuthorizeAttributeAndControllerOptionsAreNotAuthorized_ThenReturnAccessDenied(string role)
         {
             //Arrange           
-            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => mockAuthorizationService.Object, _config
-            , _mockAuthenticationService.Object);
+            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => 
+                MockAuthorizationService.Object,_userContext);
             _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
             mockContext.Setup(x => x.User.IsInRole(role)).Returns(true);
             RouteData = new RouteData();

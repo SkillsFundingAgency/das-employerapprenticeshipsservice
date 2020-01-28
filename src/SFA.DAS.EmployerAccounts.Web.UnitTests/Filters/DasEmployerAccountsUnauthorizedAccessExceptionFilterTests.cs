@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
@@ -23,25 +24,26 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         private readonly Mock<HttpRequestBase> mockRequest = new Mock<HttpRequestBase>();
         private readonly Mock<HttpContextBase> mockContext = new Mock<HttpContextBase>();
         private readonly Mock<HttpResponseBase> mockResponse = new Mock<HttpResponseBase>();
-        private EmployerAccountsConfiguration _config;
         private Mock<IAuthenticationService> _mockAuthenticationService;
-        private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
+        private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
+        private IUserContext _userContext;
+        private EmployerAccountsConfiguration _config;
 
         [SetUp]
         public void Arrange()
         {
-            _config = new EmployerAccountsConfiguration()
-            {
-                SupportConsoleUsers = SupportConsoleUsers
-            };
             _mockAuthenticationService = new Mock<IAuthenticationService>();
             Exception = new UnauthorizedAccessException();
             ExceptionContext = new ExceptionContext();
             RouteData = new RouteData();
             mockContext.Setup(htx => htx.Request).Returns(mockRequest.Object);
             mockContext.Setup(htx => htx.Response).Returns(mockResponse.Object);
-            //mockContext.Setup(x => x.User.IsInRole(Tier2User)).Returns(true);
-            UnauthorizedAccessExceptionFilter = new DasEmployerAccountsUnauthorizedAccessExceptionFilter(_config, _mockAuthenticationService.Object);
+            _config = new EmployerAccountsConfiguration()
+            {
+                SupportConsoleUsers = _supportConsoleUsers
+            };
+            _userContext =new UserContext(_mockAuthenticationService.Object,_config);
+            UnauthorizedAccessExceptionFilter = new DasEmployerAccountsUnauthorizedAccessExceptionFilter(_userContext);
         }
 
 
