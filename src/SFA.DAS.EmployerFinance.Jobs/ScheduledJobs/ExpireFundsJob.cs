@@ -15,9 +15,12 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             _messageSession = messageSession;
         }
 
-        public Task Run([TimerTrigger("0 0 0 28 * *")] TimerInfo timer, ILogger logger)
+        public Task Run(
+            [TimerTrigger("0 0 0 28 * *")] TimerInfo timer, 
+            ILogger logger)
         {
-            return _messageSession.Send(new ExpireFundsCommand());
+            return Task.FromResult(0);
+            // return _messageSession.Send(new ExpireFundsCommand());
         }
     }
 }

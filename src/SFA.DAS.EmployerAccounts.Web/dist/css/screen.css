@@ -2303,6 +2303,43 @@ a#link-settings {
   top: 3px;
   display: block; }
 
+/* Support user view of service and transact BANNER - Starts */
+#global-header #service-console-header, #global-header #service-console-header a {
+  color: #fff; }
+
+#global-header #service-console-header .header-logo {
+  padding-left: 14px; }
+
+#global-header #service-console-header .heading-large {
+  margin: 0; }
+
+#global-header #service-console-header .header-proposition {
+  text-align: right; }
+
+@media (min-width: 769px) {
+  #global-header #service-console-header .header-global {
+    width: 66.66%; }
+  #global-header #service-console-header .header-proposition {
+    width: 33.33%;
+    line-height: 4rem; } }
+
+@media (max-width: 640px) {
+  #global-header #service-console-header .header-proposition {
+    text-align: left; } }
+
+#global-header #service-console-msg {
+  background-color: #fff; }
+  #global-header #service-console-msg #global-header-bar {
+    background-color: #005ea5; }
+  #global-header #service-console-msg .header-wrapper {
+    background-color: #fff;
+    padding: 0 14px; }
+    #global-header #service-console-msg .header-wrapper .content {
+      padding: 14px; }
+      #global-header #service-console-msg .header-wrapper .content p {
+        margin: 0; }
+
+/* Support user view of service and transact BANNER - Ends */
 .error-summary, .info-summary, .success-summary, .warning-summary {
   border-width: 4px;
   border-style: solid;

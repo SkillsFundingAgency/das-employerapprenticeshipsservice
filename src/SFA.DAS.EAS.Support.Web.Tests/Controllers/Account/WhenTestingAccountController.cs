@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -19,6 +20,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
         protected Mock<ILog> _logger;
         protected Mock<IPayeLevyMapper> _payeLevyDeclarationMapper;
         protected AccountController Unit;
+        protected Mock<HttpContextBase> _httpContextMock;
 
 
         [SetUp]
@@ -28,11 +30,12 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Account
             _payeLevySubmissionsHandler = new Mock<IPayeLevySubmissionsHandler>();
             _logger = new Mock<ILog>();
             _payeLevyDeclarationMapper = new Mock<IPayeLevyMapper>();
+            _httpContextMock = new Mock<HttpContextBase>();
 
             Unit = new AccountController(AccountHandler.Object,
                 _payeLevySubmissionsHandler.Object,
                 _logger.Object,
-                _payeLevyDeclarationMapper.Object);
+                _payeLevyDeclarationMapper.Object,_httpContextMock.Object);
         }
     }
 

@@ -54,8 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("ChangedProperties", "ChangedProperties has not been supplied"), actual.ValidationDictionary);
-            
+            Assert.Contains(new KeyValuePair<string, string>("ChangedProperties", "ChangedProperties has not been supplied"), actual.ValidationDictionary);            
         }
 
         [Test]
@@ -69,6 +68,53 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AuditCommandTests
             Assert.Contains(new KeyValuePair<string, string>("EasAuditMessage", "EasAuditMessage has not been supplied"), actual.ValidationDictionary);
             
         }
-        
+
+        [Test]
+        public void ThenTrueIsReturnedIfCategoryIsViewAndChangedPropertiesAreMissing()
+        {
+            // arrange
+            var command = new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "View",
+                    Description = "description",
+                    RelatedEntities = new List<Entity> { new Entity() },
+                    ChangedProperties = null,
+                    AffectedEntity = new Entity { Id = "1", Type = "test" }
+                }
+            };
+
+            //Act
+            var result = _validator.Validate(command);
+
+            //Assert
+            Assert.IsTrue(result.IsValid());
+        }
+
+        [Test]
+        public void ThenFalseIsReturnedIfCategoryIsNotViewAndChangedPropertiesAreMissing()
+        {
+            // arrange
+            var command = new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "Changed",
+                    Description = "description",
+                    RelatedEntities = new List<Entity> { new Entity() },
+                    ChangedProperties = null,
+                    AffectedEntity = new Entity { Id = "1", Type = "test" }
+                }
+            };
+
+            //Act
+            var result = _validator.Validate(command);
+
+            //Assert
+            Assert.IsFalse(result.IsValid());
+            Assert.Contains(new KeyValuePair<string, string>("ChangedProperties", "ChangedProperties has not been supplied"), result.ValidationDictionary);
+        }
+
     }
 }
