@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoFixture" Version="4.5.1" />
+    <PackageReference Include="AutoFixture" Version="4.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="Moq" Version="4.5.28" />
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
@@ -15,6 +15,7 @@
     <PackageReference Include="SFA.DAS.EmployerAccounts.Types" Version="1.6.2103" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.34" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
+    <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.165" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
   </ItemGroup>
 
