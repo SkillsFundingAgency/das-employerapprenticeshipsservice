@@ -118,3 +118,4 @@ SELECT		DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)		AS DateCreated,
 			AND DateCreated >= @FromDate 
 			AND DateCreated < @ToDate
 			AND tl.TransactionType = 5
+			and tl.Amount > 0
