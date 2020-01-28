@@ -1,7 +1,9 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Web.Mvc;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
