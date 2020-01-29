@@ -5,14 +5,21 @@ using System.Web.Mvc;
 namespace SFA.DAS.EmployerFinance.Web.Extensions
 {
     public static class UrlHelperExtensions
-    { 
+    {
+        private const string AccountsController = "accounts";
+
         public static string EmployerAccountsAction(this UrlHelper helper, string path, bool includedAccountId = true)
+        {
+            return EmployerAccountsAction(helper, AccountsController, path, includedAccountId);                        
+        }
+
+        public static string EmployerAccountsAction(this UrlHelper helper, string controller, string path, bool includedAccountId = true)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
             var baseUrl = configuration.EmployerAccountsBaseUrl;
 
-            return includedAccountId ? AccountAction(helper, baseUrl, path) : Action(baseUrl, path);
-        }
+            return includedAccountId ? Action(baseUrl, PathWithHashedAccountId(helper, controller, path)) : Action(baseUrl, $"{controller}/{path}");
+        }        
 
         public static string EmployerCommitmentsAction(this UrlHelper helper, string path)
         {
@@ -72,10 +79,7 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
 
         private static string AccountAction(UrlHelper helper, string baseUrl, string path)
         {
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-            var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
-
-            return Action(baseUrl, accountPath);
+            return Action(baseUrl, PathWithHashedAccountId(helper, AccountsController, path));
         }
 
         private static string Action(string baseUrl, string path)
@@ -83,6 +87,12 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             var trimmedBaseUrl = baseUrl.TrimEnd('/');
 
             return $"{trimmedBaseUrl}/{path}".TrimEnd('/');
+        }
+
+        private static string PathWithHashedAccountId(UrlHelper helper, string controller, string path)
+        {
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            return hashedAccountId == null ? $"{controller}/{path}" : $"{controller}/{hashedAccountId}/{path}";
         }
     }
 }
