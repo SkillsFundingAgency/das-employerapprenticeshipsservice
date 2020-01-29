@@ -291,6 +291,7 @@
     <Content Include="dist\javascripts\apprentice\dropdown.js" />
     <Content Include="dist\javascripts\apprentice\select2.min.js" />
     <Content Include="dist\javascripts\character-limit.js" />
+    <Content Include="dist\javascripts\cookiebanner.js" />
     <Content Include="dist\javascripts\govuk-template.js" />
     <Content Include="dist\javascripts\ie.js" />
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
@@ -631,6 +632,8 @@
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Shared\BadRequest.cshtml" />
     <Content Include="src\sass\_finance.scss" />
+    <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="src\sass\_cookiebanner.scss" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
