@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
         protected const string TrainingProviderPrefix = "TrainingProvider";
         protected const string CohortReferencePrefix = "CohortReference1";
         protected const string TransactionTypePrefix = "TransactionType1";
+        protected const string DescriptionPrefix = "Description";
         protected const string UlnPrefix = "Uln1";
 
 
@@ -33,6 +34,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
             {
                 DateCreated = DateTime.Today.AddMonths(-1),
                 Apprentice = $"{ApprenticePrefix}1",
+                Description = $"{DescriptionPrefix}1",
                 ApprenticeTrainingCourse = $"{ApprenticeTrainingCoursePrefix}1",
                 ApprenticeTrainingCourseLevel = $"{ApprenticeTrainingCourseLevel}1",
                 EmployerContribution = 1,
@@ -53,6 +55,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
             {
                 DateCreated = DateTime.Today.AddMonths(-2),
                 Apprentice = $"{ApprenticePrefix}2",
+                Description = $"{DescriptionPrefix}2",
                 ApprenticeTrainingCourse = $"{ApprenticeTrainingCoursePrefix}2",
                 ApprenticeTrainingCourseLevel = $"{ApprenticeTrainingCourseLevel}2",
                 EmployerContribution = 2,
@@ -73,6 +76,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
             {
                 DateCreated = DateTime.Today.AddMonths(-3),
                 Apprentice = $"{ApprenticePrefix}3",
+                Description = $"{DescriptionPrefix}3",
                 ApprenticeTrainingCourse = $"{ApprenticeTrainingCoursePrefix}3",
                 ApprenticeTrainingCourseLevel = $"{ApprenticeTrainingCourseLevel}3",
                 EmployerContribution = 3,
