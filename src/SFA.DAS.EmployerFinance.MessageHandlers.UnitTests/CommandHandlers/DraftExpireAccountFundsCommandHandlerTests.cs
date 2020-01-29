@@ -7,8 +7,8 @@ using Moq;
 using NServiceBus.MessageInterfaces.MessageMapper.Reflection;
 using NServiceBus.Testing;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Extensions;
 using SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.ExpiredFunds;
@@ -48,13 +48,16 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             LevyFundsIn levyTwo,
             PaymentFundsOut paymentOne,
             PaymentFundsOut paymentTwo,
+            int expiredFundsPeriod,
+            Mock<EmployerFinanceConfiguration> configuration,
             [Frozen] Mock<ILevyFundsInRepository> levyFundsInRepository,
             [Frozen] Mock<IPaymentFundsOutRepository> paymentFundsOutRepository,
             [Frozen] Mock<IExpiredFunds> expiredFunds,
             [Frozen] Mock<IExpiredFundsRepository> expiredFundsRepository,
             DraftExpireAccountFundsCommandHandler handler)
         {
-            
+            //Arrange
+            configuration.Setup(x => x.FundsExpiryPeriod).Returns(expiredFundsPeriod);
             message.DateTo = DateTime.Now.AddMonths(-1);
             levyOne.CalendarPeriodYear = message.DateTo.Value.Year;
             levyOne.CalendarPeriodMonth = message.DateTo.Value.Month;
@@ -71,15 +74,18 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             var paymentFundsOut = new List<PaymentFundsOut>{paymentOne,paymentTwo};
             paymentFundsOutRepository.Setup(x => x.GetPaymentFundsOut(message.AccountId)).ReturnsAsync(paymentFundsOut);
 
-            expiredFunds.Setup(x => x.GetExpiringFunds(levyFundsIns.ToCalendarPeriodDictionary(),
-                paymentFundsOut.ToCalendarPeriodDictionary(), It.IsAny<IDictionary<CalendarPeriod, decimal>>(),
-                It.IsAny<int>())).Returns(expiredFund);
+            expiredFunds.Setup(x => x.GetExpiringFunds(
+                It.Is<IDictionary<CalendarPeriod, decimal>>(c => c.First().Value.Equals(levyOne.FundsIn)), 
+                It.Is<IDictionary<CalendarPeriod, decimal>>(c => c.First().Value.Equals(paymentOne.FundsOut)), 
+                It.Is<IDictionary<CalendarPeriod, decimal>>(c=>c.Count.Equals(0)),
+                expiredFundsPeriod)).Returns(expiredFund);
             
+            //Act
             await handler.Handle(message, new TestableMessageHandlerContext(new MessageMapper()));
 
-            expiredFunds.Verify(x=>x.GetExpiringFunds(It.Is<IDictionary<CalendarPeriod, decimal>>(c=>c.Count().Equals(1)), It.Is<IDictionary<CalendarPeriod, decimal>>(c => c.Count().Equals(1)), It.IsAny<IDictionary<CalendarPeriod, decimal>>(),It.IsAny<int>()));
+            //Assert
             expiredFundsRepository.Verify(x => x.GetDraft(message.AccountId), Times.Once);
-            expiredFundsRepository.Verify(x => x.CreateDraft(message.AccountId, It.Is<IEnumerable<ExpiredFund>>(c=>c.Count().Equals(expiredFund.Count)), It.IsAny<DateTime>()));
+            expiredFundsRepository.Verify(x => x.CreateDraft(message.AccountId, It.Is<IEnumerable<ExpiredFund>>(c=>c.Count().Equals(expiredFund.Count)), It.IsAny<DateTime>()), Times.Once);
         }
     }
 }

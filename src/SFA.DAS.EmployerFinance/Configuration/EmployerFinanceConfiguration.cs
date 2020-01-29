@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
         public string RedisConnectionString { get; set; }
-        public int FundsExpiryPeriod { get; set; }
+        public virtual int FundsExpiryPeriod { get; set; }
         public AccountApiConfiguration AccountApi { get; set; }
         public string ReservationsBaseUrl { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
