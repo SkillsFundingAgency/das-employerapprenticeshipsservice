@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.EventHandlers
         public long AgreementId = 22781184;
         public long LegalEntityId = 984087;
         public bool CohortCreated = true;
-        public AgreementType AgreementType = AgreementType.Levy;
+        public AgreementType AgreementType = AgreementType.Combined;
         public int SignedAgreementVersion = 3;
 
         public DateTime Created = DateTime.Now.AddMinutes(-1);
