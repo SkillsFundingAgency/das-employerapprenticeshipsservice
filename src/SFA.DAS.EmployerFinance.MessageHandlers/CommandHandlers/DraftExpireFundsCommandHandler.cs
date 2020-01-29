@@ -29,7 +29,6 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
                 sendOptions.RequireImmediateDispatch();
                 sendOptions.RouteToThisEndpoint();
-                sendOptions.SetMessageId($"{nameof(DraftExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{c.AccountId}");
 
                 return context.Send(c, sendOptions);
             });
