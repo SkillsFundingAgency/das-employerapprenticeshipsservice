@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                     new DateTime(message.DateTo.Value.Year, message.DateTo.Value.Month, 1)).ToList();
                 
                 fundsOut = fundsOut.Where(c =>
-                    new DateTime(c.CalendarPeriodYear, c.CalendarPeriodMonth, 1) <=
+                    new DateTime(c.CalendarPeriodYear, c.CalendarPeriodMonth, 1) <
                     new DateTime(message.DateTo.Value.Year, message.DateTo.Value.Month, 1)).ToList();
             }
             

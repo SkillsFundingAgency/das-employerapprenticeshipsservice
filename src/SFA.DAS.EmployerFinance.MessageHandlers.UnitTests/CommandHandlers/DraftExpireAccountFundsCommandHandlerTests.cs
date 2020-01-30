@@ -48,6 +48,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             LevyFundsIn levyTwo,
             PaymentFundsOut paymentOne,
             PaymentFundsOut paymentTwo,
+            PaymentFundsOut paymentThree,
             int expiredFundsPeriod,
             Mock<EmployerFinanceConfiguration> configuration,
             [Frozen] Mock<ILevyFundsInRepository> levyFundsInRepository,
@@ -71,12 +72,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             paymentOne.CalendarPeriodMonth = message.DateTo.Value.Month;
             paymentTwo.CalendarPeriodYear = DateTime.Now.Year;
             paymentTwo.CalendarPeriodMonth = DateTime.Now.Month;
-            var paymentFundsOut = new List<PaymentFundsOut>{paymentOne,paymentTwo};
+            paymentThree.CalendarPeriodYear = DateTime.Now.AddMonths(-2).Year;
+            paymentThree.CalendarPeriodMonth = DateTime.Now.AddMonths(-2).Month;
+            var paymentFundsOut = new List<PaymentFundsOut>{paymentOne,paymentTwo,paymentThree};
             paymentFundsOutRepository.Setup(x => x.GetPaymentFundsOut(message.AccountId)).ReturnsAsync(paymentFundsOut);
 
             expiredFunds.Setup(x => x.GetExpiringFunds(
                 It.Is<IDictionary<CalendarPeriod, decimal>>(c => c.First().Value.Equals(levyOne.FundsIn)), 
-                It.Is<IDictionary<CalendarPeriod, decimal>>(c => c.First().Value.Equals(paymentOne.FundsOut)), 
+                It.Is<IDictionary<CalendarPeriod, decimal>>(c => c.First().Value.Equals(paymentThree.FundsOut)), 
                 It.Is<IDictionary<CalendarPeriod, decimal>>(c=>c.Count.Equals(0)),
                 expiredFundsPeriod)).Returns(expiredFund);
             
