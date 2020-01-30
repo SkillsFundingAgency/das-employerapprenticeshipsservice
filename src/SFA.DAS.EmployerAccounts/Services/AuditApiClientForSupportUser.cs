@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
-using SFA.DAS.Authentication;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerUsers.WebClientComponents;
@@ -13,22 +12,20 @@ namespace SFA.DAS.EmployerAccounts.Services
     {
         private readonly IAuditApiClient _client;
         private readonly IUserContext _userContext;
-        private readonly IAuthenticationService _authenticationService;
-
-        public AuditApiClientForSupportUser(IAuditApiClient client, IAuthenticationService authenticationService, IUserContext userContext)
+       
+        public AuditApiClientForSupportUser(IAuditApiClient client,IUserContext userContext)
         {
             _client = client;
-            _authenticationService = authenticationService;
             _userContext = userContext;
         }
         public Task Audit(AuditMessage message)
         {
             if (_userContext.IsSupportConsoleUser())
             {
-                var impersonatedUser = _authenticationService.GetClaimValue(DasClaimTypes.Id);
-                var impersonatedUserEmail = _authenticationService.GetClaimValue(DasClaimTypes.Email);
-                message.ChangedBy.Id =  _authenticationService.GetClaimValue(ClaimTypes.Upn); // support user user principal name
-                message.ChangedBy.EmailAddress = _authenticationService.GetClaimValue(ClaimTypes.Email); // support user Email
+                var impersonatedUser = _userContext.GetClaimValue(DasClaimTypes.Id);
+                var impersonatedUserEmail = _userContext.GetClaimValue(DasClaimTypes.Email);
+                message.ChangedBy.Id = _userContext.GetClaimValue(ClaimTypes.Upn); // support user user principal name
+                message.ChangedBy.EmailAddress = _userContext.GetClaimValue(ClaimTypes.Email); // support user Email
 
                 if(message.RelatedEntities == null)
                 {

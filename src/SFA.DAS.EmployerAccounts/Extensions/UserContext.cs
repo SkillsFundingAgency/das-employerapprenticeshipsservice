@@ -5,7 +5,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Extensions
 {
-    public class UserContext :IUserContext
+    public class UserContext : IUserContext
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly EmployerAccountsConfiguration _config;
@@ -16,15 +16,23 @@ namespace SFA.DAS.EmployerAccounts.Extensions
             _authenticationService = authenticationService;
             _config = config;
         }
+
+        
         public bool IsSupportConsoleUser()
         {
             var requiredRoles = _config.SupportConsoleUsers.Split(',');
             return requiredRoles.Any(role => _authenticationService.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role));
+        }
+
+        public string GetClaimValue(string key)
+        {
+            return _authenticationService.GetClaimValue(key);
         }
     }
 
     public interface IUserContext
     {
         bool IsSupportConsoleUser();
+        string GetClaimValue(string key);
     }
 }

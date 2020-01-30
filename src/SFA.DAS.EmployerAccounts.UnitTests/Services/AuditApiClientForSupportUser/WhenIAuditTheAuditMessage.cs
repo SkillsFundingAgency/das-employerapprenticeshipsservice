@@ -13,8 +13,6 @@ using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUser
 {
-    
-
     public class WhenIAuditTheAuditMessage
     {
         private EmployerAccounts.Services.AuditApiClientForSupportUser _sut;
@@ -67,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
                 .Setup(m => m.GetClaimValue(ClaimTypes.Email))
                 .Returns(_supportUserEmail);
 
-            _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _mockAuthenticationService.Object, _userContext);
+            _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _userContext);
         }
 
         [Test]
