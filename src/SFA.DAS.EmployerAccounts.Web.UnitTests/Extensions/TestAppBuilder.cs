@@ -6,12 +6,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
     public class TestAppBuilder : IAppBuilder
     {
-        public List<object> MiddlewareOptions;
-
-        public TestAppBuilder()
-        {   
-            MiddlewareOptions = new List<object>();
-        }
+        public List<object> MiddlewareOptions { get; set; } = new List<object>();
 
         public IDictionary<string, object> Properties => new Dictionary<string, object>();       
 
