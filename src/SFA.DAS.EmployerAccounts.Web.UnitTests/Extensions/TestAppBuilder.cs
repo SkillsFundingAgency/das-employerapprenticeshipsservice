@@ -6,8 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
     public class TestAppBuilder : IAppBuilder
     {
-        public IList<Tuple<object, object[]>> BuildMiddleware;
-
         public List<object> MiddlewareOptions;
 
         public TestAppBuilder()
