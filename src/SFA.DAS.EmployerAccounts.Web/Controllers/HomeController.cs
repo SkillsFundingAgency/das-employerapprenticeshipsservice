@@ -234,7 +234,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("privacy")]
+        [Route("{HashedAccountId}/privacy", Order = 0)]
+        [Route("privacy", Order = 1)]
         public ActionResult Privacy()
         {
             return View();

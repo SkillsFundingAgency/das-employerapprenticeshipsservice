@@ -71,7 +71,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.0.5</Version>
+      <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Protocol.Extensions">
       <Version>1.0.0</Version>
@@ -121,7 +121,7 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
     <PackageReference Include="SFA.DAS.EAS.Portal.Client">
       <Version>1.6.2515</Version>
     </PackageReference>
