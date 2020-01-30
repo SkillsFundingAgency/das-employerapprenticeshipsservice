@@ -33,6 +33,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("cookieConsent", Order = 1)]        
         public ActionResult Settings(bool analyticsConsent, bool marketingConsent)
         {
+            var domain = Request.IsLocal ? Request.Url.Host :
+                Request.Url.Host.IndexOf('.') > 0 ? Request.Url.Host.Substring(Request.Url.Host.IndexOf('.')) :
+                Request.Url.Authority;
+
             var cookies = new List<HttpCookie>
             {
                 new HttpCookie("DASSeenCookieMessage", true.ToString().ToLower()),
@@ -40,7 +44,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 new HttpCookie("MarketingConsent", marketingConsent.ToString().ToLower())
             };
 
-            cookies.ForEach(x => ControllerContext.HttpContext.Response.Cookies.Add(x));
+            cookies.ForEach(x =>
+            {
+                x.Domain = domain;
+                ControllerContext.HttpContext.Response.Cookies.Add(x);
+            });
 
             return RedirectToAction("Settings", new { saved = true });
         }
