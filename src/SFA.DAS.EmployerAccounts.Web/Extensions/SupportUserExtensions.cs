@@ -46,8 +46,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = Employer,
-                ExpireTimeSpan = new TimeSpan(0, 10, 0),
-                SlidingExpiration = true
+                ExpireTimeSpan = new TimeSpan(0, 10, 0)
             });
 
             var WsFederationAuthenticationOptions = new WsFederationAuthenticationOptions
