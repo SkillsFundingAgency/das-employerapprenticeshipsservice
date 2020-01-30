@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Protocols;
+﻿
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Notifications;
@@ -84,62 +85,51 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             Logger.Debug("SecurityTokenValidated");
 
-            try
+         
+            var claimsIdentity = notification.AuthenticationTicket.Identity;
+
+            Logger.Debug("Authentication Properties", new Dictionary<string, object>
             {
-                var claimsIdentity = notification.AuthenticationTicket.Identity;
+                {"claims", JsonConvert.SerializeObject(claimsIdentity.Claims.Select(x =>new {x.Value, x.ValueType, x.Type}))},
+                {"authentication-type", claimsIdentity.AuthenticationType},
+                {"role-type", claimsIdentity.RoleClaimType}
+            });
 
-                Logger.Debug("Authentication Properties", new Dictionary<string, object>
-                {
-                    {"claims", JsonConvert.SerializeObject(claimsIdentity.Claims.Select(x =>new {x.Value, x.ValueType, x.Type}))},
-                    {"authentication-type", claimsIdentity.AuthenticationType},
-                    {"role-type", claimsIdentity.RoleClaimType}
-                });
-
-                if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier2Role))
-                {
-                    Logger.Debug("Adding Tier2 Role");
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier2User));
-
-                    Logger.Debug("Adding ConsoleUser Role");
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
-                }
-                else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier1Role))
-                {
-                    Logger.Debug("Adding ConsoleUser Role");
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
-                }
-                else
-                {
-                    Logger.Error("Service Claim Type not available to identify the Role");
-                    throw new SecurityTokenValidationException();
-                }
-
-                var firstName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
-                var lastName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
-                var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
-                
-                claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
-
-                if (!string.IsNullOrEmpty(userEmail))
-                {
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
-                }
-                else
-                {
-                    Logger.Error("Upn not available in the claims to identify UserEmail");
-                    throw new SecurityTokenValidationException();
-                }
-                
-            }
-            catch (Exception ex)
+            if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier2Role))
             {
-                Logger.Error(ex, "IDAMS Authentication Callback Error");
-                throw new Exception();
+                Logger.Debug("Adding Tier2 Role");
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier2User));
+
+                Logger.Debug("Adding ConsoleUser Role");
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
             }
+            else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier1Role))
+            {
+                Logger.Debug("Adding ConsoleUser Role");
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
+            }
+            else
+            {   
+                throw new SecurityTokenValidationException("Service Claim Type not available to identify the Role");
+            }
+
+            var firstName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
+            var lastName = claimsIdentity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
+            var userEmail = claimsIdentity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
+                
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
+
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
+            }
+            else
+            {                    
+                throw new SecurityTokenValidationException("Upn not available in the claims to identify UserEmail");
+            }   
 
             Logger.Debug("End of callback");
-
             return Task.FromResult(0);
         }
 
