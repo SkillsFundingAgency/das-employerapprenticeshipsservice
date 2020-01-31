@@ -92,13 +92,13 @@
       <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.0.5</Version>
+      <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.1</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.5.3</Version>
+      <Version>4.6.8</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.HashingService">
       <Version>1.0.183</Version>
@@ -111,9 +111,6 @@
     </PackageReference>
     <PackageReference Include="System.IdentityModel.Tokens.Jwt">
       <Version>4.0.3.308261200</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>1.1.16</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

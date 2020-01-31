@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SFA.DAS.EmployerAccounts.Interfaces;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 {
-    public class TeamMember
+    public class TeamMember : IAccountIdentifier
     {
         public bool IsUser { get; set; }
         public long Id { get; set; }

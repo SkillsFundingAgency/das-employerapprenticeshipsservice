@@ -47,8 +47,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.0" />
-    <PackageReference Include="Microsoft.AspNet.TelemetryCorrelation" Version="1.0.7" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2" />
     <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.7" />
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
     <PackageReference Include="Microsoft.Extensions.Logging">
@@ -72,12 +71,12 @@
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.0.2</Version>
+      <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.WebApi">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.4388" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.Logging">
@@ -181,6 +180,10 @@
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore\SFA.DAS.EmployerAccounts.ReadStore.csproj">
       <Project>{51f0ba52-dccd-4e6a-9f84-3bdfd501a06b}</Project>
       <Name>SFA.DAS.EmployerAccounts.ReadStore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SFA.DAS.EmployerAccounts.Types\SFA.DAS.EmployerAccounts.Types.csproj">
+      <Project>{d3aa1caa-4367-48a2-b796-fc392b9bec49}</Project>
+      <Name>SFA.DAS.EmployerAccounts.Types</Name>
     </ProjectReference>
     <ProjectReference Include="..\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj">
       <Project>{b520a3e4-8259-4309-94d4-4a99fd32d2f7}</Project>

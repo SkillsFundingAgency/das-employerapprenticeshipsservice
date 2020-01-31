@@ -13,6 +13,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
@@ -26,6 +27,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
+        private const int ViewAgreementNow = 1;
+        private const int ViewAgreementLater = 2;
 
         public EmployerAgreementController(IAuthenticationService owinWrapper,
             EmployerAgreementOrchestrator orchestrator,
@@ -109,7 +112,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(agreement.Data.EmployerAgreement.AgreementType == AgreementType.Levy
+            return View(agreement.Data.EmployerAgreement.AgreementType == AgreementType.Levy ||
+                agreement.Data.EmployerAgreement.AgreementType == AgreementType.Combined
                 ? ControllerConstants.AboutYourAgreementViewName 
                 : ControllerConstants.AboutYourDocumentViewName, agreement);
         }
@@ -121,6 +125,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
             var viewModel = await GetSignedAgreementViewModel(request);
+            var entities = await _mediator.SendAsync(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
+
+            viewModel.LegalEntitiesCount = entities.LegalEntitiesCount;
 
             return View(viewModel);
         }
@@ -265,14 +272,45 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
         }
 
-        private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
+        private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(
+            GetEmployerAgreementRequest request)
         {
             var response = await _mediator.SendAsync(request);
             var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(response);
 
-            var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest { AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId });
-            viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
+            var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest
+                {AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId});
+            viewModel.PreviouslySignedEmployerAgreement =
+                _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
             return viewModel;
+        }
+
+        [HttpGet]
+        [Route("agreements/{agreementId}/whenDoYouWantToView")]
+        public async Task<ActionResult> WhenDoYouWantToView(string agreementId, string hashedAccountId)
+        {
+            var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+            var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
+
+            return View(new WhenDoYouWantToViewViewModel{ EmployerAgreement = agreement.Data.EmployerAgreement });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("agreements/{agreementId}/whenDoYouWantToView")]
+        public async Task<ActionResult> WhenDoYouWantToView(int? choice, string agreementId, string hashedAccountId)
+        {
+            switch (choice ?? 0)
+            {
+                case ViewAgreementNow: return RedirectToAction(ControllerConstants.SignAgreementActionName);
+                case ViewAgreementLater: return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
+                default:
+                {
+                    var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                    var agreement = await _orchestrator.GetById(agreementId, hashedAccountId, userInfo);
+                    return View(new WhenDoYouWantToViewViewModel { EmployerAgreement = agreement.Data.EmployerAgreement, InError = true });
+                }
+            }
         }
     }
 }

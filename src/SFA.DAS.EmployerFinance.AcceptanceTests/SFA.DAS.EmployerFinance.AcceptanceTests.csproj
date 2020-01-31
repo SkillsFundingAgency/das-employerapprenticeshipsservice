@@ -9,15 +9,14 @@
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
-    <PackageReference Include="Microsoft.WindowsAzure.ConfigurationManager" version="3.2.3" />
     <PackageReference Include="Moq" Version="4.5.28" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
-    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.33" />
-    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.33" />
+    <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
+    <PackageReference Include="SFA.DAS.Authorization" Version="6.0.52" />
+    <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles" Version="6.0.52" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
-    <PackageReference Include="SFA.DAS.Authentication" Version="1.0.2" />
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.2103" />
     <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.16" />

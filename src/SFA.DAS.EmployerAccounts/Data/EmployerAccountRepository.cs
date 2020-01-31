@@ -120,6 +120,27 @@ namespace SFA.DAS.EmployerAccounts.Data
                 .Select(ach => ach.PayeRef)
                 .ToList();
 
+            accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
+                .Where(ale => ale.AccountId == accountDetail.AccountId
+                              && ale.Deleted == null
+                              && ale.Agreements.Any(ea =>
+                                  ea.StatusId == EmployerAgreementStatus.Pending ||
+                                  ea.StatusId == EmployerAgreementStatus.Signed))
+                .Select(ale => ale.LegalEntityId)
+                .ToListAsync();
+
+            var templateIds = await _db.Value.Agreements
+                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId) && x.SignedDate.HasValue)
+                .Select(x => x.TemplateId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+
+            accountDetail.AccountAgreementTypes = await _db.Value.AgreementTemplates
+                .Where(x => templateIds.Contains(x.Id))
+                .Select(x => x.AgreementType)
+                .ToListAsync()
+                .ConfigureAwait(false);
+              
             return accountDetail;
         }
 

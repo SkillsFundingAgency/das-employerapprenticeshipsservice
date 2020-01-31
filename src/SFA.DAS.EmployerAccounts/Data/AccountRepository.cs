@@ -93,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource);
             parameters.Add("@sector", createParams.Sector, DbType.String);
             parameters.Add("@aorn", createParams.Aorn, DbType.String);
-            parameters.Add("@AgreementType", createParams.AgreementType, DbType.Boolean);
+            parameters.Add("@AgreementType", createParams.AgreementType, DbType.Int16);
             parameters.Add("@agreementVersion", null, DbType.Int32, ParameterDirection.Output);
 
             await _db.Value.Database.Connection.ExecuteAsync(

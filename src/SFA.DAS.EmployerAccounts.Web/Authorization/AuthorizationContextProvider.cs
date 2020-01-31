@@ -6,6 +6,7 @@ using SFA.DAS.Authorization.EmployerFeatures.Context;
 using SFA.DAS.Authorization.EmployerUserRoles.Context;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.HashingService;
+using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
@@ -15,7 +16,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private readonly IHashingService _hashingService;
         private readonly IAuthenticationService _authenticationService;
 
-        public AuthorizationContextProvider(HttpContextBase httpContext, IHashingService hashingService, IAuthenticationService authenticationService)
+        public AuthorizationContextProvider(HttpContextBase httpContext, 
+                                            IHashingService hashingService,
+                                            IAuthenticationService authenticationService)
         {
             _httpContext = httpContext;
             _hashingService = hashingService;

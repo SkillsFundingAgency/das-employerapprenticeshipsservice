@@ -94,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 Source = message.Source,
                 Address = message.Address,
                 Sector = message.Sector,
-                AgreementType = await UserIsWhitelistedForEOIOrThereIsAlreadyAnEOIAgreementForThisAccount(owner) ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Levy
+                AgreementType = await UserIsWhitelistedForEOIOrThereIsAlreadyAnEOIAgreementForThisAccount(owner) ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Combined
             };
 
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);

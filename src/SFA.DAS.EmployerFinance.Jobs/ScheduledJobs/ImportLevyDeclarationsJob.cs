@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             _messageSession = messageSession;
         }
 
-        public Task Run([TimerTrigger("0 0 15 20 * *")] TimerInfo timer, ILogger logger)
+        public Task Run([TimerTrigger("0 0 15 23 * *")] TimerInfo timer, ILogger logger)
         {
             return _messageSession.Send(new ImportLevyDeclarationsCommand());
         }

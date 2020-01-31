@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
         }
 
         [Test]
-        public async Task ThenAnExpressionOfInterestAgreementIsCreated()
+        public async Task ThenACombinedAgreementIsCreated()
         {
             var accountId = 12345;
             HashingService.Setup(x => x.DecodeValue(Command.HashedAccountId)).Returns(accountId);
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
 
             AccountRepository.Verify(x =>
                 x.CreateLegalEntityWithAgreement(It.Is<CreateLegalEntityWithAgreementParams>(y =>
-                    y.AgreementType == AgreementType.Levy)));
+                    y.AgreementType == AgreementType.Combined)));
         }
 
         [Test]
