@@ -7,5 +7,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public EmployerAgreementView EmployerAgreement { get; set; }
         public EmployerAgreementView PreviouslySignedEmployerAgreement { get; set; }
         public bool NoChoiceSelected { get; set; }
+        public int LegalEntitiesCount { get; set; }
     }
 }
