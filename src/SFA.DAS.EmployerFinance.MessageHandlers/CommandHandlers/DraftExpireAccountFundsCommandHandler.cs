@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -45,17 +46,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
             var now = _currentDateTime.Now;
             var fundsIn = await _levyFundsInRepository.GetLevyFundsIn(message.AccountId);
-            var fundsOut = await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId);
+            var fundsOut = (await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId)).ToList();
             var existingExpiredFunds = await _expiredFundsRepository.GetDraft(message.AccountId);
 
-            if(message.DateTo != null)
+            if(message.DateTo != null && fundsOut.Count>0)
             {
-                fundsIn = fundsIn.Where(c =>
-                    new DateTime(c.CalendarPeriodYear, c.CalendarPeriodMonth, 1) <=
-                    new DateTime(message.DateTo.Value.Year, message.DateTo.Value.Month, 1)).ToList();
-                
                 fundsOut = fundsOut.Where(c =>
-                    new DateTime(c.CalendarPeriodYear, c.CalendarPeriodMonth, 1) <=
+                    new DateTime(c.CalendarPeriodYear, c.CalendarPeriodMonth, 1) <
                     new DateTime(message.DateTo.Value.Year, message.DateTo.Value.Month, 1)).ToList();
             }
             
@@ -67,7 +64,19 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 _configuration.FundsExpiryPeriod,
                 now);
 
-            await _expiredFundsRepository.CreateDraft(message.AccountId, expiredFunds.ToExpiredFundsList(), now);
+            if(!message.DateTo.HasValue)
+            {
+                message.DateTo = DateTime.UtcNow;
+            }
+
+            
+            var currentCalendarPeriod = new CalendarPeriod(message.DateTo.Value.Year, message.DateTo.Value.Month);
+            if(!expiredFunds.ContainsKey(currentCalendarPeriod))
+            {
+                expiredFunds.Add(currentCalendarPeriod,0);
+            }
+            
+            await _expiredFundsRepository.CreateDraft(message.AccountId, expiredFunds.Where(c=>c.Key.Equals(currentCalendarPeriod)).ToDictionary(key=>key.Key, value=>value.Value).ToExpiredFundsList(), now);
 
             _logger.Info($"DRAFT: Expired '{expiredFunds.Count}' month(s) of funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
         }

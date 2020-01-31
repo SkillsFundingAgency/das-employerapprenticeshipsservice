@@ -95,5 +95,16 @@ namespace SFA.DAS.EAS.Account.Api.UnitTests.Orchestrators.AccountsOrchestratorTe
 
             Assert.IsFalse(response.Result.Data.Data.First().IsAllowedPaymentOnService);
         }
+
+        [Test]
+        public async Task AndThereAreNoSignedAgreementsThenTheyShouldNotBeAllowedPaymentOnTheService()
+        {
+            _expectedAccount.ApprenticeshipEmployerType = ApprenticeshipEmployerType.Levy;
+            _expectedAccount.AccountAgreementType = AccountAgreementType.Unknown;
+
+            var response = _orchestrator.GetAllAccountsWithBalances(DateTime.Now.ToString(), 10, 1);
+
+            Assert.IsFalse(response.Result.Data.Data.First().IsAllowedPaymentOnService);
+        }
     }
 }
