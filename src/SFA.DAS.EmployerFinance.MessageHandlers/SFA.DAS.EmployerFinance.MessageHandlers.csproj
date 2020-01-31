@@ -16,7 +16,7 @@
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
     <PackageReference Include="SFA.DAS.AutoConfiguration" Version="2.0.1" />
     <PackageReference Include="SFA.DAS.Authentication" Version="1.1.2" />
-    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.34" />
+    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.36-con-1360-expired0001" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Messages" Version="1.6.890" />
     <PackageReference Include="SFA.DAS.Messaging" Version="3.0.0.63765" />
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
