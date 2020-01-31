@@ -173,7 +173,7 @@
       <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain">
-      <Version>1.4.276</Version>
+      <Version>1.4.278</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage">
       <Version>3.0.75</Version>

@@ -26,7 +26,7 @@
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Types" Version="4.1.355" />
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
