@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var domain = Request.IsLocal ? Request.Url.Host :
                 Request.Url.Host.IndexOf('.') > 0 ? Request.Url.Host.Substring(Request.Url.Host.IndexOf('.')) :
-                Request.Url.Authority;
+                Request.Url.Host;
 
             var cookies = new List<HttpCookie>
             {
