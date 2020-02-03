@@ -35,7 +35,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private bool _isAuthenticated = true;
         private List<Claim> _claims;
         private OrchestratorResponse<AccountDashboardViewModel> _orchestratorResponse;
+        private OrchestratorResponse<AccountSummaryViewModel> _orchestratorAccountSummaryResponse;
         private AccountDashboardViewModel _accountViewModel;
+        private AccountSummaryViewModel _accountSummaryViewModel;
         private Account _account;
         private string _hashedAccountId;
         private string _userId;
@@ -76,10 +78,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 Account = _account
             };
 
+            _accountSummaryViewModel = new AccountSummaryViewModel
+            {
+                Account = _account
+            };
+
             _orchestratorResponse = new OrchestratorResponse<AccountDashboardViewModel>()
             {
                 Status = System.Net.HttpStatusCode.OK,
                 Data = _accountViewModel
+            };
+
+            _orchestratorAccountSummaryResponse = new OrchestratorResponse<AccountSummaryViewModel>()
+            {
+                Status = System.Net.HttpStatusCode.OK,
+                Data = _accountSummaryViewModel
             };
 
             mockEmployerTeamOrchestrator
@@ -136,11 +149,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
             var model = new TestModel(_hashedAccountId);
 
+            mockEmployerTeamOrchestrator
+                .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
+                .ReturnsAsync(_orchestratorAccountSummaryResponse);
             //Act
             var result = _controller.SupportUserBanner(model) as PartialViewResult;
 
             //Assert
-            mockEmployerTeamOrchestrator.Verify(m => m.GetAccount(_hashedAccountId, It.IsAny<string>()), Times.Once);
+            mockEmployerTeamOrchestrator.Verify(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -150,6 +166,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _isAuthenticated = true;
             _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
             var model = new TestModel(_hashedAccountId);
+
+            mockEmployerTeamOrchestrator
+                .Setup(m => m.GetAccountSummary(_hashedAccountId, It.IsAny<string>()))
+                .ReturnsAsync(_orchestratorAccountSummaryResponse);
 
             //Act
             var result = _controller.SupportUserBanner(model) as PartialViewResult;
@@ -169,6 +189,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockEmployerTeamOrchestrator
                .Setup(m => m.GetAccount(_hashedAccountId, It.IsAny<string>()))
                .ReturnsAsync(new OrchestratorResponse<AccountDashboardViewModel> { Status = System.Net.HttpStatusCode.BadRequest });
+
+            mockEmployerTeamOrchestrator
+                .Setup(m => m.GetAccountSummary(_hashedAccountId,It.IsAny<string>()))
+                .ReturnsAsync(new OrchestratorResponse<AccountSummaryViewModel> { Status = System.Net.HttpStatusCode.BadRequest });
 
             //Act
             var result = _controller.SupportUserBanner(model) as PartialViewResult;
