@@ -128,7 +128,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             {
                 { new CalendarPeriod(2018, 03), 1000 },
                 { new CalendarPeriod(2018, 04), 1000 },
-                { new CalendarPeriod(2018, 05), 0 }
+                { new CalendarPeriod(2018, 05), 0 },
+                { new CalendarPeriod(Now.Year, Now.Month), 0 }
             };
 
             MockCurrentDateTime = new Mock<ICurrentDateTime>();
