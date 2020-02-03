@@ -41,9 +41,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             var teamMembers = Task.Run(() => _employerAccountTeamRepository.GetAccountTeamMembers(accountHashedId?.ToString())).Result;
             var accountOwner = teamMembers.First(tm => tm.Role == Role.Owner);
             var claimsIdentity = (ClaimsIdentity)_httpContext.User.Identity;
-            claimsIdentity.AddClaim(new Claim("sub", accountOwner.UserRef));
+            claimsIdentity.AddClaim(new Claim("sub", accountOwner.UserRef.ToString()));
             claimsIdentity.AddClaim(new Claim(RouteValueKeys.AccountHashedId, accountHashedId?.ToString()));
-            claimsIdentity.AddClaim(new Claim(DasClaimTypes.Id, accountOwner.UserRef));
+            claimsIdentity.AddClaim(new Claim(DasClaimTypes.Id, accountOwner.UserRef.ToString()));
             claimsIdentity.AddClaim(new Claim(DasClaimTypes.Email, accountOwner.Email));
 
             var authorizationContext = _authorizationContextProvider.GetAuthorizationContext();
