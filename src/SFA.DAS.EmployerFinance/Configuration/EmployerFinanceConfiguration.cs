@@ -32,5 +32,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public AccountApiConfiguration AccountApi { get; set; }
         public string ReservationsBaseUrl { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
+        public string ZenDeskSnippetKey { get; set; }
+        public string ZenDeskSectionId { get; set; }
     }
 }
