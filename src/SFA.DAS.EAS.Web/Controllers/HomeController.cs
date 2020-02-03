@@ -78,6 +78,13 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
+        [Route("cookieConsent")]
+        public ActionResult CookieConsent()
+        {
+            return Redirect(Url.EmployerAccountsAction("cookieConsent/settings", false));
+        }
+
+        [HttpGet]
         [Route("help")]
         public ActionResult Help()
         {
