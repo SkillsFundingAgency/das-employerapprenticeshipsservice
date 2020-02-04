@@ -132,59 +132,81 @@ hr.dashboard-heading-separator {
     }
 }
 
-.das-panel--featured {
-    background: $govuk-blue;
-    color: #fff;
-    margin-top: 20px;
+.das-panel--non-featured {
+    padding: 0px;
 
-    & > p {
-        color: #fff;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-
-    & > dl {
-        color: #fff;
+    & > dl.das-definition-list {
         font-size: 1em;
 
+        & > dt.das-definition-list__title {
+            text-align: left;
+            font-weight: bold;
+        }
+
         & > dd.das-definition-list__definition {
-            border-color: rgba(255, 255, 255, .5);
+            text-align: right;
         }
     }
 
-    .das-panel__link {
-        color: #fff;
-        font-weight: 700;
-
-        &:hover {
-            text-decoration: non
-        }
-
-        &:focus {
-            color: #000;
-        }
+    & > dl.das-definition-list--with-separator {
+        border-bottom: 5px solid #bfc1c3;
+        border-color: $grey-2;
     }
 }
 
-.das-panel__heading {
-    font-size: 19px;
-    font-weight: 700;
-    margin-top: 0;
-    margin-bottom: 0;
+    .das-panel--featured {
+        background: $govuk-blue;
+        color: #fff;
+        margin-top: 20px;
 
-    @include media(tablet) {
-        font-size: 24px;
+        & > p {
+            color: #fff;
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
+        & > dl {
+            color: #fff;
+            font-size: 1em;
+
+            & > dd.das-definition-list__definition {
+                border-color: rgba(255, 255, 255, .5);
+            }
+        }
+
+        .das-panel__link {
+            color: #fff;
+            font-weight: 700;
+
+            &:hover {
+                text-decoration: non
+            }
+
+            &:focus {
+                color: #000;
+            }
+        }
     }
 
-    .das-panel--featured & {
-        font-size: 24px;
+    .das-panel__heading {
+        font-size: 19px;
+        font-weight: 700;
+        margin-top: 0;
+        margin-bottom: 0;
 
         @include media(tablet) {
-            font-size: 36px;
-            line-height: 1.2;
+            font-size: 24px;
+        }
+
+        .das-panel--featured & {
+            font-size: 24px;
+
+            @include media(tablet) {
+                font-size: 36px;
+                line-height: 1.2;
+            }
         }
     }
-}
 

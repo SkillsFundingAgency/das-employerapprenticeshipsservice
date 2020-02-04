@@ -849,6 +849,8 @@
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
     <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

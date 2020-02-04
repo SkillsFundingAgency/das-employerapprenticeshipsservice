@@ -32,6 +32,7 @@ using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.Reservations;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -228,7 +229,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
                     ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
-                    ReservationsCount = reservationsResponse.Reservations.Count()
+                    ReservationsCount = reservationsResponse.Reservations.Count(),
+                    ConfirmedReservationsCount = reservationsResponse.Reservations.Count(x => x.Status == ReservationStatus.Confirmed)
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.

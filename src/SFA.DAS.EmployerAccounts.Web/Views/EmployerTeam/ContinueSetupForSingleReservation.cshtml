@@ -1,0 +1,19 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+
+<h3 class="das-panel__heading">Continue setting up an apprenticeship</h3>
+<p>You've reserved funding for the following apprenticeship:</p>
+
+@{ 
+    var courseName = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.CourseName;
+    var startDate = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.StartDate;
+}
+
+<dl class="das-definition-list das-definition-list--with-separator">
+    <dt class="das-definition-list__title">Course</dt>
+    <dd class="das-definition-list__definition">@courseName</dd>
+
+    <dt class="das-definition-list__title">Start date</dt>
+    <dd class="das-definition-list__definition">@startDate</dd>
+</dl>
+
+<p><a href="@Url.Action("ContinueSetupCreateAdvert", "EmployerTeam")" class="button">Continue</a></p>

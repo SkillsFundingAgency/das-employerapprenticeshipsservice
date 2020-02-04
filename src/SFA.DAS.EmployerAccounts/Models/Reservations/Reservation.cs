@@ -12,5 +12,14 @@ namespace SFA.DAS.EmployerAccounts.Models.Reservations
         public DateTime CreatedDate { get; set; }
         public long AccountId { get; set; }
         public Course Course { get; set; }
+        public ReservationStatus Status { get; set; }
+    }
+
+    public enum ReservationStatus
+    {
+        Pending = 0,
+        Confirmed = 1,
+        Completed = 2,
+        Deleted = 3
     }
 }

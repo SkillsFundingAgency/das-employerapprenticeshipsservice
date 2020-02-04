@@ -322,6 +322,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
+        [HttpGet]
+        [Route("continuesetupcreateadvert")]
+        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("continuesetupcreateadvert")]
+        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId, string choice)
+        {            
+            switch (choice ?? "None")
+            {
+                case "No": return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
+                case "Yes": return Redirect(Url.EmployerRecruitAction());
+                default:
+                    ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
+                    return View();
+            }
+        }
+
         [ChildActionOnly]
         public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
@@ -342,6 +364,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
+            viewModel.FeaturedPanel = !model.ApprenticeshipAdded;
 
             if (model.PayeSchemeCount == 0)
             {
@@ -353,9 +376,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     viewModel.ViewName = "SignAgreement";
                 }
-                else if (!model.HasReservations && model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
+                else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
                 {
-                    viewModel.ViewName = "CheckFunding";
+                    if (model.ReservationsCount == 1 && model.ConfirmedReservationsCount == 1 && !model.ApprenticeshipAdded)
+                    {
+                        viewModel.ViewName = "ContinueSetupForSingleReservation";
+                        viewModel.FeaturedPanel = false;
+                    }
+                    else if (!model.HasReservations)
+                    {
+                        viewModel.ViewName = "CheckFunding";
+                    }                    
                 }
             }
 
@@ -385,6 +416,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
             }
 
+
+            // child actions returns partial views for each part fo the home page.
             return PartialView(viewModel);
         }
 
@@ -558,6 +591,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult CheckFunding(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
