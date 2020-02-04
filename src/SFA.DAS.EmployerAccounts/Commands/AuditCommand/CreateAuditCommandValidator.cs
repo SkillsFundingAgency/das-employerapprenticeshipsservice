@@ -24,7 +24,10 @@ namespace SFA.DAS.EmployerAccounts.Commands.AuditCommand
 
             if (item.EasAuditMessage.ChangedProperties==null || !item.EasAuditMessage.ChangedProperties.Any())
             {
-                validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
+                if (item.EasAuditMessage.Category == null || !item.EasAuditMessage.Category.Equals("VIEW", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    validationResult.AddError(nameof(item.EasAuditMessage.ChangedProperties));
+                }
             }
             
             if (string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Id) || string.IsNullOrEmpty(item.EasAuditMessage.AffectedEntity?.Type))

@@ -25,6 +25,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Configuration
                     IdentifierUri = "--- configuration value goes here ---",
                     Tenant = "--- configuration value goes here ---"
                 },
+                EmployerAccountsConfiguration = new EmployerAccountsConfiguration(),
                 SiteValidator = new SiteValidatorSettings
                 {
                     Audience = "--- configuration value goes here ---",
