@@ -64,5 +64,27 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.IsNotNull(result);
             Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
         }
+
+        [Test]
+        public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.AgreementsToSign = false;
+            model.ReservationsCount = 1;
+            model.ConfirmedReservationsCount = 1;
+            model.ApprenticeshipAdded = false;
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            model.AccountViewModel = new Model.Account();
+            model.AccountViewModel.Providers.Add(new Model.Provider());
+
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ContinueSetupForSingleReservation", (result.Model as dynamic).ViewName);
+        }
     }
 }
