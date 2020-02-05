@@ -134,23 +134,38 @@ hr.dashboard-heading-separator {
 
 .das-panel--non-featured {
     padding: 0px;
+    margin-top: 30px;
 
     & > dl.das-definition-list {
         font-size: 1em;
+        width: 100%;
+        display: table;
+        margin-bottom: 20px;
 
-        & > dt.das-definition-list__title {
-            text-align: left;
-            font-weight: bold;
-        }
+        & > div.das-definition-list__row {
+            display: table-row;
 
-        & > dd.das-definition-list__definition {
-            text-align: right;
+            & > dt.das-definition-list__title {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 20px;
+                width: 30%;
+                font-weight: bold;
+                display: table-cell;
+                border-bottom: 1px solid;
+                border-color: $grey-2;
+            }
+
+            & > dd.das-definition-list__definition {
+                width: 70%;
+                display: table-cell;
+                border-bottom: 1px solid;
+                border-color: $grey-2;
+            }
         }
     }
 
     & > dl.das-definition-list--with-separator {
-        border-bottom: 5px solid #bfc1c3;
-        border-color: $grey-2;
     }
 }
 

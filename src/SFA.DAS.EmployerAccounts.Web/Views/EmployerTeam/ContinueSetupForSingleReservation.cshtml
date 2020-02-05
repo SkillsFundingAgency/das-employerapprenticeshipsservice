@@ -9,11 +9,14 @@
 }
 
 <dl class="das-definition-list das-definition-list--with-separator">
-    <dt class="das-definition-list__title">Course</dt>
-    <dd class="das-definition-list__definition">@courseName</dd>
-
-    <dt class="das-definition-list__title">Start date</dt>
-    <dd class="das-definition-list__definition">@startDate</dd>
+    <div class="das-definition-list__row">
+        <dt class="das-definition-list__title">Course</dt>
+        <dd class="das-definition-list__definition">@courseName</dd>
+    </div>
+    <div class="das-definition-list__row">
+        <dt class="das-definition-list__title">Start date</dt>
+        <dd class="das-definition-list__definition">@startDate</dd>
+    </div>
 </dl>
 
 <p><a href="@Url.Action("ContinueSetupCreateAdvert", "EmployerTeam")" class="button">Continue</a></p>

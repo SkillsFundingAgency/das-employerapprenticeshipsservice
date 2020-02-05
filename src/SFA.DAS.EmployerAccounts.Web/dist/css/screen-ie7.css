@@ -4646,17 +4646,29 @@ hr.dashboard-heading-separator {
       padding: 30px; } }
 
 .das-panel--non-featured {
-  padding: 0px; }
+  padding: 0px;
+  margin-top: 30px; }
   .das-panel--non-featured > dl.das-definition-list {
-    font-size: 1em; }
-    .das-panel--non-featured > dl.das-definition-list > dt.das-definition-list__title {
-      text-align: left;
-      font-weight: bold; }
-    .das-panel--non-featured > dl.das-definition-list > dd.das-definition-list__definition {
-      text-align: right; }
-  .das-panel--non-featured > dl.das-definition-list--with-separator {
-    border-bottom: 5px solid #bfc1c3;
-    border-color: #bfc1c3; }
+    font-size: 1em;
+    width: 100%;
+    display: table;
+    margin-bottom: 20px; }
+    .das-panel--non-featured > dl.das-definition-list > div.das-definition-list__row {
+      display: table-row; }
+      .das-panel--non-featured > dl.das-definition-list > div.das-definition-list__row > dt.das-definition-list__title {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 20px;
+        width: 30%;
+        font-weight: bold;
+        display: table-cell;
+        border-bottom: 1px solid;
+        border-color: #bfc1c3; }
+      .das-panel--non-featured > dl.das-definition-list > div.das-definition-list__row > dd.das-definition-list__definition {
+        width: 70%;
+        display: table-cell;
+        border-bottom: 1px solid;
+        border-color: #bfc1c3; }
 
 .das-panel--featured {
   background: #005ea5;
