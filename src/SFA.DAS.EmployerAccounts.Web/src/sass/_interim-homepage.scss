@@ -135,93 +135,61 @@ hr.dashboard-heading-separator {
 .das-panel--non-featured {
     padding: 0px;
     margin-top: 30px;
+}
 
-    & > dl.das-definition-list {
-        font-size: 1em;
-        width: 100%;
-        display: table;
-        margin-bottom: 20px;
+.das-panel--featured {
+    background: $govuk-blue;
+    color: #fff;
+    margin-top: 20px;
 
-        & > div.das-definition-list__row {
-            display: table-row;
+    & > p {
+        color: #fff;
 
-            & > dt.das-definition-list__title {
-                padding-top: 10px;
-                padding-bottom: 10px;
-                padding-right: 20px;
-                width: 30%;
-                font-weight: bold;
-                display: table-cell;
-                border-bottom: 1px solid;
-                border-color: $grey-2;
-            }
-
-            & > dd.das-definition-list__definition {
-                width: 70%;
-                display: table-cell;
-                border-bottom: 1px solid;
-                border-color: $grey-2;
-            }
+        &:last-child {
+            margin-bottom: 0;
         }
     }
 
-    & > dl.das-definition-list--with-separator {
+    & > dl {
+        color: #fff;
+        font-size: 1em;
+
+        & > dd.das-definition-list__definition {
+            border-color: rgba(255, 255, 255, .5);
+        }
+    }
+
+    .das-panel__link {
+        color: #fff;
+        font-weight: 700;
+
+        &:hover {
+            text-decoration: non
+        }
+
+        &:focus {
+            color: #000;
+        }
     }
 }
 
-    .das-panel--featured {
-        background: $govuk-blue;
-        color: #fff;
-        margin-top: 20px;
+.das-panel__heading {
+    font-size: 19px;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 0;
 
-        & > p {
-            color: #fff;
-
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-
-        & > dl {
-            color: #fff;
-            font-size: 1em;
-
-            & > dd.das-definition-list__definition {
-                border-color: rgba(255, 255, 255, .5);
-            }
-        }
-
-        .das-panel__link {
-            color: #fff;
-            font-weight: 700;
-
-            &:hover {
-                text-decoration: non
-            }
-
-            &:focus {
-                color: #000;
-            }
-        }
+    @include media(tablet) {
+        font-size: 24px;
     }
 
-    .das-panel__heading {
-        font-size: 19px;
-        font-weight: 700;
-        margin-top: 0;
-        margin-bottom: 0;
+    .das-panel--featured & {
+        font-size: 24px;
 
         @include media(tablet) {
-            font-size: 24px;
-        }
-
-        .das-panel--featured & {
-            font-size: 24px;
-
-            @include media(tablet) {
-                font-size: 36px;
-                line-height: 1.2;
-            }
+            font-size: 36px;
+            line-height: 1.2;
         }
     }
+}
 

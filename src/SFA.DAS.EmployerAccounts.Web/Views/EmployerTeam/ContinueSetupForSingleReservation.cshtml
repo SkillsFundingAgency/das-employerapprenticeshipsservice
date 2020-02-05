@@ -1,22 +1,37 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
-<h3 class="das-panel__heading">Continue setting up an apprenticeship</h3>
-<p>You've reserved funding for the following apprenticeship:</p>
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large">
+        Continue setting up an apprenticeship
+    </h2>
+    <p>You've reserved funding for the following apprenticeship: </p>
 
-@{ 
-    var courseName = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.CourseName;
-    var startDate = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.StartDate;
-}
+    @{
+        var courseName = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.CourseName;
+        var startDate = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.StartDate;
+    }
 
-<dl class="das-definition-list das-definition-list--with-separator">
-    <div class="das-definition-list__row">
-        <dt class="das-definition-list__title">Course</dt>
-        <dd class="das-definition-list__definition">@courseName</dd>
-    </div>
-    <div class="das-definition-list__row">
-        <dt class="das-definition-list__title">Start date</dt>
-        <dd class="das-definition-list__definition">@startDate</dd>
-    </div>
-</dl>
-
-<p><a href="@Url.Action("ContinueSetupCreateAdvert", "EmployerTeam")" class="button">Continue</a></p>
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Course
+            </th>
+            <td class="tw-65">
+                @courseName
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Start date
+            </th>
+            <td>
+                @startDate
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@Url.Action("ContinueSetupCreateAdvert", "EmployerTeam")" role="button" draggable="false" class="button">
+            Continue
+        </a>
+    </p>
+</section>
