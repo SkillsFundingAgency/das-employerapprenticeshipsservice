@@ -416,8 +416,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
             }
 
-
-            // child actions returns partial views for each part fo the home page.
             return PartialView(viewModel);
         }
 
