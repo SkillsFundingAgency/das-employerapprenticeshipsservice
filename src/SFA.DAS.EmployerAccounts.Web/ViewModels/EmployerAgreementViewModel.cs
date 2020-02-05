@@ -14,5 +14,9 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         ///     up the company.
         /// </summary>
         public bool OrganisationLookupPossible { get; set; }
+
+        public bool NoChoiceSelected { get; set; }
+
+        public int LegalEntitiesCount { get; set; }
     }
 }
