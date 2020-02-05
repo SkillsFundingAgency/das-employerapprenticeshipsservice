@@ -281,5 +281,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.AreEqual(expectedApprenticeshipEmployerType, model.Data.ApprenticeshipEmployerType);
         }
+        
+        [Test]
+        public async Task ThenReturnAccountSummary()
+        {
+            var model = await _orchestrator.GetAccountSummary(HashedAccountId, UserId);
+            Assert.IsNotNull(model.Data);
+        }
     }
 }

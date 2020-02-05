@@ -55,7 +55,7 @@
     <!--[if IE 8]><link href="@Styles.Url("~/bundles/screenie8")" media="screen" rel="stylesheet" /><![endif]-->
     <!--[if gt IE 8]><!-->
     <link href="@Styles.Url("~/bundles/screen")" media="all" rel="stylesheet" />
-    <!--<![endif]-->    
+    <!--<![endif]-->
 
     @Html.Partial("GoogleAnalyticsInfo")
 
@@ -96,8 +96,9 @@
     </script>
 
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
+    @Html.Partial("_ZenDeskWidget")
 </head>
-<body id="@ViewBag.PageID">
+<body id="@ViewBag.PageID">    
     <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
