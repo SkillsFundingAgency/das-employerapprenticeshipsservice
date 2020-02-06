@@ -19,8 +19,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             [TimerTrigger("0 0 0 28 * *")] TimerInfo timer, 
             ILogger logger)
         {
-            return Task.FromResult(0);
-            // return _messageSession.Send(new ExpireFundsCommand());
+            return _messageSession.Send(new ExpireFundsCommand());
         }
     }
 }
