@@ -1,32 +1,10 @@
 ﻿using System.Net;
 using System.Web.Mvc;
-using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
-{    
-   
-    public class ErrorController : BaseController
+{
+    public class ErrorController : Controller
     {
-        public ErrorController(
-            IAuthenticationService owinWrapper, 
-            IMultiVariantTestingService multiVariantTestingService, 
-            ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
-        {
-        }
-
-        [DasAuthorize]
-        [Route("error/accessdenied/{HashedAccountId}")]
-        public ActionResult AccessDenied(string hashedAccountId)
-        {
-            ViewBag.AccountId = hashedAccountId;
-
-            return View();
-        }
-
-
         [Route("accessdenied")]
         public ActionResult AccessDenied()
         {
@@ -49,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.NotFound;
 
             return View();
-        }
-       
+        }      
     }
 }

@@ -96,7 +96,7 @@
       <Version>1.0.43</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.0.5</Version>
+      <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="NLog">
       <Version>4.6.8</Version>

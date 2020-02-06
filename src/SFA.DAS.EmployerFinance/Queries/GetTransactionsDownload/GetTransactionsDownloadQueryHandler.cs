@@ -6,6 +6,7 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Models.Transaction;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
@@ -31,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
             var endDate = message.EndDate.ToDate();
             var endDateBeginningOfNextMonth = new DateTime(endDate.Year, endDate.Month, 1).AddMonths(1);
             var transactions = await _transactionRepository.GetAllTransactionDetailsForAccountByDate(message.AccountId, message.StartDate, endDateBeginningOfNextMonth);
-
+                       
             if (!transactions.Any())
             {
                 throw new ValidationException("There are no transactions in the date range");
@@ -39,6 +40,11 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
 
             var accountResponse = await _accountApiClient.GetAccount(message.AccountId);
             var apprenticeshipEmployerTypeEnum = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountResponse.ApprenticeshipEmployerType, true);
+
+            foreach (var transaction in transactions)
+            {
+                GenerateTransactionDescription(transaction);
+            }
 
             var fileFormatter = _transactionsFormatterFactory.GetTransactionsFormatterByType(
                 message.DownloadFormat.Value,
@@ -50,6 +56,27 @@ namespace SFA.DAS.EmployerFinance.Queries.GetTransactionsDownload
                 FileExtension = fileFormatter.FileExtension,
                 MimeType = fileFormatter.MimeType
             };
+        }
+
+        private void GenerateTransactionDescription(TransactionDownloadLine transaction)
+        {
+            transaction.Description = transaction.TransactionType;
+
+            if (transaction.TransactionType.Equals("Payment", StringComparison.OrdinalIgnoreCase))
+            {
+                transaction.Description = transaction.TrainingProviderFormatted;
+            }
+            else if (transaction.TransactionType.Equals("Transfer", StringComparison.OrdinalIgnoreCase))
+            {
+                if (transaction.TransferSenderAccountId.Equals(transaction.AccountId))
+                {
+                    transaction.Description = $"Transfer sent to {transaction.TransferReceiverAccountName}";
+                }
+                else
+                {
+                    transaction.Description = $"Transfer received from {transaction.TransferSenderAccountName}";
+                }
+            }
         }
     }
 }

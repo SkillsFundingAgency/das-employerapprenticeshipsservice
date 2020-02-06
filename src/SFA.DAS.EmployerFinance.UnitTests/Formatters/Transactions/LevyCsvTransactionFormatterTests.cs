@@ -36,20 +36,21 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
             
             Assert.AreEqual("Transaction date", headerColumns[0]);
             Assert.AreEqual("Transaction type", headerColumns[1]);
-            Assert.AreEqual("PAYE scheme", headerColumns[2]);
-            Assert.AreEqual("Payroll month", headerColumns[3]);
-            Assert.AreEqual("Levy declared", headerColumns[4]);
-            Assert.AreEqual("English %", headerColumns[5]);
-            Assert.AreEqual("10% top up", headerColumns[6]);
-            Assert.AreEqual("Training provider", headerColumns[7]);
-            Assert.AreEqual("Unique learner number", headerColumns[8]);
-            Assert.AreEqual("Apprentice", headerColumns[9]);
-            Assert.AreEqual("Apprenticeship training course", headerColumns[10]);
-            Assert.AreEqual("Course level", headerColumns[11]);
-            Assert.AreEqual("Paid from levy", headerColumns[12]);
-            Assert.AreEqual("Your contribution", headerColumns[13]);
-            Assert.AreEqual("Government contribution", headerColumns[14]);
-            Assert.AreEqual("Total", headerColumns[15]);
+            Assert.AreEqual("Description", headerColumns[2]);
+            Assert.AreEqual("PAYE scheme", headerColumns[3]);
+            Assert.AreEqual("Payroll month", headerColumns[4]);
+            Assert.AreEqual("Levy declared", headerColumns[5]);
+            Assert.AreEqual("English %", headerColumns[6]);
+            Assert.AreEqual("10% top up", headerColumns[7]);
+            Assert.AreEqual("Training provider", headerColumns[8]);
+            Assert.AreEqual("Unique learner number", headerColumns[9]);
+            Assert.AreEqual("Apprentice", headerColumns[10]);
+            Assert.AreEqual("Apprenticeship training course", headerColumns[11]);
+            Assert.AreEqual("Course level", headerColumns[12]);
+            Assert.AreEqual("Paid from levy", headerColumns[13]);
+            Assert.AreEqual("Your contribution", headerColumns[14]);
+            Assert.AreEqual("Government contribution", headerColumns[15]);
+            Assert.AreEqual("Total", headerColumns[16]);
         }
 
         [Test]
@@ -75,20 +76,21 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Formatters.Transactions
 
                 Assert.AreEqual(DateTime.Today.AddMonths(Convert.ToInt32(-i)).ToString("dd/MM/yyyy"), dataRow[0]);
                 Assert.AreEqual($"{TransactionTypePrefix}{i}", dataRow[1]);
-                Assert.AreEqual($"{EmpRefPrefix}{i}", dataRow[2]);
-                Assert.AreEqual($"{PeriodEndPrefix}{i}", dataRow[3]);
-                Assert.AreEqual((i * 1000).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[4]); // LevyDeclared
-                Assert.AreEqual((i * 10).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[5]);
-                Assert.AreEqual((i * 100).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[6]);
-                Assert.AreEqual($"\"{TrainingProviderPrefix}{i}\"", dataRow[7]);
-                Assert.AreEqual($"{UlnPrefix}{i}", dataRow[8]);
-                Assert.AreEqual($"{ApprenticePrefix}{i}", dataRow[9]);
-                Assert.AreEqual($"{ApprenticeTrainingCoursePrefix}{i}", dataRow[10]);
-                Assert.AreEqual($"{ApprenticeTrainingCourseLevel}{i}", dataRow[11]);
-                Assert.AreEqual((i * 10).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[12]);
-                Assert.AreEqual((i).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[13]);
-                Assert.AreEqual((i * 10000).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[14]);
-                Assert.AreEqual(((i* 1000) + (i * 100)).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[15]);
+                Assert.AreEqual($"{DescriptionPrefix}{i}", dataRow[2]);
+                Assert.AreEqual($"{EmpRefPrefix}{i}", dataRow[3]);
+                Assert.AreEqual($"{PeriodEndPrefix}{i}", dataRow[4]);
+                Assert.AreEqual((i * 1000).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[5]); // LevyDeclared
+                Assert.AreEqual((i * 10).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[6]);
+                Assert.AreEqual((i * 100).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[7]);
+                Assert.AreEqual($"\"{TrainingProviderPrefix}{i}\"", dataRow[8]);
+                Assert.AreEqual($"{UlnPrefix}{i}", dataRow[9]);
+                Assert.AreEqual($"{ApprenticePrefix}{i}", dataRow[10]);
+                Assert.AreEqual($"{ApprenticeTrainingCoursePrefix}{i}", dataRow[11]);
+                Assert.AreEqual($"{ApprenticeTrainingCourseLevel}{i}", dataRow[12]);
+                Assert.AreEqual((i * 10).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[13]);
+                Assert.AreEqual((i).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[14]);
+                Assert.AreEqual((i * 10000).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[15]);
+                Assert.AreEqual(((i* 1000) + (i * 100)).ToString("0.00000", CultureInfo.CurrentCulture), dataRow[16]);
                 i++;
             }
         }
