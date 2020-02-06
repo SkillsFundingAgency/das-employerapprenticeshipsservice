@@ -2,7 +2,7 @@
 
 @if (!Model.ViewName.Equals("Empty"))
 {
-    <div class="das-panel @(Model.FeaturedPanel ? "das-panel--featured" : "das-panel--non-featured")">
+    <div class="das-panel @(Model.IsFeaturedPanel ? "das-panel--featured" : "das-panel--non-featured")">
         @Html.Action(Model.ViewName, new { model = Model.Data })
     </div>
 }

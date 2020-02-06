@@ -332,16 +332,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("continuesetupcreateadvert")]
-        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId, string choice)
-        {            
-            switch (choice ?? "None")
+        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
+        {
+            if (!requiresAdvert.HasValue)
             {
-                case "No": return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
-                case "Yes": return Redirect(Url.EmployerRecruitAction());
-                default:
-                    ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
-                    return View();
+                ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
+                return View();
             }
+            else if(requiresAdvert.Value == true)
+            {
+                return Redirect(Url.EmployerRecruitAction());
+            }
+
+            return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
         }
 
         [ChildActionOnly]
@@ -364,7 +367,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-            viewModel.FeaturedPanel = !model.ApprenticeshipAdded;
+            viewModel.IsFeaturedPanel = !model.ApprenticeshipAdded;
 
             if (model.PayeSchemeCount == 0)
             {
@@ -381,7 +384,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     if (model.ReservationsCount == 1 && model.ConfirmedReservationsCount == 1 && !model.ApprenticeshipAdded)
                     {
                         viewModel.ViewName = "ContinueSetupForSingleReservation";
-                        viewModel.FeaturedPanel = false;
+                        viewModel.IsFeaturedPanel = false;
                     }
                     else if (!model.HasReservations)
                     {
