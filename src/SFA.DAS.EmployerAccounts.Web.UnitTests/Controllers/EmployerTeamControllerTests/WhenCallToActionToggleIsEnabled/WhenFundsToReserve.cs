@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.PayeSchemeCount = 1;
             model.AgreementsToSign = false;
             model.ReservationsCount = 1;
-            model.ConfirmedReservationsCount = 1;
+            model.PendingReservationsCount = 1;
             model.ApprenticeshipAdded = false;
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
             model.AccountViewModel = new Model.Account();

@@ -230,7 +230,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
                     ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
                     ReservationsCount = reservationsResponse.Reservations.Count(),
-                    ConfirmedReservationsCount = reservationsResponse.Reservations.Count(x => x.Status == ReservationStatus.Confirmed)
+                    PendingReservationsCount = reservationsResponse.Reservations.Count(x => x.Status == ReservationStatus.Pending)
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.

@@ -381,7 +381,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
                 {
-                    if (model.ReservationsCount == 1 && model.ConfirmedReservationsCount == 1 && !model.ApprenticeshipAdded)
+                    if (model.ReservationsCount == 1 && model.PendingReservationsCount == 1 && !model.ApprenticeshipAdded)
                     {
                         viewModel.ViewName = "ContinueSetupForSingleReservation";
                         viewModel.IsFeaturedPanel = false;
@@ -599,7 +599,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            var reservation = model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault();
+            return PartialView(reservation);
         }
 
         [ChildActionOnly]
