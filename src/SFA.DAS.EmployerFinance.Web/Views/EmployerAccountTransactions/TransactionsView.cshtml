@@ -8,12 +8,10 @@
 
 @{
     var culture = new CultureInfo("en-GB");
-}
-@{ViewBag.PageID = "page-transactions"; }
-@{ViewBag.Section = "finance"; }
-@{ViewBag.Title = "Your transactions";}
-
-@{
+    ViewBag.PageID = "page-transactions"; 
+    ViewBag.Section = "finance";
+    ViewBag.Title = "Your transactions";
+    ViewBag.ZenDeskLabel = "eas-your-transactions";
     var displayingMonthDate = new DateTime(Model.Data.Year, Model.Data.Month, 1);
     var previousMonthDate = displayingMonthDate.AddMonths(-1);
     var nextMonthDate = displayingMonthDate.AddMonths(1);

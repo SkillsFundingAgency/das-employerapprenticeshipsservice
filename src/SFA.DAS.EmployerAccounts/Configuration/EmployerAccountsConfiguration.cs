@@ -40,5 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
         public string AdfsMetadata { get; set; }
+        public string ZenDeskSnippetKey { get; set; }
+        public string ZenDeskSectionId { get; set; }
     }
 }

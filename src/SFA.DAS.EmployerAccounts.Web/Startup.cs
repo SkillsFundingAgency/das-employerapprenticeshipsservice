@@ -36,6 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+        private string _hashedAccountId;
 
         public void Configuration(IAppBuilder app)
         {
@@ -82,13 +83,13 @@ namespace SFA.DAS.EmployerAccounts.Web
                 {
                     // for first iteration of this work, allow deep linking from the support console to the teams view
                     // as this is the only action they will currently perform.
-                    var hashedAccountId = context.Request.Query.Get("HashedAccountId");
-                    var requestRedirect = string.IsNullOrEmpty(hashedAccountId) ? "/service/index" : $"/accounts/{hashedAccountId}/teams/view";
+                    _hashedAccountId = context.Request.Query.Get("HashedAccountId");
+                    var requestRedirect = string.IsNullOrEmpty(_hashedAccountId) ? "/service/index" : $"/accounts/{_hashedAccountId}/teams/view";
                     
                     context.Authentication.Challenge(new AuthenticationProperties
                     { 
                         RedirectUri = requestRedirect, 
-                        IsPersistent = true 
+                        IsPersistent = true
                     },
                     "Staff");
 
@@ -229,6 +230,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
                 notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
                 notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim("HashedAccountId", _hashedAccountId));
             }
             catch (Exception ex)
             {
