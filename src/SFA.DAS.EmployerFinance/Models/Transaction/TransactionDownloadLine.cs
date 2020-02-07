@@ -7,7 +7,11 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
     {
         public DateTime DateCreated { get; set; }
 
+        public long AccountId { get; set; }
+
         public string TransactionType { get; set; }
+
+        public string Description { get; set; }
 
         public string PayeScheme { get; set; }
 
@@ -57,5 +61,13 @@ namespace SFA.DAS.EmployerFinance.Models.Transaction
         public decimal Total { get; set; }
 
         public string TotalFormatted => Total.ToString("0.00000", NumberFormatInfo.InvariantInfo);
+
+        public long TransferSenderAccountId { get; set; }
+
+        public string TransferSenderAccountName { get; set; }
+
+        public long TransferReceiverAccountId { get; set; }
+
+        public string TransferReceiverAccountName { get; set; }
     }
 }

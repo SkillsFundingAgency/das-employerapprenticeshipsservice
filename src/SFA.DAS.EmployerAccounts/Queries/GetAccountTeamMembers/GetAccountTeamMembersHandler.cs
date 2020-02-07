@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
+using SFA.DAS.EmployerAccounts.Models;
+using Entity = SFA.DAS.Audit.Types.Entity;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
 {
@@ -10,11 +15,22 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
     {
         private readonly IValidator<GetAccountTeamMembersQuery> _validator;
         private readonly IEmployerAccountTeamRepository _repository;
+        private readonly IMembershipRepository _membershipRepository;
+        private readonly IMediator _mediator;
+        private readonly IAuthenticationService _authenticationService;
 
-        public GetAccountTeamMembersHandler(IValidator<GetAccountTeamMembersQuery> validator, IEmployerAccountTeamRepository repository)
+        public GetAccountTeamMembersHandler(
+            IValidator<GetAccountTeamMembersQuery> validator, 
+            IEmployerAccountTeamRepository repository,
+            IAuthenticationService authenticationService,
+            IMediator mediator, 
+            IMembershipRepository membershipRepository)
         {
             _validator = validator;
             _repository = repository;
+            _authenticationService = authenticationService;
+            _mediator = mediator;
+            _membershipRepository = membershipRepository;
         }
 
         public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message)
@@ -32,7 +48,28 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
             }
 
             var accounts = await _repository.GetAccountTeamMembersForUserId(message.HashedAccountId, message.ExternalUserId);
+
+            if (_authenticationService.IsSupportUser())
+            {
+                await AuditAccess(message);
+            }
+
             return new GetAccountTeamMembersResponse { TeamMembers = accounts };
+        }
+
+        private async Task AuditAccess(GetAccountTeamMembersQuery message)
+        {
+            var caller = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
+
+            await _mediator.SendAsync(new CreateAuditCommand
+            {
+                EasAuditMessage = new EasAuditMessage
+                {
+                    Category = "VIEW",
+                    Description = $"Account {caller.AccountId} team members viewed",
+                    AffectedEntity = new Entity { Type = "TeamMembers", Id = caller.AccountId.ToString() }
+                }
+            });
         }
     }
 }

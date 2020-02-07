@@ -26,16 +26,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         private const string ReturnUrlCookieName = "SFA.DAS.EmployerAccounts.Web.Controllers.ReturnUrlCookie";
 
-        public HomeController(IAuthenticationService owinWrapper, 
-            HomeOrchestrator homeOrchestrator,        
+        public HomeController(IAuthenticationService owinWrapper,
+            HomeOrchestrator homeOrchestrator,
             EmployerAccountsConfiguration configuration,
-            IMultiVariantTestingService multiVariantTestingService, 
+            IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             ICookieStorageService<ReturnUrlModel> returnUrlCookieStorageService,
             ILog logger)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _homeOrchestrator = homeOrchestrator;          
+            _homeOrchestrator = homeOrchestrator;
             _configuration = configuration;
             _returnUrlCookieStorageService = returnUrlCookieStorageService;
             _logger = logger;
@@ -47,6 +47,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index()
         {
             var userId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+
+            OrchestratorResponse<UserAccountsViewModel> accounts;
 
             if (!string.IsNullOrWhiteSpace(userId))
             {
@@ -65,45 +67,46 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 {
                     return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
                 }
-
-                var accounts = await _homeOrchestrator.GetUserAccounts(userId);
-
-                if (accounts.Data.Invitations > 0)
+                accounts = await _homeOrchestrator.GetUserAccounts(userId);
+            }
+            else
+            {
+                var model = new
                 {
-                    return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
-                }
+                    HideHeaderSignInLink = true
+                };
 
-                if (accounts.Data.Accounts.AccountList.Count == 1)
-                {
-                    var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
-
-                    if (account != null)
-                    {
-                        return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
-                    }
-                }
-
-                var flashMessage = GetFlashMessageViewModelFromCookie();
-
-                if (flashMessage != null)
-                {
-                    accounts.FlashMessage = flashMessage;
-                }
-
-                if (accounts.Data.Accounts.AccountList.Count > 1)
-                {
-                    return View(accounts);
-                }
-
-                return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
+                return View(ControllerConstants.ServiceStartPageViewName, model);
             }
 
-            var model = new
+            if (accounts.Data.Invitations > 0)
             {
-                HideHeaderSignInLink = true
-            };
+                return RedirectToAction(ControllerConstants.InvitationIndexName, ControllerConstants.InvitationControllerName);
+            }
 
-            return View(ControllerConstants.ServiceStartPageViewName, model);
+            if (accounts.Data.Accounts.AccountList.Count == 1)
+            {
+                var account = accounts.Data.Accounts.AccountList.FirstOrDefault();
+
+                if (account != null)
+                {
+                    return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new { HashedAccountId = account.HashedId });
+                }
+            }
+
+            var flashMessage = GetFlashMessageViewModelFromCookie();
+
+            if (flashMessage != null)
+            {
+                accounts.FlashMessage = flashMessage;
+            }
+
+            if (accounts.Data.Accounts.AccountList.Count > 1)
+            {
+                return View(accounts);
+            }
+
+            return RedirectToAction(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName);
         }
 
         [DasAuthorize]
@@ -250,7 +253,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("privacy")]
+        [Route("{HashedAccountId}/privacy", Order = 0)]
+        [Route("privacy", Order = 1)]
         public ActionResult Privacy()
         {
             return View();

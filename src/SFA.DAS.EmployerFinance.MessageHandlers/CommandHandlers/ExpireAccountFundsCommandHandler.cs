@@ -54,6 +54,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
                 _configuration.FundsExpiryPeriod,
                 now);
 
+            var currentCalendarPeriod = new CalendarPeriod(_currentDateTime.Now.Year, _currentDateTime.Now.Month);
+            if (!expiredFunds.ContainsKey(currentCalendarPeriod))
+            {
+                expiredFunds.Add(currentCalendarPeriod, 0);
+            }
+
             await _expiredFundsRepository.Create(message.AccountId, expiredFunds.ToExpiredFundsList(), now);
 
             _logger.Info($"Expired '{expiredFunds.Count}' month(s) of funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");

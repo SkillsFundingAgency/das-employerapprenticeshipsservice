@@ -11,11 +11,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
     {
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.NonLevyExpressionOfInterest, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Levy, false)]
-        [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Inconsistent, false)]
+        [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Combined, false)]
         [TestCase(ApprenticeshipEmployerType.Levy, AccountAgreementType.Unknown, false)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.NonLevyExpressionOfInterest, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Levy, true)]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Inconsistent, true)]
+        [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Combined, true)]
         [TestCase(ApprenticeshipEmployerType.NonLevy, AccountAgreementType.Unknown, true)]
         public void ShowYourFundingReservationsLink_GivenValues_ReturnsExpectedResult(
            ApprenticeshipEmployerType apprenticeshipEmployerType,

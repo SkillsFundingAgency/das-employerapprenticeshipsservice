@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -6,9 +6,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Commands.UnsubscribeProviderEmail;
 using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
+using System.Linq;
+using System.Threading.Tasks;
+using MediatR;
+using SFA.DAS.EmployerAccounts.Commands.UpsertRegisteredUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccounts;
 using SFA.DAS.EmployerAccounts.Queries.GetUserInvitations;
 using SFA.DAS.EmployerAccounts.Queries.GetUsers;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -108,6 +113,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 FirstName = firstName,
                 CorrelationId = correlationId
             });
-        }
+        }       
     }
 }

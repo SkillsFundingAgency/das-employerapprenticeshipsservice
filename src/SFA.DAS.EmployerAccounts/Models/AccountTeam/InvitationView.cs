@@ -1,8 +1,9 @@
+using SFA.DAS.EmployerAccounts.Interfaces;
 using System;
 
 namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 {
-    public class InvitationView
+    public class InvitationView : IAccountIdentifier
     {
         public long Id { get; set; }
         public string Name { get; set; }

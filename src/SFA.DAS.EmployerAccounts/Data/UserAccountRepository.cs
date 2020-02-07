@@ -77,6 +77,17 @@ namespace SFA.DAS.EmployerAccounts.Data
             return _db.Value.Users.SingleOrDefaultAsync(u => u.Ref == @ref);
         }
 
+        public async Task<Accounts<Account>> GetAccounts()
+        {
+            var accountList = await _db.Value.Accounts.ToListAsync();
+            
+            return new Accounts<Account>
+            {
+                AccountList = accountList,                
+                AccountsCount = accountList.Count()
+            };
+        }
+
         public async Task<Users> GetAllUsers()
         {
             var parameters = new DynamicParameters();

@@ -121,7 +121,7 @@ namespace SFA.DAS.EmployerAccounts.Data
                 .ToListAsync();
 
             var templateIds = await _db.Value.Agreements
-                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId))
+                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId) && x.SignedDate.HasValue)
                 .Select(x => x.TemplateId)
                 .ToListAsync()
                 .ConfigureAwait(false);

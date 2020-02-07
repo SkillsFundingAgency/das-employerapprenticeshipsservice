@@ -21,6 +21,23 @@ namespace SFA.DAS.EmployerFinance.Data
             _db = db;
         }
 
+        public async Task CreateDraft(long accountId, IEnumerable<ExpiredFund> expiredFunds, DateTime now)
+        {
+            var expiredFundsTable = expiredFunds.ToExpiredFundsDataTable();
+
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountId", accountId);
+            parameters.Add("@expiredFunds", expiredFundsTable.AsTableValuedParameter("[employer_financial].[ExpiredFundsTable]"));
+            parameters.Add("@now", now);
+
+            await _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[CreateDraftExpiredFunds]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
         public async Task Create(long accountId, IEnumerable<ExpiredFund> expiredFunds, DateTime now)
         {
             var expiredFundsTable = expiredFunds.ToExpiredFundsDataTable();
@@ -46,6 +63,20 @@ namespace SFA.DAS.EmployerFinance.Data
 
             return await _db.Value.Database.Connection.QueryAsync<ExpiredFund>(
                 "[employer_financial].[GetExpiredFunds]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure
+            );
+        }
+
+        public async Task<IEnumerable<ExpiredFund>> GetDraft(long accountId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@AccountId", accountId);
+
+            return await _db.Value.Database.Connection.QueryAsync<ExpiredFund>(
+                "[employer_financial].[GetDraftExpiredFunds]",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.StoredProcedure

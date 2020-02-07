@@ -146,7 +146,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
+        public virtual async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
         {
             try
             {
@@ -183,8 +183,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
-                                
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);                
+
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -577,8 +577,48 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 Name = teamMember.Name,
                 Role = teamMember.Role,
                 Status = teamMember.Status,
-                ExpiryDate = teamMember.ExpiryDate
+                ExpiryDate = teamMember.ExpiryDate,
+                HashedAccountId = teamMember.HashedAccountId
             };
-        }       
+        }
+
+        public virtual async Task<OrchestratorResponse<AccountSummaryViewModel>> GetAccountSummary(string hashedAccountId, string externalUserId)
+        {
+            try
+            {
+                var accountResponse = await _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
+                {
+                    HashedAccountId = hashedAccountId,
+                    UserId = externalUserId
+                });
+
+                var viewModel = new AccountSummaryViewModel
+                {
+                    Account = accountResponse.Account
+                };
+
+                return new OrchestratorResponse<AccountSummaryViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = viewModel
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse<AccountSummaryViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Data = new AccountSummaryViewModel(),
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new OrchestratorResponse<AccountSummaryViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
+        }
     }
 }
