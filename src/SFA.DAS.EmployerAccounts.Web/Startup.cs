@@ -7,9 +7,14 @@ using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Microsoft.Azure;
+using Microsoft.IdentityModel.Protocols;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Notifications;
+using Microsoft.Owin.Security.WsFederation;
+using Newtonsoft.Json;
 using NLog;
 using Owin;
 using SFA.DAS.Authentication;
@@ -31,6 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
         private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+        private string _hashedAccountId;
 
         public void Configuration(IAppBuilder app)
         {
@@ -39,6 +45,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
             var constants = new Constants(config.Identity);
             var urlHelper = new UrlHelper();
+
+            app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
@@ -53,8 +61,46 @@ namespace SFA.DAS.EmployerAccounts.Web
                 AuthenticationMode = AuthenticationMode.Passive
             });
 
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "Staff",
+            });
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationType = "Employer",
+                ExpireTimeSpan = new TimeSpan(0, 10, 0),
+                SlidingExpiration = true
+            });
+
+
+            // https://skillsfundingagency.atlassian.net/wiki/spaces/ERF/pages/104010807/Staff+IDAMS
+            app.UseWsFederationAuthentication(GetADFSOptions(config));
+
+            app.Map($"/login/staff", conf =>
+            {
+                conf.Run(context =>
+                {
+                    // for first iteration of this work, allow deep linking from the support console to the teams view
+                    // as this is the only action they will currently perform.
+                    _hashedAccountId = context.Request.Query.Get("HashedAccountId");
+                    var requestRedirect = string.IsNullOrEmpty(_hashedAccountId) ? "/service/index" : $"/accounts/{_hashedAccountId}/teams/view";
+                    
+                    context.Authentication.Challenge(new AuthenticationProperties
+                    { 
+                        RedirectUri = requestRedirect, 
+                        IsPersistent = true
+                    },
+                    "Staff");
+
+                    context.Response.StatusCode = 401;
+                    return context.Response.WriteAsync(string.Empty);
+                });
+            });
+
             app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
             {
+                AuthenticationType = "Cookies",
                 BaseUrl = config.Identity.BaseAddress,
                 ClientId = config.Identity.ClientId,
                 ClientSecret = config.Identity.ClientSecret,
@@ -67,18 +113,140 @@ namespace SFA.DAS.EmployerAccounts.Web
                 AuthenticatedCallback = identity =>
                 {
                     PostAuthentiationAction(
-                        identity,                     
+                        identity,
                         constants,
                         accountDataCookieStorageService,
                         hashedAccountIdCookieStorageService);
                 }
             });
 
-            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
+            app.Map($"/login", conf =>
+            {
+                conf.Run(context =>
+                {
+                    context.Authentication.Challenge(new AuthenticationProperties
+                    { RedirectUri = "/service/index", IsPersistent = true },
+                        "Cookies"
+                    );
+
+                    context.Response.StatusCode = 401;
+                    return context.Response.WriteAsync(string.Empty);
+                });
+            });
+
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);            
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
 
             UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
             UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
+        }
+
+        private WsFederationAuthenticationOptions GetADFSOptions(EmployerAccountsConfiguration config)
+        {
+            return new WsFederationAuthenticationOptions
+            {
+                AuthenticationType = "Staff",
+                Wtrealm = config.EmployerAccountsBaseUrl,
+                MetadataAddress = config.AdfsMetadata,
+                Notifications = Notifications(),
+                Wreply = config.EmployerAccountsBaseUrl
+            };
+        }
+
+        private WsFederationAuthenticationNotifications Notifications()
+        {
+            return new WsFederationAuthenticationNotifications
+            {
+                SecurityTokenValidated = OnSecurityTokenValidated,
+                SecurityTokenReceived = nx => OnSecurityTokenReceived(),
+                AuthenticationFailed = nx => OnAuthenticationFailed(nx),
+                MessageReceived = nx => OnMessageReceived(),
+                RedirectToIdentityProvider = nx => OnRedirectToIdentityProvider()
+            };
+        }
+
+        private Task OnRedirectToIdentityProvider()
+        {
+            Logger.Debug("RedirectToIdentityProvider");
+            return Task.FromResult(0);
+        }
+
+        private Task OnMessageReceived()
+        {
+            Logger.Debug("MessageReceived");
+            return Task.FromResult(0);
+        }
+
+        private Task OnSecurityTokenReceived()
+        {
+            Logger.Debug("SecurityTokenReceived");
+            return Task.FromResult(0);
+        }
+
+        private Task OnSecurityTokenValidated(SecurityTokenValidatedNotification<WsFederationMessage, WsFederationAuthenticationOptions> notification)
+        {
+            Logger.Debug("SecurityTokenValidated");
+
+            try
+            {
+                Logger.Debug("Authentication Properties", new Dictionary<string, object>
+                {
+                    {
+                        "claims",
+                        JsonConvert.SerializeObject(
+                            notification.AuthenticationTicket.Identity.Claims.Select(x =>new {x.Value, x.ValueType, x.Type}))
+                    },
+                    {
+                        "authentication-type",
+                        notification.AuthenticationTicket.Identity.AuthenticationType
+                    },
+                    {"role-type", notification.AuthenticationTicket.Identity.RoleClaimType}
+                });
+
+                const string serviceClaimType = "http://service/service";
+
+                if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, "ESF"))
+                {
+                    Logger.Debug("Adding Tier2 Role");
+                    notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Role, "Tier2User"));
+
+                    Logger.Debug("Adding ConsoleUser Role");
+                    notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Role, "ConsoleUser"));
+                }
+                else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, "ESS"))
+                {
+                    Logger.Debug("Adding ConsoleUser Role");
+                    notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Role, "ConsoleUser"));
+                }
+                else
+                {
+                    throw new SecurityTokenValidationException();
+                }
+
+                var firstName = notification.AuthenticationTicket.Identity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.GivenName)?.Value;
+                var lastName = notification.AuthenticationTicket.Identity.Claims.SingleOrDefault(x => x.Type == ClaimTypes.Surname)?.Value;
+                var userEmail = notification.AuthenticationTicket.Identity.Claims.Single(x => x.Type == ClaimTypes.Upn).Value;
+
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Email, userEmail));
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.Name, $"{firstName} {lastName}"));
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, userEmail));
+                notification.AuthenticationTicket.Identity.AddClaim(new Claim("HashedAccountId", _hashedAccountId));
+            }
+            catch (Exception ex)
+            {
+                Logger.Error(ex, "IDAMS Authentication Callback Error");
+            }
+
+            Logger.Debug("End of callback");
+
+            return Task.FromResult(0);
+        }
+
+        private Task OnAuthenticationFailed(AuthenticationFailedNotification<WsFederationMessage, WsFederationAuthenticationOptions> nx)
+        {
+            var logReport = $"AuthenticationFailed, State: {nx.State}, Exception: {nx.Exception.GetBaseException().Message}, Protocol Message: Wct {nx.ProtocolMessage.Wct},\r\nWfresh {nx.ProtocolMessage.Wfresh},\r\nWhr {nx.ProtocolMessage.Whr},\r\nWp {nx.ProtocolMessage.Wp},\r\nWpseudo{nx.ProtocolMessage.Wpseudo},\r\nWpseudoptr {nx.ProtocolMessage.Wpseudoptr},\r\nWreq {nx.ProtocolMessage.Wreq},\r\nWfed {nx.ProtocolMessage.Wfed},\r\nWreqptr {nx.ProtocolMessage.Wreqptr},\r\nWres {nx.ProtocolMessage.Wres},\r\nWreply{nx.ProtocolMessage.Wreply},\r\nWencoding {nx.ProtocolMessage.Wencoding},\r\nWtrealm {nx.ProtocolMessage.Wtrealm},\r\nWresultptr {nx.ProtocolMessage.Wresultptr},\r\nWauth {nx.ProtocolMessage.Wauth},\r\nWattrptr{nx.ProtocolMessage.Wattrptr},\r\nWattr {nx.ProtocolMessage.Wattr},\r\nWa {nx.ProtocolMessage.Wa},\r\nIsSignOutMessage {nx.ProtocolMessage.IsSignOutMessage},\r\nIsSignInMessage {nx.ProtocolMessage.IsSignInMessage},\r\nWctx {nx.ProtocolMessage.Wctx},\r\n";
+            Logger.Debug(logReport);
+            return Task.FromResult(0);
         }
 
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)

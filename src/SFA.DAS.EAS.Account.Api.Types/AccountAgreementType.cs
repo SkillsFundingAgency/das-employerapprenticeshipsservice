@@ -4,7 +4,7 @@
     {
         Levy = 0,
         NonLevyExpressionOfInterest = 1,
-        Inconsistent = 2,
+        Combined = 2,
         Unknown
     }
 }

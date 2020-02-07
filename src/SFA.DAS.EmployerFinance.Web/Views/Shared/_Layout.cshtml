@@ -96,8 +96,9 @@
     </script>
 
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
+    @Html.Partial("_ZenDeskWidget")
 </head>
-<body id="@ViewBag.PageID">
+<body id="@ViewBag.PageID">    
     <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
@@ -116,12 +117,8 @@
                 You're using a web browser that we don't support. Upgrade to one of the <a href="https://www.gov.uk/help/browsers" target="_blank">browsers that we do support</a> to access all the site's features.
             </p>
         </div>
-    <![endif]-->
-    <div id="global-cookie-message">
-        <p>
-            GOV.UK uses cookies to make the site simpler. <a href="@Url.Action("Privacy", "Home")">Find out more about cookies</a>
-        </p>
-    </div>
+    <![endif]-->     
+    @Html.Partial("_CookieBanner")
     <div id="svg-defs" aria-hidden="true">
         @Html.Partial("_SVGSprite")
     </div>
@@ -237,11 +234,11 @@
             </div>
         }
     }
-            <main role="main" id="content">
-                @RenderSection("breadcrumb", false)
-                @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
-                @RenderBody()
-            </main>
+    <main role="main" id="content">
+        @RenderSection("breadcrumb", false)
+        @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
+        @RenderBody()
+    </main>
     <footer class="group js-footer" id="footer" role="contentinfo">
         <div class="footer-wrapper">
             <div class="footer-meta">
@@ -254,7 +251,10 @@
                             <a href="https://www.smartsurvey.co.uk/s/apprenticeshipservicefeedback/" target="_blank">Feedback</a>
                         </li>
                         <li>
-                            <a href="@Url.Action("Privacy", "Home")">Privacy and cookies</a>
+                            <a href="@Url.Action("Privacy", "Home")">Privacy</a>
+                        </li>
+                        <li>
+                            <a href="@Url.Action("CookieConsent", "Home")">Cookies</a>
                         </li>
                         <li>Built by the <a href="http://gov.uk/esfa" target="_blank">Education and Skills Funding Agency</a></li>
                     </ul>

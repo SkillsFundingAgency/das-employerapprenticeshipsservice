@@ -183,7 +183,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         }
 
         [TestCase(true, AgreementType.NonLevyExpressionOfInterest)]
-        [TestCase(false, AgreementType.Levy)]
+        [TestCase(false, AgreementType.Combined)]
         public async Task WillCreateNewAccountWithCorrectAgreementType(bool eoiWhitelisted, AgreementType agreementType)
         {
             const int accountId = 23;

@@ -18,6 +18,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
     {
         public InfrastuctureRegistry()
         {
+            For<HttpContextBase>().Use(() => new HttpContextWrapper(HttpContext.Current));
             For<ILoggingPropertyFactory>().Use<LoggingPropertyFactory>();
 
             HttpContextBase conTextBase = null;
@@ -30,8 +31,7 @@ namespace SFA.DAS.EAS.Support.Web.DependencyResolution
                 x.ParentType,
                 x.GetInstance<IWebLoggingContext>(),
                 x.GetInstance<ILoggingPropertyFactory>().GetProperties())).AlwaysUnique();
-
-
+            
             For<IAccountRepository>().Use<AccountRepository>();
             For<IChallengeRepository>().Use<ChallengeRepository>();
 

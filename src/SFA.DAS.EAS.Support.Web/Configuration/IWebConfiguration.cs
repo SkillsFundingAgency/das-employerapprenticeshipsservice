@@ -9,5 +9,6 @@ namespace SFA.DAS.EAS.Support.Web.Configuration
         SiteValidatorSettings SiteValidator { get; set; }
         LevySubmissionsSettings LevySubmission { get; set; }
         HashingServiceConfig HashingService { get; set; }
+        EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
     }
 }
