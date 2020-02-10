@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerFinance.Web
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
-                .UseOutbox()
+                .UseOutbox(true)
                 .UseStructureMapBuilder(container)
                 .UseUnitOfWork();
 
