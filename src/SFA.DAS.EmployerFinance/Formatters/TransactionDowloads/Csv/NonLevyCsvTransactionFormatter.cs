@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
             var headerBuilder = new StringBuilder();
             headerBuilder.Append("Transaction date,");
             headerBuilder.Append("Transaction type,");
+            headerBuilder.Append("Description,");
             headerBuilder.Append("Training provider,");
             headerBuilder.Append("Unique learner number,");
             headerBuilder.Append("Apprentice,");
@@ -33,10 +34,11 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
             {
                 builder.Append($"{transaction.DateCreated:dd/MM/yyyy},");
                 builder.Append($"{transaction.TransactionType},");
-                builder.Append($"{transaction.TrainingProviderFormatted},");
+                builder.Append($"{transaction.Description?.Replace(",", "")},");
+                builder.Append($"{transaction.TrainingProviderFormatted?.Replace(",", "")},");
                 builder.Append($"{transaction.Uln},");
                 builder.Append($"{transaction.Apprentice},");
-                builder.Append($"{transaction.ApprenticeTrainingCourse},");
+                builder.Append($"{transaction.ApprenticeTrainingCourse?.Replace(",", "")},");
                 builder.Append($"{transaction.ApprenticeTrainingCourseLevel},");
                 builder.Append($"{transaction.PaidFromLevyFormatted},");
                 builder.Append($"{transaction.EmployerContributionFormatted},");

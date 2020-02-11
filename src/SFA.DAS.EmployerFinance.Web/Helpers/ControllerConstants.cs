@@ -17,5 +17,9 @@
         public const string UserRefClaimKeyName = "sub";
         public const string TransactionViewName = "TransactionsView";
         public const string BadRequestViewName = "BadRequest";
+        public const string ControllerKeyName = "Controller";
+        public const string ActionKeyName = "Action";  
+        public const string CookieConsent = "CookieConsent";
+        public const string Home = "Home";
     }
 }

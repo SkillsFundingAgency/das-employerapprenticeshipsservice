@@ -1,10 +1,36 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@if (ViewBag.HideZenDeskWidget == null || ViewBag.HideZenDeskWidget == false)
-{
-    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=1b1ce288-39ea-4d40-a5e1-3a5e08aadd89"></script>
-    if (!string.IsNullOrWhiteSpace(ViewBag.Title))
-    {
-        @Html.SetZenDeskLabels($"reg-{ViewBag.Title}")
-    }
-    
-}
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+
+<script type="text/javascript">
+    window.zESettings = {
+        webWidget: {
+            contactForm: {
+                attachments: false
+            },
+            chat: {
+                menuOptions: {
+                    emailTranscript: false
+                }
+            },
+            helpCenter: {
+                filter: {
+                    section: @Html.GetZenDeskSnippetSectionId()
+                }
+            }
+        }
+    };
+</script>
+
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@Html.GetZenDeskSnippetKey()"></script>
+
+@Html.SetZenDeskLabels(!string.IsNullOrWhiteSpace(ViewBag.Title) ? new[] {$"reg-{ViewBag.Title}"} : new string[] {ViewBag.ZenDeskLabel});
+
+<script type="text/javascript">
+    zE(function() {
+        zE.identify({
+            name: '@ViewBag.GaData.UserName',
+            email: '@ViewBag.GaData.UserEmail',
+            organization: '@ViewBag.GaData.Acc'
+        });
+    });
+</script>
+

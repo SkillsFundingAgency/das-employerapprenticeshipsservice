@@ -23,22 +23,13 @@ steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:
+    configFilePath: GitVersion.yml
     updateAssemblyInfo: true
 
 - task: VSBuild@1
   displayName: 'Restore solution EAS'
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
-    vsVersion: 15.0
-    msbuildArgs: '/t:restore'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
-    clean: true
-
-- task: VSBuild@1
-  displayName: 'Restore solution EAS Portal'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Portal.sln'
     vsVersion: 15.0
     msbuildArgs: '/t:restore'
     platform: '$(buildPlatform)'
@@ -53,16 +44,15 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-- task: VSBuild@1
-  displayName: 'Build solution EAS Portal'
-  inputs:
-    solution: 'src/SFA.DAS.EAS.Portal.sln'
-    vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
     
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: pack
+    packagesToPack: 'src/SFA.DAS.Account.Api.Client/SFA.DAS.EAS.Account.Api.Client.csproj;src/SFA.DAS.EAS.Account.Api.Types/SFA.DAS.EAS.Account.Api.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;src/SFA.DAS.EmployerAccounts.Messages/SFA.DAS.EmployerAccounts.Messages.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj;src/SFA.DAS.EmployerAccounts.Types/SFA.DAS.EmployerAccounts.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Types/SFA.DAS.EmployerAccounts.Api.Types.csproj'
+    packDirectory: '$(build.artifactstagingdirectory)/publish'
+    versioningScheme: byBuildNumber
+
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
   inputs:
@@ -75,7 +65,7 @@ steps:
   inputs:
     Contents: |
      azure/**
-     src/**/bin/**/*.dacpac
+     src/**/bin/**/*.dacpac     
     TargetFolder: '$(build.artifactstagingdirectory)/publish'
 
 - task: PublishBuildArtifacts@1

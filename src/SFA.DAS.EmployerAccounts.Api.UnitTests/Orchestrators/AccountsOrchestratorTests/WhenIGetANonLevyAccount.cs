@@ -58,35 +58,5 @@ namespace SFA.DAS.EmployerAccounts.Api.UnitTests.Orchestrators.AccountsOrchestra
             //Assert
             Assert.AreEqual(agreementType.ToString(), result.AccountAgreementType.ToString());
         }
-
-        [Test]
-        public async Task ThenResponseShouldHaveAccountAgreementTypeSetToInconsistent()
-        {
-            //Arrange
-            var agreementType = AccountAgreementType.Inconsistent;
-            const string hashedAgreementId = "ABC123";
-            var response = new GetEmployerAccountDetailByHashedIdResponse
-            {
-                Account = new AccountDetail
-                {
-                    AccountAgreementTypes = new List<AgreementType>
-                    {
-                        AgreementType.Levy,
-                        AgreementType.NonLevyExpressionOfInterest
-                    }
-                }
-            };
-
-            _mediator
-                .Setup(x => x.SendAsync(It.IsAny<GetEmployerAccountDetailByHashedIdQuery>()))
-                .ReturnsAsync(response)
-                .Verifiable("Get account was not called");
-
-            //Act
-            var result = await _orchestrator.GetAccount(hashedAgreementId);
-
-            //Assert
-            Assert.AreEqual(agreementType.ToString(), result.AccountAgreementType.ToString());
-        }
     }
 }

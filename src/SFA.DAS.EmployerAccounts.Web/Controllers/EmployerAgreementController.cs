@@ -115,7 +115,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 hashedAccountId,
                 OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-            return View(agreement.Data.EmployerAgreement.AgreementType == AgreementType.Levy
+            return View(agreement.Data.EmployerAgreement.AgreementType == AgreementType.Levy ||
+                agreement.Data.EmployerAgreement.AgreementType == AgreementType.Combined
                 ? ControllerConstants.AboutYourAgreementViewName 
                 : ControllerConstants.AboutYourDocumentViewName, agreement);
         }
