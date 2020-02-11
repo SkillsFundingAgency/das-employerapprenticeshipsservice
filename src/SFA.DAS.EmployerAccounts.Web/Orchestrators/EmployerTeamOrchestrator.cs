@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
+using SFA.DAS.Authorization.Services;
+using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -10,8 +13,10 @@ using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Commands.ResendInvitation;
 using SFA.DAS.EmployerAccounts.Commands.UpdateShowWizard;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
@@ -22,17 +27,16 @@ using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
-using SFA.DAS.EmployerAccounts.Web.Exceptions;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Reservations;
+using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -41,15 +45,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
+        private readonly ICommitmentsApiClient _commitmentsApiClient;
+        private readonly IEncodingService _encodingService;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
-        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient, IMapper mapper, IAuthorizationService authorizationService)
+        public EmployerTeamOrchestrator(IMediator mediator, 
+            ICurrentDateTime currentDateTime, 
+            IAccountApiClient accountApiClient, 
+            ICommitmentsApiClient commitmentsApiClient,
+            IEncodingService encodingService,
+            IMapper mapper, 
+            IAuthorizationService authorizationService)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
+            _commitmentsApiClient = commitmentsApiClient;
+            _encodingService = encodingService;
             _mapper = mapper;
             _authorizationService = authorizationService;
         }
@@ -61,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
         {
-            var response = await GetTeamMembers(hashedAccountId, externalUserId);
+            var response = await GetTeamMembers(hashedAccountId, externalUserId);            
 
             if (response.Status != HttpStatusCode.OK)
             {
@@ -183,7 +197,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 {
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
-                });
+                });                
 
                 await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
 
@@ -194,6 +208,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var agreementsResponse = agreementsResponseTask.Result;
                 var reservationsResponse = reservationsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
+
+                var cohortsResponse = (await _commitmentsApiClient.GetCohorts(new GetCohortsRequest { AccountId = accountDetailViewModel.AccountId })).Cohorts;
+                // TO DO : its coming as null
+                //var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = accountDetailViewModel.AccountId })).Apprenticeships;
+                var draftApprenticeshipsResponse = (await _commitmentsApiClient.GetDraftApprenticeships((long)cohortsResponse?.FirstOrDefault().CohortId)).DraftApprenticeships;               
+
 
                 var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
@@ -230,7 +250,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
                     ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
                     ReservationsCount = reservationsResponse.Reservations.Count(),
-                    ConfirmedReservationsCount = reservationsResponse.Reservations.Count(x => x.Status == ReservationStatus.Confirmed)
+                    ConfirmedReservationsCount = reservationsResponse.Reservations.Count(x => x.Status == ReservationStatus.Confirmed),
+
+                    CohortsCount = cohortsResponse?.Count(),
+                    ApprenticeshipsCount = 0, //apprenticeshipResponse?.Count(),
+                    NumberOfDraftApprentices = cohortsResponse?.FirstOrDefault().NumberOfDraftApprentices,
+                    HasDraftApprenticeship = draftApprenticeshipsResponse?.Count == 1,
+                    CourseName = draftApprenticeshipsResponse?.FirstOrDefault().CourseName, //CourseName
+                    CourseStartDate = draftApprenticeshipsResponse?.FirstOrDefault().StartDate, //CourseStartDate
+                    CourseEndDate = draftApprenticeshipsResponse?.FirstOrDefault().EndDate, //CourseEndDate
+                    HashedDraftApprenticeshipId = _encodingService.Encode((long)draftApprenticeshipsResponse?.FirstOrDefault().Id, EncodingType.ApprenticeshipId),
+                    ProviderName = cohortsResponse?.FirstOrDefault().ProviderName,  //Training Provider
+                    CohortStatus = cohortsResponse.FirstOrDefault().GetStatus(), //Status
+                    HashedCohortReference = _encodingService.Encode((long)cohortsResponse?.FirstOrDefault().CohortId, EncodingType.CohortReference),
+                    ApprenticeName = draftApprenticeshipsResponse?.FirstOrDefault().FirstName + draftApprenticeshipsResponse?.FirstOrDefault().LastName
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.

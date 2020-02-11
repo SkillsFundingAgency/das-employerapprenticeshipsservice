@@ -118,6 +118,9 @@
     <PackageReference Include="SFA.DAS.Caches">
       <Version>1.1.4</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
+      <Version>4.1.965</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
@@ -218,6 +221,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Extensions\CohortSummaryExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -851,6 +855,9 @@
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupForApprenticeship.cshtml" />
+    <Content Include="Views\EmployerTeam\YourApprentice.cshtml" />
+    <Content Include="Views\EmployerTeam\YourApprenticeStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

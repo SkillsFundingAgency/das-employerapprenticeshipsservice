@@ -18,6 +18,8 @@ using SFA.DAS.Validation;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
+using System.Web.Routing;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -323,6 +325,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
+        [Route("ViewApprenticeship")]
+        public ActionResult ViewApprenticeship(string hashedAccountId, string hashedDraftApprenticeshipId, string hashedCohortReference)
+        {   
+            var test = RedirectToRoute(new RouteValueDictionary(new { controller = "DraftApprenticeship", action = $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}" }));
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            //var baseUrl = configuration.EmployerCommitmentsBaseUrl;
+            var baseUrl = "https://approvals.test-eas.apprenticeships.education.gov.uk/";
+            //https://approvals.test-eas.apprenticeships.education.gov.uk/V7LJB8/unapproved/VDJP4X/apprentices/XD7D77 // Edit apprentice details Link
+            var url = $"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
+            return Redirect(url);
+        }
+
+        [HttpGet]
         [Route("continuesetupcreateadvert")]
         public ActionResult ContinueSetupCreateAdvert(string hashedAccountId)
         {
@@ -378,7 +393,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
                 {
-                    if (model.ReservationsCount == 1 && model.ConfirmedReservationsCount == 1 && !model.ApprenticeshipAdded)
+                    //STEP1 : Check Live Apprenticeship -- ApprenticeshipAdded
+                    //STEP2 : Check Draft Apprenticeship -- HasDraftApprenticeship
+                    //STEP3 : Check Reservations -- model.ReservationsCount
+
+                    if (model.ApprenticeshipAdded && model.CohortsCount == 0 && model.ApprenticeshipsCount == 1) 
+                    {
+                        //Render  Approved Status View Panel
+                        viewModel.ViewName = "YourApprentice";
+                    }
+                    else if(model.HasDraftApprenticeship && model.CohortsCount == 1 && model.ApprenticeshipsCount == 0 && model.NumberOfDraftApprentices == 1)
+                    {
+                        //Render Draft  Status View Panel                        
+                        if (model.CohortStatus == CohortStatus.Draft) 
+                        {
+                            viewModel.ViewName = "ContinueSetupForApprenticeship";
+                        }
+                        else if (model.CohortStatus == CohortStatus.WithProvider)  //Render WithProvider  Status View Panel       
+                        {
+                            viewModel.ViewName = "YourApprenticeStatus";
+                        }
+                    }
+                    else if (model.ReservationsCount == 1 && model.ConfirmedReservationsCount == 1 && !model.ApprenticeshipAdded)
                     {
                         viewModel.ViewName = "ContinueSetupForSingleReservation";
                         viewModel.FeaturedPanel = false;
@@ -595,6 +631,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ContinueSetupForApprenticeship(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult YourApprenticeStatus(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

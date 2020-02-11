@@ -42,5 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string AdfsMetadata { get; set; }
         public string ZenDeskSnippetKey { get; set; }
         public string ZenDeskSectionId { get; set; }
+        public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var baseUrl = configuration.EmployerCommitmentsBaseUrl;
 
             return AccountAction(helper, baseUrl, path);
-        }
+        }        
 
         public static string ReservationsAction(this UrlHelper helper, string path)
         {
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerRecruitBaseUrl;
-
+            
             return AccountAction(helper, baseUrl, path);
         }
 

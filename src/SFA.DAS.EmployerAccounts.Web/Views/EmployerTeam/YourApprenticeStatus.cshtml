@@ -1,0 +1,66 @@
+﻿
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large">
+        Your apprentice
+    </h2>
+
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Name
+            </th>
+            <td class="tw-65">
+                @Model.ApprenticeName
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td>
+                @Model.ProviderName
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Course
+            </th>
+            <td>
+                @Model.CourseName
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td>
+                @Model.CohortStatus.ToString()
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Start month
+            </th>
+            <td>
+                @Model.CourseStartDate.Value.ToString("MMMM yyyy")
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Finish month
+            </th>
+            <td>
+                @Model.CourseEndDate.HasValue
+            </td>
+        </tr>
+    </table>
+    <p>
+        
+        <a href="@Url.Action("ViewApprenticeship", "EmployerTeam", new {Model. HashedDraftApprenticeshipId, Model.HashedCohortReference, Model.HashedAccountId})" role="button" draggable="false" class="button">
+            View apprentice details
+        </a>
+    </p>
+</section>
+
