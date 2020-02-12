@@ -166,6 +166,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             legalEntity.PendingAgreementVersion = pendingAgreementVersion;
             legalEntity.SignedAgreementId = signedAgreementId;
             legalEntity.SignedAgreementVersion = signedAgreementVersion;
+            await _db.Value.SaveChangesAsync();
         }
     }
 }
