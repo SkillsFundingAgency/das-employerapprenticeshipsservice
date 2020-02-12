@@ -62,14 +62,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return View(response);
             }
 
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
+            response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
             {
-                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
-                {
-                    HashedAccountId = hashedAccountId,
-                    MaxNumberOfVacancies = response.Data.HasPayeScheme ? 2 : 0
-                });
-                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
+                HashedAccountId = hashedAccountId,
+                MaxNumberOfVacancies = response.Data.HasPayeScheme ? 2 : 0
+            });
+            response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
+
+            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
+            {                
                 response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
                 response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
 
