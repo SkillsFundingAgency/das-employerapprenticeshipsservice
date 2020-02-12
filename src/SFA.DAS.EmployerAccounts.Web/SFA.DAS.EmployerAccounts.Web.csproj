@@ -118,6 +118,9 @@
     <PackageReference Include="SFA.DAS.Caches">
       <Version>1.1.4</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
+      <Version>4.1.1013</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
@@ -218,6 +221,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Extensions\CohortSummaryExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -315,6 +319,7 @@
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\Row1Panel1ViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
