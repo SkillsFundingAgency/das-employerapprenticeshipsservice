@@ -107,9 +107,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
                 CreateAuditEntries(owner, agreementView),
                 NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId),
                 SetEmployerLegalEntityAgreementStatus(agreementView.AccountLegalEntityId, agreementView.Id, agreementView.VersionNumber),
-                PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId,
-                    agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, message.Code, message.Address, message.Source, ownerExternalUserId),
-                PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId)
+				PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId,
+                agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, createParams.Code, message.Address, message.Source, ownerExternalUserId),
+				PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
             );
 
             return new CreateLegalEntityCommandResponse
