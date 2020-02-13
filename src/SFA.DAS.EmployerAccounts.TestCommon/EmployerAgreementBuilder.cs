@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.TestCommon
                 Template = template,
                 TemplateId = template.Id,
                 StatusId = status,
-                AccountLegalEntityId = accountLegalEntityId,
+                AccountLegalEntityId = accountLegalEntityId
             };
 
             template.Agreements.Add(employerAgreement);
