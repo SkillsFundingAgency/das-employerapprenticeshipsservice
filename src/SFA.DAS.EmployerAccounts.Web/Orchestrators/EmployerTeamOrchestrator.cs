@@ -634,5 +634,61 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
+
+        public void GetCallToActionViewName(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
+            rules.Add(100, EvalutateSignAgreementCallToActionRule);
+            
+            if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+            {
+                rules.Add(200, EvalutateSingleReservationCallToActionRule);
+                rules.Add(201, EvalutateHasReservationsCallToActionRule);
+            }
+
+            foreach(var callToActionRuleFunc in rules.OrderBy(r => r.Key))
+            {
+                if (callToActionRuleFunc.Value(ref viewModel))
+                    return;
+            }
+        }
+
+        private delegate bool EvalutateCallToActionRuleDelegate(ref PanelViewModel<AccountDashboardViewModel> viewModel);
+
+        private bool EvalutateSignAgreementCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.AgreementsToSign)
+            {
+                viewModel.ViewName = "SignAgreement";
+                viewModel.IsFeaturedPanel = !viewModel.Data.ApprenticeshipAdded;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateSingleReservationCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.ReservationsCount == 1 && viewModel.Data.PendingReservationsCount == 1 && !viewModel.Data.ApprenticeshipAdded)
+            {
+                viewModel.ViewName = "ContinueSetupForSingleReservation";
+                viewModel.IsFeaturedPanel = false;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateHasReservationsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (!viewModel.Data.HasReservations)
+            {
+                viewModel.ViewName = "CheckFunding";
+                viewModel.IsFeaturedPanel = !viewModel.Data.ApprenticeshipAdded;
+                return true;
+            }
+
+            return false;
+        }
     }
 }
