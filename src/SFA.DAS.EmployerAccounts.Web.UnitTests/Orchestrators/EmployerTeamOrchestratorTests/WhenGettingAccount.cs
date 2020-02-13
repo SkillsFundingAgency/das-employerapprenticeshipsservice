@@ -174,7 +174,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            Assert.AreEqual(1, actual.Data.ReservationsCount);
+            Assert.AreEqual(1, actual.Data.CallToActionViewModel.ReservationsCount);
         }
 
         [Test]

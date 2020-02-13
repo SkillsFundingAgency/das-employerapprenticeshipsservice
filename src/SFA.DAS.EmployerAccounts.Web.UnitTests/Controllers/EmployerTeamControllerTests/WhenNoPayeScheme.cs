@@ -50,9 +50,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 0;
-
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                ApprenticeshipAdded = false
+            };
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -69,9 +70,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 0;
 
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
-
             //Act
             var result = _controller.Row1Panel2(model) as PartialViewResult;
 
@@ -87,9 +85,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 0;
 
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
-
             //Act
             var result = _controller.Row2Panel1(model) as PartialViewResult;
 
@@ -104,9 +99,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 0;
-
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
 
             //Act
             var result = _controller.Row2Panel2(model) as PartialViewResult;
