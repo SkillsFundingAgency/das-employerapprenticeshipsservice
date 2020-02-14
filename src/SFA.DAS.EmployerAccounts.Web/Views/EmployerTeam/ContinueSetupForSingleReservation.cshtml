@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EAS.Portal.Client.Types.Reservation
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ReservationViewModel
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large">
@@ -12,7 +12,7 @@
                 Course
             </th>
             <td class="tw-65">
-                @(Model?.CourseName)
+                @(Model?.CourseDescription)
             </td>
         </tr>
         <tr>
@@ -20,7 +20,7 @@
                 Start date
             </th>
             <td>
-                @(Model?.StartDate)
+                @(Model?.TrainingDate.ToString())
             </td>
         </tr>
     </table>

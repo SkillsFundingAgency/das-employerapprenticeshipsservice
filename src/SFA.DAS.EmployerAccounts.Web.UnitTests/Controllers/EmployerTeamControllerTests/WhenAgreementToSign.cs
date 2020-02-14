@@ -32,7 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(false);
 
             _controller = new EmployerTeamController(
@@ -50,10 +49,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 1;
-            model.AgreementsToSign = true;
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
-
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = true
+            };
+            
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
@@ -68,10 +68,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 1;
-            model.AgreementsToSign = true;
-
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = true
+            };
 
             //Act
             var result = _controller.Row1Panel2(model) as PartialViewResult;
@@ -87,10 +87,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 1;
-            model.AgreementsToSign = true;
-
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = true
+            };
 
             //Act
             var result = _controller.Row2Panel1(model) as PartialViewResult;
@@ -106,10 +106,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 1;
-            model.AgreementsToSign = true;
-
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = true
+            };
 
             //Act
             var result = _controller.Row2Panel2(model) as PartialViewResult;
