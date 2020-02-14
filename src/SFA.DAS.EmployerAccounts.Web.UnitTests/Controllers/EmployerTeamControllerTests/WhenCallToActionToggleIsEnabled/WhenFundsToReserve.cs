@@ -58,6 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.ReservationsCount = 0;
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
             model.AccountViewModel = new Model.Account();
+            model.Row1Panel1ViewModel = new Row1Panel1ViewModel();
             model.AccountViewModel.Providers.Add(new Model.Provider());
 
             //Act
@@ -80,6 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.ApprenticeshipAdded = false;
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
             model.AccountViewModel = new Model.Account();
+            model.Row1Panel1ViewModel = new Row1Panel1ViewModel();
             model.AccountViewModel.Providers.Add(new Model.Provider());
 
             //Act
@@ -88,6 +90,89 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("ContinueSetupForSingleReservation", (result.Model as dynamic).ViewName);
+        }
+
+        [Test]
+        public void ThenForNonLevyTheYourApprenticeViewIsReturnedAtRow1Panel1()
+        {
+            //Arrange
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.AgreementsToSign = false;
+            model.ReservationsCount = 1;
+            model.ConfirmedReservationsCount = 1;
+            model.ApprenticeshipAdded = true;
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            model.AccountViewModel = new Model.Account();
+            model.Row1Panel1ViewModel = new Row1Panel1ViewModel() { ApprenticeshipsCount = 1, CohortsCount = 0};
+            model.AccountViewModel.Providers.Add(new Model.Provider());
+
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("YourApprentice", (result.Model as dynamic).ViewName);
+        }
+
+        [Test]
+        public void ThenForNonLevyTheContinueSetupForApprenticeshipViewIsReturnedAtRow1Panel1()
+        {
+            //Arrange
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.AgreementsToSign = false;
+            model.ReservationsCount = 1;
+            model.ConfirmedReservationsCount = 1;
+            model.ApprenticeshipAdded = false;
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            model.AccountViewModel = new Model.Account();
+            model.Row1Panel1ViewModel = new Row1Panel1ViewModel() 
+            { 
+                HasDraftApprenticeship = true,
+                CohortsCount = 1,
+                ApprenticeshipsCount = 0,
+                NumberOfDraftApprentices = 1,
+                CohortStatus = Web.Extensions.CohortStatus.Draft
+            };
+            model.AccountViewModel.Providers.Add(new Model.Provider());
+
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ContinueSetupForApprenticeship", (result.Model as dynamic).ViewName);
+        }
+
+        [Test]
+        public void ThenForNonLevyTheYourApprenticeStatusViewIsReturnedAtRow1Panel1()
+        {
+            //Arrange
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.AgreementsToSign = false;
+            model.ReservationsCount = 1;
+            model.ConfirmedReservationsCount = 1;
+            model.ApprenticeshipAdded = false;
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            model.AccountViewModel = new Model.Account();
+            model.Row1Panel1ViewModel = new Row1Panel1ViewModel()
+            {
+                HasDraftApprenticeship = true,
+                CohortsCount = 1,
+                ApprenticeshipsCount = 0,
+                NumberOfDraftApprentices = 1,
+                CohortStatus = Web.Extensions.CohortStatus.WithTrainingProvider
+            };
+            model.AccountViewModel.Providers.Add(new Model.Provider());
+
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("YourApprenticeStatus", (result.Model as dynamic).ViewName);
         }
     }
 }
