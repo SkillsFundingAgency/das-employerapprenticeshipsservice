@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<IMultiVariantTestingService> _mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> _mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> _mockEmployerTeamOrchestrator;
+        private Mock<Row1Panel1Orchestrator> mockRow1Panel1Orchestrator;
         private Mock<IPortalClient> _mockPortalClient;
 
         [SetUp]
@@ -32,6 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             _mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             _mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             _mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
+            mockRow1Panel1Orchestrator = new Mock<Row1Panel1Orchestrator>();
             _mockPortalClient = new Mock<IPortalClient>();
 
             _mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(true);
@@ -41,6 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 _mockMultiVariantTestingService.Object,
                 _mockCookieStorageService.Object,
                 _mockEmployerTeamOrchestrator.Object,
+                mockRow1Panel1Orchestrator.Object,
                 _mockPortalClient.Object,
                 _mockAuthorizationService.Object);
         }

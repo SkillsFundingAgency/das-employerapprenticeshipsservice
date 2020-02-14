@@ -28,6 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+        private readonly Row1Panel1Orchestrator _row1Panel1Orchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
@@ -36,6 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             : base(owinWrapper)
         {
             _employerTeamOrchestrator = null;
+            _row1Panel1Orchestrator = null;
         }
 
         public EmployerTeamController(
@@ -43,11 +45,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
+            Row1Panel1Orchestrator row1Panel1Orchestrator,
             IPortalClient portalClient,
             IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
+            _row1Panel1Orchestrator = row1Panel1Orchestrator;
             _portalClient = portalClient;
             _authorizationService = authorizationService;
         }
@@ -57,6 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Index(string hashedAccountId, string reservationId)
         {
             PopulateViewBagWithExternalUserId();            
+            
             var response = await GetAccountInformation(hashedAccountId);
 
             if (response.Status != HttpStatusCode.OK)
@@ -327,12 +332,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpGet]
         [Route("ViewApprenticeship")]
         public ActionResult ViewApprenticeship(string hashedAccountId, string hashedDraftApprenticeshipId, string hashedCohortReference)
-        {   
-            var test = RedirectToRoute(new RouteValueDictionary(new { controller = "DraftApprenticeship", action = $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}" }));
+        {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            //var baseUrl = configuration.EmployerCommitmentsBaseUrl;
-            var baseUrl = "https://approvals.test-eas.apprenticeships.education.gov.uk/";
-            //https://approvals.test-eas.apprenticeships.education.gov.uk/V7LJB8/unapproved/VDJP4X/apprentices/XD7D77 // Edit apprentice details Link
+            var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;      //https://approvals.test-eas.apprenticeships.education.gov.uk/V7LJB8/unapproved/VDJP4X/apprentices/XD7D77 // Edit apprentice details Link               
             var url = $"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
             return Redirect(url);
         }
@@ -397,19 +399,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     //STEP2 : Check Draft Apprenticeship -- HasDraftApprenticeship
                     //STEP3 : Check Reservations -- model.ReservationsCount
 
-                    if (model.ApprenticeshipAdded && model.CohortsCount == 0 && model.ApprenticeshipsCount == 1) 
+                    if (model.ApprenticeshipAdded && model.Row1Panel1ViewModel.CohortsCount == 0 && model.Row1Panel1ViewModel.ApprenticeshipsCount == 1) 
                     {
                         //Render  Approved Status View Panel
                         viewModel.ViewName = "YourApprentice";
                     }
-                    else if(model.HasDraftApprenticeship && model.CohortsCount == 1 && model.ApprenticeshipsCount == 0 && model.NumberOfDraftApprentices == 1)
+                    else if(model.Row1Panel1ViewModel.HasDraftApprenticeship && model.Row1Panel1ViewModel.CohortsCount == 1 && model.Row1Panel1ViewModel.ApprenticeshipsCount == 0 && model.Row1Panel1ViewModel.NumberOfDraftApprentices == 1)
                     {
                         //Render Draft  Status View Panel                        
-                        if (model.CohortStatus == CohortStatus.Draft) 
+                        if (model.Row1Panel1ViewModel.CohortStatus == CohortStatus.Draft) 
                         {
                             viewModel.ViewName = "ContinueSetupForApprenticeship";
                         }
-                        else if (model.CohortStatus == CohortStatus.WithProvider)  //Render WithProvider  Status View Panel       
+                        else if (model.Row1Panel1ViewModel.CohortStatus == CohortStatus.WithTrainingProvider)  //Render WithProvider  Status View Panel       
                         {
                             viewModel.ViewName = "YourApprenticeStatus";
                         }
@@ -769,6 +771,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+            var responseRow1Panel1 = await _row1Panel1Orchestrator.GetAccount(hashedAccountId, response.Data.Account.Id);
+
+            response.Data.Row1Panel1ViewModel = responseRow1Panel1.Data;
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
 
@@ -780,6 +785,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             return response;
         }
+
+       
 
         private void PopulateViewBagWithExternalUserId()
         {

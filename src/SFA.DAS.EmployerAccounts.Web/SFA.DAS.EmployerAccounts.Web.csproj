@@ -119,7 +119,7 @@
       <Version>1.1.4</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
-      <Version>4.1.965</Version>
+      <Version>4.1.1013</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
@@ -262,6 +262,7 @@
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
+    <Compile Include="Orchestrators\Row1Panel1Orchestrator.cs" />
     <Compile Include="Orchestrators\SearchPensionRegulatorOrchestrator.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\SupportErrorOrchestrator.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\Row1Panel1ViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />

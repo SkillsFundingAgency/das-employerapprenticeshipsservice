@@ -55,6 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
                 c.AddRegistry<AuthorisationRegistry>();                
+                c.AddRegistry<EmployerAccounts.DependencyResolution.EncodingRegistry>();
                 c.AddRegistry<CommitmentsApiClientRegistry>();
             });
         }
