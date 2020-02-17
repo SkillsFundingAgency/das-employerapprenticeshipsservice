@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
-        private Mock<Row1Panel1Orchestrator> mockRow1Panel1Orchestrator;
+        private Mock<CallToActionOrchestrator> mockCallToActionOrchestrator;
         private Mock<IPortalClient> mockPortalClient;
 
         [SetUp]
@@ -32,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            mockRow1Panel1Orchestrator = new Mock<Row1Panel1Orchestrator>();
+            mockCallToActionOrchestrator = new Mock<CallToActionOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockRow1Panel1Orchestrator.Object,
+                mockCallToActionOrchestrator.Object,
                 mockPortalClient.Object,
                 mockAuthorizationService.Object);
         }

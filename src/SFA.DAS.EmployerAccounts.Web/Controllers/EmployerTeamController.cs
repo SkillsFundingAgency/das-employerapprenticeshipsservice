@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly Row1Panel1Orchestrator _row1Panel1Orchestrator;
+        private readonly CallToActionOrchestrator _row1Panel1Orchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            Row1Panel1Orchestrator row1Panel1Orchestrator,
+            CallToActionOrchestrator row1Panel1Orchestrator,
             IPortalClient portalClient,
             IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
@@ -617,7 +617,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
-            var responseRow1Panel1 = await _row1Panel1Orchestrator.GetAccount(hashedAccountId, response.Data.Account.Id, externalUserId);
+            var responseRow1Panel1 = await _row1Panel1Orchestrator.GetCallToAction(hashedAccountId, response.Data.Account.Id, externalUserId);
             response.Data.CallToActionViewModel = responseRow1Panel1.Data;
 
             var flashMessage = GetFlashMessageViewModelFromCookie();

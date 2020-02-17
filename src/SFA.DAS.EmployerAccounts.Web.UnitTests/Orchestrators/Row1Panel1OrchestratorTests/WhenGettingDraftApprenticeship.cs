@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
         private const string HashedAccountId = "ABC123";
         private const long AccountId = 123;
         private const string UserId = "USER1";
-        private Row1Panel1Orchestrator row1Panel1Orchestrator;
+        private CallToActionOrchestrator CalltoActionOrchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICommitmentsApiClient> mockCommitmentApiClient;
         private Mock<IEncodingService> mockEncodingService;
@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
 
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
-            row1Panel1Orchestrator = new Row1Panel1Orchestrator(_mediator.Object,  mockCommitmentApiClient.Object, mockEncodingService.Object);
+            CalltoActionOrchestrator = new CallToActionOrchestrator(_mediator.Object,  mockCommitmentApiClient.Object, mockEncodingService.Object);
         }
 
 
@@ -80,7 +80,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
                It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
 
             //Act
-            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId, UserId);
+            var result = await CalltoActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
             //Assert
             var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();
@@ -110,7 +110,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
         public async Task ThenDraftApprenticeshipIsNullWhenCohortsResponseIsNull()
         {
             //Act
-            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId, UserId);
+            var result = await CalltoActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
             //Assert
             var expected = DraftApprenticeshipsResponse.DraftApprenticeships.Where(x => x.CourseName == "CourseName");
@@ -126,7 +126,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
                It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
 
             //Act
-            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId, UserId);
+            var result = await CalltoActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
             //Assert
             var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();
@@ -143,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
                It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
 
             //Act
-            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId, UserId);
+            var result = await CalltoActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
             //Assert
             var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();
@@ -160,7 +160,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
                It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
 
             //Act
-            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId, UserId);
+            var result = await CalltoActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
             //Assert
             var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();

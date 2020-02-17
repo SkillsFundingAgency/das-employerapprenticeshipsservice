@@ -18,13 +18,13 @@ using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.Resour
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
-    public class Row1Panel1Orchestrator : UserVerificationOrchestratorBase
+    public class CallToActionOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
         private readonly ICommitmentsApiClient _commitmentsApiClient;
         private readonly IEncodingService _encodingService;     
 
-        public Row1Panel1Orchestrator(IMediator mediator, ICommitmentsApiClient commitmentsApiClient, IEncodingService encodingService) :  base(mediator)
+        public CallToActionOrchestrator(IMediator mediator, ICommitmentsApiClient commitmentsApiClient, IEncodingService encodingService) :  base(mediator)
         {
             _mediator = mediator;
             _commitmentsApiClient = commitmentsApiClient;
@@ -32,11 +32,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
 
         //Needed for tests
-        protected Row1Panel1Orchestrator()
+        protected CallToActionOrchestrator()
         {
         }
 
-        public virtual async Task<OrchestratorResponse<CallToActionViewModel>> GetAccount(string hashedAccountId,long AccountId, string externalUserId)
+        public virtual async Task<OrchestratorResponse<CallToActionViewModel>> GetCallToAction(string hashedAccountId,long AccountId, string externalUserId)
         {
             try
             {
@@ -60,13 +60,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var pendingAgreements = agreementsResponse?.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
 
                 var apprenticeshipsCount = 0;
-                Task<GetApprenticeshipsResponse> apprenticeshipResponse = null;
+                //Task<GetApprenticeshipsResponse> apprenticeshipResponse = null;
                 /*TODO : include later*/
-                /*var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = AccountId }))?.Apprenticeships;
+                var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = AccountId }))?.Apprenticeships;
                 if (apprenticeshipResponse != null)
                 {
                     apprenticeshipsCount = apprenticeshipResponse.Count();
-                }*/
+                }
 
                 var cohortsCount = 0;
                 var draftApprenticeshipCount = 0;

@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
         private const long AccountId = 123;
         public const long ProviderId = 789;
         private const string UserId = "USER1";        
-        private Row1Panel1Orchestrator row1Panel1Orchestrator;
+        private CallToActionOrchestrator callToActionOrchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICommitmentsApiClient> mockCommitmentApiClient;
         private Mock<IEncodingService> mockEncodingService;
@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
             mockCommitmentApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == AccountId), CancellationToken.None)).Returns(Task.FromResult(GetCohortsResponse));
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
-            row1Panel1Orchestrator = new Row1Panel1Orchestrator(_mediator.Object, mockCommitmentApiClient.Object, mockEncodingService.Object);
+            callToActionOrchestrator = new CallToActionOrchestrator(_mediator.Object, mockCommitmentApiClient.Object, mockEncodingService.Object);
         }
 
         private GetCohortsResponse CreateGetCohortsResponseForDraftStaus()
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
         public async Task ThenShouldGetCohortResponse()
         {
             //Act
-            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId, UserId);
+            var result = await callToActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
             //Assert
             var expected = GetCohortsResponse.Cohorts.Where(x => x.WithParty == Party.Employer);            

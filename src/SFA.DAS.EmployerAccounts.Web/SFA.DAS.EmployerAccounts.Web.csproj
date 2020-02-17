@@ -263,7 +263,7 @@
     <Compile Include="Orchestrators\InvitationOrchestrator.cs" />
     <Compile Include="Orchestrators\IOrchestratorCookie.cs" />
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
-    <Compile Include="Orchestrators\Row1Panel1Orchestrator.cs" />
+    <Compile Include="Orchestrators\CallToActionOrchestrator.cs" />
     <Compile Include="Orchestrators\SearchPensionRegulatorOrchestrator.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\SupportErrorOrchestrator.cs" />
