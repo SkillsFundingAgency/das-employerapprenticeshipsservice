@@ -27,6 +27,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
@@ -621,6 +622,108 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Status = HttpStatusCode.Unauthorized
                 };
             }
+        }
+
+        public void GetCallToActionViewName(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
+            rules.Add(100, EvalutateSignAgreementCallToActionRule);
+
+            if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+            {
+                rules.Add(200, EvalutateSingleReservationCallToActionRule);                
+                rules.Add(201, EvaluateApprenticeshipsCallToActionRule);
+                rules.Add(202, EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule);
+                rules.Add(203, EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule);
+                rules.Add(204, EvalutateHasReservationsCallToActionRule);
+            }
+
+            foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
+            {
+                if (callToActionRuleFunc.Value(ref viewModel))
+                    return;
+            }
+        }
+
+        private delegate bool EvalutateCallToActionRuleDelegate(ref PanelViewModel<AccountDashboardViewModel> viewModel);
+
+        private bool EvalutateSignAgreementCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
+            {
+                viewModel.ViewName = "SignAgreement";
+                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateSingleReservationCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1 &&
+                viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
+            {
+                viewModel.ViewName = "ContinueSetupForSingleReservation";
+                viewModel.IsFeaturedPanel = false;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateHasReservationsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (!viewModel.Data.CallToActionViewModel.HasReservations)
+            {
+                viewModel.ViewName = "CheckFunding";
+                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvaluateApprenticeshipsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.ApprenticeshipAdded && 
+                viewModel.Data.CallToActionViewModel.CohortsCount == 0 && 
+                viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 1)
+            {
+                viewModel.ViewName = "YourApprentice";
+                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship && viewModel.Data.CallToActionViewModel.CohortsCount == 1 
+                    && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
+                    && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Draft)
+            {
+                viewModel.ViewName = "ContinueSetupForApprenticeship";
+                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship && viewModel.Data.CallToActionViewModel.CohortsCount == 1
+                    && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
+                    && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)
+            {
+                viewModel.ViewName = "YourApprenticeStatus";
+                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
+                return true;
+            }
+
+            return false;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly CallToActionOrchestrator _row1Panel1Orchestrator;
+        private readonly CallToActionOrchestrator _callToActionOrchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             : base(owinWrapper)
         {
             _employerTeamOrchestrator = null;
-            _row1Panel1Orchestrator = null;
+            _callToActionOrchestrator = null;
         }
 
         public EmployerTeamController(
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
-            _row1Panel1Orchestrator = row1Panel1Orchestrator;
+            _callToActionOrchestrator = row1Panel1Orchestrator;
             _portalClient = portalClient;
             _authorizationService = authorizationService;
         }
@@ -374,53 +374,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-            viewModel.IsFeaturedPanel = !model.CallToActionViewModel.ApprenticeshipAdded;
 
             if (model.PayeSchemeCount == 0)
             {
                 viewModel.ViewName = "AddPAYE";
+                viewModel.IsFeaturedPanel = !model.CallToActionViewModel.ApprenticeshipAdded;
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
-                if (model.CallToActionViewModel.AgreementsToSign)
-                {
-                    viewModel.ViewName = "SignAgreement";
-                }
-                else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
-                {
-                    {
-                        //STEP1 : Check Live Apprenticeship -- ApprenticeshipAdded
-                        //STEP2 : Check Draft Apprenticeship -- HasDraftApprenticeship
-                        //STEP3 : Check Reservations -- model.ReservationsCount
-
-                        if (model.CallToActionViewModel.ApprenticeshipAdded && model.CallToActionViewModel.CohortsCount == 0 && model.CallToActionViewModel.ApprenticeshipsCount == 1)
-                        {
-                            //Render  Approved Status View Panel
-                            viewModel.ViewName = "YourApprentice";
-                        }
-                        else if (model.CallToActionViewModel.HasSingleDraftApprenticeship && model.CallToActionViewModel.CohortsCount == 1 && model.CallToActionViewModel.ApprenticeshipsCount == 0 && model.CallToActionViewModel.NumberOfDraftApprentices == 1)
-                        {
-                            //Render Draft  Status View Panel                        
-                            if (model.CallToActionViewModel.CohortStatus == CohortStatus.Draft)
-                            {
-                                viewModel.ViewName = "ContinueSetupForApprenticeship";
-                            }
-                            else if (model.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)  //Render WithProvider  Status View Panel       
-                            {
-                                viewModel.ViewName = "YourApprenticeStatus";
-                            }
-                        }
-                        else if (model.CallToActionViewModel.ReservationsCount == 1 && model.CallToActionViewModel.PendingReservationsCount == 1 && !model.CallToActionViewModel.ApprenticeshipAdded)
-                        {
-                            viewModel.ViewName = "ContinueSetupForSingleReservation";
-                            viewModel.IsFeaturedPanel = false;
-                        }
-                        else if (!model.CallToActionViewModel.HasReservations)
-                        {
-                            viewModel.ViewName = "CheckFunding";
-                        }
-                    }          
-                }
+                _employerTeamOrchestrator.GetCallToActionViewName(ref viewModel);
             }
 
             return PartialView(viewModel);
@@ -617,7 +579,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
-            var responseRow1Panel1 = await _row1Panel1Orchestrator.GetCallToAction(hashedAccountId, response.Data.Account.Id, externalUserId);
+            var responseRow1Panel1 = await _callToActionOrchestrator.GetCallToAction(hashedAccountId, response.Data.Account.Id, externalUserId);
             response.Data.CallToActionViewModel = responseRow1Panel1.Data;
 
             var flashMessage = GetFlashMessageViewModelFromCookie();

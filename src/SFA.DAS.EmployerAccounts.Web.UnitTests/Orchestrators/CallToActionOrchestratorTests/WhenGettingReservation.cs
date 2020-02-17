@@ -13,9 +13,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1OrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.CallToActionOrchestratorTests
 {
-    public class WhenGettingApprenticeships
+    public class WhenGettingReservation
     {
         private const string HashedAccountId = "ABC123";
         private const long AccountId = 123;
@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
         private Mock<IEncodingService> mockEncodingService;
         private GetApprenticeshipsResponse ApprenticeshipsResponse;
         private CallToActionOrchestrator callToActionOrchestrator;
+
 
         [SetUp]
         public void Arrange()
@@ -72,21 +73,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
                 }
             };
 
-            return new GetApprenticeshipsResponse() { Apprenticeships = apprenticeships, TotalApprenticeships = 1, TotalApprenticeshipsFound = 1, TotalApprenticeshipsWithAlertsFound =0 };
+            return new GetApprenticeshipsResponse() { Apprenticeships = apprenticeships, TotalApprenticeships = 1, TotalApprenticeshipsFound = 1, TotalApprenticeshipsWithAlertsFound = 0 };
         }
 
-         [Test]
-        public async Task ThenShouldGetApprenticeshipResponse()
+
+        [Test]
+        public async Task ThenShouldGetReservationsCount()
         {
-            //Act
-            var result = await callToActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
+            // Act
+            var actual = await callToActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
-            //Assert            
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Data.ApprenticeshipsCount);
-            Assert.AreEqual(0, result.Data.CohortsCount);           
-            Assert.IsFalse(result.Data.HasSingleDraftApprenticeship);
+            //Assert
+            Assert.AreEqual(1, actual.Data.ReservationsCount);
         }
-       
+
+
     }
 }

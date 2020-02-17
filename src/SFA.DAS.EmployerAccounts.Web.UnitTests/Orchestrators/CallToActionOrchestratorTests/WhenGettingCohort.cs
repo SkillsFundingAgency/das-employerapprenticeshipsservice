@@ -5,26 +5,29 @@ using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
+using SFA.DAS.EmployerAccounts.Queries.GetReservations;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.Encoding;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Queries.GetReservations;
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1OrchestratorTests
+
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.CallToActionOrchestratorTests
 {
-    public class WhenGettingReservation
+    public class WhenGettingCohort
     {
         private const string HashedAccountId = "ABC123";
         private const long AccountId = 123;
-        private const string UserId = "USER1";
+        public const long ProviderId = 789;
+        private const string UserId = "USER1";        
+        private CallToActionOrchestrator callToActionOrchestrator;
         private Mock<IMediator> _mediator;
         private Mock<ICommitmentsApiClient> mockCommitmentApiClient;
         private Mock<IEncodingService> mockEncodingService;
-        private GetApprenticeshipsResponse ApprenticeshipsResponse;
-        private CallToActionOrchestrator callToActionOrchestrator;
-
+        public GetCohortsResponse GetCohortsResponse { get; set; }
 
         [SetUp]
         public void Arrange()
@@ -33,7 +36,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
             _mediator = new Mock<IMediator>();
             mockCommitmentApiClient = new Mock<ICommitmentsApiClient>();
             mockEncodingService = new Mock<IEncodingService>();
-            ApprenticeshipsResponse = CreateApprenticeshipResponse();
+
+
             _mediator.Setup(m => m.SendAsync(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId)))
                  .ReturnsAsync(new GetReservationsResponse
                  {
@@ -46,46 +50,47 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
                      }
                  });
 
-            mockCommitmentApiClient.Setup(c => c.GetApprenticeships(It.Is<GetApprenticeshipsRequest>(a => a.AccountId == AccountId), It.IsAny<CancellationToken>()))
-                .Returns(Task.FromResult(ApprenticeshipsResponse));
+            GetCohortsResponse = CreateGetCohortsResponseForDraftStaus();
+            mockCommitmentApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == AccountId), CancellationToken.None)).Returns(Task.FromResult(GetCohortsResponse));
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
-
             callToActionOrchestrator = new CallToActionOrchestrator(_mediator.Object, mockCommitmentApiClient.Object, mockEncodingService.Object);
         }
 
-        private GetApprenticeshipsResponse CreateApprenticeshipResponse()
+        private GetCohortsResponse CreateGetCohortsResponseForDraftStaus()
         {
-            IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse> apprenticeships = new List<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>()
+            IEnumerable<CohortSummary> cohorts = new List<CohortSummary>()
             {
-                new GetApprenticeshipsResponse.ApprenticeshipDetailsResponse
+                 new CohortSummary
                 {
-                    Id = 1,
-                    FirstName = "FirstName",
-                    LastName = "LastName",
-                    Uln = "Uln",
-                    EmployerName = "EmployerName",
-                    CourseName = "CourseName",
-                    StartDate = new DateTime(2020, 5, 1),
-                    EndDate = new DateTime(2022, 5, 1),
-                    ApprenticeshipStatus = ApprenticeshipStatus.Live
+                    CohortId = 2,
+                    AccountId = 1,
+                    ProviderId = 2,
+                    ProviderName = "Provider2",
+                    NumberOfDraftApprentices = 0,
+                    IsDraft = true,
+                    WithParty = Party.Employer,
+                    CreatedOn = DateTime.Now.AddMinutes(-5),
                 }
             };
 
-            return new GetApprenticeshipsResponse() { Apprenticeships = apprenticeships, TotalApprenticeships = 1, TotalApprenticeshipsFound = 1, TotalApprenticeshipsWithAlertsFound = 0 };
+            return new GetCohortsResponse(cohorts);
         }
 
 
         [Test]
-        public async Task ThenShouldGetReservationsCount()
+        public async Task ThenShouldGetCohortResponse()
         {
-            // Act
-            var actual = await callToActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
+            //Act
+            var result = await callToActionOrchestrator.GetCallToAction(HashedAccountId, AccountId, UserId);
 
             //Assert
-            Assert.AreEqual(1, actual.Data.ReservationsCount);
+            var expected = GetCohortsResponse.Cohorts.Where(x => x.WithParty == Party.Employer);            
+            Assert.IsTrue(result.Data.CohortsCount.Equals(1));
+            Assert.IsTrue(result.Data.CohortStatus.Equals(CohortStatus.Draft));
+            Assert.AreEqual(expected.Select(x => x.NumberOfDraftApprentices).ToList()[0], result.Data.NumberOfDraftApprentices);
+            Assert.AreEqual(expected.Select(x => x.ProviderName).ToList()[0], result.Data.ProviderName);
         }
-
 
     }
 }

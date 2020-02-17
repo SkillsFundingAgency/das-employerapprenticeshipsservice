@@ -17,7 +17,7 @@ using SFA.DAS.CommitmentsV2.Types.Dtos;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1OrchestratorTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.CallToActionOrchestratorTests
 {
     public class WhenGettingDraftApprenticeship
     {
@@ -41,8 +41,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
             _mediator = new Mock<IMediator>();
             mockCommitmentApiClient = new Mock<ICommitmentsApiClient>();
             mockEncodingService = new Mock<IEncodingService>();
-
-
             _mediator.Setup(m => m.SendAsync(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId)))
                  .ReturnsAsync(new GetReservationsResponse
                  {
@@ -54,17 +52,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
                              }
                      }
                  });
-
-
             GetCohortsResponse = CreateGetCohortsResponseForWithTrainingProviderStaus();
             GetCohortsResponses = CreateGetCohortsResponses();
             GetCohortsResponseMoreThanOneDraftApprenticeship = CreateGetCohortsResponseMoreThanOneDraftApprenticeships();
-            // mockCommitmentApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == AccountId), CancellationToken.None)).Returns(Task.FromResult(GetCohortsResponse));
-
-            DraftApprenticeshipsResponse = GetDraftApprenticeshipsResponseTest();
-            //mockCommitmentApiClient.Setup(c => c.GetDraftApprenticeships(GetCohortsResponse.Cohorts.FirstOrDefault().CohortId,
-            //    It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
-
+            DraftApprenticeshipsResponse = GetDraftApprenticeshipsResponse();            
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
             CalltoActionOrchestrator = new CallToActionOrchestrator(_mediator.Object,  mockCommitmentApiClient.Object, mockEncodingService.Object);
@@ -243,7 +234,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
             return new GetCohortsResponse(cohorts);
         }
 
-        private GetDraftApprenticeshipsResponse GetDraftApprenticeshipsResponseTest()
+        private GetDraftApprenticeshipsResponse GetDraftApprenticeshipsResponse()
         {
             IReadOnlyCollection<DraftApprenticeshipDto> draftApprenticeships = new List<DraftApprenticeshipDto>()
             {

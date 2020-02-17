@@ -323,7 +323,6 @@
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
     <Compile Include="ViewModels\ReservationViewModel.cs" />
-    <Compile Include="ViewModels\Row1Panel1ViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
