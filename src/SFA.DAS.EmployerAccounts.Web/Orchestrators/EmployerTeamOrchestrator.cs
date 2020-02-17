@@ -658,10 +658,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateSignAgreementCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.AgreementsToSign)
+            if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";
-                viewModel.IsFeaturedPanel = !viewModel.Data.ApprenticeshipAdded;
+                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
                 return true;
             }
 
@@ -670,7 +670,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateSingleReservationCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.ReservationsCount == 1 && viewModel.Data.PendingReservationsCount == 1 && !viewModel.Data.ApprenticeshipAdded)
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1 && 
+                viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
             {
                 viewModel.ViewName = "ContinueSetupForSingleReservation";
                 viewModel.IsFeaturedPanel = false;
@@ -682,10 +683,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateHasReservationsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (!viewModel.Data.HasReservations)
+            if (!viewModel.Data.CallToActionViewModel.HasReservations)
             {
                 viewModel.ViewName = "CheckFunding";
-                viewModel.IsFeaturedPanel = !viewModel.Data.ApprenticeshipAdded;
+                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
                 return true;
             }
 
