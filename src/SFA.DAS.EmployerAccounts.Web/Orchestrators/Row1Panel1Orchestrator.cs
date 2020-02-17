@@ -1,7 +1,11 @@
-﻿using SFA.DAS.CommitmentsV2.Api.Client;
+﻿using MediatR;
+using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
+using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
+using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Encoding;
@@ -16,11 +20,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
     public class Row1Panel1Orchestrator : UserVerificationOrchestratorBase
     {
+        private readonly IMediator _mediator;
         private readonly ICommitmentsApiClient _commitmentsApiClient;
         private readonly IEncodingService _encodingService;     
 
-        public Row1Panel1Orchestrator(ICommitmentsApiClient commitmentsApiClient, IEncodingService encodingService)
+        public Row1Panel1Orchestrator(IMediator mediator, ICommitmentsApiClient commitmentsApiClient, IEncodingService encodingService) :  base(mediator)
         {
+            _mediator = mediator;
             _commitmentsApiClient = commitmentsApiClient;
             _encodingService = encodingService;
         }
@@ -30,33 +36,79 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
         }
 
-        public virtual async Task<OrchestratorResponse<Row1Panel1ViewModel>> GetAccount(string hashedAccountId,long AccountId)
+        public virtual async Task<OrchestratorResponse<CallToActionViewModel>> GetAccount(string hashedAccountId,long AccountId, string externalUserId)
         {
             try
-            {    
-                //TO DO : Render View Test
-                //var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = AccountId, ProviderId = cohortsResponse?.FirstOrDefault().ProviderId })).Apprenticeships; */
-                var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = AccountId }))?.Apprenticeships;
-                var cohortsResponse = (await _commitmentsApiClient.GetCohorts(new GetCohortsRequest { AccountId = AccountId }))?.Cohorts;
-                var draftApprenticeshipsResponse = (cohortsResponse != null) ? (await _commitmentsApiClient.GetDraftApprenticeships((long)cohortsResponse?.FirstOrDefault().CohortId))?.DraftApprenticeships : null;
-                
-                var viewModel = new Row1Panel1ViewModel
+            {
+                var reservationsResponseTask =  _mediator.SendAsync(new GetReservationsRequest
                 {
-                    CohortsCount = cohortsResponse?.Count(),
-                    ApprenticeshipsCount = apprenticeshipResponse?.Count(),
-                    NumberOfDraftApprentices = cohortsResponse?.FirstOrDefault().NumberOfDraftApprentices,
-                    HasDraftApprenticeship = draftApprenticeshipsResponse?.Count == 1,
-                    CourseName = draftApprenticeshipsResponse?.FirstOrDefault().CourseName, //CourseName
-                    CourseStartDate = draftApprenticeshipsResponse?.FirstOrDefault().StartDate, //CourseStartDate
-                    CourseEndDate = draftApprenticeshipsResponse?.FirstOrDefault().EndDate, //CourseEndDate                    
-                    HashedDraftApprenticeshipId = (draftApprenticeshipsResponse != null) ? _encodingService.Encode((long)draftApprenticeshipsResponse?.FirstOrDefault().Id, EncodingType.ApprenticeshipId) : string.Empty,
-                    ProviderName = cohortsResponse?.FirstOrDefault().ProviderName,  //Training Provider
-                    CohortStatus = (cohortsResponse != null) ?  cohortsResponse.FirstOrDefault().GetStatus() : CohortStatus.Unknown, //Status
-                    HashedCohortReference = (cohortsResponse != null) ? _encodingService.Encode((long)cohortsResponse?.FirstOrDefault().CohortId, EncodingType.CohortReference) : string.Empty,
-                    ApprenticeName = draftApprenticeshipsResponse?.FirstOrDefault().FirstName + " " + draftApprenticeshipsResponse?.FirstOrDefault().LastName
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
+
+
+                var agreementsResponseTask =  _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
+
+                await Task.WhenAll(reservationsResponseTask, agreementsResponseTask);
+
+                var reservationsResponse = reservationsResponseTask.Result;
+                var agreementsResponse = agreementsResponseTask.Result;
+                var pendingAgreements = agreementsResponse?.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
+
+                var apprenticeshipsCount = 0;
+                Task<GetApprenticeshipsResponse> apprenticeshipResponse = null;
+                /*TODO : include later*/
+                /*var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = AccountId }))?.Apprenticeships;
+                if (apprenticeshipResponse != null)
+                {
+                    apprenticeshipsCount = apprenticeshipResponse.Count();
+                }*/
+
+                var cohortsCount = 0;
+                var draftApprenticeshipCount = 0;
+                CohortSummary singleCohort = new CohortSummary();
+                DraftApprenticeshipDto singleDraftApprenticeship = new DraftApprenticeshipDto();
+
+                if (apprenticeshipResponse == null)
+                {
+                    var cohortsResponse = (await _commitmentsApiClient.GetCohorts(new GetCohortsRequest { AccountId = AccountId }))?.Cohorts;
+
+                    if (cohortsResponse != null && cohortsResponse.Count() == 1)
+                    {
+                        cohortsCount = cohortsResponse.Count();
+                        singleCohort = cohortsResponse.First();
+                        draftApprenticeshipCount = singleCohort.NumberOfDraftApprentices;
+
+                        if (draftApprenticeshipCount == 1)
+                        {
+                           var draftApprenticeshipsResponse = (await _commitmentsApiClient.GetDraftApprenticeships(singleCohort.CohortId))?.DraftApprenticeships;
+                            singleDraftApprenticeship = draftApprenticeshipsResponse.First();
+                        }
+                    }
+                }
+                
+                var viewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = pendingAgreements?.Count() > 0,
+                    Reservations = reservationsResponse.Reservations.ToList(),
+                    CohortsCount = cohortsCount,
+                    ApprenticeshipsCount = apprenticeshipsCount,
+                    NumberOfDraftApprentices = draftApprenticeshipCount,
+                    CourseName = singleDraftApprenticeship.CourseName, //CourseName
+                    CourseStartDate = singleDraftApprenticeship.StartDate, //CourseStartDate
+                    CourseEndDate = singleDraftApprenticeship.EndDate, //CourseEndDate                    
+                    HashedDraftApprenticeshipId = _encodingService.Encode(singleDraftApprenticeship.Id, EncodingType.ApprenticeshipId),
+                    ProviderName = singleCohort.ProviderName,  //Training Provider
+                    CohortStatus = singleCohort?.GetStatus() ?? CohortStatus.Unknown, //Status
+                    HashedCohortReference = _encodingService.Encode(singleCohort.CohortId, EncodingType.CohortReference),
+                    ApprenticeName = singleDraftApprenticeship.FirstName + " " + singleDraftApprenticeship.LastName
                 };
 
-                return new OrchestratorResponse<Row1Panel1ViewModel>
+                return new OrchestratorResponse<CallToActionViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = viewModel
@@ -64,7 +116,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (UnauthorizedAccessException ex)
             {
-                return new OrchestratorResponse<Row1Panel1ViewModel>
+                return new OrchestratorResponse<CallToActionViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized,
                     Exception = ex
@@ -72,7 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
-                return new OrchestratorResponse<Row1Panel1ViewModel>
+                return new OrchestratorResponse<CallToActionViewModel>
                 {
                     Status = HttpStatusCode.InternalServerError,
                     Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account: {hashedAccountId}", ex)
@@ -80,7 +132,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             catch (Exception ex)
             {
-                return new OrchestratorResponse<Row1Panel1ViewModel>
+                return new OrchestratorResponse<CallToActionViewModel>
                 {
                     Status = HttpStatusCode.InternalServerError,
                     Exception = ex

@@ -18,6 +18,7 @@ using SFA.DAS.Validation;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -26,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
+        private readonly Row1Panel1Orchestrator _row1Panel1Orchestrator;
         private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
@@ -34,6 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             : base(owinWrapper)
         {
             _employerTeamOrchestrator = null;
+            _row1Panel1Orchestrator = null;
         }
 
         public EmployerTeamController(
@@ -41,11 +44,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
+            Row1Panel1Orchestrator row1Panel1Orchestrator,
             IPortalClient portalClient,
             IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
+            _row1Panel1Orchestrator = row1Panel1Orchestrator;
             _portalClient = portalClient;
             _authorizationService = authorizationService;
         }
@@ -327,6 +332,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
         }
 
+        [HttpGet]
+        [Route("ViewApprenticeship")]
+        public ActionResult ViewApprenticeship(string hashedAccountId, string hashedDraftApprenticeshipId, string hashedCohortReference)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;      //https://approvals.test-eas.apprenticeships.education.gov.uk/V7LJB8/unapproved/VDJP4X/apprentices/XD7D77 // Edit apprentice details Link               
+            var url = $"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
+            return Redirect(url);
+        }
+
+        [ChildActionOnly]
+        public ActionResult ContinueSetupForApprenticeship(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult YourApprenticeStatus(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
         [ChildActionOnly]
         public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
@@ -361,15 +388,38 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
                 {
-                    if (model.CallToActionViewModel.ReservationsCount == 1 && model.CallToActionViewModel.PendingReservationsCount == 1 && !model.CallToActionViewModel.ApprenticeshipAdded)
                     {
-                        viewModel.ViewName = "ContinueSetupForSingleReservation";
-                        viewModel.IsFeaturedPanel = false;
-                    }
-                    else if (!model.CallToActionViewModel.HasReservations)
-                    {
-                        viewModel.ViewName = "CheckFunding";
-                    }                    
+                        //STEP1 : Check Live Apprenticeship -- ApprenticeshipAdded
+                        //STEP2 : Check Draft Apprenticeship -- HasDraftApprenticeship
+                        //STEP3 : Check Reservations -- model.ReservationsCount
+
+                        if (model.CallToActionViewModel.ApprenticeshipAdded && model.CallToActionViewModel.CohortsCount == 0 && model.CallToActionViewModel.ApprenticeshipsCount == 1)
+                        {
+                            //Render  Approved Status View Panel
+                            viewModel.ViewName = "YourApprentice";
+                        }
+                        else if (model.CallToActionViewModel.HasSingleDraftApprenticeship && model.CallToActionViewModel.CohortsCount == 1 && model.CallToActionViewModel.ApprenticeshipsCount == 0 && model.CallToActionViewModel.NumberOfDraftApprentices == 1)
+                        {
+                            //Render Draft  Status View Panel                        
+                            if (model.CallToActionViewModel.CohortStatus == CohortStatus.Draft)
+                            {
+                                viewModel.ViewName = "ContinueSetupForApprenticeship";
+                            }
+                            else if (model.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)  //Render WithProvider  Status View Panel       
+                            {
+                                viewModel.ViewName = "YourApprenticeStatus";
+                            }
+                        }
+                        else if (model.CallToActionViewModel.ReservationsCount == 1 && model.CallToActionViewModel.PendingReservationsCount == 1 && !model.CallToActionViewModel.ApprenticeshipAdded)
+                        {
+                            viewModel.ViewName = "ContinueSetupForSingleReservation";
+                            viewModel.IsFeaturedPanel = false;
+                        }
+                        else if (!model.CallToActionViewModel.HasReservations)
+                        {
+                            viewModel.ViewName = "CheckFunding";
+                        }
+                    }          
                 }
             }
 
@@ -561,11 +611,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
+        
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
+            var responseRow1Panel1 = await _row1Panel1Orchestrator.GetAccount(hashedAccountId, response.Data.Account.Id, externalUserId);
+            response.Data.CallToActionViewModel = responseRow1Panel1.Data;
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
 

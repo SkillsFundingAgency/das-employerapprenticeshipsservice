@@ -12,7 +12,7 @@
                 Name
             </th>
             <td class="tw-65">
-                @Model.Row1Panel1ViewModel.ApprenticeName
+                @Model.CallToActionViewModel.ApprenticeName
             </td>
         </tr>
         <tr>
@@ -20,7 +20,7 @@
                 Training Provider
             </th>
             <td>
-                @Model.Row1Panel1ViewModel.ProviderName
+                @Model.CallToActionViewModel.ProviderName
             </td>
         </tr>
         <tr>
@@ -28,7 +28,7 @@
                 Course
             </th>
             <td>
-                @Model.Row1Panel1ViewModel.CourseName
+                @Model.CallToActionViewModel.CourseName
             </td>
         </tr>        
         <tr>
@@ -36,7 +36,7 @@
                 Start month
             </th>
             <td>
-                @Model.Row1Panel1ViewModel.CourseStartDate
+                @Model.CallToActionViewModel.CourseStartDate
             </td>
         </tr>
         <tr>
@@ -44,12 +44,12 @@
                 Finish month
             </th>
             <td>
-                @Model.Row1Panel1ViewModel.CourseEndDate
+                @Model.CallToActionViewModel.CourseEndDate
             </td>
         </tr>
     </table>
     <p>
-        <a href="@Url.Action("ViewApprenticeship", "EmployerTeam", new {Model.Row1Panel1ViewModel.HashedDraftApprenticeshipId, Model.Row1Panel1ViewModel.HashedCohortReference, Model.HashedAccountId})" role="button" draggable="false" class="button">
+        <a href="@Url.Action("ViewApprenticeship", "EmployerTeam", new {Model.CallToActionViewModel.HashedDraftApprenticeshipId, Model.CallToActionViewModel.HashedCohortReference, Model.HashedAccountId})" role="button" draggable="false" class="button">
             View apprentice details
         </a>
     </p>

@@ -11,7 +11,7 @@
                 Course
             </th>
             <td class="tw-65">
-                @Model.Row1Panel1ViewModel.CourseName
+                @Model.CallToActionViewModel.CourseName
             </td>
         </tr>
         <tr>
@@ -19,7 +19,7 @@
                 Training Provider
             </th>
             <td>
-                @Model.Row1Panel1ViewModel.ProviderName
+                @Model.CallToActionViewModel.ProviderName
             </td>
         </tr>
         <tr>
@@ -27,12 +27,12 @@
                 Status
             </th>
             <td>
-                @Model.Row1Panel1ViewModel.CohortStatus
+                @Model.CallToActionViewModel.CohortStatus
             </td>
         </tr>
     </table>
     <p> 
-        <a href="@Url.Action("ViewApprenticeship", "EmployerTeam", new {Model.Row1Panel1ViewModel.HashedDraftApprenticeshipId, Model.Row1Panel1ViewModel.HashedCohortReference, Model.HashedAccountId})" role="button" draggable="false" class="button">
+        <a href="@Url.Action("ViewApprenticeship", "EmployerTeam", new {Model.CallToActionViewModel.HashedDraftApprenticeshipId, Model.CallToActionViewModel.HashedCohortReference, Model.HashedAccountId})" role="button" draggable="false" class="button">
             Add mode details
         </a>
     </p>

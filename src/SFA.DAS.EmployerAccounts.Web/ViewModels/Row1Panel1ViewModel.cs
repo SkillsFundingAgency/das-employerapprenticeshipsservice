@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public int? CohortsCount { get; set; }
         public int? ApprenticeshipsCount { get; set; }
         public int? NumberOfDraftApprentices { get; set; }
-        public bool HasDraftApprenticeship { get; set; }
+        public bool HasSingleDraftApprenticeship => NumberOfDraftApprentices == 1;
         public string CourseName { get; set; }
         public DateTime? CourseStartDate { get; set; }
         public DateTime? CourseEndDate { get; set; }
