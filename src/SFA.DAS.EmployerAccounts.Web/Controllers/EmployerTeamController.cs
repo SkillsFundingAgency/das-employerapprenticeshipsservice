@@ -361,7 +361,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
                 {
-                    if (model.CallToActionViewModel.ReservationsCount == 1 && model.CallToActionViewModel.PendingReservationsCount == 1 && !model.CallToActionViewModel.ApprenticeshipAdded)
+                    if (model.CallToActionViewModel.ReservationsCount == 1 && model.CallToActionViewModel.PendingReservationsCount == 1)
                     {
                         viewModel.ViewName = "ContinueSetupForSingleReservation";
                         viewModel.IsFeaturedPanel = false;
