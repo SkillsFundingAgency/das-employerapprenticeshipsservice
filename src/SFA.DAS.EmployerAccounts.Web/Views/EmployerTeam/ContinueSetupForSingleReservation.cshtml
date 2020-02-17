@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ReservationViewModel
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large">
@@ -6,18 +6,13 @@
     </h2>
     <p>You've reserved funding for the following apprenticeship: </p>
 
-    @{
-        var courseName = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.CourseName;
-        var startDate = Model.AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations.FirstOrDefault()?.StartDate;
-    }
-
     <table class="responsive">
         <tr>
             <th scope="row" class="tw-35">
                 Course
             </th>
             <td class="tw-65">
-                @courseName
+                @(Model?.CourseDescription)
             </td>
         </tr>
         <tr>
@@ -25,7 +20,7 @@
                 Start date
             </th>
             <td>
-                @startDate
+                @(Model?.TrainingDate.ToString())
             </td>
         </tr>
     </table>

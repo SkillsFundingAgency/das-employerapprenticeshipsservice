@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerAccounts.Models.Reservations;
+using Reservation = SFA.DAS.EmployerAccounts.Models.Reservations.Reservation;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
@@ -26,26 +26,11 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public int TeamMembersInvited { get; set; }
         public string UserFirstName { get; set; }
         public Role UserRole { get; set; }
-        public bool AgreementsToSign { get; set; }
         public int SignedAgreementCount { get; set; }
         public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
-        public bool ApprenticeshipAdded { get; set; }
-        public bool ShowSearchBar { get; set; }
-        public bool ShowMostActiveLinks { get; set; }
-        public EAS.Portal.Client.Types.Account AccountViewModel { get; set; }
-        public Guid? RecentlyAddedReservationId { get; set; }
-        public Reservation ReservedFundingToShow => AccountViewModel?.Organisations?.SelectMany(org => org.Reservations).FirstOrDefault(rf => rf.Id == RecentlyAddedReservationId) ?? AccountViewModel?.Organisations?.SelectMany(org => org.Reservations)?.LastOrDefault();
-        public string ReservedFundingOrgName => AccountViewModel?.Organisations?.Where(org => org.Reservations.Contains(ReservedFundingToShow)).Select(org => org.Name).FirstOrDefault();
-        public bool ShowSavedFavourites { get; set; }
-        public bool HasReservations => AccountViewModel?.Organisations?.FirstOrDefault()?.Reservations?.Count > 0 || ReservationsCount > 0;
         public bool HasPayeScheme => PayeSchemeCount > 0;
-        public bool HasSingleProvider => AccountViewModel?.Providers?.Count == 1;
-        public bool HasMultipleProviders => AccountViewModel?.Providers?.Count > 1;
-        // already returned in Account.ApprenticeshipEmployerType, but we want to transition to calling the api, rather than going direct to the db
         public AgreementInfoViewModel AgreementInfo { get; set; }
-        public int ReservationsCount { get; set; }
-        public int ConfirmedReservationsCount { get; set; }
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
-        public Row1Panel1ViewModel Row1Panel1ViewModel { get; set; }
+        public CallToActionViewModel CallToActionViewModel {get; set;}
     }
 }

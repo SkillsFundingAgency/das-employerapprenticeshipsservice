@@ -229,21 +229,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Tasks = tasks,
                     HashedAccountId = hashedAccountId,
                     RequiresAgreementSigning = pendingAgreements.Count(),
-                    AgreementsToSign = pendingAgreements.Count() > 0,
                     SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
-                    ReservationsCount = reservationsResponse.Reservations.Count(),
-                    ConfirmedReservationsCount = reservationsResponse.Reservations.Count(x => x.Status == ReservationStatus.Confirmed)
+                    CallToActionViewModel = new CallToActionViewModel
+                    {
+                        AgreementsToSign = pendingAgreements.Count() > 0,
+                        Reservations = reservationsResponse.Reservations.ToList(),
+                    }
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
                 // we could blat over the existing flag, but it's much nicer to store the enum (as above) rather than a byte!
                 //viewModel.Account.ApprenticeshipEmployerType = (byte) ((ApprenticeshipEmployerType) Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true));
 
-                return new OrchestratorResponse<AccountDashboardViewModel>
+            return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = viewModel

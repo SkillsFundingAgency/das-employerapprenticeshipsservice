@@ -226,6 +226,7 @@
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\SupportUserExtensions.cs" />
     <Compile Include="Extensions\SecurityExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
@@ -274,6 +275,7 @@
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
+    <Compile Include="ViewModels\CallToActionViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
@@ -320,6 +322,7 @@
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\ReservationViewModel.cs" />
     <Compile Include="ViewModels\Row1Panel1ViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
@@ -337,6 +340,7 @@
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SupportUserHeaderViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="Models\TrainingDateModel.cs" />
     <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />

@@ -1,17 +1,10 @@
 ﻿.finance-figure {
     border: 1px solid $border-colour;
+    border-left-color: $black;
     border-left-width: 10px;
     line-height: 1;
     padding: 17px 10px 13px;
     font-size: 30px;
-}
-
-.finance-figure--future {
-    border-left-color: $govuk-blue;
-}
-
-.finance-figure--planned {
-    border-left-color: $light-blue;
 }
 
 .finance-figure--expiring {
@@ -19,20 +12,26 @@
 }
 
 .finance-figure__label {
-    font-weight: bold;
     margin-top: 10px;
     margin-bottom: 30px;
 }
 
-.current-funds {
-    margin-bottom: 40px;
+.finance-figure__title {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
 
+.finance_funds {
     .finance-figure {
-        background: $highlight-colour;
         font-size: 24px;
     }
 
     .finance-figure__label {
         font-size: 16px;
     }
+}
+
+.current-funds {
+    margin-bottom: 40px;
 }
