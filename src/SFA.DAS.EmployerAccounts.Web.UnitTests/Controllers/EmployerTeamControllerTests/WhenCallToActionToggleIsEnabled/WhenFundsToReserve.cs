@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.CallToActionViewModel = new CallToActionViewModel
             {
                 AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
                 ApprenticeshipAdded = true,
                 ApprenticeshipsCount = 1,
                 CohortsCount = 0
@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.CallToActionViewModel = new CallToActionViewModel
             {
                 AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
                 ApprenticeshipAdded = false,
                 CohortsCount = 1,
                 ApprenticeshipsCount = 0,
@@ -155,7 +155,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.CallToActionViewModel = new CallToActionViewModel
             {
                 AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
                 ApprenticeshipAdded = false,
                 CohortsCount = 1,
                 ApprenticeshipsCount = 0,
