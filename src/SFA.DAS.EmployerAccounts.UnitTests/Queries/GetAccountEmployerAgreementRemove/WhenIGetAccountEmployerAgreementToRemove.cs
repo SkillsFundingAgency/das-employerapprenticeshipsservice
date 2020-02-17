@@ -3,17 +3,20 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.HashingService;
+using SFA.DAS.Testing.EntityFramework;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreementRemove
 {
     public class WhenIGetAccountEmployerAgreementToRemove : QueryBaseTest<GetAccountEmployerAgreementRemoveQueryHandler, GetAccountEmployerAgreementRemoveRequest, GetAccountEmployerAgreementRemoveResponse>
     {
-        private Mock<IEmployerAgreementRepository> _repository;
         private Mock<IHashingService> _hashingService;
+        private Mock<EmployerAccountsDbContext> _db;
+        private EmployerAgreement _employerAgreement;
+        private DbSetStub<EmployerAgreement> _emploerAgreementDbSet;
         public override GetAccountEmployerAgreementRemoveRequest Query { get; set; }
         public override GetAccountEmployerAgreementRemoveQueryHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetAccountEmployerAgreementRemoveRequest>> RequestValidator { get; set; }
@@ -30,19 +33,18 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
             SetUp();    
 
             Query = new GetAccountEmployerAgreementRemoveRequest {HashedAccountId = ExpectedHashedAccountId, HashedAgreementId = ExpectedHashedAgreementId, UserId = ExpectedUserId};
-            
-            _repository = new Mock<IEmployerAgreementRepository>();
-            _repository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId))
-                .ReturnsAsync(new EmployerAgreementView
-                {
-                    Id = ExpectedAgreementId,
-                    LegalEntityName = ExpectedAgreementName
-                });
+
+            _db = new Mock<EmployerAccountsDbContext>();
+
+            _employerAgreement = new EmployerAgreement { Id = ExpectedAgreementId, AccountLegalEntity = new AccountLegalEntity { Name = ExpectedAgreementName } };
+            _emploerAgreementDbSet = new DbSetStub<EmployerAgreement>(_employerAgreement);
+
+            _db.Setup(d => d.Agreements).Returns(_emploerAgreementDbSet);
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAgreementId)).Returns(ExpectedAgreementId);
 
-            RequestHandler = new GetAccountEmployerAgreementRemoveQueryHandler(RequestValidator.Object, _repository.Object, _hashingService.Object);
+            RequestHandler = new GetAccountEmployerAgreementRemoveQueryHandler(RequestValidator.Object, _hashingService.Object, new Lazy<EmployerAccountsDbContext>(() => _db.Object));
         }
 
         [Test]
@@ -62,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
             await RequestHandler.Handle(Query);
 
             //Assert
-            _repository.Verify(x=>x.GetEmployerAgreement(ExpectedAgreementId), Times.Once);
+            _db.Verify(x=>x.Agreements, Times.Once);
         }
 
         [Test]

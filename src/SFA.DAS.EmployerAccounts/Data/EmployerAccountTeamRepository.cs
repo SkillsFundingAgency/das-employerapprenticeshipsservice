@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-            parameters.Add("@externalUserId", externalUserId, DbType.String);
+            parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
             const string sql = @"select tm.* from [employer_account].[GetTeamMembers] tm 
                 join [employer_account].[Membership] m on m.AccountId = tm.AccountId

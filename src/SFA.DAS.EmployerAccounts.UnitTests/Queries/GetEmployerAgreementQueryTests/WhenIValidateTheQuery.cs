@@ -13,12 +13,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
     public class WhenIValidateTheQuery
     {
         private GetEmployerAgreementQueryValidator _validator;
-        private Mock<IMembershipRepository> _membershipRepository;
         private GetEmployerAgreementRequest _query;
-        private Mock<IEmployerAgreementRepository> _employerAgreementRepository;
-        private Mock<IHashingService> _hashingService;
-        private const long ExpectedAgreementId = 912790137;
-
+        
         [SetUp]
         public void Arrange()
         {
@@ -29,14 +25,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 AgreementId = "123EDADS"
             };
 
-            _membershipRepository = new Mock<IMembershipRepository>();
-            _employerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _hashingService = new Mock<IHashingService>();
-            _hashingService.Setup(x => x.DecodeValue(_query.AgreementId)).Returns(ExpectedAgreementId);
-
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {Role = Role.Owner});
-
-            _validator = new GetEmployerAgreementQueryValidator(_membershipRepository.Object, _employerAgreementRepository.Object, _hashingService.Object);
+            _validator = new GetEmployerAgreementQueryValidator();
         }
 
         [Test]
@@ -47,95 +36,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
 
             //Assert
             Assert.IsFalse(result.IsValid());
-            _membershipRepository.Verify(x=>x.GetCaller(It.IsAny<string>(),It.IsAny<string>()), Times.Never());
-        }
-
-        [Test]
-        public async Task ThenIfTheUserIsNotConnectedToTheAccountAnUnauthorizedErrorIsReturned()
-        {
-            //Arrange
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(() => null);
-
-            //Act
-            var result = await _validator.ValidateAsync(_query);
-
-            //Assert
-            Assert.IsTrue(result.IsUnauthorized);
-        }
-
-        [TestCase(Role.Transactor)]
-        [TestCase(Role.Viewer)]
-        [TestCase(Role.None)]
-        public async Task ThenIfTheUserIsNotAnOwnerOnTheAccountAndItIsNotSignedAnUnauthorizedErrorIsReturned(Role role)
-        {
-            //Arrange
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView
-                {
-                    HashedAccountId = _query.HashedAccountId,
-                    Status = EmployerAgreementStatus.Pending
-                });
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView {Role = role});
-
-            //Act
-            var result = await _validator.ValidateAsync(_query);
-
-            //Assert
-            Assert.IsTrue(result.IsUnauthorized);
-        }
-
-        [TestCase(Role.Transactor)]
-        [TestCase(Role.Viewer)]
-        [TestCase(Role.Owner)]
-        [TestCase(Role.None)]
-        public async Task ThenIfTheAgreementIsSignedThenAnyoneCanViewIt(Role role)
-        {
-            //Arrange
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView
-            {
-                HashedAccountId = _query.HashedAccountId,
-                Status = EmployerAgreementStatus.Signed
-            });
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = role });
-
-            //Act
-            var result = await _validator.ValidateAsync(_query);
-
-            //Assert
-            Assert.IsFalse(result.IsUnauthorized);
-        }
-
-        [Test]
-        public async Task ThenIfTheAgreementIsNotConnectedToTheAccountTheRequestIsNotAuthorized()
-        {
-
-            //Arrange
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(new EmployerAgreementView
-            {
-                HashedAccountId = "YUH78",
-                Status = EmployerAgreementStatus.Signed
-            });
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = Role.Owner});
-
-            //Act
-            var result = await _validator.ValidateAsync(_query);
-
-            //Assert
-            Assert.IsTrue(result.IsUnauthorized);
-        }
-
-        [Test]
-        public async Task ThenIfThereIsNoAgreementTheValidationResultIsReturned()
-        {
-            //Arrange
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(ExpectedAgreementId)).ReturnsAsync(() => null);
-            _membershipRepository.Setup(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new MembershipView { Role = Role.Owner });
-
-            //Act
-            var result = await _validator.ValidateAsync(_query);
-
-            //Assert
-            Assert.IsFalse(result.IsUnauthorized);
-            Assert.IsTrue(result.IsValid());
         }
 
         [Test]

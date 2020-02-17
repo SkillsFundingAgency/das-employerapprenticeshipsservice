@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
@@ -11,14 +13,14 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
     public class GetAccountEmployerAgreementRemoveQueryHandler : IAsyncRequestHandler<GetAccountEmployerAgreementRemoveRequest, GetAccountEmployerAgreementRemoveResponse>
     {
         private readonly IValidator<GetAccountEmployerAgreementRemoveRequest> _validator;
-        private readonly IEmployerAgreementRepository _employerAgreementRepository;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IHashingService _hashingService;
 
-        public GetAccountEmployerAgreementRemoveQueryHandler(IValidator<GetAccountEmployerAgreementRemoveRequest> validator, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+        public GetAccountEmployerAgreementRemoveQueryHandler(IValidator<GetAccountEmployerAgreementRemoveRequest> validator, IHashingService hashingService, Lazy<EmployerAccountsDbContext> db)
         {
             _validator = validator;
-            _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
+            _db = db;
         }
 
         public async Task<GetAccountEmployerAgreementRemoveResponse> Handle(GetAccountEmployerAgreementRemoveRequest message)
@@ -36,8 +38,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
 
             var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
 
-            var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
-
+            var agreement = await _db.Value.Agreements.Where(x => x.Id == agreementId).Select(x => new {x.Id, x.StatusId, x.AccountLegalEntity.Name}).SingleOrDefaultAsync();
+            
             if (agreement == null)
             {
                 return new GetAccountEmployerAgreementRemoveResponse();
@@ -49,8 +51,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
                 HashedAccountId = message.HashedAccountId,
                 HashedAgreementId = message.HashedAgreementId,
                 Id = agreement.Id,
-                Name = agreement.LegalEntityName,
-                Status = agreement.Status
+                Name = agreement.Name,
+                Status = agreement.StatusId
             };
 
             return new GetAccountEmployerAgreementRemoveResponse {Agreement = agreementView};

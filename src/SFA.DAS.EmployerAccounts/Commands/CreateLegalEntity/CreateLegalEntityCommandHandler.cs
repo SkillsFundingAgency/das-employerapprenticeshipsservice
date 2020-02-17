@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
 
             var owner = await _membershipRepository.GetCaller(message.HashedAccountId, message.ExternalUserId);
 
-            var ownerExternalUserId = Guid.Parse(owner.UserRef);
+            var ownerExternalUserId = owner.UserRef;
 
             var createParams = new CreateLegalEntityWithAgreementParams
             {
@@ -100,21 +100,17 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             var agreementView = await _accountRepository.CreateLegalEntityWithAgreement(createParams);
 
             agreementView.HashedAgreementId = _hashingService.HashValue(agreementView.Id);
-
-            await CreateAuditEntries(owner, agreementView);
-
-            await NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId);
-
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-            await EvaluateEmployerLegalEntityAgreementStatus(owner.AccountId, agreementView.LegalEntityId);
-
             agreementView.AccountLegalEntityPublicHashedId = _accountLegalEntityPublicHashingService.HashValue(agreementView.AccountLegalEntityId);
 
-            await PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId,
-                agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, createParams.Code, message.Address, message.Source, ownerExternalUserId);
-
-            await PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId);
+            await Task.WhenAll(
+                CreateAuditEntries(owner, agreementView),
+                NotifyLegalEntityCreated(message.HashedAccountId, agreementView.LegalEntityId),
+                SetEmployerLegalEntityAgreementStatus(agreementView.AccountLegalEntityId, agreementView.Id, agreementView.VersionNumber),
+				PublishLegalEntityAddedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId,
+                agreementView.AccountLegalEntityId, agreementView.AccountLegalEntityPublicHashedId, createParams.Code, message.Address, message.Source, ownerExternalUserId),
+				PublishAgreementCreatedMessage(accountId, agreementView.Id, createParams.Name, owner.FullName(), agreementView.LegalEntityId, ownerExternalUserId)
+            );
 
             return new CreateLegalEntityCommandResponse
             {
@@ -163,9 +159,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity
             return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private Task EvaluateEmployerLegalEntityAgreementStatus(long accountId, long legalEntityId)
+        private Task SetEmployerLegalEntityAgreementStatus(long accountLegalEntityId, long agreementId, int agreementVersion)
         {
-            return _employerAgreementRepository.EvaluateEmployerLegalEntityAgreementStatus(accountId, legalEntityId);
+            return _employerAgreementRepository.SetAccountLegalEntityAgreementDetails(accountLegalEntityId, agreementId, agreementVersion, null, null);
         }
 
         private async Task CreateAuditEntries(MembershipView owner, EmployerAgreementView agreementView)

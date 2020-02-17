@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Mappings;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
@@ -26,22 +27,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
         const string HashedAccountId = "ACC123";
 
         [Test]
-        public Task GetAgreementToSign_IfUserIsNotAuthorized_DoNotShowAgreement()
-        {
-            User user = null;
-            EmployerAgreement signedAgreement = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                    .WithAccount(AccountId, HashedAccountId)
-                    .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
-                    .WithUser(AccountId, "Buck", "Rogers", out user)
-                    .WithCallerAsUnauthorizedUser(),
-                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
-                assert: (fixturesf, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
-        }
-
-        [Test]
         public Task GetAgreementToSign_IfRequestIsNotValid_DoNotShowAgreement()
         {
             User user = null;
@@ -51,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 arrange: fixtures => fixtures
                     .WithAccount(AccountId, HashedAccountId)
                     .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
-                    .WithUser(AccountId, "Buck", "Rogers", out user)
+                    .WithUser(AccountId, "Buck", "Rogers", Role.Owner, out user)
                     .WithInvalidRequest(),
                 act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
                 assert: (f, r) => r.ShouldThrowExactly<InvalidRequestException>());
@@ -65,7 +50,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 assert: fixtures =>
                 {
                     Assert.IsNull(fixtures.Response.EmployerAgreement);
-                    Assert.IsNull(fixtures.Response.LastSignedAgreement);
                 }
             );
         }
@@ -81,82 +65,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                                         .WithAccount(AccountId, HashedAccountId)
                                         .WithAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 1, EmployerAgreementStatus.Pending, out expectedAgreement)
                                         .WithAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, EmployerAgreementStatus.Pending, out _)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user),
+                                        .WithUser(AccountId, "Buck", "Rogers", Role.Owner, out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, expectedAgreement.Id, user.Ref),
                 assert: fixtures => Assert.AreEqual(expectedAgreement.Id, fixtures.Response.EmployerAgreement.Id));
-        }
-
-        [Test]
-        public Task GetAgreementToSign_ShouldReturnLatestSignedAgreement()
-        {
-            EmployerAgreement latestSignedAgreement = null;
-            EmployerAgreement pendingAgreement = null;
-            User user = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                                        .WithAccount(AccountId, HashedAccountId)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 1, DateTime.Now.AddDays(-60), out _)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, DateTime.Now.AddDays(-30), out latestSignedAgreement)
-                                        .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
-                assert: fixtures =>
-                {
-                    Assert.AreEqual(pendingAgreement.Id, fixtures.Response.EmployerAgreement.Id);
-                    Assert.AreEqual(latestSignedAgreement.Id, fixtures.Response.LastSignedAgreement.Id);
-                });
-        }
-
-        [Test]
-        public Task GetAgreementToSign_IfNoSignedAgreementsExists_ShouldReturnNoSignedAgreement()
-        {
-            User user = null;
-            EmployerAgreement pendingAgreement = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                                        .WithAccount(AccountId, HashedAccountId)
-                                        .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
-                assert: fixtures =>
-                    Assert.IsNull(fixtures.Response.LastSignedAgreement));
-        }
-
-        [Test]
-        public Task GetAgreementToSign_IfSignedAgreementIfForAnotherAccount_ShouldNotReturnSignedAgreement()
-        {
-            User user = null;
-            EmployerAgreement latestAgreement = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                                        .WithAccount(AccountId, HashedAccountId)
-                                        .WithAccount(AccountId + 1, "XXX123")
-                                        .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out latestAgreement)
-                                        .WithSignedAgreement(AccountId + 1, LegalEntityId, AccountLegalEntityId + 1, 2, DateTime.Now.AddDays(-30), out _)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
-                assert: fixtures =>
-                    Assert.IsNull(fixtures.Response.LastSignedAgreement));
-        }
-
-        [Test]
-        public Task GetAgreementToSign_IfRequestAgreementIsSigned_ShouldNotReturnLatestSignedAgreementAsWell()
-        {
-            User user = null;
-            EmployerAgreement latestAgreement = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                                        .WithAccount(AccountId, HashedAccountId)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-10), out latestAgreement)
-                                        .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, DateTime.Now.AddDays(-20), out _)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
-                assert: fixtures =>
-                    Assert.IsNull(fixtures.Response.LastSignedAgreement));
         }
 
         [Test]
@@ -169,9 +80,76 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 arrange: fixtures => fixtures
                                         .WithAccount(AccountId, HashedAccountId)
                                         .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 2, out latestAgreement)
-                                        .WithUser(AccountId, "Buck", "Rogers", out user),
+                                        .WithUser(AccountId, "Buck", "Rogers", Role.Owner, out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, latestAgreement.Id, user.Ref),
                 assert: fixtures => Assert.AreEqual(user.FullName, fixtures.Response.EmployerAgreement.SignedByName));
+        }
+
+        [Test]
+        public Task ThenIfTheUserIsNotConnectedToTheAccountAnUnauthorizedErrorIsReturned()
+        {
+            EmployerAgreement signedAgreement = null;
+            User user = null;
+
+            return RunAsync(
+                arrange: fixtures => fixtures
+                    .WithAccount(AccountId, HashedAccountId)
+                    .WithAccount(AccountId + 1, "XXX945")
+                    .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
+                    .WithUser(AccountId + 1, "Buck", "Rogers", Role.Owner, out user),
+                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
+                assert: (f, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
+        }
+
+        [TestCase(Role.Transactor)]
+        [TestCase(Role.Viewer)]
+        [TestCase(Role.None)]
+        public Task ThenIfTheUserIsNotAnOwnerOnTheAccountAndItIsNotSignedAnUnauthorizedErrorIsReturned(Role role)
+        {
+            EmployerAgreement pendingAgreement = null;
+            User user = null;
+
+            return RunAsync(
+                arrange: fixtures => fixtures
+                    .WithAccount(AccountId, HashedAccountId)
+                    .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
+                    .WithUser(AccountId, "Buck", "Rogers", role, out user),
+                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
+                assert: (f, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
+        }
+
+        [TestCase(Role.Transactor)]
+        [TestCase(Role.Viewer)]
+        [TestCase(Role.Owner)]
+        [TestCase(Role.None)]
+        public Task ThenIfTheAgreementIsSignedThenAnyoneCanViewIt(Role role)
+        {
+            EmployerAgreement signedAgreement = null;
+            User user = null;
+
+            return RunAsync(
+                arrange: fixtures => fixtures
+                    .WithAccount(AccountId, HashedAccountId)
+                    .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-30), out signedAgreement)
+                    .WithUser(AccountId, "Buck", "Rogers", role, out user),
+                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
+                assert: fixtures => Assert.AreEqual(signedAgreement.Id, fixtures.Response.EmployerAgreement.Id));
+        }
+
+        [Test]
+        public Task ThenIfTheAgreementIsNotConnectedToTheAccountTheRequestIsNotAuthorized()
+        {
+            EmployerAgreement pendingAgreement = null;
+            User user = null;
+
+            return RunAsync(
+                arrange: fixtures => fixtures
+                    .WithAccount(AccountId, HashedAccountId)
+                    .WithAccount(AccountId + 1, "XXX945")
+                    .WithPendingAgreement(AccountId + 1, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
+                    .WithUser(AccountId, "Buck", "Rogers", Role.Owner, out user),
+                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
+                assert: (f, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
         }
     }
 
@@ -235,16 +213,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return this;
         }
 
-        public GetEmployerAgreementTestFixtures WithUser(long accountId, string firstName, string lastName, out User user)
+        public GetEmployerAgreementTestFixtures WithUser(long accountId, string firstName, string lastName, Role role, out User user)
         {
             var account = EmployerAgreementBuilder.GetAccount(accountId);
-            EmployerAgreementBuilder.WithUser(account.Id, firstName, lastName, out user);
-            return this;
-        }
-
-        public GetEmployerAgreementTestFixtures WithPendingAgreement(long accountId, long legalEntityId, long accountLegalEntityId, int agreementVersion)
-        {
-            EmployerAgreementBuilder.WithPendingAgreement(accountId, legalEntityId, accountLegalEntityId, agreementVersion);
+            EmployerAgreementBuilder.WithUser(account.Id, firstName, lastName, role, out user);
             return this;
         }
 
@@ -267,18 +239,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
             return this;
         }
 
-        public GetEmployerAgreementTestFixtures WithCallerAsUnauthorizedUser()
-        {
-            Validator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAgreementRequest>()))
-                .ReturnsAsync(new ValidationResult
-                {
-                    ValidationDictionary = new Dictionary<string, string>(),
-                    IsUnauthorized = true
-                });
-
-            return this;
-        }
-
         public GetEmployerAgreementTestFixtures WithInvalidRequest()
         {
             Validator.Setup(x => x.ValidateAsync(It.IsAny<GetEmployerAgreementRequest>()))
@@ -292,11 +252,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 });
 
             return this;
-        }
-
-        public void EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities()
-        {
-            EmployerAgreementBuilder.EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities();
         }
 
         private EmployerAgreementBuilder EmployerAgreementBuilder { get; }

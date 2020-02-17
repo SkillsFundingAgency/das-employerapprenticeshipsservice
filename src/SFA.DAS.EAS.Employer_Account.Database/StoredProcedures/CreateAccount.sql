@@ -19,7 +19,8 @@
 	@employerRefName varchar(500) null,
 	@sector NVARCHAR(100),
 	@aorn VARCHAR(50),
-	@agreementType TINYINT
+	@agreementType TINYINT,
+	@agreementVersion INT OUTPUT
 )
 AS
 BEGIN
@@ -44,7 +45,8 @@ BEGIN
 		@legalEntityId = @legalEntityId OUTPUT,
 		@employerAgreementId = @employerAgreementId OUTPUT,
 		@accountLegalentityId = @accountLegalentityId OUTPUT,
-		@accountLegalEntityCreated = @accountLegalEntityCreated OUTPUT;
+		@accountLegalEntityCreated = @accountLegalEntityCreated OUTPUT,
+		@agreementVersion = @agreementVersion OUTPUT;
 
 	IF EXISTS(select 1 from [employer_account].[Paye] where Ref = @employerRef)
 	BEGIN

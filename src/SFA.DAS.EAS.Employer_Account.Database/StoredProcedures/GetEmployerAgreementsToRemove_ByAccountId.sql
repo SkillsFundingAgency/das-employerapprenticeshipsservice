@@ -5,24 +5,15 @@ BEGIN
 
 	SET NOCOUNT ON;
 
-	SELECT	ISNULL(Signed.Id, Pending.Id) AS Id,
+	SELECT	ISNULL(ale.SignedAgreementId, ale.PendingAgreementId) AS Id,
 			ALE.Name, 
-			ISNULL(Signed.StatusId, Pending.StatusId) AS Status, 
+			CASE WHEN ale.SignedAgreementId IS NOT NULL THEN 2 ELSE 1 END AS Status, 
 			a.HashedId, 
-			le.Code as LegalEntityCode,
-			le.[Source] as LegalEntitySource
+			le.Code AS LegalEntityCode,
+			le.[Source] AS LegalEntitySource
 	FROM	employer_account.AccountLegalEntity AS ALE
-			JOIN employer_account.Account AS A
-				ON A.Id = ALE.AccountId
-			JOIN employer_account.LegalEntity AS LE
-				ON LE.Id = ALE.LegalEntityId
-			LEFT JOIN employer_account.EmployerAgreement AS Pending
-				ON Pending.AccountLegalEntityId = ALE.ID 
-					AND Pending.StatusId = 1 
-			LEFT JOIN employer_account.EmployerAgreement AS Signed
-				ON Signed.AccountLegalEntityId = ALE.ID
-					AND Signed.StatusId = 2
-	WHERE	ALE.Deleted IS NULL 
-			AND ALE.AccountId = @accountId; 
+			INNER JOIN employer_account.Account AS A ON A.Id = ALE.AccountId
+			INNER JOIN employer_account.LegalEntity AS LE ON LE.Id = ALE.LegalEntityId
+	WHERE	ALE.Deleted IS NULL AND ALE.AccountId = @accountId; 
 
 END;
