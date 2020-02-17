@@ -7,7 +7,6 @@ using Microsoft.Azure.Documents.SystemFunctions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -15,6 +14,8 @@ using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -79,41 +80,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return RunAsync(
                 arrange: fixtures =>
                 {
-                    fixtures.Orchestrator.Setup(x => x.Get(It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(new OrchestratorResponse<EmployerAgreementListViewModel>
+                    fixtures.Mediator.Setup(x => x.SendAsync(It.Is<GetUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId)))
+                        .ReturnsAsync(new GetUnsignedEmployerAgreementResponse
                         {
-                            Data = new EmployerAgreementListViewModel
-                            {
-                                EmployerAgreementsData = new GetAccountEmployerAgreementsResponse
-                                {
-                                    EmployerAgreements = new List<EmployerAgreementStatusDto>
-                                    {
-                                        new EmployerAgreementStatusDto
-                                        {
-                                            Pending = new PendingEmployerAgreementDetailsDto
-                                            {
-                                                HashedAgreementId = fixtures.HashedAgreementId,
-                                                Id = 123
-                                            }
-                                        },
-                                        new EmployerAgreementStatusDto
-                                        {
-                                            Signed = new SignedEmployerAgreementDetailsDto
-                                            {
-                                                HashedAgreementId = "JH4545",
-                                                Id = 456
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                            HashedAgreementId = fixtures.HashedAgreementId
                         });
                 },
                 act: fixtures => fixtures.ViewUnsignedAgreements(),
                 assert: (fixtures, result) =>
                 {
                     fixtures.OwinWrapper.Verify(x => x.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-                    fixtures.Orchestrator.Verify(x => x.Get(fixtures.HashedAccountId, fixtures.UserId));
                     Assert.IsNotNull(result);
                     Assert.AreEqual(result.RouteValues["action"], "AboutYourAgreement");
                     Assert.AreEqual(result.RouteValues["agreementId"], fixtures.HashedAgreementId);
@@ -123,10 +99,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         [Test]
         public Task ViewAgreementToSign_ShouldReturnAgreements()
         {
-            return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement(),
+            return RunAsync(arrange: fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
                 act: fixtures => fixtures.SignedAgreement(),
                 assert: (fixtures, result) =>
-                    Assert.AreEqual(fixtures.GetAgreementToSignViewModel, fixtures.ViewResult.Model));
+                    Assert.AreEqual(fixtures.GetSignAgreementViewModel, fixtures.ViewResult.Model));
         }
 
         [Test]
@@ -187,14 +163,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public Task ViewAgreementToSign_WhenIHaveNotSelectedAnOption_ThenAnErrorIsDisplayed()
         {
             return RunAsync(
-                fixtures => fixtures.WithUnsignedEmployerAgreement(),
+                fixtures => fixtures.WithUnsignedEmployerAgreement().WithPreviouslySignedAgreement(),
                 fixtures => fixtures.Sign(null),
                 (fixtures, result) =>
                 {
                     var viewResult = result as ViewResult;
                     Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
-                    Assert.AreEqual(fixtures.GetAgreementToSignViewModel, viewResult.Model);
-                    Assert.IsTrue(((EmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
+                    Assert.AreEqual(fixtures.GetSignAgreementViewModel, viewResult.Model);
+                    Assert.IsTrue(((SignEmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
                 });
         }
 
@@ -277,9 +253,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
             GetAgreementToSignViewModel = new EmployerAgreementViewModel
             {
-                EmployerAgreement = new EmployerAgreementView(),
-                PreviouslySignedEmployerAgreement = new EmployerAgreementView()
+                EmployerAgreement = new EmployerAgreementView()
             };
+
+            GetSignAgreementViewModel = new SignEmployerAgreementViewModel();
         }
 
         public static class Constants
@@ -287,17 +264,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             public const string HashedAccountId = "ABC123";
             public const string UserId = "AFV456TGF";
             public const string HashedAgreementId = "789UHY";
+            public const long AccountLegalEntityId = 1234;
             public const string LegalEntityName = "FIFTEEN LIMITED";
         }
 
         public string HashedAccountId => Constants.HashedAccountId;
         public string UserId => Constants.UserId;
         public string HashedAgreementId => Constants.HashedAgreementId;
+        public long AccountLegalEntityId => Constants.AccountLegalEntityId;
         public string LegalEntityName => Constants.LegalEntityName;
 
         public GetEmployerAgreementRequest GetAgreementRequest { get; }
 
         public EmployerAgreementViewModel GetAgreementToSignViewModel { get; }
+
+        public SignEmployerAgreementViewModel GetSignAgreementViewModel { get; }
 
         public ViewResult ViewResult { get; set; }
 
@@ -305,16 +286,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         {
             var agreementResponse = new GetEmployerAgreementResponse
             {
-                EmployerAgreement = new AgreementDto()
+                EmployerAgreement = new AgreementDto { LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = AccountLegalEntityId } }
             };
 
+            Mediator.Setup(x => x.SendAsync(It.Is<GetEmployerAgreementRequest>(r => r.AgreementId == GetAgreementRequest.AgreementId && r.HashedAccountId == GetAgreementRequest.HashedAccountId)))
+                .ReturnsAsync(agreementResponse);
             var entitiesCountResponse = new GetAccountLegalEntitiesCountByHashedAccountIdResponse
             {
                 LegalEntitiesCount = 1
             };
-
-            Mediator.Setup(x => x.SendAsync(GetAgreementRequest))
-                .ReturnsAsync(agreementResponse);
 
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>()))
                 .ReturnsAsync(entitiesCountResponse);
@@ -322,9 +302,24 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, EmployerAgreementViewModel>(agreementResponse))
                 .Returns(GetAgreementToSignViewModel);
 
+            Mapper.Setup(x => x.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(agreementResponse))
+                .Returns(GetSignAgreementViewModel);
+
             Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
                 .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
       
+            return this;
+        }
+
+        public EmployerAgreementControllerTestFixtures WithPreviouslySignedAgreement()
+        {
+            var response = new GetLastSignedAgreementResponse { LastSignedAgreement = new AgreementDto() };
+
+            Mediator.Setup(x =>
+                    x.SendAsync(
+                        It.Is<GetLastSignedAgreementRequest>(r => r.AccountLegalEntityId == AccountLegalEntityId)))
+                .ReturnsAsync(response);
+            
             return this;
         }
 

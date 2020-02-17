@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount
         }
 
         private Task PublishAccountRenamedMessage(
-            long accountId, string previousName, string currentName, string creatorName, string creatorUserRef)
+            long accountId, string previousName, string currentName, string creatorName, Guid creatorUserRef)
         {
             return _eventPublisher.Publish(new ChangedAccountNameEvent
             {
@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount
                 AccountId = accountId,
                 Created = DateTime.UtcNow,
                 UserName = creatorName,
-                UserRef = Guid.Parse(creatorUserRef)
+                UserRef = creatorUserRef
             });
         }
 

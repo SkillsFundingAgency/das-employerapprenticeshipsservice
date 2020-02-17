@@ -22,6 +22,7 @@
 			DECLARE @employerAgreementId BIGINT
 			DECLARE @accountLegalEntityId BIGINT
 			DECLARE @accountLegalEntityCreated BIT
+			DECLARE @agreementVersion INT
 
 			SET IDENTITY_INSERT [employer_account].[Account] ON
 			INSERT INTO [employer_account].[Account] (Id, HashedId, PublicHashedId, Name, CreatedDate)
@@ -45,7 +46,8 @@
 					@sector=null,
 					@agreementType=0,
 					@accountLegalEntityId=@accountLegalEntityId OUTPUT,
-					@accountLegalEntityCreated=@accountLegalEntityCreated OUTPUT
+					@accountLegalEntityCreated=@accountLegalEntityCreated OUTPUT,
+					@agreementVersion = @agreementVersion OUTPUT
 
 			EXEC [Employer_account].[UpdateAccountLegalEntity_SetPublicHashedId] 
 					@accountLegalEntityId=@accountLegalEntityId,

@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             {
                 AccountId = 123,
                 Role = Role.Owner,
-                UserRef = "UserRef",
+                UserRef = Guid.NewGuid(),
                 Email = "vas@test.com"
             };
             MockEmployerAccountTeamRepository = new Mock<IEmployerAccountTeamRepository>();
