@@ -3,6 +3,8 @@ using MediatR;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
+using SFA.DAS.CommitmentsV2.Types;
+using SFA.DAS.CommitmentsV2.Types.Dtos;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -29,6 +31,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.Encoding;
 using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
@@ -44,12 +47,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
+        private readonly ICommitmentsApiClient _commitmentsApiClient;
+        private readonly IEncodingService _encodingService;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamOrchestrator(IMediator mediator, 
             ICurrentDateTime currentDateTime, 
-            IAccountApiClient accountApiClient,            
+            IAccountApiClient accountApiClient,
+            ICommitmentsApiClient commitmentsApiClient, 
+            IEncodingService encodingService,
             IMapper mapper, 
             IAuthorizationService authorizationService)
             : base(mediator)
@@ -57,6 +64,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
+            _commitmentsApiClient = commitmentsApiClient;
+            _encodingService = encodingService;
             _mapper = mapper;
             _authorizationService = authorizationService;
         }
@@ -179,24 +188,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
-               
+                
+                var agreementsResponseTask = _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
 
                 var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
                 {
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
-                });                
+                });
 
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask,  reservationsResponseTask).ConfigureAwait(false);
+
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
                 var userResponse = userResponseTask.Result;
-                var accountStatsResponse = accountStatsResponseTask.Result;                
+                var accountStatsResponse = accountStatsResponseTask.Result;
+                var agreementsResponse = agreementsResponseTask.Result;
                 var reservationsResponse = reservationsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
 
-                var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
+                var apprenticeshipEmployerType = (Common.Domain.Types.ApprenticeshipEmployerType)Enum.Parse(typeof(Common.Domain.Types.ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
                 {
@@ -205,8 +221,42 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ApprenticeshipEmployerType = apprenticeshipEmployerType
                 });
 
+                var pendingAgreements = agreementsResponse.EmployerAgreements.Where(a => a.HasPendingAgreement).Select(a => new PendingAgreementsViewModel { HashedAgreementId = a.Pending.HashedAgreementId }).ToList();
                 var tasks = tasksResponse?.Tasks.Where(t => t.ItemsDueCount > 0 && t.Type != "AgreementToSign").ToList() ?? new List<AccountTask>();
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
+
+
+                var apprenticeshipsCount = 0;
+                //Task<GetApprenticeshipsResponse> apprenticeshipResponse = null;
+                /*TODO : include later*/
+                var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = accountResponse.Account.Id }))?.Apprenticeships;
+                if (apprenticeshipResponse != null)
+                {
+                    apprenticeshipsCount = apprenticeshipResponse.Count();
+                }
+
+                var cohortsCount = 0;
+                var draftApprenticeshipCount = 0;
+                CohortSummary singleCohort = new CohortSummary();
+                DraftApprenticeshipDto singleDraftApprenticeship = new DraftApprenticeshipDto();
+
+                if (apprenticeshipResponse == null)
+                {
+                    var cohortsResponse = (await _commitmentsApiClient.GetCohorts(new GetCohortsRequest { AccountId = accountResponse.Account.Id }))?.Cohorts;
+
+                    if (cohortsResponse != null && cohortsResponse.Count() == 1)
+                    {
+                        cohortsCount = cohortsResponse.Count();
+                        singleCohort = cohortsResponse.First();
+                        draftApprenticeshipCount = singleCohort.NumberOfDraftApprentices;
+
+                        if (draftApprenticeshipCount == 1)
+                        {
+                            var draftApprenticeshipsResponse = (await _commitmentsApiClient.GetDraftApprenticeships(singleCohort.CohortId))?.DraftApprenticeships;
+                            singleDraftApprenticeship = draftApprenticeshipsResponse.First();
+                        }
+                    }
+                }
 
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -222,16 +272,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ShowAcademicYearBanner = _currentDateTime.Now < new DateTime(2017, 10, 20),
                     Tasks = tasks,
                     HashedAccountId = hashedAccountId,
-                    //RequiresAgreementSigning = pendingAgreements.Count(),
-                    //SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
-                    //PendingAgreements = pendingAgreements,
+                    RequiresAgreementSigning = pendingAgreements.Count(),
+                    SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
+                    PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    //CallToActionViewModel = new CallToActionViewModel
-                    //{
-                    //   AgreementsToSign = pendingAgreements.Count() > 0,
-                    //   Reservations = reservationsResponse.Reservations.ToList(),
-                    //}
+                    CallToActionViewModel = new CallToActionViewModel
+                    {
+                        AgreementsToSign = pendingAgreements.Count() > 0,
+                        Reservations = reservationsResponse.Reservations.ToList(),
+                        CohortsCount = cohortsCount,
+                        ApprenticeshipsCount = apprenticeshipsCount,
+                        NumberOfDraftApprentices = draftApprenticeshipCount,
+                        CourseName = singleDraftApprenticeship.CourseName,
+                        CourseStartDate = singleDraftApprenticeship.StartDate,
+                        CourseEndDate = singleDraftApprenticeship.EndDate,
+                        HashedDraftApprenticeshipId = _encodingService.Encode(singleDraftApprenticeship.Id, EncodingType.ApprenticeshipId),
+                        ProviderName = singleCohort.ProviderName,
+                        CohortStatus = singleCohort?.GetStatus() ?? CohortStatus.Unknown,
+                        HashedCohortReference = _encodingService.Encode(singleCohort.CohortId, EncodingType.CohortReference),
+                        ApprenticeName = singleDraftApprenticeship.FirstName + " " + singleDraftApprenticeship.LastName
+                    }
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
@@ -629,7 +690,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
 
-            if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+            if (viewModel.Data.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
             {
                 rules.Add(200, EvalutateSingleReservationCallToActionRule);                
                 rules.Add(201, EvaluateApprenticeshipsCallToActionRule);

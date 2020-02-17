@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string HashedUserId { get; set; }
         public int OrganisationCount { get; set; }
         public int PayeSchemeCount { get; set; }
-        //public int RequiresAgreementSigning { get; set; }
+        public int RequiresAgreementSigning { get; set; }
         public bool ShowAcademicYearBanner { get; set; }
         public bool ShowWizard { get; set; }
         public ICollection<AccountTask> Tasks { get; set; }
@@ -26,8 +26,8 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public int TeamMembersInvited { get; set; }
         public string UserFirstName { get; set; }
         public Role UserRole { get; set; }
-        //public int SignedAgreementCount { get; set; }
-        //public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
+        public int SignedAgreementCount { get; set; }
+        public List<PendingAgreementsViewModel> PendingAgreements { get; set; }
         public bool HasPayeScheme => PayeSchemeCount > 0;
         public AgreementInfoViewModel AgreementInfo { get; set; }
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
