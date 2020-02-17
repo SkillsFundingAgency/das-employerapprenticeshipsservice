@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using MediatR;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
@@ -10,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1OrchestratorTests
 {
@@ -17,26 +19,39 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
     {
         private const string HashedAccountId = "ABC123";
         private const long AccountId = 123;
+        private const string UserId = "USER1";
+        private Mock<IMediator> _mediator;
         private Mock<ICommitmentsApiClient> mockCommitmentApiClient;
         private Mock<IEncodingService> mockEncodingService;
         private GetApprenticeshipsResponse ApprenticeshipsResponse;
         private Row1Panel1Orchestrator row1Panel1Orchestrator;
 
-
         [SetUp]
         public void Arrange()
-        {   
+        {
             //Arrange
+            _mediator = new Mock<IMediator>();
             mockCommitmentApiClient = new Mock<ICommitmentsApiClient>();
             mockEncodingService = new Mock<IEncodingService>();
             ApprenticeshipsResponse = CreateApprenticeshipResponse();
+            _mediator.Setup(m => m.SendAsync(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId)))
+                 .ReturnsAsync(new GetReservationsResponse
+                 {
+                     Reservations = new List<EmployerAccounts.Models.Reservations.Reservation>
+                     {
+                             new  EmployerAccounts.Models.Reservations.Reservation
+                             {
+                                 AccountId = 123
+                             }
+                     }
+                 });
 
             mockCommitmentApiClient.Setup(c => c.GetApprenticeships(It.Is<GetApprenticeshipsRequest>(a => a.AccountId == AccountId), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(ApprenticeshipsResponse));
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
             mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
 
-            row1Panel1Orchestrator = new Row1Panel1Orchestrator(mockCommitmentApiClient.Object, mockEncodingService.Object);
+            row1Panel1Orchestrator = new Row1Panel1Orchestrator(_mediator.Object, mockCommitmentApiClient.Object, mockEncodingService.Object);
         }
 
         private GetApprenticeshipsResponse CreateApprenticeshipResponse()
@@ -64,11 +79,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.Row1Panel1Orchest
         public async Task ThenShouldGetApprenticeshipResponse()
         {
             //Act
-            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId);
+            var result = await row1Panel1Orchestrator.GetAccount(HashedAccountId, AccountId, UserId);
 
             //Assert            
             Assert.IsNotNull(result);
-            Assert.IsTrue(result.Data.ApprenticeshipsCount.Equals(1));
+            Assert.AreEqual(1, result.Data.ApprenticeshipsCount);
+            Assert.AreEqual(0, result.Data.CohortsCount);           
+            Assert.IsFalse(result.Data.HasSingleDraftApprenticeship);
         }        
     }
 }

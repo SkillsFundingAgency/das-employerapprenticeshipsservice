@@ -58,8 +58,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.PayeSchemeCount = 1;
             model.CallToActionViewModel = new CallToActionViewModel
             {
-                AgreementsToSign = false
+                    AgreementsToSign = false
             };
+            
             
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
             
@@ -84,10 +85,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 ApprenticeshipAdded = false
             };
             
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.AccountViewModel = new Model.Account();
-            model.Row1Panel1ViewModel = new Row1Panel1ViewModel();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;                  
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -102,15 +100,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         {
             //Arrange
             var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.AgreementsToSign = false;
-            model.ReservationsCount = 1;
-            model.ConfirmedReservationsCount = 1;
-            model.ApprenticeshipAdded = true;
+            model.PayeSchemeCount = 1;           
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.AccountViewModel = new Model.Account();
-            model.Row1Panel1ViewModel = new Row1Panel1ViewModel() { ApprenticeshipsCount = 1, CohortsCount = 0};
-            model.AccountViewModel.Providers.Add(new Model.Provider());
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = false,
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                ApprenticeshipAdded = true,
+                ApprenticeshipsCount = 1,
+                CohortsCount = 0
+            };            
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -125,22 +124,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         {
             //Arrange
             var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.AgreementsToSign = false;
-            model.ReservationsCount = 1;
-            model.ConfirmedReservationsCount = 1;
-            model.ApprenticeshipAdded = false;
+            model.PayeSchemeCount = 1;            
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.AccountViewModel = new Model.Account();
-            model.Row1Panel1ViewModel = new Row1Panel1ViewModel() 
-            { 
-                HasDraftApprenticeship = true,
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = false,
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                ApprenticeshipAdded = false,
                 CohortsCount = 1,
                 ApprenticeshipsCount = 0,
                 NumberOfDraftApprentices = 1,
                 CohortStatus = Web.Extensions.CohortStatus.Draft
             };
-            model.AccountViewModel.Providers.Add(new Model.Provider());
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -155,22 +150,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         {
             //Arrange
             var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.AgreementsToSign = false;
-            model.ReservationsCount = 1;
-            model.ConfirmedReservationsCount = 1;
-            model.ApprenticeshipAdded = false;
+            model.PayeSchemeCount = 1;           
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.AccountViewModel = new Model.Account();
-            model.Row1Panel1ViewModel = new Row1Panel1ViewModel()
+            model.CallToActionViewModel = new CallToActionViewModel
             {
-                HasDraftApprenticeship = true,
+                AgreementsToSign = false,
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                ApprenticeshipAdded = false,
                 CohortsCount = 1,
                 ApprenticeshipsCount = 0,
                 NumberOfDraftApprentices = 1,
                 CohortStatus = Web.Extensions.CohortStatus.WithTrainingProvider
-            };
-            model.AccountViewModel.Providers.Add(new Model.Provider());
+            };            
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
