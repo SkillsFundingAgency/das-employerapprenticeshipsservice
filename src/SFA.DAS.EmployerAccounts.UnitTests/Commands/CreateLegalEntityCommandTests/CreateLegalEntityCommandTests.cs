@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateLegalEntityCommandTe
             AccountRepository.Setup(x => x.CreateLegalEntityWithAgreement(It.IsAny<CreateLegalEntityWithAgreementParams>())).ReturnsAsync(new EmployerAgreementView());
 
             MembershipRepository = new Mock<IMembershipRepository>();
-            MembershipRepository.Setup(x => x.GetCaller(Command.HashedAccountId, Command.ExternalUserId)).ReturnsAsync(new MembershipView { UserRef = Command.ExternalUserId, AccountId = AccountId });
+            MembershipRepository.Setup(x => x.GetCaller(Command.HashedAccountId, Command.ExternalUserId)).ReturnsAsync(new MembershipView { UserRef = Guid.Parse(Command.ExternalUserId), AccountId = AccountId });
 
             Mediator = new Mock<IMediator>();
             AuthorizationService = new Mock<IAuthorizationService>();

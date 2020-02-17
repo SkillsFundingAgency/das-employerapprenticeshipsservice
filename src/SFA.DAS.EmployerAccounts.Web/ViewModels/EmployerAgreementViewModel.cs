@@ -6,8 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
     {
         public EmployerAgreementView EmployerAgreement { get; set; }
 
-        public EmployerAgreementView PreviouslySignedEmployerAgreement { get; set; }
-
         /// <summary>
         ///     Indicates whether the organisation that signed the agreement can be looked up by id
         ///     in reference data. e.g. if the organisation that signed the agreement were a
