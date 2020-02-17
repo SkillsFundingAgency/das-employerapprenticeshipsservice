@@ -661,7 +661,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";
-                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
                 return true;
             }
 
@@ -674,7 +673,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
             {
                 viewModel.ViewName = "ContinueSetupForSingleReservation";
-                viewModel.IsFeaturedPanel = false;
+                viewModel.PanelType = PanelType.Summary;
                 return true;
             }
 
@@ -686,7 +685,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             if (!viewModel.Data.CallToActionViewModel.HasReservations)
             {
                 viewModel.ViewName = "CheckFunding";
-                viewModel.IsFeaturedPanel = !viewModel.Data.CallToActionViewModel.ApprenticeshipAdded;
                 return true;
             }
 
