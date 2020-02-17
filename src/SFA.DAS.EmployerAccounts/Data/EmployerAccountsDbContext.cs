@@ -60,6 +60,8 @@ namespace SFA.DAS.EmployerAccounts.Data
             modelBuilder.HasDefaultSchema("employer_account");
             modelBuilder.Entity<Account>().Ignore(a => a.role).Ignore(a => a.RoleName);
             modelBuilder.Entity<Account>().HasMany(a => a.AccountLegalEntities);
+            modelBuilder.Entity<Account>().HasMany(a => a.Memberships);
+            modelBuilder.Entity<Account>().HasMany(a => a.AccountHistory);
             modelBuilder.Entity<Account>().HasMany(a => a.ReceivedTransferConnectionInvitations).WithRequired(i => i.ReceiverAccount);
             modelBuilder.Entity<Account>().HasMany(a => a.SentTransferConnectionInvitations).WithRequired(i => i.SenderAccount);
             modelBuilder.Entity<AccountLegalEntity>().HasMany(ale => ale.Agreements);

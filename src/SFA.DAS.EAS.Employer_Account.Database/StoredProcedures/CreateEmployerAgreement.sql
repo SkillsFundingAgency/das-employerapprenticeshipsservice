@@ -2,14 +2,15 @@
 	@accountLegalEntityId BIGINT,
 	@templateId INT = NULL,
 	@agreementType TINYINT,
-	@employerAgreementId BIGINT OUTPUT
+	@employerAgreementId BIGINT OUTPUT,
+	@agreementVersion INT OUTPUT
 AS
 BEGIN	
 	SET NOCOUNT ON
 
 	IF @templateId IS NULL
 	BEGIN
-		SELECT TOP 1 @templateId = Id
+		SELECT TOP 1 @templateId = Id, @agreementVersion = VersionNumber
 		FROM [employer_account].[EmployerAgreementTemplate]
 		WHERE AgreementType = @agreementType
 		ORDER BY VersionNumber DESC

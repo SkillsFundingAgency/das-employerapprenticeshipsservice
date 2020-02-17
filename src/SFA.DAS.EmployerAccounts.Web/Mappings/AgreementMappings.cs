@@ -24,8 +24,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(dest => dest.VersionNumber, opts => opts.Ignore());
 
             CreateMap<GetEmployerAgreementResponse, EmployerAgreementViewModel>()
-                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opt => opt.MapFrom(src => src.LastSignedAgreement))
-                .ForMember(dest => dest.OrganisationLookupPossible, opt => opt.Ignore())
+                .ForMember(dest => dest.NoChoiceSelected, opts => opts.Ignore())
+                .ForMember(dest => dest.LegalEntitiesCount, opts => opts.Ignore())
+                .ForMember(dest => dest.OrganisationLookupPossible, opt => opt.Ignore());
+
+            CreateMap<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>()
+                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opts => opts.Ignore())
                 .ForMember(dest => dest.NoChoiceSelected, opts => opts.Ignore())
                 .ForMember(dest => dest.LegalEntitiesCount, opts => opts.Ignore());
 

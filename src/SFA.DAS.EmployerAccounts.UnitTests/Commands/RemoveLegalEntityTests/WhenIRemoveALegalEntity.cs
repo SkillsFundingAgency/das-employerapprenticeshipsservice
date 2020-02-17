@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.Commitments.Api.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
@@ -35,6 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private Mock<IEmployerAgreementEventFactory> _employerAgreementEventFactory;
         private Mock<IMembershipRepository> _membershipRepository;
         private Mock<IEventPublisher> _eventPublisher;
+        private Mock<IEmployerCommitmentApi> _commitmentsApi;
 
         private const string ExpectedHashedAccountId = "34RFD";
         private const long ExpectedAccountId = 123455;
@@ -42,6 +45,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         private const string ExpectedLegalEntityName = "Hogwarts";
         private const long ExpectedAccountLegalEntityId = 2017;
         private readonly string _expectedUserId = Guid.NewGuid().ToString();
+        private EmployerAgreementView _expectedAgreement;
         private const long ExpectedEmployerAgreementId = 5533678;
         private const string ExpectedHashedEmployerAgreementId = "FGDFH45645";
 
@@ -56,14 +60,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             _mediator = new Mock<IMediator>();
 
             _repository = new Mock<IEmployerAgreementRepository>();
-            _repository.Setup(r => r.GetEmployerAgreement(ExpectedEmployerAgreementId))
-                .ReturnsAsync(new EmployerAgreementView
-                {
-                    AccountLegalEntityId = ExpectedAccountLegalEntityId,
-                    LegalEntityId = ExpectedLegalEntityId,
-                    LegalEntityName = ExpectedLegalEntityName,
-                    Status = EmployerAgreementStatus.Signed
-                });
+            _expectedAgreement = new EmployerAgreementView
+            {
+                AccountLegalEntityId = ExpectedAccountLegalEntityId,
+                LegalEntityId = ExpectedLegalEntityId,
+                LegalEntityName = ExpectedLegalEntityName,
+                Status = EmployerAgreementStatus.Signed,
+                LegalEntityCode = "test_code"
+            };
+
+            _repository.Setup(r => r.GetEmployerAgreement(ExpectedEmployerAgreementId)).ReturnsAsync(_expectedAgreement);
             
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(ExpectedHashedAccountId)).Returns(ExpectedAccountId);
@@ -81,6 +87,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
 
             _eventPublisher = new Mock<IEventPublisher>();
 
+            _commitmentsApi = new Mock<IEmployerCommitmentApi>();
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary
+                    {
+                        ActiveCount = 0,PausedCount = 0,PendingApprovalCount = 0,LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                    }
+                });
+
             _command = new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = _expectedUserId, HashedLegalAgreementId = ExpectedHashedEmployerAgreementId };
 
             _handler = new RemoveLegalEntityCommandHandler(
@@ -92,7 +109,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 _genericEventHandler.Object,
                 _employerAgreementEventFactory.Object,
                 _membershipRepository.Object,
-                _eventPublisher.Object);
+                _eventPublisher.Object,
+                _commitmentsApi.Object);
         }
 
         [Test]
@@ -176,6 +194,22 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 && e.UserName.Equals("Harry Potter")
                 && e.UserRef.Equals(Guid.Parse(_expectedUserId))
                 )));
+        }
+
+        [Test]
+        public async Task ThenTheAgreementIsCheckedToSeeIfItHasBeenSignedAndHasActiveCommitments()
+        {
+            _commitmentsApi
+                .Setup(x => x.GetEmployerAccountSummary(ExpectedAccountId))
+                .ReturnsAsync(new List<ApprenticeshipStatusSummary>
+                {
+                    new ApprenticeshipStatusSummary
+                    {
+                        ActiveCount = 1,PausedCount = 1,PendingApprovalCount = 1,LegalEntityIdentifier = _expectedAgreement.LegalEntityCode
+                    }
+                });
+
+            Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(_command));
         }
     }
 }
