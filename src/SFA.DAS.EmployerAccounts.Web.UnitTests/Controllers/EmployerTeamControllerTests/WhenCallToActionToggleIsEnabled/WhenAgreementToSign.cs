@@ -61,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("SignAgreement", (result.Model as dynamic).ViewName);
-            Assert.AreEqual(true, (result.Model as dynamic).IsFeaturedPanel);
+            Assert.AreEqual(PanelType.Interruption, (result.Model as dynamic).PanelType);
         }
     }
 }
