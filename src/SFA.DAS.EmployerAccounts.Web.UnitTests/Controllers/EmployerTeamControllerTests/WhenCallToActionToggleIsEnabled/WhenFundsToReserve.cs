@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
-            Assert.AreEqual(PanelType.Interruption, (result.Model as dynamic).PanelType);
+            Assert.AreEqual(PanelType.Action, (result.Model as dynamic).PanelType);
         }
 
         [Test]
