@@ -8,3 +8,5 @@
 	[PublicSectorDataSource] TINYINT NULL,
 	[Sector] NVARCHAR(100) NULL
 )
+GO
+CREATE INDEX [IX_LegalEntity_Code_Source] ON [employer_account].[LegalEntity]([Code], [Source]) INCLUDE ([Id])
