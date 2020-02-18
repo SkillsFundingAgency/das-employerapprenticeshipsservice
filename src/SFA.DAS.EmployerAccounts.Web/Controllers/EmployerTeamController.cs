@@ -373,8 +373,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (model.PayeSchemeCount == 0)
             {
-                viewModel.ViewName = "AddPAYE";
-                viewModel.IsFeaturedPanel = !model.CallToActionViewModel.ApprenticeshipAdded;
+                viewModel.ViewName = "AddPAYE";                
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {

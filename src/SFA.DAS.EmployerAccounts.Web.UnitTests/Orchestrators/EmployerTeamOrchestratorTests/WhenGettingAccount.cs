@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private EmployerTeamOrchestrator _orchestrator;        
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
-        private Mock<IAccountApiClient> _accountApiClient;
+        private Mock<IAccountApiClient> _accountApiClient;        
         private Mock<ICommitmentsApiClient> _commitmentApiClient;
         private Mock<IEncodingService> _encodingService;
         private Mock<IMapper> _mapper;
@@ -169,8 +169,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             GetCohortsResponseMoreThanOneDraftApprenticeship = CreateGetCohortsResponseMoreThanOneDraftApprenticeships();
             DraftApprenticeshipsResponse = GetDraftApprenticeshipsResponse();
 
-            _accountApiClient = new Mock<IAccountApiClient>();
-            _commitmentsApiClient = new Mock<ICommitmentsApiClient>();
+            _accountApiClient = new Mock<IAccountApiClient>();            
             _encodingService = new Mock<IEncodingService>();
 
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
