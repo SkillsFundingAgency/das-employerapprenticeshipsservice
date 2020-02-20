@@ -11,7 +11,7 @@
             <th scope="row" class="tw-35">
                 Name
             </th>
-            <td class="tw-65">
+            <td class="tw-65" id="apprentice-name">
                 @Model.CallToActionViewModel.ApprenticeName
             </td>
         </tr>
@@ -19,7 +19,7 @@
             <th scope="row">
                 Training Provider
             </th>
-            <td>
+            <td id="provider-name">
                 @Model.CallToActionViewModel.ProviderName
             </td>
         </tr>
@@ -27,7 +27,7 @@
             <th scope="row">
                 Course
             </th>
-            <td>
+            <td id="course-name">
                 @Model.CallToActionViewModel.CourseName
             </td>
         </tr>
@@ -35,15 +35,17 @@
             <th scope="row">
                 Status
             </th>
-            <td>                
-                @Html.GetCohortStatus(@Model.CallToActionViewModel.CohortStatus)
+            <td id="with-training-provider">
+                WITH TRAINING PROVIDER
             </td>
         </tr>
+        @if (Model.CallToActionViewModel.CourseEndDate.HasValue)
+        {
         <tr>
             <th scope="row">
                 Start month
             </th>
-            <td>
+            <td id="course-start-date">
                 @Model.CallToActionViewModel.CourseStartDate.Value.ToString("MMMM yyyy")
             </td>
         </tr>
@@ -51,14 +53,16 @@
             <th scope="row">
                 Finish month
             </th>
-            <td>
+            <td id="course-end-date">
                 @Model.CallToActionViewModel.CourseEndDate.Value.ToString("MMMM yyyy")
             </td>
         </tr>
+        }
     </table>
     <p>
-        <a href="@Url.Action("ViewApprentice", "EmployerTeam", new {Model.CallToActionViewModel.HashedDraftApprenticeshipId, Model.CallToActionViewModel.HashedCohortReference, Model.HashedAccountId, Model.CallToActionViewModel.CohortStatus})" role="button" draggable="false" class="button">
-            @Html.GetCallToActionButtonText(Model.CallToActionViewModel)
+
+        <a href="@Url.EmployerCommitmentsV2Action("")" draggable="false" class="govuk-link">
+            View apprentice details
         </a>
     </p>
 </section>

@@ -861,8 +861,9 @@
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleApprenticeship.cshtml" />
-    <Content Include="Views\EmployerTeam\YourSingleApprentice.cshtml" />
-    <Content Include="Views\EmployerTeam\YourSingleApprenticeStatus.cshtml" />
+    <Content Include="Views\EmployerTeam\YourSingleApprovedApprentice.cshtml" />
+    <Content Include="Views\EmployerTeam\YourSingleApprenticeWithTrainingProviderStatus.cshtml" />
+    <Content Include="Views\EmployerTeam\YourSingleApprenticeReadyForReviewStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

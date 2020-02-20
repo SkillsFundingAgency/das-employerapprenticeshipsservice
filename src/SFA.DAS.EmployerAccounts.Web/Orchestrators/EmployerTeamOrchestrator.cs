@@ -53,12 +53,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
-        public EmployerTeamOrchestrator(IMediator mediator, 
-            ICurrentDateTime currentDateTime, 
+        public EmployerTeamOrchestrator(IMediator mediator,
+            ICurrentDateTime currentDateTime,
             IAccountApiClient accountApiClient,
-            ICommitmentsApiClient commitmentsApiClient, 
+            ICommitmentsApiClient commitmentsApiClient,
             IEncodingService encodingService,
-            IMapper mapper, 
+            IMapper mapper,
             IAuthorizationService authorizationService)
             : base(mediator)
         {
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
         {
-            var response = await GetTeamMembers(hashedAccountId, externalUserId);            
+            var response = await GetTeamMembers(hashedAccountId, externalUserId);
 
             if (response.Status != HttpStatusCode.OK)
             {
@@ -201,7 +201,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
-                
+
                 await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
@@ -211,7 +211,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var agreementsResponse = agreementsResponseTask.Result;
                 var reservationsResponse = reservationsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
-                
+
                 var apprenticeshipEmployerType = (Common.Domain.Types.ApprenticeshipEmployerType)Enum.Parse(typeof(Common.Domain.Types.ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
@@ -320,7 +320,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Exception = ex
                 };
             }
-        }       
+        }
 
         private async Task<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>> GetApprenticeshipResponse(GetEmployerAccountByHashedIdResponse accountResponse)
         {
@@ -697,14 +697,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public void GetCallToActionViewName(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
 
             if (viewModel.Data.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
             {
-                rules.Add(200, EvalutateSingleReservationCallToActionRule);                
+                rules.Add(200, EvalutateSingleReservationCallToActionRule);
                 rules.Add(201, EvaluateApprenticeshipsCallToActionRule);
                 rules.Add(202, EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule);
                 rules.Add(203, EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule);
@@ -714,25 +714,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
             {
-                if (callToActionRuleFunc.Value(ref viewModel))
+                if (callToActionRuleFunc.Value(viewModel))
                     return;
             }
         }
 
-        private delegate bool EvalutateCallToActionRuleDelegate(ref PanelViewModel<AccountDashboardViewModel> viewModel);
+        private delegate bool EvalutateCallToActionRuleDelegate(PanelViewModel<AccountDashboardViewModel> viewModel);
 
-        private bool EvalutateSignAgreementCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
             {
-                viewModel.ViewName = "SignAgreement";                
+                viewModel.ViewName = "SignAgreement";
                 return true;
             }
 
             return false;
         }
 
-        private bool EvalutateSingleReservationCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateSingleReservationCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1 &&
                 viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
@@ -745,24 +745,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateHasReservationsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateHasReservationsCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (!viewModel.Data.CallToActionViewModel.HasReservations)
             {
-                viewModel.ViewName = "CheckFunding";                
+                viewModel.ViewName = "CheckFunding";
                 return true;
             }
 
             return false;
         }
 
-        private bool EvaluateApprenticeshipsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateApprenticeshipsCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.ApprenticeshipAdded && 
-                viewModel.Data.CallToActionViewModel.CohortsCount == 0 && 
-                viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 1)
+            if (viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 1)
             {
-                viewModel.ViewName = "YourSingleApprentice";
+                viewModel.ViewName = "YourSingleApprovedApprentice";
                 viewModel.PanelType = PanelType.Summary;
                 return true;
             }
@@ -770,11 +768,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship && viewModel.Data.CallToActionViewModel.CohortsCount == 1 
-                    && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
-                    && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Draft)
+            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship
+                && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Draft)
             {
                 viewModel.ViewName = "ContinueSetupForSingleApprenticeship";
                 viewModel.PanelType = PanelType.Summary;
@@ -784,13 +781,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship && viewModel.Data.CallToActionViewModel.CohortsCount == 1
-                    && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
-                    && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)
+            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship
+                && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)
             {
-                viewModel.ViewName = "YourSingleApprenticeStatus";
+                viewModel.ViewName = "YourSingleApprenticeWithTrainingProviderStatus";
                 viewModel.PanelType = PanelType.Summary;
                 return true;
             }
@@ -798,14 +794,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvaluateDraftApprenticeshipsWithReviewStatusCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateDraftApprenticeshipsWithReviewStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship && viewModel.Data.CallToActionViewModel.CohortsCount == 1
-                    && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
-                    && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Review)
+            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship
+                && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Review)
             {
-                viewModel.ViewName = "YourSingleApprenticeStatus";
-                viewModel.PanelType = PanelType.Summary;                
+                viewModel.ViewName = "YourSingleApprenticeReadyForReviewStatus";
+                viewModel.PanelType = PanelType.Summary;
                 return true;
             }
 

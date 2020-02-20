@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonLevyTheYourSingleApprenticeViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyTheYourSingleApprovedApprenticeViewIsReturnedAtRow1Panel1()
         {
             //Arrange
             var model = new AccountDashboardViewModel();
@@ -104,10 +104,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.CallToActionViewModel = new CallToActionViewModel
             {
                 AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                ApprenticeshipAdded = true,
-                ApprenticeshipsCount = 1,
-                CohortsCount = 0
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },                
+                ApprenticeshipsCount = 1
             };            
 
             //Act
@@ -115,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("YourSingleApprentice", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("YourSingleApprovedApprentice", (result.Model as dynamic).ViewName);
         }
 
         [Test]
@@ -132,8 +130,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 ApprenticeshipAdded = false,
                 CohortsCount = 1,
                 ApprenticeshipsCount = 0,
-                NumberOfDraftApprentices = 1,
-                CohortStatus = Web.Extensions.CohortStatus.Draft
+                NumberOfDraftApprentices = 1,                
+                CohortStatus = Web.Extensions.CohortStatus.Draft                
             };
 
             //Act
@@ -145,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonLevyTheYourSingleApprenticeStatusViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyTheYourSingleApprenticeWithTrainingProviderStatusViewIsReturnedAtRow1Panel1()
         {
             //Arrange
             var model = new AccountDashboardViewModel();
@@ -167,7 +165,34 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("YourSingleApprenticeStatus", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("YourSingleApprenticeWithTrainingProviderStatus", (result.Model as dynamic).ViewName);
+        }
+
+
+        [Test]
+        public void ThenForNonLevyTheYourSingleApprenticeReadyForReviewStatusViewIsReturnedAtRow1Panel1()
+        {
+            //Arrange
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = false,
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                ApprenticeshipAdded = false,
+                CohortsCount = 1,
+                ApprenticeshipsCount = 0,
+                NumberOfDraftApprentices = 1,
+                CohortStatus = Web.Extensions.CohortStatus.Review
+            };
+
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("YourSingleApprenticeReadyForReviewStatus", (result.Model as dynamic).ViewName);
         }
     }
 }

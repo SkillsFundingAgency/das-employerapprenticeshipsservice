@@ -1,0 +1,58 @@
+﻿
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large" id="call-to-action-your-apprentice">
+        Your apprentice
+    </h2>
+
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Name
+            </th>
+            <td class="tw-65">
+                @Model.CallToActionViewModel.ApprenticeName
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td>
+                @Model.CallToActionViewModel.ProviderName
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Course
+            </th>
+            <td>
+                @Model.CallToActionViewModel.CourseName
+            </td>
+        </tr>        
+        <tr>
+            <th scope="row">
+                Start month
+            </th>
+            <td>
+                @Model.CallToActionViewModel.CourseStartDate
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Finish month
+            </th>
+            <td>
+                @Model.CallToActionViewModel.CourseEndDate
+            </td>
+        </tr>
+    </table>
+    <p>
+
+        <a href="@Url.EmployerCommitmentsAction("")" role="button" draggable="false" class="button">
+            View apprentice details
+        </a>
+    </p>
+</section>
+

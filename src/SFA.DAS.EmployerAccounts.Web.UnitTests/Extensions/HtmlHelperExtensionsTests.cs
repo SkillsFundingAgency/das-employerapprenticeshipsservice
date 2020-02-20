@@ -134,18 +134,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             Assert.IsFalse(result);
         }
 
-        [TestCase(CohortStatus.Draft, "DRAFT")]
-        [TestCase(CohortStatus.WithTrainingProvider, "WITH TRAINING PROVIDER")]
-        [TestCase(CohortStatus.Review, "READY FOR REVIEW")]
-        public void WhenCohortStausSet_ThenReturnText(CohortStatus cohortStatus, string expected)
-        {
-            //Act
-            var actual = Web.Extensions.HtmlHelperExtensions.GetCohortStatus(null, cohortStatus);
-
-            //Assert
-            Assert.AreEqual(expected, actual);
-        }
-
         [TestCaseSource(nameof(LabelCases))]
         public void WhenICallSetZenDeskLabelsWithLabels_ThenTheKeywordsAreCorrect(string[] labels, string keywords)
         {

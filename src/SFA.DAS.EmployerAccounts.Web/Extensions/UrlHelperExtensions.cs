@@ -1,5 +1,6 @@
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
@@ -18,9 +19,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerCommitmentsBaseUrl;
-
+            
             return AccountAction(helper, baseUrl, path);
-        }        
+        }
+
+        public static string EmployerCommitmentsV2Action(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;
+
+            return CommitmentAction(helper, baseUrl, path);
+        }
 
         public static string ReservationsAction(this UrlHelper helper, string path)
         {
@@ -92,6 +101,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
 
             return Action(baseUrl, accountPath);
+        }
+
+        private static string CommitmentAction(UrlHelper helper, string baseUrl, string path)
+        {
+            //$"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var model = helper.RequestContext.RouteData.Values["model"]  as AccountDashboardViewModel;
+            var hashedCohortReference = model.CallToActionViewModel.HashedCohortReference;
+            var hashedDraftApprenticeshipId = model.CallToActionViewModel.HashedDraftApprenticeshipId;
+            var commitmentPath = path == "Approve" ? $"{hashedAccountId}/unapproved/{hashedCohortReference}" : $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
+            return Action(baseUrl, commitmentPath);
         }
 
         private static string Action(string baseUrl, string path)

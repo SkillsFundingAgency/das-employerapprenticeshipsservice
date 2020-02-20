@@ -326,18 +326,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return Redirect(Url.EmployerCommitmentsAction("apprentices/home"));
-        }
-
-        [HttpGet]
-        [Route("ViewApprentice")]
-        public ActionResult ViewApprentice(string hashedAccountId, string hashedDraftApprenticeshipId, string hashedCohortReference, CohortStatus cohortStatus)
-        {          
-            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;      //https://approvals.test-eas.apprenticeships.education.gov.uk/V7LJB8/unapproved/VDJP4X/apprentices/XD7D77 // Edit apprentice details Link               
-            var url = $"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
-            if (cohortStatus == CohortStatus.Review){ url = $"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}"; }
-            return Redirect(url);
-        }
+        }       
        
         [ChildActionOnly]
         public ActionResult ContinueSetupForSingleApprenticeship(AccountDashboardViewModel model)
@@ -346,13 +335,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult YourSingleApprenticeStatus(AccountDashboardViewModel model)
+        public ActionResult YourSingleApprenticeWithTrainingProviderStatus(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
 
         [ChildActionOnly]
-        public ActionResult YourSingleApprentice(AccountDashboardViewModel model)
+        public ActionResult YourSingleApprenticeReadyForReviewStatus(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult YourSingleApprovedApprentice(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -384,7 +379,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
-                _employerTeamOrchestrator.GetCallToActionViewName(ref viewModel);
+                _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
             }
 
             return PartialView(viewModel);

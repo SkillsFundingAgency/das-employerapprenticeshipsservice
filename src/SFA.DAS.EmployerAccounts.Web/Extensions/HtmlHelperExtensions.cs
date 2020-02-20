@@ -10,17 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class HtmlHelperExtensions
     {
-        private const string Draft = "DRAFT";
-        private const string WithTrainingProvider = "WITH TRAINING PROVIDER";
-        private const string ReadyForReview = "READY FOR REVIEW";
-        private const string AddMoreDetails = "Add more details";
-        private const string ViewApprenticeDetails = "View apprentice details";
-        private const string ApproveOrRejectApprenticeDetails = "Approve or reject apprentice details";
-
-        //"Add more details"
-        //"View apprentice details"
-        //"Approve or reject apprentice details"
-
         public static MvcHtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
         {
             var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<Configuration.EmployerAccountsConfiguration>().CdnBaseUrl;
@@ -77,50 +66,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             return configuration.ZenDeskSectionId;
-        }
-
-        public static string GetCohortStatus(this HtmlHelper html, CohortStatus cohortStatus)
-        {
-            switch(cohortStatus)
-            {
-                case CohortStatus.Draft:
-                    return Draft;
-                case CohortStatus.WithTrainingProvider:
-                    return WithTrainingProvider;
-                case CohortStatus.Review:
-                    return ReadyForReview;
-                default:
-                    return string.Empty;
-            }
-            //return cohortStatus switch
-            //{
-            //    CohortStatus.Draft => "DRAFT",
-            //    CohortStatus.WithTrainingProvider => "WITH TRAINING PROVIDER",
-            //    CohortStatus.Review => "READY FOR REVIEW",
-            //    _ => string.Empty
-            //};
-        }
-
-        public static string GetCallToActionButtonText(this HtmlHelper htmlHelper, CallToActionViewModel callToActionViewModel)
-        {
-            switch (callToActionViewModel.CohortStatus)
-            {
-                case (CohortStatus.Draft):
-                    return AddMoreDetails;
-                case (CohortStatus.WithTrainingProvider):
-                    return callToActionViewModel.ViewApprenticeDetails ? ViewApprenticeDetails : AddMoreDetails;
-                case (CohortStatus.Review):
-                    return ApproveOrRejectApprenticeDetails;
-                default:
-                    return string.Empty;
-            }
-            //return callToActionViewModel.CohortStatus switch
-            //{
-            //    (CohortStatus.Draft) => "Add more details",
-            //    (CohortStatus.WithTrainingProvider) => callToActionViewModel.ViewApprenticeDetails ? "View apprentice details" : "Add more details",
-            //    (CohortStatus.Review) => "Approve or reject apprentice details"
-            //    _ => string.Empty,
-            //};
-        }
+        }       
     }
 }
