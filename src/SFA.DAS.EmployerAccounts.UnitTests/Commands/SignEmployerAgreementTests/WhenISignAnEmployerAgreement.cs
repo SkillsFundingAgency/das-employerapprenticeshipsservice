@@ -78,7 +78,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 HashedAgreementId = "124GHJG",
                 LegalEntityId = LegalEntityId,
                 LegalEntityName = OrganisationName,
-                AgreementType = AgreementType
+                AgreementType = AgreementType,
+                AccountId = AccountId,
+                Id = AgreementId
             };
 
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
@@ -123,7 +125,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 Role = Role.Owner,
                 FirstName = "Fred",
                 LastName = "Bloggs",
-                UserRef = Guid.NewGuid().ToString()
+                UserRef = Guid.NewGuid()
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
@@ -179,6 +181,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                                   && c.SignedById.Equals(_owner.UserId)
                                   && c.SignedByName.Equals($"{_owner.FirstName} {_owner.LastName}")
                                 )));
+        }
+
+        [Test]
+        public async Task ThenIfTheCommandIsValidTheAccountLegalEntityAgreementDetailsShouldBeUpdated()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _agreementRepository.Verify(x => x.SetAccountLegalEntityAgreementDetails(_agreement.AccountLegalEntityId, (long?)null, (int?)null, _agreement.Id, _agreement.VersionNumber));
         }
 
         [Test]

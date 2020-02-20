@@ -12,7 +12,8 @@
 	@employerAgreementId BIGINT OUTPUT,
 	@sector NVARCHAR(100) NULL,
 	@accountLegalentityId BIGINT OUTPUT,
-	@accountLegalEntityCreated BIT OUTPUT
+	@accountLegalEntityCreated BIT OUTPUT,
+	@agreementVersion INT OUTPUT
 AS
 BEGIN	
 	DECLARE @firstName NVARCHAR(MAX)	
@@ -45,5 +46,6 @@ BEGIN
 			@accountLegalEntityId = @accountLegalEntityId, 
 			@templateId = NULL, 
 			@agreementType = @agreementType,
-			@employerAgreementId = @employerAgreementId OUTPUT
+			@employerAgreementId = @employerAgreementId OUTPUT,
+			@agreementVersion = @agreementVersion OUTPUT
 END

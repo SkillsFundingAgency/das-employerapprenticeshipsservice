@@ -149,7 +149,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
-                .UseOutbox()
+                .UseOutbox(true)
                 .UseStructureMapBuilder(container)
                 .UseUnitOfWork();
 

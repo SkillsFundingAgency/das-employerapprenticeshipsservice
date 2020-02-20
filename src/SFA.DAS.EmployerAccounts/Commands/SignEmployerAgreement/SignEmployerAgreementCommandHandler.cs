@@ -34,8 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         private readonly IMediator _mediator;
         private readonly IEventPublisher _eventPublisher;
         private readonly ICommitmentService _commitmentService;
-
-
+        
         public SignEmployerAgreementCommandHandler(
             IMembershipRepository membershipRepository,
             IEmployerAgreementRepository employerAgreementRepository,
@@ -68,38 +67,37 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
             await SignAgreement(message, agreementId, owner);
 
-            var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-            await AddAuditEntry(message, accountId, agreementId);
-
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
-            await _employerAgreementRepository.EvaluateEmployerLegalEntityAgreementStatus(accountId, agreement.LegalEntityId);
-
-            var hashedLegalEntityId = _hashingService.HashValue(agreement.LegalEntityId);
-
-            await PublishEvents(message, hashedLegalEntityId, accountId, agreement, agreementId, owner, userResponse.User.CorrelationId);
+            var hashedLegalEntityId = _hashingService.HashValue((long)agreement.LegalEntityId);
+            await Task.WhenAll(
+                AddAuditEntry(message, agreement.AccountId, agreementId),
+                _employerAgreementRepository.SetAccountLegalEntityAgreementDetails(agreement.AccountLegalEntityId, null, null, agreement.Id, agreement.VersionNumber),
+                PublishEvents(message, hashedLegalEntityId, agreement, owner, userResponse.User.CorrelationId)
+            );
         }
 
-        private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, long accountId,
-            EmployerAgreementView agreement, long agreementId, MembershipView owner, string correlationId)
+        private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, EmployerAgreementView agreement, MembershipView owner)
         {
-            await PublishLegalGenericEvent(message, hashedLegalEntityId);
+            await Task.WhenAll(
+                PublishLegalGenericEvent(message, hashedLegalEntityId),
+                PublihAgreementSignedMessage(agreement, owner)
+            );
+        }
 
-            var commitments = await _commitmentService.GetEmployerCommitments(accountId);
-
+        private async Task PublihAgreementSignedMessage(EmployerAgreementView agreement, MembershipView owner)
+        {
+            var commitments = await _commitmentService.GetEmployerCommitments(agreement.AccountId);
             var accountHasCommitments = commitments?.Any() ?? false;
 
-            await PublishAgreementSignedMessage(accountId, agreement.LegalEntityId, agreement.LegalEntityName, agreementId,
-                accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType, agreement.VersionNumber, correlationId);
+            await PublishAgreementSignedMessage(agreement.AccountId, agreement.LegalEntityId, agreement.LegalEntityName,
+                agreement.Id, accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType,
+                agreement.VersionNumber, correlationId);
         }
 
         private async Task PublishLegalGenericEvent(SignEmployerAgreementCommand message, string hashedLegalEntityId)
         {
-            var agreementEvent =
-                _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId,
-                    message.HashedAgreementId);
-
+            var agreementEvent = _agreementEventFactory.CreateSignedEvent(message.HashedAccountId, hashedLegalEntityId, message.HashedAgreementId);
             var genericEvent = _genericEventFactory.Create(agreementEvent);
 
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
@@ -149,7 +147,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
                 CohortCreated = cohortCreated,
                 Created = DateTime.UtcNow,
                 UserName = currentUserName,
-                UserRef = Guid.Parse(currentUserRef),
+                UserRef = currentUserRef,
                 AgreementType = agreementType,
                 SignedAgreementVersion = versionNumber,
                 CorrelationId = correlationId
