@@ -1,8 +1,6 @@
-﻿using System.Configuration;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
