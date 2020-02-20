@@ -77,15 +77,15 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             );
         }
 
-        private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, EmployerAgreementView agreement, MembershipView owner)
+        private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, EmployerAgreementView agreement, MembershipView owner, string correlationId)
         {
             await Task.WhenAll(
                 PublishLegalGenericEvent(message, hashedLegalEntityId),
-                PublihAgreementSignedMessage(agreement, owner)
+                PublihAgreementSignedMessage(agreement, owner, correlationId)
             );
         }
 
-        private async Task PublihAgreementSignedMessage(EmployerAgreementView agreement, MembershipView owner)
+        private async Task PublihAgreementSignedMessage(EmployerAgreementView agreement, MembershipView owner, string correlationId)
         {
             var commitments = await _commitmentService.GetEmployerCommitments(agreement.AccountId);
             var accountHasCommitments = commitments?.Any() ?? false;
@@ -135,7 +135,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
         private Task PublishAgreementSignedMessage(
             long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, string currentUserRef, 
+            bool cohortCreated, string currentUserName, Guid currentUserRef, 
             AgreementType agreementType, int versionNumber, string correlationId)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
