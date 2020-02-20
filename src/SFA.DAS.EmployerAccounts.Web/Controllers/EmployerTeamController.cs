@@ -410,7 +410,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult SignAgreement(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }
+        }        
 
         [ChildActionOnly]
         public ActionResult V2SignAgreement(AccountDashboardViewModel model)
@@ -501,6 +501,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult FundingComplete(AccountDashboardViewModel model)
         {
             return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyDraft(AccountDashboardViewModel model)
+        {   
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Draft));
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyPendingReview(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Submitted));
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyLive(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Live));
         }
 
         [ChildActionOnly]
