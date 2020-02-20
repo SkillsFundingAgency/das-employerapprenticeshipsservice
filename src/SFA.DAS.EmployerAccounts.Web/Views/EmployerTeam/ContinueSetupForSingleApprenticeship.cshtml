@@ -1,7 +1,8 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <section class="dashboard-section">
-    <h2 class="section-heading heading-large">
+    <h2 class="section-heading heading-large" id="call-to-action-continue-setting-up-an-apprenticeship">
         Continue setting up an apprenticeship
     </h2>
 
@@ -27,11 +28,11 @@
                 Status
             </th>
             <td>
-                @Model.CallToActionViewModel.CohortStatus
+                @Html.GetCohortStatus(@Model.CallToActionViewModel.CohortStatus)
             </td>
         </tr>
     </table>
-    <p> 
+    <p>
         <a href="@Url.Action("ViewApprenticeship", "EmployerTeam", new {Model.CallToActionViewModel.HashedDraftApprenticeshipId, Model.CallToActionViewModel.HashedCohortReference, Model.HashedAccountId})" role="button" draggable="false" class="button">
             Add mode details
         </a>

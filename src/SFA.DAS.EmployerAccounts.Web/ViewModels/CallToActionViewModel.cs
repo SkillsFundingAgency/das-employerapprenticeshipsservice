@@ -27,5 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string HashedDraftApprenticeshipId { get; set; }
         public string HashedCohortReference { get; set; }
         public string ApprenticeName { get; set; }
+        public bool ViewApprenticeDetails => CourseStartDate.HasValue && CourseEndDate.HasValue;
     }
 }

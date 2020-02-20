@@ -119,7 +119,7 @@
       <Version>1.1.4</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
-      <Version>4.1.1013</Version>
+      <Version>4.1.1063</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
@@ -860,9 +860,9 @@
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
-    <Content Include="Views\EmployerTeam\ContinueSetupForApprenticeship.cshtml" />
-    <Content Include="Views\EmployerTeam\YourApprentice.cshtml" />
-    <Content Include="Views\EmployerTeam\YourApprenticeStatus.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupForSingleApprenticeship.cshtml" />
+    <Content Include="Views\EmployerTeam\YourSingleApprentice.cshtml" />
+    <Content Include="Views\EmployerTeam\YourSingleApprenticeStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

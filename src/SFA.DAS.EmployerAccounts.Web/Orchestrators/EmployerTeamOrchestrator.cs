@@ -3,6 +3,7 @@ using MediatR;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.CommitmentsV2.Api.Types.Requests;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
 using SFA.DAS.Common.Domain.Types;
@@ -188,7 +189,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
-                
+
                 var agreementsResponseTask = _mediator.SendAsync(new GetAccountEmployerAgreementsRequest
                 {
                     HashedAccountId = hashedAccountId,
@@ -200,8 +201,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
-
-
+                
                 await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
@@ -211,7 +211,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var agreementsResponse = agreementsResponseTask.Result;
                 var reservationsResponse = reservationsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
-
+                
                 var apprenticeshipEmployerType = (Common.Domain.Types.ApprenticeshipEmployerType)Enum.Parse(typeof(Common.Domain.Types.ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
@@ -227,9 +227,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
 
                 var apprenticeshipsCount = 0;
-                //Task<GetApprenticeshipsResponse> apprenticeshipResponse = null;
-                /*TODO : include later*/
-                var apprenticeshipResponse = (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = accountResponse.Account.Id }))?.Apprenticeships;
+                IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse> apprenticeshipResponse = await GetApprenticeshipResponse(accountResponse);
                 if (apprenticeshipResponse != null)
                 {
                     apprenticeshipsCount = apprenticeshipResponse.Count();
@@ -239,22 +237,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var draftApprenticeshipCount = 0;
                 CohortSummary singleCohort = new CohortSummary();
                 DraftApprenticeshipDto singleDraftApprenticeship = new DraftApprenticeshipDto();
-
                 if (apprenticeshipResponse == null)
                 {
-                    var cohortsResponse = (await _commitmentsApiClient.GetCohorts(new GetCohortsRequest { AccountId = accountResponse.Account.Id }))?.Cohorts;
-
+                    CohortSummary[] cohortsResponse = await GetCohortsResponse(accountResponse);
                     if (cohortsResponse != null && cohortsResponse.Count() == 1)
                     {
                         cohortsCount = cohortsResponse.Count();
                         singleCohort = cohortsResponse.First();
                         draftApprenticeshipCount = singleCohort.NumberOfDraftApprentices;
-
-                        if (draftApprenticeshipCount == 1)
-                        {
-                            var draftApprenticeshipsResponse = (await _commitmentsApiClient.GetDraftApprenticeships(singleCohort.CohortId))?.DraftApprenticeships;
-                            singleDraftApprenticeship = draftApprenticeshipsResponse.First();
-                        }
+                        singleDraftApprenticeship = await GetSingleDraftApprenticeship(draftApprenticeshipCount, singleCohort, singleDraftApprenticeship);
                     }
                 }
 
@@ -299,7 +290,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 // we could blat over the existing flag, but it's much nicer to store the enum (as above) rather than a byte!
                 //viewModel.Account.ApprenticeshipEmployerType = (byte) ((ApprenticeshipEmployerType) Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true));
 
-            return new OrchestratorResponse<AccountDashboardViewModel>
+                return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = viewModel
@@ -329,6 +320,27 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Exception = ex
                 };
             }
+        }       
+
+        private async Task<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>> GetApprenticeshipResponse(GetEmployerAccountByHashedIdResponse accountResponse)
+        {
+            return (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = accountResponse.Account.Id }))?.Apprenticeships;
+        }
+
+        private async Task<CohortSummary[]> GetCohortsResponse(GetEmployerAccountByHashedIdResponse accountResponse)
+        {
+            return (await _commitmentsApiClient.GetCohorts(new GetCohortsRequest { AccountId = accountResponse.Account.Id }))?.Cohorts;
+        }
+
+        private async Task<DraftApprenticeshipDto> GetSingleDraftApprenticeship(int draftApprenticeshipCount, CohortSummary singleCohort, DraftApprenticeshipDto singleDraftApprenticeship)
+        {
+            if (draftApprenticeshipCount == 1)
+            {
+                var draftApprenticeshipsResponse = (await _commitmentsApiClient.GetDraftApprenticeships(singleCohort.CohortId))?.DraftApprenticeships;
+                singleDraftApprenticeship = draftApprenticeshipsResponse.First();
+            }
+
+            return singleDraftApprenticeship;
         }
 
         public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)
@@ -696,7 +708,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(201, EvaluateApprenticeshipsCallToActionRule);
                 rules.Add(202, EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule);
                 rules.Add(203, EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule);
-                rules.Add(204, EvalutateHasReservationsCallToActionRule);
+                rules.Add(204, EvaluateDraftApprenticeshipsWithReviewStatusCallToActionRule);
+                rules.Add(205, EvalutateHasReservationsCallToActionRule);
             }
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
@@ -749,7 +762,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 viewModel.Data.CallToActionViewModel.CohortsCount == 0 && 
                 viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 1)
             {
-                viewModel.ViewName = "YourApprentice";
+                viewModel.ViewName = "YourSingleApprentice";
                 viewModel.PanelType = PanelType.Summary;
                 return true;
             }
@@ -763,7 +776,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
                     && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Draft)
             {
-                viewModel.ViewName = "ContinueSetupForApprenticeship";
+                viewModel.ViewName = "ContinueSetupForSingleApprenticeship";
                 viewModel.PanelType = PanelType.Summary;
                 return true;
             }
@@ -777,8 +790,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
                     && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)
             {
-                viewModel.ViewName = "YourApprenticeStatus";
+                viewModel.ViewName = "YourSingleApprenticeStatus";
                 viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvaluateDraftApprenticeshipsWithReviewStatusCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship && viewModel.Data.CallToActionViewModel.CohortsCount == 1
+                    && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0 && viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices == 1
+                    && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Review)
+            {
+                viewModel.ViewName = "YourSingleApprenticeStatus";
+                viewModel.PanelType = PanelType.Summary;                
                 return true;
             }
 

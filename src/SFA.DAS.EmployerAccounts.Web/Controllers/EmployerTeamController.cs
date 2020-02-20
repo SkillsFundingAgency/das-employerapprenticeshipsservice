@@ -329,23 +329,30 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("ViewApprenticeship")]
-        public ActionResult ViewApprenticeship(string hashedAccountId, string hashedDraftApprenticeshipId, string hashedCohortReference)
-        {
+        [Route("ViewApprentice")]
+        public ActionResult ViewApprentice(string hashedAccountId, string hashedDraftApprenticeshipId, string hashedCohortReference, CohortStatus cohortStatus)
+        {          
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;      //https://approvals.test-eas.apprenticeships.education.gov.uk/V7LJB8/unapproved/VDJP4X/apprentices/XD7D77 // Edit apprentice details Link               
             var url = $"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
+            if (cohortStatus == CohortStatus.Review){ url = $"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}"; }
             return Redirect(url);
         }
-
+       
         [ChildActionOnly]
-        public ActionResult ContinueSetupForApprenticeship(AccountDashboardViewModel model)
+        public ActionResult ContinueSetupForSingleApprenticeship(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
 
         [ChildActionOnly]
-        public ActionResult YourApprenticeStatus(AccountDashboardViewModel model)
+        public ActionResult YourSingleApprenticeStatus(AccountDashboardViewModel model)
+        {
+            return PartialView(model);
+        }
+
+        [ChildActionOnly]
+        public ActionResult YourSingleApprentice(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }

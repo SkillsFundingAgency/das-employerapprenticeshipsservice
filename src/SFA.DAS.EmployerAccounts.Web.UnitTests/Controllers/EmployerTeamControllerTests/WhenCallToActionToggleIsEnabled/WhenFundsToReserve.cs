@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonLevyTheYourApprenticeViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyTheYourSingleApprenticeViewIsReturnedAtRow1Panel1()
         {
             //Arrange
             var model = new AccountDashboardViewModel();
@@ -115,11 +115,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("YourApprentice", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("YourSingleApprentice", (result.Model as dynamic).ViewName);
         }
 
         [Test]
-        public void ThenForNonLevyTheContinueSetupForApprenticeshipViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyTheContinueSetupForSingleApprenticeshipViewIsReturnedAtRow1Panel1()
         {
             //Arrange
             var model = new AccountDashboardViewModel();
@@ -141,11 +141,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("ContinueSetupForApprenticeship", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("ContinueSetupForSingleApprenticeship", (result.Model as dynamic).ViewName);
         }
 
         [Test]
-        public void ThenForNonLevyTheYourApprenticeStatusViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyTheYourSingleApprenticeStatusViewIsReturnedAtRow1Panel1()
         {
             //Arrange
             var model = new AccountDashboardViewModel();
@@ -167,7 +167,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("YourApprenticeStatus", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("YourSingleApprenticeStatus", (result.Model as dynamic).ViewName);
         }
     }
 }

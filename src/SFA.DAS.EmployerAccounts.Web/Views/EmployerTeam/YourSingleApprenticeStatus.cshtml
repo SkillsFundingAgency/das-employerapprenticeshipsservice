@@ -1,8 +1,8 @@
-﻿
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <section class="dashboard-section">
-    <h2 class="section-heading heading-large">
+    <h2 class="section-heading heading-large" id="call-to-action-your-apprentice-status">
         Your apprentice
     </h2>
 
@@ -30,13 +30,21 @@
             <td>
                 @Model.CallToActionViewModel.CourseName
             </td>
-        </tr>        
+        </tr>
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td>                
+                @Html.GetCohortStatus(@Model.CallToActionViewModel.CohortStatus)
+            </td>
+        </tr>
         <tr>
             <th scope="row">
                 Start month
             </th>
             <td>
-                @Model.CallToActionViewModel.CourseStartDate
+                @Model.CallToActionViewModel.CourseStartDate.Value.ToString("MMMM yyyy")
             </td>
         </tr>
         <tr>
@@ -44,13 +52,13 @@
                 Finish month
             </th>
             <td>
-                @Model.CallToActionViewModel.CourseEndDate
+                @Model.CallToActionViewModel.CourseEndDate.Value.ToString("MMMM yyyy")
             </td>
         </tr>
     </table>
     <p>
-        <a href="@Url.Action("ViewApprenticeship", "EmployerTeam", new {Model.CallToActionViewModel.HashedDraftApprenticeshipId, Model.CallToActionViewModel.HashedCohortReference, Model.HashedAccountId})" role="button" draggable="false" class="button">
-            View apprentice details
+        <a href="@Url.Action("ViewApprentice", "EmployerTeam", new {Model.CallToActionViewModel.HashedDraftApprenticeshipId, Model.CallToActionViewModel.HashedCohortReference, Model.HashedAccountId, Model.CallToActionViewModel.CohortStatus})" role="button" draggable="false" class="button">
+            @Html.GetCallToActionButtonText(Model.CallToActionViewModel)
         </a>
     </p>
 </section>
