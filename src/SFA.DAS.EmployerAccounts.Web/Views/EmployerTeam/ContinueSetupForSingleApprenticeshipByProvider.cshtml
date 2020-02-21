@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <section class="dashboard-section">
@@ -6,15 +7,15 @@
         Your apprentice
     </h2>
 
-    <table class="responsive">       
+    <table class="responsive">
         <tr>
             <th scope="row">
                 Course
             </th>
             <td id="course-name">
-                @(Model?.ReservationViewModel.CourseDescription)
+                @(Model?.CallToActionViewModel?.Reservations.FirstOrDefault()?.Course?.CourseDescription)
             </td>
-        </tr>        
+        </tr>
         <tr>
             <th scope="row">
                 Training Provider
@@ -22,7 +23,7 @@
             <td id="provider-name">
                 @(Model?.CallToActionViewModel.ProviderName)
             </td>
-        </tr>        
+        </tr>
         <tr>
             <th scope="row">
                 Status
@@ -30,11 +31,11 @@
             <td id="with-training-provider">
                 WITH TRAINING PROVIDER
             </td>
-        </tr>       
+        </tr>
     </table>
     <p>
 
-        <a href="@Url.EmployerCommitmentsV2Action("")" draggable="false" class="govuk-link">
+        <a href="@Url.EmployerCommitmentsV2Action(ControllerConstants.ViewApprentice)" role="button" draggable="false" class="button">
             View apprentice details
         </a>
     </p>

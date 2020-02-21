@@ -353,7 +353,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult YourSingleApprenticeDraftCountZeroWithTrainingProviderStatus(AccountDashboardViewModel model)
+        public ActionResult ContinueSetupForSingleApprenticeshipByProvider(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -518,8 +518,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
         {
             var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
-            //var viewModel = new ReservationViewModel(reservation);            
-            return PartialView(model);
+            var viewModel = new ReservationViewModel(reservation);
+            return PartialView(viewModel);
         }
 
         [ChildActionOnly]

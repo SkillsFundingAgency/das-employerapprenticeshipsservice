@@ -31,7 +31,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool HasPayeScheme => PayeSchemeCount > 0;
         public AgreementInfoViewModel AgreementInfo { get; set; }
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
-        public ReservationViewModel ReservationViewModel { get; set; }
         public CallToActionViewModel CallToActionViewModel {get; set;}        
     }
 }

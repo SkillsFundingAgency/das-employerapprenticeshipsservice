@@ -51,15 +51,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheCheckFundingViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel()
             {
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
                     AgreementsToSign = false
+                },
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };
-            
-            
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
             
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -74,16 +74,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel()
             {
-                AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
-                ApprenticeshipAdded = false
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {   
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },                 
+                },
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };
-            
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;                  
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -98,15 +97,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheYourSingleApprovedApprenticeViewIsReturnedAtRow1Panel1()
         {
             //Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;           
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel()
             {
-                AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },                
-                ApprenticeshipsCount = 1
-            };            
+                PayeSchemeCount = 1,
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                    ApprenticeshipsCount = 1
+                }
+            };
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -120,18 +120,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheContinueSetupForSingleApprenticeshipViewIsReturnedAtRow1Panel1()
         {
             //Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;            
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel()
             {
-                AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                ApprenticeshipAdded = false,
-                CohortsCount = 1,
-                ApprenticeshipsCount = 0,
-                NumberOfDraftApprentices = 1,                
-                CohortStatus = Web.Extensions.CohortStatus.Draft                
+                PayeSchemeCount = 1,
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
+                CallToActionViewModel = new CallToActionViewModel
+                {   
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                    CohortsCount = 1,
+                    ApprenticeshipsCount = 0,
+                    NumberOfDraftApprentices = 1,
+                    CohortStatus = Web.Extensions.CohortStatus.Draft
+                }
             };
 
             //Act
@@ -146,19 +146,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheYourSingleApprenticeWithTrainingProviderStatusViewIsReturnedAtRow1Panel1()
         {
             //Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;           
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel()
             {
-                AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                ApprenticeshipAdded = false,
-                CohortsCount = 1,
-                ApprenticeshipsCount = 0,
-                NumberOfDraftApprentices = 1,
-                CohortStatus = Web.Extensions.CohortStatus.WithTrainingProvider
-            };            
+                PayeSchemeCount = 1,
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
+                CallToActionViewModel = new CallToActionViewModel
+                {                    
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },                    
+                    CohortsCount = 1,
+                    ApprenticeshipsCount = 0,
+                    NumberOfDraftApprentices = 1,
+                    CohortStatus = Web.Extensions.CohortStatus.WithTrainingProvider
+                }
+            };
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -173,18 +173,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheYourSingleApprenticeReadyForReviewStatusViewIsReturnedAtRow1Panel1()
         {
             //Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel()
             {
-                AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                ApprenticeshipAdded = false,
-                CohortsCount = 1,
-                ApprenticeshipsCount = 0,
-                NumberOfDraftApprentices = 1,
-                CohortStatus = Web.Extensions.CohortStatus.Review
+                PayeSchemeCount = 1,
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
+                CallToActionViewModel = new CallToActionViewModel
+                {                    
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                    CohortsCount = 1,
+                    ApprenticeshipsCount = 0,
+                    NumberOfDraftApprentices = 1,
+                    CohortStatus = Web.Extensions.CohortStatus.Review
+                }
             };
 
             //Act
@@ -193,6 +193,30 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("YourSingleApprenticeReadyForReviewStatus", (result.Model as dynamic).ViewName);
+        }
+
+        [Test]
+        public void ThenForNonLevyContinueSetupForSingleApprenticeshipByProviderViewIsReturnedAtRow1Panel1()
+        {
+            //Arrange
+            var model = new AccountDashboardViewModel()
+            {
+                PayeSchemeCount = 1,
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                    NumberOfDraftApprentices = 0,
+                    CohortStatus = Web.Extensions.CohortStatus.WithTrainingProvider
+                }
+            };
+
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ContinueSetupForSingleApprenticeshipByProvider", (result.Model as dynamic).ViewName);
         }
     }
 }

@@ -13,8 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool HasReservations => ReservationsCount > 0;
         public int ReservationsCount => Reservations?.Count ?? 0;
         public int PendingReservationsCount => Reservations?.Count(x => x.Status == ReservationStatus.Pending) ?? 0;
-        public bool ApprenticeshipAdded { get; set; }
-
+        //public bool ApprenticeshipAdded { get; set; }
         public int? CohortsCount { get; set; }
         public int? ApprenticeshipsCount { get; set; }
         public int? NumberOfDraftApprentices { get; set; }
@@ -28,5 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string HashedCohortReference { get; set; }
         public string ApprenticeName { get; set; }
         public bool ViewApprenticeDetails => CourseStartDate.HasValue && CourseEndDate.HasValue;
+        public bool HasSingleReservation => Reservations?.Count == 1 && NumberOfDraftApprentices == 0;
     }
 }

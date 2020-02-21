@@ -1,6 +1,5 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ReservationViewModel
 
-@*das-panel das-panel-non--featured*@
 <section class="dashboard-section">
     <h2 class="section-heading heading-large" id="call-to-action-continue-setting-up-an-apprenticeship">
         Continue setting up an apprenticeship
@@ -13,15 +12,15 @@
                 Course
             </th>
             <td class="tw-65">
-                @(Model?.ReservationViewModel.CourseDescription)                
+                @(Model?.CourseDescription)
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Start date
             </th>
-            <td>                
-                @(Model?.ReservationViewModel.TrainingDate.ToString())
+            <td>
+                @(Model?.TrainingDate.ToString())
             </td>
         </tr>
     </table>

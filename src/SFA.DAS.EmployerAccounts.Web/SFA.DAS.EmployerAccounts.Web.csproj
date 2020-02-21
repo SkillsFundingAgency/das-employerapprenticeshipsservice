@@ -864,7 +864,7 @@
     <Content Include="Views\EmployerTeam\YourSingleApprovedApprentice.cshtml" />
     <Content Include="Views\EmployerTeam\YourSingleApprenticeWithTrainingProviderStatus.cshtml" />
     <Content Include="Views\EmployerTeam\YourSingleApprenticeReadyForReviewStatus.cshtml" />
-    <Content Include="Views\EmployerTeam\YourSingleApprenticeDraftCountZeroWithTrainingProviderStatus.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupForSingleApprenticeshipByProvider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
