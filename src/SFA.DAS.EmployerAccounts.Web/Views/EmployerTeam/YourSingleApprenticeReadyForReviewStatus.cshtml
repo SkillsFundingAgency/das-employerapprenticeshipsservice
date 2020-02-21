@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <section class="dashboard-section">
@@ -57,7 +58,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action("Approve")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action(ControllerConstants.ApproveOrRejectApprentice)" role="button" draggable="false" class="button">
             Approve or reject apprentice details
         </a>
     </p>

@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <section class="dashboard-section">
@@ -41,27 +42,27 @@
         </tr>
         @if (Model.CallToActionViewModel.CourseEndDate.HasValue)
         {
-        <tr>
-            <th scope="row">
-                Start month
-            </th>
-            <td id="course-start-date">
-                @Model.CallToActionViewModel.CourseStartDate.Value.ToString("MMMM yyyy")
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">
-                Finish month
-            </th>
-            <td id="course-end-date">
-                @Model.CallToActionViewModel.CourseEndDate.Value.ToString("MMMM yyyy")
-            </td>
-        </tr>
+            <tr>
+                <th scope="row">
+                    Start month
+                </th>
+                <td id="course-start-date">
+                    @Model.CallToActionViewModel.CourseStartDate.Value.ToString("MMMM yyyy")
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    Finish month
+                </th>
+                <td id="course-end-date">
+                    @Model.CallToActionViewModel.CourseEndDate.Value.ToString("MMMM yyyy")
+                </td>
+            </tr>
         }
     </table>
     <p>
 
-        <a href="@Url.EmployerCommitmentsV2Action("")" draggable="false" class="govuk-link">
+        <a href="@Url.EmployerCommitmentsV2Action(ControllerConstants.ViewApprentice)" draggable="false" class="govuk-link">
             View apprentice details
         </a>
     </p>

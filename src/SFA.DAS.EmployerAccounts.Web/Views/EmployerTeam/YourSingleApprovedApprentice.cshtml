@@ -1,4 +1,4 @@
-﻿
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 <section class="dashboard-section">
@@ -30,7 +30,7 @@
             <td>
                 @Model.CallToActionViewModel.CourseName
             </td>
-        </tr>        
+        </tr>
         <tr>
             <th scope="row">
                 Start month
@@ -50,7 +50,7 @@
     </table>
     <p>
 
-        <a href="@Url.EmployerCommitmentsAction("")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsAction(ControllerConstants.ViewApprentice)" role="button" draggable="false" class="button">
             View apprentice details
         </a>
     </p>
