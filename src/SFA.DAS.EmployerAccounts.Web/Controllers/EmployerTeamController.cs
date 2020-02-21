@@ -62,26 +62,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return View(response);
             }
 
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-            {
-                response.Data.AccountViewModel = await _portalClient.GetAccount(new GetAccountParameters
-                {
-                    HashedAccountId = hashedAccountId,
-                    MaxNumberOfVacancies = response.Data.HasPayeScheme ? 2 : 0
-                });
-                response.Data.ApprenticeshipAdded = response.Data.AccountViewModel?.Organisations?.FirstOrDefault()?.Cohorts?.FirstOrDefault()?.Apprenticeships?.Any() ?? false;
-                response.Data.ShowMostActiveLinks = response.Data.ApprenticeshipAdded;
-                response.Data.ShowSearchBar = response.Data.ApprenticeshipAdded;
-
-                if (Guid.TryParse(reservationId, out var recentlyAddedReservationId))
-                    response.Data.RecentlyAddedReservationId = recentlyAddedReservationId;
-
-                if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-                {
-                    return View("v2/Index", "_Layout_v2", response);
-                }
-            }
-
             if (!response.Data.HasPayeScheme)
             {
                 ViewBag.HideNav = true;
@@ -322,6 +302,31 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
+        [HttpGet]
+        [Route("continuesetupcreateadvert")]
+        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("continuesetupcreateadvert")]
+        public ActionResult ContinueSetupCreateAdvert(string hashedAccountId, bool? requiresAdvert)
+        {
+            if (!requiresAdvert.HasValue)
+            {
+                ViewData.ModelState.AddModelError("Choice", "You must select an option to continue.");
+                return View();
+            }
+            else if(requiresAdvert.Value == true)
+            {
+                return Redirect(Url.EmployerRecruitAction());
+            }
+
+            return Redirect(Url.EmployerCommitmentsAction("apprentices/inform"));
+        }
+
         [ChildActionOnly]
         public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
@@ -342,6 +347,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
+            viewModel.IsFeaturedPanel = !model.CallToActionViewModel.ApprenticeshipAdded;
 
             if (model.PayeSchemeCount == 0)
             {
@@ -349,39 +355,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
-                if (model.AgreementsToSign)
+                if (model.CallToActionViewModel.AgreementsToSign)
                 {
                     viewModel.ViewName = "SignAgreement";
                 }
-                else if (!model.HasReservations && model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
+                else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
                 {
-                    viewModel.ViewName = "CheckFunding";
-                }
-            }
-
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-            {
-                viewModel.ViewName = "V2CheckFunding";
-
-                if (model.AgreementsToSign)
-                {
-                    viewModel.ViewName = "V2SignAgreement";
-                }
-                else if (model.ApprenticeshipAdded)
-                {
-                    viewModel.ViewName = "ApprenticeshipDetails";
-                }
-                else if (model.HasReservations)
-                {
-                    viewModel.ViewName = "FundingComplete";
-                }
-                else if (model.RecentlyAddedReservationId != null)
-                {
-                    viewModel.ViewName = "NotCurrentlyInStorage";
-                }
-                else if (model.PayeSchemeCount == 0)
-                {
-                    viewModel.ViewName = "V2AddPAYE";
+                    if (model.CallToActionViewModel.ReservationsCount == 1 && model.CallToActionViewModel.PendingReservationsCount == 1)
+                    {
+                        viewModel.ViewName = "ContinueSetupForSingleReservation";
+                        viewModel.IsFeaturedPanel = false;
+                    }
+                    else if (!model.CallToActionViewModel.HasReservations)
+                    {
+                        viewModel.ViewName = "CheckFunding";
+                    }                    
                 }
             }
 
@@ -398,23 +386,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 viewModel.ViewName = "Empty";
             }
 
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-            {
-                viewModel.ViewName = "ProviderPermissions";
-                if (model.PayeSchemeCount == 0 || model.AgreementsToSign)
-                {
-                    viewModel.ViewName = "ProviderPermissionsDenied";
-                }
-                else if (model.HasSingleProvider)
-                {
-                    viewModel.ViewName = "SingleProvider";
-                }
-                else if (model.HasMultipleProviders)
-                {
-                    viewModel.ViewName = "ProviderPermissionsMultiple";
-                }
-            }
-
             return PartialView(viewModel);
         }
 
@@ -428,11 +399,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 viewModel.ViewName = "Empty";
             }
 
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-            {
-                viewModel.ViewName = "FinancialTransactions";
-            }
-
             return PartialView(viewModel);
         }
 
@@ -440,35 +406,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row2Panel2(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-
-            if (_authorizationService.IsAuthorized("EmployerFeature.HomePage"))
-            {
-                viewModel.ViewName = "PrePayeRecruitment";
-
-                if (model.HasPayeScheme)
-                {
-                    if (model.AccountViewModel?.VacanciesRetrieved == false)
-                    {
-                        viewModel.ViewName = "MultipleVacancies";
-                    }
-                    else
-                    {
-                        switch (model.AccountViewModel?.GetVacancyCardinality())
-                        {
-                            case null:
-                            case Cardinality.None:
-                                viewModel.ViewName = "CreateVacancy";
-                                break;
-                            case Cardinality.One:
-                                viewModel.ViewName = "VacancyStatus";
-                                break;
-                            default:
-                                viewModel.ViewName = "MultipleVacancies";
-                                break;
-                        }
-                    }
-                }
-            }
 
             return PartialView(viewModel);
         }
@@ -563,6 +500,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
+        {
+            var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
+            var viewModel = new ReservationViewModel(reservation);            
+            return PartialView(viewModel);
+        }
+
+        [ChildActionOnly]
         public ActionResult V2CheckFunding(AccountDashboardViewModel model)
         {
             return PartialView(model);
@@ -578,49 +523,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult VacancyStatus(AccountDashboardViewModel model)
-        {
-            Vacancy vacancy = model.AccountViewModel.Vacancies.First();
-
-            var viewModel = new VacancyStatusViewModel
-            {
-                VacancyTitle = vacancy.Title,
-                ClosingDateText = vacancy.ClosingDate.HasValue ? vacancy.ClosingDate.Value.ToGdsFormatFull() : "-",
-                ManageVacancyLinkUrl = vacancy.ManageVacancyUrl,
-                ManageVacancyLinkText = "Manage vacancy",
-                Reference = "VAC" + vacancy.Reference,
-                Status = vacancy.Status.ToString()
-            };
-
-            switch (vacancy.Status)
-            {
-                case EAS.Portal.Client.Types.VacancyStatus.Closed:
-                    viewModel.Applications = ApplicationsDisplay(vacancy);
-                    break;
-
-                case EAS.Portal.Client.Types.VacancyStatus.Submitted:
-                    viewModel.ManageVacancyLinkText = "Preview vacancy";
-                    viewModel.Status = "Pending review";
-                    break;
-
-                case EAS.Portal.Client.Types.VacancyStatus.Draft:
-                    viewModel.ManageVacancyLinkText = "Edit and submit vacancy";
-                    break;
-
-                case EAS.Portal.Client.Types.VacancyStatus.Referred:
-                    viewModel.ManageVacancyLinkText = "Edit and re-submit vacancy";
-                    viewModel.Status = "Rejected";
-                    break;
-
-                case EAS.Portal.Client.Types.VacancyStatus.Live:
-                    viewModel.Applications = ApplicationsDisplay(vacancy);
-                    break;
-            }
-
-            return PartialView(viewModel);
         }
 
         private string ApplicationsDisplay(Vacancy vacancy)
@@ -658,26 +560,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult OtherTasksPanel(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult ApprenticeshipDetails(AccountDashboardViewModel model)
-        {
-            Cohort cohort = model.AccountViewModel.Organisations.FirstOrDefault()?.Cohorts?.FirstOrDefault();
-            Apprenticeship apprenticeship = cohort?.Apprenticeships?.FirstOrDefault();
-
-            var viewModel = new ApprenticeDetailsViewModel
-            {
-                ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}",
-                TrainingProviderName = apprenticeship.TrainingProvider?.Name,
-                CourseName = apprenticeship.CourseName,
-                StartDateText = apprenticeship.StartDate?.ToGdsFormatWithoutDay(),
-                EndDateText = apprenticeship.EndDate?.ToGdsFormatWithoutDay(),
-                ProposedCostText = $"{apprenticeship.ProposedCost?.ToString("C0", CultureInfo.CreateSpecificCulture("en-GB"))} excluding VAT",
-                IsApproved = cohort.IsApproved
-            };
-
-            return PartialView(viewModel);
         }
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)

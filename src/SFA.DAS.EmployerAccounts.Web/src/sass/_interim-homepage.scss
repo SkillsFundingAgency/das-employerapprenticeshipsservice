@@ -132,6 +132,11 @@ hr.dashboard-heading-separator {
     }
 }
 
+.das-panel--non-featured {
+    padding: 0px;
+    margin-top: 30px;
+}
+
 .das-panel--featured {
     background: $govuk-blue;
     color: #fff;
