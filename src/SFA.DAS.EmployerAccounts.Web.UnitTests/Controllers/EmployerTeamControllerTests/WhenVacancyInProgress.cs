@@ -105,7 +105,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonLevyWithASingleLiveVacancyTheVacancyLiveIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyWithASingleLiveVacancyTheVacancyLiveViewIsReturnedAtRow1Panel1()
         {
             // Arrange
             var model = new AccountDashboardViewModel
@@ -132,6 +132,36 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("VacancyLive", (result.Model as dynamic).ViewName);
+        }
+
+        [Test]
+        public void ThenForNonLevyWithASingleRejectedVacancyTheVacancyRejectedViewIsReturnedAtRow1Panel1()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = false,
+                    Reservations = new List<EmployerAccounts.Models.Reservations.Reservation> { new EmployerAccounts.Models.Reservations.Reservation { Status = EmployerAccounts.Models.Reservations.ReservationStatus.Completed } },
+                    VacanciesViewModel = new VacanciesViewModel
+                    {
+                        VacancyCount = 1,
+                        Vacancies = new List<VacancyViewModel>{ new VacancyViewModel{ Status = EmployerAccounts.Models.Recruit.VacancyStatus.Referred }
+                     }
+                    }
+                },
+
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
+            };
+
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("VacancyRejected", (result.Model as dynamic).ViewName);
         }
     }
 }
