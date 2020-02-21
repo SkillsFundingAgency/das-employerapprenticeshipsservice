@@ -663,6 +663,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             rules.Add(250, EvalutateDraftVacancyCallToActionRule);
             rules.Add(251, EvalutatePendingReviewVacancyCallToActionRule);
             rules.Add(252, EvalutateLiveVacancyCallToActionRule);
+            rules.Add(254, EvalutateClosedVacancyCallToActionRule);
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
             {
@@ -720,6 +721,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Live))
             {
                 viewModel.ViewName = "VacancyLive";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+        private bool EvalutateClosedVacancyCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
+                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+            {
+                return false;
+            }
+
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Closed))
+            {
+                viewModel.ViewName = "VacancyClosed";
                 viewModel.PanelType = PanelType.Summary;
                 return true;
             }

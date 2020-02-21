@@ -865,6 +865,7 @@
     <Content Include="Views\EmployerTeam\VacancyDraft.cshtml" />
     <Content Include="Views\EmployerTeam\VacancyPendingReview.cshtml" />
     <Content Include="Views\EmployerTeam\VacancyLive.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
