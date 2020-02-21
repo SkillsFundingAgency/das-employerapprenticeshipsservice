@@ -13,7 +13,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
 {
-    public class WhenFundsToReserve
+    public class WhenSetupSingleApprentice
     {
         private EmployerTeamController _controller;
 
@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
-        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;        
+        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
         private Mock<IPortalClient> mockPortalClient;
 
         [SetUp]
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();            
+            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
 
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
@@ -41,32 +41,36 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,                
+                mockEmployerTeamOrchestrator.Object,
                 mockPortalClient.Object,
                 mockAuthorizationService.Object);
-        }
+        }        
 
         [Test]
-        public void ThenForNonLevyTheCheckFundingViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyTheContinueSetupForSingleApprenticeshipViewIsReturnedAtRow1Panel1()
         {
-            // Arrange
+            //Arrange
             var model = new AccountDashboardViewModel()
             {
                 PayeSchemeCount = 1,
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false
-                },
-                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                    CohortsCount = 1,
+                    ApprenticeshipsCount = 0,
+                    NumberOfDraftApprentices = 1,
+                    CohortStatus = Web.Extensions.CohortStatus.Draft
+                }
             };
-            
+
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
-            Assert.AreEqual(PanelType.Interruption, (result.Model as dynamic).PanelType);
+            Assert.AreEqual("ContinueSetupForSingleApprenticeship", (result.Model as dynamic).ViewName);
         }
+
     }
 }
