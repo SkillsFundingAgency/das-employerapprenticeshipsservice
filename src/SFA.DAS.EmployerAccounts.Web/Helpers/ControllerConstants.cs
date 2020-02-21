@@ -87,5 +87,6 @@
         public const string EditApprentice = "EditApprentice";
         public const string ViewApprentice = "ViewApprentice";
         public const string ApproveOrRejectApprentice = "ApproveOrRejectApprentice";
+        public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
     }
 }
