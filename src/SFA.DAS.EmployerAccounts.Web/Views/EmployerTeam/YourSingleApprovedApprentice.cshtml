@@ -1,5 +1,6 @@
-﻿
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large" id="call-to-action-your-apprentice">
@@ -50,7 +51,7 @@
     </table>
     <p>
 
-        <a href="@Url.EmployerCommitmentsAction("")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsAction(ControllerConstants.ViewApprentice)" role="button" draggable="false" class="button">
             View apprentice details
         </a>
     </p>

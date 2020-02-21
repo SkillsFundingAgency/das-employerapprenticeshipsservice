@@ -1,0 +1,42 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large" id="call-to-action-your-apprentice-status">
+        Your apprentice
+    </h2>
+
+    <table class="responsive">       
+        <tr>
+            <th scope="row">
+                Course
+            </th>
+            <td id="course-name">
+                @(Model?.ReservationViewModel.CourseDescription)
+            </td>
+        </tr>        
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td id="provider-name">
+                @(Model?.CallToActionViewModel.ProviderName)
+            </td>
+        </tr>        
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td id="with-training-provider">
+                WITH TRAINING PROVIDER
+            </td>
+        </tr>       
+    </table>
+    <p>
+
+        <a href="@Url.EmployerCommitmentsV2Action("")" draggable="false" class="govuk-link">
+            View apprentice details
+        </a>
+    </p>
+</section>
+

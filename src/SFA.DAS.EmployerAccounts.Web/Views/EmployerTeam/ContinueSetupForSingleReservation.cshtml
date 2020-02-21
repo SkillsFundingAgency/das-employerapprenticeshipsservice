@@ -1,4 +1,4 @@
-﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ReservationViewModel
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
 
 @*das-panel das-panel-non--featured*@
 <section class="dashboard-section">
@@ -13,15 +13,15 @@
                 Course
             </th>
             <td class="tw-65">
-                @(Model?.CourseDescription)
+                @(Model?.ReservationViewModel.CourseDescription)                
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Start date
             </th>
-            <td>
-                @(Model?.TrainingDate.ToString())
+            <td>                
+                @(Model?.ReservationViewModel.TrainingDate.ToString())
             </td>
         </tr>
     </table>

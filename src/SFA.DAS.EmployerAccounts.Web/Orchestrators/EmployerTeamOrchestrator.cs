@@ -227,18 +227,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
 
                 var apprenticeshipsCount = 0;
-                IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse> apprenticeshipResponse = await GetApprenticeshipResponse(accountResponse);
-                if (apprenticeshipResponse != null)
-                {
-                    apprenticeshipsCount = apprenticeshipResponse.Count();
-                }
+                //IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse> apprenticeshipResponse = await GetApprenticeshipResponse(accountResponse);
+                //if (apprenticeshipResponse != null)
+                //{
+                //    apprenticeshipsCount = apprenticeshipResponse.Count();
+                //}
 
                 var cohortsCount = 0;
                 var draftApprenticeshipCount = 0;
                 CohortSummary singleCohort = new CohortSummary();
                 DraftApprenticeshipDto singleDraftApprenticeship = new DraftApprenticeshipDto();
-                if (apprenticeshipResponse == null)
-                {
+                //if (apprenticeshipResponse == null)
+                //{
                     CohortSummary[] cohortsResponse = await GetCohortsResponse(accountResponse);
                     if (cohortsResponse != null && cohortsResponse.Count() == 1)
                     {
@@ -247,7 +247,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         draftApprenticeshipCount = singleCohort.NumberOfDraftApprentices;
                         singleDraftApprenticeship = await GetSingleDraftApprenticeship(draftApprenticeshipCount, singleCohort, singleDraftApprenticeship);
                     }
-                }
+                //}
 
                 var viewModel = new AccountDashboardViewModel
                 {
@@ -268,6 +268,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
+                    ReservationViewModel = new ReservationViewModel
+                    {
+                        Id = reservationsResponse.Reservations.FirstOrDefault()?.Id ?? Guid.Empty,
+                        CourseDescription = reservationsResponse.Reservations.FirstOrDefault()?.Course?.CourseDescription ?? "Unknown",
+                        TrainingDate = new Models.TrainingDateModel { 
+                            StartDate = reservationsResponse.Reservations.FirstOrDefault()?.StartDate.Value ?? default(DateTime),
+                            EndDate = reservationsResponse.Reservations.FirstOrDefault()?.ExpiryDate.Value ?? default(DateTime)
+                        }
+                    },
                     CallToActionViewModel = new CallToActionViewModel
                     {
                         AgreementsToSign = pendingAgreements.Count() > 0,
@@ -709,7 +718,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(202, EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule);
                 rules.Add(203, EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule);
                 rules.Add(204, EvaluateDraftApprenticeshipsWithReviewStatusCallToActionRule);
-                rules.Add(205, EvalutateHasReservationsCallToActionRule);
+                rules.Add(205, EvaluateDraftApprenticeshipsCountIsZeroWithTrainingProviderStatusCallToActionRule);
+                rules.Add(206, EvalutateHasReservationsCallToActionRule);
             }
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
@@ -787,6 +797,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)
             {
                 viewModel.ViewName = "YourSingleApprenticeWithTrainingProviderStatus";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+
+
+        private bool EvaluateDraftApprenticeshipsCountIsZeroWithTrainingProviderStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.NumberOfDraftApprentices.Equals(0)  && viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+               && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)
+            {
+                viewModel.ViewName = "YourSingleApprenticeDraftCountZeroWithTrainingProviderStatus";
                 viewModel.PanelType = PanelType.Summary;
                 return true;
             }

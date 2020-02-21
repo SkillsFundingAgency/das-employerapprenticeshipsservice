@@ -23,12 +23,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerCommitmentsV2Action(this UrlHelper helper, string path)
+        public static string EmployerCommitmentsV2Action(this UrlHelper helper, string routeName)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;
 
-            return CommitmentAction(helper, baseUrl, path);
+            return CommitmentAction(helper, baseUrl, routeName);
         }
 
         public static string ReservationsAction(this UrlHelper helper, string path)
@@ -103,14 +103,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return Action(baseUrl, accountPath);
         }
 
-        private static string CommitmentAction(UrlHelper helper, string baseUrl, string path)
+        private static string CommitmentAction(UrlHelper helper, string baseUrl, string routeName)
         {
             //$"{baseUrl}/{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var model = helper.RequestContext.RouteData.Values["model"]  as AccountDashboardViewModel;
-            var hashedCohortReference = model.CallToActionViewModel.HashedCohortReference;
-            var hashedDraftApprenticeshipId = model.CallToActionViewModel.HashedDraftApprenticeshipId;
-            var commitmentPath = path == "Approve" ? $"{hashedAccountId}/unapproved/{hashedCohortReference}" : $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
+            var hashedCohortReference = model?.CallToActionViewModel?.HashedCohortReference ?? string.Empty;
+            var hashedDraftApprenticeshipId = model?.CallToActionViewModel?.HashedDraftApprenticeshipId ?? string.Empty;
+            var commitmentPath = routeName == ControllerConstants.ApproveOrRejectApprentice ? $"{hashedAccountId}/unapproved/{hashedCohortReference}" : $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
             return Action(baseUrl, commitmentPath);
         }
 
