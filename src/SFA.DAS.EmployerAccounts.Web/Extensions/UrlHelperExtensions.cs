@@ -107,8 +107,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {          
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             var model = helper.RequestContext.RouteData.Values["model"]  as AccountDashboardViewModel;
-            var hashedCohortReference = model.CallToActionViewModel.HashedCohortReference;
-            var hashedDraftApprenticeshipId = model.CallToActionViewModel.HashedDraftApprenticeshipId;
+            var hashedCohortReference = model?.CallToActionViewModel?.HashedCohortReference ?? string.Empty;
+            var hashedDraftApprenticeshipId = model?.CallToActionViewModel?.HashedDraftApprenticeshipId ?? string.Empty;
             var commitmentPath = path == ControllerConstants.ApproveOrRejectApprentice ? $"{hashedAccountId}/unapproved/{hashedCohortReference}" : $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
            
             return Action(baseUrl, commitmentPath);

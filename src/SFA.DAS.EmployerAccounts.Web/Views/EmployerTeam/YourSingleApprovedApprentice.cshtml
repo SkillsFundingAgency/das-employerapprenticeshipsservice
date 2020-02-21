@@ -11,39 +11,39 @@
             <th scope="row" class="tw-35">
                 Name
             </th>
-            <td class="tw-65">
-                @Model.CallToActionViewModel.ApprenticeName
+            <td class="tw-65" id="apprentice-name">
+                @(Model?.CallToActionViewModel?.ApprenticeName)
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Training Provider
             </th>
-            <td>
-                @Model.CallToActionViewModel.ProviderName
+            <td id="provider-name">
+                @(Model?.CallToActionViewModel?.ProviderName)
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Course
             </th>
-            <td>
-                @Model.CallToActionViewModel.CourseName
+            <td id="course-name">
+                @(Model?.CallToActionViewModel?.CourseName)
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Start month
             </th>
-            <td>
-                @Model.CallToActionViewModel.CourseStartDate
+            <td id="course-start-date">
+                @(Model?.CallToActionViewModel?.CourseStartDate)
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Finish month
             </th>
-            <td>
+            <td id="course-end-date">
                 @Model.CallToActionViewModel.CourseEndDate
             </td>
         </tr>

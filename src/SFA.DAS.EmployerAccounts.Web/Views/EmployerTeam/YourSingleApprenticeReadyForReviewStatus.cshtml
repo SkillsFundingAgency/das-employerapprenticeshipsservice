@@ -13,7 +13,7 @@
                 Name
             </th>
             <td class="tw-65" id="apprentice-name">
-                @Model.CallToActionViewModel.ApprenticeName
+                @(Model?.CallToActionViewModel?.ApprenticeName)
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 Training Provider
             </th>
             <td id="provider-name">
-                @Model.CallToActionViewModel.ProviderName
+                @(Model?.CallToActionViewModel?.ProviderName)
             </td>
         </tr>
         <tr>
@@ -29,7 +29,7 @@
                 Course
             </th>
             <td id="course-name">
-                @Model.CallToActionViewModel.CourseName
+                @(Model?.CallToActionViewModel?.CourseName)
             </td>
         </tr>
         <tr>
@@ -44,16 +44,16 @@
             <th scope="row">
                 Start month
             </th>
-            <td>
-                @Model.CallToActionViewModel.CourseStartDate.Value.ToString("MMMM yyyy")
+            <td id="course-start-date">
+                @(Model?.CallToActionViewModel?.CourseStartDate.Value.ToString("MMMM yyyy"))
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Finish month
             </th>
-            <td>
-                @Model.CallToActionViewModel.CourseEndDate.Value.ToString("MMMM yyyy")
+            <td id="course-end-date">
+                @(Model?.CallToActionViewModel?.CourseEndDate.Value.ToString("MMMM yyyy"))
             </td>
         </tr>
     </table>

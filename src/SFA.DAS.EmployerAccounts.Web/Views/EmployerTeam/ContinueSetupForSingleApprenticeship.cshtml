@@ -13,7 +13,7 @@
                 Course
             </th>
             <td class="tw-65" id="course-name">
-                @Model.CallToActionViewModel.CourseName
+                @(Model?.CallToActionViewModel?.CourseName)
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 Training Provider
             </th>
             <td id="training-provider">
-                @Model.CallToActionViewModel.ProviderName
+                @(Model?.CallToActionViewModel?.ProviderName)
             </td>
         </tr>
         <tr>
