@@ -69,7 +69,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
 
         public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
-            throw new System.NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }
