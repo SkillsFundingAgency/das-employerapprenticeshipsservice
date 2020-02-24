@@ -33,8 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Filters
                 agreementId = filterContext.ActionParameters["agreementId"] as string;
             }
 
-            
-
             filterContext.Controller.ViewBag.GaData = new GaData
             {
                 UserId = userId,

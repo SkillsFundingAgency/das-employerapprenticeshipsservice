@@ -24,9 +24,10 @@ namespace SFA.DAS.EmployerAccounts.Models.UserProfile
         public virtual string Email { get; set; }
         public virtual string FirstName { get; set; }
         public virtual string LastName { get; set; }
+        public virtual string CorrelationId { get; set; }
         public string FullName => $"{FirstName} {LastName}";
         public virtual ICollection<Membership> Memberships { get; protected set; } = new List<Membership>();
-        public virtual ICollection<UserAccountSetting> UserAccountSettings { get;  protected set; } = new List<UserAccountSetting>();
+        public virtual ICollection<UserAccountSetting> UserAccountSettings { get; protected set; } = new List<UserAccountSetting>();
         
         private Guid? _ref;
         private string _userRef;
