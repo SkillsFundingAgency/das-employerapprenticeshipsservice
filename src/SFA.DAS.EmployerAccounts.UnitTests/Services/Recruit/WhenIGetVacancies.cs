@@ -91,7 +91,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.GetVacancies
         public async Task ThenTheServiceIsCalled()
         {
             //Arrange
-            var expectedUrl = $"{_apiBaseUrl}/api/vacancies/?employerAccountId={_hashedAccountId}&pageSize={int.MaxValue}";
+            var expectedUrl = $"{_apiBaseUrl}/api/vacancies?employerAccountId={_hashedAccountId}&pageSize={int.MaxValue}";
 
             //Act
             await _sut.GetVacancies(_hashedAccountId);

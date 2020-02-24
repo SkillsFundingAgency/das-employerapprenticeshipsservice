@@ -10,7 +10,6 @@ using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
 {
@@ -35,7 +34,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
             mockPortalClient = new Mock<IPortalClient>();
 
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
 
             _controller = new EmployerTeamController(
@@ -55,7 +53,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             model.PayeSchemeCount = 1;
             model.CallToActionViewModel = new CallToActionViewModel
             {
-                AgreementsToSign = false
+                AgreementsToSign = false,
+                VacanciesViewModel = new VacanciesViewModel { VacancyCount = 0 }
             };
             
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
@@ -79,6 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             {
                 AgreementsToSign = false,
                 Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                VacanciesViewModel = new VacanciesViewModel { VacancyCount = 0 },
                 ApprenticeshipAdded = false
             };
             

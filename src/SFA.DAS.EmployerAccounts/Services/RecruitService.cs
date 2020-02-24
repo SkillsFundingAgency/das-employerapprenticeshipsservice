@@ -33,14 +33,18 @@ namespace SFA.DAS.EmployerAccounts.Services
         public async Task<IEnumerable<Vacancy>> GetVacancies(string hashedAccountId, int maxVacanciesToGet = int.MaxValue)
         {
             var baseUrl = GetBaseUrl();
-            var url = $"{baseUrl}api/vacancies/?employerAccountId={hashedAccountId}&pageSize={maxVacanciesToGet}";
+            var url = $"{baseUrl}api/vacancies?employerAccountId={hashedAccountId}&pageSize={maxVacanciesToGet}";
 
             var json = await _httpService.GetAsync(url, false);
             if(json == null)
             {
                 return new List<Vacancy>();
             }
-            return _mapper.Map<IEnumerable<VacancySummary>, IEnumerable<Vacancy>>(JsonConvert.DeserializeObject<VacanciesSummary>(json).Vacancies);
+
+            var vacanciesSummary = JsonConvert.DeserializeObject<VacanciesSummary>(json);
+
+
+            return _mapper.Map<IEnumerable<VacancySummary>, IEnumerable<Vacancy>>(vacanciesSummary.Vacancies);
         }
 
         private string GetBaseUrl()
