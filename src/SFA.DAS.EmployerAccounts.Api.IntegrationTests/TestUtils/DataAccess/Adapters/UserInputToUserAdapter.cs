@@ -11,6 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Ada
             FirstName = input.FirstName;
             LastName = input.LastName;
             Ref = input.Ref;
+            CorrelationId = input.CorrelationId;
         }
     }
 }

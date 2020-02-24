@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@userRef", new Guid(id), DbType.Guid);
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE UserRef = @userRef",
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE UserRef = @userRef",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@email", emailAddress, DbType.String);
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User] WHERE Email = @email",
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User] WHERE Email = @email",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -71,9 +71,10 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
             parameters.Add("@firstName", user.FirstName, DbType.String);
             parameters.Add("@lastName", user.LastName, DbType.String);
+            parameters.Add("@correlationId", user.CorrelationId, DbType.String);
 
             return _db.Value.Database.Connection.ExecuteAsync(
-                sql: "INSERT INTO [employer_account].[User] (UserRef, Email, FirstName, LastName) VALUES (@userRef, @email, @firstName, @lastName)",
+                sql: "INSERT INTO [employer_account].[User] (UserRef, Email, FirstName, LastName, CorrelationId) VALUES (@userRef, @email, @firstName, @lastName, @correlationId)",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -105,9 +106,10 @@ namespace SFA.DAS.EmployerAccounts.Data
                 parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
+                parameters.Add("@correlationId", user.CorrelationId, DbType.String);
 
                 return c.ExecuteAsync(
-                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                     param: parameters,
                     commandType: CommandType.Text);
             });
@@ -118,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             var result = await _db.Value.Database.Connection.QueryAsync<User>(
-                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName FROM [employer_account].[User];",
+                sql: "SELECT Id, CONVERT(varchar(64), UserRef) as UserRef, Email, FirstName, LastName, CorrelationId FROM [employer_account].[User];",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);

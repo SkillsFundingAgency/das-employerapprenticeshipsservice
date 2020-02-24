@@ -18,6 +18,7 @@
     <PackageReference Include="HMRC.ESFA.Levy.Api.Client" version="1.0.43" />
     <PackageReference Include="HMRC.ESFA.Levy.Api.Types" version="1.0.43" />
     <PackageReference Include="MediatR" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />    
@@ -39,6 +40,7 @@
     <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.16" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Types" Version="2.2.37" />
+    <PackageReference Include="SFA.DAS.Notifications.Messages" Version="3.0.0" />
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client" Version="1.1.82" />
     <PackageReference Include="SFA.DAS.TimeProvider" version="1.0.0.3956" />
     <PackageReference Include="SFA.DAS.Activities.Client" Version="1.2.71" />

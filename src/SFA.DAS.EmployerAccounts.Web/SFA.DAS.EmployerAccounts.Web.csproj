@@ -205,6 +205,7 @@
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SearchPensionRegulatorController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="ViewModels\OrganisationAddedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationUpdatedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\ProviderInvitationViewModel.cs" />
     <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
@@ -838,6 +840,8 @@
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_Layout_CDN.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage_CDN.cshtml" />
+    <Content Include="Views\Home\Unsubscribe.cshtml" />
+    <Content Include="Views\Home\Unsubscribed.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\EmployerAgreement\WhenDoYouWantToView.cshtml" />
     <Content Include="Views\Shared\_Agreement_v3.cshtml" />
@@ -852,6 +856,7 @@
     <Content Include="Views\CookieConsent\Details.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="Views\Report\ReportTrainingProvider.cshtml" />
     <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
