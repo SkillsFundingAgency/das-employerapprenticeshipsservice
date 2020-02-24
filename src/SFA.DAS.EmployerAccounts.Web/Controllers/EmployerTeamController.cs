@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Portal.Client;
@@ -80,6 +81,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             return View(response);
+        }
+
+        [HttpGet]
+        [Route("AddedProvider/{providerName}")]
+        public async Task<ActionResult> AddedProvider(string providerName)
+        {
+            AddFlashMessageToCookie(new FlashMessageViewModel
+            {
+                Headline = "Your account has been created",
+                Message = $"You account has been created and you've successfully updated permissions for {HttpUtility.UrlDecode(providerName.ToUpper())}",
+                Severity = FlashMessageSeverityLevel.Success
+            });
+
+            return RedirectToAction(ControllerConstants.IndexActionName);
         }
 
         [HttpGet]

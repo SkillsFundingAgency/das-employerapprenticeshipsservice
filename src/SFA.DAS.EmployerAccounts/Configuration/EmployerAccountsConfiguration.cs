@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
         public PensionRegulatorConfiguration PensionRegulatorApi { get; set; }
+        public ProviderRegistrationsConfiguration ProviderRegistrationsApi { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
@@ -40,6 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public AccountApiConfiguration AccountApi { get; set; }
         public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
+        public string ReportTrainingProviderEmailAddress { get; set; }
         public string AdfsMetadata { get; set; }
         public string ZenDeskSnippetKey { get; set; }
         public string ZenDeskSectionId { get; set; }

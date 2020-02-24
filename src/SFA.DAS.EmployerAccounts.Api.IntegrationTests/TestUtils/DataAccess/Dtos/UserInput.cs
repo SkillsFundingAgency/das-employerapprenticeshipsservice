@@ -8,5 +8,6 @@ namespace SFA.DAS.EmployerAccounts.Api.IntegrationTests.TestUtils.DataAccess.Dto
         public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string CorrelationId { get; set; }
     }
 }
