@@ -112,7 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             var createdByName = caller.FullName();
 
             await Task.WhenAll(
-                PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref, message.Aorn, message.EmployerRefName),
+                PublishAddPayeSchemeMessage(message.PayeReference, createAccountResult.AccountId, createdByName, userResponse.User.Ref, message.Aorn, message.EmployerRefName, userResponse.User.CorrelationId),
                 PublishAccountCreatedMessage(createAccountResult.AccountId, hashedAccountId, publicHashedAccountId, message.OrganisationName, createdByName, externalUserId),
                 NotifyAccountCreated(hashedAccountId),
                 CreateAuditEntries(message, createAccountResult, hashedAccountId, userResponse.User),
@@ -178,7 +178,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
             return _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef, string aorn, string schemeName)
+        private Task PublishAddPayeSchemeMessage(string empref, long accountId, string createdByName, Guid userRef, string aorn, string schemeName, string correlationId)
         {
             return _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
@@ -188,7 +188,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 UserRef = userRef,
                 Created = DateTime.UtcNow,
                 Aorn = aorn,
-                SchemeName = schemeName
+                SchemeName = schemeName,
+                CorrelationId = correlationId
             });
         }
 

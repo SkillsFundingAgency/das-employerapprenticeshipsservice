@@ -15,5 +15,6 @@ namespace SFA.DAS.EmployerAccounts.Messages.Events
         public bool CohortCreated { get; set; }
         public AgreementType AgreementType { get; set; }
         public int SignedAgreementVersion { get; set; }
+        public string CorrelationId { get; set; }
     }
 }
