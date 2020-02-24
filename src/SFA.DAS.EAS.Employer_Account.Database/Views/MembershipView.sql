@@ -10,6 +10,7 @@ UserRef,
 u.Email, 
 u.FirstName, 
 u.LastName, 
+u.CorrelationId,
 a.Name AS AccountName, 
 a.HashedId AS HashedAccountId
 FROM employer_account.Membership AS m 
