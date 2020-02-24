@@ -36,7 +36,7 @@
             <th scope="row">
                 Status
             </th>
-            <td id="ready-for-review">
+            <td id="ready-for-review" class="govuk-tag--error">
                 READY FOR REVIEW
             </td>
         </tr>
@@ -44,7 +44,7 @@
             <th scope="row">
                 Start month
             </th>
-            <td>
+            <td id="course-start-date">
                 @(Model?.CallToActionViewModel?.CourseStartDate.Value.ToString("MMMM yyyy"))
             </td>
         </tr>
@@ -52,7 +52,7 @@
             <th scope="row">
                 Finish month
             </th>
-            <td>
+            <td id="course-end-date">
                 @(Model?.CallToActionViewModel?.CourseEndDate.Value.ToString("MMMM yyyy"))
             </td>
         </tr>

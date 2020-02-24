@@ -4,7 +4,8 @@
     [UserRef] UNIQUEIDENTIFIER NOT NULL, 
     [Email] NVARCHAR(255) NOT NULL UNIQUE, 
     [FirstName] NVARCHAR(MAX) NULL, 
-    [LastName] NVARCHAR(MAX) NULL
+    [LastName] NVARCHAR(MAX) NULL, 
+    [CorrelationId] NVARCHAR(255) NULL
 )
 GO
 
