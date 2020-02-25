@@ -708,6 +708,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(121, EvaluateSingleDraftApprenticeshipsWithDraftStatusCallToActionRule);
                 rules.Add(122, EvaluateSingleDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule);
                 rules.Add(123, EvaluateSingleDraftApprenticeshipsWithReadyToReviewStatusCallToActionRule);
+                rules.Add(124, EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule);
                 rules.Add(200, EvalutateSingleReservationCallToActionRule);
                 rules.Add(205, EvalutateHasReservationsCallToActionRule);
             }
@@ -808,7 +809,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvaluateDraftApprenticeshipsWithReviewStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateSingleDraftApprenticeshipsWithReadyToReviewStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship
                 && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Review)
