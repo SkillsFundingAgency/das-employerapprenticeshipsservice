@@ -66,6 +66,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(PanelType.Action, (result.Model as dynamic).PanelType);
         }
 
         [Test]
@@ -89,6 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("ContinueSetupForSingleReservation", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(PanelType.Summary, (result.Model as dynamic).PanelType);
         }
     }
 }

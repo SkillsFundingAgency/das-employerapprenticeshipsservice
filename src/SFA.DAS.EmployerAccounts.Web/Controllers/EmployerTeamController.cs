@@ -362,30 +362,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-            viewModel.IsFeaturedPanel = !model.CallToActionViewModel.ApprenticeshipAdded;
-
+            
             if (model.PayeSchemeCount == 0)
             {
                 viewModel.ViewName = "AddPAYE";
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
-                if (model.CallToActionViewModel.AgreementsToSign)
-                {
-                    viewModel.ViewName = "SignAgreement";
-                }
-                else if (model.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
-                {
-                    if (model.CallToActionViewModel.ReservationsCount == 1 && model.CallToActionViewModel.PendingReservationsCount == 1)
-                    {
-                        viewModel.ViewName = "ContinueSetupForSingleReservation";
-                        viewModel.IsFeaturedPanel = false;
-                    }
-                    else if (!model.CallToActionViewModel.HasReservations)
-                    {
-                        viewModel.ViewName = "CheckFunding";
-                    }                    
-                }
+                _employerTeamOrchestrator.GetCallToActionViewName(ref viewModel);
             }
 
             return PartialView(viewModel);
