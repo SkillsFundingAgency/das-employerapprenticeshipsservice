@@ -57,6 +57,7 @@
         public const string RegisterUserActionName = "RegisterUser";
         public const string RenameAccountActionName = "RenameAccount";
         public const string RemoveViewName = "Remove";
+        public const string ReportTrainingProviderViewName = "ReportTrainingProvider";
         public const string SearchOrganisationControllerName = "SearchOrganisation";
         public const string SearchForOrganisationActionName = "SearchForOrganisation";
         public const string SearchForOrganisationViewName = "SearchForOrganisation";
@@ -73,6 +74,7 @@
         public const string SignOutActionName = "SignOut";
         public const string SkipRegistrationActionName = "SkipRegistration";
         public const string SummaryActionName = "Summary";
+        public const string UnsubscribedViewName = "Unsubscribed";
         public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";

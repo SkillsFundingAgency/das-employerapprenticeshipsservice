@@ -7,7 +7,6 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
-using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
@@ -21,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
 {
     public class AddPayeToAccountCommandHandler : AsyncRequestHandler<AddPayeToAccountCommand>
     {
-
         private readonly IValidator<AddPayeToAccountCommand> _validator;
         private readonly IPayeRepository _payeRepository;
         private readonly IEventPublisher _eventPublisher;
@@ -55,22 +53,22 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             await _payeRepository.AddPayeToAccount(
-                    new Paye
-                    {
-                        AccessToken = message.AccessToken,
-                        RefreshToken = message.RefreshToken,
-                        AccountId = accountId,
-                        EmpRef = message.Empref,
-                        RefName = message.EmprefName, 
-                        Aorn = message.Aorn
-                    }
-                );
+                new Paye
+                {
+                    AccessToken = message.AccessToken,
+                    RefreshToken = message.RefreshToken,
+                    AccountId = accountId,
+                    EmpRef = message.Empref,
+                    RefName = message.EmprefName, 
+                    Aorn = message.Aorn
+                }
+            );
 
             var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
             await AddAuditEntry(message, accountId);
 
-            await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.UserRef, message.Aorn, message.EmprefName);
+            await AddPayeScheme(message.Empref, accountId, userResponse.User.FullName, userResponse.User.UserRef, message.Aorn, message.EmprefName, userResponse.User.CorrelationId);
 
             await NotifyPayeSchemeAdded(message.HashedAccountId, message.Empref);
         }
@@ -99,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef, string aorn, string schemeName)
+        private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef, string aorn, string schemeName, string correlationId)
         {
             return _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
@@ -109,7 +107,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
                 UserRef = Guid.Parse(userRef),
                 Created = DateTime.UtcNow,
                 Aorn = aorn,
-                SchemeName = schemeName
+                SchemeName = schemeName,
+                CorrelationId = correlationId
             });
         }
 

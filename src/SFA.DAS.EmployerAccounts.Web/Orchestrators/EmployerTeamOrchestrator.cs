@@ -660,10 +660,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(201, EvalutateHasReservationsCallToActionRule);
             }
 
-            rules.Add(250, EvalutateDraftVacancyCallToActionRule);
-            rules.Add(251, EvalutatePendingReviewVacancyCallToActionRule);
-            rules.Add(252, EvalutateLiveVacancyCallToActionRule);
-            rules.Add(254, EvalutateClosedVacancyCallToActionRule);
+            rules.Add(150, EvalutateDraftVacancyCallToActionRule);
+            rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
+            rules.Add(152, EvalutateLiveVacancyCallToActionRule);
+            rules.Add(154, EvalutateClosedVacancyCallToActionRule);
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
             {
@@ -758,8 +758,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateSingleReservationCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1 && 
-                viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+                && viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
             {
                 viewModel.ViewName = "ContinueSetupForSingleReservation";
                 viewModel.PanelType = PanelType.Summary;
