@@ -704,13 +704,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             if (viewModel.Data.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
             {
+                rules.Add(120, EvaluateSingleApprenticeshipsCallToActionRule);
+                rules.Add(121, EvaluateSingleDraftApprenticeshipsWithDraftStatusCallToActionRule);
+                rules.Add(122, EvaluateSingleDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule);
+                rules.Add(123, EvaluateSingleDraftApprenticeshipsWithReadyToReviewStatusCallToActionRule);
                 rules.Add(200, EvalutateSingleReservationCallToActionRule);
-                rules.Add(201, EvaluateApprenticeshipsCallToActionRule);
-                rules.Add(202, EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule);
-                rules.Add(203, EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule);
-                rules.Add(204, EvaluateDraftApprenticeshipsWithReviewStatusCallToActionRule);
-                rules.Add(205, EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule);
-                rules.Add(206, EvalutateHasReservationsCallToActionRule);
+                rules.Add(205, EvalutateHasReservationsCallToActionRule);
             }
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
@@ -757,7 +756,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvaluateApprenticeshipsCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateSingleApprenticeshipsCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 1)
             {
@@ -769,7 +768,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvaluateDraftApprenticeshipsWithDraftStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateSingleDraftApprenticeshipsWithDraftStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship
                 && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.Draft)
@@ -782,7 +781,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvaluateDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvaluateSingleDraftApprenticeshipsWithTrainingProviderStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.HasSingleDraftApprenticeship
                 && viewModel.Data.CallToActionViewModel.CohortStatus == CohortStatus.WithTrainingProvider)
