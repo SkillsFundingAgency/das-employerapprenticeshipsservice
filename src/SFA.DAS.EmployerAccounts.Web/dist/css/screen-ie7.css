@@ -4665,10 +4665,20 @@ hr.dashboard-heading-separator {
   .das-panel--featured .das-panel__link {
     color: #fff;
     font-weight: 700; }
-    .das-panel--featured .das-panel__link:hover {
-      text-decoration: non; }
     .das-panel--featured .das-panel__link:focus {
       color: #000; }
+
+.das-panel--popular {
+  margin-top: 20px;
+  background: #6f72af;
+  color: #fff; }
+  .das-panel--popular .das-panel__link {
+    color: #fff;
+    font-weight: 700; }
+    .das-panel--popular .das-panel__link:focus {
+      color: #000; }
+  .das-panel--popular .list {
+    margin-bottom: -5px; }
 
 .das-panel__heading {
   font-size: 19px;
