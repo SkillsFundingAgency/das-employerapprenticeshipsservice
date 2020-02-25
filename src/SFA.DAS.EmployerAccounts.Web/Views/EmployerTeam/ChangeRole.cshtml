@@ -16,6 +16,8 @@
     ViewBag.GaData.Vpv = "/accounts/teams/role/change/page-team-member-change-role";
 }
 
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
 @if (!ViewContext.ViewData.ModelState.IsValid)
 {
     foreach (var state in ViewContext.ViewData.ModelState.Values)
@@ -26,57 +28,83 @@
         }
     }
 
-    <div class="error-summary" role="group" aria-labelledby="error-summary-heading" tabindex="-1">
-        <h1 class="heading-medium error-summary-heading" id="error-summary-heading">
-            Errors to fix
-        </h1>
-        <ul class="error-summary-list">
-            <li><a href="#change-role-selection">@errorMessage</a></li>
-        </ul>
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li>
+                    <a href="#radio1">@errorMessage</a>
+                </li>
+            </ul>
+        </div>
     </div>
-
 }
 
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@name</h1>
-        <p class="lede">Choose what you allow this team member to do.</p>
-       
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
         <form method="POST" action="@Url.Action("ChangeRole")">
             @Html.AntiForgeryToken()
-            <div class="form-group @(!ViewContext.ViewData.ModelState.IsValid ? "error" : "")">
-                <fieldset>
-                    <legend id="change-role-selection">
-                        <span class="vh">Select a role for @name</span>
-                        @if (!string.IsNullOrWhiteSpace(errorMessage))
-                        {
-                            <span class="error-message">@errorMessage</span>
-                        }
+
+            <div class="govuk-form-group @(!ViewContext.ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
+
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading"><span class="govuk-visually-hidden">Select a role for </span>@name</h1>
                     </legend>
-                    <label class="block-label" for="radio1">
-                        <input id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "") />
-                        @(RoleStrings.GetRoleDescription(Role.Viewer))
-                    </label>
-                    <label class="block-label" for="radio2">
-                        <input id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "") />
-                        @(RoleStrings.GetRoleDescription(Role.Transactor))
-                    </label>
-                    <label class="block-label" for="radio3">
-                        <input id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "") />
-                        @(RoleStrings.GetRoleDescription(Role.Owner))
-                    </label>
+
+                    <span id="changed-name-hint" class="govuk-hint">
+                        Choose what you allow this team member to do.
+                    </span>
+
+                    @if (!string.IsNullOrWhiteSpace(errorMessage))
+                    {
+                        <span id="changed-name-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @errorMessage
+                        </span>
+                    }
+
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="radio1" type="radio" name="Role" value="3" @(Model.Data.Role == Role.Viewer ? "checked" : "")>
+                            <label class="govuk-label govuk-radios__label" for="radio1">
+                                @(RoleStrings.GetRoleDescription(Role.Viewer))
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="radio2" type="radio" name="Role" value="2" @(Model.Data.Role == Role.Transactor ? "checked" : "")>
+                            <label class="govuk-label govuk-radios__label" for="radio2">
+                                @(RoleStrings.GetRoleDescription(Role.Transactor))
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="radio3" type="radio" name="Role" value="1" @(Model.Data.Role == Role.Owner ? "checked" : "")>
+                            <label class="govuk-label govuk-radios__label" for="radio3">
+                                @(RoleStrings.GetRoleDescription(Role.Owner))
+                            </label>
+                        </div>
+                    </div>
+
                     <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
+
                 </fieldset>
             </div>
-            <button type="submit" class="button" id="update">Update</button>
+
+            <div class="govuk-form-group">
+                <button type="submit" class="govuk-button" id="update">Update</button>
+            </div>
+
         </form>
+
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")", class="back-link">Back to your team</a>
+    <div class="govuk-breadcrumbs">
+        <a href="@Url.Action("ViewTeam", "EmployerTeam")" , class="govuk-back-link">Back to your team</a>
     </div>
 }
 

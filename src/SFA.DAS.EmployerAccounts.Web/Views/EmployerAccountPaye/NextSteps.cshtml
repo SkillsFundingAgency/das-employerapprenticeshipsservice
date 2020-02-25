@@ -6,42 +6,78 @@
     ViewBag.GaData.Vpv = "/accounts/schemes/page-paye-scheme-next-steps";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-large">
-            What's next
-        </h1>
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+
+@if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
+{
+    <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+        <h2 class="govuk-error-summary__title" id="error-summary-title">
+            There is a problem
+        </h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li>
+                    <a href="#choice1">@Model.Data.ErrorMessage</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds @(string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "govuk-!-margin-top-9" : "")">
+
         <form method="POST" action="@Url.Action("NextSteps")">
             @Html.AntiForgeryToken()
-            <div class="form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "error" : "")">
-                <fieldset>
-                    <legend>
-                        <span class="visuallyhidden">What's next?</span>
-                        @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
-                        {
-                            <span class="error-message" id="select-option">@Model.Data.ErrorMessage</span>
-                        }
+
+            <div class="govuk-form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset">
+
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <h1 class="govuk-fieldset__heading">What's next</h1>
                     </legend>
-                    <label for="choice1" class="block-label">
-                        <input id="choice1" type="radio" name="choice" value="1" />
-                        Add another PAYE scheme
-                    </label>
-                    @if (!Model.Data.ShowWizard)
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage))
                     {
-                        <label for="choice2" class="block-label">
-                            <input id="choice2" type="radio" name="choice" value="2" />
-                            Check finances
-                        </label>
+                        <span id="changed-name-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error:</span> @Model.Data.ErrorMessage
+                        </span>
                     }
-                    <label for="choice3" class="block-label">
-                        <input id="choice3" type="radio" name="choice" value="3" />
-                        @(Model.Data.ShowWizard ? "Continue account setup" : "Return to homepage")
-                    </label>
+
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="choice1" type="radio" name="choice" value="1">
+                            <label class="govuk-label govuk-radios__label" for="choice1">
+                                Add another <abbr title="Pay As You Earn" class="">PAYE</abbr> scheme
+                            </label>
+                        </div>
+                        @if (!Model.Data.ShowWizard)
+                        {
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" id="choice2" type="radio" name="choice" value="2">
+                                <label class="govuk-label govuk-radios__label" for="choice2">
+                                    Check finances
+                                </label>
+                            </div>
+                        }
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" id="choice3" type="radio" name="choice" value="3">
+                            <label class="govuk-label govuk-radios__label" for="choice3">
+                                @(Model.Data.ShowWizard ? "Continue account setup" : "Return to homepage")
+                            </label>
+                        </div>
+                    </div>
+
                 </fieldset>
+
             </div>
-            <div class="form-group">
-                <button type="submit" class="button" id="accept">Continue</button>
+
+            <div class="govuk-form-group">
+                <button type="submit" class="govuk-button" id="accept">Continue</button>
             </div>
+
         </form>
+
     </div>
 </div>

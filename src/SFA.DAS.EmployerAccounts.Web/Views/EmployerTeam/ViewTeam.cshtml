@@ -52,7 +52,7 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
 
-            <table class="govuk-table">
+            <table class="govuk-table das-table--responsive">
                 <caption class="govuk-table__caption govuk-visually-hidden">Table of what your team members can do</caption>
                 <thead class="govuk-table__head">
                     <tr class="govuk-table__row">
@@ -72,9 +72,9 @@
                             </td>
                             <td class="govuk-table__cell" data-label="What they can do">@RoleStrings.GetRoleDescription(teamMember.Role)</td>
                             <td class="govuk-table__cell" data-label="Status">@InvitationStatusStrings.ToString(teamMember.Status)</td>
-                            <td class="govuk-table__cell">
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
                                 <a href="@Url.Action("Review", new { email = teamMember.Email })"
-                                   class="govuk-link" aria-label="View details for @teamMember.Name"
+                                   class="govuk-link" aria-label="View details for @teamMember.Name" 
                                    title="View details for @teamMember.Name">
                                     View<span class="govuk-visually-hidden"> details for @teamMember.Name</span>
                                 </a>
