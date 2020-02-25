@@ -2,6 +2,9 @@
 using NServiceBus;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.Notifications.Messages.Commands;
+using SFA.DAS.NServiceBus;
+using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.NServiceBus.Configuration.AzureServiceBus;
 using StructureMap;
 
@@ -22,9 +25,11 @@ namespace SFA.DAS.EmployerAccounts.Extensions
 
             else
             {
-
                 config.UseAzureServiceBusTransport(connectionStringBuilder(), ConfigureRouting);
             }
+
+            // 5 seperate endpoints call this helper method, easier to add here.
+            config.UseMessageConventions();
 
             return config;
         }
@@ -35,6 +40,12 @@ namespace SFA.DAS.EmployerAccounts.Extensions
                     typeof(ImportLevyDeclarationsCommand).Assembly,
                     typeof(ImportLevyDeclarationsCommand).Namespace,
                     "SFA.DAS.EmployerFinance.MessageHandlers"
+            );
+
+            routing.RouteToEndpoint(
+                typeof(SendEmailCommand).Assembly,
+                typeof(SendEmailCommand).Namespace,
+                "SFA.DAS.Notifications.MessageHandlers"
             );
         }
     }

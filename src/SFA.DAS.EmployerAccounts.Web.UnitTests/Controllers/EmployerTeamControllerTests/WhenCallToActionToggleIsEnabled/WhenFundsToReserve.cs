@@ -1,10 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -51,18 +53,44 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel();
             model.PayeSchemeCount = 1;
-            model.AgreementsToSign = false;
-            model.ReservationsCount = 0;
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = false
+            };
+            
             model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
-
+            
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(PanelType.Action, (result.Model as dynamic).PanelType);
+        }
+
+        [Test]
+        public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = false,
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                ApprenticeshipAdded = false
+            };
+            
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ContinueSetupForSingleReservation", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(PanelType.Summary, (result.Model as dynamic).PanelType);
         }
     }
 }

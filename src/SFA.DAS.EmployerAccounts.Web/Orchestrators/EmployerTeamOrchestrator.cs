@@ -32,6 +32,9 @@ using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.EmployerAccounts.Models.Reservations;
+using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -40,15 +43,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
+        private readonly ICommitmentsApiClient _commitmentsApiClient;
+        private readonly IEncodingService _encodingService;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
-        public EmployerTeamOrchestrator(IMediator mediator, ICurrentDateTime currentDateTime, IAccountApiClient accountApiClient, IMapper mapper, IAuthorizationService authorizationService)
+        public EmployerTeamOrchestrator(IMediator mediator, 
+            ICurrentDateTime currentDateTime, 
+            IAccountApiClient accountApiClient,
+            ICommitmentsApiClient commitmentsApiClient,
+            IEncodingService encodingService,
+            IMapper mapper, 
+            IAuthorizationService authorizationService)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
+            _commitmentsApiClient = commitmentsApiClient;
+            _encodingService = encodingService;
             _mapper = mapper;
             _authorizationService = authorizationService;
         }
@@ -222,20 +235,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Tasks = tasks,
                     HashedAccountId = hashedAccountId,
                     RequiresAgreementSigning = pendingAgreements.Count(),
-                    AgreementsToSign = pendingAgreements.Count() > 0,
                     SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    ShowSavedFavourites = _authorizationService.IsAuthorized("EmployerFeature.HomePage"),
-                    ReservationsCount = reservationsResponse.Reservations.Count()
+                    CallToActionViewModel = new CallToActionViewModel
+                    {
+                        AgreementsToSign = pendingAgreements.Count() > 0,
+                        Reservations = reservationsResponse.Reservations.ToList(),
+                    }
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
                 // we could blat over the existing flag, but it's much nicer to store the enum (as above) rather than a byte!
                 //viewModel.Account.ApprenticeshipEmployerType = (byte) ((ApprenticeshipEmployerType) Enum.Parse(typeof(ApprenticeshipEmployerType), apiGetAccountTask.Result.ApprenticeshipEmployerType, true));
 
-                return new OrchestratorResponse<AccountDashboardViewModel>
+            return new OrchestratorResponse<AccountDashboardViewModel>
                 {
                     Status = HttpStatusCode.OK,
                     Data = viewModel
@@ -619,6 +634,62 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Status = HttpStatusCode.Unauthorized
                 };
             }
+        }
+
+        public void GetCallToActionViewName(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
+            rules.Add(100, EvalutateSignAgreementCallToActionRule);
+            
+            if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+            {
+                rules.Add(200, EvalutateSingleReservationCallToActionRule);
+                rules.Add(201, EvalutateHasReservationsCallToActionRule);
+            }
+
+            foreach(var callToActionRuleFunc in rules.OrderBy(r => r.Key))
+            {
+                if (callToActionRuleFunc.Value(ref viewModel))
+                    return;
+            }
+        }
+
+        private delegate bool EvalutateCallToActionRuleDelegate(ref PanelViewModel<AccountDashboardViewModel> viewModel);
+
+        private bool EvalutateSignAgreementCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
+            {
+                viewModel.ViewName = "SignAgreement";
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateSingleReservationCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1 && 
+                viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
+            {
+                viewModel.ViewName = "ContinueSetupForSingleReservation";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateHasReservationsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (!viewModel.Data.CallToActionViewModel.HasReservations)
+            {
+                viewModel.ViewName = "CheckFunding";
+                viewModel.PanelType = PanelType.Action;
+                return true;
+            }
+
+            return false;
         }
     }
 }

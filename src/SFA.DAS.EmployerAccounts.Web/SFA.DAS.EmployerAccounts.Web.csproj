@@ -118,6 +118,9 @@
     <PackageReference Include="SFA.DAS.Caches">
       <Version>1.1.4</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
+      <Version>4.1.1013</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
@@ -205,6 +208,7 @@
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SearchPensionRegulatorController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -218,6 +222,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Extensions\CohortSummaryExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -270,6 +275,7 @@
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
+    <Compile Include="ViewModels\CallToActionViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
@@ -313,10 +319,12 @@
     <Compile Include="ViewModels\OrganisationAddedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationUpdatedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\ProviderInvitationViewModel.cs" />
     <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\ReservationViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
@@ -333,6 +341,7 @@
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SupportUserHeaderViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="Models\TrainingDateModel.cs" />
     <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
@@ -835,6 +844,8 @@
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_Layout_CDN.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage_CDN.cshtml" />
+    <Content Include="Views\Home\Unsubscribe.cshtml" />
+    <Content Include="Views\Home\Unsubscribed.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\EmployerAgreement\WhenDoYouWantToView.cshtml" />
     <Content Include="Views\Shared\_Agreement_v3.cshtml" />
@@ -849,8 +860,11 @@
     <Content Include="Views\CookieConsent\Details.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="Views\Report\ReportTrainingProvider.cshtml" />
     <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
