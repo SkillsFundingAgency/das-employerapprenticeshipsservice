@@ -36,7 +36,7 @@
             <th scope="row">
                 Status
             </th>
-            <td id="with-training-provider" class="govuk-tag--inactive">
+            <td id="with-training-provider" class="govuk-tag govuk-tag--inactive">
                 WITH TRAINING PROVIDER
             </td>
         </tr>
@@ -61,8 +61,7 @@
         }
     </table>
     <p>
-
-        <a href="@Url.EmployerCommitmentsV2Action(ControllerConstants.ViewApprentice)" draggable="false" class="govuk-link">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.HashedAccountId}/{Model.CallToActionViewModel.ViewOrEditApprenticeDetails}")" draggable="false" class="govuk-link">
             View apprentice details
         </a>
     </p>

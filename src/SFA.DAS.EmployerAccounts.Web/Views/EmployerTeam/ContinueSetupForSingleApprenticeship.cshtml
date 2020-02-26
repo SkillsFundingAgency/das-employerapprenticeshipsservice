@@ -25,16 +25,16 @@
             </td>
         </tr>
         <tr>
-            <th scope="row" class="govuk-tag--inactive">
+            <th scope="row">
                 Status
             </th>
-            <td>
+            <td class="govuk-tag govuk-tag--inactive">
                 DRAFT
             </td>
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action(ControllerConstants.EditApprentice)" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.HashedAccountId}/{Model.CallToActionViewModel.ViewOrEditApprenticeDetails}")" role="button" draggable="false" class="button">
             Add mode details
         </a>
     </p>

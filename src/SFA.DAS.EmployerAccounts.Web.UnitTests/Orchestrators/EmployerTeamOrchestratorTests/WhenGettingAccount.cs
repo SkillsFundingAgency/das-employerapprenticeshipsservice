@@ -10,8 +10,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Services;
-using SFA.DAS.CommitmentsV2.Api.Client;
-using SFA.DAS.CommitmentsV2.Api.Types.Requests;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
@@ -33,7 +31,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -47,9 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private EmployerTeamOrchestrator _orchestrator;        
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
-        private Mock<IAccountApiClient> _accountApiClient;        
-        private Mock<ICommitmentsApiClient> _commitmentApiClient;
-        private Mock<IEncodingService> _encodingService;
+        private Mock<IAccountApiClient> _accountApiClient;
         private Mock<IMapper> _mapper;
         private List<AccountTask> _tasks;
         private AccountTask _testTask;
@@ -160,8 +155,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                              }
                        }
                    });
-
-
+            
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             GetCohortsResponse = CreateGetCohortsResponseForWithTrainingProviderStaus();
@@ -169,19 +163,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             GetCohortsResponseMoreThanOneDraftApprenticeship = CreateGetCohortsResponseMoreThanOneDraftApprenticeships();
             DraftApprenticeshipsResponse = GetDraftApprenticeshipsResponse();
 
-            _accountApiClient = new Mock<IAccountApiClient>();            
-            _encodingService = new Mock<IEncodingService>();
+            _accountApiClient = new Mock<IAccountApiClient>();
 
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
                 {ApprenticeshipEmployerType = "Levy"});
-
-            _commitmentApiClient = new Mock<ICommitmentsApiClient>();
-            _encodingService = new Mock<IEncodingService>();
-            _encodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
-            _encodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
+           
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _commitmentApiClient.Object, _encodingService.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, Mock.Of<IAuthorizationService>());
         }
         
         [Test]
@@ -324,9 +313,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             //Arrange
             ApprenticeshipsResponse = CreateApprenticeshipResponse();
-            _commitmentApiClient.Setup(c => c.GetApprenticeships(It.Is<GetApprenticeshipsRequest>(a => a.AccountId == AccountId), It.IsAny<CancellationToken>()))
-              .Returns(Task.FromResult(ApprenticeshipsResponse));
-          
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetApprenticeship.GetApprenticeshipRequest>()))
+            .ReturnsAsync(new Queries.GetApprenticeship.GetApprenticeshipResponse
+            {
+                ApprenticeshipDetailsResponse = ApprenticeshipsResponse
+            });          
 
             //Act
             var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
@@ -341,10 +332,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenShouldGetDraftApprenticeshipResponse()
         {
-            //Arrange
-            _commitmentApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == AccountId), CancellationToken.None)).Returns(Task.FromResult(GetCohortsResponse));
-            _commitmentApiClient.Setup(c => c.GetDraftApprenticeships(GetCohortsResponse.Cohorts.FirstOrDefault().CohortId,
-               It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
+            //Arrange           
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
+           .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
+           {
+               CohortsResponse = GetCohortsResponse,
+               HashedCohortReference = "4_Encoded",
+               SingleCohort = GetCohortsResponse.Cohorts.First()
+           });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
+           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
+           {
+               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
+               HashedDraftApprenticeshipId = "1_Encoded"
+           });
 
             //Act
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
@@ -358,8 +360,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             Assert.AreEqual("1_Encoded", actual.Data.CallToActionViewModel.HashedDraftApprenticeshipId);
             Assert.AreEqual("4_Encoded", actual.Data.CallToActionViewModel.HashedCohortReference);
             Assert.AreEqual(expected.CourseName, actual.Data.CallToActionViewModel.CourseName);
-            Assert.AreEqual(expected.StartDate, actual.Data.CallToActionViewModel.CourseStartDate);
-            //Assert.AreEqual(expected.Select(s => s.EndDate).ToList()[0], result.Data.CourseEndDate);
+            Assert.AreEqual(expected.StartDate, actual.Data.CallToActionViewModel.CourseStartDate);            
             Assert.IsNotNull(actual);
         }
 
@@ -377,10 +378,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenGetDraftResponseIfCohortCountIsOne()
         {
-            //Arrange
-            _commitmentApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == AccountId), CancellationToken.None)).Returns(Task.FromResult(GetCohortsResponse));
-            _commitmentApiClient.Setup(c => c.GetDraftApprenticeships(GetCohortsResponse.Cohorts.FirstOrDefault().CohortId,
-               It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
+            //Arrange           
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
+            .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
+            {
+                CohortsResponse = GetCohortsResponse,
+                HashedCohortReference = "4_Encoded",
+                SingleCohort = GetCohortsResponse.Cohorts.First()
+            });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
+           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
+           {
+               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
+               HashedDraftApprenticeshipId = "1_Encoded"
+           });
 
             //Act
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
@@ -393,10 +405,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenDoNotGetDraftApprenticeshipsResponseIfCohortCountIsGreaterThanOne()
         {
-            //Arrange
-            _commitmentApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == AccountId), CancellationToken.None)).Returns(Task.FromResult(GetCohortsResponses));
-            _commitmentApiClient.Setup(c => c.GetDraftApprenticeships(GetCohortsResponses.Cohorts.FirstOrDefault().CohortId,
-               It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
+            //Arrange           
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
+           .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
+           {
+               CohortsResponse = GetCohortsResponses,
+               HashedCohortReference = "4_Encoded",
+               SingleCohort = GetCohortsResponse.Cohorts.First()
+           });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
+           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
+           {
+               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
+               HashedDraftApprenticeshipId = "1_Encoded"
+           });
 
             //Act
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
@@ -408,10 +431,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         [Test]
         public async Task ThenNumberOfDraftApprenticeshipeGreaterThanOneDoNotGetDraftApprenticeshipsResponse()
         {
-            //Arrange
-            _commitmentApiClient.Setup(c => c.GetCohorts(It.Is<GetCohortsRequest>(r => r.AccountId == AccountId), CancellationToken.None)).Returns(Task.FromResult(GetCohortsResponseMoreThanOneDraftApprenticeship));
-            _commitmentApiClient.Setup(c => c.GetDraftApprenticeships(GetCohortsResponseMoreThanOneDraftApprenticeship.Cohorts.FirstOrDefault().CohortId,
-               It.IsAny<CancellationToken>())).Returns(Task.FromResult(DraftApprenticeshipsResponse));
+            //Arrange           
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
+           .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
+           {
+               CohortsResponse = GetCohortsResponseMoreThanOneDraftApprenticeship,
+               HashedCohortReference = "4_Encoded",
+               SingleCohort = GetCohortsResponseMoreThanOneDraftApprenticeship.Cohorts.First()
+           });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
+           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
+           {
+               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
+               HashedDraftApprenticeshipId = "1_Encoded"
+           });
 
             //Act
             var result = await _orchestrator.GetAccount(HashedAccountId, UserId);

@@ -103,25 +103,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return Action(baseUrl, accountPath);
         }
 
-        private static string CommitmentAction(UrlHelper helper, string baseUrl, string routeName)
-        {            
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-            var model = helper.RequestContext.RouteData.Values["model"]  as AccountDashboardViewModel;
-            var hashedCohortReference = model?.CallToActionViewModel?.HashedCohortReference ?? string.Empty;
-            var hashedDraftApprenticeshipId = model?.CallToActionViewModel?.HashedDraftApprenticeshipId ?? string.Empty;
-            string commitmentPath;
-            switch (routeName)
-            {
-                case ControllerConstants.ApproveOrRejectApprentice:
-                case ControllerConstants.ViewApprenticeBeforeApprove:
-                    commitmentPath = $"{hashedAccountId}/unapproved/{hashedCohortReference}";
-                    break;
-                default:
-                    commitmentPath = $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
-                    break;
-            }
-            
-            return Action(baseUrl, commitmentPath);
+        private static string CommitmentAction(UrlHelper helper, string baseUrl, string path)
+        { 
+            return Action(baseUrl, path);
         }
 
         private static string Action(string baseUrl, string path)
