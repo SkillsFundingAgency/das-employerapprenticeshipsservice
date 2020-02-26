@@ -1,0 +1,12 @@
+﻿using SFA.DAS.EmployerAccounts.Models.Recruit;
+namespace SFA.DAS.EmployerAccounts.Web.ViewModels
+{
+    public class VacancyViewModel
+    {
+        public string Title { get; set; }
+        public VacancyStatus Status { get; set; }
+        public string ManageVacancyUrl { get; set; }
+        public string ClosingDateText { get; set; }
+        public int? NoOfNewApplications { get; set; }
+    }
+}

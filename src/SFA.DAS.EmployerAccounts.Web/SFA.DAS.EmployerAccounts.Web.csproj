@@ -252,6 +252,7 @@
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\OrganisationMappings.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
+    <Compile Include="Mappings\VacancyMappings.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
@@ -353,7 +354,8 @@
     <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeDetailsViewModel.cs" />
-    <Compile Include="ViewModels\VacancyStatusViewModel.cs" />
+    <Compile Include="ViewModels\VacancyViewModel.cs" />
+    <Compile Include="ViewModels\VacanciesViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\WhenDoYouWantToViewViewModel.cs" />
   </ItemGroup>
@@ -865,6 +867,10 @@
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyDraft.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyPendingReview.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyLive.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
