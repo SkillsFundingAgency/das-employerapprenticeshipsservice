@@ -663,6 +663,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             rules.Add(150, EvalutateDraftVacancyCallToActionRule);
             rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
             rules.Add(152, EvalutateLiveVacancyCallToActionRule);
+            rules.Add(153, EvalutateRejectedVacancyCallToActionRule);
             rules.Add(154, EvalutateClosedVacancyCallToActionRule);
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
@@ -738,6 +739,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Closed))
             {
                 viewModel.ViewName = "VacancyClosed";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateRejectedVacancyCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
+                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+            {
+                return false;
+            }
+
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Referred))
+            {
+                viewModel.ViewName = "VacancyRejected";
                 viewModel.PanelType = PanelType.Summary;
                 return true;
             }

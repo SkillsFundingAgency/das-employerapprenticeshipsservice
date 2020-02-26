@@ -870,6 +870,7 @@
     <Content Include="Views\EmployerTeam\VacancyDraft.cshtml" />
     <Content Include="Views\EmployerTeam\VacancyPendingReview.cshtml" />
     <Content Include="Views\EmployerTeam\VacancyLive.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyRejected.cshtml" />
     <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
   </ItemGroup>
   <ItemGroup>

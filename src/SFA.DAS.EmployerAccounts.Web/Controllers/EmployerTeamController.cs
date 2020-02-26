@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -8,9 +7,7 @@ using System.Web.Mvc;
 using SFA.DAS.Authentication;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -528,6 +525,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult VacancyPendingReview(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Submitted));
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyRejected(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Referred));
         }
 
         [ChildActionOnly]
