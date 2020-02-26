@@ -43,26 +43,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
-        private readonly IAccountApiClient _accountApiClient;
-        private readonly ICommitmentsApiClient _commitmentsApiClient;
-        private readonly IEncodingService _encodingService;
+        private readonly IAccountApiClient _accountApiClient;        
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamOrchestrator(IMediator mediator, 
             ICurrentDateTime currentDateTime, 
-            IAccountApiClient accountApiClient,
-            ICommitmentsApiClient commitmentsApiClient,
-            IEncodingService encodingService,
+            IAccountApiClient accountApiClient,            
             IMapper mapper, 
             IAuthorizationService authorizationService)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
-            _accountApiClient = accountApiClient;
-            _commitmentsApiClient = commitmentsApiClient;
-            _encodingService = encodingService;
+            _accountApiClient = accountApiClient;           
             _mapper = mapper;
             _authorizationService = authorizationService;
         }
