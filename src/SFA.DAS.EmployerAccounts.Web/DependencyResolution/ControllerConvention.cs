@@ -5,7 +5,6 @@ using StructureMap.Pipeline;
 using StructureMap.TypeRules;
 using System.Linq;
 using System.Web.Mvc;
-using WebGrease.Css.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {

@@ -8,7 +8,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
-using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -27,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
-        private Mock<IPortalClient> mockPortalClient;
         private Mock<ControllerContext> mockControllerContext;
         private Mock<HttpContextBase> mockHttpContext;
         private Mock<IPrincipal> mockPrincipal;
@@ -50,7 +48,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            mockPortalClient = new Mock<IPortalClient>();
             mockControllerContext = new Mock<ControllerContext>();
             mockHttpContext = new Mock<HttpContextBase>();
             mockPrincipal = new Mock<IPrincipal>();
@@ -104,7 +101,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object,
                 mockAuthorizationService.Object);
 
             _controller.ControllerContext = mockControllerContext.Object;
