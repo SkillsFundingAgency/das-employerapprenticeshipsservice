@@ -41,8 +41,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
         private Mock<IAccountApiClient> _accountApiClient;
-        private Mock<ICommitmentsApiClient> _commitmentsApiClient;
-        private Mock<IEncodingService> _encodingService;
         private Mock<IMapper> _mapper;
         private List<AccountTask> _tasks;
         private AccountTask _testTask;
@@ -149,16 +147,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _currentDateTime = new Mock<ICurrentDateTime>();
 
-            _accountApiClient = new Mock<IAccountApiClient>();
-            _commitmentsApiClient = new Mock<ICommitmentsApiClient>();
-            _encodingService = new Mock<IEncodingService>();
+            _accountApiClient = new Mock<IAccountApiClient>();           
 
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
                 {ApprenticeshipEmployerType = "Levy"});
 
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _commitmentsApiClient.Object, _encodingService.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
         }
         
         [Test]
