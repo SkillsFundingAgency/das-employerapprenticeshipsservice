@@ -47,26 +47,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
-        private readonly IAccountApiClient _accountApiClient;
-        private readonly ICommitmentsApiClient _commitmentsApiClient;
-        private readonly IEncodingService _encodingService;
+        private readonly IAccountApiClient _accountApiClient;       
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamOrchestrator(IMediator mediator,
             ICurrentDateTime currentDateTime,
-            IAccountApiClient accountApiClient,
-            ICommitmentsApiClient commitmentsApiClient,
-            IEncodingService encodingService,
+            IAccountApiClient accountApiClient,           
             IMapper mapper,
             IAuthorizationService authorizationService)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
-            _accountApiClient = accountApiClient;
-            _commitmentsApiClient = commitmentsApiClient;
-            _encodingService = encodingService;
+            _accountApiClient = accountApiClient;            
             _mapper = mapper;
             _authorizationService = authorizationService;
         }
@@ -226,26 +220,35 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var showWizard = userResponse.User.ShowWizard && userRoleResponse.UserRole == Role.Owner;
 
 
-                var apprenticeshipsCount = 0;
-                IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse> apprenticeshipResponse = await GetApprenticeshipResponse(accountResponse);
-                if (apprenticeshipResponse != null)
+                var apprenticeshipResponse = await _mediator.SendAsync(new Queries.GetApprenticeship.GetApprenticeshipRequest
                 {
-                    apprenticeshipsCount = apprenticeshipResponse.Count();
-                }
+                    AccountId = accountResponse.Account.Id
+                });
 
-                var cohortsCount = 0;
-                var draftApprenticeshipCount = 0;
-                CohortSummary singleCohort = new CohortSummary();
-                DraftApprenticeshipDto singleDraftApprenticeship = new DraftApprenticeshipDto();
+                int cohortsCount, draftApprenticeshipCount;
+                CohortSummary singleCohort;
+                DraftApprenticeshipDto singleDraftApprenticeship;
+                string hashedDraftApprenticeshipId, hashedCohortReference;
+                InitializeApprenticeInfo(out cohortsCount, out draftApprenticeshipCount, out singleCohort, out singleDraftApprenticeship, out hashedDraftApprenticeshipId, out hashedCohortReference);
                 if (apprenticeshipResponse == null)
                 {
-                    CohortSummary[] cohortsResponse = await GetCohortsResponse(accountResponse);
-                    if (cohortsResponse != null && cohortsResponse.Count() == 1)
+                    var cohortsResponse = await _mediator.SendAsync(new Queries.GetCohorts.GetCohortsRequest
                     {
-                        cohortsCount = cohortsResponse.Count();
-                        singleCohort = cohortsResponse.First();
-                        draftApprenticeshipCount = singleCohort.NumberOfDraftApprentices;
-                        singleDraftApprenticeship = await GetSingleDraftApprenticeship(draftApprenticeshipCount, singleCohort, singleDraftApprenticeship);
+                        AccountId = accountResponse.Account.Id
+                    });
+
+                    if (cohortsResponse?.CohortsResponse?.Cohorts != null && cohortsResponse?.CohortsResponse?.Cohorts?.Count() == 1)
+                    {
+                        GetCohortsInfo(out cohortsCount, out draftApprenticeshipCount, out singleCohort, out hashedCohortReference, cohortsResponse);
+                        if (draftApprenticeshipCount == 1)
+                        {
+                            var singleDraftApprenticeshipResponse = await _mediator.SendAsync(new SFA.DAS.EmployerAccounts.Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest
+                            {
+                                CohortId = singleCohort.CohortId
+                            });
+                            singleDraftApprenticeship = singleDraftApprenticeshipResponse.DraftApprenticeshipsResponse?.DraftApprenticeships.First();
+                            hashedDraftApprenticeshipId = singleDraftApprenticeshipResponse.HashedDraftApprenticeshipId;
+                        }
                     }
                 }
 
@@ -273,15 +276,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         AgreementsToSign = pendingAgreements.Count() > 0,
                         Reservations = reservationsResponse.Reservations.ToList(),
                         CohortsCount = cohortsCount,
-                        ApprenticeshipsCount = apprenticeshipsCount,
+                        ApprenticeshipsCount = apprenticeshipResponse?.ApprenticeshipsCount ?? 0,
                         NumberOfDraftApprentices = draftApprenticeshipCount,
                         CourseName = singleDraftApprenticeship.CourseName,
                         CourseStartDate = singleDraftApprenticeship.StartDate,
                         CourseEndDate = singleDraftApprenticeship.EndDate,
-                        HashedDraftApprenticeshipId = _encodingService.Encode(singleDraftApprenticeship.Id, EncodingType.ApprenticeshipId),
+                        HashedDraftApprenticeshipId = hashedDraftApprenticeshipId,
                         ProviderName = singleCohort.ProviderName,
                         CohortStatus = singleCohort?.GetStatus() ?? CohortStatus.Unknown,
-                        HashedCohortReference = _encodingService.Encode(singleCohort.CohortId, EncodingType.CohortReference),
+                        HashedCohortReference = hashedCohortReference,
                         ApprenticeName = singleDraftApprenticeship.FirstName + " " + singleDraftApprenticeship.LastName
                     }
                 };
@@ -322,25 +325,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        private async Task<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>> GetApprenticeshipResponse(GetEmployerAccountByHashedIdResponse accountResponse)
+        private static void GetCohortsInfo(out int cohortsCount, out int draftApprenticeshipCount, out CohortSummary singleCohort, out string hashedCohortReference, Queries.GetCohorts.GetCohortsResponse cohortsResponse)
         {
-            return (await _commitmentsApiClient.GetApprenticeships(new GetApprenticeshipsRequest { AccountId = accountResponse.Account.Id }))?.Apprenticeships;
+            cohortsCount = cohortsResponse.CohortsResponse.Cohorts.Count();
+            singleCohort = cohortsResponse.SingleCohort;
+            draftApprenticeshipCount = singleCohort.NumberOfDraftApprentices;
+            hashedCohortReference = cohortsResponse.HashedCohortReference;
         }
 
-        private async Task<CohortSummary[]> GetCohortsResponse(GetEmployerAccountByHashedIdResponse accountResponse)
+        private static void InitializeApprenticeInfo(out int cohortsCount, out int draftApprenticeshipCount, out CohortSummary singleCohort, out DraftApprenticeshipDto singleDraftApprenticeship, out string hashedDraftApprenticeshipId, out string hashedCohortReference)
         {
-            return (await _commitmentsApiClient.GetCohorts(new GetCohortsRequest { AccountId = accountResponse.Account.Id }))?.Cohorts;
-        }
-
-        private async Task<DraftApprenticeshipDto> GetSingleDraftApprenticeship(int draftApprenticeshipCount, CohortSummary singleCohort, DraftApprenticeshipDto singleDraftApprenticeship)
-        {
-            if (draftApprenticeshipCount == 1)
-            {
-                var draftApprenticeshipsResponse = (await _commitmentsApiClient.GetDraftApprenticeships(singleCohort.CohortId))?.DraftApprenticeships;
-                singleDraftApprenticeship = draftApprenticeshipsResponse.First();
-            }
-
-            return singleDraftApprenticeship;
+            cohortsCount = 0;
+            draftApprenticeshipCount = 0;
+            singleCohort = new CohortSummary();
+            singleDraftApprenticeship = new DraftApprenticeshipDto();
+            hashedDraftApprenticeshipId = string.Empty;
+            hashedCohortReference = string.Empty;
         }
 
         public async Task<OrchestratorResponse<InvitationView>> GetInvitation(string id)

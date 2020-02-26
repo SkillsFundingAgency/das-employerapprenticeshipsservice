@@ -57,8 +57,8 @@
             </td>
         </tr>
     </table>
-    <p>
-        <a href="@Url.EmployerCommitmentsV2Action(ControllerConstants.ApproveOrRejectApprentice)" role="button" draggable="false" class="button">
+    <p>       
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.HashedAccountId}/{Model.CallToActionViewModel.ApprovedOrRejectApprenticeDetails}")" role="button" draggable="false" class="button">
             Approve or reject apprentice details
         </a>
     </p>

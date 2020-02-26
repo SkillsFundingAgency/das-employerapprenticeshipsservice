@@ -181,7 +181,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _encodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _commitmentApiClient.Object, _encodingService.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, Mock.Of<IAuthorizationService>());
         }
         
         [Test]

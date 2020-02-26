@@ -61,8 +61,7 @@
         }
     </table>
     <p>
-
-        <a href="@Url.EmployerCommitmentsV2Action(ControllerConstants.ViewApprentice)" draggable="false" class="govuk-link">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.HashedAccountId}/{Model.CallToActionViewModel.ViewOrEditApprenticeDetails}")" draggable="false" class="govuk-link">
             View apprentice details
         </a>
     </p>

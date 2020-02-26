@@ -105,13 +105,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         private static string CommitmentAction(UrlHelper helper, string baseUrl, string path)
         {          
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-            var model = helper.RequestContext.RouteData.Values["model"]  as AccountDashboardViewModel;
-            var hashedCohortReference = model?.CallToActionViewModel?.HashedCohortReference ?? string.Empty;
-            var hashedDraftApprenticeshipId = model?.CallToActionViewModel?.HashedDraftApprenticeshipId ?? string.Empty;
-            var commitmentPath = path == ControllerConstants.ApproveOrRejectApprentice ? $"{hashedAccountId}/unapproved/{hashedCohortReference}" : $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
+            //var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            //var model = helper.RequestContext.RouteData.Values["model"]  as AccountDashboardViewModel;
+            //var hashedCohortReference = model?.CallToActionViewModel?.HashedCohortReference ?? string.Empty;
+            //var hashedDraftApprenticeshipId = model?.CallToActionViewModel?.HashedDraftApprenticeshipId ?? string.Empty;
+            //var commitmentPath = path == ControllerConstants.ApproveOrRejectApprentice ? $"{hashedAccountId}/unapproved/{hashedCohortReference}" : $"{hashedAccountId}/unapproved/{hashedCohortReference}/apprentices/{hashedDraftApprenticeshipId}";
            
-            return Action(baseUrl, commitmentPath);
+            return Action(baseUrl, path);
         }
 
         private static string Action(string baseUrl, string path)
