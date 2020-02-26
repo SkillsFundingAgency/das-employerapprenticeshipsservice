@@ -242,7 +242,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         GetCohortsInfo(out cohortsCount, out draftApprenticeshipCount, out singleCohort, out hashedCohortReference, cohortsResponse);
                         if (draftApprenticeshipCount == 1)
                         {
-                            var singleDraftApprenticeshipResponse = await _mediator.SendAsync(new SFA.DAS.EmployerAccounts.Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest
+                            var singleDraftApprenticeshipResponse = await _mediator.SendAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest
                             {
                                 CohortId = singleCohort.CohortId
                             });

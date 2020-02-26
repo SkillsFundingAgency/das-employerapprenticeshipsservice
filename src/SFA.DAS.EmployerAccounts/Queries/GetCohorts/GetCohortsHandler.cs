@@ -12,8 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetCohorts
     public class GetCohortsHandler : IAsyncRequestHandler<GetCohortsRequest, GetCohortsResponse>
     {
         private readonly IValidator<GetCohortsRequest> _validator;
-        private readonly ILog _logger;
-        private readonly ICommitmentsApiClient _commitmentsApiClient;
+        private readonly ILog _logger;        
         private readonly ICommitmentV2Service _commitmentV2Service;
         private readonly IEncodingService _encodingService;
 
@@ -21,13 +20,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetCohorts
         public GetCohortsHandler(
             IValidator<GetCohortsRequest> validator,
             ILog logger,
-            ICommitmentV2Service commitmentV2Service,
-            ICommitmentsApiClient commitmentsApiClient,
+            ICommitmentV2Service commitmentV2Service,            
             IEncodingService encodingService)
         {
             _validator = validator;
-            _logger = logger;
-            _commitmentsApiClient = commitmentsApiClient;
+            _logger = logger;            
             _commitmentV2Service = commitmentV2Service;
             _encodingService = encodingService;
         }
