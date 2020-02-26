@@ -24,9 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private const string HashedAccountId = "ABC123";
 
         private Mock<IMediator> _mediator;
-        private Mock<IAccountApiClient> _accountApiClient;
-        private Mock<ICommitmentsApiClient> _commitmentApiClient;
-        private Mock<IEncodingService> _encodingService;
+        private Mock<IAccountApiClient> _accountApiClient;       
         private Mock<IMapper> _mapper;
         private EmployerTeamOrchestrator _orchestrator;
         private GetMemberResponse _teamMemberResponse;
@@ -45,9 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             };
 
             _mediator = new Mock<IMediator>();
-            _accountApiClient = new Mock<IAccountApiClient>();
-            _commitmentApiClient = new Mock<ICommitmentsApiClient>();
-            _encodingService = new Mock<IEncodingService>();
+            _accountApiClient = new Mock<IAccountApiClient>();           
             _mapper = new Mock<IMapper>();
 
             _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
