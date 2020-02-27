@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SFA.DAS.CommitmentsV2.Api.Client;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;

@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
         }
 
         [Test]
-        public void ThenShouldReturnInValidIfRequestIsValid()
+        public void ThenShouldReturnInValidIfRequestIsNotValid()
         {
             //Act
             var result = _validator.Validate(new GetApprenticeshipRequest { });

@@ -14,7 +14,7 @@ using SFA.DAS.CommitmentsV2.Types.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleDraftApprenticeship
 {
-    public class WhenIGetSingleDraftApprenticeship : QueryBaseTest<GetSingleDraftApprenticeshipRequestHandler, GetSingleDraftApprenticeshipRequest, EmployerAccounts.Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse>
+    public class WhenIGetSingleDraftApprenticeship : QueryBaseTest<GetSingleDraftApprenticeshipRequestHandler, GetSingleDraftApprenticeshipRequest, GetSingleDraftApprenticeshipResponse>
     {
         public override GetSingleDraftApprenticeshipRequest Query { get; set; }
         public override GetSingleDraftApprenticeshipRequestHandler RequestHandler { get; set; }
