@@ -270,8 +270,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            //Assert.AreEqual(3, actual.Data.SignedAgreementCount);
-            //Assert.AreEqual(4, actual.Data.RequiresAgreementSigning);
+            Assert.AreEqual(3, actual.Data.SignedAgreementCount);
+            Assert.AreEqual(4, actual.Data.RequiresAgreementSigning);
         }
 
         [TestCase(Common.Domain.Types.ApprenticeshipEmployerType.Levy, "Levy")]

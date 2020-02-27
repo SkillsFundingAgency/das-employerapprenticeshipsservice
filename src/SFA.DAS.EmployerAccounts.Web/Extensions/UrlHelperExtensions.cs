@@ -1,6 +1,5 @@
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
@@ -23,12 +22,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
-        public static string EmployerCommitmentsV2Action(this UrlHelper helper, string routeName)
+        public static string EmployerCommitmentsV2Action(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;
 
-            return CommitmentAction(helper, baseUrl, routeName);
+            return Action(baseUrl, path);
         }
 
         public static string ReservationsAction(this UrlHelper helper, string path)
@@ -101,11 +100,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
 
             return Action(baseUrl, accountPath);
-        }
-
-        private static string CommitmentAction(UrlHelper helper, string baseUrl, string path)
-        { 
-            return Action(baseUrl, path);
         }
 
         private static string Action(string baseUrl, string path)

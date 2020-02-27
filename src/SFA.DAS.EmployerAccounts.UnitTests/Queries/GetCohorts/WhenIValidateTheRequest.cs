@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetCohorts
         }
 
         [Test]
-        public void ThenShouldReturnInValidIfAccountIdNotSet()
+        public void ThenShouldReturnInValidIfRequestIsNotValid()
         {
             //Act
             var result = _validator.Validate(new GetCohortsRequest { });
