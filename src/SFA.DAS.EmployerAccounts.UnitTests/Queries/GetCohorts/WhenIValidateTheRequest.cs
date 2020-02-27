@@ -1,7 +1,5 @@
 ﻿using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Queries.GetCohorts;
-using System;
-using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetCohorts
 {
@@ -26,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetCohorts
         }
 
         [Test]
-        public void ThenShouldReturnInValidIfRequestIsValid()
+        public void ThenShouldReturnInValidIfAccountIdNotSet()
         {
             //Act
             var result = _validator.Validate(new GetCohortsRequest { });

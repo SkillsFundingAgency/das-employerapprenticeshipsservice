@@ -25,8 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public CohortStatus CohortStatus { get; set; }
         public string HashedDraftApprenticeshipId { get; set; }
         public string HashedCohortReference { get; set; }
-        public string ApprenticeName { get; set; }
-        public bool ViewApprenticeDetails => CourseStartDate.HasValue && CourseEndDate.HasValue;
+        public string ApprenticeName { get; set; }        
         public bool HasSingleReservation => Reservations?.Count == 1 && NumberOfDraftApprentices == 0;
         public string ViewOrEditApprenticeDetails => $"unapproved/{HashedCohortReference}/apprentices/{HashedDraftApprenticeshipId}";
         public string ApprovedOrRejectApprenticeDetails => $"unapproved/{HashedCohortReference}";

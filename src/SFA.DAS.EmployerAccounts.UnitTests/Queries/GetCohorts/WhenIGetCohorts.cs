@@ -1,20 +1,18 @@
 ﻿using Moq;
 using NUnit.Framework;
+using SFA.DAS.CommitmentsV2.Types;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetCohorts;
+using SFA.DAS.Encoding;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using SFA.DAS.NLog.Logger;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.CommitmentsV2.Types;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetCohorts
 {
-    public class WhenIGetCohorts : QueryBaseTest<GetCohortsHandler, GetCohortsRequest, EmployerAccounts.Queries.GetCohorts.GetCohortsResponse>
+    public class WhenIGetCohorts : QueryBaseTest<GetCohortsHandler, GetCohortsRequest, GetCohortsResponse>
     {
         public override GetCohortsRequest Query { get; set; }
         public override GetCohortsHandler RequestHandler { get; set; }
@@ -34,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetCohorts
             _logger = new Mock<ILog>();
 
             _commitmentV2Service = new Mock<ICommitmentV2Service>();            
-            _commitmentV2Service.Setup(m => m.GetCohorts(_accountId)).ReturnsAsync(new SFA.DAS.CommitmentsV2.Api.Types.Responses.GetCohortsResponse
+            _commitmentV2Service.Setup(m => m.GetCohorts(_accountId)).ReturnsAsync(new CommitmentsV2.Api.Types.Responses.GetCohortsResponse
                 (new List<CohortSummary>()
                 {
                     new CohortSummary()

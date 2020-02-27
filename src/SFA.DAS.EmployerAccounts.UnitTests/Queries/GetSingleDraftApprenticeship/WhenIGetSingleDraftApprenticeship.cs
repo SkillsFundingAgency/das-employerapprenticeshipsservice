@@ -6,15 +6,13 @@ using SFA.DAS.Encoding;
 using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleDraftApprenticeship
 {
-    public class WhenIGetSingleDraftApprenticeship : QueryBaseTest<GetSingleDraftApprenticeshipRequestHandler, GetSingleDraftApprenticeshipRequest, EmployerAccounts.Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse>
+    public class WhenIGetSingleDraftApprenticeship : QueryBaseTest<GetSingleDraftApprenticeshipRequestHandler, GetSingleDraftApprenticeshipRequest, GetSingleDraftApprenticeshipResponse>
     {
         public override GetSingleDraftApprenticeshipRequest Query { get; set; }
         public override GetSingleDraftApprenticeshipRequestHandler RequestHandler { get; set; }
@@ -35,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleDraftApprenticeshi
 
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
             _commitmentV2Service.Setup(m => m.GetDraftApprenticeships(_cohortId))
-                .ReturnsAsync(new SFA.DAS.CommitmentsV2.Api.Types.Responses.GetDraftApprenticeshipsResponse() 
+                .ReturnsAsync(new CommitmentsV2.Api.Types.Responses.GetDraftApprenticeshipsResponse() 
                 { DraftApprenticeships = new List<DraftApprenticeshipDto>() { new DraftApprenticeshipDto { Id = 4} } });
             _encodingService = new Mock<IEncodingService>();
             _encodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_Encoded");
