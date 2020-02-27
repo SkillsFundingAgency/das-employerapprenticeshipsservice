@@ -1,7 +1,6 @@
-﻿using System.Configuration;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
@@ -10,6 +9,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
     public class EmployerCommitmentsController : Controller
     {
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+
+        public EmployerCommitmentsController(EmployerAccountsConfiguration employerAccountsConfiguration)
+        {
+            _employerAccountsConfiguration = employerAccountsConfiguration;
+        }
+
         [HttpGet]
         [Route("home", Name = "CommitmentsHome")]
         [Route("cohorts/review")]
@@ -112,9 +118,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName].EndsWith("/")
-                ? ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName]
-                : ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName] + "/";
+            var baseUrl = _employerAccountsConfiguration.EmployerCommitmentsBaseUrl.EndsWith("/") 
+                ? _employerAccountsConfiguration.EmployerCommitmentsBaseUrl
+                : _employerAccountsConfiguration.EmployerCommitmentsBaseUrl + "/";
 
             var path = Request.Url.AbsolutePath;
 
