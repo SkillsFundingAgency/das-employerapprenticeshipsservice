@@ -50,7 +50,7 @@
             @Html.AntiForgeryToken()
 
             <div class="govuk-form-group @(!ViewContext.ViewData.ModelState.IsValid ? "govuk-form-group--error" : "")">
-                <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint">
+                <fieldset class="govuk-fieldset" aria-describedby="changed-name-hint@(!string.IsNullOrWhiteSpace(errorMessage) ? " changed-name-error" : "")">
 
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                         <h1 class="govuk-fieldset__heading"><span class="govuk-visually-hidden">Select a role for </span>@name</h1>

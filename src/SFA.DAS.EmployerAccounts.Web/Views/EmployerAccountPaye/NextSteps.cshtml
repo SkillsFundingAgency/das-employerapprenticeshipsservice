@@ -31,8 +31,8 @@
         <form method="POST" action="@Url.Action("NextSteps")">
             @Html.AntiForgeryToken()
 
-            <div class="govuk-form-group  @(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? "govuk-form-group--error" : "")">
-                <fieldset class="govuk-fieldset">
+            <div class="govuk-form-group@(!string.IsNullOrEmpty(Model.Data.ErrorMessage) ? " govuk-form-group--error" : "")">
+                <fieldset class="govuk-fieldset"@(!string.IsNullOrWhiteSpace(Model.Data.ErrorMessage) ? " aria-describedby=changed-name-error" : "")>
 
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
                         <h1 class="govuk-fieldset__heading">What's next</h1>
@@ -49,7 +49,7 @@
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input" id="choice1" type="radio" name="choice" value="1">
                             <label class="govuk-label govuk-radios__label" for="choice1">
-                                Add another <abbr title="Pay As You Earn" class="">PAYE</abbr> scheme
+                                Add another <abbr title="Pay As You Earn">PAYE</abbr> scheme
                             </label>
                         </div>
                         @if (!Model.Data.ShowWizard)

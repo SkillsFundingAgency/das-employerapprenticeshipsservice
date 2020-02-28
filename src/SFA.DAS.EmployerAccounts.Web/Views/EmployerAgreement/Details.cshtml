@@ -10,108 +10,119 @@
     ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-details";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-            <span class="heading-secondary">@Model.Data.EmployerAgreement.LegalEntityName</span>
-            Your ESFA agreement
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl">@Model.Data.EmployerAgreement.LegalEntityName<span class="govuk-visually-hidden">:</span> </span>
+            Your <abbr>ESFA</abbr> agreement
         </h1>
-        <p>This agreement allows you to spend funds for <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong>.</p>
+
+        <p class="govuk-body">This agreement allows you to spend funds for <b>@Model.Data.EmployerAgreement.LegalEntityName</b>.</p>
 
     </div>
 </div>
-<hr />
-<div class="grid-row agreement-parties">
-    <div class="column-one-third">
-        <h2 class="heading-medium section-heading">Parties</h2>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <h2 class="govuk-heading-m">Parties</h2>
     </div>
-    <div class="column-one-third">
-        <address class="party">
-            <b>The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education</b>
-            <br />
-            Cheylesmore House<br />
-            Quinton Road<br />
-            Coventry<br />
+
+    <div class="govuk-grid-column-two-thirds">
+        <address class="govuk-body das-text--normal">
+            <span class="govuk-!-font-weight-bold">
+                The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education<span class="govuk-visually-hidden">: </span>
+            </span><br>
+            Cheylesmore House<span class="govuk-visually-hidden">, </span><br>
+            Quinton Road<span class="govuk-visually-hidden">, </span><br>
+            Coventry<span class="govuk-visually-hidden">, </span><br>
             CV1 2WT
         </address>
     </div>
 </div>
-<div class="grid-row agreement-parties">
-    <div class="column-one-third column-hide">&nbsp;</div>
-    <div class="column-two-thirds"><hr /></div>
-</div>
-<div class="grid-row agreement-parties">
-    <div class="column-one-third column-hide">&nbsp;</div>
-    <div class="column-one-third">
-        <address class="party">
-            <strong>@Model.Data.EmployerAgreement.LegalEntityName</strong><br />
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds das-float-right">
+        <address class="govuk-body das-text--normal">
+            <span class="govuk-!-font-weight-bold">
+                @Model.Data.EmployerAgreement.LegalEntityName
+            </span><br>
+
             @Html.CommaSeperatedAddressToHtml(@Model.Data.EmployerAgreement.LegalEntityAddress)
-            @if (Model.Data.OrganisationLookupPossible)
-            {
-                <p class="update-details">
-                    <a href="@Url.Action("review", "organisation", new
-                    {
-                        Model.Data.EmployerAgreement.HashedAccountId,
-                        Model.Data.EmployerAgreement.HashedAgreementId,
-                        Model.Data.EmployerAgreement.AccountLegalEntityPublicHashedId
-                    })">Update these details</a>
-                </p>
-            }
         </address>
+
+        @if (Model.Data.OrganisationLookupPossible)
+        {
+        <p class="govuk-body">
+            <a href="@Url.Action("review", "organisation", new
+            {
+                Model.Data.EmployerAgreement.HashedAccountId,
+                Model.Data.EmployerAgreement.HashedAgreementId,
+                Model.Data.EmployerAgreement.AccountLegalEntityPublicHashedId
+            })" class="govuk-link">Update these details</a>
+        </p>
+        }
     </div>
 </div>
-<hr />
-<div class="grid-row">
-    <div class="column-one-third">
-        <h2 class="heading-medium section-heading">Document</h2>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-third">
+        <h2 class="govuk-heading-m">Document</h2>
     </div>
-    <div class="column-two-thirds">
-        <div class="signed-agreement">
-            <section class="attachment embedded">
-                <div class="attachment-thumb">
-                    <a aria-hidden="true" class="thumbnail" href="@Url.Action("View", "EmployerAgreement")"><img alt="" src="/dist/images/pub-cover-html.png"></a>
-                </div>
-                <div class="attachment-details">
-                    <h2 class="title"><a href="@Url.Action("View", "EmployerAgreement")">Your ESFA agreement</a></h2>
-                    <p class="metadata">
-                        <span class="type">HTML</span>
-                    </p>
-                </div>
-            </section>
-        </div>
+
+    <div class="govuk-grid-column-two-thirds">
+
+        <a href="@Url.Action("View", "EmployerAgreement")" class="das-pub-cover-link das-float-left govuk-!-margin-right-4" aria-hidden="true">
+            <img src="/dist/images/pub-cover-html.png" alt="HTML document icon">
+        </a>
+            
+        <p class="govuk-body">
+            <a href="@Url.Action("View", "EmployerAgreement")" class="govuk-link govuk-link--no-visited-state">Your <abbr>ESFA</abbr> agreement</a>
+            <span class="govuk-visually-hidden">. </span><br>
+            <span class="govuk-visually-hidden">Document type: </span><span class="govuk-body-s das-text--muted">HTML</span>
+        </p>
+
     </div>
 </div>
-<hr />
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h3 class="heading-medium">This agreement has been accepted</h3>
-        <table>
-            <tr>
-                <th scope="row">Accepted by:</th>
-                <td>@Model.Data.EmployerAgreement.SignedByName</td>
-            </tr>
-            <tr>
-                <th scope="row">On behalf of:</th>
-                <td>@Model.Data.EmployerAgreement.LegalEntityName</td>
-            </tr>
-            <tr>
-                <th scope="row">Address:</th>
-                <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
-            </tr>
-            <tr>
-                <th scope="row"><span class="no-wrap">Accepted on:</span></th>
-                <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</td>
-            </tr>
-        </table>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<div class="govuk-grid-row govuk-!-margin-bottom-8">
+    <div class="govuk-grid-column-one-third">
+        <h3 class="govuk-heading-m">This agreement has been accepted</h3>
+    </div>
+
+    <div class="govuk-grid-column-two-thirds">
+        <dl class="das-definition-list das-definition-list--table das-definition-list--table-narrow">
+            <dt class="das-definition-list__title das-definition-list__title--spacer">Accepted by</dt>
+            <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.Data.EmployerAgreement.SignedByName</dd>
+
+            <dt class="das-definition-list__title das-definition-list__title--spacer">On behalf of</dt>
+            <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.Data.EmployerAgreement.LegalEntityName</dd>
+
+            <dt class="das-definition-list__title das-definition-list__title--spacer">Address</dt>
+            <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.Data.EmployerAgreement.LegalEntityAddress</dd>
+
+            <dt class="das-definition-list__title das-definition-list__title--spacer">Accepted on</dt>
+            <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.Data.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</dd>
+        </dl>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam")">Home</a></li>
-            <li><a href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a></li>
-            <li>Your ESFA agreement</li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
+            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerTeam")" class="govuk-breadcrumbs__link">Home</a></li>
+            <li class="govuk-breadcrumbs__list-item"><a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-breadcrumbs__link">Your organisations and agreements</a></li>
+            <li class="govuk-breadcrumbs__list-item">Your <abbr>ESFA</abbr> agreement</li>
         </ol>
     </div>
 }
