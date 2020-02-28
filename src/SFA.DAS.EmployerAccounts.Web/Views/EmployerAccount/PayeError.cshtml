@@ -1,7 +1,10 @@
 ﻿@using SFA.DAS.Common.Domain.Types
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 
-@{ViewBag.PageID = "page-onboard-paye-scheme-in-use";}
+@{
+    ViewBag.PageID = "page-onboard-paye-scheme-in-use";
+    ViewBag.ZenDeskLabel = "eas-paye-scheme-already-in-use";
+}
 @{ViewBag.Title = "PAYE scheme already in use";}
 @{ViewBag.HideNav = true; }
 @{ViewBag.GaData.Vpv = "/onboarding/address/update/page-extra-paye-error";}
