@@ -679,6 +679,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             if (!viewModel.Data.CallToActionViewModel.HasReservations)
             {
                 viewModel.ViewName = "CheckFunding";
+                viewModel.PanelType = PanelType.Action;
                 return true;
             }
 
