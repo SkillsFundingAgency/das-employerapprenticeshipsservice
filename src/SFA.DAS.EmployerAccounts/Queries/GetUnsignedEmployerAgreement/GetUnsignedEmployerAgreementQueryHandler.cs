@@ -44,11 +44,13 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
 
             var pendingAgreementId = await _db.Value.AccountLegalEntities
                 .Where(x => x.AccountId == accountId && x.PendingAgreementId != null)
-                .Select(x => x.PendingAgreementId).SingleOrDefaultAsync();
+                .Select(x => x.PendingAgreementId)
+                .Take(2)
+                .ToListAsync();
 
             return new GetUnsignedEmployerAgreementResponse
             {
-                HashedAgreementId = pendingAgreementId.HasValue ? _hashingService.HashValue(pendingAgreementId.Value) : null
+                HashedAgreementId = pendingAgreementId.Count() == 1 ? _hashingService.HashValue(pendingAgreementId.Single().Value) : null
             };
         }
     }
