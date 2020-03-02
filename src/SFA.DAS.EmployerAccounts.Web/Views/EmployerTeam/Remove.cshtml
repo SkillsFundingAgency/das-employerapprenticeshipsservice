@@ -10,39 +10,54 @@
 @{
     ViewBag.GaData.Vpv = "/accounts/teams/remove/page-remove-team-member";
 }
-   
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Remove team member</h1>
-        @if (!ViewContext.ViewData.ModelState.IsValid)
-        {
-            foreach (var state in ViewContext.ViewData.ModelState.Values)
+
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+<div class="govuk-form-group@(!ViewContext.ViewData.ModelState.IsValid ? " govuk-form-group--error" : "")">
+    <form action="@Url.Action("Remove")" method="POST">
+
+        <fieldset class="govuk-fieldset" aria-describedby="remove-member-hint@(!ViewContext.ViewData.ModelState.IsValid ? " remove-member-error" : "")">
+
+            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                <h1 class="govuk-fieldset__heading">Remove team member</h1>
+            </legend>
+
+            <span id="remove-member-hint" class="govuk-hint">
+                Are you sure you want to remove @name?
+            </span>
+
+            @if (!ViewContext.ViewData.ModelState.IsValid)
             {
-                foreach (var error in state.Errors)
+                foreach (var state in ViewContext.ViewData.ModelState.Values)
                 {
-                    <div class="error" id="invalidMessage">
-                        <p class="error-message">@error.ErrorMessage</p>
-                    </div>
+                    foreach (var error in state.Errors)/* removed id="invalidMessage" as 'foreach' loop would repeat the ID */
+                    {
+                        <span id="remove-member-error" class="govuk-error-message">
+                            <span class="govuk-visually-hidden">Error: </span>@error.ErrorMessage
+                        </span><br>
+                    }
                 }
             }
-        }
-        <p class="lede">Are you sure you want to remove @name?</p>
-        <div class="form-group">
-            <form action="@Url.Action("Remove")" method="POST">
+
+            <div class="govuk-form-group govuk-!-margin-top-8">
                 @Html.AntiForgeryToken()
-                <input type="hidden" id="remove" name="remove" value="1" />
-                <input type="hidden" id="UserId" name="UserId" value="@Model.Data.Id" />
-                <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                <button type="submit" class="button" id="remove_team_member">Yes, remove now</button>
-            </form>
-            <a href="@Url.Action("Viewteam", "EmployerTeam")" class="button button-link">No, cancel</a>
-        </div>
-    </div>
+
+                <input type="hidden" id="remove" name="remove" value="1">
+                <input type="hidden" id="UserId" name="UserId" value="@Model.Data.Id">
+                <input type="hidden" id="Email" name="Email" value="@Model.Data.Email">
+
+                <button type="submit" class="govuk-button" id="remove_team_member">Yes, remove now</button>
+                <a href="@Url.Action("Viewteam", "EmployerTeam")" class="govuk-link das-link--button-aligned">No, cancel</a>
+
+            </div>
+
+        </fieldset>
+
+    </form>
 </div>
 
 @section breadcrumb {
-
-    <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
+    <div class="govuk-breadcrumbs">
+        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="govuk-back-link">Back to your team</a>
     </div>
 }

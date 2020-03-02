@@ -47,7 +47,7 @@
 
             <div class="govuk-form-group govuk-!-margin-top-6 @(Model.Data.Valid ? "" : "govuk-form-group--error")">
 
-                <fieldset id="confirm" class="govuk-fieldset" aria-describedby="confirm-hint  @(Model.Data.Valid ? "" : "confirm-error")">
+                <fieldset id="confirm" class="govuk-fieldset" aria-describedby="confirm-hint@(Model.Data.Valid ? "" : " confirm-error")">
                     <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">
                         <h1 id="confirm-hint" class="govuk-fieldset__heading">
                             Remove this <abbr>PAYE</abbr> scheme
