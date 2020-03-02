@@ -71,7 +71,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         }
 
         [HttpGet]
-        [Route("privacy")]
+        [Route("{HashedAccountId}/privacy", Order = 0)]
+        [Route("privacy", Order = 1)]
         public ActionResult Privacy()
         {
             return Redirect(Url.EmployerAccountsAction("service/privacy", false));
