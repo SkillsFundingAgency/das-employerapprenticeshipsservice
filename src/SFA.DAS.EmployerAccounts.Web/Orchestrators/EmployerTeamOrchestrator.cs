@@ -32,9 +32,7 @@ using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.CommitmentsV2.Api.Client;
-using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -44,7 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
         private readonly ICommitmentsApiClient _commitmentsApiClient;
-        private readonly IEncodingService _encodingService;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
@@ -52,7 +49,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             ICurrentDateTime currentDateTime, 
             IAccountApiClient accountApiClient,
             ICommitmentsApiClient commitmentsApiClient,
-            IEncodingService encodingService,
             IMapper mapper, 
             IAuthorizationService authorizationService)
             : base(mediator)
@@ -61,7 +57,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
             _commitmentsApiClient = commitmentsApiClient;
-            _encodingService = encodingService;
             _mapper = mapper;
             _authorizationService = authorizationService;
         }
