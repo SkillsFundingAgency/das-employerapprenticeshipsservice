@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.CohortV2ViewModel
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large" id="call-to-action-your-apprentice-status">
@@ -13,7 +13,7 @@
                 Name
             </th>
             <td class="tw-65" id="apprentice-name">
-                @(Model?.CallToActionViewModel?.ApprenticeName)
+                @(Model?.Apprenticeships?.First().ApprenticeshipFullName)
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 Training Provider
             </th>
             <td id="provider-name">
-                @(Model?.CallToActionViewModel?.ProviderName)
+                @(Model?.Apprenticeships?.First().TrainingProvider?.Name)
             </td>
         </tr>
         <tr>
@@ -29,7 +29,7 @@
                 Course
             </th>
             <td id="course-name">
-                @(Model?.CallToActionViewModel?.CourseName)
+                @(Model?.Apprenticeships?.First().CourseName)                
             </td>
         </tr>
         <tr>
@@ -45,7 +45,7 @@
                 Start month
             </th>
             <td id="course-start-date">
-                @(Model?.CallToActionViewModel?.CourseStartDate.Value.ToString("MMMM yyyy"))
+                @(Model?.Apprenticeships?.First().CourseStartDate.Value.ToString("MMMM yyyy"))                
             </td>
         </tr>
         <tr>
@@ -53,12 +53,12 @@
                 Finish month
             </th>
             <td id="course-end-date">
-                @(Model?.CallToActionViewModel?.CourseEndDate.Value.ToString("MMMM yyyy"))
+                @(Model?.Apprenticeships?.First().CourseEndDate.Value.ToString("MMMM yyyy"))                
             </td>
         </tr>
     </table>
     <p>       
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.HashedAccountId}/{Model.CallToActionViewModel.ApprovedOrRejectApprenticeDetails}")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ApprovedOrRejectApprenticeDetails}")" role="button" draggable="false" class="button">
             Approve or reject apprentice details
         </a>
     </p>

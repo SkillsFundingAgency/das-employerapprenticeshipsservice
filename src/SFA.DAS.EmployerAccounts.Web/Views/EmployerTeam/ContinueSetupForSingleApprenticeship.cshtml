@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.CohortV2ViewModel
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large" id="call-to-action-continue-setting-up-an-apprenticeship">
@@ -13,15 +13,15 @@
                 Course
             </th>
             <td class="tw-65" id="course-name">
-                @(Model?.CallToActionViewModel?.CourseName)
+                @(Model?.Apprenticeships?.First().CourseName)
             </td>
         </tr>
         <tr>
             <th scope="row">
                 Training Provider
             </th>
-            <td id="training-provider">
-                @(Model?.CallToActionViewModel?.ProviderName)
+            <td id="training-provider">                
+                @(Model?.Apprenticeships?.First().TrainingProvider?.Name)
             </td>
         </tr>
         <tr>
@@ -34,7 +34,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.HashedAccountId}/{Model.CallToActionViewModel.ViewOrEditApprenticeDetails}")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetails}")" role="button" draggable="false" class="button">
             Add more details
         </a>
     </p>

@@ -21,7 +21,9 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
@@ -31,6 +33,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -155,7 +158,41 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                              }
                        }
                    });
-            
+
+
+            var Cohort = new CohortV2()
+            {
+                CohortId = 1,
+                CohortsCount = 1,
+                HashedCohortReference = "4_Encoded",
+                HashedDraftApprenticeshipId = "1_Encoded",
+                CohortStatus = EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
+                NumberOfDraftApprentices = 1,
+                Apprenticeships = new List<Apprenticeship>
+                           {
+                               new Apprenticeship()
+                               {
+                                   Id = 2,
+                                   FirstName = "FirstName",
+                                   LastName = "LastName",
+                                   CourseStartDate = new DateTime(2020,5,1),
+                                   CourseEndDate = new DateTime(2022,1,1),
+                                   CourseName = "CourseName",
+                                   TrainingProvider = new TrainingProvider()
+                                   {
+                                       Id = 3,
+                                       Name = "TrainingProviderName"
+                                   }
+                               }
+                           }
+            };
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountCohortRequest>()))
+                    .ReturnsAsync(new GetAccountCohortResponse 
+                    {  
+                        CohortV2 = new List<CohortV2> { Cohort }
+
+                    });
+
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             GetCohortsResponse = CreateGetCohortsResponseForWithTrainingProviderStaus();
@@ -306,158 +343,92 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             Assert.AreEqual(1, result.Data.CallToActionViewModel.ReservationsCount);
-        }
+        }       
 
         [Test]
-        public async Task ThenReturnApprenticeshipResponse()
+        public async Task ThenShouldGetDraftApprenticeshipV2Response()
         {
-            //Arrange
-            ApprenticeshipsResponse = CreateApprenticeshipResponse();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetApprenticeship.GetApprenticeshipRequest>()))
-            .ReturnsAsync(new Queries.GetApprenticeship.GetApprenticeshipResponse
+            //Arrange 
+
+            var Cohort = new CohortV2()
             {
-                ApprenticeshipDetailsResponse = ApprenticeshipsResponse
-            });          
+                CohortId = 1,
+                CohortsCount = 1,
+                HashedCohortReference = "4_Encoded",
+                HashedDraftApprenticeshipId = "1_Encoded",
+                CohortStatus = EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
+                NumberOfDraftApprentices = 1,                
+                Apprenticeships = new List<Apprenticeship>
+                {
+                    new Apprenticeship()
+                    {
+                        Id = 2,
+                        FirstName = "FirstName",
+                        LastName = "LastName",
+                        CourseStartDate = new DateTime(2020,5,1),
+                        CourseEndDate = new DateTime(2022,1,1),
+                        CourseName = "CourseName",
+                        TrainingProvider = new TrainingProvider()
+                        {
+                            Id = 3,
+                            Name = "TrainingProviderName"
+                        }
+                    }
+                }
+            };
 
-            //Act
-            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
+            var Cohorts = new List<CohortV2> { Cohort };
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountCohortRequest>()))
+               .ReturnsAsync(new GetAccountCohortResponse
+               {
+                   CohortV2 = Cohorts
+               });
 
-            //Assert            
-            Assert.IsNotNull(result);
-            Assert.AreEqual(1, result.Data.CallToActionViewModel.ApprenticeshipsCount);
-            Assert.AreEqual(0, result.Data.CallToActionViewModel.CohortsCount);
-            Assert.IsFalse(result.Data.CallToActionViewModel.HasSingleDraftApprenticeship);
-        }
 
-        [Test]
-        public async Task ThenShouldGetDraftApprenticeshipResponse()
-        {
-            //Arrange           
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
-           .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
-           {
-               CohortsResponse = GetCohortsResponse,
-               HashedCohortReference = "4_Encoded",
-               SingleCohort = GetCohortsResponse.Cohorts.First()
-           });
+            var expectedCohort = new CohortV2ViewModel()
+            {
+                CohortId = 1,
+                CohortsCount = 1,
+                CohortStatus = EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
+                HashedCohortReference = "4_Encoded",
+                HashedDraftApprenticeshipId = "1_Encoded",
+                NumberOfDraftApprentices = 1,
+                Apprenticeships = new List<ApprenticeshipViewModel>
+                           {
+                               new ApprenticeshipViewModel()
+                               {
+                                   Id = 2,
+                                   FirstName = "FirstName",
+                                   LastName = "LastName",
+                                   CourseStartDate = new DateTime(2020,5,1),
+                                   CourseEndDate = new DateTime(2022,1,1),
+                                   CourseName = "CourseName",
+                                   ApprenticeshipStatus = EmployerAccounts.Models.Commitments.ApprenticeshipStatus.Draft,
+                                   TrainingProvider = new TrainingProviderViewModel()
+                                   {
+                                       Id = 3,
+                                       Name = "TrainingProviderName"
+                                   }
+                               }
+                           }
+            };
+            var expectedCohorts = new List<CohortV2ViewModel> { expectedCohort };
+            _mapper.Setup(m => m.Map<IEnumerable<CohortV2>, IEnumerable<CohortV2ViewModel>>(Cohorts)).Returns(expectedCohorts);
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
-           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
-           {
-               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
-               HashedDraftApprenticeshipId = "1_Encoded"
-           });
 
             //Act
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();
-            Assert.IsTrue(actual.Data.CallToActionViewModel.ApprenticeshipsCount.Equals(0));
-            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsCount.Equals(1));
-            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortStatus.Equals(CohortStatus.WithTrainingProvider));
-            Assert.IsTrue(actual.Data.CallToActionViewModel.HasSingleDraftApprenticeship);
-            Assert.AreEqual("1_Encoded", actual.Data.CallToActionViewModel.HashedDraftApprenticeshipId);
-            Assert.AreEqual("4_Encoded", actual.Data.CallToActionViewModel.HashedCohortReference);
-            Assert.AreEqual(expected.CourseName, actual.Data.CallToActionViewModel.CourseName);
-            Assert.AreEqual(expected.StartDate, actual.Data.CallToActionViewModel.CourseStartDate);            
+            var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();            
+            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().CohortsCount.Equals(1));
+            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().CohortStatus.Equals(SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider));
+            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().HasSingleDraftApprenticeship);            
+            Assert.AreEqual(expected.CourseName, actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().Apprenticeships.First().CourseName);
+            Assert.AreEqual(expected.StartDate, actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().Apprenticeships.First().CourseStartDate);            
             Assert.IsNotNull(actual);
         }
-
-        [Test]
-        public async Task ThenDraftApprenticeshipIsNullIfCohortsResponseIsNull()
-        {
-            //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert            
-            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsCount.Equals(0));
-        }
-
-
-        [Test]
-        public async Task ThenGetDraftResponseIfCohortCountIsOne()
-        {
-            //Arrange           
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
-            .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
-            {
-                CohortsResponse = GetCohortsResponse,
-                HashedCohortReference = "4_Encoded",
-                SingleCohort = GetCohortsResponse.Cohorts.First()
-            });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
-           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
-           {
-               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
-               HashedDraftApprenticeshipId = "1_Encoded"
-           });
-
-            //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();
-            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsCount.Equals(1));
-        }
-
-        [Test]
-        public async Task ThenDoNotGetDraftApprenticeshipsResponseIfCohortCountIsGreaterThanOne()
-        {
-            //Arrange           
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
-           .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
-           {
-               CohortsResponse = GetCohortsResponses,
-               HashedCohortReference = "4_Encoded",
-               SingleCohort = GetCohortsResponse.Cohorts.First()
-           });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
-           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
-           {
-               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
-               HashedDraftApprenticeshipId = "1_Encoded"
-           });
-
-            //Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert            
-            Assert.AreEqual(actual.Data.CallToActionViewModel.CohortsCount, 0);
-        }
-
-        [Test]
-        public async Task ThenNumberOfDraftApprenticeshipeGreaterThanOneDoNotGetDraftApprenticeshipsResponse()
-        {
-            //Arrange           
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetCohorts.GetCohortsRequest>()))
-           .ReturnsAsync(new Queries.GetCohorts.GetCohortsResponse
-           {
-               CohortsResponse = GetCohortsResponseMoreThanOneDraftApprenticeship,
-               HashedCohortReference = "4_Encoded",
-               SingleCohort = GetCohortsResponseMoreThanOneDraftApprenticeship.Cohorts.First()
-           });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipRequest>()))
-           .ReturnsAsync(new Queries.GetSingleDraftApprenticeship.GetSingleDraftApprenticeshipResponse
-           {
-               DraftApprenticeshipsResponse = DraftApprenticeshipsResponse,
-               HashedDraftApprenticeshipId = "1_Encoded"
-           });
-
-            //Act
-            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();
-            Assert.AreEqual(result.Data.CallToActionViewModel.CohortsCount, 1);
-            Assert.IsFalse(result.Data.CallToActionViewModel.HasSingleDraftApprenticeship);
-            Assert.AreEqual("4_Encoded", result.Data.CallToActionViewModel.HashedCohortReference);
-            Assert.AreEqual(GetCohortsResponseMoreThanOneDraftApprenticeship.Cohorts.First().NumberOfDraftApprentices, result.Data.CallToActionViewModel.NumberOfDraftApprentices);
-        }
-
+        
 
         private GetApprenticeshipsResponse CreateApprenticeshipResponse()
         {

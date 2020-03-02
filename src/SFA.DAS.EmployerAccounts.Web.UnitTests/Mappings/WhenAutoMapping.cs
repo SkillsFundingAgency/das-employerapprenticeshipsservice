@@ -20,6 +20,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Mappings
                 c.AddProfile<TransferMappings>();
                 c.AddProfile<OrganisationMappings>();
                 c.AddProfile<AgreementMappings>();
+                c.AddProfile<CohortV2Mapping>();                
             });
 
             config.AssertConfigurationIsValid();

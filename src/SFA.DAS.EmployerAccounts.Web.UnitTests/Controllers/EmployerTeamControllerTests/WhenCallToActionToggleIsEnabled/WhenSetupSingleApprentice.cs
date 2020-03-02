@@ -6,6 +6,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -57,10 +58,27 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 CallToActionViewModel = new CallToActionViewModel
                 {
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                    CohortsCount = 1,
-                    ApprenticeshipsCount = 0,
-                    NumberOfDraftApprentices = 1,
-                    CohortStatus = Web.Extensions.CohortStatus.Draft
+                    CohortsV2ViewModel = new CohortsV2ViewModel
+                    {
+                        CohortV2WebViewModel = new List<CohortV2ViewModel>
+                        {
+                            new CohortV2ViewModel
+                            {
+                                CohortsCount = 1,
+                                NumberOfDraftApprentices = 1,
+                                CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.Draft,
+                                Apprenticeships = new List<ApprenticeshipViewModel>()
+                                {
+                                    new ApprenticeshipViewModel
+                                    {
+                                        ApprenticeshipStatus = ApprenticeshipStatus.Draft
+                                    }
+                                }
+
+                            }
+                        }
+                    }                   
+                    
                 }
             };
 

@@ -249,6 +249,7 @@
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementInfoConverter.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
+    <Compile Include="Mappings\CohortV2Mapping.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\OrganisationMappings.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
@@ -276,6 +277,7 @@
     <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
     <Compile Include="ViewModels\CallToActionViewModel.cs" />
+    <Compile Include="ViewModels\CohortV2ViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />

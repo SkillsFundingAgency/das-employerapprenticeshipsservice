@@ -65,6 +65,7 @@
     <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
     <PackageReference Include="Z.EntityFramework.Plus.QueryFuture.EF6" Version="1.7.19" />
   </ItemGroup>

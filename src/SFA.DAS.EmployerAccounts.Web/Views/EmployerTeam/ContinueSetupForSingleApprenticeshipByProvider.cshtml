@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.AccountDashboardViewModel
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.CallToActionViewModel
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large" id="call-to-action-your-apprentice-status">
@@ -13,7 +13,7 @@
                 Course
             </th>
             <td id="course-name">
-                @(Model?.CallToActionViewModel?.Reservations.FirstOrDefault()?.Course?.CourseDescription)
+                @(Model?.Reservations.FirstOrDefault()?.Course?.CourseDescription)
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 Training Provider
             </th>
             <td id="provider-name">
-                @(Model?.CallToActionViewModel.ProviderName)
+                @(Model?.CohortsV2ViewModel.CohortV2WebViewModel?.First().Apprenticeships?.First().TrainingProvider?.Name)
             </td>
         </tr>
         <tr>
@@ -35,7 +35,7 @@
     </table>
     <p>
 
-        <a  href="@Url.EmployerCommitmentsV2Action($"{Model.HashedAccountId}/{Model.CallToActionViewModel.ApprovedOrRejectApprenticeDetails}")"  role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.CohortsV2ViewModel.CohortV2WebViewModel?.First().ApprovedOrRejectApprenticeDetails}")" role="button" draggable="false" class="button">
             Add more details
         </a>
     </p>

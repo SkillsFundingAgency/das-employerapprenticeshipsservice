@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;
 
-            return Action(baseUrl, path);
+            return CommitmentAction(helper, baseUrl, path);
         }
 
         public static string ReservationsAction(this UrlHelper helper, string path)
@@ -100,6 +100,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var accountPath = hashedAccountId == null ? $"accounts/{path}" : $"accounts/{hashedAccountId}/{path}";
 
             return Action(baseUrl, accountPath);
+        }
+
+        private static string CommitmentAction(UrlHelper helper, string baseUrl, string path)
+        {
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var commitmentPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
+           
+            return Action(baseUrl, commitmentPath);
         }
 
         private static string Action(string baseUrl, string path)
