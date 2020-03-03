@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
         private Mock<IHashingService> _hashingService;
         private Mock<ILog> _logger;
         private long _accountId;
-        public string hashedAccountId;
+        public string hashedAccountId;        
 
         [SetUp]
         public void Arrange()
@@ -36,7 +36,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
             _logger = new Mock<ILog>();
 
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
-            _commitmentV2Service.Setup(m => m.GetCohortsV2(_accountId))
+            _commitmentV2Service.Setup(m => m.GetCohortsV2(_accountId, It.IsAny<CohortFilter>() ))
                 .ReturnsAsync(new List<CohortV2>() { 
                     new CohortV2 
                     {
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
             await RequestHandler.Handle(Query);
 
             //Assert
-            _commitmentV2Service.Verify(x => x.GetCohortsV2(_accountId), Times.Once);
+            _commitmentV2Service.Verify(x => x.GetCohortsV2(_accountId, It.IsAny<CohortFilter>()), Times.Once);
         }
 
         public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()

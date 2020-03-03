@@ -38,76 +38,44 @@ namespace SFA.DAS.EmployerAccounts.Services
             }
             return cohorts;
         }
+       
 
-
-        public async Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId)
-        {            
-            var cohortsResponse = new List<CohortV2>()  {  new CohortV2()  { Apprenticeships = new List<Apprenticeship> { } } };            
+        public async  Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId, CohortFilter cohortFilter)
+        {
+            if (cohortFilter.Take != 1) { throw new System.Exception("Not Supported"); }
+            var cohortsResponse = new List<CohortV2>() { new CohortV2() { Apprenticeships = new List<Apprenticeship> { } } };
             var apprenticeship = await _commitmentsApiClient.GetApprenticeships(new CommitmentsV2.Api.Types.Requests.GetApprenticeshipsRequest() { AccountId = accountId });
-            if (apprenticeship?.TotalApprenticeshipsFound > 0)
-            {                
-                cohortsResponse.First().Apprenticeships = new List<Apprenticeship>()
-                {
-                    new Apprenticeship()
-                    {
-                        CourseName = apprenticeship.Apprenticeships.First().CourseName,
-                        CourseStartDate = apprenticeship.Apprenticeships.First().StartDate,
-                        CourseEndDate = apprenticeship.Apprenticeships.First().EndDate,
-                        FirstName = apprenticeship.Apprenticeships.First().FirstName,
-                        LastName = apprenticeship.Apprenticeships.First().LastName,
-                        ApprenticeshipStatus = Models.Commitments.ApprenticeshipStatus.Approved,
-                        TrainingProvider = new TrainingProvider
-                        {
-                            Name = apprenticeship.Apprenticeships.First().ProviderName
-                        }
-                    }
-                };
+            if (apprenticeship?.TotalApprenticeshipsFound >= cohortFilter.Take)
+            {
+                cohortsResponse.First().Apprenticeships = _mapper.Map<ICollection<Apprenticeship>>(apprenticeship.Apprenticeships);
+
+                return cohortsResponse;
             }
             else
             {
-                var cohorts = await _commitmentsApiClient.GetCohorts(new CommitmentsV2.Api.Types.Requests.GetCohortsRequest { AccountId = accountId });
-                if (cohorts == null) { return new List<CohortV2>() { new CohortV2 { Apprenticeships = new List<Apprenticeship>() } }; };
+                var cohortSummary = await _commitmentsApiClient.GetCohorts(new CommitmentsV2.Api.Types.Requests.GetCohortsRequest { AccountId = accountId });
 
-                if (cohorts.Cohorts != null && cohorts.Cohorts.Count() == 1)
+                if (cohortSummary != null && cohortSummary.Cohorts != null && cohortSummary.Cohorts.Any())
                 {
-                    var singleCohort = cohorts.Cohorts.First();
-                    if (singleCohort.NumberOfDraftApprentices == 1)
-                    {
-                        cohortsResponse = new List<CohortV2>()
+                    var mappedCohorts = _mapper.Map<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>(cohortSummary.Cohorts);
+
+                    if (mappedCohorts.Count() <= cohortFilter.Take)
+                    {                        
+                        foreach (var cohort in mappedCohorts)
                         {
-                            new CohortV2()
+                            if (cohort.NumberOfDraftApprentices == 1)
                             {
-                                CohortId = singleCohort.CohortId,
-                                CohortsCount = cohorts.Cohorts.Count(),
-                                NumberOfDraftApprentices = singleCohort.NumberOfDraftApprentices,
-                                CohortStatus = GetStatus(singleCohort)
+                                var draftApprenticeshipsResponse = await _commitmentsApiClient.GetDraftApprenticeships(cohort.CohortId);
+                                cohortsResponse.First().CohortId = cohort.CohortId;
+                                cohortsResponse.First().CohortStatus = cohort.CohortStatus;
+                                cohortsResponse.First().NumberOfDraftApprentices = cohort.NumberOfDraftApprentices;
+                                cohortsResponse.First().Apprenticeships = _mapper.Map<IEnumerable<DraftApprenticeshipDto>, List<Apprenticeship>>(draftApprenticeshipsResponse.DraftApprenticeships);                                                     
                             }
-                        };
-
-                        var draftApprenticeshipsResponse = await _commitmentsApiClient.GetDraftApprenticeships(singleCohort.CohortId);
-                        if (draftApprenticeshipsResponse == null) { return new List<CohortV2>() { new CohortV2 { Apprenticeships = new List<Apprenticeship>() } }; };
-                        var singleDraftApprentice = draftApprenticeshipsResponse?.DraftApprenticeships?.First();                        
-
-                        cohortsResponse.First().Apprenticeships = new List<Apprenticeship>()
-                        {
-                            new Apprenticeship()
-                            {
-                                FirstName = singleDraftApprentice.FirstName,
-                                LastName = singleDraftApprentice.LastName,
-                                CourseName = singleDraftApprentice.CourseName,
-                                CourseStartDate = singleDraftApprentice.StartDate,
-                                CourseEndDate = singleDraftApprentice.EndDate,
-                                ApprenticeshipStatus = Models.Commitments.ApprenticeshipStatus.Draft,
-                                TrainingProvider = new TrainingProvider()
-                                {
-                                    Id = singleCohort.ProviderId,
-                                    Name = singleCohort.ProviderName
-                                }
-                            },
-                        };
+                        }
                     }
                 }
             }
+
             return cohortsResponse;
         }
 
@@ -135,5 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             
             return draftApprenticeshipsResponse;
         }
+
+     
     }
 }

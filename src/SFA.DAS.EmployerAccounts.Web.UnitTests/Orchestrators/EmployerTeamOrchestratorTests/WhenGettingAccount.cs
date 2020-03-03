@@ -163,9 +163,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var Cohort = new CohortV2()
             {
                 CohortId = 1,
-                CohortsCount = 1,
-                HashedCohortReference = "4_Encoded",
-                HashedDraftApprenticeshipId = "1_Encoded",
+                //CohortsCount = 1,
+                //HashedCohortReference = "4_Encoded",
+                //HashedDraftApprenticeshipId = "1_Encoded",
                 CohortStatus = EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
                 NumberOfDraftApprentices = 1,
                 Apprenticeships = new List<Apprenticeship>
@@ -353,9 +353,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var Cohort = new CohortV2()
             {
                 CohortId = 1,
-                CohortsCount = 1,
-                HashedCohortReference = "4_Encoded",
-                HashedDraftApprenticeshipId = "1_Encoded",
+               // CohortsCount = 1,
+                //HashedCohortReference = "4_Encoded",
+                //HashedDraftApprenticeshipId = "1_Encoded",
                 CohortStatus = EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
                 NumberOfDraftApprentices = 1,                
                 Apprenticeships = new List<Apprenticeship>
@@ -388,9 +388,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var expectedCohort = new CohortV2ViewModel()
             {
                 CohortId = 1,
-                CohortsCount = 1,
+                //CohortsCount = 1,
                 CohortStatus = EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
-                HashedCohortReference = "4_Encoded",
+                //HashedCohortReference = "4_Encoded",
                 HashedDraftApprenticeshipId = "1_Encoded",
                 NumberOfDraftApprentices = 1,
                 Apprenticeships = new List<ApprenticeshipViewModel>
@@ -421,7 +421,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             var expected = DraftApprenticeshipsResponse.DraftApprenticeships.First();            
-            Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().CohortsCount.Equals(1));
+            //Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().CohortsCount.Equals(1));
             Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().CohortStatus.Equals(SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider));
             Assert.IsTrue(actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().HasSingleDraftApprenticeship);            
             Assert.AreEqual(expected.CourseName, actual.Data.CallToActionViewModel.CohortsV2ViewModel.CohortV2WebViewModel?.First().Apprenticeships.First().CourseName);

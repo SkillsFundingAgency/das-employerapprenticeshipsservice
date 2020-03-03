@@ -45,9 +45,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountCohort
 
             _logger.Info($"Getting Cohorts for account id {message.HashedAccountId}");
 
-            var cohortsResponse = await _commitmentV2Service.GetCohortsV2(accountId);
+            var cohortsResponse = await _commitmentV2Service.GetCohortsV2(accountId, new CohortFilter { Take = 1 });
             var hashedCohortReference = _encodingService.Encode(cohortsResponse.First().CohortId, EncodingType.CohortReference);
             var hashedDraftApprenticeshipId = _encodingService.Encode(cohortsResponse.First().Apprenticeships.First().Id, EncodingType.ApprenticeshipId);
+            
+            _logger.Info($"cohortResponse :: {cohortsResponse}, HashedCohortReference :: {hashedCohortReference}  hashedDraftApprenticeshipId :: {hashedDraftApprenticeshipId}");
 
             return new GetAccountCohortResponse
             {

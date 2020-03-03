@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                         {
                             new CohortV2ViewModel
                             {
-                                CohortsCount = 1,
+                                //CohortsCount = 1,
                                 NumberOfDraftApprentices = 1,
                                 CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.Draft,
                                 Apprenticeships = new List<ApprenticeshipViewModel>()

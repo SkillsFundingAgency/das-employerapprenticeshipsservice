@@ -10,10 +10,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
         {
             CreateMap<CohortSummary, CohortV2>()
                 .ForMember(target => target.CohortId, opt => opt.MapFrom(src => src.CohortId))
-                .ForMember(target => target.CohortsCount, opt => opt.Ignore())
                 .ForMember(target => target.NumberOfDraftApprentices, opt => opt.MapFrom(src => src.NumberOfDraftApprentices))
-                .ForMember(target => target.HashedCohortReference, opt => opt.Ignore())
-                .ForMember(target => target.HashedDraftApprenticeshipId, opt => opt.Ignore())
                 .ForMember(target => target.Apprenticeships, opt => opt.Ignore())
                 .ForMember(target => target.CohortStatus, opt => opt.MapFrom(src => GetStatus(src)));
         }

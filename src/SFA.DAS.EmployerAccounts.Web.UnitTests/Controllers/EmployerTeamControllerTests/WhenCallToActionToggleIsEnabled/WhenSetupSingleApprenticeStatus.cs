@@ -103,7 +103,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                         {
                             new CohortV2ViewModel
                             {
-                                CohortsCount = 1,
+                                //CohortsCount = 1,
                                 NumberOfDraftApprentices = 1,
                                 CohortStatus = CohortStatus.WithTrainingProvider,
                                 Apprenticeships = new List<ApprenticeshipViewModel>()
@@ -145,9 +145,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                         {
                             new CohortV2ViewModel
                             {
-                                CohortsCount = 1,
+                                //CohortsCount = 1,
                                 NumberOfDraftApprentices = 1,
-                                CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.Review,
+                                CohortStatus = CohortStatus.Review,
                                 Apprenticeships = new List<ApprenticeshipViewModel>()
                                 {
                                     new ApprenticeshipViewModel

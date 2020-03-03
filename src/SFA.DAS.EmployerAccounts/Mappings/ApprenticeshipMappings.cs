@@ -3,7 +3,6 @@ using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
-using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.Mappings
 {
