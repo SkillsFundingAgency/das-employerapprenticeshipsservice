@@ -1,5 +1,4 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.CallToActionViewModel
 
 <section class="dashboard-section">
@@ -20,8 +19,8 @@
             <th scope="row">
                 Training Provider
             </th>
-            <td id="provider-name">
-                @(Model?.CohortsV2ViewModel.CohortV2WebViewModel?.First().Apprenticeships?.First().TrainingProvider?.Name)
+            <td id="provider-name">                
+                @(Model?.Cohorts.Single().Apprenticeships?.First().TrainingProvider?.Name)
             </td>
         </tr>
         <tr>
@@ -35,7 +34,7 @@
     </table>
     <p>
 
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.CohortsV2ViewModel.CohortV2WebViewModel?.First().ApprovedOrRejectApprenticeDetails}")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.Cohorts.Single().ApprovedOrRejectApprenticeDetails}")" role="button" draggable="false" class="button">
             Add more details
         </a>
     </p>

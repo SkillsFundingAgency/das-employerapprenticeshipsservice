@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountCohort
 {
-    public class GetAccountCohortRequestValidator : IValidator<GetAccountCohortRequest>
+    public class GetSingleCohortRequestValidator : IValidator<GetSingleCohortRequest>
     {
-        public ValidationResult Validate(GetAccountCohortRequest item)
+        public ValidationResult Validate(GetSingleCohortRequest item)
         {
             var validationResult = new ValidationResult();
 
@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountCohort
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(GetAccountCohortRequest item)
+        public Task<ValidationResult> ValidateAsync(GetSingleCohortRequest item)
         {
             throw new NotImplementedException();
         }

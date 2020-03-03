@@ -39,16 +39,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetCohorts
 
             _logger.Info($"Getting Cohorts for account id {message.AccountId}");
 
-            var cohortsResponse = await _commitmentV2Service.GetCohorts(message.AccountId);
-            var hashedCohortReference = _encodingService.Encode(cohortsResponse.Cohorts.First().CohortId, EncodingType.CohortReference);
-            var singleCohort = cohortsResponse.Cohorts.First();
+            var cohortsResponse = await _commitmentV2Service.GetCohortsV2(message.AccountId);
+            var hashedCohortReference = _encodingService.Encode(cohortsResponse.Single().Id, EncodingType.CohortReference);
+            var singleCohort = cohortsResponse.Single();
 
-            return new GetCohortsResponse
-            {
-                CohortsResponse = cohortsResponse,
-                HashedCohortReference = hashedCohortReference,
-                SingleCohort = singleCohort                
-            };
+            return new GetCohortsResponse();
+         
         }
     }
 }

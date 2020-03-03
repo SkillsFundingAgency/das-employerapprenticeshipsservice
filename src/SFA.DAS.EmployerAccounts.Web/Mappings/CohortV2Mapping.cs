@@ -10,14 +10,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
         public CohortV2Mapping()
         {
             CreateMap<CohortV2, CohortV2ViewModel>()
+               .ForMember(dest => dest.CohortId , opt => opt.MapFrom(src => src.Id))
                .ForMember(dest => dest.HashedCohortReference, opt => opt.Ignore())
                .ForMember(dest => dest.HashedDraftApprenticeshipId, opt => opt.Ignore());               
 
-            CreateMap<GetAccountCohortResponse, CohortV2ViewModel>()
+            CreateMap<GetSingleCohortResponse, CohortV2ViewModel>()                
                 .ForMember(dest => dest.CohortId, opt => opt.Ignore())
                 .ForMember(dest => dest.NumberOfDraftApprentices, opt => opt.Ignore())
                 .ForMember(dest => dest.CohortStatus, opt => opt.Ignore())
-                .ForMember(dest => dest.Apprenticeships, opt => opt.Ignore());
+                .ForMember(dest => dest.HashedCohortReference, opt => opt.Ignore())               
+                .ForMember(dest => dest.Apprenticeships, opt => opt.Ignore())
+                .ForMember(dest => dest.HashedDraftApprenticeshipId, opt => opt.Ignore());
 
             CreateMap<Apprenticeship, ApprenticeshipViewModel>()
                 .ForMember(dest => dest.ApprenticeshipFullName, opt => opt.MapFrom(src => string.Format("{0} {1}",

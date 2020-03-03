@@ -7,13 +7,12 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface ICommitmentV2Service
     {
-        Task<GetApprenticeshipsResponse> GetApprenticeship(long? accountId);
+        Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId);        
 
-        Task<GetCohortsResponse> GetCohorts(long? accountId);
-        
-        Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId, CohortFilter cohortFilter = null);
+        Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(long cohortId);
 
-        Task<GetDraftApprenticeshipsResponse> GetDraftApprenticeships(long cohortId);
+        Task<IEnumerable<Apprenticeship>> GetApprenticeships(long accountId);
+
     }
 
     public class CohortFilter
@@ -22,3 +21,5 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
         
     }
 }
+
+

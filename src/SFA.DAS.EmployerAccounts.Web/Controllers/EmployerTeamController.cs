@@ -360,7 +360,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult YourSingleApprovedApprentice(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            return PartialView(model.CallToActionViewModel.Apprenticeships.First());
         }
 
         [ChildActionOnly]

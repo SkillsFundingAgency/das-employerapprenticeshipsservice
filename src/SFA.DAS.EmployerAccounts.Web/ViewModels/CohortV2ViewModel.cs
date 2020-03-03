@@ -4,13 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
-{
-    
-    public class CohortsV2ViewModel
-    {
-        public IEnumerable<CohortV2ViewModel> CohortV2WebViewModel { get; set; }
-      
-    }
+{   
+ 
 
     public class CohortV2ViewModel
     {  
@@ -20,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string HashedDraftApprenticeshipId { get; set; }
         public CohortStatus CohortStatus { get; set; }
         public virtual ICollection<ApprenticeshipViewModel> Apprenticeships { get; set; } = new List<ApprenticeshipViewModel>();
-        public bool HasSingleDraftApprenticeship =>  NumberOfDraftApprentices == 1 &&  Apprenticeships.First().ApprenticeshipStatus == ApprenticeshipStatus.Draft ; //CohortsCount == 1 && NumberOfDraftApprentices == 1 && ApprenticeshipsCount == 0;        
+        public bool HasSingleDraftApprenticeship =>  NumberOfDraftApprentices == 1 &&  Apprenticeships.Single().ApprenticeshipStatus == ApprenticeshipStatus.Draft ; //CohortsCount == 1 && NumberOfDraftApprentices == 1 && ApprenticeshipsCount == 0;        
         public bool HasApprovedApprenticeship => Apprenticeships.First().ApprenticeshipStatus == ApprenticeshipStatus.Approved;
         public string ViewOrEditApprenticeDetails => $"unapproved/{HashedCohortReference}/apprentices/{HashedDraftApprenticeshipId}";
         public string ApprovedOrRejectApprenticeDetails => $"unapproved/{HashedCohortReference}";
@@ -38,6 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public DateTime? CourseEndDate { get; set; }
         public ApprenticeshipStatus ApprenticeshipStatus { get; set; }
         public TrainingProviderViewModel TrainingProvider { get; set; }
+        public string ViewApprenticeDetails => $"apprentices"; //TODO : View Live ApprenticeLink
     }
 
 

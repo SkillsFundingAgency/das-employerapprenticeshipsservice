@@ -5,19 +5,19 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
 {
     public class WhenIValidateTheRequest
     {
-        private GetAccountCohortRequestValidator _validator;
+        private GetSingleCohortRequestValidator _validator;
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new GetAccountCohortRequestValidator();
+            _validator = new GetSingleCohortRequestValidator();
         }
 
         [Test]
         public void ThenShouldReturnValidIfRequestIsValid()
         {
             //Act
-            var result = _validator.Validate(new GetAccountCohortRequest { HashedAccountId = "Abc123" });
+            var result = _validator.Validate(new GetSingleCohortRequest { HashedAccountId = "Abc123" });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
         public void ThenShouldReturnInValidIfRequestIsNotValid()
         {
             //Act
-            var result = _validator.Validate(new GetAccountCohortRequest { HashedAccountId = string.Empty });
+            var result = _validator.Validate(new GetSingleCohortRequest { HashedAccountId = string.Empty });
 
             //Assert
             Assert.IsFalse(result.IsValid());

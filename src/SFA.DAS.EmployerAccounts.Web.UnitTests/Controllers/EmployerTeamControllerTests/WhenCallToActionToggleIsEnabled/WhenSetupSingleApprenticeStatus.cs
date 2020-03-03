@@ -57,23 +57,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },                    
-                    CohortsV2ViewModel = new CohortsV2ViewModel
-                    {
-                        CohortV2WebViewModel = new List<CohortV2ViewModel>
-                        {
-                            new CohortV2ViewModel
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                    Apprenticeships = new List<ApprenticeshipViewModel>()
                             {
-                                Apprenticeships = new List<ApprenticeshipViewModel>()
+                                new ApprenticeshipViewModel()
                                 {
-                                    new ApprenticeshipViewModel()
-                                    {
-                                        ApprenticeshipStatus =ApprenticeshipStatus.Approved
-                                    }
+                                    ApprenticeshipStatus =ApprenticeshipStatus.Approved
                                 }
                             }
-                        }
-                    }
                 }
             };
 
@@ -97,25 +88,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 CallToActionViewModel = new CallToActionViewModel
                 {
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                    CohortsV2ViewModel = new CohortsV2ViewModel
+               
+                    Cohorts = new List<CohortV2ViewModel>
                     {
-                        CohortV2WebViewModel = new List<CohortV2ViewModel>
+                        new CohortV2ViewModel
                         {
-                            new CohortV2ViewModel
+                            //CohortsCount = 1,
+                            NumberOfDraftApprentices = 1,
+                            CohortStatus = CohortStatus.WithTrainingProvider,
+                            Apprenticeships = new List<ApprenticeshipViewModel>()
                             {
-                                //CohortsCount = 1,
-                                NumberOfDraftApprentices = 1,
-                                CohortStatus = CohortStatus.WithTrainingProvider,
-                                Apprenticeships = new List<ApprenticeshipViewModel>()
+                                new ApprenticeshipViewModel
                                 {
-                                    new ApprenticeshipViewModel
-                                    {
-                                        ApprenticeshipStatus = ApprenticeshipStatus.Draft
-                                    }
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
                                 }
                             }
                         }
-                    }                   
+                    }                                       
                 }
             };
 
@@ -138,26 +127,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,                
                 CallToActionViewModel = new CallToActionViewModel
                 {                    
-                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                    CohortsV2ViewModel = new CohortsV2ViewModel
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },              
+                    Cohorts = new List<CohortV2ViewModel>
                     {
-                        CohortV2WebViewModel = new List<CohortV2ViewModel>
+                        new CohortV2ViewModel
                         {
-                            new CohortV2ViewModel
+                            //CohortsCount = 1,
+                            NumberOfDraftApprentices = 1,
+                            CohortStatus = CohortStatus.Review,
+                            Apprenticeships = new List<ApprenticeshipViewModel>()
                             {
-                                //CohortsCount = 1,
-                                NumberOfDraftApprentices = 1,
-                                CohortStatus = CohortStatus.Review,
-                                Apprenticeships = new List<ApprenticeshipViewModel>()
+                                new ApprenticeshipViewModel
                                 {
-                                    new ApprenticeshipViewModel
-                                    {
-                                        ApprenticeshipStatus = ApprenticeshipStatus.Draft
-                                    }
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
                                 }
                             }
                         }
-                    }                  
+                    }                                      
                 }
             };
 

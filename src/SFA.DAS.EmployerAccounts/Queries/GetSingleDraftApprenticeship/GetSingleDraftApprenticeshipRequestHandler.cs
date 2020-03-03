@@ -41,14 +41,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleDraftApprenticeship
             _logger.Info($"Getting Draft Apprentices for cohort id {message.CohortId}");
 
 
-            var draftApprenticeshipsResponse = await _commitmentV2Service.GetDraftApprenticeships(message.CohortId);            
-            var hashedDraftApprenticeshipId =  _encodingService.Encode(draftApprenticeshipsResponse.DraftApprenticeships.First().Id, EncodingType.ApprenticeshipId);
+            var draftApprenticeshipsResponse = await _commitmentV2Service.GetDraftApprenticeships(message.CohortId);                      
 
             return new GetSingleDraftApprenticeshipResponse
             {
-                DraftApprenticeshipsResponse = draftApprenticeshipsResponse,
-                HashedDraftApprenticeshipId = hashedDraftApprenticeshipId
-
+                
             };
         }
     }

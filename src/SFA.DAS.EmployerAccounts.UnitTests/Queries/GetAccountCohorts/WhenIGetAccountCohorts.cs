@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
 {
-    public class WhenIGetAccountCohorts : QueryBaseTest<GetAccountCohortHandler, GetAccountCohortRequest, GetAccountCohortResponse>
+    public class WhenIGetAccountCohorts : QueryBaseTest<GetSingleCohortHandler, GetSingleCohortRequest, GetSingleCohortResponse>
     {
-        public override GetAccountCohortRequest Query { get; set; }
-        public override GetAccountCohortHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetAccountCohortRequest>> RequestValidator { get; set; }
+        public override GetSingleCohortRequest Query { get; set; }
+        public override GetSingleCohortHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetSingleCohortRequest>> RequestValidator { get; set; }
         private Mock<ICommitmentV2Service> _commitmentV2Service;
         private Mock<IEncodingService> _encodingService;
         private Mock<IHashingService> _hashingService;
@@ -36,11 +36,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
             _logger = new Mock<ILog>();
 
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
-            _commitmentV2Service.Setup(m => m.GetCohortsV2(_accountId, It.IsAny<CohortFilter>() ))
+            _commitmentV2Service.Setup(m => m.GetCohortsV2(_accountId))
                 .ReturnsAsync(new List<CohortV2>() { 
                     new CohortV2 
                     {
-                        CohortId = 1,
+                        Id = 1,
                         Apprenticeships = new List<Apprenticeship>()
                         {
                             new Apprenticeship {Id = 2 }
@@ -55,9 +55,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(hashedAccountId)).Returns(_accountId);
 
-            RequestHandler = new GetAccountCohortHandler(RequestValidator.Object, _logger.Object, _commitmentV2Service.Object, _encodingService.Object, _hashingService.Object);
+            RequestHandler = new GetSingleCohortHandler(RequestValidator.Object, _logger.Object, _commitmentV2Service.Object, _hashingService.Object);
 
-            Query = new GetAccountCohortRequest
+            Query = new GetSingleCohortRequest
             {
                 HashedAccountId = hashedAccountId
             };
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
             await RequestHandler.Handle(Query);
 
             //Assert
-            _commitmentV2Service.Verify(x => x.GetCohortsV2(_accountId, It.IsAny<CohortFilter>()), Times.Once);
+            _commitmentV2Service.Verify(x => x.GetCohortsV2(_accountId), Times.Once);
         }
 
         public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()

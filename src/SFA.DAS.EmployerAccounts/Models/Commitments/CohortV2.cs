@@ -4,10 +4,11 @@ namespace SFA.DAS.EmployerAccounts.Models.Commitments
 {
     public class CohortV2
     {
-        public long CohortId { get; set; }
+        public long Id { get; set; }
+        public string HashedId { get; set; }
         public int? NumberOfDraftApprentices { get; set; }       
         public CohortStatus CohortStatus { get; set; }
-        public virtual ICollection<Apprenticeship> Apprenticeships { get; set; } = new List<Apprenticeship>();
+        public IEnumerable<Apprenticeship> Apprenticeships { get; set; }
     }
 
     public enum CohortStatus

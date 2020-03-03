@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.CohortV2ViewModel
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
 
 
 <section class="dashboard-section">
@@ -12,8 +12,8 @@
             <th scope="row" class="tw-35">
                 Name
             </th>
-            <td class="tw-65" id="apprentice-name">
-                @(Model?.Apprenticeships?.First().ApprenticeshipFullName)
+            <td class="tw-65" id="apprentice-name">                
+                @(Model?.ApprenticeshipFullName)
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 Training Provider
             </th>
             <td id="provider-name">
-                @(Model?.Apprenticeships?.First().TrainingProvider?.Name)
+                @(Model?.TrainingProvider?.Name)
             </td>
         </tr>
         <tr>
@@ -29,7 +29,7 @@
                 Course
             </th>
             <td id="course-name">
-                @(Model?.Apprenticeships?.First().CourseName)
+                @(Model?.CourseName)
             </td>
         </tr>
         <tr>
@@ -37,7 +37,7 @@
                 Start month
             </th>
             <td id="course-start-date">
-                @(Model?.Apprenticeships?.First().CourseStartDate.Value.ToString("MMMM yyyy"))
+                @(Model?.CourseStartDate.Value.ToString("MMMM yyyy"))
             </td>
         </tr>
         <tr>
@@ -45,12 +45,12 @@
                 Finish month
             </th>
             <td id="course-end-date">
-                @(Model?.Apprenticeships?.First().CourseEndDate.Value.ToString("MMMM yyyy"))
+                @(Model?.CourseEndDate.Value.ToString("MMMM yyyy"))
             </td>
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetails}")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewApprenticeDetails}")" role="button" draggable="false" class="button">
             View apprentice details
         </a>
     </p>

@@ -14,24 +14,19 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                .ForMember(target => target.CourseStartDate, opt => opt.MapFrom(src => src.StartDate))
                .ForMember(target => target.CourseEndDate, opt => opt.MapFrom(src => src.EndDate))
                .ForMember(target => target.ApprenticeshipStatus, opt => opt.MapFrom(src => Models.Commitments.ApprenticeshipStatus.Draft))
+               .ForMember(target => target.HashedId, opt => opt.Ignore())
                .ForMember(target => target.TrainingProvider, opt => opt.Ignore());
 
             CreateMap<ApprenticeshipDetailsResponse, Apprenticeship>()              
                .ForMember(target => target.CourseStartDate, opt => opt.MapFrom(src => src.StartDate))
                .ForMember(target => target.CourseEndDate, opt => opt.MapFrom(src => src.EndDate))
                .ForMember(target => target.ApprenticeshipStatus, opt => opt.MapFrom(src => Models.Commitments.ApprenticeshipStatus.Approved))
+               .ForMember(target => target.HashedId, opt => opt.Ignore())
                .ForMember(target => target.TrainingProvider, opt => opt.Ignore());
-        }
-    }
-
-    public class TrainingProviderMappings : Profile
-    {
-        public TrainingProviderMappings()
-        {   
 
             CreateMap<CohortSummary, TrainingProvider>()
-                .ForMember(target => target.Id, opt => opt.MapFrom(src => src.ProviderId))
-                .ForMember(target => target.Name, opt => opt.MapFrom(src => src.ProviderName));
+               .ForMember(target => target.Id, opt => opt.MapFrom(src => src.ProviderId))
+               .ForMember(target => target.Name, opt => opt.MapFrom(src => src.ProviderName));
         }
     }
 }

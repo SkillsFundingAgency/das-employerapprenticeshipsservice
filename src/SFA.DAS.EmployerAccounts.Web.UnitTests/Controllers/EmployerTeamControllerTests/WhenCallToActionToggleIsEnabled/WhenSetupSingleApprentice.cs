@@ -58,27 +58,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 CallToActionViewModel = new CallToActionViewModel
                 {
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                    CohortsV2ViewModel = new CohortsV2ViewModel
+                    Cohorts = new List<CohortV2ViewModel>
                     {
-                        CohortV2WebViewModel = new List<CohortV2ViewModel>
+                        new CohortV2ViewModel
                         {
-                            new CohortV2ViewModel
+                            CohortId = 1,
+                            NumberOfDraftApprentices = 1,
+                            CohortStatus =  CohortStatus.Draft,
+                            Apprenticeships = new List<ApprenticeshipViewModel>
                             {
-                                //CohortsCount = 1,
-                                NumberOfDraftApprentices = 1,
-                                CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.Draft,
-                                Apprenticeships = new List<ApprenticeshipViewModel>()
+                                new ApprenticeshipViewModel
                                 {
-                                    new ApprenticeshipViewModel
-                                    {
-                                        ApprenticeshipStatus = ApprenticeshipStatus.Draft
-                                    }
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
                                 }
-
                             }
                         }
-                    }                   
-                    
+                    }                    
                 }
             };
 

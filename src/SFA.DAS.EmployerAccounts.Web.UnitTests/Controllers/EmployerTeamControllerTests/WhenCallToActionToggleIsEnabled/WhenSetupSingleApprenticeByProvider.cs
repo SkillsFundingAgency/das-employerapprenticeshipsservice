@@ -57,25 +57,22 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
-                    CohortsV2ViewModel = new CohortsV2ViewModel
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },       
+                    Cohorts = new List<CohortV2ViewModel>
                     {
-                        CohortV2WebViewModel = new List<CohortV2ViewModel>
-                        {
-                            new CohortV2ViewModel
-                            {   
-                                NumberOfDraftApprentices = 0,
-                                CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
-                                Apprenticeships = new List<ApprenticeshipViewModel>()
+                        new CohortV2ViewModel
+                        {   
+                            NumberOfDraftApprentices = 0,
+                            CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
+                            Apprenticeships = new List<ApprenticeshipViewModel>()
+                            {
+                                new ApprenticeshipViewModel
                                 {
-                                    new ApprenticeshipViewModel
-                                    {
-                                        ApprenticeshipStatus = ApprenticeshipStatus.Draft
-                                    }
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
                                 }
                             }
                         }
-                    }
+                    }                    
                 }
             };
 
