@@ -16,7 +16,6 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
-using SFA.DAS.Encoding;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
@@ -26,7 +25,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         const string Email = "test@test.com";
 
         private Mock<IMediator> _mediator;
-        private Mock<IAccountApiClient> _accountApiClient;        
+        private Mock<IAccountApiClient> _accountApiClient;
+        private Mock<ICommitmentsApiClient> _commitmentsApiClient;
         private Mock<IMapper> _mapper;
 
         private EmployerTeamOrchestrator _orchestrator;
@@ -35,10 +35,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _accountApiClient = new Mock<IAccountApiClient>();            
+            _accountApiClient = new Mock<IAccountApiClient>();
+            _commitmentsApiClient = new Mock<ICommitmentsApiClient>();
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _commitmentsApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
             
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
                      .ReturnsAsync(new GetAccountTeamMembersResponse

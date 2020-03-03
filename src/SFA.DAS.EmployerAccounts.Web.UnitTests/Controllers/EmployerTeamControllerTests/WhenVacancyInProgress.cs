@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
-using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -21,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
-        private Mock<IPortalClient> mockPortalClient;
 
         [SetUp]
         public void Arrange()
@@ -31,7 +29,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            mockPortalClient = new Mock<IPortalClient>();
 
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
 
@@ -40,7 +37,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object,
                 mockAuthorizationService.Object);
         }
 

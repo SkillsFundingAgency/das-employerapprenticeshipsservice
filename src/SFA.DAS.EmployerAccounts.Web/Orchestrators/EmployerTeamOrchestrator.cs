@@ -33,7 +33,6 @@ using System.Threading.Tasks;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.CommitmentsV2.Api.Client;
-using SFA.DAS.Encoding;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 
@@ -44,19 +43,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;        
+        private readonly ICommitmentsApiClient _commitmentsApiClient;
         private readonly IMapper _mapper;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamOrchestrator(IMediator mediator, 
             ICurrentDateTime currentDateTime, 
-            IAccountApiClient accountApiClient,            
+            IAccountApiClient accountApiClient,
+            ICommitmentsApiClient commitmentsApiClient,
             IMapper mapper, 
             IAuthorizationService authorizationService)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
-            _accountApiClient = accountApiClient;           
+            _accountApiClient = accountApiClient;
+            _commitmentsApiClient = commitmentsApiClient;
             _mapper = mapper;
             _authorizationService = authorizationService;
         }

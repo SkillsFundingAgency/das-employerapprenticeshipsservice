@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Portal.Client;
-using SFA.DAS.EAS.Portal.Client.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -24,7 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
@@ -39,12 +36,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
             IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
-            _portalClient = portalClient;
             _authorizationService = authorizationService;
         }
 
@@ -549,13 +544,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }
-
-        private string ApplicationsDisplay(Vacancy vacancy)
-        {
-            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
-                ? "Advertised by employer"
-                : vacancy.NumberOfApplications.ToString();
         }
 
         [ChildActionOnly]
