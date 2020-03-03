@@ -7,6 +7,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public VacancyStatus Status { get; set; }
         public string ManageVacancyUrl { get; set; }
         public string ClosingDateText { get; set; }
+        public string ClosedDateText { get; set; }
         public int? NoOfNewApplications { get; set; }
     }
 }
