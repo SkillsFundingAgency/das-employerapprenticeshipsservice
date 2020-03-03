@@ -4679,7 +4679,8 @@ hr.dashboard-heading-separator {
   margin-top: 30px; }
 
 .das-panel--action {
-  background: #bfc1c3;
+  background: #dee0e2;
+  color: #000;
   margin-top: 20px; }
   .das-panel--action > p:last-child {
     margin-bottom: 0; }
@@ -4695,6 +4696,10 @@ hr.dashboard-heading-separator {
   margin-bottom: 0;
   font-size: 24px; }
   .das-panel--featured .das-panel__heading {
+    font-size: 24px;
+    font-size: 36px;
+    line-height: 1.2; }
+  .das-panel--action .das-panel__heading {
     font-size: 24px;
     font-size: 36px;
     line-height: 1.2; }

@@ -3,7 +3,6 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;

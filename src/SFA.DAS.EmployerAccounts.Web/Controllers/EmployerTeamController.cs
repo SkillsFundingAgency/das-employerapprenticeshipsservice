@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Portal.Client;
-using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -27,8 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}/teams")]
     public class EmployerTeamController : BaseController
     {
-        private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;        
-        private readonly IPortalClient _portalClient;
+        private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
@@ -42,13 +36,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthenticationService owinWrapper,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator,            
-            IPortalClient portalClient,
+            EmployerTeamOrchestrator employerTeamOrchestrator,
             IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
-            _employerTeamOrchestrator = employerTeamOrchestrator;            
-            _portalClient = portalClient;
+            _employerTeamOrchestrator = employerTeamOrchestrator;
             _authorizationService = authorizationService;
         }
 
@@ -547,13 +539,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }
-
-        private string ApplicationsDisplay(Vacancy vacancy)
-        {
-            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
-                ? "Advertised by employer"
-                : vacancy.NumberOfApplications.ToString();
         }
 
         [ChildActionOnly]
