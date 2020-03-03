@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public DateTime? CreatedDate { get; set; }
         public string Status { get; set; }
         public DateTime? ClosingDate { get; set; }
+        public DateTime? ClosedDate { get; set; }
         public int? Duration { get; set; }
         public string DurationUnit { get; set; }
         public string ApplicationMethod { get; set; }
