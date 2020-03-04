@@ -100,7 +100,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                             {
                                 new ApprenticeshipViewModel
                                 {
-                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft,
+                                    NumberOfDraftApprentices = 1
                                 }
                             }
                         }
@@ -139,7 +140,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                             {
                                 new ApprenticeshipViewModel
                                 {
-                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft,
+                                    NumberOfDraftApprentices = 1
                                 }
                             }
                         }

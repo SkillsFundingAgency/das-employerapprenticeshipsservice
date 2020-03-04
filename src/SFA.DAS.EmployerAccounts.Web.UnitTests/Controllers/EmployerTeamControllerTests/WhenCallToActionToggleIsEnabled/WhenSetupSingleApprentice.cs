@@ -61,15 +61,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                     Cohorts = new List<CohortViewModel>
                     {
                         new CohortViewModel
-                        {
-                            CohortId = 1,
+                        {                            
                             NumberOfDraftApprentices = 1,
                             CohortStatus =  CohortStatus.Draft,
                             Apprenticeships = new List<ApprenticeshipViewModel>
                             {
                                 new ApprenticeshipViewModel
                                 {
-                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft,
+                                    NumberOfDraftApprentices = 1
                                 }
                             }
                         }

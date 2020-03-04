@@ -27,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
             _hashingService = hashingService;
         }
 
-
         public async Task<GetSingleCohortResponse> Handle(GetSingleCohortRequest message)
         {
             var validationResult = _validator.Validate(message);
@@ -45,7 +44,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
             if (cohortsResponse.Count() != 1) return new GetSingleCohortResponse();
 
             var singleCohort = cohortsResponse.Single();
-
 
             if (singleCohort.NumberOfDraftApprentices > 0)
             {

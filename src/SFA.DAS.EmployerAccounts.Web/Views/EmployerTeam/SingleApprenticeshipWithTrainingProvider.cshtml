@@ -39,14 +39,14 @@
                 WITH TRAINING PROVIDER
             </td>
         </tr>
-        @if (Model.CourseEndDate.HasValue)
+        @if (String.IsNullOrEmpty(Model.CourseStartDateText))
         {
             <tr>
                 <th scope="row">
                     Start month
                 </th>
                 <td id="course-start-date">
-                    @(Model?.CourseStartDate.Value.ToString("MMMM yyyy"))                    
+                    @(Model?.CourseStartDateText)                    
                 </td>
             </tr>
             <tr>
@@ -54,7 +54,7 @@
                     Finish month
                 </th>
                 <td id="course-end-date">
-                    @(Model?.CourseEndDate.Value.ToString("MMMM yyyy"))                    
+                    @(Model?.CourseEndDateText)                    
                 </td>
             </tr>
         }

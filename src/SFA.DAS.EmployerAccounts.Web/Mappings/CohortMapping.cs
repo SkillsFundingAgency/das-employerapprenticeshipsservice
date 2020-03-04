@@ -10,28 +10,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
         public CohortMapping()
         {
             CreateMap<CohortV2, CohortViewModel>()
-               .ForMember(dest => dest.CohortId, opt => opt.MapFrom(src => src.Id))
-               .ForMember(dest => dest.HashedCohortReference, opt => opt.MapFrom(src => src.HashedId));
+               .ForMember(dest => dest.HashedCohortId, opt => opt.MapFrom(src => src.HashedId));
 
             CreateMap<GetSingleCohortResponse, CohortViewModel>()
-                .ForMember(dest => dest.CohortId, opt => opt.Ignore())
                 .ForMember(dest => dest.NumberOfDraftApprentices, opt => opt.Ignore())
                 .ForMember(dest => dest.CohortStatus, opt => opt.Ignore())
-                .ForMember(dest => dest.HashedCohortReference, opt => opt.Ignore())
-                .ForMember(dest => dest.Apprenticeships, opt => opt.Ignore());                
+                .ForMember(dest => dest.HashedCohortId, opt => opt.Ignore())
+                .ForMember(dest => dest.Apprenticeships, opt => opt.Ignore());
 
             CreateMap<Apprenticeship, ApprenticeshipViewModel>()
                 .ForMember(dest => dest.ApprenticeshipFullName, opt => opt.MapFrom(src => string.Format("{0} {1}",
-                                       src.FirstName, src.LastName)))                
+                                       src.FirstName, src.LastName)))
                 .ForMember(dest => dest.HashedApprenticeshipId, opt => opt.MapFrom(src => src.HashedId))
                 .ForMember(dest => dest.CohortId, opt => opt.MapFrom(src => src.Cohort.Id))
                 .ForMember(dest => dest.HashedCohortId, opt => opt.MapFrom(src => src.Cohort.HashedId))
-                .ForMember(dest => dest.FirstName, opt => opt.Ignore())
-                
-                .ForMember(dest => dest.LastName, opt => opt.Ignore());
-
+                .ForMember(dest => dest.NumberOfDraftApprentices, opt => opt.MapFrom(src => src.Cohort.NumberOfDraftApprentices))
+                .ForMember(dest => dest.CourseStartDateText, opt => opt.MapFrom(src => src.CourseStartDate.HasValue ? src.CourseStartDate.Value.ToString("dd MMMM yyyy") : ""))
+                .ForMember(dest => dest.CourseEndDateText, opt => opt.MapFrom(src => src.CourseEndDate.HasValue ? src.CourseEndDate.Value.ToString("dd MMMM yyyy") : ""));                                
+            
             CreateMap<TrainingProvider, TrainingProviderViewModel>();
-                
         }
     }
 }

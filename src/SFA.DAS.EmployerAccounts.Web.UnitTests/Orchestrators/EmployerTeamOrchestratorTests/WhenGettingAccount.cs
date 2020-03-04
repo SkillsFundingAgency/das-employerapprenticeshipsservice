@@ -342,7 +342,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var apprenticeships = new List<Apprenticeship>  { new Apprenticeship { FirstName = "FirstName" } };
             _mediator.Setup(m => m.SendAsync(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == HashedAccountId)))
                 .ReturnsAsync(new GetApprenticeshipsResponse  { Apprenticeships = apprenticeships });
-            var expectedApprenticeship = new List<ApprenticeshipViewModel>() {new ApprenticeshipViewModel {FirstName = "FirstName" }};
+            var expectedApprenticeship = new List<ApprenticeshipViewModel>() {new ApprenticeshipViewModel { ApprenticeshipFullName = "FullName" }};
             _mapper.Setup(m => m.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeships)).Returns(expectedApprenticeship);
             
             //Act
@@ -359,10 +359,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var Cohort = new CohortV2() { Id = 1, NumberOfDraftApprentices = 1,  Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" }  } };            
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { CohortV2 = Cohort });            
             var expectedCohort = new CohortViewModel()
-            {
-                CohortId = 1,
+            {                
                 NumberOfDraftApprentices = 1,
-                Apprenticeships = new List<ApprenticeshipViewModel> { new ApprenticeshipViewModel { FirstName = "FirstName" } }
+                Apprenticeships = new List<ApprenticeshipViewModel> { new ApprenticeshipViewModel { ApprenticeshipFullName = "FullName" } }
             };            
             _mapper.Setup(m => m.Map<CohortV2, CohortViewModel>(Cohort)).Returns(expectedCohort);
 
