@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using System.Linq;
 using SFA.DAS.HashingService;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountCohort
+namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
 {
     public class GetSingleCohortHandler : IAsyncRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
     {

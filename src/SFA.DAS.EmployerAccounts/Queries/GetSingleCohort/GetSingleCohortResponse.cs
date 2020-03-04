@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.Commitments;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountCohort
+namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
 {
     public class GetSingleCohortResponse
     {

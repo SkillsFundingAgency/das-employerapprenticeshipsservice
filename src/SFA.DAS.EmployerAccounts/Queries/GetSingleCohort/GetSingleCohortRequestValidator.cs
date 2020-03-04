@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountCohort
+namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
 {
     public class GetSingleCohortRequestValidator : IValidator<GetSingleCohortRequest>
     {

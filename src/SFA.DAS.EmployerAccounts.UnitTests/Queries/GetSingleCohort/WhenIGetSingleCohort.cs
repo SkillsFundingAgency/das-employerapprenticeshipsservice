@@ -1,20 +1,20 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountCohort;
+using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 {
-    public class WhenIGetAccountCohorts : QueryBaseTest<GetSingleCohortHandler, GetSingleCohortRequest, GetSingleCohortResponse>
+    public class WhenIGetSingleCohort : QueryBaseTest<GetSingleCohortHandler, GetSingleCohortRequest, GetSingleCohortResponse>
     {
         public override GetSingleCohortRequest Query { get; set; }
         public override GetSingleCohortHandler RequestHandler { get; set; }
@@ -24,6 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
         private Mock<IHashingService> _hashingService;
         private Mock<ILog> _logger;
         private long _accountId;
+        private long _cohortId;
         public string hashedAccountId;        
 
         [SetUp]
@@ -32,22 +33,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
             SetUp();
 
             _accountId = 123;
+            _cohortId = 1;
             hashedAccountId = "Abc123";
             _logger = new Mock<ILog>();
 
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
             _commitmentV2Service.Setup(m => m.GetCohortsV2(_accountId))
-                .ReturnsAsync(new List<CohortV2>() { 
-                    new CohortV2 
-                    {
-                        Id = 1,
-                        Apprenticeships = new List<Apprenticeship>()
-                        {
-                            new Apprenticeship {Id = 2 }
-                        }
-                    } 
-                
-                });
+                .ReturnsAsync(new List<CohortV2>() { new CohortV2 { Id = _cohortId, NumberOfDraftApprentices = 1 }});
+
+            _commitmentV2Service.Setup(m => m.GetDraftApprenticeships(1))
+                .ReturnsAsync(new List<Apprenticeship> { new Apprenticeship { Id = _cohortId, HashedId = "ApprenticeHashedId" } });
                 
             _encodingService = new Mock<IEncodingService>();
             _encodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
@@ -71,7 +66,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
             var response = await RequestHandler.Handle(Query);
 
             //Assert            
-            Assert.IsNotNull(response.CohortV2);            
+            Assert.IsNotNull(response.CohortV2);
+            Assert.IsTrue(response.CohortV2?.Apprenticeships.Count().Equals(1));
         }
 
 

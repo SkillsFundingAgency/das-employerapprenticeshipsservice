@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -23,8 +24,6 @@ namespace SFA.DAS.EmployerAccounts.Services
             _encodingService = encodingService;
         }
 
-
-
         public async Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(long cohortId)
         {
             var draftApprenticeshipsResponse = await _commitmentsApiClient.GetDraftApprenticeships(cohortId);
@@ -43,12 +42,9 @@ namespace SFA.DAS.EmployerAccounts.Services
                 });
         }
 
-
         public async Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId)
         {
-            var cohortSummary = await _commitmentsApiClient.GetCohorts(new CommitmentsV2.Api.Types.Requests.GetCohortsRequest { AccountId = accountId });
-
-            //return _mapper.Map<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>(cohortSummary.Cohorts);
+            var cohortSummary = await _commitmentsApiClient.GetCohorts(new CommitmentsV2.Api.Types.Requests.GetCohortsRequest { AccountId = accountId });          
 
             return _mapper.Map<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>(cohortSummary.Cohorts,
                 opt =>
@@ -61,15 +57,13 @@ namespace SFA.DAS.EmployerAccounts.Services
                             }
                         });
                 });
-
         }
 
         public async Task<IEnumerable<Apprenticeship>> GetApprenticeships(long accountId)
         {
-            var apprenticeship = await _commitmentsApiClient.GetApprenticeships
-                (new CommitmentsV2.Api.Types.Requests.GetApprenticeshipsRequest { AccountId = accountId });
-
-            return _mapper.Map<ICollection<Apprenticeship>>(apprenticeship.Apprenticeships); 
+            var apprenticeship = await _commitmentsApiClient.GetApprenticeships(new CommitmentsV2.Api.Types.Requests.GetApprenticeshipsRequest { AccountId = accountId });
+            
+            return _mapper.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, ICollection<Apprenticeship>>(apprenticeship.Apprenticeships);
         }
     }
 }

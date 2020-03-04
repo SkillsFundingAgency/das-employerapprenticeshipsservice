@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Models.Commitments
         public string HashedId { get; set; }
         public int? NumberOfDraftApprentices { get; set; }       
         public CohortStatus CohortStatus { get; set; }
-        public IEnumerable<Apprenticeship> Apprenticeships { get; set; }
+        public IEnumerable<Apprenticeship> Apprenticeships { get; set; }        
     }
 
     public enum CohortStatus

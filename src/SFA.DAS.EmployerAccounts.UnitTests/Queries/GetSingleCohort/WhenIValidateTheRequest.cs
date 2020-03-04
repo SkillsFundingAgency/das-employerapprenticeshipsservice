@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountCohort;
+using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountCohorts
+namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 {
     public class WhenIValidateTheRequest
     {

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountCohort;
+using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings
