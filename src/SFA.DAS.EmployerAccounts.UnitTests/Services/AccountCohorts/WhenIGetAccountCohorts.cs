@@ -102,6 +102,33 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
             Assert.IsTrue(result.Count().Equals(1));
         }
 
+        [Test]
+        public void ThenGetEncodedCohortId()
+        {
+            //Arrange
+            _mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_EncodedCohortId");
+
+            //Act
+            var result =  _sut.GetEncodedId(123, EncodingType.CohortReference);
+
+            //Assert
+            Assert.AreEqual(result, "123_EncodedCohortId");
+        }
+
+
+        [Test]
+        public void ThenGetEncodedDraftApprenticeshipId()
+        {
+            //Arrange
+            _mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_EncodedApprenticeshipId");
+
+            //Act
+            var result = _sut.GetEncodedId(456, EncodingType.ApprenticeshipId);
+
+            //Assert
+            Assert.AreEqual(result, "456_EncodedApprenticeshipId");
+        }
+
 
         private GetApprenticeshipsResponse CreateApprenticeshipResponse()
         {

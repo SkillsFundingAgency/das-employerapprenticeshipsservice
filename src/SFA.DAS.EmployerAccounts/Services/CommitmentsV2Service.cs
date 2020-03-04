@@ -33,14 +33,12 @@ namespace SFA.DAS.EmployerAccounts.Services
                 {
                     opt.AfterMap((src, dest) =>
                     {
-                        foreach (var apprenticeship in dest)
-                        {
-                            apprenticeship.HashedId = _encodingService.Encode(apprenticeship.Id, EncodingType.ApprenticeshipId);
-                        }
+                        GetEncodedDraftApprenticeShipIds(dest, EncodingType.ApprenticeshipId);
                     });
 
                 });
         }
+     
 
         public async Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId)
         {
@@ -48,22 +46,40 @@ namespace SFA.DAS.EmployerAccounts.Services
 
             return _mapper.Map<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>(cohortSummary.Cohorts,
                 opt =>
-                {
+                {   
                     opt.AfterMap((src, dest) =>
-                        {
-                            foreach (var cohort in dest)
-                            {
-                                cohort.HashedId = _encodingService.Encode(cohort.Id, EncodingType.CohortReference);
-                            }
-                        });
+                    {
+                        GetEncodedCohortIds(dest, EncodingType.CohortReference);
+                    });
                 });
-        }
+        }        
 
         public async Task<IEnumerable<Apprenticeship>> GetApprenticeships(long accountId)
         {
             var apprenticeship = await _commitmentsApiClient.GetApprenticeships(new CommitmentsV2.Api.Types.Requests.GetApprenticeshipsRequest { AccountId = accountId });
             
             return _mapper.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, ICollection<Apprenticeship>>(apprenticeship.Apprenticeships);
+        }
+
+        private void GetEncodedCohortIds(IEnumerable<CohortV2> dest, EncodingType encodingType)
+        {
+            foreach (var cohort in dest)
+            {
+                cohort.HashedId = GetEncodedId(cohort.Id, encodingType);
+            }
+        }
+
+        private void GetEncodedDraftApprenticeShipIds(List<Apprenticeship> dest, EncodingType encodingType)
+        {
+            foreach (var apprenticeship in dest)
+            {
+                apprenticeship.HashedId = GetEncodedId(apprenticeship.Id, encodingType);
+            }
+        }
+
+        public string GetEncodedId(long id, EncodingType encodingType)
+        {
+            return _encodingService.Encode(id, encodingType);
         }
     }
 }
