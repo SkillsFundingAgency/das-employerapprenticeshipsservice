@@ -358,13 +358,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Arrange 
             var Cohort = new CohortV2() { Id = 1, NumberOfDraftApprentices = 1,  Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" }  } };            
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { CohortV2 = Cohort });            
-            var expectedCohort = new CohortV2ViewModel()
+            var expectedCohort = new CohortViewModel()
             {
                 CohortId = 1,
                 NumberOfDraftApprentices = 1,
                 Apprenticeships = new List<ApprenticeshipViewModel> { new ApprenticeshipViewModel { FirstName = "FirstName" } }
             };            
-            _mapper.Setup(m => m.Map<CohortV2, CohortV2ViewModel>(Cohort)).Returns(expectedCohort);
+            _mapper.Setup(m => m.Map<CohortV2, CohortViewModel>(Cohort)).Returns(expectedCohort);
 
             //Act
             var result = await _orchestrator.GetAccount(HashedAccountId, UserId);

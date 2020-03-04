@@ -58,9 +58,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 CallToActionViewModel = new CallToActionViewModel
                 {
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },       
-                    Cohorts = new List<CohortV2ViewModel>
+                    Cohorts = new List<CohortViewModel>
                     {
-                        new CohortV2ViewModel
+                        new CohortViewModel
                         {   
                             NumberOfDraftApprentices = 0,
                             CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
@@ -81,7 +81,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("ContinueSetupForSingleApprenticeshipByProvider", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("SingleApprenticeshipContinueWithProvider", (result.Model as dynamic).ViewName);
         }
     }
 }

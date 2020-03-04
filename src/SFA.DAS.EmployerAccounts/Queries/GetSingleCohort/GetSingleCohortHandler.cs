@@ -49,12 +49,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
 
             if (singleCohort.NumberOfDraftApprentices > 0)
             {
-                singleCohort.Apprenticeships = await _commitmentV2Service.GetDraftApprenticeships(singleCohort.Id);                
+                singleCohort.Apprenticeships = await _commitmentV2Service.GetDraftApprenticeships(singleCohort);                
             }
 
             return new GetSingleCohortResponse
             {
-                CohortV2 = singleCohort
+                CohortV2 = singleCohort                
             };
         }
     }

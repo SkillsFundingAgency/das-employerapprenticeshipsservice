@@ -73,7 +73,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("YourSingleApprovedApprentice", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("SingleApprenticeshipApproved", (result.Model as dynamic).ViewName);
         }
 
 
@@ -89,9 +89,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 {
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
                
-                    Cohorts = new List<CohortV2ViewModel>
+                    Cohorts = new List<CohortViewModel>
                     {
-                        new CohortV2ViewModel
+                        new CohortViewModel
                         {
                             //CohortsCount = 1,
                             NumberOfDraftApprentices = 1,
@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("YourSingleApprenticeWithTrainingProviderStatus", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("SingleApprenticeshipWithTrainingProvider", (result.Model as dynamic).ViewName);
         }
 
 
@@ -128,9 +128,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 CallToActionViewModel = new CallToActionViewModel
                 {                    
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },              
-                    Cohorts = new List<CohortV2ViewModel>
+                    Cohorts = new List<CohortViewModel>
                     {
-                        new CohortV2ViewModel
+                        new CohortViewModel
                         {
                             //CohortsCount = 1,
                             NumberOfDraftApprentices = 1,
@@ -152,7 +152,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("YourSingleApprenticeReadyForReviewStatus", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("SingleApprenticeshipReadyForReview", (result.Model as dynamic).ViewName);
         }
     }
 }

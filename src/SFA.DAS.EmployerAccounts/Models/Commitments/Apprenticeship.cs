@@ -1,11 +1,11 @@
-﻿using System;
+﻿using SFA.DAS.Encoding;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Models.Commitments
 {
     public class Apprenticeship
     {
-        public long Id { get; set; }
-        public string HashedId { get; set; }
+        public long Id { get; set; }               
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string CourseName { get; set; }
@@ -13,8 +13,17 @@ namespace SFA.DAS.EmployerAccounts.Models.Commitments
         public DateTime? CourseEndDate { get; set; }
         public ApprenticeshipStatus ApprenticeshipStatus { get; set; }
         public TrainingProvider TrainingProvider { get; set; }
+        public CohortV2 Cohort { get; private set; }
+        public void SetCohort(CohortV2 cohort)
+        {
+            Cohort = cohort;
+        }
+        public string HashedId { get; private set; }
+        public void SetHashId(IEncodingService encodingService)
+        {
+            HashedId = encodingService.Encode(Id, EncodingType.ApprenticeshipId);
+        }
     }
-
 
     public class TrainingProvider
     {

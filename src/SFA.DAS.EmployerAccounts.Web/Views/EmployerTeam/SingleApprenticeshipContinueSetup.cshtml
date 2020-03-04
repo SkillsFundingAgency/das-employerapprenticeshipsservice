@@ -1,6 +1,6 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.CohortV2ViewModel
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large" id="call-to-action-continue-setting-up-an-apprenticeship">
@@ -12,8 +12,8 @@
             <th scope="row" class="tw-35">
                 Course
             </th>
-            <td class="tw-65" id="course-name">                                
-                @(Model?.Apprenticeships?.First().CourseName)
+            <td class="tw-65" id="course-name">                 
+                @(Model?.CourseName)
             </td>
         </tr>
         <tr>
@@ -21,7 +21,7 @@
                 Training Provider
             </th>
             <td id="training-provider">                
-                @(Model?.Apprenticeships?.First().TrainingProvider?.Name)
+                @(Model?.TrainingProvider?.Name)
             </td>
         </tr>
         <tr>

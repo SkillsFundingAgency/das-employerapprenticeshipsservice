@@ -68,7 +68,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
 
             var cohorts = new List<CohortV2>()
             {
-                new CohortV2 { Id = 1, HashedId = "CohortHashedId" }
+                new CohortV2 { Id = 1 }
             };
 
             _mockMapper.Setup(m => m.Map<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>(It.IsAny<CohortSummary[]>(), 
@@ -95,38 +95,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
 
 
             //Act
-            var result = await _sut.GetDraftApprenticeships(123);
+            var result = await _sut.GetDraftApprenticeships(new CohortV2 {Id = 123});
 
             //Assert
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count().Equals(1));
-        }
-
-        [Test]
-        public void ThenGetEncodedCohortId()
-        {
-            //Arrange
-            _mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_EncodedCohortId");
-
-            //Act
-            var result =  _sut.GetEncodedId(123, EncodingType.CohortReference);
-
-            //Assert
-            Assert.AreEqual(result, "123_EncodedCohortId");
-        }
-
-
-        [Test]
-        public void ThenGetEncodedDraftApprenticeshipId()
-        {
-            //Arrange
-            _mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.ApprenticeshipId)).Returns((long y, EncodingType z) => y + "_EncodedApprenticeshipId");
-
-            //Act
-            var result = _sut.GetEncodedId(456, EncodingType.ApprenticeshipId);
-
-            //Assert
-            Assert.AreEqual(result, "456_EncodedApprenticeshipId");
         }
 
 

@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.CohortV2ViewModel
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large" id="call-to-action-your-apprentice-status">
@@ -11,8 +11,8 @@
             <th scope="row" class="tw-35">
                 Name
             </th>
-            <td class="tw-65" id="apprentice-name">             
-                @(Model?.Apprenticeships?.First().ApprenticeshipFullName)
+            <td class="tw-65" id="apprentice-name">
+                @(Model?.ApprenticeshipFullName)                
             </td>
         </tr>
         <tr>
@@ -20,7 +20,7 @@
                 Training Provider
             </th>
             <td id="provider-name">
-                @(Model?.Apprenticeships?.First().TrainingProvider?.Name)
+                @(Model?.TrainingProvider?.Name)
             </td>
         </tr>
         <tr>
@@ -28,7 +28,7 @@
                 Course
             </th>
             <td id="course-name">
-                @(Model?.Apprenticeships?.First().CourseName)
+                @(Model?.CourseName)
             </td>
         </tr>
         <tr>
@@ -39,14 +39,14 @@
                 WITH TRAINING PROVIDER
             </td>
         </tr>
-        @if (Model.Apprenticeships.First().CourseEndDate.HasValue)
+        @if (Model.CourseEndDate.HasValue)
         {
             <tr>
                 <th scope="row">
                     Start month
                 </th>
                 <td id="course-start-date">
-                    @(Model?.Apprenticeships?.First().CourseStartDate.Value.ToString("MMMM yyyy"))                    
+                    @(Model?.CourseStartDate.Value.ToString("MMMM yyyy"))                    
                 </td>
             </tr>
             <tr>
@@ -54,7 +54,7 @@
                     Finish month
                 </th>
                 <td id="course-end-date">
-                    @(Model?.Apprenticeships?.First().CourseEndDate.Value.ToString("MMMM yyyy"))                    
+                    @(Model?.CourseEndDate.Value.ToString("MMMM yyyy"))                    
                 </td>
             </tr>
         }

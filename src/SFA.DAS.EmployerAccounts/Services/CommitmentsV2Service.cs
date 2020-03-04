@@ -7,6 +7,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.Encoding;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Services
@@ -24,21 +25,23 @@ namespace SFA.DAS.EmployerAccounts.Services
             _encodingService = encodingService;
         }
 
-        public async Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(long cohortId)
+        public async Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(CohortV2 cohort)
         {
-            var draftApprenticeshipsResponse = await _commitmentsApiClient.GetDraftApprenticeships(cohortId);
-
+            var draftApprenticeshipsResponse = await _commitmentsApiClient.GetDraftApprenticeships(cohort.Id);
             return _mapper.Map<IEnumerable<DraftApprenticeshipDto>, List<Apprenticeship>>(draftApprenticeshipsResponse.DraftApprenticeships,
-                opt =>
-                {
-                    opt.AfterMap((src, dest) =>
-                    {
-                        GetEncodedDraftApprenticeShipIds(dest, EncodingType.ApprenticeshipId);
-                    });
+               opt =>
+               {
+                   opt.AfterMap((src, dest) =>
+                   {
+                       dest.ToList().ForEach(c =>
+                       {
+                           c.SetHashId(_encodingService);
+                           c.SetCohort(cohort);
+                       });
+                   });
+               });
+        }        
 
-                });
-        }
-     
 
         public async Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId)
         {
@@ -49,7 +52,10 @@ namespace SFA.DAS.EmployerAccounts.Services
                 {   
                     opt.AfterMap((src, dest) =>
                     {
-                        GetEncodedCohortIds(dest, EncodingType.CohortReference);
+                        dest.ToList().ForEach(c =>
+                        {
+                            c.SetHashId(_encodingService);
+                        });
                     });
                 });
         }        
@@ -60,26 +66,6 @@ namespace SFA.DAS.EmployerAccounts.Services
             
             return _mapper.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, ICollection<Apprenticeship>>(apprenticeship.Apprenticeships);
         }
-
-        private void GetEncodedCohortIds(IEnumerable<CohortV2> dest, EncodingType encodingType)
-        {
-            foreach (var cohort in dest)
-            {
-                cohort.HashedId = GetEncodedId(cohort.Id, encodingType);
-            }
-        }
-
-        private void GetEncodedDraftApprenticeShipIds(List<Apprenticeship> dest, EncodingType encodingType)
-        {
-            foreach (var apprenticeship in dest)
-            {
-                apprenticeship.HashedId = GetEncodedId(apprenticeship.Id, encodingType);
-            }
-        }
-
-        public string GetEncodedId(long id, EncodingType encodingType)
-        {
-            return _encodingService.Encode(id, encodingType);
-        }
+     
     }
 }

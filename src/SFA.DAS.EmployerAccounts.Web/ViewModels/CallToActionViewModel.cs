@@ -15,8 +15,9 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 
         public IEnumerable<ApprenticeshipViewModel> Apprenticeships { get; set; }
 
-        public IEnumerable<CohortV2ViewModel> Cohorts { get; set; }
+        public IEnumerable<CohortViewModel> Cohorts { get; set; }
         public int CohortsCount => Cohorts?.Count() ?? 0;        
         public bool HasSingleReservation => Reservations?.Count == 1 && CohortsCount == 1;
+        
     }
 }

@@ -249,7 +249,7 @@
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementInfoConverter.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
-    <Compile Include="Mappings\CohortV2Mapping.cs" />
+    <Compile Include="Mappings\CohortMapping.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\OrganisationMappings.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
@@ -276,8 +276,9 @@
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
+    <Compile Include="ViewModels\ApprenticeshipViewModel.cs" />
     <Compile Include="ViewModels\CallToActionViewModel.cs" />
-    <Compile Include="ViewModels\CohortV2ViewModel.cs" />
+    <Compile Include="ViewModels\CohortViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
@@ -344,6 +345,7 @@
     <Compile Include="ViewModels\SupportUserHeaderViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
     <Compile Include="Models\TrainingDateModel.cs" />
+    <Compile Include="ViewModels\TrainingProviderViewModel.cs" />
     <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
@@ -867,11 +869,11 @@
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
-    <Content Include="Views\EmployerTeam\ContinueSetupForSingleApprenticeship.cshtml" />
-    <Content Include="Views\EmployerTeam\YourSingleApprovedApprentice.cshtml" />
-    <Content Include="Views\EmployerTeam\YourSingleApprenticeWithTrainingProviderStatus.cshtml" />
-    <Content Include="Views\EmployerTeam\YourSingleApprenticeReadyForReviewStatus.cshtml" />
-    <Content Include="Views\EmployerTeam\ContinueSetupForSingleApprenticeshipByProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueSetup.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipApproved.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
