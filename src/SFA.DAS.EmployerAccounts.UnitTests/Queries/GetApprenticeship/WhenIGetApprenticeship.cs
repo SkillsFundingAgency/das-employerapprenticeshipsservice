@@ -8,7 +8,7 @@ using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship

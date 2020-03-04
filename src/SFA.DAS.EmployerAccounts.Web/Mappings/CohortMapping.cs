@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
     {
         public CohortMapping()
         {
-            CreateMap<CohortV2, CohortViewModel>()
+            CreateMap<Cohort, CohortViewModel>()
                .ForMember(dest => dest.HashedCohortId, opt => opt.MapFrom(src => src.HashedId));
 
             CreateMap<GetSingleCohortResponse, CohortViewModel>()

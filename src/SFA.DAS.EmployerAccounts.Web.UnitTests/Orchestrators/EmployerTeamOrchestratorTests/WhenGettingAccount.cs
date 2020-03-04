@@ -15,7 +15,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
@@ -158,10 +158,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                  });           
 
 
-            var Cohort = new CohortV2()
+            var Cohort = new Cohort()
             {
                 Id = 1,              
-                CohortStatus = EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
+                CohortStatus = EmployerAccounts.Models.CommitmentsV2.CohortStatus.WithTrainingProvider,
                 NumberOfDraftApprentices = 1,
                 Apprenticeships = new List<Apprenticeship> 
                         {
@@ -184,7 +184,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>()))
                     .ReturnsAsync(new GetSingleCohortResponse 
                     {  
-                        CohortV2 = Cohort
+                        Cohort = Cohort
 
                     });
 
@@ -356,14 +356,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public async Task ThenShouldGetCohortResponse()
         {
             //Arrange 
-            var Cohort = new CohortV2() { Id = 1, NumberOfDraftApprentices = 1,  Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" }  } };            
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { CohortV2 = Cohort });            
+            var Cohort = new Cohort() { Id = 1, NumberOfDraftApprentices = 1,  Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" }  } };            
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { Cohort = Cohort });            
             var expectedCohort = new CohortViewModel()
             {                
                 NumberOfDraftApprentices = 1,
                 Apprenticeships = new List<ApprenticeshipViewModel> { new ApprenticeshipViewModel { ApprenticeshipFullName = "FullName" } }
             };            
-            _mapper.Setup(m => m.Map<CohortV2, CohortViewModel>(Cohort)).Returns(expectedCohort);
+            _mapper.Setup(m => m.Map<Cohort, CohortViewModel>(Cohort)).Returns(expectedCohort);
 
             //Act
             var result = await _orchestrator.GetAccount(HashedAccountId, UserId);

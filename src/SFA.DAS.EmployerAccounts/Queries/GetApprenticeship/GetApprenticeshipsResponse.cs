@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Commitments;
+﻿using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship

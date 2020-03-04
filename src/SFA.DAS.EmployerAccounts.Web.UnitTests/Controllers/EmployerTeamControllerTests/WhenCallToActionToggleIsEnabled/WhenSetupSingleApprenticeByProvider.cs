@@ -6,7 +6,7 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -63,7 +63,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                         new CohortViewModel
                         {   
                             NumberOfDraftApprentices = 0,
-                            CohortStatus = SFA.DAS.EmployerAccounts.Models.Commitments.CohortStatus.WithTrainingProvider,
+                            CohortStatus = CohortStatus.WithTrainingProvider,
                             Apprenticeships = new List<ApprenticeshipViewModel>()
                             {
                                 new ApprenticeshipViewModel

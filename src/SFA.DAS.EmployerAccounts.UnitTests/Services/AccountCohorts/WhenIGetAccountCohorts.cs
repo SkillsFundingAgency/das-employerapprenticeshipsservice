@@ -12,7 +12,7 @@ using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
 using System.Linq;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.Encoding;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
@@ -42,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
             _mockCommitmentsApiClient
                 .Setup(c => c.GetApprenticeships(It.Is<GetApprenticeshipsRequest>(r => r.AccountId == _accountId), CancellationToken.None))
                 .Returns(Task.FromResult(CreateApprenticeshipResponse()));
-            var apprenticeships = new List<Apprenticeship>  { new Apprenticeship { ApprenticeshipStatus = EmployerAccounts.Models.Commitments.ApprenticeshipStatus.Approved,  FirstName ="FirstName" , LastName = "LastName" } };
+            var apprenticeships = new List<Apprenticeship>  { new Apprenticeship { ApprenticeshipStatus = EmployerAccounts.Models.CommitmentsV2.ApprenticeshipStatus.Approved,  FirstName ="FirstName" , LastName = "LastName" } };
             _mockMapper
              .Setup(m => m.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, ICollection<Apprenticeship>>(It.IsAny<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>>()))
              .Returns(apprenticeships);
@@ -66,17 +66,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
                .Returns(Task.FromResult(GetCohortsResponseForWithTrainingProviderStaus()));
             _mockEncodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
 
-            var cohorts = new List<CohortV2>()
+            var cohorts = new List<Cohort>()
             {
-                new CohortV2 { Id = 1 }
+                new Cohort { Id = 1 }
             };
 
-            _mockMapper.Setup(m => m.Map<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>(It.IsAny<CohortSummary[]>(), 
-                It.IsAny<Action<IMappingOperationOptions<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>>>()))
+            _mockMapper.Setup(m => m.Map<IEnumerable<CohortSummary>, IEnumerable<Cohort>>(It.IsAny<CohortSummary[]>(), 
+                It.IsAny<Action<IMappingOperationOptions<IEnumerable<CohortSummary>, IEnumerable<Cohort>>>>()))
             .Returns(cohorts);
 
             //Act
-            var result = await _sut.GetCohortsV2(_accountId);
+            var result = await _sut.GetCohorts(_accountId);
 
             //Assert
             Assert.IsNotNull(result);
@@ -95,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
 
 
             //Act
-            var result = await _sut.GetDraftApprenticeships(new CohortV2 {Id = 123});
+            var result = await _sut.GetDraftApprenticeships(new Cohort {Id = 123});
 
             //Assert
             Assert.IsNotNull(result);

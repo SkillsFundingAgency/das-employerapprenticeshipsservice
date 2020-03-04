@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
@@ -38,10 +38,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             _logger = new Mock<ILog>();
 
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
-            _commitmentV2Service.Setup(m => m.GetCohortsV2(_accountId))
-                .ReturnsAsync(new List<CohortV2>() { new CohortV2 { Id = _cohortId, NumberOfDraftApprentices = 1 }});
+            _commitmentV2Service.Setup(m => m.GetCohorts(_accountId))
+                .ReturnsAsync(new List<Cohort>() { new Cohort { Id = _cohortId, NumberOfDraftApprentices = 1 }});
 
-            _commitmentV2Service.Setup(m => m.GetDraftApprenticeships(new CohortV2 { Id = _cohortId, NumberOfDraftApprentices = 1 }))
+            _commitmentV2Service.Setup(m => m.GetDraftApprenticeships(new Cohort { Id = _cohortId, NumberOfDraftApprentices = 1 }))
                 .ReturnsAsync(new List<Apprenticeship> { new Apprenticeship { Id = _cohortId } });
 
             _encodingService = new Mock<IEncodingService>();
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             var response = await RequestHandler.Handle(Query);
 
             //Assert            
-            Assert.IsNotNull(response.CohortV2);
+            Assert.IsNotNull(response.Cohort);
             //Assert.IsTrue(response.CohortV2?.Apprenticeships.Count().Equals(1));
         }
 
@@ -78,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             await RequestHandler.Handle(Query);
 
             //Assert
-            _commitmentV2Service.Verify(x => x.GetCohortsV2(_accountId), Times.Once);
+            _commitmentV2Service.Verify(x => x.GetCohorts(_accountId), Times.Once);
         }
 
         public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()

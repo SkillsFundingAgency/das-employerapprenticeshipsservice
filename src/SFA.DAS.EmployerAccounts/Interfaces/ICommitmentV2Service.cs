@@ -1,5 +1,4 @@
-﻿using SFA.DAS.CommitmentsV2.Api.Types.Responses;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+﻿using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,9 +6,9 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface ICommitmentV2Service
     {
-        Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId);        
+        Task<IEnumerable<Cohort>> GetCohorts(long? accountId);        
 
-        Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(CohortV2 cohort);
+        Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(Cohort cohort);
 
         Task<IEnumerable<Apprenticeship>> GetApprenticeships(long accountId);
     }

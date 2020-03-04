@@ -4,7 +4,7 @@ using SFA.DAS.CommitmentsV2.Api.Types.Responses;
 using SFA.DAS.CommitmentsV2.Types;
 using SFA.DAS.CommitmentsV2.Types.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.Encoding;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             _encodingService = encodingService;
         }
 
-        public async Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(CohortV2 cohort)
+        public async Task<IEnumerable<Apprenticeship>> GetDraftApprenticeships(Cohort cohort)
         {
             var draftApprenticeshipsResponse = await _commitmentsApiClient.GetDraftApprenticeships(cohort.Id);
             return _mapper.Map<IEnumerable<DraftApprenticeshipDto>, List<Apprenticeship>>(draftApprenticeshipsResponse.DraftApprenticeships,
@@ -43,11 +43,11 @@ namespace SFA.DAS.EmployerAccounts.Services
         }        
 
 
-        public async Task<IEnumerable<CohortV2>> GetCohortsV2(long? accountId)
+        public async Task<IEnumerable<Cohort>> GetCohorts(long? accountId)
         {
             var cohortSummary = await _commitmentsApiClient.GetCohorts(new CommitmentsV2.Api.Types.Requests.GetCohortsRequest { AccountId = accountId });          
 
-            return _mapper.Map<IEnumerable<CohortSummary>, IEnumerable<CohortV2>>(cohortSummary.Cohorts,
+            return _mapper.Map<IEnumerable<CohortSummary>, IEnumerable<Cohort>>(cohortSummary.Cohorts,
                 opt =>
                 {   
                     opt.AfterMap((src, dest) =>

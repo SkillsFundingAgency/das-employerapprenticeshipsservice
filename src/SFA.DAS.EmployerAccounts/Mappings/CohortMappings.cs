@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using SFA.DAS.CommitmentsV2.Types;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 
 namespace SFA.DAS.EmployerAccounts.Mappings
 {
@@ -8,7 +8,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
     {
         public CohortMappings()
         {
-            CreateMap<CohortSummary, CohortV2>()                
+            CreateMap<CohortSummary, Cohort>()                
                 .ForMember(target => target.Id, opt => opt.MapFrom(src => src.CohortId))
                 .ForMember(target => target.NumberOfDraftApprentices, opt => opt.MapFrom(src => src.NumberOfDraftApprentices))
                 .ForMember(target => target.Apprenticeships, opt => opt.Ignore())

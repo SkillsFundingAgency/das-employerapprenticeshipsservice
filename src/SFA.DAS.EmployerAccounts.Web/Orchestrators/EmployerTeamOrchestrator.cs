@@ -13,7 +13,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Models.Commitments;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
@@ -254,7 +254,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),
                         Cohorts = new List<CohortViewModel>
                         {
-                            _mapper.Map<CohortV2, CohortViewModel>(accountCohort.CohortV2)
+                            _mapper.Map<Cohort, CohortViewModel>(accountCohort.Cohort)
                         }                        
                     }
                 };

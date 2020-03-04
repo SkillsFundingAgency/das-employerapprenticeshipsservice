@@ -1,13 +1,14 @@
 ﻿using SFA.DAS.Encoding;
 using System.Collections.Generic;
 
-namespace SFA.DAS.EmployerAccounts.Models.Commitments
+
+namespace SFA.DAS.EmployerAccounts.Models.CommitmentsV2
 {
-    public class CohortV2
+    public class Cohort
     {
         public long Id { get; set; }
-      
-        public int? NumberOfDraftApprentices { get; set; }       
+
+        public int? NumberOfDraftApprentices { get; set; }
         public CohortStatus CohortStatus { get; set; }
         public IEnumerable<Apprenticeship> Apprenticeships { get; set; }
         public string HashedId { get; private set; }

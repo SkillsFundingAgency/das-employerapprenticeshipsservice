@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
 
             _logger.Info($"Getting Cohorts for account id {message.HashedAccountId}");
 
-            var cohortsResponse = await _commitmentV2Service.GetCohortsV2(accountId);
+            var cohortsResponse = await _commitmentV2Service.GetCohorts(accountId);
             if (cohortsResponse.Count() != 1) return new GetSingleCohortResponse();
 
             var singleCohort = cohortsResponse.Single();
@@ -52,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
 
             return new GetSingleCohortResponse
             {
-                CohortV2 = singleCohort                
+                Cohort = singleCohort                
             };
         }
     }

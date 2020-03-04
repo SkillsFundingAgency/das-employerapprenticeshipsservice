@@ -1,4 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Models.Commitments;
+﻿using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using System;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
