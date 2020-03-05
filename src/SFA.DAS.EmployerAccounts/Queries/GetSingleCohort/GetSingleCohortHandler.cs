@@ -36,9 +36,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            long accountId = _hashingService.DecodeValue(message.HashedAccountId);
-
-            _logger.Info($"Getting Cohorts for account id {message.HashedAccountId}");
+            long accountId = _hashingService.DecodeValue(message.HashedAccountId);            
 
             var cohortsResponse = await _commitmentV2Service.GetCohorts(accountId);
             if (cohortsResponse.Count() != 1) return new GetSingleCohortResponse();
