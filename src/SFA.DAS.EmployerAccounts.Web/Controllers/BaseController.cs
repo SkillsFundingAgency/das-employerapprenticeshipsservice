@@ -8,8 +8,6 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using SFA.DAS.Validation;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
-using System.Security.Claims;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {

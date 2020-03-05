@@ -174,7 +174,8 @@ hr.dashboard-heading-separator {
 }
 
 .das-panel--action {
-    background: $grey-2;
+    background: $grey-3;
+    color: #000;
     margin-top: 20px;
 
     & > p {
@@ -192,7 +193,6 @@ hr.dashboard-heading-separator {
     }
 }
 
-
 .das-panel__heading {
     font-size: 19px;
     font-weight: 700;
@@ -204,6 +204,15 @@ hr.dashboard-heading-separator {
     }
 
     .das-panel--featured & {
+        font-size: 24px;
+
+        @include media(tablet) {
+            font-size: 36px;
+            line-height: 1.2;
+        }
+    }
+
+    .das-panel--action & {
         font-size: 24px;
 
         @include media(tablet) {

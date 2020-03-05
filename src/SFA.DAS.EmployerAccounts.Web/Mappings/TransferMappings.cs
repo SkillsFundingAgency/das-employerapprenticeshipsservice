@@ -2,7 +2,6 @@
 using SFA.DAS.EmployerAccounts.Commands.ApproveTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Commands.DeleteSentTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Commands.RejectTransferConnectionInvitation;
-using SFA.DAS.EmployerAccounts.Commands.SendTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetApprovedTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetReceivedTransferConnectionInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetRejectedTransferConnectionInvitation;
