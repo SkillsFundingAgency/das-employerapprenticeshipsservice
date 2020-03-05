@@ -20,7 +20,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         public override GetSingleCohortHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetSingleCohortRequest>> RequestValidator { get; set; }
         private Mock<ICommitmentV2Service> _commitmentV2Service;
-        private Mock<IEncodingService> _encodingService;
         private Mock<IHashingService> _hashingService;
         private Mock<ILog> _logger;
         private long _accountId;
@@ -41,12 +40,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             _commitmentV2Service.Setup(m => m.GetCohorts(_accountId))
                 .ReturnsAsync(new List<Cohort>() { new Cohort { Id = _cohortId, NumberOfDraftApprentices = 1 }});
 
-            _commitmentV2Service.Setup(m => m.GetDraftApprenticeships(new Cohort { Id = _cohortId, NumberOfDraftApprentices = 1 }))
-                .ReturnsAsync(new List<Apprenticeship> { new Apprenticeship { Id = _cohortId } });
-
-            _encodingService = new Mock<IEncodingService>();
-            _encodingService.Setup(x => x.Encode(It.IsAny<long>(), EncodingType.CohortReference)).Returns((long y, EncodingType z) => y + "_Encoded");
-
+            _commitmentV2Service.Setup(m => m.GetDraftApprenticeships(It.IsAny<Cohort>()))
+                .ReturnsAsync(new List<Apprenticeship> { new Apprenticeship { CourseName = "CourseName" } });
+           
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(hashedAccountId)).Returns(_accountId);
 
@@ -67,7 +63,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 
             //Assert            
             Assert.IsNotNull(response.Cohort);
-            //Assert.IsTrue(response.CohortV2?.Apprenticeships.Count().Equals(1));
+            Assert.IsTrue(response.Cohort.NumberOfDraftApprentices.Equals(1));
+            Assert.IsTrue(response.Cohort?.Apprenticeships.Count().Equals(1));
         }
 
 

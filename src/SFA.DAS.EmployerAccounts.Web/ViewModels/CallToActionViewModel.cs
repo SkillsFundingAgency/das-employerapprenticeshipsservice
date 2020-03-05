@@ -14,6 +14,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public int PendingReservationsCount => Reservations?.Count(x => x.Status == ReservationStatus.Pending) ?? 0;
 
         public IEnumerable<ApprenticeshipViewModel> Apprenticeships { get; set; }
+        public int ApprenticeshipsCount => Apprenticeships?.Count() ?? 0;
 
         public IEnumerable<CohortViewModel> Cohorts { get; set; }
         public int CohortsCount => Cohorts?.Count() ?? 0;        
