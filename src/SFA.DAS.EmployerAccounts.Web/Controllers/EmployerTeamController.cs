@@ -365,8 +365,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
+        {          
+            model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().CourseName =  model.CallToActionViewModel.Reservations?.Single().Course?.CourseDescription;
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
         [ChildActionOnly]

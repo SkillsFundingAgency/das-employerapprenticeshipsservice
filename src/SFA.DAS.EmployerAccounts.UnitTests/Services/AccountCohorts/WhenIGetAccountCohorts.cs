@@ -34,7 +34,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
             _sut = new CommitmentsV2Service(_mockCommitmentsApiClient.Object, _mockMapper.Object, _mockEncodingService.Object);
         }
 
-
         [Test]
         public async Task ThenGetApprenticeshipsResponse()
         {
@@ -44,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
                 .Returns(Task.FromResult(CreateApprenticeshipResponse()));
             var apprenticeships = new List<Apprenticeship>  { new Apprenticeship { ApprenticeshipStatus = EmployerAccounts.Models.CommitmentsV2.ApprenticeshipStatus.Approved,  FirstName ="FirstName" , LastName = "LastName" } };
             _mockMapper
-             .Setup(m => m.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, ICollection<Apprenticeship>>(It.IsAny<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>>()))
+             .Setup(m => m.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, IEnumerable<Apprenticeship>>(It.IsAny<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>>()))
              .Returns(apprenticeships);
 
             //Act
@@ -54,9 +53,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
             Assert.IsNotNull(result);
             Assert.IsTrue(result.Count().Equals(1));
         }
-
-        
-
 
         [Test]
         public async Task ThenGetCohortsResponse()
@@ -89,8 +85,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
             //Arrange
             _mockCommitmentsApiClient.Setup(c => c.GetDraftApprenticeships(123, It.IsAny<CancellationToken>())).Returns(Task.FromResult(GetDraftApprenticeshipsResponse()));
             var apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName", LastName = "LastName" } };
-            _mockMapper.Setup(m => m.Map<IEnumerable<DraftApprenticeshipDto>, List<Apprenticeship>>(It.IsAny<IReadOnlyCollection<DraftApprenticeshipDto>>(),
-               It.IsAny<Action<IMappingOperationOptions<IEnumerable<DraftApprenticeshipDto>, List<Apprenticeship>>>>()))
+            _mockMapper.Setup(m => m.Map<IEnumerable<DraftApprenticeshipDto>, IEnumerable<Apprenticeship>>(It.IsAny<IReadOnlyCollection<DraftApprenticeshipDto>>(),
+               It.IsAny<Action<IMappingOperationOptions<IEnumerable<DraftApprenticeshipDto>, IEnumerable<Apprenticeship>>>>()))
            .Returns(apprenticeships);
 
 

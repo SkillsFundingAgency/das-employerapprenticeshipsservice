@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public TrainingProviderViewModel TrainingProvider { get; set; }
         public bool HasSingleDraftApprenticeship => NumberOfDraftApprentices == 1 && ApprenticeshipStatus == ApprenticeshipStatus.Draft;
         public bool HasApprovedApprenticeship => ApprenticeshipStatus == ApprenticeshipStatus.Approved;
-        public string ViewOrEditApprenticeDetails => $"unapproved/{HashedCohortId}/apprentices/{HashedApprenticeshipId}";
-        public string ApprovedOrRejectApprenticeDetails => $"unapproved/{HashedCohortId}";
+        public string ViewOrEditApprenticeDetailsLink => $"unapproved/{HashedCohortId}/apprentices/{HashedApprenticeshipId}";
+        public string ApprovedOrRejectApprenticeDetailsLink => $"unapproved/{HashedCohortId}";
     }
 }

@@ -1,5 +1,4 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
 
 <section class="dashboard-section">
@@ -34,7 +33,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetails}")" role="button" draggable="false" class="button">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetailsLink}")" role="button" draggable="false" class="button">
             Add more details
         </a>
     </p>

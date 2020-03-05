@@ -37,8 +37,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
 
             long accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            _logger.Info($"Getting Apprenticeships for hashed account id {message.HashedAccountId}");
-
             return new GetApprenticeshipsResponse
             {
                 Apprenticeships = await _commitmentV2Service.GetApprenticeships(accountId)

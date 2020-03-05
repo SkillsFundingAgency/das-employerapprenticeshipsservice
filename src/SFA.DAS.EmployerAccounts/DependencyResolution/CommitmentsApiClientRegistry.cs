@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public CommitmentsApiClientRegistry()
         {
-            For<ICommitmentsApiClient>().Use(c => c.GetInstance<ICommitmentsApiClientFactory>().CreateClient()).Singleton();
+            For<ICommitmentsApiClient>().Use(c => c.GetInstance<ICommitmentsApiClientFactory>().CreateClient());
             For<ICommitmentsApiClientFactory>().Use<CommitmentsApiClientFactory>();
             For<IRestHttpClient>().Use<RestHttpClient>();
         }

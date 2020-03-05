@@ -12,12 +12,6 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 
         Task<IEnumerable<Apprenticeship>> GetApprenticeships(long accountId);
     }
-
-    public class CohortFilter
-    {
-        public int Take { get; set; }
-        
-    }
 }
 
 
