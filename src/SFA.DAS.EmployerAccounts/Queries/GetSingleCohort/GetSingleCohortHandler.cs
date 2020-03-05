@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using System.Threading.Tasks;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using System.Linq;
@@ -11,18 +10,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
     public class GetSingleCohortHandler : IAsyncRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
     {
         private readonly IValidator<GetSingleCohortRequest> _validator;
-        private readonly ILog _logger;
         private readonly ICommitmentV2Service _commitmentV2Service;        
         private readonly IHashingService _hashingService;
 
         public GetSingleCohortHandler(
             IValidator<GetSingleCohortRequest> validator,
-            ILog logger,
             ICommitmentV2Service commitmentV2Service,            
             IHashingService hashingService)
         {
             _validator = validator;
-            _logger = logger;
             _commitmentV2Service = commitmentV2Service;            
             _hashingService = hashingService;
         }

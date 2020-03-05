@@ -21,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         public override Mock<IValidator<GetSingleCohortRequest>> RequestValidator { get; set; }
         private Mock<ICommitmentV2Service> _commitmentV2Service;
         private Mock<IHashingService> _hashingService;
-        private Mock<ILog> _logger;
         private long _accountId;
         private long _cohortId;
         public string hashedAccountId;        
@@ -34,7 +33,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             _accountId = 123;
             _cohortId = 1;
             hashedAccountId = "Abc123";
-            _logger = new Mock<ILog>();
 
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
             _commitmentV2Service.Setup(m => m.GetCohorts(_accountId))
@@ -46,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(hashedAccountId)).Returns(_accountId);
 
-            RequestHandler = new GetSingleCohortHandler(RequestValidator.Object, _logger.Object, _commitmentV2Service.Object, _hashingService.Object);
+            RequestHandler = new GetSingleCohortHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object);
 
             Query = new GetSingleCohortRequest
             {
