@@ -125,6 +125,9 @@
       <Version>2.1.1395</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
+    <PackageReference Include="SFA.DAS.EAS.Portal.Client">
+      <Version>1.6.2515</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2103</Version>
     </PackageReference>
@@ -862,6 +865,7 @@
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
+    <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             PopulateViewBagWithExternalUserId();            
             var response = await GetAccountInformation(hashedAccountId);
-
+            
             if (response.Status != HttpStatusCode.OK)
             {
                 return View(response);
