@@ -41,26 +41,43 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
             var userId = htmlHelper.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.
-                User.Claims.Where(x => x.Type == ControllerConstants.UserRefClaimKeyName);
+                User.Claims.FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
             var hashedAccountId = htmlHelper.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName].ToString();
             var agreementResponse = Task.Run(async () => await mediator
             .SendAsync(new GetAccountEmployerAgreementsRequest
             {
                 HashedAccountId = hashedAccountId,
-                ExternalUserId = userId.FirstOrDefault().Value
+                ExternalUserId = userId
             })).Result;
 
-            if (agreementResponse.HasPendingAgreements && agreementResponse.EmployerAgreements.Count > 0)
+            if (agreementResponse.EmployerAgreements.Count > 0)
             {
                 var employerAgreements = agreementResponse.EmployerAgreements;
-                foreach (var _ in from agreement in employerAgreements
-                                  where agreement.Signed?.VersionNumber == 3
-                                  select new { })
+
+                var legalEntityAgreements = employerAgreements.GroupBy(ea => ea.LegalEntity.AccountLegalEntityId);
+
+                foreach (var legalEntityAgreement in legalEntityAgreements)
                 {
-                    return false;
+                    var latestSignedAgreement = legalEntityAgreement
+                        .Where(lea => lea.HasSignedAgreement)
+                        .OrderByDescending(lea => lea.Signed.VersionNumber)
+                        .FirstOrDefault();
+
+                    if (latestSignedAgreement.Signed.VersionNumber != 3) return true;
                 }
             }
-            return true;
+
+            return false;
+
+
+            //    foreach (var _ in from agreement in employerAgreements
+            //                      where agreement.Signed?.VersionNumber == 3
+            //                      select new { })
+            //    {
+            //        return false;
+            //    }
+            //}
+            //return true;
         }
 
 
