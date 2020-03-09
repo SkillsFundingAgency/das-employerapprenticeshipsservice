@@ -5,13 +5,10 @@ using SFA.DAS.Authorization.Services;
 using System.Security.Claims;
 using System.Linq;
 using MediatR;
-using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Threading.Tasks;
 using System.Web;
-using SFA.DAS.Authorization.EmployerFeatures.Models;
-using SFA.DAS.Authorization.Features.Services;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers
@@ -37,12 +34,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return isAuthorized;
         }
 
-        public static bool HasSignedV3AgreementAsync(this HtmlHelper htmlHelper)
+        public static bool HasSignedV3AgreementAsync(this HtmlHelper htmlHelper,string userId,string hashedAccountId)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
-            var userId = htmlHelper.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.
-                User.Claims.FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
-            var hashedAccountId = htmlHelper.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName].ToString();
             var agreementResponse = Task.Run(async () => await mediator
             .SendAsync(new GetAccountEmployerAgreementsRequest
             {
@@ -63,21 +57,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
                         .OrderByDescending(lea => lea.Signed.VersionNumber)
                         .FirstOrDefault();
 
-                    if (latestSignedAgreement.Signed.VersionNumber != 3) return true;
+                    if (latestSignedAgreement?.Signed.VersionNumber != 3) return true;
                 }
             }
-
             return false;
-
-
-            //    foreach (var _ in from agreement in employerAgreements
-            //                      where agreement.Signed?.VersionNumber == 3
-            //                      select new { })
-            //    {
-            //        return false;
-            //    }
-            //}
-            //return true;
         }
 
 

@@ -1,13 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using MediatR;
+using Microsoft.Owin;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
+using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -33,9 +39,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         private bool _isAuthenticated = true;
         private List<Claim> _claims;
         private string _userId;
-        private HtmlHelper _sut;
+        private HtmlHelper htmlHelper;
         private Mock<IViewDataContainer> _viewDataContainerMock;
         private ViewContext _viewContext;
+        private Mock<IMediator> _mockMediator;
 
         [SetUp]
         public void SetUp()
@@ -69,12 +76,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
                 mockAuthorizationService.Object);
 
             _controller.ControllerContext = mockControllerContext.Object;
-
+            //_controller.Request.SetOwinContext(new OwinContext());
             _viewDataContainerMock = new Mock<IViewDataContainer>();
             _viewContext = new ViewContext();
             _viewContext.Controller = _controller;
+            
 
-            _sut = new HtmlHelper(_viewContext, _viewDataContainerMock.Object);
+            _mockMediator = new Mock<IMediator>();
+
+            htmlHelper = new HtmlHelper(_viewContext, _viewDataContainerMock.Object);
         }
 
         [Test]
@@ -85,7 +95,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
 
             // Act
-            var result = _sut.IsSupportUser();
+            var result = htmlHelper.IsSupportUser();
 
             // Assert
             Assert.IsTrue(result);
@@ -98,7 +108,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             mockClaimsIdentity.Setup(m => m.IsAuthenticated).Returns(false); // re-apply the mock return
             _claims.Add(new Claim(ClaimsIdentity.DefaultRoleClaimType, ControllerConstants.Tier2UserClaim));
             // Act
-            var result = _sut.IsSupportUser();
+            var result = htmlHelper.IsSupportUser();
 
             // Assert
             Assert.IsFalse(result);
@@ -111,7 +121,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             _isAuthenticated = false;
 
             // Act
-            var result = _sut.IsSupportUser();
+            var result = htmlHelper.IsSupportUser();
 
             // Assert
             Assert.IsFalse(result);
@@ -124,7 +134,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             _isAuthenticated = true;
 
             // Act
-            var result = _sut.IsSupportUser();
+            var result = htmlHelper.IsSupportUser();
 
             // Assert
             Assert.IsFalse(result);
@@ -151,5 +161,94 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             new object[] { new string[] { "eas-apostrophe's" }, @"'eas-apostrophe\'s'"},
             new object[] { new string[] { null }, "''" }
         };
+
+        [Test]
+        public void CheckIfV3AgreementIsNotSignedByAllLegalEntities_ReturnTrue()
+        {
+            //Arrange
+            var hashedAccountId = "ABC123";
+            var userId = "USER1";
+            var dependancyResolver = new Mock<IDependencyResolver>();
+            dependancyResolver.Setup(r => r.GetService(typeof(IMediator))).Returns(_mockMediator.Object);
+            DependencyResolver.SetResolver(dependancyResolver.Object);
+            _mockMediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId)))
+                    .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
+                    {
+                        EmployerAgreements = new List<EmployerAgreementStatusDto>
+                        {
+                            new EmployerAgreementStatusDto
+                            {
+                                Pending = new PendingEmployerAgreementDetailsDto { Id = 123 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
+                            },
+                            new EmployerAgreementStatusDto
+                            {
+                                Pending = new PendingEmployerAgreementDetailsDto { Id = 124 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
+                            },
+                            new EmployerAgreementStatusDto
+                            {
+                                Pending = new PendingEmployerAgreementDetailsDto { Id = 125 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
+                            },
+                            new EmployerAgreementStatusDto
+                            {
+                                Pending = new PendingEmployerAgreementDetailsDto { Id = 126 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
+                            },
+                            new EmployerAgreementStatusDto
+                            {
+                                Signed = new SignedEmployerAgreementDetailsDto { Id = 111 , VersionNumber = 2},
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 11}
+                                },
+                            new EmployerAgreementStatusDto
+                            {
+                                Signed = new SignedEmployerAgreementDetailsDto { Id = 112, VersionNumber = 1 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 11}
+                            },
+                            new EmployerAgreementStatusDto
+                            {
+                                Signed = new SignedEmployerAgreementDetailsDto { Id = 113 , VersionNumber = 2},
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 12}
+
+                            },
+                            new EmployerAgreementStatusDto
+                            {
+                                Signed = null,
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 12}
+                            }
+                        }
+                    }));
+            //Act
+            var actual = htmlHelper.HasSignedV3AgreementAsync(userId,hashedAccountId);
+            //Assert
+            Assert.IsTrue(actual);
+        }
+
+        public void CheckIfV3AgreementIsNotSignedByAllLegalEntities_ReturnFalse()
+        {
+            //Arrange
+            var hashedAccountId = "ABC123";
+            var userId = "USER1";
+            var dependancyResolver = new Mock<IDependencyResolver>();
+            dependancyResolver.Setup(r => r.GetService(typeof(IMediator))).Returns(_mockMediator.Object);
+            DependencyResolver.SetResolver(dependancyResolver.Object);
+            _mockMediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId)))
+                    .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
+                    {
+                        EmployerAgreements = new List<EmployerAgreementStatusDto>
+                        {
+                            new EmployerAgreementStatusDto
+                            {
+                                Signed = new SignedEmployerAgreementDetailsDto { Id = 113 , VersionNumber = 3},
+                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 12}
+                            }
+                        }
+                    }));
+            //Act
+            var actual = htmlHelper.HasSignedV3AgreementAsync(userId, hashedAccountId);
+            //Assert
+            Assert.IsFalse(actual);
+        }
     }
 }
