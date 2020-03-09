@@ -8,7 +8,6 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Threading.Tasks;
-using System.Web;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers

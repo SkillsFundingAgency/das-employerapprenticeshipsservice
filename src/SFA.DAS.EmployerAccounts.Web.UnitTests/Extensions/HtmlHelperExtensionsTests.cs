@@ -76,7 +76,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
                 mockAuthorizationService.Object);
 
             _controller.ControllerContext = mockControllerContext.Object;
-            //_controller.Request.SetOwinContext(new OwinContext());
             _viewDataContainerMock = new Mock<IViewDataContainer>();
             _viewContext = new ViewContext();
             _viewContext.Controller = _controller;
@@ -225,6 +224,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             Assert.IsTrue(actual);
         }
 
+        [Test]
         public void CheckIfV3AgreementIsNotSignedByAllLegalEntities_ReturnFalse()
         {
             //Arrange
