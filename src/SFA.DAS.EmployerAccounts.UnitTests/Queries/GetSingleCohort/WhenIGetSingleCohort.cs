@@ -14,10 +14,10 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 {
-    public class WhenIGetSingleCohort : QueryBaseTest<GetSingleCohortHandler, GetSingleCohortRequest, GetSingleCohortResponse>
+    public class WhenIGetSingleCohort : QueryBaseTest<GetSingleCohortRequestHandler, GetSingleCohortRequest, GetSingleCohortResponse>
     {
         public override GetSingleCohortRequest Query { get; set; }
-        public override GetSingleCohortHandler RequestHandler { get; set; }
+        public override GetSingleCohortRequestHandler RequestHandler { get; set; }
         public override Mock<IValidator<GetSingleCohortRequest>> RequestValidator { get; set; }
         private Mock<ICommitmentV2Service> _commitmentV2Service;
         private Mock<IHashingService> _hashingService;
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(hashedAccountId)).Returns(_accountId);
 
-            RequestHandler = new GetSingleCohortHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object);
+            RequestHandler = new GetSingleCohortRequestHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object);
 
             Query = new GetSingleCohortRequest
             {

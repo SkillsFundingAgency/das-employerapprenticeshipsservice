@@ -7,13 +7,13 @@ using SFA.DAS.HashingService;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
 {
-    public class GetSingleCohortHandler : IAsyncRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
+    public class GetSingleCohortRequestHandler : IAsyncRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
     {
         private readonly IValidator<GetSingleCohortRequest> _validator;
         private readonly ICommitmentV2Service _commitmentV2Service;        
         private readonly IHashingService _hashingService;
 
-        public GetSingleCohortHandler(
+        public GetSingleCohortRequestHandler(
             IValidator<GetSingleCohortRequest> validator,
             ICommitmentV2Service commitmentV2Service,            
             IHashingService hashingService)
