@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using MediatR;
-using Microsoft.Owin;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;

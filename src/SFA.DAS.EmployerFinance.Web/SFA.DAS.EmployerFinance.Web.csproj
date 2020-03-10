@@ -636,7 +636,6 @@
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
-    <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

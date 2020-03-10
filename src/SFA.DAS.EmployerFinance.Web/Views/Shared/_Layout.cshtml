@@ -236,10 +236,6 @@
     }
     <main role="main" id="content">
         @RenderSection("breadcrumb", false)
-        @*@if (Html.IsAuthorized("EmployerFeature.Recruitments"))
-        {*@
-        @Html.Partial(@"_NotSignedV3AgreementMessage")
-        @*}*@
         @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
         @RenderBody()
     </main>

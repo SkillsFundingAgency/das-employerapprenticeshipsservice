@@ -3,8 +3,6 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
-using SFA.DAS.EAS.Account.Api.Client;
-using SFA.DAS.EmployerAccounts.Api.Client;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
@@ -59,8 +57,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         public static string GetZenDeskSnippetKey(this HtmlHelper html)
         {
-            var accountClient = DependencyResolver.Current.GetService<IAccountApiClient>();
-            accountClient.GetAccount("");
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             return configuration.ZenDeskSnippetKey;
         }
