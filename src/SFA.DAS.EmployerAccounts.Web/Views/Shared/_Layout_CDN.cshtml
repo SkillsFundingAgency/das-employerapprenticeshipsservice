@@ -269,9 +269,12 @@
                         FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
                 var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
                 {
-                    if (!Html.HasSignedV3AgreementAsync(userId, hashedAccountId))
+                    if (!string.IsNullOrEmpty(hashedAccountId))
                     {
-                        @Html.Partial(@"_NotSignedV3AgreementMessage_CDN")
+                        if (!Html.HasSignedV3AgreementAsync(userId, hashedAccountId))
+                        {
+                            @Html.Partial(@"_NotSignedV3AgreementMessage_CDN")
+                        }
                     }
                 }
             }
