@@ -160,7 +160,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         };
 
         [Test]
-        public void CheckIfV3AgreementIsNotSignedByAllLegalEntities_ReturnTrue()
+        public void CheckIfV3AgreementIsSignedByAllLegalEntities_ReturnFalse()
         {
             //Arrange
             var hashedAccountId = "ABC123";
@@ -219,11 +219,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             //Act
             var actual = htmlHelper.HasSignedV3AgreementAsync(userId,hashedAccountId);
             //Assert
-            Assert.IsTrue(actual);
+            Assert.IsFalse(actual);
         }
 
         [Test]
-        public void CheckIfV3AgreementIsNotSignedByAllLegalEntities_ReturnFalse()
+        public void CheckIfV3AgreementIsSignedByAllLegalEntities_ReturnTrue()
         {
             //Arrange
             var hashedAccountId = "ABC123";
@@ -246,7 +246,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             //Act
             var actual = htmlHelper.HasSignedV3AgreementAsync(userId, hashedAccountId);
             //Assert
-            Assert.IsFalse(actual);
+            Assert.IsTrue(actual);
         }
     }
 }
