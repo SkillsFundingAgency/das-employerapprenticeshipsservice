@@ -258,6 +258,15 @@
 <div class="govuk-width-container">
     @RenderSection("breadcrumb", required: false)
     <main class="govuk-main-wrapper" id="main-content" role="main">
+        @{
+            var userId = Html.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.User.Claims.
+                FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
+            var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName].ToString();
+        }
+        @if (!Html.HasSignedV3AgreementAsync(userId, hashedAccountId))
+        {
+            @Html.Partial(@"_NotSignedV3AgreementMessage")
+        }
         @Html.Partial(@"_SuccessMessage_CDN", Model as OrchestratorResponse)
         @RenderBody()
     </main>
