@@ -56,10 +56,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
                         .OrderByDescending(lea => lea.Signed.VersionNumber)
                         .FirstOrDefault();
 
-                    if (latestSignedAgreement?.Signed.VersionNumber != 3) return true;
+                    if (latestSignedAgreement?.Signed.VersionNumber != 3) return false;
                 }
             }
-            return false;
+            return true;
         }
 
 
