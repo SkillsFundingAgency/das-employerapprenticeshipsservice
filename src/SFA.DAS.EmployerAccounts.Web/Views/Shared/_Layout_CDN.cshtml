@@ -271,7 +271,7 @@
                 {
                     if (!string.IsNullOrEmpty(hashedAccountId))
                     {
-                        if (!Html.HasSignedV3AgreementAsync(userId, hashedAccountId))
+                        if (Html.ShowExpiringAgreementBanner(userId, hashedAccountId))
                         {
                             @Html.Partial(@"_NotSignedV3AgreementMessage_CDN")
                         }

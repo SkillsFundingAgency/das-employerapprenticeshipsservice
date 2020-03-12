@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return isAuthorized;
         }
 
-        public static bool HasSignedV3AgreementAsync(this HtmlHelper htmlHelper,string userId,string hashedAccountId)
+        public static bool ShowExpiringAgreementBanner(this HtmlHelper htmlHelper,string userId,string hashedAccountId)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
             var agreementResponse = Task.Run(async () => await mediator
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
                 ExternalUserId = userId
             })).Result;
 
-            if (agreementResponse.EmployerAgreements.Count > 0)
+            if (agreementResponse.EmployerAgreements.Where(ea => ea.HasSignedAgreement).Count() > 0)
             {
                 var employerAgreements = agreementResponse.EmployerAgreements;
 
@@ -56,10 +56,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
                         .OrderByDescending(lea => lea.Signed.VersionNumber)
                         .FirstOrDefault();
 
-                    if (latestSignedAgreement?.Signed.VersionNumber != 3) return false;
+                    if (latestSignedAgreement?.Signed.VersionNumber != 3) return true;
                 }
             }
-            return true;
+            return false;
         }
 
 

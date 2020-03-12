@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -77,7 +78,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             _viewDataContainerMock = new Mock<IViewDataContainer>();
             _viewContext = new ViewContext();
             _viewContext.Controller = _controller;
-            
+
 
             _mockMediator = new Mock<IMediator>();
 
@@ -160,7 +161,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         };
 
         [Test]
-        public void CheckIfV3AgreementIsSignedByAllLegalEntities_ReturnFalse()
+        [TestCase(false, false, false)]
+        [TestCase(true, false, false)]
+        [TestCase(false, true, false)]
+        public void SingleOrg_SignedV3Agreement_ShouldNotShowExpiringAgreementBanner(bool hasSignedV1, bool hasSignedV2, bool shouldShowBanner)
         {
             //Arrange
             var hashedAccountId = "ABC123";
@@ -175,55 +179,36 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
                         {
                             new EmployerAgreementStatusDto
                             {
-                                Pending = new PendingEmployerAgreementDetailsDto { Id = 123 },
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
+                                Signed = hasSignedV1 ? new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 } : null,
+                                Pending = hasSignedV1 ? null :  new PendingEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{ AccountLegalEntityId = 1 }
                             },
                             new EmployerAgreementStatusDto
                             {
-                                Pending = new PendingEmployerAgreementDetailsDto { Id = 124 },
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
+                                Signed = hasSignedV2 ? new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 2 } : null,
+                                Pending = hasSignedV2 ? null :  new PendingEmployerAgreementDetailsDto { Id = 123, VersionNumber = 2 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{ AccountLegalEntityId = 1 }
                             },
                             new EmployerAgreementStatusDto
                             {
-                                Pending = new PendingEmployerAgreementDetailsDto { Id = 125 },
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
-                            },
-                            new EmployerAgreementStatusDto
-                            {
-                                Pending = new PendingEmployerAgreementDetailsDto { Id = 126 },
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 1}
-                            },
-                            new EmployerAgreementStatusDto
-                            {
-                                Signed = new SignedEmployerAgreementDetailsDto { Id = 111 , VersionNumber = 2},
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 11}
-                                },
-                            new EmployerAgreementStatusDto
-                            {
-                                Signed = new SignedEmployerAgreementDetailsDto { Id = 112, VersionNumber = 1 },
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 11}
-                            },
-                            new EmployerAgreementStatusDto
-                            {
-                                Signed = new SignedEmployerAgreementDetailsDto { Id = 113 , VersionNumber = 2},
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 12}
-
-                            },
-                            new EmployerAgreementStatusDto
-                            {
-                                Signed = null,
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 12}
+                                Signed = new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 3 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{ AccountLegalEntityId = 1 }
                             }
                         }
                     }));
+            
             //Act
-            var actual = htmlHelper.HasSignedV3AgreementAsync(userId,hashedAccountId);
+            var actual = htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
+            
             //Assert
-            Assert.IsFalse(actual);
+            Assert.AreEqual(shouldShowBanner, actual);
         }
 
         [Test]
-        public void CheckIfV3AgreementIsSignedByAllLegalEntities_ReturnTrue()
+        [TestCase(false, false, false)]
+        [TestCase(true, false, true)]
+        [TestCase(false, true, true)]
+        public void SingleOrg_PreviousAgreementSigned_V3NotSigned_ShouldShowExpiringAgreementBanner(bool hasSignedV1, bool hasSignedV2, bool shouldShowBanner)
         {
             //Arrange
             var hashedAccountId = "ABC123";
@@ -238,15 +223,90 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
                         {
                             new EmployerAgreementStatusDto
                             {
-                                Signed = new SignedEmployerAgreementDetailsDto { Id = 113 , VersionNumber = 3},
-                                LegalEntity = new AccountSpecificLegalEntityDto{AccountLegalEntityId = 12}
+                                Signed = hasSignedV1 ? new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 } : null,
+                                Pending = hasSignedV1 ? null :  new PendingEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{ AccountLegalEntityId = 1 }
+                            },
+                            new EmployerAgreementStatusDto
+                            {
+                                Signed = hasSignedV2 ? new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 } : null,
+                                Pending = hasSignedV2 ? null :  new PendingEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 },
+                                LegalEntity = new AccountSpecificLegalEntityDto{ AccountLegalEntityId = 1 }
                             }
                         }
                     }));
+            
             //Act
-            var actual = htmlHelper.HasSignedV3AgreementAsync(userId, hashedAccountId);
+            var actual = htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
+            
+            //Assert
+            Assert.AreEqual(shouldShowBanner, actual);
+        }
+
+        [Test]
+        [TestCase(1)]
+        [TestCase(5)]
+        public void MultipleOrg_OneWithSignedPrevious_AndV3NotSigned_ShouldShowExpiringAgreementBanner(int numOfOrgsWithSignedV3)
+        {
+            //Arrange
+            var hashedAccountId = "ABC123";
+            var userId = "USER1";
+            var dependancyResolver = new Mock<IDependencyResolver>();
+            dependancyResolver.Setup(r => r.GetService(typeof(IMediator))).Returns(_mockMediator.Object);
+            DependencyResolver.SetResolver(dependancyResolver.Object);
+
+            var employerAgreements = GetAgreementTestData(numOfOrgsWithSignedV3);
+            employerAgreements.Add(new EmployerAgreementStatusDto
+            {
+                Signed = new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 },
+                LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = 3 }
+            });
+
+            employerAgreements.Add(new EmployerAgreementStatusDto
+            {
+                Signed = new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 2 },
+                LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = 3 }
+            });
+
+            _mockMediator.Setup(m => m.SendAsync(It.Is<GetAccountEmployerAgreementsRequest>(q => q.HashedAccountId == hashedAccountId)))
+                    .Returns(Task.FromResult(new GetAccountEmployerAgreementsResponse
+                    {
+                        EmployerAgreements = employerAgreements
+                    }));
+
+            //Act
+            var actual = htmlHelper.ShowExpiringAgreementBanner(userId, hashedAccountId);
+
             //Assert
             Assert.IsTrue(actual);
+        }
+
+        private List<EmployerAgreementStatusDto> GetAgreementTestData(int numOfOrgsWithSignedV3)
+        {
+            var employerAgreementStatusDtos = new List<EmployerAgreementStatusDto>();
+
+            for (int i = 1; i <= numOfOrgsWithSignedV3; i++)
+            {
+                employerAgreementStatusDtos.Add(new EmployerAgreementStatusDto
+                {
+                    Signed = new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 1 },
+                    LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = 1 }
+                });
+
+                employerAgreementStatusDtos.Add(new EmployerAgreementStatusDto
+                {
+                    Signed = new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 2 },
+                    LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = 1 }
+                });
+
+                employerAgreementStatusDtos.Add(new EmployerAgreementStatusDto
+                {
+                    Signed = new SignedEmployerAgreementDetailsDto { Id = 123, VersionNumber = 3 },
+                    LegalEntity = new AccountSpecificLegalEntityDto { AccountLegalEntityId = 1 }
+                });
+            }
+
+            return employerAgreementStatusDtos;
         }
     }
 }
