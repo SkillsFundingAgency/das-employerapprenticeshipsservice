@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.Encoding;
 using System.Collections.Generic;
-
+using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.Models.CommitmentsV2
 {
@@ -15,6 +15,11 @@ namespace SFA.DAS.EmployerAccounts.Models.CommitmentsV2
         public void SetHashId(IEncodingService encodingService)
         {
             HashedId = encodingService.Encode(Id, EncodingType.CohortReference);
+        }
+        public IEnumerable<TrainingProvider> TrainingProvider { get; private set; }
+        public void SetTrainingProvider(IEnumerable<TrainingProvider> trainingProvider)
+        {            
+            TrainingProvider = trainingProvider;
         }
     }
 

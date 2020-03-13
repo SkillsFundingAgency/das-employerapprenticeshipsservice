@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                .ForMember(target => target.TrainingProvider, opt => opt.Ignore())
                .ForMember(target => target.Cohort, opt => opt.Ignore());
 
-            CreateMap<ApprenticeshipDetailsResponse, Apprenticeship>()              
+            CreateMap<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse, Apprenticeship>()              
                .ForMember(target => target.CourseStartDate, opt => opt.MapFrom(src => src.StartDate))
                .ForMember(target => target.CourseEndDate, opt => opt.MapFrom(src => src.EndDate))
                .ForMember(target => target.ApprenticeshipStatus, opt => opt.MapFrom(src => Models.CommitmentsV2.ApprenticeshipStatus.Approved))

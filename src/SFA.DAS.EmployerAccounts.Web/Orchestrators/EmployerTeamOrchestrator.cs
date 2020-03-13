@@ -190,20 +190,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest 
-                { 
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-
-                });
-
                 var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
                 {
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
 
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask, accountCohortResponseTask, apprenticeshipsResponseTask).ConfigureAwait(false);
+                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest 
+                { 
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+
+                });                
+
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -725,6 +725,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvaluateSingleApprenticeshipDraftStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.CohortsCount == 1 
+                && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.Draft))
@@ -739,7 +740,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvaluateSingleApprenticeshipsWithTrainingProviderStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.CohortsCount == 1
+            if (viewModel.Data.CallToActionViewModel.CohortsCount == 1 
+                && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.WithTrainingProvider))
@@ -755,6 +757,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.CohortsCount == 1 
+                && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.HasSingleReservation
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.WithTrainingProvider))
             {
@@ -768,7 +771,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvaluateSingleApprenticeshipsWithReadyToReviewStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.CohortsCount  == 1
+            if (viewModel.Data.CallToActionViewModel.CohortsCount  == 1 
+                && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.Review))

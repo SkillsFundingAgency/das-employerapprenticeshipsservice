@@ -337,19 +337,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult SingleApprenticeshipContinueSetup(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
         [ChildActionOnly]
         public ActionResult SingleApprenticeshipWithTrainingProvider(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
         [ChildActionOnly]
         public ActionResult SingleApprenticeshipReadyForReview(AccountDashboardViewModel model)
         {
-            return PartialView(model);
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
         [ChildActionOnly]

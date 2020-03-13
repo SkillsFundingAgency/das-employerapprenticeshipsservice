@@ -172,12 +172,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                                 LastName = "LastName",
                                 CourseStartDate = new DateTime(2020,5,1),
                                 CourseEndDate = new DateTime(2022,1,1),
-                                CourseName = "CourseName",
-                                TrainingProvider = new TrainingProvider()
-                                {
-                                    Id = 3,
-                                    Name = "TrainingProviderName"
-                                }
+                                CourseName = "CourseName"                               
                             }
                         }
             };

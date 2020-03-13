@@ -12,7 +12,11 @@ namespace SFA.DAS.EmployerAccounts.Models.CommitmentsV2
         public DateTime? CourseStartDate { get; set; }
         public DateTime? CourseEndDate { get; set; }
         public ApprenticeshipStatus ApprenticeshipStatus { get; set; }
-        public TrainingProvider TrainingProvider { get; set; }
+        public TrainingProvider TrainingProvider { get; private set; }
+        public void SetTrainingProvider(TrainingProvider trainingProvider)
+        {           
+            TrainingProvider = trainingProvider;
+        }
         public Cohort Cohort { get; private set; }
         public void SetCohort(Cohort cohort)
         {

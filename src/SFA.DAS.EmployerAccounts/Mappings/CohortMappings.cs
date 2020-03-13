@@ -11,9 +11,11 @@ namespace SFA.DAS.EmployerAccounts.Mappings
             CreateMap<CohortSummary, Cohort>()                
                 .ForMember(target => target.Id, opt => opt.MapFrom(src => src.CohortId))
                 .ForMember(target => target.NumberOfDraftApprentices, opt => opt.MapFrom(src => src.NumberOfDraftApprentices))
-                .ForMember(target => target.Apprenticeships, opt => opt.Ignore())
+                .ForMember(target => target.Apprenticeships, opt => opt.Ignore())                
                 .ForMember(target => target.HashedId, opt => opt.Ignore())
+                .ForMember(target => target.TrainingProvider, opt => opt.Ignore())
                 .ForMember(target => target.CohortStatus, opt => opt.MapFrom(src => GetStatus(src)));
+
         }
 
         private CohortStatus GetStatus(CohortSummary cohort)
