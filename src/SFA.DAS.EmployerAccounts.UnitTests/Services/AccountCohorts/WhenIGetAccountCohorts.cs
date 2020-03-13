@@ -43,7 +43,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AccountCohorts
                 .Returns(Task.FromResult(CreateApprenticeshipResponse()));
             var apprenticeships = new List<Apprenticeship>  { new Apprenticeship { ApprenticeshipStatus = EmployerAccounts.Models.CommitmentsV2.ApprenticeshipStatus.Approved,  FirstName ="FirstName" , LastName = "LastName" } };
             _mockMapper
-             .Setup(m => m.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, IEnumerable<Apprenticeship>>(It.IsAny<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>>()))
+             .Setup(m => m.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, IEnumerable<Apprenticeship>>
+             (It.IsAny<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>>(),
+             It.IsAny<Action<IMappingOperationOptions<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, IEnumerable<Apprenticeship>>>>()))
              .Returns(apprenticeships);
 
             //Act

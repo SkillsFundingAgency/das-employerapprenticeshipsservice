@@ -65,8 +65,20 @@ namespace SFA.DAS.EmployerAccounts.Services
         public async Task<IEnumerable<Apprenticeship>> GetApprenticeships(long accountId)
         {
             var apprenticeship = await _commitmentsApiClient.GetApprenticeships(new CommitmentsV2.Api.Types.Requests.GetApprenticeshipsRequest { AccountId = accountId });
+            var trainingProvider = _mapper.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, IEnumerable<TrainingProvider>>(apprenticeship.Apprenticeships);
 
-            return _mapper.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, IEnumerable<Apprenticeship>>(apprenticeship.Apprenticeships);
+            return _mapper.Map<IEnumerable<GetApprenticeshipsResponse.ApprenticeshipDetailsResponse>, IEnumerable<Apprenticeship>>(apprenticeship.Apprenticeships,
+                  opt =>
+                  {
+                      opt.AfterMap((src, dest) =>
+                      {
+                          dest.ToList().ForEach(c =>
+                          {
+                              c.SetHashId(_encodingService);
+                              c.SetTrainingProvider(trainingProvider.First());
+                          });
+                      });
+                  });
         }
     }
 }
