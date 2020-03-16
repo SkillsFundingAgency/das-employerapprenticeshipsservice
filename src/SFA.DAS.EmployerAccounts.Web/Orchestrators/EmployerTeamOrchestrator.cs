@@ -26,6 +26,8 @@ using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
+using SFA.DAS.EmployerAccounts.Web.Exceptions;
+using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
@@ -34,6 +36,11 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
+
+using System.Threading.Tasks;
+using SFA.DAS.Authorization.Services;
+using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.CommitmentsV2.Api.Client;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
