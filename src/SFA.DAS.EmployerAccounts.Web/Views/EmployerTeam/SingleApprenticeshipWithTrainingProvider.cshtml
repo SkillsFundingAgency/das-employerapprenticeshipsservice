@@ -12,7 +12,7 @@
                 Name
             </th>
             <td class="tw-65" id="apprentice-name">
-                @(Model?.ApprenticeshipFullName)                
+                @(Model?.ApprenticeshipFullName)
             </td>
         </tr>
         <tr>
@@ -31,14 +31,6 @@
                 @(Model?.CourseName)
             </td>
         </tr>
-        <tr>
-            <th scope="row">
-                Status
-            </th>
-            <td id="with-training-provider">
-                <span class="govuk-tag govuk-tag--inactive">WITH TRAINING PROVIDER</span> 
-            </td>
-        </tr>
         @if (String.IsNullOrEmpty(Model.CourseStartDateText))
         {
             <tr>
@@ -46,7 +38,7 @@
                     Start month
                 </th>
                 <td id="course-start-date">
-                    @(Model?.CourseStartDateText)                    
+                    @(Model?.CourseStartDateText)
                 </td>
             </tr>
             <tr>
@@ -54,10 +46,18 @@
                     Finish month
                 </th>
                 <td id="course-end-date">
-                    @(Model?.CourseEndDateText)                    
+                    @(Model?.CourseEndDateText)
                 </td>
             </tr>
         }
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td id="with-training-provider">
+                <span class="govuk-tag govuk-tag--inactive">WITH TRAINING PROVIDER</span>
+            </td>
+        </tr>
     </table>
     <p>
         <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetailsLink}")" draggable="false" class="govuk-link">

@@ -10,16 +10,8 @@
             <th scope="row" class="tw-35">
                 Name
             </th>
-            <td class="tw-65" id="apprentice-name">                
+            <td class="tw-65" id="apprentice-name">
                 @(Model?.ApprenticeshipFullName)
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">
-                Training Provider
-            </th>
-            <td id="provider-name">
-                @(Model?.TrainingProvider?.Name)
             </td>
         </tr>
         <tr>
@@ -28,6 +20,14 @@
             </th>
             <td id="course-name">
                 @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td id="provider-name">
+                @(Model?.TrainingProvider?.Name)
             </td>
         </tr>
         <tr>

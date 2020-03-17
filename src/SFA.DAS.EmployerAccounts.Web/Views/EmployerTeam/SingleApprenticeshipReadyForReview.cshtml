@@ -12,7 +12,7 @@
                 Name
             </th>
             <td class="tw-65" id="apprentice-name">
-                @(Model?.ApprenticeshipFullName)                
+                @(Model?.ApprenticeshipFullName)
             </td>
         </tr>
         <tr>
@@ -28,7 +28,23 @@
                 Course
             </th>
             <td id="course-name">
-                @(Model?.CourseName)                
+                @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Start month
+            </th>
+            <td id="course-start-date">
+                @(Model?.CourseStartDateText)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Finish month
+            </th>
+            <td id="course-end-date">
+                @(Model?.CourseEndDateText)
             </td>
         </tr>
         <tr>
@@ -37,22 +53,6 @@
             </th>
             <td id="ready-for-review">
                 <span class="govuk-tag govuk-tag--error">READY FOR REVIEW</span>
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">
-                Start month
-            </th>
-            <td id="course-start-date">
-                @(Model?.CourseStartDateText)                
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">
-                Finish month
-            </th>
-            <td id="course-end-date">
-                @(Model?.CourseEndDateText)                
             </td>
         </tr>
     </table>
