@@ -1,19 +1,21 @@
-﻿using System.Web;
-using NLog;
+﻿using NLog;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Results;
 using SFA.DAS.Authorization.Services;
 using System.Security.Claims;
 using System.Linq;
+using MediatR;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
+using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers
 {
     public static class HtmlHelperExtensions
     {
         public const string Tier2User = "Tier2User";
-        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();        
+        private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public static AuthorizationResult GetAuthorizationResult(this HtmlHelper htmlHelper, string featureType)
         {
@@ -31,19 +33,49 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return isAuthorized;
         }
 
+        public static bool ShowExpiringAgreementBanner(this HtmlHelper htmlHelper,string userId,string hashedAccountId)
+        {
+            var mediator = DependencyResolver.Current.GetService<IMediator>();
+            var agreementResponse = Task.Run(async () => await mediator
+            .SendAsync(new GetAccountEmployerAgreementsRequest
+            {
+                HashedAccountId = hashedAccountId,
+                ExternalUserId = userId
+            })).Result;
+
+            if (agreementResponse.EmployerAgreements.Where(ea => ea.HasSignedAgreement).Count() > 0)
+            {
+                var employerAgreements = agreementResponse.EmployerAgreements;
+
+                var legalEntityAgreements = employerAgreements.GroupBy(ea => ea.LegalEntity.AccountLegalEntityId);
+
+                foreach (var legalEntityAgreement in legalEntityAgreements)
+                {
+                    var latestSignedAgreement = legalEntityAgreement
+                        .Where(lea => lea.HasSignedAgreement)
+                        .OrderByDescending(lea => lea.Signed.VersionNumber)
+                        .FirstOrDefault();
+
+                    if (latestSignedAgreement?.Signed.VersionNumber != 3) return true;
+                }
+            }
+            return false;
+        }
+
+
         public static string ReturnToHomePageButtonHref(this HtmlHelper htmlHelper, string accountId)
         {
             accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
-            
+
             Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
-            
+
             return isTier2User && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : isAccountIdSet ? $"/accounts/{accountId}/teams" : "/";
-        }       
+        }
 
         public static string ReturnToHomePageButtonText(this HtmlHelper htmlHelper, string accountId)
         {
             accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
-           
+
             Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
 
             return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Go back to the account home page" : "Go back to the service home page";
@@ -52,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         public static string ReturnToHomePageLinkHref(this HtmlHelper htmlHelper, string accountId)
         {
             accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
-            
+
             Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
 
             return isTier2User && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : "/";
@@ -61,7 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         public static string ReturnToHomePageLinkText(this HtmlHelper htmlHelper, string accountId)
         {
             accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
-            
+
             Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
 
             return isTier2User && isAccountIdSet ? "Back" : isAccountIdSet ? "Back to the homepage" : "Back";
@@ -89,13 +121,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
         {
             var identity = htmlHelper.ViewContext.RequestContext.HttpContext.User.Identity as ClaimsIdentity;
             var claim = identity?.Claims.FirstOrDefault(c => c.Type == RouteValueKeys.AccountHashedId);
-            var hashedAccountId = claim?.Value;            
-            
+            var hashedAccountId = claim?.Value;
+
             Logger.Debug($"GetClaimsHashedAccountId :: HashedAccountId : {hashedAccountId} ");
             return (!string.IsNullOrEmpty(hashedAccountId)) ? hashedAccountId : string.Empty;
         }
 
-       
+
 
         public static bool ViewExists(this HtmlHelper html, string viewName)
         {
@@ -103,6 +135,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
 
             return result.View != null;
-        }      
+        }
     }
 }
