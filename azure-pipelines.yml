@@ -19,6 +19,14 @@ pool:
   - msbuild
   - visualstudio
 
+resources:
+  repositories:
+  - repository: das-platform-building-blocks
+    type: github
+    name: SkillsFundingAgency/das-platform-building-blocks
+    ref: refs/heads/master
+    endpoint: "GitHub (SFA)"  
+
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
@@ -59,6 +67,8 @@ steps:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks    
     
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
