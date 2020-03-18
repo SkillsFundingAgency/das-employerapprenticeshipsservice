@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data.Entity;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
@@ -12,15 +14,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf
     {
         private readonly IValidator<GetEmployerAgreementPdfRequest> _validator;
         private readonly IPdfService _pdfService;
-        private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
+        private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public GetEmployerAgreementPdfQueryHandler(IValidator<GetEmployerAgreementPdfRequest> validator, IPdfService pdfService, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+        public GetEmployerAgreementPdfQueryHandler(IValidator<GetEmployerAgreementPdfRequest> validator, IPdfService pdfService, IHashingService hashingService, Lazy<EmployerAccountsDbContext> db)
         {
             _validator = validator;
             _pdfService = pdfService;
-            _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
+            _db = db;
         }
 
         public async Task<GetEmployerAgreementPdfResponse> Handle(GetEmployerAgreementPdfRequest message)
@@ -39,9 +41,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf
 
             var employerAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
 
-            var agreement = await _employerAgreementRepository.GetEmployerAgreement(employerAgreementId);
+            var templatePartialViewName = await _db.Value.Agreements.Where(x => x.Id == employerAgreementId).Select(x => x.Template.PartialViewName).SingleAsync();
 
-            var file = await _pdfService.SubsituteValuesForPdf($"{agreement.TemplatePartialViewName}.pdf");
+            var file = await _pdfService.SubsituteValuesForPdf($"{templatePartialViewName}.pdf");
 
 
             return new GetEmployerAgreementPdfResponse {FileStream = file};

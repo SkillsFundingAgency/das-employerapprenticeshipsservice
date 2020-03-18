@@ -1,12 +1,14 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Models.Reservations
 {
     public class Course
     {
-        [JsonProperty("courseId")]
-        public string Id { get; set; }
-        [JsonProperty("title")]
-        public string CourseName { get; set; }
+        public string CourseId { get; set; }
+        public string Title { get; set; }
+        public string Level { get; set; }
+        [JsonIgnore]
+        public string CourseDescription => Title.Equals("UNKNOWN", StringComparison.CurrentCultureIgnoreCase) ? Title : $"{Title} - Level {Level}";
     }
 }

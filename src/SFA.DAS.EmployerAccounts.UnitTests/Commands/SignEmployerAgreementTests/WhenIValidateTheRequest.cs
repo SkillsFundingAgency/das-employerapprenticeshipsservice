@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             var employerAgreementId = 12345;
             var hashedAgreementId = "123ASD";
             _hashingService.Setup(x => x.DecodeValue(hashedAgreementId)).Returns(employerAgreementId);
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(employerAgreementId)).ReturnsAsync(new EmployerAgreementView { Status = EmployerAgreementStatus.Pending });
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreementStatus(employerAgreementId)).ReturnsAsync(EmployerAgreementStatus.Pending);
 
             //Act
             var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
@@ -39,8 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 HashedAccountId = "GHT432",
                 ExternalUserId = "123asd",
                 SignedDate = new DateTime(2016, 01, 01),
-                HashedAgreementId = "123ASD",
-                OrganisationName = "compName"
+                HashedAgreementId = "123ASD"
             });
 
 
@@ -59,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.AreEqual(4,actual.ValidationDictionary.Count);
+            Assert.AreEqual(3,actual.ValidationDictionary.Count);
         }
 
 
@@ -72,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             var employerAgreementId = 12345;
             var hashedAgreementId = "123ASD";
             _hashingService.Setup(x => x.DecodeValue(hashedAgreementId)).Returns(employerAgreementId);
-            _employerAgreementRepository.Setup(x => x.GetEmployerAgreement(employerAgreementId)).ReturnsAsync(new EmployerAgreementView {Status = employerAgreementStatus});
+            _employerAgreementRepository.Setup(x => x.GetEmployerAgreementStatus(employerAgreementId)).ReturnsAsync(employerAgreementStatus);
 
             //Act
             var actual = await _validator.ValidateAsync(new SignEmployerAgreementCommand
@@ -80,8 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 HashedAccountId = "GHT432",
                 ExternalUserId = "123asd",
                 SignedDate = new DateTime(2016, 01, 01),
-                HashedAgreementId = hashedAgreementId,
-                OrganisationName = "compName"
+                HashedAgreementId = hashedAgreementId
             });
 
 

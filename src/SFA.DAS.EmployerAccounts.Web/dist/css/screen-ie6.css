@@ -2141,6 +2141,8 @@ a#link-settings {
       padding: 14px; }
       #global-header #service-console-msg .header-wrapper .content p {
         margin: 0; }
+        #global-header #service-console-msg .header-wrapper .content p span {
+          white-space: nowrap; }
 
 /* Support user view of service and transact BANNER - Ends */
 .error-summary, .info-summary, .success-summary, .warning-summary {
@@ -3184,6 +3186,56 @@ table.responsive--desktop tr th.tw-70 {
   #layout-agreement .back-to-contents {
     display: none; }
 
+/* *** "new" leaner styles for _Agreement_v3.cshtml: Starts *** */
+#agreement-list .grey-background,
+#agreement-list .call-to-action {
+  background: #dee0e2;
+  padding: 20px 20px 10px; }
+
+#agreement-list .call-to-action {
+  margin-bottom: 24px; }
+
+#agreement-list ol.contents a {
+  display: table;
+  text-decoration: none; }
+  #agreement-list ol.contents a:hover {
+    text-decoration: underline; }
+
+#agreement-list ol.contents span.number {
+  display: table-cell;
+  min-width: 1.5em;
+  padding-right: 0.3em;
+  margin-right: 5px; }
+
+#agreement-list ol .contents .govuk-list--number {
+  padding-left: 20px;
+  list-style-type: decimal; }
+
+#agreement-list .list-lower-alpha {
+  padding-left: 20px;
+  list-style: lower-alpha; }
+
+#agreement-list .list-lower-roman {
+  padding-left: 20px;
+  list-style: lower-roman; }
+
+#agreement-list .list-lower-alpha ol {
+  padding: 16px 0 6px 20px; }
+
+#agreement-list .govuk-heading-m {
+  width: inherit;
+  padding: 0; }
+  #agreement-list .govuk-heading-m span {
+    display: inline-block;
+    width: 9%; }
+  #agreement-list .govuk-heading-m .clause-column-fig {
+    float: left;
+    width: 10%; }
+  #agreement-list .govuk-heading-m .clause-column-content {
+    float: left;
+    width: 90%; }
+
+/* *** "new" leaner styles for _Agreement_v3.cshtml: Ends *** */
 .js-enabled .accordion-tab {
   position: relative;
   color: #005ea5;
@@ -4601,26 +4653,41 @@ hr.dashboard-heading-separator {
       margin-bottom: 30px;
       padding: 30px; } }
 
-.das-panel--featured {
+.das-panel--interruption {
   background: #005ea5;
   color: #fff;
   margin-top: 20px; }
-  .das-panel--featured > p {
+  .das-panel--interruption > p {
     color: #fff; }
-    .das-panel--featured > p:last-child {
+    .das-panel--interruption > p:last-child {
       margin-bottom: 0; }
-  .das-panel--featured > dl {
+  .das-panel--interruption > dl {
     color: #fff;
     font-size: 1em; }
-    .das-panel--featured > dl > dd.das-definition-list__definition {
+    .das-panel--interruption > dl > dd.das-definition-list__definition {
       border-color: rgba(255, 255, 255, 0.5); }
-  .das-panel--featured .das-panel__link {
+  .das-panel--interruption .das-panel__link {
     color: #fff;
     font-weight: 700; }
-    .das-panel--featured .das-panel__link:hover {
-      text-decoration: non; }
-    .das-panel--featured .das-panel__link:focus {
+    .das-panel--interruption .das-panel__link:hover {
+      text-decoration: none; }
+    .das-panel--interruption .das-panel__link:focus {
       color: #000; }
+
+.das-panel--summary {
+  padding: 0px;
+  margin-top: 30px; }
+
+.das-panel--action {
+  background: #dee0e2;
+  color: #000;
+  margin-top: 20px; }
+  .das-panel--action > p:last-child {
+    margin-bottom: 0; }
+  .das-panel--action .das-panel__link {
+    font-weight: 700; }
+    .das-panel--action .das-panel__link:hover {
+      text-decoration: none; }
 
 .das-panel__heading {
   font-size: 19px;
@@ -4629,6 +4696,10 @@ hr.dashboard-heading-separator {
   margin-bottom: 0;
   font-size: 24px; }
   .das-panel--featured .das-panel__heading {
+    font-size: 24px;
+    font-size: 36px;
+    line-height: 1.2; }
+  .das-panel--action .das-panel__heading {
     font-size: 24px;
     font-size: 36px;
     line-height: 1.2; }

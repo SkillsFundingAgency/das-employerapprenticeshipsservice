@@ -86,18 +86,18 @@
                             }
                             else
                             {
-                                @:Agreement not signed
+                                @:Agreement not accepted
                             }
                         }
                         else if (employerAgreement.HasSignedAgreement)
                         {
-                            @:Signed by @employerAgreement.Signed.SignedByName
+                            @:Accepted by @employerAgreement.Signed.SignedByName
                         }
                     </td>
                     <td data-label="Action">
                         @if (employerAgreement.HasPendingAgreement)
                         {
-                            <a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Sign agreement</a>
+                            <a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Accept agreement</a>
                         }
                         else if (employerAgreement.HasSignedAgreement)
                         {
@@ -111,7 +111,7 @@
                         }
                         else
                         {
-                            <span>Sign agreement to receive an agreement ID</span>
+                            <span>Accept agreement to receive an agreement ID</span>
                         }
                     </td>
                 </tr>

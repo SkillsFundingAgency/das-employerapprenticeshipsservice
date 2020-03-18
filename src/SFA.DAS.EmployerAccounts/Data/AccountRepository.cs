@@ -94,6 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@sector", createParams.Sector, DbType.String);
             parameters.Add("@aorn", createParams.Aorn, DbType.String);
             parameters.Add("@AgreementType", createParams.AgreementType, DbType.Int16);
+            parameters.Add("@agreementVersion", null, DbType.Int32, ParameterDirection.Output);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateAccount]",
@@ -110,6 +111,7 @@ namespace SFA.DAS.EmployerAccounts.Data
                 AccountId = parameters.Get<long>("@accountId"),
                 LegalEntityId = parameters.Get<long>("@legalentityId"),
                 EmployerAgreementId = parameters.Get<long>("@employerAgreementId"),
+                AgreementVersion = parameters.Get<int>("@agreementVersion"),
                 AccountLegalEntityId = accountLegalEntityId
             };
         }
@@ -132,6 +134,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@agreementType", createParams.AgreementType, DbType.Int16);
             parameters.Add("@accountLegalentityId", null, DbType.Int64, ParameterDirection.Output);
             parameters.Add("@accountLegalEntityCreated", null, DbType.Boolean, ParameterDirection.Output);
+            parameters.Add("@agreementVersion", null, DbType.Int32, ParameterDirection.Output);
 
             await _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[CreateLegalEntityWithAgreement]",
@@ -162,7 +165,8 @@ namespace SFA.DAS.EmployerAccounts.Data
                 LegalEntityInceptionDate = createParams.DateOfIncorporation,
                 Sector = createParams.Sector,
                 Status = EmployerAgreementStatus.Pending,
-            };
+                VersionNumber = parameters.Get<int>("@agreementVersion")
+        };
         }
 
         public async Task<AccountStats> GetAccountStats(long accountId)

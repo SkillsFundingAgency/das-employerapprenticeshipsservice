@@ -633,9 +633,9 @@
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Shared\BadRequest.cshtml" />
     <Content Include="src\sass\_finance.scss" />
-    <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
+    <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

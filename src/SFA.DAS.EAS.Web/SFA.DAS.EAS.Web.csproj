@@ -115,7 +115,6 @@
     <Compile Include="ViewModels\PaymentTransactionViewModel.cs" />
     <Compile Include="ViewModels\PrivacyViewModel.cs" />
     <Compile Include="ViewModels\EmployerAccountPayeListViewModel.cs" />
-    <Compile Include="ViewModels\EmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\GatewayViewModel.cs" />
     <Compile Include="ViewModels\Organisation\SelectEmployerViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
@@ -154,8 +153,6 @@
     <Content Include="Views\Activities\Index.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\Activities\Latest.cshtml" />
-    <Content Include="Views\Shared\_Agreement_v2.cshtml" />
-    <Content Include="Views\Shared\_Agreement_v2_changes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -521,7 +518,6 @@
     <Content Include="Views\Shared\_SetupAccount.cshtml" />
     <Content Include="Views\Home\SetupAccount.cshtml" />
     <Content Include="Views\Home\LegalAgreement.cshtml" />
-    <Content Include="Views\Shared\_Agreement_v1.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="src\sass\_accordions.scss" />
     <Content Include="src\sass\_notifications.scss" />
@@ -661,7 +657,7 @@
     <PackageReference Include="WindowsAzure.Storage">
       <Version>8.7.0</Version>
     </PackageReference>
-  </ItemGroup>  
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -680,7 +676,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>57196</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost/</IISUrl>
+          <IISUrl>https://localhost:44349</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

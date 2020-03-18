@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web;
 using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.CreateLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.CreateOrganisationAddress;
 using SFA.DAS.EmployerAccounts.Commands.UpdateOrganisationDetails;

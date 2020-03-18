@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -56,7 +57,33 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
 
 
         [Test]
-        public void OnException_WhenAnUnauthorizedAccessExceptionIsThrownForTier2UserAndNoHashedAccountIdIsSet_ThenReturnToAccessDenied()
+        public void OnException_WhenAnUnauthorizedAccessExceptionIsThrownForTier2UserAndNoHashedAccountIdIsSet_ButClaimValueIsSet_ThenReturnToAccessDenied()
+        {
+            //Arrange            
+            ExceptionContext.Exception = Exception;
+            mockContext.Setup(x => x.Request.RequestContext.RouteData).Returns(RouteData);
+            ExceptionContext.HttpContext = mockContext.Object;
+            var identityMock = new Mock<ClaimsIdentity>();
+            identityMock.Setup(x => x.FindFirst("HashedAccountId")).Returns(new Claim("HashedAccountId", HashedAccountId));
+
+            var cp = new Mock<ClaimsPrincipal>();
+            cp.Setup(m => m.IsInRole(Tier2User)).Returns(true);
+            cp.Setup(m => m.HasClaim(It.IsAny<string>(), It.IsAny<string>())).Returns(true);
+            cp.Setup(m => m.Identity).Returns(identityMock.Object);
+            mockContext.Setup(ctx => ctx.User).Returns(cp.Object);
+
+            //Act            
+            UnauthorizedAccessExceptionFilter.OnException(ExceptionContext);
+
+            //Assert
+            var redirectToRouteResult = ExceptionContext.Result as RedirectToRouteResult;
+            Assert.That(redirectToRouteResult, Is.Not.Null);
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("Error"));
+            Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo($"accessdenied/{HashedAccountId}"));
+        }
+
+        [Test]
+        public void OnException_WhenAnUnauthorizedAccessExceptionIsThrownForTier2UserAndNoHashedAccountIdIsSet_AndNoClaimValueIsSet_ThenReturnToAccessDenied()
         {
             //Arrange            
             ExceptionContext.Exception = Exception;

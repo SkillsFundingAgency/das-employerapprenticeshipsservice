@@ -19,10 +19,19 @@ pool:
   - msbuild
   - visualstudio
 
+resources:
+  repositories:
+  - repository: das-platform-building-blocks
+    type: github
+    name: SkillsFundingAgency/das-platform-building-blocks
+    ref: refs/heads/master
+    endpoint: "GitHub (SFA)"  
+
 steps:
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:
+    configFilePath: GitVersion.yml
     updateAssemblyInfo: true
 
 - task: VSBuild@1
@@ -44,19 +53,29 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
     
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet pack'
+  inputs:
+    command: pack
+    packagesToPack: 'src/SFA.DAS.Account.Api.Client/SFA.DAS.EAS.Account.Api.Client.csproj;src/SFA.DAS.EAS.Account.Api.Types/SFA.DAS.EAS.Account.Api.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Api.Client/SFA.DAS.EmployerFinance.Api.Client.csproj;src/SFA.DAS.EmployerAccounts.Messages/SFA.DAS.EmployerAccounts.Messages.csproj;src/SFA.DAS.EmployerAccounts.Api.Client/SFA.DAS.EmployerAccounts.Api.Client.csproj;src/SFA.DAS.EmployerFinance.Messages/SFA.DAS.EmployerFinance.Messages.csproj;src/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore/SFA.DAS.EmployerAccounts.ReadStore.csproj;src/SFA.DAS.EmployerAccounts.Types/SFA.DAS.EmployerAccounts.Types.csproj;src/SFA.DAS.EmployerAccounts.Api.Types/SFA.DAS.EmployerAccounts.Api.Types.csproj'
+    packDirectory: '$(build.artifactstagingdirectory)/publish'
+    versioningScheme: byBuildNumber
+
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
   inputs:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks    
     
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
     Contents: |
      azure/**
-     src/**/bin/**/*.dacpac
+     src/**/bin/**/*.dacpac     
     TargetFolder: '$(build.artifactstagingdirectory)/publish'
 
 - task: PublishBuildArtifacts@1

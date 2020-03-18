@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Services;
+using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
@@ -39,6 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
         private Mock<IAccountApiClient> _accountApiClient;
+        private Mock<ICommitmentsApiClient> _commitmentsApiClient;
         private Mock<IMapper> _mapper;
         private List<AccountTask> _tasks;
         private AccountTask _testTask;
@@ -146,12 +148,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _accountApiClient = new Mock<IAccountApiClient>();
+            _commitmentsApiClient = new Mock<ICommitmentsApiClient>();
+
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
                 {ApprenticeshipEmployerType = "Levy"});
 
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _commitmentsApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
         }
         
         [Test]
@@ -174,7 +178,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
-            Assert.AreEqual(1, actual.Data.ReservationsCount);
+            Assert.AreEqual(1, actual.Data.CallToActionViewModel.ReservationsCount);
         }
 
         [Test]
@@ -280,6 +284,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             Assert.AreEqual(expectedApprenticeshipEmployerType, model.Data.ApprenticeshipEmployerType);
+        }
+        
+        [Test]
+        public async Task ThenReturnAccountSummary()
+        {
+            var model = await _orchestrator.GetAccountSummary(HashedAccountId, UserId);
+            Assert.IsNotNull(model.Data);
         }
     }
 }

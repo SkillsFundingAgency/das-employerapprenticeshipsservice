@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -30,6 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEventPublisher _eventPublisher;
+        private IEmployerCommitmentApi _employerCommitmentApi;
 
         public RemoveLegalEntityCommandHandler(
             IValidator<RemoveLegalEntityCommand> validator,
@@ -40,7 +43,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
             IMembershipRepository membershipRepository,
-            IEventPublisher eventPublisher)
+            IEventPublisher eventPublisher,
+            IEmployerCommitmentApi employerCommitmentApi)
         {
             _validator = validator;
             _logger = logger;
@@ -51,6 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             _employerAgreementEventFactory = employerAgreementEventFactory;
             _membershipRepository = membershipRepository;
             _eventPublisher = eventPublisher;
+            _employerCommitmentApi = employerCommitmentApi;
         }
 
         protected override async Task HandleCore(RemoveLegalEntityCommand message)
@@ -73,11 +78,14 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
 
+            await ValidateLegalEntityHasNoCommitments(agreement, accountId, validationResult);
+
             await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreementId);
 
-            await AddAuditEntry(accountId, message.HashedLegalAgreementId);
-
-            await CreateEvent(message.HashedLegalAgreementId);
+            await Task.WhenAll(
+                AddAuditEntry(accountId, message.HashedLegalAgreementId),
+                CreateEvent(message.HashedLegalAgreementId)
+            );
 
             // it appears that an agreement is created whenever we create a legal entity, so there should always be an agreement associated with a legal entity
             if (agreement != null)
@@ -95,6 +103,28 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                     agreement.LegalEntityName,
                     agreement.AccountLegalEntityId,
                     message.UserId);
+            }
+        }
+
+        private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId,
+            ValidationResult validationResult)
+        {
+            if (agreement.Status == EmployerAgreementStatus.Signed)
+            {
+                var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
+
+                var returnValue = commitments.FirstOrDefault(c =>
+                    !string.IsNullOrEmpty(c.LegalEntityIdentifier)
+                    && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
+                    && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
+
+                if (returnValue != null &&
+                    (returnValue.ActiveCount + returnValue.PausedCount + returnValue.PendingApprovalCount) != 0)
+                {
+                    validationResult.AddError(nameof(agreement.HashedAgreementId),
+                        "Agreement has already been signed and has active commitments");
+                    throw new InvalidRequestException(validationResult.ValidationDictionary);
+                }
             }
         }
 

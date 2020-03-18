@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Models.EmployerAgreement
-@model EmployerAgreementViewModel
+@model SignEmployerAgreementViewModel
 
 @{
     var hiddenClass = Model.NoChoiceSelected ? "" : "das-hidden";
@@ -1192,7 +1192,7 @@
 
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
-        <p class="govuk-body"><a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" class="govuk-link" target="_blank">Download the agreement</a> (<abbr>PDF</abbr>, 337<abbr>KB</abbr>)</p>
+        <p class="govuk-body"><a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" class="govuk-link" target="_blank">Download the agreement</a> (<abbr>PDF</abbr>, 304<abbr>KB</abbr>)</p>
         
         @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
         {
