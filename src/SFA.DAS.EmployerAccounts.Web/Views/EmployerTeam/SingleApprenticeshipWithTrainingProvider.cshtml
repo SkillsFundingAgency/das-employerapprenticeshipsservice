@@ -31,7 +31,7 @@
                 @(Model?.CourseName)
             </td>
         </tr>
-        @if (String.IsNullOrEmpty(Model.CourseStartDateText))
+        @if (!String.IsNullOrEmpty(Model.CourseStartDateText))
         {
             <tr>
                 <th scope="row">
@@ -60,7 +60,7 @@
         </tr>
     </table>
     <p>
-        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetailsLink}")" draggable="false" class="govuk-link">
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ApprovedOrRejectApprenticeDetailsLink}")" draggable="false" class="govuk-link">
             View apprentice details
         </a>
     </p>
