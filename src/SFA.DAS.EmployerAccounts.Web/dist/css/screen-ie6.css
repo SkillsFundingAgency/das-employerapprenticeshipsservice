@@ -4669,10 +4669,22 @@ hr.dashboard-heading-separator {
   .das-panel--interruption .das-panel__link {
     color: #fff;
     font-weight: 700; }
-    .das-panel--interruption .das-panel__link:hover {
-      text-decoration: none; }
     .das-panel--interruption .das-panel__link:focus {
       color: #000; }
+    .das-panel--interruption .das-panel__link:hover {
+      text-decoration: none; }
+
+.das-panel--popular {
+  margin-top: 20px;
+  background: #6f72af;
+  color: #fff; }
+  .das-panel--popular .das-panel__link {
+    color: #fff;
+    font-weight: 700; }
+    .das-panel--popular .das-panel__link:focus {
+      color: #000; }
+  .das-panel--popular .list {
+    margin-bottom: -5px; }
 
 .das-panel--summary {
   padding: 0px;
