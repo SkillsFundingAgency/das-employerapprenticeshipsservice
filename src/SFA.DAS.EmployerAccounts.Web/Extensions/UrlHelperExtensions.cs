@@ -22,6 +22,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
+        public static string EmployerCommitmentsV2Action(this UrlHelper helper, string path)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerCommitmentsV2BaseUrl;
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var accountPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
+
+            return Action(baseUrl, accountPath);
+        }
+
         public static string ReservationsAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
