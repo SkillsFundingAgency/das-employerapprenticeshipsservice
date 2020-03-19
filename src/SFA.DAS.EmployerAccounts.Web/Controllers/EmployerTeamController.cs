@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -360,8 +361,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         [ChildActionOnly]
         public ActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
-        {          
-            model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().CourseName =  model.CallToActionViewModel.Reservations?.Single().Course?.CourseDescription;
+        {
+            model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>() 
+            { 
+                new ApprenticeshipViewModel() 
+                { 
+                    CourseName = model.CallToActionViewModel.Reservations?.Single().Course?.CourseDescription,
+                    HashedCohortId = model.CallToActionViewModel.Cohorts?.Single().HashedCohortId,
+                    TrainingProvider = model.CallToActionViewModel.Cohorts?.Single().TrainingProvider.First()
+                }
+            };           
             return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 

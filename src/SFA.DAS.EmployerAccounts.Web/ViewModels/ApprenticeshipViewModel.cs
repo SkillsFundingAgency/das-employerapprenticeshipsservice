@@ -20,5 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool HasApprovedApprenticeship => ApprenticeshipStatus == ApprenticeshipStatus.Approved;
         public string ViewOrEditApprenticeDetailsLink => $"unapproved/{HashedCohortId}/apprentices/{HashedApprenticeshipId}";
         public string ApprovedOrRejectApprenticeDetailsLink => $"unapproved/{HashedCohortId}";
+        public string ViewApprovedApprenticeDetailsLink => $"apprentices/manage/{HashedApprenticeshipId}/details";        
     }
 }
