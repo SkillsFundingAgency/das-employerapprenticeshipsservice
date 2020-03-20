@@ -712,7 +712,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvaluateSingleApprenticeshipCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel?.ApprenticeshipsCount == 1)
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+                && viewModel.Data.CallToActionViewModel?.ApprenticeshipsCount == 1)
             {
                 viewModel.ViewName = "SingleApprenticeshipApproved";
                 viewModel.PanelType = PanelType.Summary;
@@ -724,7 +725,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvaluateSingleApprenticeshipDraftStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.CohortsCount == 1 
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+                && viewModel.Data.CallToActionViewModel.CohortsCount == 1 
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single() != null
                 && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0                
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
@@ -741,7 +743,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvaluateSingleApprenticeshipsWithTrainingProviderStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.CohortsCount == 1
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+                && viewModel.Data.CallToActionViewModel.CohortsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single() != null
                 && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
@@ -758,7 +761,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.CohortsCount == 1
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+                && viewModel.Data.CallToActionViewModel.CohortsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single() != null
                 && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.HasSingleReservation
@@ -774,7 +778,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvaluateSingleApprenticeshipsWithReadyToReviewStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.CohortsCount  == 1
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+                && viewModel.Data.CallToActionViewModel.CohortsCount  == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single() != null
                 && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
