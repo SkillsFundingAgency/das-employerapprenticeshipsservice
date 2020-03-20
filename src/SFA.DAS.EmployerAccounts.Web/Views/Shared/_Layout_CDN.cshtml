@@ -143,7 +143,7 @@
         Html.RenderAction("SupportUserBanner", new { model = Model is OrchestratorResponse ? Model?.Data : Model });
     }
 
-    @Html.Partial("_Header", Html.GetHeaderViewModel(useLegacyStyles: true))
+    @Html.Partial("_Header", Html.GetHeaderViewModel())
 
     <div class="govuk-width-container">
         @RenderSection("breadcrumb", required: false)
@@ -168,7 +168,7 @@
         </main>
     </div>
 
-    @Html.Partial("_Footer", Html.GetFooterViewModel(useLegacyStyles: true))
+    @Html.Partial("_Footer", Html.GetFooterViewModel())
 
     @if (!string.IsNullOrWhiteSpace(SystemDetailsViewModel.EnvironmentName))
     {
