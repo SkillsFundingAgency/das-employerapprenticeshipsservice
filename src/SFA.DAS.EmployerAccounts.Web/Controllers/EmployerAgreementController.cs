@@ -87,13 +87,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> View(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(
-                agreementId, 
-                hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
-            );
+            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
 
-            return View(agreement.Data);
+            return View(agreement);
         }
 
         [HttpGet]
