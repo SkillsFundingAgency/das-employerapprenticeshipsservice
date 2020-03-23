@@ -17,18 +17,18 @@
         </tr>
         <tr>
             <th scope="row">
-                Training Provider
-            </th>
-            <td id="provider-name">
-                @(Model?.TrainingProvider?.Name)
-            </td>
-        </tr>
-        <tr>
-            <th scope="row">
                 Course
             </th>
             <td id="course-name">
                 @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td id="provider-name">
+                @(Model?.TrainingProvider?.Name)
             </td>
         </tr>
         @if (!String.IsNullOrEmpty(Model.CourseStartDateText))
