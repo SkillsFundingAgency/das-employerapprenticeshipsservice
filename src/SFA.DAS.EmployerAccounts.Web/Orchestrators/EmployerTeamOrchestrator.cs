@@ -247,13 +247,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     CallToActionViewModel = new CallToActionViewModel
                     {
                         AgreementsToSign = pendingAgreements.Count() > 0,
-                        Reservations = reservationsResponse.Reservations.ToList(),
+                        Reservations = reservationsResponse.Reservations?.ToList(),
                         VacanciesViewModel = vacanciesResponse.HasFailed ? new VacanciesViewModel() : new VacanciesViewModel
                         {
                             VacancyCount = vacanciesResponse.Vacancies.Count(),
                             Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
                         },
-                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed
+                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed
                     }
                 };
 
