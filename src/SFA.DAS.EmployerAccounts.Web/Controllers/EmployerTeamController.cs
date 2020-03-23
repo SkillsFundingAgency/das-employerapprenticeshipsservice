@@ -23,10 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IAuthorizationService _authorizationService;
-        private const string Yes = "yes";
-        private const string No = "no";
-        private const string Unknown = "unknown";
-
+   
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
             : base(owinWrapper)
@@ -550,177 +547,177 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("whichcourseyourapprenticewilltake")]
-        public ActionResult WhichCourseYourApprenticeWillTake()
+        [Route("triagewhichcourseyourapprenticewilltake")]
+        public ActionResult TriageWhichCourseYourApprenticeWillTake()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("whichcourseyourapprenticewilltake")]
+        [Route("triagewhichcourseyourapprenticewilltake")]
         [ValidateAntiForgeryToken]
-        public ActionResult WhichCourseYourApprenticeWillTake(string choice)
+        public ActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
         {
-            switch (choice)
+            if (!ModelState.IsValid)
             {
-                case Yes:
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
                 {
-                    return RedirectToAction(ControllerConstants.HaveYouChosenATrainingProviderActionName);
+                    return RedirectToAction(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName);
                 }
 
-                case No:
+                case TriageOptions.No:
                 {
-                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetCourseProviderActionName);
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName);
                 }
 
                 default:
                 {
-                    var model = new
-                    {
-                        InError = true
-                    };
-
                     return View(model);
                 }
             }
         }
 
         [HttpGet]
-        [Route("youcannotsetupanapprenticeshipyetcourseprovider")]
-        public ActionResult YouCannotSetupAnApprenticeshipYetCourseProvider()
+        [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
         {
             return View();
         }
 
         [HttpGet]
-        [Route("haveyouchosenatrainingprovider")]
-        public ActionResult HaveYouChosenATrainingProvider()
+        [Route("triagehaveyouchosenatrainingprovider")]
+        public ActionResult TriageHaveYouChosenATrainingProvider()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("haveyouchosenatrainingprovider")]
+        [Route("triagehaveyouchosenatrainingprovider")]
         [ValidateAntiForgeryToken]
-        public ActionResult HaveYouChosenATrainingProvider(string choice)
+        public ActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
         {
-            switch (choice)
+            if (!ModelState.IsValid)
             {
-                case Yes:
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
                 {
-                    return RedirectToAction(ControllerConstants.WillApprenticeshipTrainingStartActionName);
+                    return RedirectToAction(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName);
                 }
 
-                case No:
+                case TriageOptions.No:
                 {
-                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetProviderActionName);
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName);
                 }
 
                 default:
                 {
-                    var model = new
-                    {
-                        InError = true
-                    };
-
                     return View(model);
                 }
             }
         }
 
         [HttpGet]
-        [Route("youcannotsetupanapprenticeshipyetprovider")]
-        public ActionResult YouCannotSetupAnApprenticeshipYetProvider()
+        [Route("triageyoucannotsetupanapprenticeshipyetprovider")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
         {
             return View();
         }
 
         [HttpGet]
-        [Route("willapprenticeshiptrainingstart")]
-        public ActionResult WillApprenticeshipTrainingStart()
+        [Route("triagewillapprenticeshiptrainingstart")]
+        public ActionResult TriageWillApprenticeshipTrainingStart()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("willapprenticeshiptrainingstart")]
+        [Route("triagewillapprenticeshiptrainingstart")]
         [ValidateAntiForgeryToken]
-        public ActionResult WillApprenticeshipTrainingStart(string choice)
+        public ActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
         {
-            switch (choice)
+            if (!ModelState.IsValid)
             {
-                case Yes:
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
                 {
-                    return RedirectToAction(ControllerConstants.ApprenticeForExistingEmployeeActionName);
+                    return RedirectToAction(ControllerConstants.TriageApprenticeForExistingEmployeeActionName);
                 }
 
-                case No:
+                case TriageOptions.No:
                 {
-                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetStartDateActionName);
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName);
                 }
 
-                case Unknown:
+                case TriageOptions.Unknown:
                 {
-                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
                 }
 
                 default:
                 {
-                    var model = new
-                    {
-                        InError = true
-                    };
-
                     return View(model);
                 }
             }
         }
 
         [HttpGet]
-        [Route("youcannotsetupanapprenticeshipyetstartdate")]
-        public ActionResult YouCannotSetupAnApprenticeshipYetStartDate()
+        [Route("triageyoucannotsetupanapprenticeshipyetstartdate")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
         {
             return View();
         }
 
         [HttpGet]
-        [Route("youcannotsetupanapprenticeshipyetapproximatestartdate")]
-        public ActionResult YouCannotSetupAnApprenticeshipYetApproximateStartDate()
+        [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
         {
             return View();
         }
 
         [HttpGet]
-        [Route("apprenticeforexistingemployee")]
-        public ActionResult ApprenticeForExistingEmployee()
+        [Route("triageapprenticeforexistingemployee")]
+        public ActionResult TriageApprenticeForExistingEmployee()
         {
             return View();
         }
 
         [HttpPost]
-        [Route("apprenticeforexistingemployee")]
+        [Route("triageapprenticeforexistingemployee")]
         [ValidateAntiForgeryToken]
-        public ActionResult ApprenticeForExistingEmployee(string choice)
+        public ActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
         {
-            switch (choice)
+            if (!ModelState.IsValid)
             {
-                case Yes:
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
                 {
-                    return View(ControllerConstants.SetupApprenticeshipExistingEmployeeViewName);
+                    return View(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName);
                 }
 
-                case No:
+                case TriageOptions.No:
                 {
-                    return View(ControllerConstants.SetupApprenticeshipNewEmployeeViewName);
+                    return View(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName);
                 }
 
                 default:
                 {
-                    var model = new
-                    {
-                        InError = true
-                    };
-
                     return View(model);
                 }
             }

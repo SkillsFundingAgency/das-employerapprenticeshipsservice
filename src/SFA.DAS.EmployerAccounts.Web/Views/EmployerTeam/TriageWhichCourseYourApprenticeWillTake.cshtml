@@ -1,22 +1,19 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{ViewBag.PageID = "have-you-chosen-a-training-provider"; }
-@{ViewBag.Title = "Have you chosen a training provider to deliver the apprenticeship training?"; }
-@{ViewBag.MetaDesc = "Have you chosen a training provider to deliver the apprenticeship training"; }
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.TriageViewModel
+@{ViewBag.PageID = "which-course-your-apprentice-will-take"; }
+@{ViewBag.Title = "Do you know which course your apprentice will take?"; }
+@{ViewBag.MetaDesc = "Do you know which course your apprentice will take"; }
 @{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
-@{
-    ViewBag.GaData.Vpv = "/account/setupapprentice/have-you-chosen-a-training-provider";
-    var inError = Model?.GetType().GetProperty("InError") != null;
-}
+@{ViewBag.GaData.Vpv = "/account/setupapprentice/which-course-your-apprentice-will-take"; }
 
 @section breadcrumb
 {
-    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>    
+    <a href="javascript:history.back()" class="govuk-back-link js-show">Back</a>
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        @if (inError)
+        @if (!ViewData.ModelState.IsValid)
         {
             <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
                 <h2 class="govuk-error-summary__title" id="error-summary-heading">
@@ -25,7 +22,7 @@
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
                         <li>
-                            <a href="#yes">Select yes if you've chosen a training provider to deliver the apprenticeship training</a>
+                            <a href="#yes">Select yes if you know which course your apprentice will take</a>
                         </li>
                     </ul>
                 </div>
@@ -33,29 +30,25 @@
         }
 
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
-        <form method="POST" action="@Url.Action(ControllerConstants.HaveYouChosenATrainingProviderActionName)">
+        <form method="POST" action="@Url.Action(ControllerConstants.TriageWhichCourseYourApprenticeWillTakeActionName)">
             @Html.AntiForgeryToken()
-            <div class="govuk-form-group @(inError ? "govuk-form-group--error" : "")" id="which-course-your-apprentice-will-take">
+            <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="which-course-your-apprentice-will-take">
                 <fieldset class="govuk-fieldset" aria-describedby="which-course-you-apprentice-will-take">
-                    @if (inError)
+                    @if (!ViewData.ModelState.IsValid)
                     {
                         <span class="govuk-error-message" aria-hidden="false" id="which-course-your-apprentice-will-take-error">
-                            Select yes if you've chosen a training provider to deliver the apprenticeship training
+                            Select yes if you know which course your apprentice will take
                         </span>
                     }
 
                     <div class="govuk-radios">
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="yes" value="yes" />
-                            <label class="govuk-label govuk-radios__label" for="yes">
-                                Yes
-                            </label>
+                            @Html.RadioButtonFor(m => m.TriageOption, TriageOptions.Yes, new { @class = "govuk-radios__input", id = "yes" })
+                            <label class="govuk-label govuk-radios__label" for="yes">Yes</label>
                         </div>
                         <div class="govuk-radios__item">
-                            <input class="govuk-radios__input" type="radio" name="choice" id="no" value="no" />
-                            <label class="govuk-label govuk-radios__label" for="no">
-                                No
-                            </label>
+                            @Html.RadioButtonFor(m => m.TriageOption, TriageOptions.No, new { @class = "govuk-radios__input", id = "no" })
+                            <label class="govuk-label govuk-radios__label" for="no">No</label>
                         </div>
                     </div>
                 </fieldset>

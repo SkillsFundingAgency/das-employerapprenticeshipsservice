@@ -45,30 +45,30 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void IfIChooseYesIContinueTheJourney()
         {
             //Act
-            var result = _controller.WillApprenticeshipTrainingStart("yes") as RedirectToRouteResult;
+            var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel {TriageOption = TriageOptions.Yes}) as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.ApprenticeForExistingEmployeeActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.TriageApprenticeForExistingEmployeeActionName, result.RouteValues["Action"]);
         }
 
         [Test]
         public void IfIChooseNoICannotSetupAnApprentice()
         {
             //Act
-            var result = _controller.WillApprenticeshipTrainingStart("no") as RedirectToRouteResult;
+            var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.YouCannotSetupAnApprenticeshipYetStartDateActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName, result.RouteValues["Action"]);
         }
 
         [Test]
         public void IfIChooseDontKnowICannotSetupAnApprentice()
         {
             //Act
-            var result = _controller.WillApprenticeshipTrainingStart("unknown") as RedirectToRouteResult;
+            var result = _controller.TriageWillApprenticeshipTrainingStart(new TriageViewModel { TriageOption = TriageOptions.Unknown }) as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.YouCannotSetupAnApprenticeshipYetApproximateStartDateActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName, result.RouteValues["Action"]);
         }
     }
 }

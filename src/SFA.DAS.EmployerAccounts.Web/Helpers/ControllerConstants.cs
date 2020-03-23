@@ -14,7 +14,6 @@
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string AmendOrganisationActionName = "AmendOrganisation";
         public const string AmendPayeActionName = "AmendPaye";
-        public const string ApprenticeForExistingEmployeeActionName = "ApprenticeForExistingEmployee";
         public const string CodeKeyName = "code";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
@@ -39,7 +38,6 @@
         public const string GetSignedPdfAgreementActionName = "GetSignedPdfAgreement";
         public const string HomeControllerName = "Home";
         public const string HelpActionName = "Help";
-        public const string HaveYouChosenATrainingProviderActionName = "HaveYouChosenATrainingProvider";
         public const string IndexActionName = "Index";
         public const string InvitationControllerName = "Invitation";
         public const string InvitationIndexName = "All";
@@ -70,8 +68,6 @@
         public const string SearchPensionRegulatorResultsViewName = "SearchPensionRegulatorResults";
         public const string SearchUsingAornActionName = "SearchPensionRegulatorByAorn";
         public const string ServiceStartPageViewName = "ServiceStartPage";
-        public const string SetupApprenticeshipExistingEmployeeViewName = "SetupApprenticeshipExistingEmployee";
-        public const string SetupApprenticeshipNewEmployeeViewName = "SetupApprenticeshipNewEmployee";
         public const string SignAgreementActionName = "SignAgreement";
         public const string SignAgreementViewName = "SignAgreement";
         public const string SignInActionName = "SignIn";
@@ -82,12 +78,16 @@
         public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
-        public const string WhichCourseYourApprenticeWillTakeActionName = "WhichCourseYourApprenticeWillTake";
-        public const string WillApprenticeshipTrainingStartActionName = "WillApprenticeshipTrainingStart";
-        public const string YouCannotSetupAnApprenticeshipYetCourseProviderActionName = "YouCannotSetupAnApprenticeshipYetCourseProvider";
-        public const string YouCannotSetupAnApprenticeshipYetProviderActionName = "YouCannotSetupAnApprenticeshipYetProvider";
-        public const string YouCannotSetupAnApprenticeshipYetStartDateActionName = "YouCannotSetupAnApprenticeshipYetStartDate";
-        public const string YouCannotSetupAnApprenticeshipYetApproximateStartDateActionName = "YouCannotSetupAnApprenticeshipYetApproximateStartDate";
+        public const string TriageApprenticeForExistingEmployeeActionName = "TriageApprenticeForExistingEmployee";
+        public const string TriageSetupApprenticeshipExistingEmployeeViewName = "TriageSetupApprenticeshipExistingEmployee";
+        public const string TriageSetupApprenticeshipNewEmployeeViewName = "TriageSetupApprenticeshipNewEmployee";
+        public const string TriageHaveYouChosenATrainingProviderActionName = "TriageHaveYouChosenATrainingProvider";
+        public const string TriageWhichCourseYourApprenticeWillTakeActionName = "TriageWhichCourseYourApprenticeWillTake";
+        public const string TriageWillApprenticeshipTrainingStartActionName = "TriageWillApprenticeshipTrainingStart";
+        public const string TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetCourseProvider";
+        public const string TriageYouCannotSetupAnApprenticeshipYetProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetProvider";
+        public const string TriageYouCannotSetupAnApprenticeshipYetStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetStartDate";
+        public const string TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate";
         public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
         public const string WhenDoYouWantToView = "WhenDoYouWantToView";

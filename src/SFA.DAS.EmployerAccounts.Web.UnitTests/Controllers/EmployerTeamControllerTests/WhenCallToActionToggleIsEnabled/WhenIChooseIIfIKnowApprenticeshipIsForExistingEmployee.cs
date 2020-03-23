@@ -45,20 +45,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void IfIChooseYesIContinueTheJourney()
         {
             //Act
-            var result = _controller.ApprenticeForExistingEmployee("yes") as ViewResult;
+            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.Yes }) as ViewResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.SetupApprenticeshipExistingEmployeeViewName, result.ViewName);
+            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName, result.ViewName);
         }
 
         [Test]
         public void IfIChooseNoICannotSetupAnApprentice()
         {
             //Act
-            var result = _controller.ApprenticeForExistingEmployee("no") as ViewResult;
+            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.No }) as ViewResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.SetupApprenticeshipNewEmployeeViewName, result.ViewName);
+            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName, result.ViewName);
         }
     }
 }

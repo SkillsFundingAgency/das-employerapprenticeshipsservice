@@ -45,20 +45,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void IfIChooseYesIContinueTheJourney()
         {
             //Act
-            var result = _controller.WhichCourseYourApprenticeWillTake("yes") as RedirectToRouteResult;
+            var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.HaveYouChosenATrainingProviderActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName, result.RouteValues["Action"]);
         }
 
         [Test]
         public void IfIChooseNoICannotSetupAnApprentice()
         {
             //Act
-            var result = _controller.WhichCourseYourApprenticeWillTake("no") as RedirectToRouteResult;
+            var result = _controller.TriageWhichCourseYourApprenticeWillTake(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
 
             //Assert
-            Assert.AreEqual(ControllerConstants.YouCannotSetupAnApprenticeshipYetCourseProviderActionName, result.RouteValues["Action"]);
+            Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName, result.RouteValues["Action"]);
         }
     }
 }
