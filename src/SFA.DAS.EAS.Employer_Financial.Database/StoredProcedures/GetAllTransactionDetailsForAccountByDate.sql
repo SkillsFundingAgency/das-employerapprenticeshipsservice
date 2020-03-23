@@ -139,7 +139,7 @@ UNION ALL
 
 -- sender transfers
 SELECT  DATEADD(dd, DATEDIFF(dd, 0, [employer_financial].[AccountTransfers].CreatedDate), 0)	AS DateCreated,
-		[AccountTransfers].SenderAccountId														AS AccountId,
+		[employer_financial].[AccountTransfers].SenderAccountId									AS AccountId,
 		'Transfer'																				AS TransactionType,
 		NULL																					AS PayeScheme,
 		NULL																					AS PayrollYear,
@@ -169,7 +169,7 @@ UNION ALL
 
 -- receiver transfers
 SELECT  DATEADD(dd, DATEDIFF(dd, 0, [employer_financial].[AccountTransfers].CreatedDate), 0)	AS DateCreated,
-		[AccountTransfers].SenderAccountId														AS AccountId,
+		[employer_financial].[AccountTransfers].SenderAccountId									AS AccountId,
 		'Transfer'																				AS TransactionType,
 		NULL																					AS PayeScheme,
 		NULL																					AS PayrollYear,
