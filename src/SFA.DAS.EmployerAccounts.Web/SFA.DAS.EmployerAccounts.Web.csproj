@@ -864,6 +864,16 @@
     <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage_CDN.cshtml" />
+    <Content Include="Views\EmployerTeam\WhichCourseYourApprenticeWillTake.cshtml" />
+    <Content Include="Views\EmployerTeam\YouCannotSetupAnApprenticeshipYetProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\HaveYouChosenATrainingProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\WillApprenticeshipTrainingStart.cshtml" />
+    <Content Include="Views\EmployerTeam\YouCannotSetupAnApprenticeshipYetCourseProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\YouCannotSetupAnApprenticeshipYetStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\YouCannotSetupAnApprenticeshipYetApproximateStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\ApprenticeForExistingEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\SetupApprenticeshipNewEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\SetupApprenticeshipExistingEmployee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

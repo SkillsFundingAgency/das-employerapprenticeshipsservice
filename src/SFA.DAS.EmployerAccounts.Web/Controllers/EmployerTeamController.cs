@@ -23,6 +23,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly IAuthorizationService _authorizationService;
+        private const string Yes = "yes";
+        private const string No = "no";
+        private const string Unknown = "unknown";
 
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
@@ -544,6 +547,183 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult OtherTasksPanel(AccountDashboardViewModel model)
         {
             return PartialView(model);
+        }
+
+        [HttpGet]
+        [Route("whichcourseyourapprenticewilltake")]
+        public ActionResult WhichCourseYourApprenticeWillTake()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("whichcourseyourapprenticewilltake")]
+        [ValidateAntiForgeryToken]
+        public ActionResult WhichCourseYourApprenticeWillTake(string choice)
+        {
+            switch (choice)
+            {
+                case Yes:
+                {
+                    return RedirectToAction(ControllerConstants.HaveYouChosenATrainingProviderActionName);
+                }
+
+                case No:
+                {
+                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetCourseProviderActionName);
+                }
+
+                default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("youcannotsetupanapprenticeshipyetcourseprovider")]
+        public ActionResult YouCannotSetupAnApprenticeshipYetCourseProvider()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("haveyouchosenatrainingprovider")]
+        public ActionResult HaveYouChosenATrainingProvider()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("haveyouchosenatrainingprovider")]
+        [ValidateAntiForgeryToken]
+        public ActionResult HaveYouChosenATrainingProvider(string choice)
+        {
+            switch (choice)
+            {
+                case Yes:
+                {
+                    return RedirectToAction(ControllerConstants.WillApprenticeshipTrainingStartActionName);
+                }
+
+                case No:
+                {
+                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetProviderActionName);
+                }
+
+                default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("youcannotsetupanapprenticeshipyetprovider")]
+        public ActionResult YouCannotSetupAnApprenticeshipYetProvider()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("willapprenticeshiptrainingstart")]
+        public ActionResult WillApprenticeshipTrainingStart()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("willapprenticeshiptrainingstart")]
+        [ValidateAntiForgeryToken]
+        public ActionResult WillApprenticeshipTrainingStart(string choice)
+        {
+            switch (choice)
+            {
+                case Yes:
+                {
+                    return RedirectToAction(ControllerConstants.ApprenticeForExistingEmployeeActionName);
+                }
+
+                case No:
+                {
+                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetStartDateActionName);
+                }
+
+                case Unknown:
+                {
+                    return RedirectToAction(ControllerConstants.YouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
+                }
+
+                default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("youcannotsetupanapprenticeshipyetstartdate")]
+        public ActionResult YouCannotSetupAnApprenticeshipYetStartDate()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("youcannotsetupanapprenticeshipyetapproximatestartdate")]
+        public ActionResult YouCannotSetupAnApprenticeshipYetApproximateStartDate()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("apprenticeforexistingemployee")]
+        public ActionResult ApprenticeForExistingEmployee()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("apprenticeforexistingemployee")]
+        [ValidateAntiForgeryToken]
+        public ActionResult ApprenticeForExistingEmployee(string choice)
+        {
+            switch (choice)
+            {
+                case Yes:
+                {
+                    return View(ControllerConstants.SetupApprenticeshipExistingEmployeeViewName);
+                }
+
+                case No:
+                {
+                    return View(ControllerConstants.SetupApprenticeshipNewEmployeeViewName);
+                }
+
+                default:
+                {
+                    var model = new
+                    {
+                        InError = true
+                    };
+
+                    return View(model);
+                }
+            }
         }
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
