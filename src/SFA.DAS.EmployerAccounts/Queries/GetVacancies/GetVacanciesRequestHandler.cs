@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
@@ -33,10 +34,21 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
 
             _logger.Info($"Getting vacancies for hashed account id {message.HashedAccountId}");
 
-            return new GetVacanciesResponse
+            try
             {
-                Vacancies = await _service.GetVacancies(message.HashedAccountId)
-            };
+                return new GetVacanciesResponse
+                {
+                    Vacancies = await _service.GetVacancies(message.HashedAccountId)
+                };
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
+                return new GetVacanciesResponse
+                {
+                    HasFailed = true
+                };
+            }
         }
     }
 }

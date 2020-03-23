@@ -361,7 +361,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
-                _employerTeamOrchestrator.GetCallToActionViewName(ref viewModel);
+                _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
             }
 
             return PartialView(viewModel);

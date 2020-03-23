@@ -248,11 +248,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     {
                         AgreementsToSign = pendingAgreements.Count() > 0,
                         Reservations = reservationsResponse.Reservations.ToList(),
-                        VacanciesViewModel = new VacanciesViewModel
+                        VacanciesViewModel = vacanciesResponse.HasFailed ? new VacanciesViewModel() : new VacanciesViewModel
                         {
                             VacancyCount = vacanciesResponse.Vacancies.Count(),
                             Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
-                        }
+                        },
+                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed
                     }
                 };
 
@@ -646,33 +647,35 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public void GetCallToActionViewName(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
-            
+            rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
+
             if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
             {
                 rules.Add(200, EvalutateSingleReservationCallToActionRule);
                 rules.Add(201, EvalutateHasReservationsCallToActionRule);
-            }
 
-            rules.Add(150, EvalutateDraftVacancyCallToActionRule);
-            rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
-            rules.Add(152, EvalutateLiveVacancyCallToActionRule);
-            rules.Add(153, EvalutateRejectedVacancyCallToActionRule);
-            rules.Add(154, EvalutateClosedVacancyCallToActionRule);
+
+                rules.Add(150, EvalutateDraftVacancyCallToActionRule);
+                rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
+                rules.Add(152, EvalutateLiveVacancyCallToActionRule);
+                rules.Add(153, EvalutateRejectedVacancyCallToActionRule);
+                rules.Add(154, EvalutateClosedVacancyCallToActionRule);
+            }
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
             {
-                if (callToActionRuleFunc.Value(ref viewModel))
+                if (callToActionRuleFunc.Value(viewModel))
                     return;
             }
         }
 
-        private delegate bool EvalutateCallToActionRuleDelegate(ref PanelViewModel<AccountDashboardViewModel> viewModel);
+        private delegate bool EvalutateCallToActionRuleDelegate(PanelViewModel<AccountDashboardViewModel> viewModel);
 
-        private bool EvalutateDraftVacancyCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateDraftVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
@@ -690,7 +693,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutatePendingReviewVacancyCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutatePendingReviewVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
@@ -708,7 +711,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateLiveVacancyCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateLiveVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
@@ -725,7 +728,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return false;
         }
-        private bool EvalutateClosedVacancyCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateClosedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
@@ -743,7 +746,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateRejectedVacancyCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateRejectedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
                 viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
@@ -761,7 +764,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateSignAgreementCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
             {
@@ -772,7 +775,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateSingleReservationCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateSingleReservationCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
                 && viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
@@ -785,7 +788,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return false;
         }
 
-        private bool EvalutateHasReservationsCallToActionRule(ref PanelViewModel<AccountDashboardViewModel> viewModel)
+        private bool EvalutateHasReservationsCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (!viewModel.Data.CallToActionViewModel.HasReservations)
             {
