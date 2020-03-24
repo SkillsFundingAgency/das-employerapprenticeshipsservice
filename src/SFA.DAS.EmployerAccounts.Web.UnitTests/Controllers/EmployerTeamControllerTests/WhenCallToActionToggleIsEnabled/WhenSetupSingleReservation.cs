@@ -53,6 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 CallToActionViewModel = new CallToActionViewModel
                 {
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                    VacanciesViewModel = new VacanciesViewModel()
                 },
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };

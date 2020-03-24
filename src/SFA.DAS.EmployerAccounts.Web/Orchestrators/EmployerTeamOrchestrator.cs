@@ -39,6 +39,7 @@ using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -271,7 +272,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         Cohorts = new List<CohortViewModel>
                         {
                             _mapper.Map<Cohort, CohortViewModel>(accountCohort.Cohort)
-                        }
+                        },
                         UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed
                     }
                 };
@@ -668,7 +669,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            var rules = new Dictionary<int, EvaluateCallToActionRuleDelegate>();
+            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
             rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
 
