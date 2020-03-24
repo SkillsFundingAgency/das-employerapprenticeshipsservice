@@ -98,7 +98,7 @@
     <!--[if lt IE 9]><script src="/dist/javascripts/respond.min.js"></script><![endif]-->
     @Html.Partial("_ZenDeskWidget")
 </head>
-<body id="@ViewBag.PageID">    
+<body id="@ViewBag.PageID">
     <!-- Google Tag Manager (noscript) -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWQBWGJ"
@@ -117,7 +117,7 @@
                 You're using a web browser that we don't support. Upgrade to one of the <a href="https://www.gov.uk/help/browsers" target="_blank">browsers that we do support</a> to access all the site's features.
             </p>
         </div>
-    <![endif]-->     
+    <![endif]-->
     @Html.Partial("_CookieBanner")
     <div id="svg-defs" aria-hidden="true">
         @Html.Partial("_SVGSprite")
@@ -236,6 +236,12 @@
     }
     <main role="main" id="content">
         @RenderSection("breadcrumb", false)
+        
+        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+        {
+            @Html.Partial("_COVID19GuidanceBanner")
+        }
+
         @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
         @RenderBody()
     </main>
