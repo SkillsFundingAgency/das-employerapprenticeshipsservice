@@ -3,6 +3,10 @@
 @using SFA.DAS.Authorization.Mvc
 @using SFA.DAS.EmployerAccounts.Web.Helpers
 
+
+@{
+    ViewBag.UseCDN = true;
+}
 <!DOCTYPE html>
 <html lang="en" class="govuk-template ">
 <head>
@@ -147,18 +151,24 @@
 
     <div class="govuk-width-container">
         @RenderSection("breadcrumb", required: false)
+
         <main class="govuk-main-wrapper" id="main-content" role="main">
             @if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                var userId = Html.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.User?.Claims.
-                        FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
-                var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
+                @Html.Partial("_COVID19GuidanceBanner")
+
+                if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
                 {
-                    if (!string.IsNullOrEmpty(hashedAccountId))
+                    var userId = Html.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.User?.Claims.
+                            FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
+                    var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
                     {
-                        if (Html.ShowExpiringAgreementBanner(userId, hashedAccountId))
+                        if (!string.IsNullOrEmpty(hashedAccountId))
                         {
-                            @Html.Partial(@"_NotSignedV3AgreementMessage_CDN")
+                            if (Html.ShowExpiringAgreementBanner(userId, hashedAccountId))
+                            {
+                                @Html.Partial(@"_NotSignedV3AgreementMessage_CDN")
+                            }
                         }
                     }
                 }
