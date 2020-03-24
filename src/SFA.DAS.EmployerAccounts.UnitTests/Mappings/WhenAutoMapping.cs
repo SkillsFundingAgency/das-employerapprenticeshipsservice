@@ -20,6 +20,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Mappings
                 c.AddProfile<MembershipMappings>();
                 c.AddProfile<TransferConnectionInvitationMappings>();
                 c.AddProfile<UserMappings>();
+                c.AddProfile<VacancyMappings>();
                 c.AddProfile<CohortMappings>();
                 c.AddProfile<ApprenticeshipMappings>();                
             });

@@ -33,6 +33,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using SFA.DAS.Authorization.Services;
+using SFA.DAS.EmployerAccounts.Models;
+using SFA.DAS.CommitmentsV2.Api.Client;
+using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
+using SFA.DAS.EmployerAccounts.Models.Recruit;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -200,10 +205,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 { 
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
+                });
 
-                });                
+                var vacanciesResponseTask = _mediator.SendAsync(new GetVacanciesRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
 
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask, vacanciesResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
@@ -212,6 +222,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var agreementsResponse = agreementsResponseTask.Result;
                 var reservationsResponse = reservationsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
+                var vacanciesResponse = vacanciesResponseTask.Result;
                 var accountCohort = accountCohortResponseTask.Result;
                 var apprenticeshipsResponse = apprenticeshipsResponseTask.Result;
 
@@ -250,12 +261,18 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     CallToActionViewModel = new CallToActionViewModel
                     {
                         AgreementsToSign = pendingAgreements.Count() > 0,
-                        Reservations = reservationsResponse.Reservations.ToList(),
+                        Reservations = reservationsResponse.Reservations?.ToList(),
+                        VacanciesViewModel = vacanciesResponse.HasFailed ? new VacanciesViewModel() : new VacanciesViewModel
+                        {
+                            VacancyCount = vacanciesResponse.Vacancies.Count(),
+                            Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
+                        },
                         Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),
                         Cohorts = new List<CohortViewModel>
                         {
                             _mapper.Map<Cohort, CohortViewModel>(accountCohort.Cohort)
-                        }                        
+                        }
+                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed
                     }
                 };
 
@@ -653,8 +670,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             var rules = new Dictionary<int, EvaluateCallToActionRuleDelegate>();
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
+            rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
 
-            if (viewModel.Data.ApprenticeshipEmployerType == Common.Domain.Types.ApprenticeshipEmployerType.NonLevy)
+            if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
             {
                 rules.Add(120, EvaluateSingleApprenticeshipCallToActionRule);
                 rules.Add(121, EvaluateSingleApprenticeshipDraftStatusCallToActionRule);
@@ -662,7 +680,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(123, EvaluateSingleApprenticeshipsWithReadyToReviewStatusCallToActionRule);
                 rules.Add(124, EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule);
                 rules.Add(200, EvalutateSingleReservationCallToActionRule);
-                rules.Add(205, EvalutateHasReservationsCallToActionRule);
+                rules.Add(201, EvalutateHasReservationsCallToActionRule);
+
+
+                rules.Add(150, EvalutateDraftVacancyCallToActionRule);
+                rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
+                rules.Add(152, EvalutateLiveVacancyCallToActionRule);
+                rules.Add(153, EvalutateRejectedVacancyCallToActionRule);
+                rules.Add(154, EvalutateClosedVacancyCallToActionRule);
             }
 
             foreach (var callToActionRuleFunc in rules.OrderBy(r => r.Key))
@@ -672,7 +697,96 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        private delegate bool EvaluateCallToActionRuleDelegate(PanelViewModel<AccountDashboardViewModel> viewModel);
+        private delegate bool EvalutateCallToActionRuleDelegate(PanelViewModel<AccountDashboardViewModel> viewModel);
+
+        private bool EvalutateDraftVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
+                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+            {
+                return false;
+            }
+
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Draft))
+            {
+                viewModel.ViewName = "VacancyDraft";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutatePendingReviewVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
+                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+            {
+                return false;
+            }
+
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Submitted))
+            {
+                viewModel.ViewName = "VacancyPendingReview";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateLiveVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
+                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+            {
+                return false;
+            }
+
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Live))
+            {
+                viewModel.ViewName = "VacancyLive";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+        private bool EvalutateClosedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
+                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+            {
+                return false;
+            }
+
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Closed))
+            {
+                viewModel.ViewName = "VacancyClosed";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool EvalutateRejectedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
+        {
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
+                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+            {
+                return false;
+            }
+
+            if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Status.Equals(VacancyStatus.Referred))
+            {
+                viewModel.ViewName = "VacancyRejected";
+                viewModel.PanelType = PanelType.Summary;
+                return true;
+            }
+
+            return false;
+        }
 
         private bool EvalutateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
@@ -687,8 +801,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateSingleReservationCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1 &&
-                viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
+                && viewModel.Data.CallToActionViewModel.PendingReservationsCount == 1)
             {
                 viewModel.ViewName = "ContinueSetupForSingleReservation";
                 viewModel.PanelType = PanelType.Summary;
