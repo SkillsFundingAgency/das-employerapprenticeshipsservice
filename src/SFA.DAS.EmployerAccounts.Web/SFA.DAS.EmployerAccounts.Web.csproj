@@ -872,6 +872,7 @@
     <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage_CDN.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
