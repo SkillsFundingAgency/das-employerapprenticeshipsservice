@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.HashingService;
@@ -39,10 +40,21 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
 
             _logger.Info($"Getting reservations for hashed account id {message.HashedAccountId}");
 
-            return new GetReservationsResponse
+            try
             {
-                Reservations = await _service.Get(accountId)
-            };
+                return new GetReservationsResponse
+                {
+                    Reservations = await _service.Get(accountId)
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, $"Failed to get Reservations for {message.HashedAccountId}");
+                return new GetReservationsResponse
+                {
+                    HasFailed = true
+                };
+            }
         }
     }
 }
