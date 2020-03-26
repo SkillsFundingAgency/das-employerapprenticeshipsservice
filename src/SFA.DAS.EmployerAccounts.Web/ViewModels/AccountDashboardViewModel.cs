@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.Reservations;
-using Reservation = SFA.DAS.EmployerAccounts.Models.Reservations.Reservation;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {

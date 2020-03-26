@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using SFA.DAS.Authentication;
-using SFA.DAS.EAS.Portal.Client;
-using SFA.DAS.EAS.Portal.Client.Types;
-using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Portal;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -27,7 +22,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly IPortalClient _portalClient;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
@@ -42,12 +36,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IPortalClient portalClient,
             IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
-            _portalClient = portalClient;
             _authorizationService = authorizationService;
         }
 
@@ -57,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             PopulateViewBagWithExternalUserId();            
             var response = await GetAccountInformation(hashedAccountId);
-
+            
             if (response.Status != HttpStatusCode.OK)
             {
                 return View(response);
@@ -369,7 +361,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
-                _employerTeamOrchestrator.GetCallToActionViewName(ref viewModel);
+                _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
             }
 
             return PartialView(viewModel);
@@ -425,7 +417,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult SignAgreement(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }
+        }        
 
         [ChildActionOnly]
         public ActionResult V2SignAgreement(AccountDashboardViewModel model)
@@ -519,16 +511,39 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult VacancyDraft(AccountDashboardViewModel model)
+        {   
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Draft));
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyPendingReview(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Submitted));
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyRejected(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Referred));
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyLive(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Live));
+        }
+
+        [ChildActionOnly]
+        public ActionResult VacancyClosed(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
+        }
+
+        [ChildActionOnly]
         public ActionResult CreateVacancy(AccountDashboardViewModel model)
         {
             return PartialView(model);
-        }
-
-        private string ApplicationsDisplay(Vacancy vacancy)
-        {
-            return vacancy.ApplicationMethod == ApplicationMethod.ThroughExternalApplicationSite
-                ? "Advertised by employer"
-                : vacancy.NumberOfApplications.ToString();
         }
 
         [ChildActionOnly]

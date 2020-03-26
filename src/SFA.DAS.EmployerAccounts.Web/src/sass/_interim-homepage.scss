@@ -158,13 +158,31 @@ hr.dashboard-heading-separator {
         color: #fff;
         font-weight: 700;
 
+        &:focus {
+            color: #000;
+        }
+
         &:hover {
             text-decoration: none
         }
+    }
+}
+
+.das-panel--popular {
+    margin-top: 20px;
+    background: $mauve;
+    color: #fff;
+
+    .das-panel__link {
+        color: #fff;
+        font-weight: 700;
 
         &:focus {
             color: #000;
         }
+    }
+    .list {
+        margin-bottom: -5px;
     }
 }
 
