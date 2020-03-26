@@ -196,8 +196,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else
                 {
-                    flashMessage.Headline = "All agreements signed";
-                    flashMessage.Message = "You’ve successfully signed your organisation agreement(s)";
+                    flashMessage.Headline = "Agreement accepted";
+                    flashMessage.Message = "You’ve successfully accepted your organisation agreement(s)";
                     result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 }
 
