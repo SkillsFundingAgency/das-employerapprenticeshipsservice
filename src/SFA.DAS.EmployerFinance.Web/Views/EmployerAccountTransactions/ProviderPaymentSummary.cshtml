@@ -4,19 +4,13 @@
 @model OrchestratorResponse<ProviderPaymentsSummaryViewModel>
 
 @{
-    /**/
-
     var culture = new CultureInfo("en-GB");
-    ViewBag.PageID = "page-course-payment-summary";
+    ViewBag.PageID = "provider-payment-summary";
     ViewBag.Title = "Payment details";
     ViewBag.Section = "finance";
-
+    ViewBag.GaData.Vpv = $"/accounts/finance/{ViewBag.PageID}";
 }
-@*
-        Uncomment this line when the GaData handling branch is merged
-        @{
-        ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
-    }*@
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <div class="hgroup">

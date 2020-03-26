@@ -3,13 +3,12 @@
 
 @{
     var culture = new CultureInfo("en-GB");
-    ViewBag.PageID = "page-transfer-transaction-details";
+    ViewBag.PageID = "transfer-transaction-details";
     ViewBag.Title = "Levy Transfer";
     ViewBag.Section = "finance";
+    ViewBag.GaData.Vpv = $"/accounts/finance/{ViewBag.PageID}";
 }
-@{
-    ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
-}
+
 <div class="grid-row">
     <div class="column-two-thirds">
 

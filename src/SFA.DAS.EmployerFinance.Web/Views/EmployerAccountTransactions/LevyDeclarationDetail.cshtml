@@ -9,13 +9,12 @@
     {
         paymentType = "Adjustment";
     }
-    ViewBag.PageID = "page-transaction-details";
+    ViewBag.PageID = "levy-declaration-details";
     ViewBag.Title = paymentType;
     ViewBag.Section = "finance";
+    ViewBag.GaData.Vpv = $"/accounts/finance/{ViewBag.PageID}";
 }
-@*@{
-    ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
-}*@
+
 <div class="grid-row">
     <div class="column-two-thirds">
         <h1 class="heading-xlarge">@paymentType</h1>
