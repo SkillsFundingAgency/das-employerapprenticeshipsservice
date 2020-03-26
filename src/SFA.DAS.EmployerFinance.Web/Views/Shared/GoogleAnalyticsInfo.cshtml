@@ -1,5 +1,4 @@
 ﻿@using SFA.DAS.EmployerFinance.Web.Filters
-@using System.Web
 
 <script>
     @if (ViewBag.GaData == null)
@@ -13,7 +12,8 @@
         'userID': '@ViewBag.GaData.UserId',
         'vpv': '@ViewBag.GaData.Vpv',
         'acc': '@ViewBag.GaData.Acc',
-        'org': ''
+        'org': '',
+        'Account': '@ViewBag.GaData.Acc'
 
         @if (ViewBag.GaData.Extras.Count>0)
         {
@@ -25,7 +25,7 @@
             foreach (var extra in ViewBag.GaData.Extras)
             {
                 count++;
-                
+
                 @Html.Raw($"'{extra.Key}' : '{extra.Value}'");
 
                 if (count < ViewBag.GaData.Extras.Count)

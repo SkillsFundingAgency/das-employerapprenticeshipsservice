@@ -637,6 +637,9 @@
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
+    <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>
