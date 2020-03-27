@@ -6,46 +6,80 @@
     ViewBag.Section = "organisations";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+
 
         @if (string.IsNullOrEmpty(Model.Data.ErrorMessage))
         {
-            <div class="success-summary" tabindex="-1">
-                <h1 class="bold-large">Details updated</h1>
-                <p>You've successfully updated your organisation details</p>
+            <div class="das-notification das-notification--success" tabindex="-1">
+                <h1 class="das-notification__heading">Details updated</h1>
+                <p class="das-notification__body">You've successfully updated your organisation details</p>
             </div>
         }
-        else
-        {
-            <div class="error-summary" tabindex="-1">
-                <h1 class="bold-large">Details could not be updated</h1>
-                <p class="error-message">@Model.Data.ErrorMessage</p>
+        @*
+            else
+            {
+            <div class="govuk-error-summary" aria-labelledby="error-summary-title-02" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                <h1 class="govuk-error-summary__title" id="error-summary-title-02">
+                    Details could not be updated
+                </h1>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            <a href="#nextStep">@Model.Data.ErrorMessage</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        }
+            }
+        *@
+
+    </div>
+</div>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
         <form action="@Url.Action("GoToPostUpdateSelection")" method="post">
-            <div class="form-group">
-                <h2 class="heading-large">What's next?</h2>
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
 
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="dashboard" />
-                    <label for="acceptAgreement">xxxx Go to your organisations and agreements</label>
-                </div>
-                <div class="multiple-choice">
-                    <input type="radio" name="nextStep" value="homepage" />
-                    <label for="teamMembers">Go to the homepage</label>
-                </div>
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h2 class="govuk-fieldset__heading">What's next?</h2>
+                    </legend>
+
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" id="nextStep" name="nextStep" value="dashboard">
+                            <label class="govuk-label govuk-radios__label" for="nextStep">
+                                Go to your organisations and agreements
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" id="review-opt-2" name="nextStep" value="homepage">
+                            <label class="govuk-label govuk-radios__label" for="review-opt-2">
+                                Go to the homepage
+                            </label>
+                        </div>
+                    </div>
+
+                </fieldset>
             </div>
-            <button type="submit" class="button">Continue</button>
+
+            <div class="govuk-form-group govuk-!-margin-top-5">
+                <button type="submit" class="govuk-button">Continue</button>
+            </div>
         </form>
+
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a></li>
-        </ol>
+    <div class="govuk-breadcrumbs">
+        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="govuk-back-link">Back to your organisations</a>
     </div>
 }
