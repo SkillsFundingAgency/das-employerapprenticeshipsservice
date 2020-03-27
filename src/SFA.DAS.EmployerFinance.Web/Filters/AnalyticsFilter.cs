@@ -4,7 +4,7 @@ using SFA.DAS.EmployerFinance.Web.Controllers;
 
 namespace SFA.DAS.EmployerFinance.Web.Filters
 {
-    public class GoogleAnalyticsFilter : ActionFilterAttribute
+    public class AnalyticsFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
                 hashedAccountId = filterContext.Controller.ControllerContext.RouteData.Values["hashedAccountId"] as string;
             }
 
-            filterContext.Controller.ViewBag.GaData = new GaData
+            filterContext.Controller.ViewBag.AnalyticsData = new AnalyticsData
             {
                 UserId = userId,
                 Acc = hashedAccountId,
@@ -43,12 +43,8 @@ namespace SFA.DAS.EmployerFinance.Web.Filters
 
         public string DataLoaded { get; set; }
 
-        public class GaData
+        public class AnalyticsData
         {
-            public GaData()
-            {
-
-            }
             public string DataLoaded { get; set; } = "dataLoaded";
             public string UserId { get; set; }
             public string UserEmail { get; set; }

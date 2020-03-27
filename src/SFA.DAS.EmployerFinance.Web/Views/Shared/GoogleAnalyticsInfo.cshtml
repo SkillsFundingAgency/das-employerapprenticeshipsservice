@@ -1,34 +1,34 @@
 ﻿@using SFA.DAS.EmployerFinance.Web.Filters
 
 <script>
-    @if (ViewBag.GaData == null)
+    @if (ViewBag.AnalyticsData == null)
     {
-        ViewBag.GaData = new GoogleAnalyticsFilter.GaData();
+        ViewBag.AnalyticsData = new AnalyticsFilter.AnalyticsData();
     }
     window.dataLayer = window.dataLayer || [];
     dataLayer.push({
-        'event': '@ViewBag.GaData.DataLoaded',
+        'event': '@ViewBag.AnalyticsData.DataLoaded',
         'loggedIn': '@HttpContext.Current.User.Identity.IsAuthenticated',
-        'userID': '@ViewBag.GaData.UserId',
-        'vpv': '@ViewBag.GaData.Vpv',
-        'acc': '@ViewBag.GaData.Acc',
+        'userID': '@ViewBag.AnalyticsData.UserId',
+        'vpv': '@ViewBag.AnalyticsData.Vpv',
+        'acc': '@ViewBag.AnalyticsData.Acc',
         'org': '',
-        'Account': '@ViewBag.GaData.Acc'
+        'Account': '@ViewBag.AnalyticsData.Acc'
 
-        @if (ViewBag.GaData.Extras.Count>0)
+        @if (ViewBag.AnalyticsData.Extras.Count>0)
         {
             @Html.Raw(",");
         }
 
         @{
             var count = 0;
-            foreach (var extra in ViewBag.GaData.Extras)
+            foreach (var extra in ViewBag.AnalyticsData.Extras)
             {
                 count++;
 
                 @Html.Raw($"'{extra.Key}' : '{extra.Value}'");
 
-                if (count < ViewBag.GaData.Extras.Count)
+                if (count < ViewBag.AnalyticsData.Extras.Count)
                 {
                     @Html.Raw("," + Environment.NewLine);
                 }
