@@ -7,13 +7,14 @@
 @{
     ViewBag.PageID = "page-manage-team";
     ViewBag.Title = "Manage team members";
-    ViewBag.Section = "team";   
+    ViewBag.Section = "team";
+    ViewBag.ZenDeskLabel = "eas-view-team-member";
 
     if (!string.IsNullOrEmpty(Model.FlashMessage?.HiddenFlashMessageInformation))
     {
         ViewBag.PageID = Model.FlashMessage.HiddenFlashMessageInformation;
     }
-    
+
 }
 
 @{
