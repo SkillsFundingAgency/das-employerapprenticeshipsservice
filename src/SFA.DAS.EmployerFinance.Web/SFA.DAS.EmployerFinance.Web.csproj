@@ -175,7 +175,7 @@
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\LevyEmployerTypeOnly.cs" />
-    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
+    <Compile Include="Filters\AnalyticsFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -636,6 +636,10 @@
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
+    <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

@@ -11,6 +11,7 @@
     ViewBag.Section = "organisations";
     ViewBag.GaData.Vpv = "/accounts/agreements/about-your-agreement/agreement-about";
     ViewBag.HideNav = true;
+    ViewBag.ZenDeskLabel = "eas-about-your-agreement";
 }
 
 <div class="govuk-grid-row header-index">
@@ -21,12 +22,12 @@
         @if (Html.IsAuthorized("EmployerFeature.Transfers"))
         {
             <p class="govuk-body">This agreement creates a legal contract between <span class="govuk-!-font-weight-bold">@Model.Data.EmployerAgreement.LegalEntityName</span> and the <span class="bold">Education and Skills Funding Agency (ESFA)</span>. It allows you to transfer funds to other employers and pay training providers for apprenticeships.</p>
-            <p class="govuk-body">You need to ensure you have the authority from your organisation before you sign this agreement.</p>
+            <p class="govuk-body">You need to ensure you have the authority from your organisation before you accept this agreement.</p>
         }
         else
         {
             <p class="govuk-body">This agreement creates a legal contract between <span class="govuk-!-font-weight-bold">@Model.Data.EmployerAgreement.LegalEntityName</span>and the <span class="govuk-!-font-weight-bold">Education and Skills Funding Agency (ESFA)</span>.It allows ESFA to pay your training providers for apprenticeships.</p>
-            <p class="govuk-body"> You need to make sure you have authority from your organisation before you sign this agreement.</p>
+            <p class="govuk-body"> You need to make sure you have authority from your organisation before you accept this agreement.</p>
         }
 
         <form method="get" action="@Url.Action(ControllerConstants.SignAgreementActionName ,ControllerConstants.EmployerAgreementControllerName)">
