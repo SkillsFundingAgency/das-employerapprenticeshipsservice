@@ -1,5 +1,8 @@
 ﻿@model OrchestratorResponse<AddNewPayeSchemeViewModel>
-@{ViewBag.PageID = "page-paye-scheme-confirm";}
+@{
+    ViewBag.PageID = "page-paye-scheme-confirm";
+    ViewBag.ZenDeskLabel = "eas-confirm-paye-scheme";
+}
 @{ViewBag.Title = "Confirm PAYE Scheme";}
 @{ViewBag.Section = "paye";}
 
@@ -7,6 +10,7 @@
 {
     ViewBag.PageID = "page-paye-scheme-in-use-error";
     ViewBag.Title = "PAYE scheme already in use";
+    ViewBag.ZenDeskLabel = "eas-paye-scheme-already-in-use";
 }
 
 @{

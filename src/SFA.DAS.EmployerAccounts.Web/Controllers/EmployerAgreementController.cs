@@ -10,6 +10,9 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetProviderInvitation;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
@@ -23,6 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{HashedAccountId}")]
     public class EmployerAgreementController : BaseController
     {
+        private const int InvitationComplete = 4;
         private const int ReviewAgreementLater = 1;
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
@@ -83,13 +87,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> View(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
-            var agreement = await _orchestrator.GetById(
-                agreementId, 
-                hashedAccountId,
-                OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName)
-            );
+            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
 
-            return View(agreement.Data);
+            return View(agreement);
         }
 
         [HttpGet]
@@ -153,6 +153,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow);
 
+            var user = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = userInfo });
+
+            if (!string.IsNullOrWhiteSpace(user.User.CorrelationId))
+            {
+                var getProviderInvitationQueryResponse = await _mediator.SendAsync(new GetProviderInvitationQuery
+                {
+                    CorrelationId = Guid.Parse(user.User.CorrelationId)
+                });
+
+                if (getProviderInvitationQueryResponse.Result?.Status < InvitationComplete)
+                {
+                    return Redirect(@Url.ProviderRelationshipsAction($"providers/invitation/{user.User.CorrelationId}"));
+                }
+            }
+
             if (response.Status == HttpStatusCode.OK)
             {
                 FlashMessageViewModel flashMessage = new FlashMessageViewModel
@@ -181,8 +196,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else
                 {
-                    flashMessage.Headline = "All agreements signed";
-                    flashMessage.Message = "You’ve successfully signed your organisation agreement(s)";
+                    flashMessage.Headline = "Agreement accepted";
+                    flashMessage.Message = "You’ve successfully accepted your organisation agreement(s)";
                     result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 }
 

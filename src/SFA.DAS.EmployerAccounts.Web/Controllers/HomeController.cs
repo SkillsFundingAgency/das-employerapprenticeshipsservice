@@ -143,23 +143,42 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return View(ControllerConstants.IndexActionName, accounts);
         }
 
+        [DasAuthorize]
+        [HttpGet]
+        [Route("register/new/{correlationId?}")]
+        public async Task<ActionResult> HandleNewRegistration(string correlationId = null)
+        {
+            await OwinWrapper.UpdateClaims();
+
+            if (!string.IsNullOrWhiteSpace(correlationId))
+            {
+                var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
+                var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
+                var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
+                var lastName = OwinWrapper.GetClaimValue(DasClaimTypes.FamilyName);
+
+                await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName, correlationId);
+            }
+
+            return RedirectToAction(ControllerConstants.IndexActionName);
+        }
+
         [HttpGet]
         [Route("register")]
-        public ActionResult RegisterUser()
+        [Route("register/{correlationId}")]
+        public async Task<ActionResult> RegisterUser(Guid? correlationId)
         {
             var schema = System.Web.HttpContext.Current.Request.Url.Scheme;
             var authority = System.Web.HttpContext.Current.Request.Url.Authority;
             var c = new Constants(_configuration.Identity);
-            return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
-        }
 
-        [DasAuthorize]
-        [HttpGet]
-        [Route("register/new")]
-        public async Task<ActionResult> HandleNewRegistration()
-        {
-            await OwinWrapper.UpdateClaims();
-            return RedirectToAction(ControllerConstants.IndexActionName);
+            if (!correlationId.HasValue) return new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
+
+            var invitation = await _homeOrchestrator.GetProviderInvitation(correlationId.Value);
+
+            return invitation.Data != null
+                ? new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new/{correlationId}&firstname={Url.Encode(invitation.Data.EmployerFirstName)}&lastname={Url.Encode(invitation.Data.EmployerLastName)}&email={Url.Encode(invitation.Data.EmployerEmail)}")
+                : new RedirectResult($"{c.RegisterLink()}{schema}://{authority}/service/register/new");
         }
 
         [DasAuthorize]
@@ -258,6 +277,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("unsubscribe/{correlationId}")]
+        public ActionResult Unsubscribe()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("unsubscribe/{correlationId}")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Unsubscribe(bool? unsubscribe, string correlationId)
+        {
+            if (unsubscribe == null || unsubscribe == false)
+            {
+                var model = new
+                {
+                    InError = true
+                };
+
+                return View(model);
+            }
+
+            await _homeOrchestrator.Unsubscribe(Guid.Parse(correlationId));
+
+            return View(ControllerConstants.UnsubscribedViewName);
         }
 
 #if DEBUG

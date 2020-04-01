@@ -1,11 +1,12 @@
-﻿
+﻿// used by the cookie banner component
+
 (function (root) {
     'use strict'
     window.GOVUK = window.GOVUK || {}
 
     var DEFAULT_COOKIE_CONSENT = {
-        'AnalyticsConsent': true,
-        'MarketingConsent': false
+        'AnalyticsConsent': 'true',
+        'MarketingConsent': 'false'
     }
 
     window.GOVUK.cookie = function (name, value, options) {
@@ -52,14 +53,14 @@
     }
 
     window.GOVUK.setConsentCookie = function (options) {
-        var DASSeenCookieMessage = window.GOVUK.getConsentCookie()
+        var cookieConsent = window.GOVUK.getConsentCookie()
 
-        if (!DASSeenCookieMessage) {
-            DASSeenCookieMessage = JSON.parse(JSON.stringify(DEFAULT_COOKIE_CONSENT))
+        if (!cookieConsent) {
+            cookieConsent = JSON.parse(JSON.stringify(DEFAULT_COOKIE_CONSENT))
         }
 
         for (var cookieType in options) {
-            DASSeenCookieMessage[cookieType] = options[cookieType]
+            cookieConsent[cookieType] = options[cookieType]
 
             // Delete cookies of that type if consent being set to false
             if (!options[cookieType]) {
@@ -68,14 +69,15 @@
                         window.GOVUK.cookie(cookie, null)
 
                         if (window.GOVUK.cookie(cookie)) {
-                            document.cookie = cookie + '=;expires=' + new Date() + ';domain=.' + window.location.hostname + ';path=/'
+
+                            document.cookie = cookie + '=;expires=' + new Date() + ';domain=.' + window.GOVUK.getDomain() + ';path=/'
                         }
                     }
                 }
             }
         }
 
-        window.GOVUK.setCookie('cookie_policy', JSON.stringify(DASSeenCookieMessage), { days: 365 })
+        window.GOVUK.setCookie('cookie_policy', JSON.stringify(cookieConsent), { days: 365 })
     }
 
     window.GOVUK.setCookie = function (name, value, options) {
@@ -95,7 +97,7 @@
             cookieString = cookieString + '; Secure'
         }
 
-        document.cookie = cookieString
+        document.cookie = cookieString + ';domain=.' + window.GOVUK.getDomain()
     }
 
     window.GOVUK.getCookie = function (name) {
@@ -111,6 +113,12 @@
             }
         }
         return null
+    }
+
+    window.GOVUK.getDomain = function () {
+        return window.location.hostname !== 'localhost'
+            ? window.location.hostname.slice(window.location.hostname.indexOf('.') + 1)
+            : window.location.hostname;
     }
 }(window))
 

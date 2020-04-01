@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerFinance.Web
             filters.AddUnitOfWorkFilter();
             filters.AddAuthorizationFilter();
             filters.AddUnauthorizedAccessExceptionFilter();
-            filters.Add(new GoogleAnalyticsFilter());
+            filters.Add(new AnalyticsFilter());
         }
     }
 }

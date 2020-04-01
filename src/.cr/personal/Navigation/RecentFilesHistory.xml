@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root Type="DevExpress.CodeRush.Foundation.Navigation.QuickFileNav.SolutionFileInfosContainer">
+  <Options Language="Neutral">
+    <Items>
+      <Item Id="{8a02d3a3-2b65-4c3b-b255-20e60303a11e}">
+        <Filename>EmployerTeamController.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web\controllers\employerteamcontroller.cs</FilePath>
+        <Folders>
+          <Item>Controllers</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web</ProjectName>
+      </Item>
+      <Item Id="{94894b8d-c8da-4361-a132-fbf3ed6eae94}">
+        <Filename>EmployerTeamController.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web\controllers\employerteamcontroller.cs</FilePath>
+        <Folders>
+          <Item>Controllers</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web</ProjectName>
+      </Item>
+      <Item Id="{d300401c-1b37-4cc1-8d68-e727c2ccba80}">
+        <Filename>UrlHelperExtensions.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web\extensions\urlhelperextensions.cs</FilePath>
+        <Folders>
+          <Item>Extensions</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web</ProjectName>
+      </Item>
+      <Item Id="{6b7660f7-c583-4ef0-8f67-9faaa29e950c}">
+        <Filename>UrlHelperExtensions.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.eas.support.web\extensions\urlhelperextensions.cs</FilePath>
+        <Folders>
+          <Item>Extensions</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EAS.Support.Web\SFA.DAS.EAS.Support.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EAS.Support.Web</ProjectName>
+      </Item>
+      <Item Id="{92d9e756-5f0e-45a3-8820-7b3103628e2a}">
+        <Filename>EmployerTeamOrchestrator.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web\orchestrators\employerteamorchestrator.cs</FilePath>
+        <Folders>
+          <Item>Orchestrators</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web</ProjectName>
+      </Item>
+      <Item Id="{36f1e025-c645-4f6a-95ac-8c2bb7e72efc}">
+        <Filename>EmployerTeamController.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web\controllers\employerteamcontroller.cs</FilePath>
+        <Folders>
+          <Item>Controllers</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web</ProjectName>
+      </Item>
+      <Item Id="{c2e527d6-e2b9-4f3d-b526-160c267e3386}">
+        <Filename>EmployerTeam</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web\views\employerteam\</FilePath>
+        <Folders>
+          <Item>Views</Item>
+        </Folders>
+        <LocationType>Folder</LocationType>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web</ProjectName>
+      </Item>
+      <Item Id="{892a4756-3f8f-4434-acef-51f7367a7bd8}">
+        <Filename>EmployerTeamController.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web\controllers\employerteamcontroller.cs</FilePath>
+        <Folders>
+          <Item>Controllers</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web\SFA.DAS.EmployerAccounts.Web.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web</ProjectName>
+      </Item>
+      <Item Id="{86a9c0a5-db6c-4a6e-8308-862537d621c5}">
+        <Filename>GetReservationsRequestHandler.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts\queries\getreservations\getreservationsrequesthandler.cs</FilePath>
+        <Folders>
+          <Item>Queries</Item>
+          <Item>GetReservations</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts\SFA.DAS.EmployerAccounts.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts</ProjectName>
+      </Item>
+      <Item Id="{af3cefe5-28eb-4a50-8565-af435bf961de}">
+        <Filename>WhenGettingAccount.cs</Filename>
+        <FilePath>c:\esfa\das-employerapprenticeshipsservice\src\sfa.das.employeraccounts.web.unittests\orchestrators\employerteamorchestratortests\whengettingaccount.cs</FilePath>
+        <Folders>
+          <Item>Orchestrators</Item>
+          <Item>EmployerTeamOrchestratorTests</Item>
+        </Folders>
+        <ProjectFileName>C:\ESFA\das-employerapprenticeshipsservice\src\SFA.DAS.EmployerAccounts.Web.UnitTests\SFA.DAS.EmployerAccounts.Web.UnitTests.csproj</ProjectFileName>
+        <ProjectName>SFA.DAS.EmployerAccounts.Web.UnitTests</ProjectName>
+      </Item>
+    </Items>
+  </Options>
+</Root>

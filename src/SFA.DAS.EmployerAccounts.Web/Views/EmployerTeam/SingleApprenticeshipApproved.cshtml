@@ -1,0 +1,56 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large" id="call-to-action-your-apprentice">
+        Your apprentice
+    </h2>
+
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Name
+            </th>
+            <td class="tw-65" id="apprentice-name">
+                @(Model?.ApprenticeshipFullName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Course
+            </th>
+            <td id="course-name">
+                @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td id="provider-name">
+                @(Model?.TrainingProvider?.Name)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Start month
+            </th>
+            <td id="course-start-date">
+                @(Model?.CourseStartDateText)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Finish month
+            </th>
+            <td id="course-end-date">
+                @(Model?.CourseEndDateText)
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@Url.EmployerCommitmentsAction($"{Model.ViewApprovedApprenticeDetailsLink}")" draggable="false" class="govuk-link">
+            View apprentice details
+        </a>
+    </p>
+</section>
+

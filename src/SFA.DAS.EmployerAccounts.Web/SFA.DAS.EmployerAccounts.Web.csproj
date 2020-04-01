@@ -118,13 +118,13 @@
     <PackageReference Include="SFA.DAS.Caches">
       <Version>1.1.4</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
+      <Version>4.1.1063</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
-    <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.2515</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2103</Version>
     </PackageReference>
@@ -138,6 +138,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Hmrc">
       <Version>1.0.16</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.MA.Shared.UI">
+      <Version>1.1.34</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -205,6 +208,7 @@
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SearchPensionRegulatorController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -218,6 +222,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Extensions\CohortSummaryExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
@@ -244,9 +249,11 @@
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementInfoConverter.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
+    <Compile Include="Mappings\CohortMapping.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\OrganisationMappings.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
+    <Compile Include="Mappings\VacancyMappings.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
@@ -270,6 +277,9 @@
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
     <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
+    <Compile Include="ViewModels\ApprenticeshipViewModel.cs" />
+    <Compile Include="ViewModels\CallToActionViewModel.cs" />
+    <Compile Include="ViewModels\CohortViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
@@ -313,10 +323,12 @@
     <Compile Include="ViewModels\OrganisationAddedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationUpdatedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\ProviderInvitationViewModel.cs" />
     <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\ReservationViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
@@ -333,6 +345,8 @@
     <Compile Include="ViewModels\SummaryViewModel.cs" />
     <Compile Include="ViewModels\SupportUserHeaderViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="Models\TrainingDateModel.cs" />
+    <Compile Include="ViewModels\TrainingProviderViewModel.cs" />
     <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
@@ -341,10 +355,10 @@
     <Compile Include="ViewModels\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
-    <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeDetailsViewModel.cs" />
-    <Compile Include="ViewModels\VacancyStatusViewModel.cs" />
+    <Compile Include="ViewModels\VacancyViewModel.cs" />
+    <Compile Include="ViewModels\VacanciesViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="ViewModels\WhenDoYouWantToViewViewModel.cs" />
   </ItemGroup>
@@ -800,7 +814,6 @@
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\EmployerAccount\GetApprenticeshipFunding.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Index.cshtml" />
-    <Content Include="Views\Shared\_Layout_v2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row1Panel1.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row1Panel2.cshtml" />
     <Content Include="Views\EmployerTeam\V2\Row2Panel2.cshtml" />
@@ -835,6 +848,8 @@
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_Layout_CDN.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage_CDN.cshtml" />
+    <Content Include="Views\Home\Unsubscribe.cshtml" />
+    <Content Include="Views\Home\Unsubscribed.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\EmployerAgreement\WhenDoYouWantToView.cshtml" />
     <Content Include="Views\Shared\_Agreement_v3.cshtml" />
@@ -849,8 +864,24 @@
     <Content Include="Views\CookieConsent\Details.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="Views\Report\ReportTrainingProvider.cshtml" />
     <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
     <Content Include="Views\EmployerTeam\V2\NotCurrentlyInStorage.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyDraft.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyPendingReview.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyLive.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyRejected.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
+    <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
+    <Content Include="Views\Shared\_NotSignedV3AgreementMessage_CDN.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueSetup.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipApproved.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

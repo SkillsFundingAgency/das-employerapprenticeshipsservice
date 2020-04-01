@@ -1,14 +1,14 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
-using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using Model = SFA.DAS.EAS.Portal.Client.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
 {
@@ -21,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
-        private Mock<IPortalClient> mockPortalClient;
 
         [SetUp]
         public void Arrange()
@@ -31,9 +30,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            mockPortalClient = new Mock<IPortalClient>();
 
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
             mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
 
             _controller = new EmployerTeamController(
@@ -41,7 +38,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
                 mockEmployerTeamOrchestrator.Object,
-                mockPortalClient.Object,
                 mockAuthorizationService.Object);
         }
 
@@ -49,20 +45,48 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheCheckFundingViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.AgreementsToSign = false;
-            model.ReservationsCount = 0;
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            model.AccountViewModel = new Model.Account();
-            model.AccountViewModel.Providers.Add(new Model.Provider());
-
+            var model = new AccountDashboardViewModel()
+            {
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = false,
+                    VacanciesViewModel = new VacanciesViewModel()
+                },
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
+            };
+            
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(PanelType.Action, (result.Model as dynamic).PanelType);
+        }
+
+        [Test]
+        public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
+        {
+            // Arrange
+            var model = new AccountDashboardViewModel();
+            model.PayeSchemeCount = 1;
+            model.CallToActionViewModel = new CallToActionViewModel
+            {
+                AgreementsToSign = false,
+                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                VacanciesViewModel = new VacanciesViewModel()
+            };
+            
+            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
+            
+            //Act
+            var result = _controller.Row1Panel1(model) as PartialViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.AreEqual("ContinueSetupForSingleReservation", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(PanelType.Summary, (result.Model as dynamic).PanelType);
         }
     }
 }

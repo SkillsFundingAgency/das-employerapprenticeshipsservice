@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using MediatR;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Commands.RenameEmployerAccount;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
