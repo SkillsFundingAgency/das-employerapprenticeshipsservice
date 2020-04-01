@@ -876,6 +876,7 @@
     <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage_CDN.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueSetup.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipApproved.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
