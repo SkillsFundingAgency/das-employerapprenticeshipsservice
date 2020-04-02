@@ -712,6 +712,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyDraft";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -730,6 +731,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyPendingReview";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -748,6 +750,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyLive";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -765,6 +768,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyClosed";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -783,6 +787,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyRejected";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -807,6 +812,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "ContinueSetupForSingleReservation";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -819,6 +825,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "CheckFunding";
                 viewModel.PanelType = PanelType.Action;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -832,6 +839,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipApproved";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -850,6 +858,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 {
                     viewModel.ViewName = "SingleApprenticeshipContinueSetup";
                     viewModel.PanelType = PanelType.Summary;
+                    viewModel.Data.HideTasksBar = true;
                     return true;
                 }
 
@@ -868,6 +877,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipWithTrainingProvider";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
             return false;
@@ -885,6 +895,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipContinueWithProvider";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
             
@@ -903,6 +914,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipReadyForReview";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
        
