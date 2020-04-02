@@ -15,110 +15,92 @@
     }
 }
 
-<div class="grid-row header-index">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Your organisations and agreements</h1>
-    </div>
-    <div class="column-one-third">
-        <form action="@Url.EmployerAccountsAction("organisations/search")" method="GET">
-            <input class="button action-add" id="addNewOrg" type="submit" value="Add new organisation">
-        </form>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <p>Add each organisation that will contract with your training providers.</p>
-        <p>There is no restriction on the number of <a href="https://www.gov.uk/government/publications/employment-allowance-more-detailed-guidance" target="_blank" rel="external">connected organisations</a> you can add.</p>
-    </div>
-</div>
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <details class="transfers-status">
-            <summary>
-                <span class="summary">Transfers status: 
-                    <span class="bold">
-                        @{
-                            var authorizationResult = Html.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
-                            if (authorizationResult.IsAuthorized)
-                            {
-                                @:Enabled
-                            }
-                            else if (authorizationResult.HasError<EmployerFeatureAgreementNotSigned>())
-                            {
-                                @:Disabled
-                            }
-                            else
-                            {
-                                throw new ArgumentOutOfRangeException();
-                            }
-                        }
-                    </span>
-                </span>
-            </summary>
-            <div class="text panel">
-                <p>You must sign the most up-to-date agreement for all organisations to use transfers functionality.</p>
-            </div>
-        </details>
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">Your organisations and agreements</h1>
+        <p class="govuk-body">You must add each organisation that will contract with your training providers.</p>
+        <p class="govuk-body">You can add as many connected organisations as you need to.</p>
+        <p class="govuk-body">Transfers status:&nbsp;
+            <span>
+                @{
+                    var authorizationResult = Html.GetAuthorizationResult("EmployerFeature.TransferConnectionRequests");
+                    if (authorizationResult.IsAuthorized)
+                    {
+                        @:enabled.
+                    }
+                    else if (authorizationResult.HasError<EmployerFeatureAgreementNotSigned>())
+                    {
+                        @:disabled.
+                    }
+                    else
+                    {
+                        throw new ArgumentOutOfRangeException();
+                    }
+                }
+            </span>
+        </p>
+        <p class="govuk-!-margin-bottom-8">
+            <a href="@Url.Action(ControllerConstants.SearchForOrganisationActionName, ControllerConstants.SearchOrganisationControllerName)" class="govuk-button govuk-!-margin-bottom-0">Add an organisation</a>
+        </p>
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-full">
-        <table class="responsive">
-            <thead>
-            <tr>
-                <th scope="col">Organisation</th>
-                <th scope="col">Agreement status</th>
-                <th scope="col">Action</th>
-                <th class="no-wrap" scope="col">Agreement ID</th>
-            </tr>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <table class="govuk-table govuk-!-font-size- govuk-!-margin-bottom-8">
+            <caption class="govuk-table__caption govuk-heading-l govuk-visually-hidden">Organisations</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header govuk-!-width-one-third">Organisation name</th>
+                    <th scope="col" class="govuk-table__header">Latest agreement status</th>
+                    <th scope="col" class="govuk-table__header" colspan="2"><span class="govuk-visually-hidden">Actions</span></th>
+                </tr>
             </thead>
-            <tbody>
+            <tbody class="govuk-table__body">
             @foreach (var employerAgreement in Model.Data.EmployerAgreementsData.EmployerAgreements)
             {
-                <tr>
-                    <td data-label="Organisation">@employerAgreement.LegalEntity.Name</td>
-                    <td data-label="Agreement status">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell">@employerAgreement.LegalEntity.Name</td>
+                    <td class="govuk-table__cell">
                         @if (employerAgreement.HasPendingAgreement)
                         {
-                            if (employerAgreement.HasSignedAgreement)
-                            {
-                                @:Updated agreement available
-                            }
-                            else
-                            {
-                                @:Agreement not accepted
-                            }
+                            @:Not yet accepted
                         }
                         else if (employerAgreement.HasSignedAgreement)
                         {
-                            @:Accepted by @employerAgreement.Signed.SignedByName
+                            @:Accepted
                         }
                     </td>
-                    <td data-label="Action">
-                        @if (employerAgreement.HasPendingAgreement)
-                        {
-                            <a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Accept agreement</a>
-                        }
-                        else if (employerAgreement.HasSignedAgreement)
-                        {
-                            <a href="@Url.Action(ControllerConstants.DetailsActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = employerAgreement.Signed.HashedAgreementId })" title="View agreement">View</a>
-                        }
+                    <td class="govuk-table__cell">
+                        <a href="@Url.Action(ControllerConstants.ViewAllAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" title="View all agreements">
+                            View all agreements
+                        </a>
                     </td>
-                    <td data-label="Agreement ID">
-                        @if (employerAgreement.HasSignedAgreement)
+                    <td class="govuk-table__cell">
+                        @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Any())
                         {
-                            <span>@employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId</span>
-                        }
-                        else
-                        {
-                            <span>Accept agreement to receive an agreement ID</span>
+                            <a href="remove?name=Makingway">Remove organisation</a>
                         }
                     </td>
                 </tr>
             }
             </tbody>
         </table>
-
+        <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                    How transfers status is worked out
+                </span>
+            </summary>
+            <div class="govuk-details__text">
+                Transfers are enabled if all the organisations in your account have accepted the latest agreement.
+            </div>
+        </details>
+    </div>
+</div>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
         @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Any())
         {
             <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new {Model.Data.HashedAccountId})">Remove an organisation from your account</a></p>

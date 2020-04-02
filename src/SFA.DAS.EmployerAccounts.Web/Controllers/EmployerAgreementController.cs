@@ -327,5 +327,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        [Route("agreements/{accountLegalEntityHashedId}/viewallagreements")]
+        public ActionResult ViewAllAgreements(string hashedAccountId, string accountLegalEntityHashedId)
+        {
+           throw new NotImplementedException();
+        }
     }
 }
