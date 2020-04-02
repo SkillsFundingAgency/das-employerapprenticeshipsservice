@@ -80,7 +80,7 @@
                     <td class="govuk-table__cell">
                         @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Any())
                         {
-                            <a href="remove?name=Makingway">Remove organisation</a>
+                            <a href="@Url.Action("ConfirmRemoveOrganisation","EmployerAgreement",new {agreementId = employerAgreement.HasPendingAgreement})">Remove organisation</a>
                         }
                     </td>
                 </tr>
@@ -109,10 +109,12 @@
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerTeam", new {Model.Data.HashedAccountId})">Home</a></li>
-            <li>Your organisations and agreements</li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="@Url.Action("Index", "EmployerTeam", new {Model.Data.HashedAccountId})">Home</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item" aria-current="page">Your organisations and agreements</li>
         </ol>
     </div>
 }
