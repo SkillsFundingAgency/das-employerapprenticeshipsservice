@@ -26,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public int? NoOfNewApplications { get; set; }
         public int? NoOfSuccessfulApplications { get; set; }
         public int? NoOfUnsuccessfulApplications { get; set; }
-        public int NoOfApplications { get; set; }
         public string FaaVacancyDetailUrl { get; set; }
         public string RaaManageVacancyUrl { get; set; }
     }
