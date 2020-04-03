@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
@@ -49,20 +48,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;       
         private readonly IMapper _mapper;
-        private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamOrchestrator(IMediator mediator,
             ICurrentDateTime currentDateTime,
             IAccountApiClient accountApiClient,           
-            IMapper mapper,
-            IAuthorizationService authorizationService)
+            IMapper mapper)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;            
             _mapper = mapper;
-            _authorizationService = authorizationService;
         }
 
         //Needed for tests
@@ -669,9 +665,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
-            rules.Add(100, EvalutateSignAgreementCallToActionRule);
-            rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
+            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>
+            {
+                { 100, EvalutateSignAgreementCallToActionRule },
+                { 101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction }
+            };
 
             if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
             {

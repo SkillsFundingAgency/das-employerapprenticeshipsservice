@@ -2,7 +2,6 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -15,7 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
@@ -24,27 +22,25 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void Arrange()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
 
            _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
+                mockEmployerTeamOrchestrator.Object);
         }
 
         [Test]
         public void ThenTheAddPayeViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 0;            
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 0
+            };
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
@@ -52,51 +48,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             //Assert
             Assert.IsNotNull(result);
             Assert.AreEqual("AddPAYE", (result.Model as dynamic).ViewName);
-        }
-
-        [Test]
-        public void ThenTheEmptyViewIsReturnedAtRow1Panel2()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 0;
-
-            //Act
-            var result = _controller.Row1Panel2(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Empty", (result.Model as dynamic).ViewName);
-        }
-
-        [Test]
-        public void ThenTheEmptyViewIsReturnedAtRow2Panel1()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 0;
-
-            //Act
-            var result = _controller.Row2Panel1(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Empty", (result.Model as dynamic).ViewName);
-        }
-
-        [Test]
-        public void ThenTheEmptyViewIsReturnedAtRow2Panel2()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 0;
-
-            //Act
-            var result = _controller.Row2Panel2(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Empty", (result.Model as dynamic).ViewName);
         }
     }
 }

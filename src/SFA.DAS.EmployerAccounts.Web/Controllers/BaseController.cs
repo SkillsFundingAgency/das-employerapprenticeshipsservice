@@ -34,16 +34,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         protected override ViewResult View(string viewName, string masterName, object model)
         {
-            var orchestratorResponse = model as OrchestratorResponse;
-
-            if (orchestratorResponse == null)
+            if (!(model is OrchestratorResponse orchestratorResponse))
             {
                 return base.View(viewName, masterName, model);
             }
-
-            var invalidRequestException = orchestratorResponse.Exception as InvalidRequestException;
-
-            if (invalidRequestException != null)
+            
+            if (orchestratorResponse.Exception is InvalidRequestException invalidRequestException)
             {
                 foreach (var errorMessageItem in invalidRequestException.ErrorMessages)
                 {

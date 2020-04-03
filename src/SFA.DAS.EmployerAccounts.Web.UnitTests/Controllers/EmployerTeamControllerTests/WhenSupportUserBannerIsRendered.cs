@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
@@ -22,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
@@ -44,7 +42,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void Arrange()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
@@ -55,8 +52,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             _userId = "TestUser";
 
-            _claims = new List<Claim>();
-            _claims.Add(new Claim(ControllerConstants.UserRefClaimKeyName, _userId));
+            _claims = new List<Claim>
+            {
+                new Claim(ControllerConstants.UserRefClaimKeyName, _userId)
+            };
 
             mockPrincipal.Setup(m => m.Identity).Returns(mockClaimsIdentity.Object);
             mockClaimsIdentity.Setup(m => m.IsAuthenticated).Returns(_isAuthenticated);
@@ -100,10 +99,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
-
-            _controller.ControllerContext = mockControllerContext.Object;
+                mockEmployerTeamOrchestrator.Object)
+            {
+                ControllerContext = mockControllerContext.Object
+            };
         }
 
         [Test]

@@ -2,7 +2,6 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -15,7 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
@@ -24,115 +22,57 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void Arrange()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(false);
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
+                mockEmployerTeamOrchestrator.Object);
         }
 
         [Test]
         public void ThenForNonLevyTheCheckFundingViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel
             {
-                AgreementsToSign = false
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = false
+                },
+
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };
-            
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            
+
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("Empty", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
         }
 
         [Test]
         public void ThenForLevyTheEmptyViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel
             {
-                AgreementsToSign = false
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = false
+                },
+
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.Levy
             };
-            
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.Levy;
-            
+
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Empty", (result.Model as dynamic).ViewName);
-        }
-
-        [Test]
-        public void ThenTheTasksViewIsReturnedAtRow1Panel2()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
-            {
-                AgreementsToSign = false
-            };
-            
-            //Act
-            var result = _controller.Row1Panel2(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Tasks", (result.Model as dynamic).ViewName);
-        }
-
-        [Test]
-        public void ThenTheDashboardViewIsReturnedAtRow2Panel1()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
-            {
-                AgreementsToSign = false
-            };
-
-            //Act
-            var result = _controller.Row2Panel1(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Dashboard", (result.Model as dynamic).ViewName);
-        }
-
-        [Test]
-        public void ThenTheEmptyViewIsReturnedAtRow2Panel2()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
-            {
-                AgreementsToSign = false
-            };
-
-            //Act
-            var result = _controller.Row2Panel2(model) as PartialViewResult;
 
             //Assert
             Assert.IsNotNull(result);
