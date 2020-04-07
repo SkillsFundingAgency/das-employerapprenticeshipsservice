@@ -168,5 +168,42 @@ namespace SFA.DAS.EmployerAccounts.Data
             legalEntity.SignedAgreementVersion = signedAgreementVersion;
             await _db.Value.SaveChangesAsync();
         }
+
+        public async Task<OrganisationAgreement> GetOrganisationAgreement(long accountLegalEntityId)
+        {
+            var accountLegalEntity = await _db.Value.AccountLegalEntities
+                .Include(x => x.Agreements.Select(y => y.Template))
+                .SingleOrDefaultAsync(x => x.Id == accountLegalEntityId);
+
+            if (accountLegalEntity == null)
+            {
+                return null;
+            }
+
+            var organisationAgreement = new OrganisationAgreement
+            {
+                Id = accountLegalEntity.Id,
+                Name = accountLegalEntity.Name,
+                Address = accountLegalEntity.Address,
+                AccountId = accountLegalEntity.AccountId,
+                AccountLegalEntityPublicHashedId = accountLegalEntity.PublicHashedId,
+                SignedAgreementId = accountLegalEntity.SignedAgreementId,
+                SignedAgreementVersion = accountLegalEntity.SignedAgreementVersion,
+                PendingAgreementId = accountLegalEntity.PendingAgreementId,
+                PendingAgreementVersion = accountLegalEntity.PendingAgreementVersion,
+                Created = accountLegalEntity.Created,
+                Deleted = accountLegalEntity.Deleted,
+                LegalEntityId = accountLegalEntity.LegalEntityId
+            };
+
+            var legalEntity = await _db.Value.LegalEntities.Where(x => x.Id == accountLegalEntity.LegalEntityId).ToListAsync();
+
+            organisationAgreement.Agreements = accountLegalEntity.Agreements;
+
+            organisationAgreement.LegalEntity = legalEntity.FirstOrDefault();
+
+            return organisationAgreement;
+
+        }
     }
 }

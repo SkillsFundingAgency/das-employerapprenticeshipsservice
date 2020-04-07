@@ -281,6 +281,9 @@
     <Compile Include="ViewModels\CallToActionViewModel.cs" />
     <Compile Include="ViewModels\CohortViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
+    <Compile Include="ViewModels\EmployerAgreementViewModelV1.cs" />
+    <Compile Include="ViewModels\OrganisationAgreementViewModel.cs" />
+    <Compile Include="ViewModels\OrganisationEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
@@ -882,6 +885,9 @@
     <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
+    <Content Include="Views\EmployerAgreement\ViewAllAgreements.cshtml" />
+    <Content Include="Views\Shared\_AcceptedAgreement.cshtml" />
+    <Content Include="Views\Shared\_NotAcceptedAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

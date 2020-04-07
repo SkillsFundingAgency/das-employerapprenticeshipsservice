@@ -327,5 +327,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
             }
         }
+
+        [HttpGet]
+        [Route("agreements/{accountLegalEntityHashedId}/viewallagreements")]
+        public async Task<ActionResult> ViewAllAgreements(string hashedAccountId, string accountLegalEntityHashedId)
+        {
+            var model = await _orchestrator.GetOrganisationAgreements(accountLegalEntityHashedId);
+            return View(model);
+        }
     }
 }

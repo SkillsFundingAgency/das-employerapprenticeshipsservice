@@ -15,6 +15,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementType;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -367,5 +368,47 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return response;
         }
+
+        public virtual async Task<OrchestratorResponse<OrganisationAgreementViewModelV1>> GetOrganisationAgreements(string accountLegalEntityHashedId)
+        {
+            try
+            {
+                var response = await _mediator.SendAsync(new GetOrganisationAgreementsRequest
+                {
+                    AccountLegalEntityHashedId = accountLegalEntityHashedId
+                });
+
+                var employerAgreementView =
+                  _mapper.Map<OrganisationAgreement, OrganisationAgreementViewModel>(response.OrganisationAgreements);
+
+                var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(response.OrganisationAgreements.LegalEntity.Source);
+
+                return new OrchestratorResponse<OrganisationAgreementViewModelV1>
+                {
+                    Data = new OrganisationAgreementViewModelV1
+                    {
+                        OrganisationAgreementViewModel = employerAgreementView,
+                        OrganisationLookupPossible = organisationLookupByIdPossible
+                    }
+                };
+            }
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse<OrganisationAgreementViewModelV1>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Data = new OrganisationAgreementViewModelV1(),
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new OrchestratorResponse<OrganisationAgreementViewModelV1>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
+        }
     }
 }
+   
