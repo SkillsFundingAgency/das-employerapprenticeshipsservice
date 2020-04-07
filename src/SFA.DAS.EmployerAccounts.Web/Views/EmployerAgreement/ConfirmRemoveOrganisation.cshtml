@@ -1,66 +1,88 @@
-﻿@using SFA.DAS.EmployerAccounts.Models.EmployerAgreement
-@model OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>
-
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@model ConfirmOrganisationToRemoveViewModel
 
 @{
     ViewBag.PageID = "organisations-remove-confirmation";
     ViewBag.Title = "Remove organisation";
     ViewBag.Section = "organisations";
     ViewBag.ZenDeskLabel = "eas-remove-organisation";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/agreements/remove/organisation-remove-confirmation";
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 }
 
-<div class="grid-row header-index">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">
-            <span class="heading-secondary">@Model.Data.Name</span> 
-            Remove organisation
-        </h1>
-
-        @if (Model.Data.AgreementStatus == EmployerAgreementStatus.Signed)
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
         {
-            <p class="lede">@Model.Data.Name will end its agreement with the <abbr title="Education and Skills Funding Agency">ESFA</abbr>.</p>
+            <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+                <h2 class="govuk-error-summary__title" id="error-summary-heading">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            <a href="#yes">Select yes if you want to remove @Model.Name</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         }
-        
-        <form method="post" action="@Url.Action("RemoveOrganisation","EmployerAgreement")">
+
+        <h1 class="govuk-heading-xl">Are you sure you want to remove @Model.Name?</h1>
+        <form method="POST" action="@Url.Action(ControllerConstants.ConfirmRemoveOrganisationActionName)">
             @Html.AntiForgeryToken()
-            <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedAccountId" id="HashedAccountId"/>
-            <input type="hidden" value="@Model.Data.HashedAgreementId" name="HashedAgreementId" id="HashedAgreementId"/>
-            <input type="hidden" value="@Model.Data.Name" name="Name" id="Name"/>
-            <div class="form-group @(!string.IsNullOrEmpty(Model.Data.RemoveOrganisationError) ? "error" : "")">
-                <fieldset id="confirm">
-                    <legend>
-                        <span class="form-label-bold">Are you sure?</span>
-                        @if (!string.IsNullOrEmpty(Model.Data.RemoveOrganisationError))
-                        {
-                            <span class="error-message">@Model.Data.RemoveOrganisationError</span>
-                        }
-                    </legend>
-                    <label class="block-label">
-                        <input type="radio" name="RemoveOrganisation" value="2"/>
-                        <span class="form-label">Yes, remove now</span>
-                    </label>
-                    <label class="block-label">
-                        <input type="radio" name="RemoveOrganisation" value="1"/>
-                        <span class="form-label">No, don't remove</span>
-                    </label>
+            @Html.HiddenFor(m => m.Name)
+            @Html.HiddenFor(m => m.CanBeRemoved)
+            @Html.HiddenFor(m => m.HasSignedAgreement)
+            @Html.HiddenFor(m => m.HashedAccountId)
+            @Html.HiddenFor(m => m.HashedAccountLegalEntitytId)
+            <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="can-remove-organisation">
+                <fieldset class="govuk-fieldset" aria-describedby="can-remove-organisation">
+                    @if (Model.HasSignedAgreement)
+                    {
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                            <p>This will end @Model.Name’s agreement with ESFA.</p>
+                        </legend>
+                    }
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <span class="govuk-error-message" aria-hidden="false" id="can-remove-organisation-error">
+                            Select yes if you want to remove @Model.Name
+                        </span>
+                    }
+
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            @Html.RadioButtonFor(m => m.Remove, true, new { @class = "govuk-radios__input", id = "yes" })
+                            <label class="govuk-label govuk-radios__label" for="yes">Yes</label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            @Html.RadioButtonFor(m => m.Remove, false, new { @class = "govuk-radios__input", id = "no" })
+                            <label class="govuk-label govuk-radios__label" for="no">No</label>
+                        </div>
+                    </div>
                 </fieldset>
             </div>
-            <div class="form-group">
-                <button type="submit" class="button">Continue</button>
+
+            <div class="govuk-form-group">
+                <button class="govuk-button" type="submit" id="can-remove-organisation-button">Continue</button>
             </div>
         </form>
     </div>
 </div>
 
-
-@section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
+@section breadcrumb
+{
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">Home</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)">Your organisations and agreements</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item" aria-current="page">Remove organisation</li>
         </ol>
     </div>
 }

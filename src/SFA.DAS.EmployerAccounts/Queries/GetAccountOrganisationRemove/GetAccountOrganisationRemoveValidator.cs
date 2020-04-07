@@ -1,31 +1,26 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOrganisationRemove
 {
-    public class RemoveLegalEntityCommandValidator : IValidator<RemoveLegalEntityCommand>
+    public class GetAccountOrganisationRemoveValidator : IValidator<GetAccountOrganisationRemoveRequest>
     {
         private readonly IMembershipRepository _membershipRepository;
-        private readonly IEmployerAgreementRepository _employerAgreementRepository;
-        private readonly IHashingService _hashingService;
 
-        public RemoveLegalEntityCommandValidator(IMembershipRepository membershipRepository, IEmployerAgreementRepository employerAgreementRepository, IHashingService hashingService)
+        public GetAccountOrganisationRemoveValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
-            _employerAgreementRepository = employerAgreementRepository;
-            _hashingService = hashingService;
         }
 
-        public ValidationResult Validate(RemoveLegalEntityCommand item)
+        public ValidationResult Validate(GetAccountOrganisationRemoveRequest item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(RemoveLegalEntityCommand item)
+        public async Task<ValidationResult> ValidateAsync(GetAccountOrganisationRemoveRequest item)
         {
             var validationResult = new ValidationResult();
 
@@ -47,12 +42,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                 return validationResult;
             }
 
-            var member = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
+            var user = await _membershipRepository.GetCaller(item.HashedAccountId, item.UserId);
 
-            if (member == null || !member.Role.Equals(Role.Owner))
+            if (user == null || user.Role != Role.Owner)
             {
                 validationResult.IsUnauthorized = true;
-                return validationResult;
             }
 
             return validationResult;

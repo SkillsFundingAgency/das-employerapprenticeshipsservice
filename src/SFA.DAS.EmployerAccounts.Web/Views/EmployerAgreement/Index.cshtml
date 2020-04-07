@@ -78,9 +78,9 @@
                         </a>
                     </td>
                     <td class="govuk-table__cell">
-                        @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Any())
+                        @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Count > 1)
                         {
-                            <a href="@Url.Action("ConfirmRemoveOrganisation","EmployerAgreement",new {agreementId = employerAgreement.HasPendingAgreement})">Remove organisation</a>
+                            <a href="@Url.Action(ControllerConstants.RemoveOrganisationActionName ,ControllerConstants.EmployerAgreementControllerName,new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})">Remove organisation</a>
                         }
                     </td>
                 </tr>
@@ -99,20 +99,13 @@
         </details>
     </div>
 </div>
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-        @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Any())
-        {
-            <p class="font-xsmall"><a href="@Url.Action("GetOrganisationsToRemove", "EmployerAgreement", new {Model.Data.HashedAccountId})">Remove an organisation from your account</a></p>
-        }
-    </div>
-</div>
 
-@section breadcrumb {
+@section breadcrumb
+{
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
-                <a class="govuk-breadcrumbs__link" href="@Url.Action("Index", "EmployerTeam", new {Model.Data.HashedAccountId})">Home</a>
+                <a class="govuk-breadcrumbs__link" href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName)">Home</a>
             </li>
             <li class="govuk-breadcrumbs__list-item" aria-current="page">Your organisations and agreements</li>
         </ol>

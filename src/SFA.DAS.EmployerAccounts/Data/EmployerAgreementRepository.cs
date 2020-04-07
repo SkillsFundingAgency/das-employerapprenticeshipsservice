@@ -154,6 +154,13 @@ namespace SFA.DAS.EmployerAccounts.Data
             return agreements;
         }
 
+        public async Task<IEnumerable<EmployerAgreement>> GetAccountLegalEntityAgreements(long accountLegalEntityId)
+        {
+            return await _db.Value.Agreements.Where(ea => ea.AccountLegalEntityId == accountLegalEntityId)
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
         public async Task<EmployerAgreementStatus?> GetEmployerAgreementStatus(long agreementId)
         {
             return await _db.Value.Agreements.Where(x => x.Id == agreementId).Select(x => x.StatusId).SingleOrDefaultAsync();

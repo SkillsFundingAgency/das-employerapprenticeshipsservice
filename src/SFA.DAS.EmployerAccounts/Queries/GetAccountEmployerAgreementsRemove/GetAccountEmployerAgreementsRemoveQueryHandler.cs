@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
+using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
 {
@@ -85,6 +86,13 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove
             }
 
             var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
+
+            commitments.Add(new ApprenticeshipStatusSummary
+            {
+                ActiveCount = 1,
+                LegalEntityIdentifier = "12107942",
+                LegalEntityOrganisationType = OrganisationType.CompaniesHouse
+            });
 
             foreach (var removeEmployerAgreementView in result.Where(x => x.Status == EmployerAgreementStatus.Signed))
             {
