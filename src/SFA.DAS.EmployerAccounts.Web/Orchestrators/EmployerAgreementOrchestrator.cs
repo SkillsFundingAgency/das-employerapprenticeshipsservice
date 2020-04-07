@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,7 +9,7 @@ using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountOrganisationRemove;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementType;
@@ -160,6 +159,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
+
         public virtual async Task<OrchestratorResponse<bool>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
         {
             var response = new OrchestratorResponse<bool>();
@@ -198,6 +198,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return response;
         }
+
         public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
         {
             var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
@@ -282,7 +283,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             try
             {
-                var result = await _mediator.SendAsync(new GetAccountOrganisationRemoveRequest
+                var result = await _mediator.SendAsync(new GetAccountLegalEntityRemoveRequest
                 {
                     HashedAccountId = hashedAccountId,
                     UserId = userId,

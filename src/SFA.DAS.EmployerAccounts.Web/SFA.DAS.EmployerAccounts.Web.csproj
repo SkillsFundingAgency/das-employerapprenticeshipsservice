@@ -296,7 +296,6 @@
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="ViewModels\CreateNewLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />

@@ -7,21 +7,20 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
-    public class WhenIGetTheConfirmRemoveAgreementModel
+    public class WhenIGetTheConfirmRemoveAccountLegalEntityModel
     {
         private Mock<IMediator> _mediator;
         private Mock<IReferenceDataService> _referenceDataService;
         private EmployerAgreementOrchestrator _orchestrator;
 
         private const string ExpectedHahsedAccountId = "RT456";
-        private const string ExpectedHashedAgreementId = "RRTE56";
+        private const string ExpectedHashedAccountLegalEntityId = "RRTE56";
         private const string ExpectedUserId = "TYG68UY";
         private const string ExpectedName = "Test Name";
 
@@ -29,18 +28,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountEmployerAgreementRemoveRequest>()))
-                .ReturnsAsync(new GetAccountEmployerAgreementRemoveResponse
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>()))
+                .ReturnsAsync(new GetAccountLegalEntityRemoveResponse
                 {
-                    Agreement = new RemoveEmployerAgreementView
-                    {
-                        Name = ExpectedName,
-                        CanBeRemoved = false,
-                        HashedAccountId = ExpectedHahsedAccountId,
-                        HashedAgreementId = ExpectedHashedAgreementId,
-                        Id = 123444
-                    }
-
+                    Name = ExpectedName,
+                    CanBeRemoved = true,
+                    HasSignedAgreement = true
                 });
 
             _referenceDataService = new Mock<IReferenceDataService>();
@@ -53,13 +46,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         {
 
             //Act
-            await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAgreementId, ExpectedHahsedAccountId, ExpectedUserId);
+            await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountEmployerAgreementRemoveRequest>(
+            _mediator.Verify(x => x.SendAsync(It.Is<GetAccountLegalEntityRemoveRequest>(
                 c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
                      && c.UserId.Equals(ExpectedUserId)
-                     && c.HashedAgreementId.Equals(ExpectedHashedAgreementId)
+                     && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntityId)
                 )), Times.Once);
         }
 
@@ -68,10 +61,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountEmployerAgreementRemoveRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAgreementId, ExpectedHahsedAccountId, ExpectedUserId);
+            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
@@ -81,10 +74,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfAUnauthroizedAccessExceptionIsThrownThenTheOrchestratorResponseShowsAccessDenied()
         {
             //Arrange
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountEmployerAgreementRemoveRequest>())).ThrowsAsync(new UnauthorizedAccessException());
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>())).ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAgreementId, ExpectedHahsedAccountId, ExpectedUserId);
+            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
@@ -94,10 +87,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenTheValuesAreReturnedInTheResponseFromTheMediatorCall()
         {
             //Act
-            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAgreementId, ExpectedHahsedAccountId, ExpectedUserId);
+            var actual = await _orchestrator.GetConfirmRemoveOrganisationViewModel(ExpectedHashedAccountLegalEntityId, ExpectedHahsedAccountId, ExpectedUserId);
 
             //Assert
-            Assert.AreEqual(ExpectedHashedAgreementId, actual.Data.HashedAgreementId);
+            Assert.AreEqual(ExpectedHashedAccountLegalEntityId, actual.Data.HashedAccountLegalEntitytId);
             Assert.AreEqual(ExpectedHahsedAccountId, actual.Data.HashedAccountId);
             Assert.AreEqual(ExpectedName, actual.Data.Name);
         }

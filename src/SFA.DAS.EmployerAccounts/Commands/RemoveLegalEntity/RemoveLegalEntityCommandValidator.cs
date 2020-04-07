@@ -55,6 +55,15 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                 return validationResult;
             }
 
+            var accountId = _hashingService.DecodeValue(item.HashedAccountId);
+            var legalEntities = await _employerAgreementRepository.GetLegalEntitiesLinkedToAccount(accountId, false);
+
+            if (legalEntities != null && legalEntities.Count == 1)
+            {
+                validationResult.AddError(nameof(item.HashedAccountLegalEntityId), "There must be at least one legal entity on the account");
+                return validationResult;
+            }
+
             return validationResult;
         }
     }

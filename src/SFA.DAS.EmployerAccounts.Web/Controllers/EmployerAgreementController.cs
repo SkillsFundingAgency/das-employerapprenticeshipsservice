@@ -251,7 +251,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [HttpPost]
         [Route("agreements/{accountLegalEntityHashedId}/remove")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveOrganisation(string accountLegalEntityHashedId, string hashedAccountId, ConfirmOrganisationToRemoveViewModel model)
+        public async Task<ActionResult> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model)
         {
             if (!ModelState.IsValid)
             {

@@ -78,11 +78,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var accountlegalEntityId = _accountLegalEntityHashingService.DecodeValue(message.HashedAccountLegalEntityId);
+            var accountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(message.HashedAccountLegalEntityId);
 
-            var agreements = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountlegalEntityId);
+            var agreements = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
             var legalAgreement = agreements.OrderByDescending(a => a.TemplateId).First();
-            var HashedLegalAgreementId = _hashingService.HashValue((long)legalAgreement.Id);
+            var hashedLegalAgreementId = _hashingService.HashValue(legalAgreement.Id);
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreement.Id);
 
@@ -91,8 +91,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreement.Id);
 
             await Task.WhenAll(
-                AddAuditEntry(accountId, HashedLegalAgreementId),
-                CreateEvent(HashedLegalAgreementId)
+                AddAuditEntry(accountId, hashedLegalAgreementId),
+                CreateEvent(hashedLegalAgreementId)
             );
 
             // it appears that an agreement is created whenever we create a legal entity, so there should always be an agreement associated with a legal entity

@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {

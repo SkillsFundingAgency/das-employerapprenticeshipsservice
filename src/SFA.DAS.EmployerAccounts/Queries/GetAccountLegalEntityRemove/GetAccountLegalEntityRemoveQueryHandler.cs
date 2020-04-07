@@ -1,29 +1,27 @@
-﻿using MediatR;
-using SFA.DAS.Commitments.Api.Client.Interfaces;
-using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.HashingService;
-using SFA.DAS.Validation;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Commitments.Api.Types;
+using MediatR;
+using SFA.DAS.Commitments.Api.Client.Interfaces;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
-using OrganisationType = SFA.DAS.Common.Domain.Types.OrganisationType;
+using SFA.DAS.HashingService;
+using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOrganisationRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
 {
-    public class GetAccountOrganisationRemoveQueryHandler : IAsyncRequestHandler<GetAccountOrganisationRemoveRequest, GetAccountOrganisationRemoveResponse>
+    public class GetAccountLegalEntityRemoveQueryHandler : IAsyncRequestHandler<GetAccountLegalEntityRemoveRequest, GetAccountLegalEntityRemoveResponse>
     {
-        private readonly IValidator<GetAccountOrganisationRemoveRequest> _validator;
+        private readonly IValidator<GetAccountLegalEntityRemoveRequest> _validator;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IHashingService _hashingService;
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
         private readonly IEmployerCommitmentApi _employerCommitmentApi;
 
-        public GetAccountOrganisationRemoveQueryHandler(
-            IValidator<GetAccountOrganisationRemoveRequest> validator,
+        public GetAccountLegalEntityRemoveQueryHandler(
+            IValidator<GetAccountLegalEntityRemoveRequest> validator,
             IEmployerAgreementRepository employerAgreementRepository, 
             IHashingService hashingService,
             IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
@@ -36,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOrganisationRemove
             _employerCommitmentApi = employerCommitmentApi;
         }
 
-        public async Task<GetAccountOrganisationRemoveResponse> Handle(GetAccountOrganisationRemoveRequest message)
+        public async Task<GetAccountLegalEntityRemoveResponse> Handle(GetAccountLegalEntityRemoveRequest message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -55,11 +53,11 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOrganisationRemove
             var accountLegalEntity = await _employerAgreementRepository.GetAccountLegalEntity(accountLegalEntityId);
 
             var result = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
-            if (result == null) return new GetAccountOrganisationRemoveResponse();
+            if (result == null) return new GetAccountLegalEntityRemoveResponse();
 
             if (result.Any(x => x.StatusId == EmployerAgreementStatus.Signed))
             {
-                return new GetAccountOrganisationRemoveResponse
+                return new GetAccountLegalEntityRemoveResponse
                 {
                     CanBeRemoved = await SetRemovedStatusBasedOnCommitments(accountId, accountLegalEntity),
                     HasSignedAgreement = true,
@@ -67,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOrganisationRemove
                 };
             }
 
-            return new GetAccountOrganisationRemoveResponse
+            return new GetAccountLegalEntityRemoveResponse
             {
                 CanBeRemoved = true,
                 HasSignedAgreement = false,
@@ -78,13 +76,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountOrganisationRemove
         private async Task<bool> SetRemovedStatusBasedOnCommitments(long accountId, AccountLegalEntityModel accountLegalEntityModel)
         {
             var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
-
-            commitments.Add(new ApprenticeshipStatusSummary
-            {
-                ActiveCount = 1,
-                LegalEntityIdentifier = "12107942",
-                LegalEntityOrganisationType = OrganisationType.CompaniesHouse
-            });
 
             var commitmentConnectedToEntity = commitments.FirstOrDefault(c =>
                 !string.IsNullOrEmpty(c.LegalEntityIdentifier)
