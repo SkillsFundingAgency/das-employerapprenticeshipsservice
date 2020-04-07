@@ -1,0 +1,89 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.EmployerAgreementViewModelV1
+
+
+<p>This agreement allows you to spend funds for <strong> @Model.AccountLegalEntity.Name</strong>.</p>
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Parties</td>
+            <td class="govuk-table__cell">
+
+                <address class="party">
+                    <b>The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education</b>
+                    <br />
+                    Cheylesmore House<br />
+                    Quinton Road<br />
+                    Coventry<br />
+                    CV1 2WT
+                </address>
+                <address class="party">
+                    <strong>@Model.AccountLegalEntity.Name</strong><br />
+                    @Html.CommaSeperatedAddressToHtml(@Model.AccountLegalEntity.Address)
+                    @if (Model.OrganisationLookupPossible)
+                    {
+                        <p class="update-details">
+                            <a href="@Url.Action("review", "organisation", new
+                                {
+                                    Model.HashedAccountId,
+                                    Model.HashedAgreementId,
+                                    Model.AccountLegalEntityPublicHashedId
+                                })">Update these details</a>
+                        </p>
+                    }
+                </address>
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Document</td>
+            <td class="govuk-table__cell">
+                <div class="signed-agreement">
+                    <section class="attachment embedded">
+                        <div class="attachment-thumb">
+                            <a aria-hidden="true" class="thumbnail" href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")"><img alt="" src="/dist/images/pub-cover-html.png"></a>
+                        </div>
+                        <div class="attachment-details">
+                            <h2 class="title">
+                                <a href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")">Your ESFA agreement</a>
+                            </h2>
+                            <p class="metadata">
+                                <span class="type">HTML</span>
+                            </p>
+                        </div>
+                    </section>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<h3>This agreement has been accepted</h3>
+<table class="govuk-table">
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Accepted by:</td>
+            <td class="govuk-table__cell">@Model.SignedByName</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">On behalf of:</td>
+            <td class="govuk-table__cell">@Model.AccountLegalEntity.Name</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Address:</td>
+            <td class="govuk-table__cell">@Model.AccountLegalEntity.Address</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Accepted on:</td>
+            <td class="govuk-table__cell">@Model.SignedDateText</td>
+        </tr>
+        <tr class="govuk-table__row">
+            <td class="govuk-table__cell">Agreement ID:</td>
+            <td class="govuk-table__cell">@Model.AccountLegalEntityPublicHashedId</td>
+        </tr>
+    </tbody>
+</table>

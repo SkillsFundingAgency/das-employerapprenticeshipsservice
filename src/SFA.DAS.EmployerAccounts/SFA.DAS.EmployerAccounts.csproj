@@ -92,10 +92,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Commands\GetAllAgreements\" />
     <Folder Include="Models\Portal\" />
     <Folder Include="Queries\GetAccountLegalEntitiesByHashedAccountId\" />
     <Folder Include="Queries\GetEmployerAgreementById\" />
     <Folder Include="Queries\GetLegalEntity\" />
+    <Folder Include="Queries\GetOrganisationEmployerAgreement\" />
   </ItemGroup>
 
 </Project>

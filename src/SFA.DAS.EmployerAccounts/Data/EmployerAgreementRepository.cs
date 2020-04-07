@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Data
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
 
-        public EmployerAgreementRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db) 
+        public EmployerAgreementRepository(EmployerAccountsConfiguration configuration, ILog logger, Lazy<EmployerAccountsDbContext> db)
             : base(configuration.DatabaseConnectionString, logger)
         {
             _db = db;
@@ -76,7 +76,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@signedById", agreement.SignedById, DbType.Int64);
             parameters.Add("@signedByName", agreement.SignedByName, DbType.String);
             parameters.Add("@signedDate", agreement.SignedDate, DbType.DateTime);
-            
+
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[SignEmployerAgreement]",
                 param: parameters,
@@ -167,6 +167,71 @@ namespace SFA.DAS.EmployerAccounts.Data
             legalEntity.SignedAgreementId = signedAgreementId;
             legalEntity.SignedAgreementVersion = signedAgreementVersion;
             await _db.Value.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<OrganisationEmployerAgreementView>> GetAllAgreements(long accountLegalEntityId)
+        {
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@accountLegalEntityId", accountLegalEntityId, DbType.Int64);
+
+            var sql =
+                @"
+                    SELECT ale.Id, ale.Name, ale.Address, ale.AccountId, ale.LegalEntityId, ale.Created, ale.SignedAgreementId, ale.SignedAgreementVersion, ale.PendingAgreementId, 
+                           ale.PendingAgreementVersion, ale.PublicHashedId as AccountLegalEntityPublicHashedId, ale.Deleted, ea.Id as EmployerAgreementId, ea.TemplateId, ea.StatusId, ea.SignedByName, ea.SignedDate,
+                           ea.AccountLegalEntityId, ea.SignedById, ea.ExpiredDate,  le.Source,
+                           eat.AgreementType, eat.PartialViewName, eat.VersionNumber
+                    FROM   [employer_account].[AccountLegalEntity] ale 
+                            JOIN [employer_account].[EmployerAgreement] ea ON ale.Id = ea.AccountLegalEntityId
+                            JOIN [employer_account].[LegalEntity] le ON le.Id = ale.LegalEntityId
+                            JOIN [employer_account].[EmployerAgreementTemplate] eat ON eat.Id = ea.TemplateId
+                    WHERE  ale.Id = @accountLegalEntityId and (ea.SignedDate IS NOT NULL OR ale.PendingAgreementId = ea.Id)";
+
+
+            var result = await _db.Value.Database.Connection.QueryAsync<OrganisationEmployerAgreementView>(
+                sql: sql,
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.Text);
+
+            return result.ToList();
+        }
+
+        public async Task<OrganisationAgreement> GetOrganisationAgreement(long accountLegalEntityId)
+        {
+            var accountLegalEntity = await _db.Value.AccountLegalEntities
+                .Include(x => x.Agreements.Select(y => y.Template))
+                .SingleOrDefaultAsync(x => x.Id == accountLegalEntityId);
+
+            if (accountLegalEntity == null)
+            {
+                return null;
+            }
+
+            var organisationAgreement = new OrganisationAgreement
+            {
+                Id = accountLegalEntity.Id,
+                Name = accountLegalEntity.Name,
+                Address = accountLegalEntity.Address,
+                AccountId = accountLegalEntity.AccountId,
+                AccountLegalEntityPublicHashedId = accountLegalEntity.PublicHashedId,
+                SignedAgreementId = accountLegalEntity.SignedAgreementId,
+                SignedAgreementVersion = accountLegalEntity.SignedAgreementVersion,
+                PendingAgreementId = accountLegalEntity.PendingAgreementId,
+                PendingAgreementVersion = accountLegalEntity.PendingAgreementVersion,
+                Created = accountLegalEntity.Created,
+                Deleted = accountLegalEntity.Deleted,
+                LegalEntityId = accountLegalEntity.LegalEntityId
+            };
+
+            var legalEntity = await _db.Value.LegalEntities.Where(x => x.Id == accountLegalEntity.LegalEntityId).ToListAsync();
+
+            organisationAgreement.Agreements = accountLegalEntity.Agreements;
+
+            organisationAgreement.LegalEntity = legalEntity.FirstOrDefault();
+
+            return organisationAgreement;
+
         }
     }
 }
