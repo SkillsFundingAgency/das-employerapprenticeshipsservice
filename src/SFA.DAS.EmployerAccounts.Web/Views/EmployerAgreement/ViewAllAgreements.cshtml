@@ -1,6 +1,6 @@
 ﻿@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-
-@model OrchestratorResponse<OrganisationAgreementViewModel>
+@using SFA.DAS.EmployerAccounts.Web.Helpers
+@model OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>
 @{
     ViewBag.PageID = "organisations-agreements-details";
     ViewBag.Title = "ViewAllAgreements";
@@ -16,98 +16,68 @@
 <h1>Your agreements with the Education and Skills Funding Agency (ESFA)</h1>
 
 <div class="govuk-tabs" data-module="govuk-tabs">
-    <h2 class="govuk-tabs__title">
-        Contents
-    </h2>
-    <ul class="govuk-tabs__list">
-        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-            <a class="govuk-tabs__tab" href="#v3-agreement">
-                Published 9 January 2020
-            </a>
-        </li>        
-        @if (@Model.Data.AgreementV2Signed)
-        {
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="#v2-agreement">
-                    Published 1 May 2018
+
+    @foreach (var item in Model.Data)
+    {
+        <ul class="govuk-tabs__list">
+            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+                <a class="govuk-tabs__tab" href=@Html.GetAgreementTabListId(@item.Template.VersionNumber)>
+                    @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
                 </a>
             </li>
-        }
-        @if (@Model.Data.AgreementV1Signed)
-        {
-            <li class="govuk-tabs__list-item">
-                <a class="govuk-tabs__tab" href="#v1-agreement">
-                    Published 1 May 2017
-                </a>
-            </li>
-        }
-    </ul>
-    <div class="govuk-tabs__panel" id="v3-agreement">
-        V3 Agreement
+        </ul>
 
-        @if (@Model.Data.AgreementV3Signed)
-        {
-            <h2>Accepted on @Model.Data.AgreementV3SignedDate</h2>
+        <div class="govuk-tabs__panel" id=@Html.GetAgreementTabPanelId(@item.Template.VersionNumber)>
 
-            <h2>Agreement between @Model.Data.Name and ESFA </h2>
-            <Subheading>
-                Published 9 January 2020
-            </Subheading>
+            @if (item.SignedDate != null)
+            {
+                <h2>Accepted on @item.SignedDate</h2>
 
-            <Insettext>
-                This is a new agreement.
-            </Insettext>
+                <h2>Agreement between @item.AccountLegalEntity.Name and ESFA </h2>
 
-            @Html.Partial("_AcceptedAgreement", @Model.Data.EmployerAgreementV3)
-        }
-        else
-        {
-            <h2>NOT ACCEPTED YET</h2>
+                ViewBag.BreadCrumbsTrail = @item.AccountLegalEntity.Name;
 
-            <h2>Agreement between @Model.Data.Name and ESFA </h2>
+                <Subheading>
+                    @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
+                </Subheading>
 
-            <subheading>
-                Published 9 January 2020
-            </subheading>
+                <Insettext>
+                    This is a new agreement.
+                </Insettext>
 
-            @Html.Partial("_NotAcceptedAgreement", @Model.Data)
-        }
-    </div>
-    <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="v2-agreement">
+                @Html.Partial("_AcceptedAgreement", item)
+            }
+            else
+            {
+                <h2>NOT ACCEPTED YET</h2>
 
-        V2 Agreement
+                <h2>Agreement between @item.AccountLegalEntity.Name and ESFA </h2>
 
-        @if (@Model.Data.AgreementV2Signed)
-        {
-            <h2>Accepted on @Model.Data.AgreementV2SignedDate</h2>
+                ViewBag.BreadCrumbsTrail = @item.AccountLegalEntity.Name;
 
-            <h2>Agreement between @Model.Data.Name and ESFA </h2>
-            <Subheading>
-                Published 1 May 2018
-            </Subheading>
+                <subheading>
+                    @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
+                </subheading>
 
-            <Insettext>
-                This is a variation of the agreement that we published 1 May 2017. We updated it to add clause 7 (transfer of funding).
-            </Insettext>
+                @Html.Partial("_NotAcceptedAgreement", item)
+            }
+        </div>
+    }
 
-            @Html.Partial("_AcceptedAgreement", @Model.Data.EmployerAgreementV2)
-        }       
-
-    </div>
-
-    <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="v1-agreement">
-        V1 Agreement
-        @if (@Model.Data.AgreementV1Signed)
-        {
-            <h2>Accepted on @Model.Data.AgreementV1SignedDate</h2>
-
-            <h2>Agreement between @Model.Data.Name and ESFA </h2>
-            <Subheading>
-                Published 1 May 2017
-            </Subheading>
-
-            @Html.Partial("_AcceptedAgreement", @Model.Data.EmployerAgreementV1)
-        }       
-
-    </div>
 </div>
+
+@section breadcrumb {
+    
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="@Url.Action("Index", "EmployerTeam")">Home</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item">
+                <a class="govuk-breadcrumbs__link" href="@Url.Action("Index", "EmployerAgreement")">Your organisations and agreements</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item" aria-current="page">@ViewBag.BreadCrumbsTrail</li>
+        </ol>
+    </div>
+
+}

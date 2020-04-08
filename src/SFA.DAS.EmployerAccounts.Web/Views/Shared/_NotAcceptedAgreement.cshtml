@@ -1,5 +1,5 @@
 ﻿
-@model SFA.DAS.EmployerAccounts.Web.ViewModels.OrganisationAgreementViewModel
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.EmployerAgreementViewModelV1
 
 
 <insettext>This is a new agreement.</insettext>
@@ -7,12 +7,11 @@
 <h2>About the agreement</h2>
 
 <p>
-    This agreement creates a legal contract between @Model.Name and ESFA. It allows you to transfer funds to other employers and pay training providers for apprenticeships.
+    This agreement creates a legal contract between @Model.AccountLegalEntity.Name and ESFA. It allows you to transfer funds to other employers and pay training providers for apprenticeships.
     You need to ensure you have authority from your organisation before you accept this agreement on their behalf.
 </p>
 
-<form method="get" action="@Url.EmployerAccountsAction($"agreements/{Model.Id}/about-your-agreement")">
-    @*HashedAgreementId TODO*@
+<form method="get" action="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/about-your-agreement")">    
     @Html.AntiForgeryToken()
     <input class="govuk-button" type="submit" value="View agreement" />
 </form> 

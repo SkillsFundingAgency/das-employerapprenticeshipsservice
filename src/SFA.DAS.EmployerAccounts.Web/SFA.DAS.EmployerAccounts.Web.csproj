@@ -282,7 +282,6 @@
     <Compile Include="ViewModels\CohortViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\EmployerAgreementViewModelV1.cs" />
-    <Compile Include="ViewModels\OrganisationAgreementViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />

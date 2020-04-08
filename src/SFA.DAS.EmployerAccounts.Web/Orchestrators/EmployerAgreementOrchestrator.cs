@@ -369,9 +369,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationAgreementViewModel>> GetOrganisationAgreements(string accountLegalEntityHashedId)
+        public virtual async Task<OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>> GetOrganisationAgreements(string accountLegalEntityHashedId)
         {
-            var response = new OrchestratorResponse<OrganisationAgreementViewModel>();
+            var response = new OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>();
 
             try
             {
@@ -379,21 +379,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 {
                     AccountLegalEntityHashedId = accountLegalEntityHashedId
                 });
-
-                response.Data = _mapper.Map<OrganisationAgreement, OrganisationAgreementViewModel>(result.OrganisationAgreements);                          
+                
+                response.Data = _mapper.Map<ICollection<EmployerAgreementDto>, ICollection<EmployerAgreementViewModelV1>>(result.Agreements);
             }
             catch (InvalidRequestException ex)
             {
-                return new OrchestratorResponse<OrganisationAgreementViewModel>
+                return new OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new OrganisationAgreementViewModel(),
+                    Data = new List<EmployerAgreementViewModelV1>(),
                     Exception = ex
                 };
             }
             catch (UnauthorizedAccessException)
             {
-                return new OrchestratorResponse<OrganisationAgreementViewModel>
+                return new OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>
                 {
                     Status = HttpStatusCode.Unauthorized
                 };

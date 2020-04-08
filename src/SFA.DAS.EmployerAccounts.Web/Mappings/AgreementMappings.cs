@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
@@ -36,14 +35,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
 
             CreateMap<AccountDetailViewModel, AgreementInfoViewModel>()
                 .ConvertUsing(new AgreementInfoConverter());
-
-            CreateMap<OrganisationAgreement, OrganisationAgreementViewModel>()
-            .ForMember(dest => dest.AgreementV1SignedDate, opts => opts.Ignore())
-            .ForMember(dest => dest.AgreementV2SignedDate, opts => opts.Ignore())
-            .ForMember(dest => dest.AgreementV3SignedDate, opts => opts.Ignore())
-            .ForMember(dest => dest.AgreementV1Signed, opts => opts.Ignore())
-            .ForMember(dest => dest.AgreementV2Signed, opts => opts.Ignore())
-            .ForMember(dest => dest.AgreementV3Signed, opts => opts.Ignore());
 
             CreateMap<EmployerAgreementDto, EmployerAgreementViewModelV1>()
                 .ForMember(dest => dest.SignedDateText, opt => opt.MapFrom(src => src.SignedDate.HasValue ? src.SignedDate.Value.ToString("dd MMMM yyyy") : ""))

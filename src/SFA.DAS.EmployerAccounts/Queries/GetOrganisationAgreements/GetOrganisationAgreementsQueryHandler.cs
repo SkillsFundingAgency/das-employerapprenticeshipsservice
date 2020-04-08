@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
+using System.Linq;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
 
@@ -18,19 +20,23 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
         private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityPublicHashingService;
         private readonly IHashingService _hashingService;
         private readonly IReferenceDataService _referenceDataService;
+        private readonly IMapper _mapper;
 
         public GetOrganisationAgreementsQueryHandler(IValidator<GetOrganisationAgreementsRequest> validator,
            IEmployerAgreementRepository employerAgreementRepository,
            IAccountLegalEntityPublicHashingService accountLegalEntityPublicHashingService,
            IHashingService hashingService,
-           IReferenceDataService referenceDataService)
+           IReferenceDataService referenceDataService,
+           IMapper mapper)
         {
             _validator = validator;
             _employerAgreementRepository = employerAgreementRepository;
             _accountLegalEntityPublicHashingService = accountLegalEntityPublicHashingService;
             _hashingService = hashingService;
             _referenceDataService = referenceDataService;
+            _mapper = mapper;
         }
+
 
         public async Task<GetOrganisationAgreementsResponse> Handle(GetOrganisationAgreementsRequest message)
         {
@@ -43,59 +49,27 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
 
             var accountLegalEntityId = _accountLegalEntityPublicHashingService.DecodeValue(message.AccountLegalEntityHashedId);
 
-            var result = await _employerAgreementRepository.GetOrganisationAgreement(accountLegalEntityId);
-            if (result == null) return new GetOrganisationAgreementsResponse();
+            var accountLegalEntity = await _employerAgreementRepository.GetOrganisationAgreement(accountLegalEntityId);
+            if (accountLegalEntity == null) return new GetOrganisationAgreementsResponse();
 
-            var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(result.LegalEntity.Source);
+            var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(accountLegalEntity.LegalEntity.Source);
 
-            foreach (var agreement in result.Agreements)
-            {
-                switch (agreement.Template.PartialViewName)
+            var agreements = _mapper.Map<ICollection<EmployerAgreement>, ICollection<EmployerAgreementDto>>(accountLegalEntity.Agreements,
+                opt =>
                 {
-                    case "_Agreement_V3":
-                        OrganisationAgreement agreementV3 = GetAgreement(result, agreement, organisationLookupByIdPossible);
-                        result.EmployerAgreementV3 = agreementV3.EmployerAgreementV2;
-                        break;
-                    case "_Agreement_V2":
-                        OrganisationAgreement agreementV2 = GetAgreement(result, agreement, organisationLookupByIdPossible);
-                        result.EmployerAgreementV2 = agreementV2.EmployerAgreementV2;
-                        break;
-                    case "_Agreement_V1":
-                        OrganisationAgreement agreementV1 = GetAgreement(result, agreement, organisationLookupByIdPossible);
-                        result.EmployerAgreementV1 = agreementV1.EmployerAgreementV1;
-                        break;
-                }
-            }
-
-            result.HashedAccountId = _hashingService.HashValue(result.AccountId); //AccountId            
-            result.HashedLegalEntityId = _hashingService.HashValue(result.Id); //AccountLegalEntityId
-
-            return new GetOrganisationAgreementsResponse { OrganisationAgreements = result };
-        }
-
-        private OrganisationAgreement GetAgreement(OrganisationAgreement result, EmployerAgreement agreement, bool organisationLookupByIdPossible)
-        {
-            return new OrganisationAgreement()
-            {
-                EmployerAgreementV2 = new EmployerAgreementDto
-                {
-                    SignedByName = agreement.SignedByName,
-                    SignedDate = agreement.SignedDate,
-                    AccountLegalEntity = new AccountLegalEntity
+                    opt.AfterMap((src, dest) =>
                     {
-                        Id = result.Id,
-                        AccountId = result.AccountId,
-                        Name = result.Name,
-                        Address = result.Address,
-                        PublicHashedId = result.AccountLegalEntityPublicHashedId
+                        dest.ToList().ForEach(e =>
+                        {
+                            e.HashedAccountId = _hashingService.HashValue(accountLegalEntity.AccountId);
+                            e.HashedAgreementId = _hashingService.HashValue(e.Id);
+                            e.HashedLegalEntityId = _hashingService.HashValue(accountLegalEntity.Id);
+                            e.OrganisationLookupPossible = organisationLookupByIdPossible;
+                        });
+                    });
+                });
 
-                    },
-                    HashedAgreementId = _hashingService.HashValue(agreement.Id),
-                    HashedAccountId = _hashingService.HashValue(result.AccountId),
-                    HashedLegalEntityId = _hashingService.HashValue(result.Id),
-                    OrganisationLookupPossible = organisationLookupByIdPossible
-                }
-            };
+            return new GetOrganisationAgreementsResponse { Agreements = agreements };
         }
     }
 }

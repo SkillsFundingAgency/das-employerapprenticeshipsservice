@@ -127,7 +127,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return (!string.IsNullOrEmpty(hashedAccountId)) ? hashedAccountId : string.Empty;
         }
 
+        public static string GetAgreementHistoryTabTitle(this HtmlHelper htmlHelper , int versionNumber)
+        {
+            if (versionNumber == 1) return "Published 9 January 2020";
+            if (versionNumber == 2) return "Published 1 May 2018";
+            if (versionNumber == 3) return "Published 1 May 2017";
+            
+            return string.Empty;
+        }
 
+        public static string GetAgreementTabListId(this HtmlHelper htmlHelper, int versionNumber)
+        {
+            return $"#v{versionNumber}-agreement";
+        }
+
+        public static string GetAgreementTabPanelId(this HtmlHelper htmlHelper, int versionNumber)
+        {
+            return $"v{versionNumber}-agreement";
+        }
 
         public static bool ViewExists(this HtmlHelper html, string viewName)
         {

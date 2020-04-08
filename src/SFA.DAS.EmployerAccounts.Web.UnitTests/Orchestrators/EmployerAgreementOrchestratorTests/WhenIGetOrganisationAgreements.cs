@@ -6,12 +6,13 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
+using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -20,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         private Mock<IMediator> _mediator;
         private Mock<IReferenceDataService> _referenceDataService;
         private Mock<IMapper> _mapper;
-        private EmployerAgreementOrchestrator _orchestrator;        
+        private EmployerAgreementOrchestrator _orchestrator;
 
         public string AccountLegalEntityHashedId = "2K7J94";
 
@@ -32,21 +33,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationAgreementsRequest>()))
                 .ReturnsAsync(new GetOrganisationAgreementsResponse
                 {
-                   OrganisationAgreements = new OrganisationAgreement
-                   {
-                       Address = "Address",
-                       Name = "Name"
-                   }
-                });;
+                    Agreements = new List<EmployerAgreementDto>()
+                    {
+                        new EmployerAgreementDto { SignedDate = DateTime.UtcNow }
+                    }
+                });             
 
-            var organisationAgreementViewModel = new OrganisationAgreementViewModel
+            var EmployerAgreementViewModelV1 = new List<EmployerAgreementViewModelV1>()
             {
-                Address = "Address",
-                Name = "Name"
+                new EmployerAgreementViewModelV1 { SignedDate = DateTime.UtcNow }
             };
 
             _referenceDataService = new Mock<IReferenceDataService>();
-            _mapper.Setup(m => m.Map<OrganisationAgreement, OrganisationAgreementViewModel>(It.IsAny<OrganisationAgreement>())).Returns(organisationAgreementViewModel);
+            _mapper.Setup(m => m.Map<ICollection<EmployerAgreementDto>, ICollection<EmployerAgreementViewModelV1>>(It.IsAny<ICollection<EmployerAgreementDto>>())).Returns(EmployerAgreementViewModelV1);
             _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _mapper.Object, _referenceDataService.Object);
         }
 
@@ -95,8 +94,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             var actual = await _orchestrator.GetOrganisationAgreements(AccountLegalEntityHashedId);
 
             //Assert
-            //TO DO 
-            Assert.IsTrue(actual.Data.Address.Equals("Address"));
+            Assert.IsNotNull(actual.Data.Any());            
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
@@ -169,33 +170,14 @@ namespace SFA.DAS.EmployerAccounts.Data
             await _db.Value.SaveChangesAsync();
         }
 
-        public async Task<OrganisationAgreement> GetOrganisationAgreement(long accountLegalEntityId)
+        public async Task<AccountLegalEntity> GetOrganisationAgreement(long accountLegalEntityId)
         {
             var accountLegalEntity = await _db.Value.AccountLegalEntities
+                .Include(x => x.LegalEntity)
                 .Include(x => x.Agreements.Select(y => y.Template))
                 .SingleOrDefaultAsync(x => x.Id == accountLegalEntityId);
 
-            if (accountLegalEntity == null)
-            {
-                return null;
-            }
-
-            var organisationAgreement = new OrganisationAgreement
-            {
-                Id = accountLegalEntity.Id,
-                Name = accountLegalEntity.Name,
-                Address = accountLegalEntity.Address,
-                AccountId = accountLegalEntity.AccountId,
-                AccountLegalEntityPublicHashedId = accountLegalEntity.PublicHashedId
-            };
-
-            var legalEntity = await _db.Value.LegalEntities.Where(x => x.Id == accountLegalEntity.LegalEntityId).ToListAsync();
-
-            organisationAgreement.Agreements = accountLegalEntity.Agreements;
-
-            organisationAgreement.LegalEntity = legalEntity.FirstOrDefault();
-
-            return organisationAgreement;
+            return accountLegalEntity;
 
         }
     }
