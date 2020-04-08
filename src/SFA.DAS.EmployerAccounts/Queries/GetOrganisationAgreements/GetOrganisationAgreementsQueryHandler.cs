@@ -50,7 +50,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
 
             foreach (var agreement in result.Agreements)
             {
-
                 switch (agreement.Template.PartialViewName)
                 {
                     case "_Agreement_V3":
@@ -66,7 +65,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
                         result.EmployerAgreementV1 = agreementV1.EmployerAgreementV1;
                         break;
                 }
-
             }
 
             result.HashedAccountId = _hashingService.HashValue(result.AccountId); //AccountId            

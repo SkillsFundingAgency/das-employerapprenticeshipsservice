@@ -369,45 +369,37 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<OrganisationAgreementViewModelV1>> GetOrganisationAgreements(string accountLegalEntityHashedId)
+        public virtual async Task<OrchestratorResponse<OrganisationAgreementViewModel>> GetOrganisationAgreements(string accountLegalEntityHashedId)
         {
+            var response = new OrchestratorResponse<OrganisationAgreementViewModel>();
+
             try
             {
-                var response = await _mediator.SendAsync(new GetOrganisationAgreementsRequest
+                var result = await _mediator.SendAsync(new GetOrganisationAgreementsRequest
                 {
                     AccountLegalEntityHashedId = accountLegalEntityHashedId
                 });
 
-                var employerAgreementView =
-                  _mapper.Map<OrganisationAgreement, OrganisationAgreementViewModel>(response.OrganisationAgreements);
-
-                var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(response.OrganisationAgreements.LegalEntity.Source);
-
-                return new OrchestratorResponse<OrganisationAgreementViewModelV1>
-                {
-                    Data = new OrganisationAgreementViewModelV1
-                    {
-                        OrganisationAgreementViewModel = employerAgreementView,
-                        OrganisationLookupPossible = organisationLookupByIdPossible
-                    }
-                };
+                response.Data = _mapper.Map<OrganisationAgreement, OrganisationAgreementViewModel>(result.OrganisationAgreements);                          
             }
             catch (InvalidRequestException ex)
             {
-                return new OrchestratorResponse<OrganisationAgreementViewModelV1>
+                return new OrchestratorResponse<OrganisationAgreementViewModel>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new OrganisationAgreementViewModelV1(),
+                    Data = new OrganisationAgreementViewModel(),
                     Exception = ex
                 };
             }
             catch (UnauthorizedAccessException)
             {
-                return new OrchestratorResponse<OrganisationAgreementViewModelV1>
+                return new OrchestratorResponse<OrganisationAgreementViewModel>
                 {
                     Status = HttpStatusCode.Unauthorized
                 };
             }
+
+            return response;
         }
     }
 }

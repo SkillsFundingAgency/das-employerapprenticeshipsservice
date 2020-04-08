@@ -186,14 +186,7 @@ namespace SFA.DAS.EmployerAccounts.Data
                 Name = accountLegalEntity.Name,
                 Address = accountLegalEntity.Address,
                 AccountId = accountLegalEntity.AccountId,
-                AccountLegalEntityPublicHashedId = accountLegalEntity.PublicHashedId,
-                SignedAgreementId = accountLegalEntity.SignedAgreementId,
-                SignedAgreementVersion = accountLegalEntity.SignedAgreementVersion,
-                PendingAgreementId = accountLegalEntity.PendingAgreementId,
-                PendingAgreementVersion = accountLegalEntity.PendingAgreementVersion,
-                Created = accountLegalEntity.Created,
-                Deleted = accountLegalEntity.Deleted,
-                LegalEntityId = accountLegalEntity.LegalEntityId
+                AccountLegalEntityPublicHashedId = accountLegalEntity.PublicHashedId
             };
 
             var legalEntity = await _db.Value.LegalEntities.Where(x => x.Id == accountLegalEntity.LegalEntityId).ToListAsync();

@@ -11,7 +11,7 @@
     You need to ensure you have authority from your organisation before you accept this agreement on their behalf.
 </p>
 
-<form method="get" action="@Url.EmployerAccountsAction($"agreements/{Model.SignedAgreementId}/about-your-agreement")">
+<form method="get" action="@Url.EmployerAccountsAction($"agreements/{Model.Id}/about-your-agreement")">
     @*HashedAgreementId TODO*@
     @Html.AntiForgeryToken()
     <input class="govuk-button" type="submit" value="View agreement" />

@@ -1,7 +1,6 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
-@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-@model OrchestratorResponse<OrganisationAgreementViewModelV1>
+﻿@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+@model OrchestratorResponse<OrganisationAgreementViewModel>
 @{
     ViewBag.PageID = "organisations-agreements-details";
     ViewBag.Title = "ViewAllAgreements";
@@ -25,8 +24,8 @@
             <a class="govuk-tabs__tab" href="#v3-agreement">
                 Published 9 January 2020
             </a>
-        </li>
-        @if (@Model.Data.OrganisationAgreementViewModel.AgreementV2Signed)
+        </li>        
+        @if (@Model.Data.AgreementV2Signed)
         {
             <li class="govuk-tabs__list-item">
                 <a class="govuk-tabs__tab" href="#v2-agreement">
@@ -34,7 +33,7 @@
                 </a>
             </li>
         }
-        @if (@Model.Data.OrganisationAgreementViewModel.AgreementV1Signed)
+        @if (@Model.Data.AgreementV1Signed)
         {
             <li class="govuk-tabs__list-item">
                 <a class="govuk-tabs__tab" href="#v1-agreement">
@@ -46,11 +45,11 @@
     <div class="govuk-tabs__panel" id="v3-agreement">
         V3 Agreement
 
-        @if (@Model.Data.OrganisationAgreementViewModel.AgreementV3Signed)
+        @if (@Model.Data.AgreementV3Signed)
         {
-            <h2>Accepted on @Model.Data.OrganisationAgreementViewModel.AgreementV3SignedDate</h2>
+            <h2>Accepted on @Model.Data.AgreementV3SignedDate</h2>
 
-            <h2>Agreement between @Model.Data.OrganisationAgreementViewModel.Name and ESFA </h2>
+            <h2>Agreement between @Model.Data.Name and ESFA </h2>
             <Subheading>
                 Published 9 January 2020
             </Subheading>
@@ -59,30 +58,30 @@
                 This is a new agreement.
             </Insettext>
 
-            @Html.Partial("_AcceptedAgreement", @Model.Data.OrganisationAgreementViewModel.EmployerAgreementV3)
+            @Html.Partial("_AcceptedAgreement", @Model.Data.EmployerAgreementV3)
         }
         else
         {
             <h2>NOT ACCEPTED YET</h2>
 
-            <h2>Agreement between @Model.Data.OrganisationAgreementViewModel.Name and ESFA </h2>
+            <h2>Agreement between @Model.Data.Name and ESFA </h2>
 
             <subheading>
                 Published 9 January 2020
             </subheading>
 
-            @Html.Partial("_NotAcceptedAgreement", @Model.Data.OrganisationAgreementViewModel)
+            @Html.Partial("_NotAcceptedAgreement", @Model.Data)
         }
     </div>
     <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="v2-agreement">
 
         V2 Agreement
 
-        @if (@Model.Data.OrganisationAgreementViewModel.AgreementV2Signed)
+        @if (@Model.Data.AgreementV2Signed)
         {
-            <h2>Accepted on @Model.Data.OrganisationAgreementViewModel.AgreementV2SignedDate</h2>
+            <h2>Accepted on @Model.Data.AgreementV2SignedDate</h2>
 
-            <h2>Agreement between @Model.Data.OrganisationAgreementViewModel.Name and ESFA </h2>
+            <h2>Agreement between @Model.Data.Name and ESFA </h2>
             <Subheading>
                 Published 1 May 2018
             </Subheading>
@@ -91,32 +90,24 @@
                 This is a variation of the agreement that we published 1 May 2017. We updated it to add clause 7 (transfer of funding).
             </Insettext>
 
-            @Html.Partial("_AcceptedAgreement", @Model.Data.OrganisationAgreementViewModel.EmployerAgreementV2)
-        }
-        else
-        {
-            <p> Not Required </p>
-        }
+            @Html.Partial("_AcceptedAgreement", @Model.Data.EmployerAgreementV2)
+        }       
 
     </div>
 
     <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="v1-agreement">
         V1 Agreement
-        @if (@Model.Data.OrganisationAgreementViewModel.AgreementV1Signed)
+        @if (@Model.Data.AgreementV1Signed)
         {
-            <h2>Accepted on @Model.Data.OrganisationAgreementViewModel.AgreementV1SignedDate</h2>
+            <h2>Accepted on @Model.Data.AgreementV1SignedDate</h2>
 
-            <h2>Agreement between @Model.Data.OrganisationAgreementViewModel.Name and ESFA </h2>
+            <h2>Agreement between @Model.Data.Name and ESFA </h2>
             <Subheading>
                 Published 1 May 2017
             </Subheading>
 
-            @Html.Partial("_AcceptedAgreement", @Model.Data.OrganisationAgreementViewModel.EmployerAgreementV1)
-        }
-        else
-        {
-            <p> Not Required </p>
-        }
+            @Html.Partial("_AcceptedAgreement", @Model.Data.EmployerAgreementV1)
+        }       
 
     </div>
 </div>
