@@ -1,6 +1,6 @@
 ﻿@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 @using SFA.DAS.EmployerAccounts.Web.Helpers
-@model OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>
+@model OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
 @{
     ViewBag.PageID = "organisations-agreements-details";
     ViewBag.Title = "ViewAllAgreements";
@@ -19,15 +19,15 @@
 
     @foreach (var item in Model.Data)
     {
-        <ul class="govuk-tabs__list">
+        <ul class="govuk-tabs__list"> 
             <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                <a class="govuk-tabs__tab" href=@Html.GetAgreementTabListId(@item.Template.VersionNumber)>
+                <a class="govuk-tabs__tab" href=@item.GetAgreementTabListId>
                     @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
                 </a>
             </li>
         </ul>
 
-        <div class="govuk-tabs__panel" id=@Html.GetAgreementTabPanelId(@item.Template.VersionNumber)>
+        <div class="govuk-tabs__panel" id=@item.GetAgreementTabPanelId>
 
             @if (item.SignedDate != null)
             {

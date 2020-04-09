@@ -3,7 +3,7 @@ using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
-    public class EmployerAgreementViewModelV1
+    public class OrganisationAgreementViewModel
     {
         public long Id { get; set; }
         public DateTime? ExpiredDate { get; set; }
@@ -21,7 +21,10 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string HashedAgreementId { get; set; }
 
         public string AccountLegalEntityPublicHashedId => AccountLegalEntity.PublicHashedId;
-
         public string SignedDateText { get; set; }
+        public string GetAgreementTabListId => $"#v{Template.VersionNumber}-agreement";
+        public string GetAgreementTabPanelId => $"#v{Template.VersionNumber}-agreement";
+
+
     }
 }

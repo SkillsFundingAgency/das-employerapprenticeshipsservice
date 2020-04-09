@@ -39,18 +39,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
                     }
                 });             
 
-            var EmployerAgreementViewModelV1 = new List<EmployerAgreementViewModelV1>()
+            var organisationAgreementViewModel = new List<OrganisationAgreementViewModel>()
             {
-                new EmployerAgreementViewModelV1 { SignedDate = DateTime.UtcNow }
+                new OrganisationAgreementViewModel { SignedDate = DateTime.UtcNow }
             };
 
             _referenceDataService = new Mock<IReferenceDataService>();
-            _mapper.Setup(m => m.Map<ICollection<EmployerAgreementDto>, ICollection<EmployerAgreementViewModelV1>>(It.IsAny<ICollection<EmployerAgreementDto>>())).Returns(EmployerAgreementViewModelV1);
+            _mapper.Setup(m => m.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(It.IsAny<ICollection<EmployerAgreementDto>>())).Returns(organisationAgreementViewModel);
             _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _mapper.Object, _referenceDataService.Object);
         }
 
         [Test]
-        public async Task ThenTheMediatorIsCalledWithAccountLegalEntityId()
+        public async Task ThenTheRequestForAllOrganisationAgreementsIsMadeForAccountLegalEntity()
         {
 
             //Act
@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         }
 
         [Test]
-        public async Task ThenTheValuesAreReturnedInTheResponseFromTheMediatorCall()
+        public async Task ThenTheValuesAreReturnedInTheResponseFromTheRequestForAllOrganisationAgreementsIsMadeForAccountLegalEntity()
         {
             //Act
             var actual = await _orchestrator.GetOrganisationAgreements(AccountLegalEntityHashedId);

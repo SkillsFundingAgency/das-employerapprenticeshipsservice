@@ -369,9 +369,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             return response;
         }
 
-        public virtual async Task<OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>> GetOrganisationAgreements(string accountLegalEntityHashedId)
+        public virtual async Task<OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>> GetOrganisationAgreements(string accountLegalEntityHashedId)
         {
-            var response = new OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>();
+            var response = new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>();
 
             try
             {
@@ -380,20 +380,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     AccountLegalEntityHashedId = accountLegalEntityHashedId
                 });
                 
-                response.Data = _mapper.Map<ICollection<EmployerAgreementDto>, ICollection<EmployerAgreementViewModelV1>>(result.Agreements);
+                response.Data = _mapper.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(result.Agreements);
             }
             catch (InvalidRequestException ex)
             {
-                return new OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>
+                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
                 {
                     Status = HttpStatusCode.BadRequest,
-                    Data = new List<EmployerAgreementViewModelV1>(),
+                    Data = new List<OrganisationAgreementViewModel>(),
                     Exception = ex
                 };
             }
             catch (UnauthorizedAccessException)
             {
-                return new OrchestratorResponse<ICollection<EmployerAgreementViewModelV1>>
+                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
                 {
                     Status = HttpStatusCode.Unauthorized
                 };

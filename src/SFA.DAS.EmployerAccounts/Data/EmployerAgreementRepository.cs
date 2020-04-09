@@ -173,12 +173,15 @@ namespace SFA.DAS.EmployerAccounts.Data
         public async Task<AccountLegalEntity> GetOrganisationAgreement(long accountLegalEntityId)
         {
             var accountLegalEntity = await _db.Value.AccountLegalEntities
-                .Include(x => x.LegalEntity)
-                .Include(x => x.Agreements.Select(y => y.Template))
-                .SingleOrDefaultAsync(x => x.Id == accountLegalEntityId);
+             .Where(ale => ale.Id == accountLegalEntityId
+                           && ale.Deleted == null
+                           && ale.Agreements.Any(ea =>
+                               ea.StatusId == EmployerAgreementStatus.Pending ||
+                               ea.StatusId == EmployerAgreementStatus.Signed))
+             .SingleOrDefaultAsync()
+             .ConfigureAwait(false);
 
             return accountLegalEntity;
-
         }
     }
 }

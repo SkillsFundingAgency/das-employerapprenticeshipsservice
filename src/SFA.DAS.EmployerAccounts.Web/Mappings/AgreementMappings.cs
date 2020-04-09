@@ -36,9 +36,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
             CreateMap<AccountDetailViewModel, AgreementInfoViewModel>()
                 .ConvertUsing(new AgreementInfoConverter());
 
-            CreateMap<EmployerAgreementDto, EmployerAgreementViewModelV1>()
+            CreateMap<EmployerAgreementDto, OrganisationAgreementViewModel>()
                 .ForMember(dest => dest.SignedDateText, opt => opt.MapFrom(src => src.SignedDate.HasValue ? src.SignedDate.Value.ToString("dd MMMM yyyy") : ""))
-                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore());
+                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore())
+                .ForMember(dest => dest.GetAgreementTabListId, opts => opts.Ignore())
+                .ForMember(dest => dest.GetAgreementTabPanelId, opts => opts.Ignore());
         }
     }
 }

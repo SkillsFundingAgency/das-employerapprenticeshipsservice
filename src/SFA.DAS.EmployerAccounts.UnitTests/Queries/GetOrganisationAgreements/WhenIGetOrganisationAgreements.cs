@@ -39,17 +39,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
             _mockAccountLegalEntityPublicHashingService.Setup(m => m.DecodeValue(It.IsAny<string>())).Returns(_accountLegelEntityId);
 
             _mockEmployerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _mockEmployerAgreementRepository.Setup(m => m.GetOrganisationAgreement(It.IsAny<long>())).ReturnsAsync
-                (new AccountLegalEntity {
-                 
+            _mockEmployerAgreementRepository.Setup(m => m.GetOrganisationAgreement(It.IsAny<long>())).ReturnsAsync(new AccountLegalEntity {       
                  LegalEntity = new LegalEntity { Id=1, Source= OrganisationType.CompaniesHouse } , 
-                 Agreements = new List<EmployerAgreement>()                 
-                    { new EmployerAgreement 
-                        { 
-                            SignedDate = DateTime.UtcNow,
-                        } 
-                
-                    } });
+                 Agreements = new List<EmployerAgreement>()  { new EmployerAgreement { SignedDate = DateTime.UtcNow, } }});
 
             _mockhashingService = new Mock<IHashingService>();
             _mockhashingService.Setup(m => m.HashValue(It.IsAny<long>())).Returns(hashedId);

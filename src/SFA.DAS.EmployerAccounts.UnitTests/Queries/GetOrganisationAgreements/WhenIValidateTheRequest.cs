@@ -25,10 +25,21 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
         }
 
         [Test]
-        public async Task ThenShouldReturnInValidIfRequestIsNotValid()
+        public async Task ThenShouldReturnInvaldidIfAccountLegalEntityHashedIdIsEmpty()
         {
             //Act
             var result = await _validator.ValidateAsync(new GetOrganisationAgreementsRequest { AccountLegalEntityHashedId = string.Empty });
+
+            //Assert
+            Assert.IsFalse(result.IsValid());
+        }
+
+
+        [Test]
+        public async Task ThenShouldReturnInvaldidIfAccountLegalEntityHashedIdIsNull()
+        {
+            //Act
+            var result = await _validator.ValidateAsync(new GetOrganisationAgreementsRequest { AccountLegalEntityHashedId = null });
 
             //Assert
             Assert.IsFalse(result.IsValid());
