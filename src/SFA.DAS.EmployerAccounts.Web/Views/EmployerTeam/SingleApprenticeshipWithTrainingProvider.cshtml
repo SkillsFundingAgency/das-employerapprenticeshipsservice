@@ -1,0 +1,68 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large" id="call-to-action-your-apprentice-status">
+        Your apprentice
+    </h2>
+    <p>Your training provider is reviewing the following details:</p>
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Name
+            </th>
+            <td class="tw-65" id="apprentice-name">
+                @(Model?.ApprenticeshipFullName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Course
+            </th>
+            <td id="course-name">
+                @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td id="provider-name">
+                @(Model?.TrainingProvider?.Name)
+            </td>
+        </tr>
+        @if (!String.IsNullOrEmpty(Model.CourseStartDateText))
+        {
+            <tr>
+                <th scope="row">
+                    Start month
+                </th>
+                <td id="course-start-date">
+                    @(Model?.CourseStartDateText)
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    Finish month
+                </th>
+                <td id="course-end-date">
+                    @(Model?.CourseEndDateText)
+                </td>
+            </tr>
+        }
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td id="with-training-provider">
+                <span class="govuk-tag govuk-tag--inactive">WITH TRAINING PROVIDER</span>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ApprovedOrRejectApprenticeDetailsLink}")" draggable="false" class="govuk-link">
+            View apprentice details
+        </a>
+    </p>
+</section>
+

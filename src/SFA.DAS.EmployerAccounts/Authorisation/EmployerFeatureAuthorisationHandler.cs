@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                         .DefaultIfEmpty()
                         .Min();
 
-                    if (minAgreementVersion < featureToggle.EnabledByAgreementVersion)
+                    if (minAgreementVersion < featureToggle.EnabledByAgreementVersion || agreements.EmployerAgreements.Any(a => a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Pending))
                     {
                         authorizationResult.AddError(new EmployerFeatureAgreementNotSigned());
                     }
