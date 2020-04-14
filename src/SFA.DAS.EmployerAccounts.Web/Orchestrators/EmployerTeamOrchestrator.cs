@@ -60,6 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         //Needed for tests	
         protected EmployerTeamOrchestrator()
         {
+            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
@@ -185,13 +186,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
+                    TimeOut = timeout
                 });
 
                 var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
+                    ExternalUserId = externalUserId,
+                    TimeOut = timeout
                 });
 
                 var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest

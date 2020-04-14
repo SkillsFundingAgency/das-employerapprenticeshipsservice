@@ -6,5 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
     {
         public string HashedAccountId { get; set; }
         public string ExternalUserId { get; set; }
+        public int TimeOut { get; set; }
     }
 }

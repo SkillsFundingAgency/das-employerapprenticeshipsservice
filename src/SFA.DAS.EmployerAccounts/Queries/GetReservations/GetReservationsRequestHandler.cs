@@ -42,10 +42,24 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
 
             try
             {
+                var task = _service.Get(accountId);
+                if (await Task.WhenAny(task, Task.Delay(message.TimeOut)) == task)
+                {
+                    await task;
+                }
                 return new GetReservationsResponse
                 {
-                    Reservations = await _service.Get(accountId)
+                    Reservations = task.Result
                 };
+            }
+            catch (TimeoutException ex)
+            {
+                _logger.Error(ex, $"Failued to get Reservations for {message.HashedAccountId}");
+                return new GetReservationsResponse
+                {
+                    HasFailed = true
+                };
+
             }
             catch (Exception ex)
             {
