@@ -186,15 +186,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId,
-                    TimeOut = timeout
+                    ExternalUserId = externalUserId
                 });
 
                 var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId,
-                    TimeOut = timeout
+                    ExternalUserId = externalUserId
                 });
 
                 var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest

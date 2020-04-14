@@ -6,6 +6,5 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
     {
         public string HashedAccountId { get; set; }
         public string ExternalUserId { get; set; }
-        public int TimeOut { get; set; }
     }
 }

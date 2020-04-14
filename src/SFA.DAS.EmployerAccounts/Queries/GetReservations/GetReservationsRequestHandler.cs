@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -14,17 +15,20 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
         private readonly ILog _logger;
         private readonly IReservationsService _service;
         private readonly IHashingService _hashingService;
+        private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
 
         public GetReservationsRequestHandler(
             IValidator<GetReservationsRequest> validator,
             ILog logger,
             IReservationsService service,
-            IHashingService hashingService)
+            IHashingService hashingService, 
+            EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
         {
             _validator = validator;
             _logger = logger;
             _service = service;
             _hashingService = hashingService;
+            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
         }
 
         public async Task<GetReservationsResponse> Handle(GetReservationsRequest message)
@@ -43,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
             try
             {
                 var task = _service.Get(accountId);
-                if (await Task.WhenAny(task, Task.Delay(message.TimeOut)) == task)
+                if (await Task.WhenAny(task, Task.Delay(_employerApprenticeshipsServiceConfiguration.AddApprenticeCallToActionTimeout)) == task)
                 {
                     await task;
                 }
@@ -54,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
             }
             catch (TimeoutException ex)
             {
-                _logger.Error(ex, $"Failued to get Reservations for {message.HashedAccountId}");
+                _logger.Error(ex, $"Failed to get Reservations for {message.HashedAccountId}");
                 return new GetReservationsResponse
                 {
                     HasFailed = true
