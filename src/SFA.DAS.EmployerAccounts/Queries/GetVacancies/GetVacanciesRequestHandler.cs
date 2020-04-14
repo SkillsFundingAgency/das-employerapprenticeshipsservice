@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
             }
             catch (TimeoutException ex)
             {
-                _logger.Error(ex, $"Failed to get Reservations for {message.HashedAccountId}");
+                _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
                 return new GetVacanciesResponse
                 {
                     HasFailed = true
