@@ -15,20 +15,20 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
         private readonly ILog _logger;
         private readonly IReservationsService _service;
         private readonly IHashingService _hashingService;
-        private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
         public GetReservationsRequestHandler(
             IValidator<GetReservationsRequest> validator,
             ILog logger,
             IReservationsService service,
-            IHashingService hashingService, 
-            EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+            IHashingService hashingService,
+            EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _validator = validator;
             _logger = logger;
             _service = service;
             _hashingService = hashingService;
-            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
+            _employerAccountsConfiguration = employerAccountsConfiguration;
         }
 
         public async Task<GetReservationsResponse> Handle(GetReservationsRequest message)
@@ -47,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
             try
             {
                 var task = _service.Get(accountId);
-                if (await Task.WhenAny(task, Task.Delay(_employerApprenticeshipsServiceConfiguration.AddApprenticeCallToActionTimeout)) == task)
+                if (await Task.WhenAny(task, Task.Delay(_employerAccountsConfiguration.AddApprenticeCallToActionTimeout)) == task)
                 {
                     await task;
                 }
