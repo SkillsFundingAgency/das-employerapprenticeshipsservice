@@ -36,9 +36,21 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
 
             try
             {
+                var task = _service.GetVacancies(message.HashedAccountId);
+                if (await Task.WhenAny(task, Task.Delay(message.TimeOut)) == task)
+                {
+                    await task;
+                }
+                else
+                {
+                    return new GetVacanciesResponse
+                    {
+                        HasFailed = true
+                    };
+                }
                 return new GetVacanciesResponse
                 {
-                    Vacancies = await _service.GetVacancies(message.HashedAccountId)
+                    Vacancies = task.Result
                 };
             }
             catch(Exception ex)

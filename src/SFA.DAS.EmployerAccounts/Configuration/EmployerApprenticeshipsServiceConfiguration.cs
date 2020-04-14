@@ -32,5 +32,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string PublicHashstring { get; set; }
         public string ServiceBusConnectionString { get; set; }
         public Dictionary<string, string> ServiceBusConnectionStrings { get; set; }
+        public int AddApprenticeCallToActionTimeout { get; set; }
     }
 }
