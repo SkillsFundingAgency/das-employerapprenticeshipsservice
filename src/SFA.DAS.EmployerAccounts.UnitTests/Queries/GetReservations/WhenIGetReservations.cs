@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
@@ -22,10 +23,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         private Mock<IHashingService> _hashingService;
         private Reservation _reservation;
         private Mock<ILog> _logger;
-
+        public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
         private string _hashedAccountId;
         private long _accountId;
 
+        
         [SetUp]
         public void Arrange()
         {
@@ -46,8 +48,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
             _hashingService
                 .Setup(m => m.DecodeValue(_hashedAccountId))
                 .Returns(_accountId);
+            EmployerAccountsConfiguration = EmployerAccountsConfiguration = new EmployerAccountsConfiguration()
+            {
 
-            RequestHandler = new GetReservationsRequestHandler(RequestValidator.Object, _logger.Object, _reservationsService.Object, _hashingService.Object);
+            };
+
+            RequestHandler = new GetReservationsRequestHandler(RequestValidator.Object, _logger.Object, _reservationsService.Object, _hashingService.Object,EmployerAccountsConfiguration);
 
             Query = new GetReservationsRequest
             {

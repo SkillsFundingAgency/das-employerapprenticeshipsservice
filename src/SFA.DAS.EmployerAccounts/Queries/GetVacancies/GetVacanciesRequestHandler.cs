@@ -13,17 +13,17 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
         private readonly IValidator<GetVacanciesRequest> _validator;
         private readonly ILog _logger;
         private readonly IRecruitService _service;
-        private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
         public GetVacanciesRequestHandler(
             IValidator<GetVacanciesRequest> validator,
             ILog logger,
-            IRecruitService service, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+            IRecruitService service, EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _validator = validator;
             _logger = logger;
             _service = service;
-            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
+            _employerAccountsConfiguration = employerAccountsConfiguration;
         }
 
         public async Task<GetVacanciesResponse> Handle(GetVacanciesRequest message)
@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
             try
             {
                 var task = _service.GetVacancies(message.HashedAccountId);
-                if (await Task.WhenAny(task, Task.Delay(_employerApprenticeshipsServiceConfiguration.AddApprenticeCallToActionTimeout)) == task)
+                if (await Task.WhenAny(task, Task.Delay(_employerAccountsConfiguration.AddApprenticeCallToActionTimeout)) == task)
                 {
                     await task;
                     return new GetVacanciesResponse

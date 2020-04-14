@@ -16,18 +16,18 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
         private readonly ILog _logger;        
         private readonly ICommitmentV2Service _commitmentV2Service;
         private readonly IHashingService _hashingService;
-        private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
         public GetApprenticeshipsHandler(
             IValidator<GetApprenticeshipsRequest> validator,
             ILog logger,
             ICommitmentV2Service commitmentV2Service,
-            IHashingService hashingService, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+            IHashingService hashingService, EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _validator = validator;
             _logger = logger;            
             _commitmentV2Service = commitmentV2Service;
             _hashingService = hashingService;
-            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
+            _employerAccountsConfiguration = employerAccountsConfiguration;
         }
         
         public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message)

@@ -3,14 +3,12 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
-using SFA.DAS.Encoding;
 using SFA.DAS.HashingService;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 {
@@ -23,7 +21,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         private Mock<IHashingService> _hashingService;
         private long _accountId;
         private long _cohortId;
-        public string hashedAccountId;        
+        public string hashedAccountId;
+        public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
 
         [SetUp]
         public void Arrange()
@@ -43,6 +42,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
            
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(hashedAccountId)).Returns(_accountId);
+            EmployerAccountsConfiguration = EmployerAccountsConfiguration = new EmployerAccountsConfiguration()
+            {
 
             RequestHandler = new GetSingleCohortRequestHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object, Mock.Of<ILog>());
 
