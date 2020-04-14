@@ -1,6 +1,7 @@
 ﻿using System;
 using MediatR;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -15,17 +16,18 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
         private readonly ILog _logger;        
         private readonly ICommitmentV2Service _commitmentV2Service;
         private readonly IHashingService _hashingService;
-
+        private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
         public GetApprenticeshipsHandler(
             IValidator<GetApprenticeshipsRequest> validator,
             ILog logger,
             ICommitmentV2Service commitmentV2Service,
-            IHashingService hashingService)
+            IHashingService hashingService, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
         {
             _validator = validator;
             _logger = logger;            
             _commitmentV2Service = commitmentV2Service;
             _hashingService = hashingService;
+            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
         }
         
         public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message)

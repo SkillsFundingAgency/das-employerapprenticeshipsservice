@@ -36,7 +36,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
 using SFA.DAS.Common.Domain.Types;
-using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -46,25 +45,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IAccountApiClient _accountApiClient;
         private readonly IMapper _mapper;
-        private EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
 
         public EmployerTeamOrchestrator(IMediator mediator,
             ICurrentDateTime currentDateTime,
             IAccountApiClient accountApiClient,
-            IMapper mapper, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
+            IMapper mapper)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
             _accountApiClient = accountApiClient;
             _mapper = mapper;
-            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
-        }
-
-        //Needed for tests
-        protected EmployerTeamOrchestrator(EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
-        {
-            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
@@ -159,7 +150,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
-                var timeout = _employerApprenticeshipsServiceConfiguration.AddApprenticeCallToActionTimeout;
                 var apiGetAccountTask = _accountApiClient.GetAccount(hashedAccountId);
 
                 var accountResponseTask = _mediator.SendAsync(new GetEmployerAccountByHashedIdQuery
@@ -191,15 +181,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId,
-                    TimeOut = timeout
+                    ExternalUserId = externalUserId
                 });
 
                 var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId,
-                    TimeOut = timeout
+                    ExternalUserId = externalUserId
                 });
 
                 var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest
@@ -211,8 +199,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var vacanciesResponseTask = _mediator.SendAsync(new GetVacanciesRequest
                 {
                     HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId,
-                    TimeOut = timeout
+                    ExternalUserId = externalUserId
                 });
 
                 await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask, vacanciesResponseTask).ConfigureAwait(false);

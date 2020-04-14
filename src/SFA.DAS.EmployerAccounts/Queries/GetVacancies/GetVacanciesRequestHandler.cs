@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -12,15 +13,17 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
         private readonly IValidator<GetVacanciesRequest> _validator;
         private readonly ILog _logger;
         private readonly IRecruitService _service;
+        private readonly EmployerApprenticeshipsServiceConfiguration _employerApprenticeshipsServiceConfiguration;
 
         public GetVacanciesRequestHandler(
             IValidator<GetVacanciesRequest> validator,
             ILog logger,
-            IRecruitService service)
+            IRecruitService service, EmployerApprenticeshipsServiceConfiguration employerApprenticeshipsServiceConfiguration)
         {
             _validator = validator;
             _logger = logger;
             _service = service;
+            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
         }
 
         public async Task<GetVacanciesResponse> Handle(GetVacanciesRequest message)
@@ -37,23 +40,28 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
             try
             {
                 var task = _service.GetVacancies(message.HashedAccountId);
-                if (await Task.WhenAny(task, Task.Delay(message.TimeOut)) == task)
+                if (await Task.WhenAny(task, Task.Delay(_employerApprenticeshipsServiceConfiguration.AddApprenticeCallToActionTimeout)) == task)
                 {
                     await task;
-                }
-                else
-                {
                     return new GetVacanciesResponse
                     {
-                        HasFailed = true
+                        Vacancies = task.Result
                     };
                 }
                 return new GetVacanciesResponse
                 {
-                    Vacancies = task.Result
+                    HasFailed = true
                 };
             }
-            catch(Exception ex)
+            catch (TimeoutException ex)
+            {
+                _logger.Error(ex, $"Failed to get Reservations for {message.HashedAccountId}");
+                return new GetVacanciesResponse
+                {
+                    HasFailed = true
+                };
+            }
+            catch (Exception ex)
             {
                 _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
                 return new GetVacanciesResponse

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using System.Linq;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.HashingService;
 using System;
 using SFA.DAS.NLog.Logger;
