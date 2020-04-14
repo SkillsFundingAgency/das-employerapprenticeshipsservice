@@ -57,6 +57,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             _accountApiClient = accountApiClient;
             _mapper = mapper;
         }
+        //Needed for tests	
+        protected EmployerTeamOrchestrator()
+        {
+        }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
         {
