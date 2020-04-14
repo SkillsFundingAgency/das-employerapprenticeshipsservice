@@ -9,7 +9,7 @@
 }
 
 @{
-    ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-details";
+    ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-details";    
 }
 
 
@@ -19,7 +19,7 @@
 
     @foreach (var item in Model.Data)
     {
-        <ul class="govuk-tabs__list"> 
+        <ul class="govuk-tabs__list">
             <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
                 <a class="govuk-tabs__tab" href=@item.GetAgreementTabListId>
                     @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
@@ -36,6 +36,8 @@
                 <h2>Agreement between @item.AccountLegalEntity.Name and ESFA </h2>
 
                 ViewBag.BreadCrumbsTrail = @item.AccountLegalEntity.Name;
+
+                <insettext>@item.V2InsetText</insettext>
 
                 <Subheading>
                     @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
@@ -67,7 +69,7 @@
 </div>
 
 @section breadcrumb {
-    
+
     <div class="govuk-breadcrumbs">
         <ol class="govuk-breadcrumbs__list">
             <li class="govuk-breadcrumbs__list-item">
@@ -79,5 +81,5 @@
             <li class="govuk-breadcrumbs__list-item" aria-current="page">@ViewBag.BreadCrumbsTrail</li>
         </ol>
     </div>
-
+    <caption>@ViewBag.BreadCrumbsTrail</caption>
 }

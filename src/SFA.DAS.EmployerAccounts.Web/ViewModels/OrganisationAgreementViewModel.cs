@@ -24,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string SignedDateText { get; set; }
         public string GetAgreementTabListId => $"#v{Template.VersionNumber}-agreement";
         public string GetAgreementTabPanelId => $"#v{Template.VersionNumber}-agreement";
-
+        public string V2InsetText => Template.VersionNumber == 2 ? "This is a variation of the agreement that we published 1 May 2017. We updated it to add clause 7 (transfer of funding)." : string.Empty;
 
     }
 }
