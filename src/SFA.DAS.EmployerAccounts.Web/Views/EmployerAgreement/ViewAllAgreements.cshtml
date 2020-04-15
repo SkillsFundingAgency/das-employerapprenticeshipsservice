@@ -9,69 +9,111 @@
 }
 
 @{
-    ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-details";    
+    ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-details";
 }
 
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
-<h1>Your agreements with the Education and Skills Funding Agency (ESFA)</h1>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-<div class="govuk-tabs" data-module="govuk-tabs">
+        <h1 class="govuk-heading-xl">
+            <span class="govuk-caption-xl">***INSERT name of company here***</span>
+            Your agreements with the Education and Skills Funding Agency (<abbr>ESFA</abbr>)
+        </h1>
 
-    @foreach (var item in Model.Data)
-    {
-        <ul class="govuk-tabs__list">
-            <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
-                <a class="govuk-tabs__tab" href=@item.GetAgreementTabListId>
-                    @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
-                </a>
-            </li>
-        </ul>
+    </div>
+</div>
 
-        <div class="govuk-tabs__panel" id=@item.GetAgreementTabPanelId>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
 
-            @if (item.SignedDate != null)
+        <div class="govuk-tabs" data-module="govuk-tabs">
+
+
+            <h2 class="govuk-tabs__title">
+                By published dates
+            </h2>
+
+            <ul class="govuk-tabs__list">
+                @foreach (var item in Model.Data)
+                {
+                    <li class="govuk-tabs__list-item@(@item.Template.VersionNumber == 1 ? "" : " govuk-tabs__list-item--selected")">
+                        <a class="govuk-tabs__tab" href="@item.GetAgreementTabListId">
+                            @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
+                        </a>
+                    </li>
+                }
+            </ul>
+
+            @foreach (var item in Model.Data)
             {
-                <h2>Accepted on @item.SignedDate</h2>
+                <div class="govuk-tabs__panel" id="@item.GetAgreementTabPanelId">
 
-                <h2>Agreement between @item.AccountLegalEntity.Name and ESFA </h2>
+                    @if (item.SignedDate != null)
+                    {
+                        <strong class="govuk-tag govuk-tag--green govuk-!-margin-bottom-4">
+                            Accepted on @item.SignedDate
+                        </strong>
 
-                ViewBag.BreadCrumbsTrail = @item.AccountLegalEntity.Name;
+                        ViewBag.BreadCrumbsTrail = @item.AccountLegalEntity.Name;
 
-                <insettext>@item.V2InsetText</insettext>
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-two-thirds">
 
-                <Subheading>
-                    @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
-                </Subheading>
+                                <h3 class="govuk-heading-l govuk-!-margin-bottom-0">
+                                    Agreement between @item.AccountLegalEntity.Name and <abbr>ESFA</abbr>
+                                </h3>
 
-                <Insettext>
-                    This is a new agreement.
-                </Insettext>
+                                <span class="govuk-caption-m">@Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)</span>
 
-                @Html.Partial("_AcceptedAgreement", item)
+                                <div class="govuk-inset-text">
+                                    @item.V2InsetText
+                                </div>
+
+                                <div class="govuk-inset-text">
+                                    This is a new agreement.
+                                </div>
+
+                            </div>
+                        </div>
+
+                        @Html.Partial("_AcceptedAgreement", item)
+                    }
+                    else
+                    {
+                        <strong class="govuk-tag govuk-tag--red govuk-!-margin-bottom-4">
+                            NOT ACCEPTED YET
+                        </strong>
+
+                        ViewBag.BreadCrumbsTrail = @item.AccountLegalEntity.Name;
+
+                        <div class="govuk-grid-row">
+                            <div class="govuk-grid-column-two-thirds">
+
+                                <h3 class="govuk-heading-l">
+                                    Agreement between @item.AccountLegalEntity.Name and <abbr>ESFA</abbr>
+                                </h3>
+
+                                <span class="govuk-caption-m">@Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)</span>
+
+                            </div>
+                        </div>
+
+                        @Html.Partial("_NotAcceptedAgreement", item)
+                    }
+
+                </div>
             }
-            else
-            {
-                <h2>NOT ACCEPTED YET</h2>
 
-                <h2>Agreement between @item.AccountLegalEntity.Name and ESFA </h2>
-
-                ViewBag.BreadCrumbsTrail = @item.AccountLegalEntity.Name;
-
-                <subheading>
-                    @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
-                </subheading>
-
-                @Html.Partial("_NotAcceptedAgreement", item)
-            }
         </div>
-    }
 
+    </div>
 </div>
 
 @section breadcrumb {
-
     <div class="govuk-breadcrumbs">
-        <ol class="govuk-breadcrumbs__list">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
             <li class="govuk-breadcrumbs__list-item">
                 <a class="govuk-breadcrumbs__link" href="@Url.Action("Index", "EmployerTeam")">Home</a>
             </li>
@@ -81,5 +123,4 @@
             <li class="govuk-breadcrumbs__list-item" aria-current="page">@ViewBag.BreadCrumbsTrail</li>
         </ol>
     </div>
-    <caption>@ViewBag.BreadCrumbsTrail</caption>
 }

@@ -1,89 +1,112 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.OrganisationAgreementViewModel
 
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
 
-<p>This agreement allows you to spend funds for <strong> @Model.AccountLegalEntity.Name</strong>.</p>
+        <p class="govuk-body">This agreement allows you to spend funds for <span class="govuk-!-font-weight-bold">@Model.AccountLegalEntity.Name</span>.</p>
 
-<table class="govuk-table">
-    <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">Parties</td>
-            <td class="govuk-table__cell">
+    </div>
+</div>
 
-                <address class="party">
-                    <b>The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education</b>
-                    <br />
-                    Cheylesmore House<br />
-                    Quinton Road<br />
-                    Coventry<br />
-                    CV1 2WT
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <section class="govuk-grid-row govuk-!-padding-bottom-5">
+            <div class="govuk-grid-column-one-third">
+                <h4 class="govuk-heading-s">Parties</h4>
+            </div>
+
+            <div class="govuk-grid-column-two-thirds">
+                <address class="das-text--normal">
+                    <dl class="das-definition-list">
+                        <dt class="das-definition-list__title">The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education<span class="govuk-visually-hidden">: Address</span></dt>
+
+                        <dd class="das-definition-list__definition">Cheylesmore House</dd>
+                        <dd class="das-definition-list__definition">Quinton Road</dd>
+                        <dd class="das-definition-list__definition">Coventry</dd>
+                        <dd class="das-definition-list__definition">CV1 2WT</dd>
+                    </dl>
                 </address>
-                <address class="party">
-                    <strong>@Model.AccountLegalEntity.Name</strong><br />
-                    @Html.CommaSeperatedAddressToHtml(@Model.AccountLegalEntity.Address)
+
+                <address class="das-text--normal">
                     @if (Model.OrganisationLookupPossible)
                     {
-                        <p class="update-details">
-                            <a href="@Url.Action("review", "organisation", new
+                        <dl class="das-definition-list">
+                            <dt class="das-definition-list__title">@Model.AccountLegalEntity.Name<span class="govuk-visually-hidden">: Address</span></dt>
+
+                            <dd class="das-definition-list__definition">
+                                @Html.CommaSeperatedAddressToHtml(@Model.AccountLegalEntity.Address)
+                            </dd>
+                        </dl>
+
+                        <a href="@Url.Action("review", "organisation", new
                                 {
                                     Model.HashedAccountId,
                                     Model.HashedAgreementId,
                                     Model.AccountLegalEntityPublicHashedId
-                                })">Update these details</a>
-                        </p>
+                                })" class="govuk-link govuk-link--no-visited-state govuk-!-font-size-19">Update these details</a>
                     }
                 </address>
-            </td>
-        </tr>
+            </div>
+        </section>
 
-    </tbody>
-</table>
+        <section class="govuk-grid-row govuk-!-padding-top-9">
+            <div class="govuk-grid-column-one-third govuk-!-padding-top-2">
+                <h4 class="govuk-heading-s">Document</h4>
+            </div>
 
-<table class="govuk-table">
-    <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">Document</td>
-            <td class="govuk-table__cell">
-                <div class="signed-agreement">
-                    <section class="attachment embedded">
-                        <div class="attachment-thumb">
-                            <a aria-hidden="true" class="thumbnail" href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")"><img alt="" src="/dist/images/pub-cover-html.png"></a>
-                        </div>
-                        <div class="attachment-details">
-                            <h2 class="title">
-                                <a href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")">Your ESFA agreement</a>
-                            </h2>
-                            <p class="metadata">
-                                <span class="type">HTML</span>
-                            </p>
-                        </div>
-                    </section>
+            <div class="govuk-grid-column-two-thirds">
+
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-one-third">
+                        <a href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")" aria-hidden="true"><img src="/dist/images/pub-cover-html.png" alt="."></a>
+                    </div>
+                    <div class="govuk-grid-column-two-thirds govuk-!-padding-top-3">
+                        <p class="govuk-body">
+                            <a href="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/view")" class="govuk-link govuk-link--no-visited-state">Your <abbr>ESFA</abbr> agreement</a> <br>
+                            <span class="govuk-caption-m"><span class="govuk-visually-hidden">Document format: </span><abbr>HTML</abbr></span>
+                        </p>
+                    </div>
                 </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
-<h3>This agreement has been accepted</h3>
-<table class="govuk-table">
-    <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">Accepted by:</td>
-            <td class="govuk-table__cell">@Model.SignedByName</td>
-        </tr>
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">On behalf of:</td>
-            <td class="govuk-table__cell">@Model.AccountLegalEntity.Name</td>
-        </tr>
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">Address:</td>
-            <td class="govuk-table__cell">@Model.AccountLegalEntity.Address</td>
-        </tr>
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">Accepted on:</td>
-            <td class="govuk-table__cell">@Model.SignedDateText</td>
-        </tr>
-        <tr class="govuk-table__row">
-            <td class="govuk-table__cell">Agreement ID:</td>
-            <td class="govuk-table__cell">@Model.AccountLegalEntityPublicHashedId</td>
-        </tr>
-    </tbody>
-</table>
+
+            </div>
+        </section>
+
+    </div>
+</div>
+
+<hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <section class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+
+                <h4 class="govuk-heading-s">This agreement has been accepted</h4>
+
+                <dl class="das-definition-list das-definition-list--table das-definition-list--table-narrow">
+                    <dt class="das-definition-list__title das-definition-list__title--spacer">Accepted by</dt>
+                    <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.SignedByName</dd>
+
+                    <dt class="das-definition-list__title das-definition-list__title--spacer">On behalf of</dt>
+                    <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.AccountLegalEntity.Name</dd>
+
+                    <dt class="das-definition-list__title das-definition-list__title--spacer">Address</dt>
+                    <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.AccountLegalEntity.Address</dd>
+
+                    <dt class="das-definition-list__title das-definition-list__title--spacer">Accepted on</dt>
+                    <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.SignedDateText</dd>
+
+                    <dt class="das-definition-list__title das-definition-list__title--spacer">Agreement <abbr>ID</abbr></dt>
+                    <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.AccountLegalEntityPublicHashedId</dd>
+                </dl>
+
+            </div>
+        </section>
+
+    </div>
+</div>
+
