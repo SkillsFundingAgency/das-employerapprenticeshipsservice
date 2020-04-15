@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
 {
@@ -22,6 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         private long _accountId;
         private long _cohortId;
         public string hashedAccountId;
+        private Mock<ILog> _logger;
         public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
 
         [SetUp]
@@ -32,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             _accountId = 123;
             _cohortId = 1;
             hashedAccountId = "Abc123";
-
+            _logger = new Mock<ILog>();
             _commitmentV2Service = new Mock<ICommitmentV2Service>();
             _commitmentV2Service.Setup(m => m.GetCohorts(_accountId))
                 .ReturnsAsync(new List<Cohort>() { new Cohort { Id = _cohortId, NumberOfDraftApprentices = 1 }});
