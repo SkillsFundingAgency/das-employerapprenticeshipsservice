@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
@@ -15,20 +14,17 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
         private readonly ILog _logger;
         private readonly IReservationsService _service;
         private readonly IHashingService _hashingService;
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
         public GetReservationsRequestHandler(
             IValidator<GetReservationsRequest> validator,
             ILog logger,
             IReservationsService service,
-            IHashingService hashingService,
-            EmployerAccountsConfiguration employerAccountsConfiguration)
+            IHashingService hashingService)
         {
             _validator = validator;
             _logger = logger;
             _service = service;
             _hashingService = hashingService;
-            _employerAccountsConfiguration = employerAccountsConfiguration;
         }
 
         public async Task<GetReservationsResponse> Handle(GetReservationsRequest message)
@@ -46,24 +42,10 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetReservations
 
             try
             {
-                var task = _service.Get(accountId);
-                if (await Task.WhenAny(task, Task.Delay(_employerAccountsConfiguration.AddApprenticeCallToActionTimeout)) == task)
-                {
-                    await task;
-                }
                 return new GetReservationsResponse
                 {
-                    Reservations = task.Result
+                    Reservations = await _service.Get(accountId)
                 };
-            }
-            catch (TimeoutException ex)
-            {
-                _logger.Error(ex, $"Failed to get Reservations for {message.HashedAccountId}");
-                return new GetReservationsResponse
-                {
-                    HasFailed = true
-                };
-
             }
             catch (Exception ex)
             {

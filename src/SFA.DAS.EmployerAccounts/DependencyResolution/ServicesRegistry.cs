@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using SFA.DAS.Authorization.Context;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Services;
@@ -15,7 +16,9 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<IRestServiceFactory>().Use<RestServiceFactory>();         
             For<IHttpServiceFactory>().Use<HttpServiceFactory>();
             For<IUserAornPayeLockService>().Use<UserAornPayeLockService>();
-            For<IReservationsService>().Use<ReservationsService>();
+            var reservationServiceInstance = For<IReservationsService>().Use<ReservationsService>();
+            For<IReservationsService>().Use<ReservationsServiceWithTimeout>()
+                .Ctor<IReservationsService>().Is(reservationServiceInstance);
             For<ICommitmentV2Service>().Use<CommitmentsV2Service>();
         }
     }
