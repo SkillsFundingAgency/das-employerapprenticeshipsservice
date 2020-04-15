@@ -96,7 +96,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 PublicSectorDataSource = message.PublicSectorDataSource,
                 Sector = message.Sector,
                 Aorn = message.Aorn,
-                AgreementType = _authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest") ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Combined
+                AgreementType = _authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest") ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Combined,
+                ApprenticeshipEmployerType = string.IsNullOrWhiteSpace(message.Aorn) ? ApprenticeshipEmployerType.Unknown : ApprenticeshipEmployerType.NonLevy
             });   
             
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
@@ -121,6 +122,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                     message.OrganisationReferenceNumber, message.OrganisationAddress, message.OrganisationType, createdByName, externalUserId),
                 PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId, createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, externalUserId)
             );
+
+            if (!string.IsNullOrWhiteSpace(message.Aorn))
+            {
+                await PublishApprenticeshipEmployerTypeChangeMessage(createAccountResult.AccountId, ApprenticeshipEmployerType.NonLevy);
+            }
 
             return new CreateAccountCommandResponse
             {
@@ -204,6 +210,16 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 UserName = createdByName,
                 UserRef = userRef,
                 Created = DateTime.UtcNow
+            });
+        }
+
+        private Task PublishApprenticeshipEmployerTypeChangeMessage(long accountId,
+            ApprenticeshipEmployerType apprenticeshipEmployerType)
+        {
+            return _eventPublisher.Publish(new ApprenticeshipEmployerTypeChangeEvent
+            {
+                AccountId = accountId,
+                ApprenticeshipEmployerType = apprenticeshipEmployerType
             });
         }
 

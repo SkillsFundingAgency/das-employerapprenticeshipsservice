@@ -182,9 +182,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             _validator.Verify(x => x.ValidateAsync(command), Times.Once);
         }
 
-        [TestCase(true, AgreementType.NonLevyExpressionOfInterest)]
-        [TestCase(false, AgreementType.Combined)]
-        public async Task WillCreateNewAccountWithCorrectAgreementType(bool eoiWhitelisted, AgreementType agreementType)
+        [TestCase(true, AgreementType.NonLevyExpressionOfInterest, null, ApprenticeshipEmployerType.Unknown)]
+        [TestCase(false, AgreementType.Combined, "Aorn", ApprenticeshipEmployerType.NonLevy)]
+        public async Task WillCreateNewAccountWithCorrectAgreementType(bool eoiWhitelisted, AgreementType agreementType, string aorn, ApprenticeshipEmployerType apprenticeshipEmployerType)
         {
             const int accountId = 23;
 
@@ -201,7 +201,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationStatus = "active",
                 EmployerRefName = "Paye Scheme 1",
-                Aorn = "Aorn"
+                Aorn = aorn
             };
 
             _mockAuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(eoiWhitelisted);
@@ -230,6 +230,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                     y.PublicSectorDataSource == cmd.PublicSectorDataSource &&
                     y.Sector == cmd.Sector &&
                     y.Aorn == cmd.Aorn &&
+                    y.ApprenticeshipEmployerType == apprenticeshipEmployerType &&
                     y.AgreementType == agreementType
                 )));
         }
@@ -362,6 +363,36 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             addedLegalEntityEvent.OrganisationReferenceNumber.Should().Be(ExpectedOrganisationReferenceNumber);
             addedLegalEntityEvent.OrganisationAddress.Should().Be(ExpectedOrganisationAddress);
             addedLegalEntityEvent.OrganisationType.Should().Be(expectedOrganisationType);
+        }
+
+        [Test]
+        public async Task ThenAnApprenticeEmployerTypeChangeEventIsPublishedForAnAornAccount()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = "Org", Aorn = "Aorn",ExternalUserId = _user.Ref.ToString() };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            var apprenticeEmployerTypeChangeEvent = _eventPublisher.Events.OfType<ApprenticeshipEmployerTypeChangeEvent>().Single();
+
+            apprenticeEmployerTypeChangeEvent.AccountId.Should().Be(ExpectedAccountId);
+            apprenticeEmployerTypeChangeEvent.ApprenticeshipEmployerType.Should().Be(ApprenticeshipEmployerType.NonLevy);
+        }
+
+        [Test]
+        public async Task ThenAnApprenticeEmployerTypeChangeEventIsNotPublishedForANonAornAccount()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = "Org", ExternalUserId = _user.Ref.ToString() };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+            var apprenticeEmployerTypeChangeEvent = _eventPublisher.Events.OfType<ApprenticeshipEmployerTypeChangeEvent>().SingleOrDefault();
+            apprenticeEmployerTypeChangeEvent.Should().BeNull();
         }
     }
 }
