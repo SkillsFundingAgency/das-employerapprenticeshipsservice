@@ -7,17 +7,18 @@ namespace SFA.DAS.EmployerAccounts.Extensions
 {
     public static class PollyTimeoutExtensions
     {
-        public static AsyncTimeoutPolicy GetTimeoutPolicy(ILog logger)
+        public static TimeoutPolicy GetTimeoutPolicy(ILog logger)
         {
-            return Policy
-                .TimeoutAsync(1,
-                     (context, timeSpan, retryCount, exception) =>
-                {
-                    logger.Warn($"Error executing command for method {context.OperationKey} " +
-                                $"Reason: {exception.Message}. " +
-                                $"Retrying in {timeSpan.Seconds} secs...attempt: {retryCount}");
-                    return Task.CompletedTask;
-                });
+            return Policy.TimeoutAsync(1);
+            //.TimeoutAsync(1,TimeoutStrategy.Pessimistic,(context, timeSpan, task) =>
+            //{
+            //    logger.Warn($"Error executing command for method {context.ExecutionKey} " +
+            //                $"Reason: {task?.Exception?.Message}. " +
+            //                $"Retrying in {timeSpan.Seconds} secs..."
+            //                );
+            //    return Task.CompletedTask;
+            //}
+            //);
         }
     }
 }

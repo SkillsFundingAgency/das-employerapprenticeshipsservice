@@ -17,8 +17,9 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<IHttpServiceFactory>().Use<HttpServiceFactory>();
             For<IUserAornPayeLockService>().Use<UserAornPayeLockService>();
             var reservationServiceInstance = For<IReservationsService>().Use<ReservationsService>();
-            For<IReservationsService>().Use<ReservationsServiceWithTimeout>()
-                .Ctor<IReservationsService>().Is(reservationServiceInstance);
+            //For<IReservationsService>().Use<ReservationsServiceWithTimeout>()
+            //    .Ctor<IReservationsService>().Is(reservationServiceInstance);
+            For<IReservationsService>().Use<ReservationsService>();
             For<ICommitmentV2Service>().Use<CommitmentsV2Service>();
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using Polly.Timeout;
 using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -14,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Services
     {
         private readonly IReservationsService _service;
         private readonly ILog _logger;
-        private AsyncTimeoutPolicy TimeoutPolicy { get; }
+        private TimeoutPolicy TimeoutPolicy { get; }
 
         public ReservationsServiceWithTimeout(IReservationsService service, ILog logger)
         {
@@ -25,9 +24,16 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<IEnumerable<Reservation>> Get(long accountId)
         {
-           return await TimeoutPolicy.ExecuteAsync(async token =>
-                    await _service.Get(accountId), CancellationToken.None);
-            //var result2 = await TimeoutPolicy.ExecuteAsync(context =>
+            //var response = await _pollyPolicy.ExecuteAsync(() => _httpClient.PostAsync(url, null));
+            //response.EnsureSuccessStatusCode();
+            //return await response.Content.ReadAsStringAsync();
+            var response = await TimeoutPolicy.ExecuteAsync(() =>
+                _service.Get(accountId)); 
+            //response.EnsureSuccessStatusCode();
+            return response;//.Content.ReadAsStringAsync();
+            //return await TimeoutPolicy.ExecuteAsync(async token =>
+            //         await _service.Get(accountId), CancellationToken.None);
+            //return await TimeoutPolicy.ExecuteAsync(context =>
             //    _service.Get(accountId), CancellationToken.None, true);
 
             //var result1 = await TimeoutPolicy.ExecuteAndCaptureAsync(async (ct) =>

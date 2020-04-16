@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -17,8 +18,17 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<IEnumerable<Reservation>> Get(long accountId)
         {
-            var reservations = await _client.Get(accountId);
-            return JsonConvert.DeserializeObject<IEnumerable<Reservation>>(reservations);
+            try
+            {
+                string reservations = await _client.Get(accountId);
+                return JsonConvert.DeserializeObject<IEnumerable<Reservation>>(reservations);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
         }
     }
 }
