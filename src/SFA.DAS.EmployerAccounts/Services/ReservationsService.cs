@@ -6,7 +6,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 
 namespace SFA.DAS.EmployerAccounts.Services
-{    
+{
     public class ReservationsService : IReservationsService
     {
         private readonly IReservationsApiClient _client;
@@ -18,17 +18,8 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<IEnumerable<Reservation>> Get(long accountId)
         {
-            try
-            {
-                string reservations = await _client.Get(accountId);
-                return JsonConvert.DeserializeObject<IEnumerable<Reservation>>(reservations);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-           
+            string reservations = await _client.Get(accountId);
+            return JsonConvert.DeserializeObject<IEnumerable<Reservation>>(reservations);
         }
     }
 }

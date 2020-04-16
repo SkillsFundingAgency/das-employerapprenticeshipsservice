@@ -19,16 +19,8 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public Task<string> Get(long accountId)
         {
-            try
-            {
-                var uri = $"{ApiBaseUrl}accounts/{accountId}/reservations";
-                return GetAsync(uri);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            var uri = $"{ApiBaseUrl}accounts/{accountId}/reservations";
+            return GetAsync(uri);
         }
     }
 }
