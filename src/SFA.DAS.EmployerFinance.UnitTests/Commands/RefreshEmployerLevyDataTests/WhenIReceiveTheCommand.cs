@@ -6,7 +6,6 @@ using SFA.DAS.EAS.Account.Api.Types.Events.Levy;
 using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Events.ProcessDeclaration;
 using SFA.DAS.EmployerFinance.Factories;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Services;
@@ -19,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using NServiceBus;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NServiceBus.Testing.Services;
@@ -118,16 +117,25 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
         }
 
         [Test]
-        public async Task ThenIfThereAreDeclarationsToProcessTheProcessDeclarationsEventIsPublished()
+        public async Task ThenIfThereAreDeclarationsToProcessTheLevyAddedToAccountEventAndAccountLevyStatusEventIsPublished()
         {
             //Arrange
             var data = RefreshEmployerLevyDataCommandObjectMother.Create(ExpectedEmpRef, ExpectedAccountId);
+            _levyRepository.Setup(m => m.ProcessDeclarations(ExpectedAccountId, It.IsAny<string>())).Returns(Task.FromResult(decimal.One));
 
             //Act
             await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             //Assert
-            _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessDeclarationsEvent>()), Times.Once);
+            _levyRepository.Verify(x => x.ProcessDeclarations(ExpectedAccountId, ExpectedEmpRef), Times.Once);
+
+            Assert.IsTrue(_eventPublisher.Events.OfType<LevyAddedToAccountEvent>().Any(e =>
+                e.AccountId.Equals(ExpectedAccountId)
+                && e.Amount.Equals(decimal.One)));
+
+            Assert.IsTrue(_eventPublisher.Events.OfType<AccountLevyStatusEvent>().Any(e =>
+                e.AccountId.Equals(ExpectedAccountId)
+                && e.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.Levy)));
         }
 
         [Test]
@@ -141,7 +149,15 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             await _refreshEmployerLevyDataCommandHandler.Handle(data);
 
             //Assert
-            _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessDeclarationsEvent>()), Times.Never);
+            _levyRepository.Verify(x => x.ProcessDeclarations(ExpectedAccountId, ExpectedEmpRef), Times.Never);
+
+            Assert.IsFalse(_eventPublisher.Events.OfType<LevyAddedToAccountEvent>().Any(e =>
+                e.AccountId.Equals(ExpectedAccountId)
+                && e.Amount.Equals(decimal.One)));
+
+            Assert.IsTrue(_eventPublisher.Events.OfType<AccountLevyStatusEvent>().Any(e =>
+                e.AccountId.Equals(ExpectedAccountId)
+                && e.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy)));
         }
 
         //[Test]

@@ -2,7 +2,6 @@
 using MediatR;
 using SFA.DAS.EmployerFinance.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerFinance.Data;
-using SFA.DAS.EmployerFinance.Events.ProcessDeclaration;
 using SFA.DAS.EmployerFinance.Factories;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.HashingService;
@@ -10,6 +9,7 @@ using SFA.DAS.Validation;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
@@ -72,13 +72,16 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             }
 
             var hasDecalarations = savedDeclarations.Any();
+            var levyTotalTransactionValue = decimal.Zero;
+
             if (hasDecalarations)
             {
-                await PublishProcessDeclarationEvents(message, updatedEmpRefs);
+                levyTotalTransactionValue = await HasAccountHadLevyTransactions(message, updatedEmpRefs);
                 await PublishDeclarationUpdatedEvents(message.AccountId, savedDeclarations);
             }
 
             await PublishRefreshEmployerLevyDataCompletedEvent(hasDecalarations, message.AccountId);
+            await PublishAccountLevyStatusEvent(levyTotalTransactionValue, message.AccountId);
         }
 
         private async Task PublishRefreshEmployerLevyDataCompletedEvent(bool levyImported, long accountId)
@@ -91,16 +94,34 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
             });
         }
 
-        private async Task PublishProcessDeclarationEvents(RefreshEmployerLevyDataCommand message, IEnumerable<string> updatedEmpRefs)
+        private async Task PublishAccountLevyStatusEvent(decimal levyTotalTransactionValue, long accountId)
         {
-            foreach (var empRef in updatedEmpRefs)
+            if (levyTotalTransactionValue != decimal.Zero)
             {
-                await _mediator.PublishAsync(new ProcessDeclarationsEvent
+                await _eventPublisher.Publish(new LevyAddedToAccountEvent
                 {
-                    AccountId = message.AccountId,
-                    EmpRef = empRef
+                    AccountId = accountId,
+                    Amount = levyTotalTransactionValue
                 });
             }
+
+            await _eventPublisher.Publish(new AccountLevyStatusEvent
+            {
+                AccountId = accountId,
+                ApprenticeshipEmployerType = levyTotalTransactionValue == decimal.Zero ? ApprenticeshipEmployerType.NonLevy : ApprenticeshipEmployerType.Levy
+            });
+        }
+
+        private async Task<decimal> HasAccountHadLevyTransactions(RefreshEmployerLevyDataCommand message, IEnumerable<string> updatedEmpRefs)
+        {
+            var levyTransactionTotalAmount = decimal.Zero;
+
+            foreach (var empRef in updatedEmpRefs)
+            {
+                levyTransactionTotalAmount += await _dasLevyRepository.ProcessDeclarations(message.AccountId, empRef);
+            }
+
+            return levyTransactionTotalAmount;
         }
 
         private async Task PublishDeclarationUpdatedEvents(long accountId, IEnumerable<DasDeclaration> savedDeclarations)

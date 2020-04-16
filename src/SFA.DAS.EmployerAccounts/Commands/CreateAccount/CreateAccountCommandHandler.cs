@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -97,7 +98,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 Sector = message.Sector,
                 Aorn = message.Aorn,
                 AgreementType = _authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest") ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Combined,
-                ApprenticeshipEmployerType = string.IsNullOrWhiteSpace(message.Aorn) ? ApprenticeshipEmployerType.Unknown : ApprenticeshipEmployerType.NonLevy
+                ApprenticeshipEmployerType = ApprenticeshipEmployerType.Unknown
             });   
             
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
@@ -125,7 +126,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
 
             if (!string.IsNullOrWhiteSpace(message.Aorn))
             {
-                await PublishApprenticeshipEmployerTypeChangeMessage(createAccountResult.AccountId, ApprenticeshipEmployerType.NonLevy);
+                await _mediator.SendAsync(new AccountLevyStatusCommand
+                {
+                    AccountId = createAccountResult.AccountId,
+                    ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
+                });
             }
 
             return new CreateAccountCommandResponse
@@ -210,16 +215,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 UserName = createdByName,
                 UserRef = userRef,
                 Created = DateTime.UtcNow
-            });
-        }
-
-        private Task PublishApprenticeshipEmployerTypeChangeMessage(long accountId,
-            ApprenticeshipEmployerType apprenticeshipEmployerType)
-        {
-            return _eventPublisher.Publish(new ApprenticeshipEmployerTypeChangeEvent
-            {
-                AccountId = accountId,
-                ApprenticeshipEmployerType = apprenticeshipEmployerType
             });
         }
 

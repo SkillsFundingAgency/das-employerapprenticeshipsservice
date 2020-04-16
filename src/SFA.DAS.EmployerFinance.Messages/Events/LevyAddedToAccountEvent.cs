@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerFinance.Messages.Events
 {
-    public class LevyAddedToAccount : Event
+    public class LevyAddedToAccountEvent : Event
     {
         public long AccountId { get; set; }
         public decimal Amount { get; set; }
