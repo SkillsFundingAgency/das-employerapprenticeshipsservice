@@ -232,6 +232,85 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.PaymentServiceTests
         }
 
         [Test]
+        public async Task ThenShouldNotAttemptToGetStandardWithNullStandardCode()
+        {
+            // Arrange
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                .Returns(() => _frameworkPayment);
+
+            // Act
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            // Assert
+            _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenShouldNotAttemptToGetStandardWithZeroStandardCode()
+        {
+            // Arrange
+            _frameworkPayment.StandardCode = 0;
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                .Returns(() => _frameworkPayment);
+
+            // Act
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            // Assert
+            _apprenticeshipInfoService.Verify(x => x.GetStandardsAsync(false), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenShouldNotAttemptToGetFrameworkWithNullFrameworkCode()
+        {
+            // Arrange
+            _frameworkPayment.FrameworkCode = null;
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                .Returns(() => _frameworkPayment);
+
+            // Act
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            // Assert
+            _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenShouldNotAttemptToGetFrameworkWithZeroFrameworkCode()
+        {
+            // Arrange
+            _frameworkPayment.FrameworkCode = 0;
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                .Returns(() => _frameworkPayment);
+
+            // Act
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            // Assert
+            _apprenticeshipInfoService.Verify(x => x.GetFrameworksAsync(false), Times.Never);
+        }
+
+        [Test]
+        [TestCase(0, 0)]
+        [TestCase(0, null)]
+        [TestCase(null, 0)]
+        [TestCase(null, null)]
+        public async Task ThenShouldLogWarningIfBothStandardCodeAndFramworkCodeNotSet(int? invalidFrameworkCode, int? invalidStandardCode)
+        {
+            // Arrange
+            _frameworkPayment.FrameworkCode = invalidFrameworkCode;
+            _frameworkPayment.StandardCode = invalidStandardCode;
+            _mapper.Setup(x => x.Map<PaymentDetails>(It.IsAny<Provider.Events.Api.Types.Payment>()))
+                .Returns(() => _frameworkPayment);
+
+            // Act
+            var details = await _paymentService.GetAccountPayments(PeriodEnd, AccountId);
+
+            // Assert
+            _logger.Verify(x => x.Warn(It.IsAny<string>()), Times.Once);
+        }
+
+        [Test]
         public async Task ThenIShouldGetCorrectApprenticeDetails()
         {
             //Act
