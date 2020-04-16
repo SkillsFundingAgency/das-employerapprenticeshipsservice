@@ -21,7 +21,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
         private Mock<IRecruitService> _recruitService;
         private Vacancy _vacancy;
         private Mock<ILog> _logger;
-        public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
         private string _hashedAccountId;
 
         [SetUp]
@@ -38,11 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetVacancies
             _recruitService
                 .Setup(s => s.GetVacancies(_hashedAccountId, int.MaxValue))
                 .ReturnsAsync(new List<Vacancy> { _vacancy });
-            EmployerAccountsConfiguration = EmployerAccountsConfiguration = new EmployerAccountsConfiguration()
-            {
-
-            };
-            RequestHandler = new GetVacanciesRequestHandler(RequestValidator.Object, _logger.Object, _recruitService.Object, EmployerAccountsConfiguration);
+            RequestHandler = new GetVacanciesRequestHandler(RequestValidator.Object, _logger.Object, _recruitService.Object);
 
             Query = new GetVacanciesRequest
             {

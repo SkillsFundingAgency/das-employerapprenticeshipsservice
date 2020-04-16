@@ -24,8 +24,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
         private long _cohortId;
         public string hashedAccountId;
         private Mock<ILog> _logger;
-        public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
-
+        
         [SetUp]
         public void Arrange()
         {
