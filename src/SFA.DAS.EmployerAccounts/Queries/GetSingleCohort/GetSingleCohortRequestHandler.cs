@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using System.Linq;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.HashingService;
 using System;
 using SFA.DAS.NLog.Logger;
@@ -14,7 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
     public class GetSingleCohortRequestHandler : IAsyncRequestHandler<GetSingleCohortRequest, GetSingleCohortResponse>
     {
         private readonly IValidator<GetSingleCohortRequest> _validator;
-        private readonly ICommitmentV2Service _commitmentV2Service;        
+        private readonly ICommitmentV2Service _commitmentV2Service;
         private readonly IHashingService _hashingService;
         private readonly ILog _logger;
 
@@ -25,7 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
             ILog logger)
         {
             _validator = validator;
-            _commitmentV2Service = commitmentV2Service;            
+            _commitmentV2Service = commitmentV2Service;
             _hashingService = hashingService;
             _logger = logger;
         }
@@ -52,7 +51,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetSingleCohort
                 {
                     singleCohort.Apprenticeships = await _commitmentV2Service.GetDraftApprenticeships(singleCohort);
                 }
-
                 return new GetSingleCohortResponse
                 {
                     Cohort = singleCohort

@@ -1,7 +1,6 @@
 ﻿using System;
 using MediatR;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -13,28 +12,27 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
     public class GetApprenticeshipsHandler : IAsyncRequestHandler<GetApprenticeshipsRequest, GetApprenticeshipsResponse>
     {
         private readonly IValidator<GetApprenticeshipsRequest> _validator;
-        private readonly ILog _logger;        
+        private readonly ILog _logger;
         private readonly ICommitmentV2Service _commitmentV2Service;
         private readonly IHashingService _hashingService;
-        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+
         public GetApprenticeshipsHandler(
             IValidator<GetApprenticeshipsRequest> validator,
             ILog logger,
             ICommitmentV2Service commitmentV2Service,
-            IHashingService hashingService, EmployerAccountsConfiguration employerAccountsConfiguration)
+            IHashingService hashingService)
         {
             _validator = validator;
-            _logger = logger;            
+            _logger = logger;
             _commitmentV2Service = commitmentV2Service;
             _hashingService = hashingService;
-            _employerAccountsConfiguration = employerAccountsConfiguration;
         }
-        
+
         public async Task<GetApprenticeshipsResponse> Handle(GetApprenticeshipsRequest message)
         {
             var validationResult = _validator.Validate(message);
 
-            if(!validationResult.IsValid())
+            if (!validationResult.IsValid())
             {
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }

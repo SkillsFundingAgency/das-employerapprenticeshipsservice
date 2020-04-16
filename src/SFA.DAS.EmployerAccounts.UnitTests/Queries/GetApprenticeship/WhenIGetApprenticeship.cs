@@ -7,7 +7,6 @@ using NUnit.Framework;
 using SFA.DAS.NLog.Logger;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.HashingService;
 
@@ -24,8 +23,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
         private Mock<ILog> _logger;
         private long _accountId;
         private string _hashedAccountId;
-        public EmployerAccountsConfiguration EmployerAccountsConfiguration { get; set; }
-
+        
         [SetUp]
         public void Arrange()
         {
@@ -41,11 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetApprenticeship
             _commitmentV2Service.Setup(m => m.GetApprenticeships(_accountId)).ReturnsAsync(new List<Apprenticeship> { new Apprenticeship { Id = 3 } });
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(_hashedAccountId)).Returns(_accountId);
-            EmployerAccountsConfiguration = new EmployerAccountsConfiguration()
-            {
-
-            };
-            RequestHandler = new GetApprenticeshipsHandler(RequestValidator.Object, _logger.Object, _commitmentV2Service.Object, _hashingService.Object, EmployerAccountsConfiguration);
+            RequestHandler = new GetApprenticeshipsHandler(RequestValidator.Object, _logger.Object, _commitmentV2Service.Object, _hashingService.Object);
             
             Query = new GetApprenticeshipsRequest
             {
