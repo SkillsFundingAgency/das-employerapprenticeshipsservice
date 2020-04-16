@@ -39,28 +39,28 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
 
             try
             {
-                var task = _service.GetVacancies(message.HashedAccountId);
-                if (await Task.WhenAny(task, Task.Delay(_employerAccountsConfiguration.AddApprenticeCallToActionTimeout)) == task)
-                {
-                    await task;
-                    return new GetVacanciesResponse
-                    {
-                        Vacancies = task.Result
-                    };
-                }
+                var task = await _service.GetVacancies(message.HashedAccountId);
+                //if (await Task.WhenAny(task, Task.Delay(_employerAccountsConfiguration.AddApprenticeCallToActionTimeout)) == task)
+                //{
+                //    await task;
                 return new GetVacanciesResponse
                 {
-                    HasFailed = true
+                    Vacancies = task
                 };
+                //}
+                //return new GetVacanciesResponse
+                //{
+                //    HasFailed = true
+                //};
             }
-            catch (TimeoutException ex)
-            {
-                _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
-                return new GetVacanciesResponse
-                {
-                    HasFailed = true
-                };
-            }
+            //catch (TimeoutException ex)
+            //{
+            //    _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
+            //    return new GetVacanciesResponse
+            //    {
+            //        HasFailed = true
+            //    };
+            //}
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
