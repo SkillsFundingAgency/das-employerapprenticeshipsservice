@@ -4,6 +4,7 @@ using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.HashingService;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
 {
@@ -37,10 +38,21 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetApprenticeship
 
             long accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
-            return new GetApprenticeshipsResponse
+            try
             {
-                Apprenticeships = await _commitmentV2Service.GetApprenticeships(accountId)
-            };            
+                return new GetApprenticeshipsResponse
+                {
+                    Apprenticeships = await _commitmentV2Service.GetApprenticeships(accountId)
+                };
+            }
+            catch(Exception ex)
+            {
+                _logger.Error(ex, $"Failed to get Cohorts for {message.HashedAccountId}");
+                return new GetApprenticeshipsResponse
+                {
+                    HasFailed = true
+                };
+            }
         }
     }
 }
