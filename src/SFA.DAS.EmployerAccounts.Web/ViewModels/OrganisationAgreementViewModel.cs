@@ -23,8 +23,9 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string AccountLegalEntityPublicHashedId => AccountLegalEntity.PublicHashedId;
         public string SignedDateText { get; set; }
         public string GetAgreementTabListId => $"#v{Template.VersionNumber}-agreement";
-        public string GetAgreementTabPanelId => $"#v{Template.VersionNumber}-agreement";
-        public string V2InsetText => Template.VersionNumber == 2 ? "This is a variation of the agreement that we published 1 May 2017. We updated it to add clause 7 (transfer of funding)." : string.Empty;
-
+        public string GetAgreementTabPanelId => $"#v{Template.VersionNumber}-agreement";        
+        public string GetAgreementTabCssClass => Template.VersionNumber == 0 ? "govuk-tabs__list-item" : "govuk-tabs__list-item govuk-tabs__list-item--selected";
+        public string V2InsetText => Template.VersionNumber == 2 ? "This is a variation of the agreement that we published 1 May 2017. We updated it to add clause 7 (transfer of funding)." : "This is a new agreement.";
+        
     }
 }
