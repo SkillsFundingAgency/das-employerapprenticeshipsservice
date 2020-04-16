@@ -11,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Models
         {
             return EndDate == default(DateTime) ?
                 $"{StartDate:MMMM yyyy}" :
-                $"{StartDate:MMMM yyyy} to {EndDate:MMMM yyyy}";
+                $"Between {StartDate:MMMM yyyy} and {EndDate:MMMM yyyy}";
         }
 
         public override bool Equals(object obj)

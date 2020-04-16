@@ -1,12 +1,13 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.MA.Shared.UI.Configuration;
+using SFA.DAS.MA.Shared.UI.Models;
+using SFA.DAS.MA.Shared.UI.Models.Links;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.MA.Shared.UI.Models;
-using SFA.DAS.MA.Shared.UI.Configuration;
-using SFA.DAS.MA.Shared.UI.Models.Links;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -24,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             var htmlAddress = commaSeperatedAddress.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => $"{line.Trim()}<br/>")
-                .Aggregate("", (x, y) => x + y);
+                .Aggregate(string.Empty, (x, y) => x + y);
 
             return new MvcHtmlString(htmlAddress);
         }
@@ -127,5 +128,4 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             );
         }
     }
-        
 }

@@ -21,6 +21,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Mappings
                 c.AddProfile<TransferConnectionInvitationMappings>();
                 c.AddProfile<UserMappings>();
                 c.AddProfile<VacancyMappings>();
+                c.AddProfile<CohortMappings>();
+                c.AddProfile<ApprenticeshipMappings>();                
             });
 
             config.AssertConfigurationIsValid();

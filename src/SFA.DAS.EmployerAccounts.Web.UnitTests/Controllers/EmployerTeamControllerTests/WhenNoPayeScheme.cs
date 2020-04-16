@@ -44,11 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         {
             // Arrange
             var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 0;
-            model.CallToActionViewModel = new CallToActionViewModel
-            {
-                ApprenticeshipAdded = false
-            };
+            model.PayeSchemeCount = 0;            
 
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;

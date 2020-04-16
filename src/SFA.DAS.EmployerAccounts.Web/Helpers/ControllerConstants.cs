@@ -95,6 +95,10 @@
         public const string Settings = "Settings";
         public const string Details = "Details";
         public const string CookieConsent = "CookieConsent";
-        public const string Tier2UserClaim = "Tier2User";        
+        public const string Tier2UserClaim = "Tier2User";
+        public const string EditApprentice = "EditApprentice";
+        public const string ViewApprentice = "ViewApprentice";
+        public const string ApproveOrRejectApprentice = "ApproveOrRejectApprentice";
+        public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
     }
 }

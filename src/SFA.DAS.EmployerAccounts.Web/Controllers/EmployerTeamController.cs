@@ -1,19 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using SFA.DAS.Authentication;
+﻿using SFA.DAS.Authentication;
+using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
-using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EmployerAccounts.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using System.Web;
+using System.Web.Mvc;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -28,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthenticationService owinWrapper)
             : base(owinWrapper)
         {
-            _employerTeamOrchestrator = null;
+            _employerTeamOrchestrator = null;            
         }
 
         public EmployerTeamController(
@@ -335,6 +336,45 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
+        public ActionResult SingleApprenticeshipContinueSetup(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
+        }
+
+        [ChildActionOnly]
+        public ActionResult SingleApprenticeshipWithTrainingProvider(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
+        }
+
+        [ChildActionOnly]
+        public ActionResult SingleApprenticeshipReadyForReview(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
+        }
+
+        [ChildActionOnly]
+        public ActionResult SingleApprenticeshipApproved(AccountDashboardViewModel model)
+        {
+            return PartialView(model.CallToActionViewModel.Apprenticeships.First());
+        }
+
+        [ChildActionOnly]
+        public ActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
+        {
+            model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>() 
+            { 
+                new ApprenticeshipViewModel() 
+                { 
+                    CourseName = model.CallToActionViewModel.Reservations?.Single().Course?.CourseDescription,
+                    HashedCohortId = model.CallToActionViewModel.Cohorts?.Single().HashedCohortId,
+                    TrainingProvider = model.CallToActionViewModel.Cohorts?.Single().TrainingProvider.First()
+                }
+            };           
+            return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
+        }
+
+        [ChildActionOnly]
         public override ActionResult SupportUserBanner(IAccountIdentifier model = null)
         {
             EmployerAccounts.Models.Account.Account account = null;
@@ -354,10 +394,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult Row1Panel1(AccountDashboardViewModel model)
         {
             var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
-            
+
             if (model.PayeSchemeCount == 0)
             {
-                viewModel.ViewName = "AddPAYE";
+                viewModel.ViewName = "AddPAYE";                
             }
             else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
             {
@@ -494,7 +534,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult ContinueSetupForSingleReservation(AccountDashboardViewModel model)
         {
             var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
-            var viewModel = new ReservationViewModel(reservation);            
+            var viewModel = new ReservationViewModel(reservation);
             return PartialView(viewModel);
         }
 
@@ -575,6 +615,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             return PartialView(model);
         }
+        
 
         [HttpGet]
         [Route("triagewhichcourseyourapprenticewilltake")]
