@@ -21,7 +21,7 @@
             <div class="govuk-grid-column-two-thirds">
                 <address class="das-text--normal">
                     <dl class="das-definition-list">
-                        <dt class="das-definition-list__title">The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education<span class="govuk-visually-hidden">: Address</span></dt>
+                        <dt class="das-definition-list__title">The Secretary of State for Education acting through the Education and Skills Funding Agency an executive agency of the Department for Education</dt>
 
                         <dd class="das-definition-list__definition">Cheylesmore House</dd>
                         <dd class="das-definition-list__definition">Quinton Road</dd>
@@ -34,7 +34,7 @@
                     @if (Model.OrganisationLookupPossible)
                     {
                         <dl class="das-definition-list">
-                            <dt class="das-definition-list__title">@Model.AccountLegalEntity.Name<span class="govuk-visually-hidden">: Address</span></dt>
+                            <dt class="das-definition-list__title">@Model.AccountLegalEntity.Name</dt>
 
                             <dd class="das-definition-list__definition">
                                 @Html.CommaSeperatedAddressToHtml(@Model.AccountLegalEntity.Address)
