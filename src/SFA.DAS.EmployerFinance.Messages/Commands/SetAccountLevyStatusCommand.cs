@@ -1,9 +1,9 @@
 ﻿using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.NServiceBus;
 
-namespace SFA.DAS.EmployerFinance.Messages.Events
+namespace SFA.DAS.EmployerFinance.Messages.Commands
 {
-    public class AccountLevyStatusEvent : Event
+    public class SetAccountLevyStatusCommand : Command  
     {
         public long AccountId { get; set; }
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; } 

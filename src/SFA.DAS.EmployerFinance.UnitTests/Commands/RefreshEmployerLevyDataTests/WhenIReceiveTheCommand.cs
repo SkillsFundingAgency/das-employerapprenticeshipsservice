@@ -20,6 +20,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Interfaces;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NServiceBus.Testing.Services;
 
@@ -133,7 +134,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.Amount.Equals(decimal.One)));
 
-            Assert.IsTrue(_eventPublisher.Events.OfType<AccountLevyStatusEvent>().Any(e =>
+            Assert.IsTrue(_eventPublisher.Events.OfType<SetAccountLevyStatusCommand>().Any(e =>
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.Levy)));
         }
@@ -155,7 +156,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.Amount.Equals(decimal.One)));
 
-            Assert.IsTrue(_eventPublisher.Events.OfType<AccountLevyStatusEvent>().Any(e =>
+            Assert.IsTrue(_eventPublisher.Events.OfType<SetAccountLevyStatusCommand>().Any(e =>
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy)));
         }

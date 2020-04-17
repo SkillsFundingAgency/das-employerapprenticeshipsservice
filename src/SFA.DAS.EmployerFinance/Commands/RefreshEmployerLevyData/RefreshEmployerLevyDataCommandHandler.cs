@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.NServiceBus.Services;
@@ -105,7 +106,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
                 });
             }
 
-            await _eventPublisher.Publish(new AccountLevyStatusEvent
+            await _eventPublisher.Publish(new SetAccountLevyStatusCommand
             {
                 AccountId = accountId,
                 ApprenticeshipEmployerType = levyTotalTransactionValue == decimal.Zero ? ApprenticeshipEmployerType.NonLevy : ApprenticeshipEmployerType.Levy
