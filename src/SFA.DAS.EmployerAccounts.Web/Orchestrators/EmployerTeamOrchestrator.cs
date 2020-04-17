@@ -60,7 +60,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         //Needed for tests	
         protected EmployerTeamOrchestrator()
         {
-            _employerApprenticeshipsServiceConfiguration = employerApprenticeshipsServiceConfiguration;
+            
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
