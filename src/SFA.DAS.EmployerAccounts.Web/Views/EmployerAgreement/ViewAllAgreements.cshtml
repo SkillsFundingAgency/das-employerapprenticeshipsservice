@@ -1,4 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
+@using SFA.DAS.EmployerAccounts.Web.Extensions
 @model OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
 
 @{  
@@ -32,14 +33,14 @@
                     </h2>                
 
                     <ul class="govuk-tabs__list">
-                        <li class='@item.GetAgreementTabCssClass'>
-                            <a class="govuk-tabs__tab" href=@item.GetAgreementTabListId>
+                        <li class="govuk-tabs__list-item@(@item.Template.VersionNumber == 1 ? "" : " govuk-tabs__list-item--selected")">                        
+                            <a class="govuk-tabs__tab" href="#v'@item.Template.VersionNumber'-agreement">
                                 @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
                             </a>
                         </li>
                     </ul>
 
-                    <div class="govuk-tabs__panel" id="@item.GetAgreementTabPanelId">
+                    <div class="govuk-tabs__panel" id="v'@item.Template.VersionNumber'-agreement">
 
                         @if (item.SignedDate != null)
                         {
@@ -59,7 +60,7 @@
                                     <span class="govuk-caption-m">@Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)</span>
 
                                     <div class="govuk-inset-text">
-                                        @item.V2InsetText                                             
+                                       @item.Template.GetInsetText()
                                     </div>
                                 </div>
                             </div>
