@@ -36,5 +36,11 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
             return configuration.ZenDeskSectionId;
         }
+
+        public static string GetZenDeskCobrowsingSnippetKey(this HtmlHelper html)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+            return configuration.ZenDeskCobrowsingSnippetKey;
+        }
     }
 }   
