@@ -13,7 +13,7 @@ using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
 {
-    class WhenIGetReservationWithTimeoutData
+    public class WhenIGetReservationWithTimeoutData
     {
         private Mock<IReservationsApiClient> _mockReservationsApiClient;
         private ReservationsServiceWithTimeout _reservationsServiceWithTimeout;
