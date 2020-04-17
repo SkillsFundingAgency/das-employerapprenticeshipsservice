@@ -18,7 +18,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<IEnumerable<Reservation>> Get(long accountId)
         {
-            string reservations = await _client.Get(accountId);
+            var reservations = await _client.Get(accountId);
             return JsonConvert.DeserializeObject<IEnumerable<Reservation>>(reservations);
         }
     }
