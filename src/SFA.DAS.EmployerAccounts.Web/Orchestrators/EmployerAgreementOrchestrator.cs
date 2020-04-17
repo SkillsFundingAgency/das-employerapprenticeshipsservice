@@ -386,8 +386,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
                 {
-                    Status = HttpStatusCode.BadRequest,
-                    Data = new List<OrganisationAgreementViewModel>(),
+                    Status = HttpStatusCode.BadRequest,                    
                     Exception = ex
                 };
             }

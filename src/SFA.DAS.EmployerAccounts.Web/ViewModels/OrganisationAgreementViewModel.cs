@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string HashedAgreementId { get; set; }
 
         public string AccountLegalEntityPublicHashedId => AccountLegalEntity.PublicHashedId;
-        public string SignedDateText { get; set; }
+        public string SignedDateText => SignedDate.HasValue ? SignedDate.Value.ToString("dd MMMM yyyy") : "";
         public string GetAgreementTabListId => $"#v{Template.VersionNumber}-agreement";
         public string GetAgreementTabPanelId => $"#v{Template.VersionNumber}-agreement";        
         public string GetAgreementTabCssClass => Template.VersionNumber == 0 ? "govuk-tabs__list-item" : "govuk-tabs__list-item govuk-tabs__list-item--selected";

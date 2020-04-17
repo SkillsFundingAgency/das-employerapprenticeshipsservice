@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
             _mockAccountLegalEntityPublicHashingService.Setup(m => m.DecodeValue(It.IsAny<string>())).Returns(_accountLegelEntityId);
 
             _mockEmployerAgreementRepository = new Mock<IEmployerAgreementRepository>();
-            _mockEmployerAgreementRepository.Setup(m => m.GetOrganisationAgreement(It.IsAny<long>())).ReturnsAsync(new AccountLegalEntity {       
+            _mockEmployerAgreementRepository.Setup(m => m.GetAccountLegalEntityAgreements(It.IsAny<long>())).ReturnsAsync(new AccountLegalEntity {       
                  LegalEntity = new LegalEntity { Id=1, Source= OrganisationType.CompaniesHouse } , 
                  Agreements = new List<EmployerAgreement>()  { new EmployerAgreement { SignedDate = DateTime.UtcNow, } }});
 
@@ -75,7 +75,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
             await RequestHandler.Handle(Query);
 
             //Assert
-            _mockEmployerAgreementRepository.Verify(x => x.GetOrganisationAgreement(It.IsAny<long>()), Times.Once);
+            _mockEmployerAgreementRepository.Verify(x => x.GetAccountLegalEntityAgreements(It.IsAny<long>()), Times.Once);
         }
 
         [Test]

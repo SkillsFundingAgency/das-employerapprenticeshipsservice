@@ -170,7 +170,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             await _db.Value.SaveChangesAsync();
         }
 
-        public async Task<AccountLegalEntity> GetOrganisationAgreement(long accountLegalEntityId)
+        public async Task<AccountLegalEntity> GetAccountLegalEntityAgreements(long accountLegalEntityId)
         {
             var accountLegalEntity = await _db.Value.AccountLegalEntities
              .Where(ale => ale.Id == accountLegalEntityId

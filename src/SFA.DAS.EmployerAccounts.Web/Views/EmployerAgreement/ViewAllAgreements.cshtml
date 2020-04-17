@@ -1,18 +1,14 @@
-﻿@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
-@using SFA.DAS.EmployerAccounts.Web.Helpers
+﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
 @model OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
-@{
+
+@{  
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
     ViewBag.PageID = "organisations-agreements-details";
     ViewBag.Title = "ViewAllAgreements";
     ViewBag.Section = "organisations";
     ViewBag.ZenDeskLabel = "eas-your-esfa-agreement";
-}
-
-@{
     ViewBag.GaData.Vpv = "/accounts/agreements/view-your-agreement/agreement-details";
 }
-
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">

@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
 
             var accountLegalEntityId = _accountLegalEntityPublicHashingService.DecodeValue(message.AccountLegalEntityHashedId);
 
-            var accountLegalEntity = await _employerAgreementRepository.GetOrganisationAgreement(accountLegalEntityId);
+            var accountLegalEntity = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
             if (accountLegalEntity == null) return new GetOrganisationAgreementsResponse();
 
             var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(accountLegalEntity.LegalEntity.Source);
