@@ -1,7 +1,7 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
 
 @{
-    var applicationsTextSuffix = Model.NoOfNewApplications.HasValue && Model.NoOfNewApplications.Value.Equals(1) ? "application" : "applications";
+    var applicationsTextSuffix = Model.NoOfNewApplications.HasValue ? (Model.NoOfNewApplications.Value.Equals(1) ? "application" : "applications") : "";
     var applicationsTextPrefix = Model.NoOfNewApplications.HasValue ? "View" : "";
 }
 
@@ -33,7 +33,7 @@
                 Applications
             </th>
             <td class="tw-65">
-                <a href="@Model.ManageVacancyUrl" class="govuk-link">@applicationsTextPrefix @(Model.NoOfNewApplications.HasValue ? $"{Model.NoOfNewApplications.Value}" : "0")  @applicationsTextSuffix</a>
+                <a href="@Model.ManageVacancyUrl" class="govuk-link">@applicationsTextPrefix @(Model.NoOfNewApplications.HasValue ? $"{Model.NoOfNewApplications.Value}" : "No applications yet")  @applicationsTextSuffix</a>
             </td>
         </tr>
         <tr>
