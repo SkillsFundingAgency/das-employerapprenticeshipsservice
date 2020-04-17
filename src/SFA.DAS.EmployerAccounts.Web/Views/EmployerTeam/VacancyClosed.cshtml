@@ -1,15 +1,15 @@
 ﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
 
 @{
-    var noOfApplications = Model.NoOfApplications.GetValueOrDefault();
-    var applicationsTextSuffix = noOfApplications.Equals(1) ? "application" : "applications";
+    var applicationsTextSuffix = Model.NoOfNewApplications.HasValue && Model.NoOfNewApplications.Value.Equals(1) ? "application" : "applications";
+    var applicationsTextPrefix = Model.NoOfNewApplications.HasValue ? "View" : "";
 }
 
 <section class="dashboard-section">
     <h2 class="section-heading heading-large">
         Your apprenticeship advert
     </h2>
-    <p>You have created a vacancy for your apprenticeship.</p>
+    <p>You've created an advert for your apprenticeship.</p>
 
     <table class="responsive">
         <tr>
@@ -21,14 +21,6 @@
             </td>
         </tr>
         <tr>
-            <th scope="row">
-                Status
-            </th>
-            <td>
-                <strong class="govuk-tag govuk-tag--inactive">CLOSED</strong>
-            </td>
-        </tr>
-        <tr>
             <th scope="row" class="tw-35">
                 Closing date
             </th>
@@ -36,13 +28,20 @@
                 @(Model.ClosedDateText)
             </td>
         </tr>
-
         <tr>
             <th scope="row" class="tw-35">
                 Applications
             </th>
             <td class="tw-65">
-                <a href="@Model.ManageVacancyUrl" class="govuk-link">View @noOfApplications  @applicationsTextSuffix</a>
+                <a href="@Model.ManageVacancyUrl" class="govuk-link">@applicationsTextPrefix @(Model.NoOfNewApplications.HasValue ? $"{Model.NoOfNewApplications.Value}" : "0")  @applicationsTextSuffix</a>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td>
+                <strong class="govuk-tag govuk-tag--inactive">CLOSED</strong>
             </td>
         </tr>
     </table>

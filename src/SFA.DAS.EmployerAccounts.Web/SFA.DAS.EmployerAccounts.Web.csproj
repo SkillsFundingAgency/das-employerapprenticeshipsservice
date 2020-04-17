@@ -882,6 +882,7 @@
     <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
