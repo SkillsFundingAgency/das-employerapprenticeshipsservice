@@ -48,8 +48,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
             IEnumerable<Reservation> reservations = new List<Reservation> {
                 new Reservation {AccountId = _accountId}
             };
-            _mockreservationsService.Setup(rs => rs.Get(_accountId))
-                .Returns(It.IsAny<Task<IEnumerable<Reservation>>>());
+            //_mockreservationsService.Setup(rs => rs.Get(_accountId))
+            //    .Returns(It.IsAny<Task<IEnumerable<Reservation>>>());
             //act
             await _sut.Get(_accountId);
 
