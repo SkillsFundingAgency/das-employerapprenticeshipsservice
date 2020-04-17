@@ -2,20 +2,20 @@
 using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
-using SFA.DAS.EmployerFinance.Messages.Events;
+using SFA.DAS.EmployerFinance.Messages.Commands;
 
-namespace SFA.DAS.EmployerAccounts.MessageHandlers.EventHandlers
+namespace SFA.DAS.EmployerAccounts.MessageHandlers.CommandHandlers
 {
-    public class AccountLevyStatusEventHandler : IHandleMessages<AccountLevyStatusEvent>
+    public class SetAccountLevyStatusCommandHandler : IHandleMessages<SetAccountLevyStatusCommand>
     {
         private readonly IMediator _mediatr;
 
-        public AccountLevyStatusEventHandler(IMediator mediatr)
+        public SetAccountLevyStatusCommandHandler(IMediator mediatr)
         {
             _mediatr = mediatr;
         }
 
-        public async Task Handle(AccountLevyStatusEvent message, IMessageHandlerContext context)
+        public async Task Handle(SetAccountLevyStatusCommand message, IMessageHandlerContext context)
         {
             await _mediatr.SendAsync(new AccountLevyStatusCommand
             {
