@@ -273,7 +273,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         {
                             _mapper.Map<Cohort, CohortViewModel>(accountCohort.Cohort)
                         },
-                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed
+                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed || accountCohort.HasFailed || apprenticeshipsResponse.HasFailed
                     }
                 };
 
