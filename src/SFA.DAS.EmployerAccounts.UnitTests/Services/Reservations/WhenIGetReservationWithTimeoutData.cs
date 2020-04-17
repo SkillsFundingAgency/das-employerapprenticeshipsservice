@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Polly;
 using Polly.Registry;
+using Polly.Timeout;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Services;
@@ -17,11 +16,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
     class WhenIGetReservationWithTimeoutData
     {
         private Mock<IReservationsApiClient> _mockReservationsApiClient;
-        private IReservationsService _sut;
-        private Mock<ReservationsService> _mockreservationsService;
+        private ReservationsServiceWithTimeout _reservationsServiceWithTimeout;
+        private Mock<IReservationsService> _reservationsService;
         private string _testData;
-        private Mock<IAsyncPolicy> _mockPolicy;
-
+        private IAsyncPolicy _policy;
+        private IEnumerable<Reservation> _reservations;
         long _accountId;
 
         [SetUp]
@@ -29,42 +28,67 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
         {
             _accountId = 123;
             _testData = JsonConvert.SerializeObject(new List<Reservation> { new Reservation { AccountId = _accountId } });
+            _reservations = JsonConvert.DeserializeObject<IEnumerable<Reservation>>(_testData);
 
             _mockReservationsApiClient = new Mock<IReservationsApiClient>();
             _mockReservationsApiClient
                 .Setup(m => m.Get(_accountId))
                 .ReturnsAsync(_testData);
-            _mockPolicy = new Mock<IAsyncPolicy>();
-            var mockRegistryPolicy = new PolicyRegistry();
-            mockRegistryPolicy.Add(Constants.DefaultServiceTimeout, _mockPolicy.Object);
-            _mockreservationsService = new Mock<ReservationsService>(_mockReservationsApiClient.Object);
-            _sut = new ReservationsServiceWithTimeout(_mockreservationsService.Object, mockRegistryPolicy);
+
+            _policy = Policy.NoOpAsync();
+            var registryPolicy = new PolicyRegistry();
+            registryPolicy.Add(Constants.DefaultServiceTimeout, _policy);
+
+            _reservationsService = new Mock<IReservationsService>();
+            _reservationsService
+                .Setup(rs => rs.Get(_accountId))
+                .ReturnsAsync(_reservations);
+
+            _reservationsServiceWithTimeout = new ReservationsServiceWithTimeout(_reservationsService.Object, registryPolicy);
         }
 
         [Test]
-        public async Task ThenTheReservationsAreReturnedFromTheService()
+        public async Task ThenTheReservationsServiceIsCalled()
         {
-            //arrange
-            IEnumerable<Reservation> reservations = new List<Reservation> {
-                new Reservation {AccountId = _accountId}
-            };
-            //_mockreservationsService.Setup(rs => rs.Get(_accountId))
-            //    .Returns(It.IsAny<Task<IEnumerable<Reservation>>>());
             //act
-            await _sut.Get(_accountId);
+            await _reservationsServiceWithTimeout.Get(_accountId);
 
             // assert 
-            _mockPolicy.Verify(p => p.ExecuteAsync(It.IsAny<Func<Task<IEnumerable<Reservation>>>>()));
+            _reservationsService.Verify(rs => rs.Get(_accountId), Times.AtLeastOnce);
         }
 
         [Test]
-        public async Task ThenTheReservationsServiceReturnsATimeout()
+        public async Task ThenTheReservationsServiceReturnsTheSameReservation()
         {
             //act
-            await _sut.Get(_accountId);
+            var reservationsResult = await _reservationsServiceWithTimeout.Get(_accountId);
 
             // assert 
-            _mockPolicy.Verify(p => p.ExecuteAsync(It.IsAny<Func<Task<IEnumerable<Reservation>>>>()));
+            Assert.AreSame(reservationsResult, _reservations);
+        }
+
+        [Test]
+        public async Task ThenThrowTimeoutException()
+        {
+            var innerException = "Exception of type 'Polly.Timeout.TimeoutRejectedException' was thrown.";
+            var message = "Call to Reservation Service timed out";
+            Exception actualException = null;
+            var correctExceptionThrown = false;
+
+            try
+            {
+                _reservationsService.Setup(p => p.Get(_accountId))
+                    .Throws<TimeoutRejectedException>();
+                await _reservationsServiceWithTimeout.Get(_accountId);
+            }
+            catch (Exception e)
+            {
+                actualException = e;
+                correctExceptionThrown = true;
+            }
+            Assert.IsTrue(correctExceptionThrown);
+            Assert.AreEqual(actualException.InnerException?.Message, innerException);
+            Assert.AreEqual(actualException.Message, message);
         }
     }
 }
