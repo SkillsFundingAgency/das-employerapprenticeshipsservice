@@ -673,7 +673,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
             rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
 
-            if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+            if (viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.Levy)
             {
                 rules.Add(120, EvaluateSingleApprenticeshipCallToActionRule);
                 rules.Add(121, EvaluateSingleApprenticeshipDraftStatusCallToActionRule);
@@ -703,7 +703,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateDraftVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -721,7 +721,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutatePendingReviewVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -739,7 +739,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateLiveVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -756,7 +756,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateClosedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -774,7 +774,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateRejectedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
