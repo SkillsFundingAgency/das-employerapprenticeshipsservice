@@ -50,8 +50,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetOrganisationAgreements
             _mockreferenceDataService.Setup(m => m.IsIdentifiableOrganisationType(It.IsAny<OrganisationType>())).ReturnsAsync(true);
 
             var agreements = new List<EmployerAgreementDto> { 
-                new EmployerAgreementDto  { Id =1, SignedDate = DateTime.UtcNow , AccountLegalEntity = new AccountLegalEntity { Id = _accountLegelEntityId} },
-                new EmployerAgreementDto  { Id =2, SignedDate = DateTime.UtcNow , AccountLegalEntity = new AccountLegalEntity { Id = _accountLegelEntityId} }};
+                new EmployerAgreementDto  { Id =1, SignedDate = DateTime.UtcNow , AccountLegalEntity = new AccountLegalEntityDto { Id = _accountLegelEntityId} },
+                new EmployerAgreementDto  { Id =2, SignedDate = DateTime.UtcNow , AccountLegalEntity = new AccountLegalEntityDto { Id = _accountLegelEntityId} }};
 
             _mockmapper = new Mock<IMapper>();
             _mockmapper.Setup(m => m.Map<ICollection<EmployerAgreement>, ICollection<EmployerAgreementDto>>(It.IsAny<ICollection<EmployerAgreement>>(),

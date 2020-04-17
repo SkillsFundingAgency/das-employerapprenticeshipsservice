@@ -3,6 +3,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using AccountLegalEntityViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.AccountLegalEntityViewModel;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings
 {
@@ -39,6 +40,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
             CreateMap<EmployerAgreementDto, OrganisationAgreementViewModel>()
                 .ForMember(dest => dest.SignedDateText, opt => opt.Ignore())
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore());
+
+            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>();
+
+            CreateMap<AccountLegalEntityDto, AccountLegalEntityViewModel>();
         }
     }
 }

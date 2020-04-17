@@ -9,11 +9,10 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public DateTime? ExpiredDate { get; set; }
         public long? SignedById { get; set; }
         public string SignedByName { get; set; }
-        public DateTime? SignedDate { get; set; }
-        public long AccountLegalEntityId { get; set; }
-        public AccountLegalEntity AccountLegalEntity { get; set; }
+        public DateTime? SignedDate { get; set; }        
+        public AccountLegalEntityViewModel AccountLegalEntity { get; set; }
         public EmployerAgreementStatus StatusId { get; set; }
-        public AgreementTemplate Template { get; set; }        
+        public AgreementTemplateViewModel Template { get; set; }        
         public bool OrganisationLookupPossible { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedLegalEntityId { get; set; }

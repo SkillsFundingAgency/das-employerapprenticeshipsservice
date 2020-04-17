@@ -67,6 +67,8 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                 .ForMember(
                     d => d.HashedLegalEntityId,
                     o => o.Ignore());
+
+            CreateMap<AccountLegalEntity, AccountLegalEntityDto>();
         }
     }
 }
