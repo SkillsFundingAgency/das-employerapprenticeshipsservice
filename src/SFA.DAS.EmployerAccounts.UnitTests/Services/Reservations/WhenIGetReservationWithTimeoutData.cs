@@ -54,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
             await _reservationsServiceWithTimeout.Get(_accountId);
 
             // assert 
-            _reservationsService.Verify(rs => rs.Get(_accountId), Times.AtLeastOnce);
+            _reservationsService.Verify(rs => rs.Get(_accountId), Times.Once);
         }
 
         [Test]
