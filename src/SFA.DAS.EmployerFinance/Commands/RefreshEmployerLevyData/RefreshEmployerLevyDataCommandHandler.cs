@@ -81,17 +81,18 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
                 await PublishDeclarationUpdatedEvents(message.AccountId, savedDeclarations);
             }
 
-            await PublishRefreshEmployerLevyDataCompletedEvent(hasDecalarations, message.AccountId);
+            await PublishRefreshEmployerLevyDataCompletedEvent(hasDecalarations, levyTotalTransactionValue, message.AccountId);
             await PublishAccountLevyStatusEvent(levyTotalTransactionValue, message.AccountId);
         }
 
-        private async Task PublishRefreshEmployerLevyDataCompletedEvent(bool levyImported, long accountId)
+        private async Task PublishRefreshEmployerLevyDataCompletedEvent(bool levyImported, decimal levyTotalTransactionValue, long accountId)
         {
             await _eventPublisher.Publish(new RefreshEmployerLevyDataCompletedEvent
             {
                 AccountId = accountId,
                 Created = DateTime.UtcNow,
-                LevyImported = levyImported
+                LevyImported = levyImported,
+                LevyTransactionValue = levyTotalTransactionValue
             });
         }
 
@@ -99,18 +100,12 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshEmployerLevyData
         {
             if (levyTotalTransactionValue != decimal.Zero)
             {
-                await _eventPublisher.Publish(new LevyAddedToAccountEvent
+                await _eventPublisher.Publish(new LevyAddedToAccount
                 {
                     AccountId = accountId,
                     Amount = levyTotalTransactionValue
                 });
             }
-
-            await _eventPublisher.Publish(new SetAccountLevyStatusCommand
-            {
-                AccountId = accountId,
-                ApprenticeshipEmployerType = levyTotalTransactionValue == decimal.Zero ? ApprenticeshipEmployerType.NonLevy : ApprenticeshipEmployerType.Levy
-            });
         }
 
         private async Task<decimal> HasAccountHadLevyTransactions(RefreshEmployerLevyDataCommand message, IEnumerable<string> updatedEmpRefs)

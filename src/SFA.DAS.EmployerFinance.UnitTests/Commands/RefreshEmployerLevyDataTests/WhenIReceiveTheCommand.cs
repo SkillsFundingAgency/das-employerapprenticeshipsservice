@@ -130,13 +130,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Assert
             _levyRepository.Verify(x => x.ProcessDeclarations(ExpectedAccountId, ExpectedEmpRef), Times.Once);
 
-            Assert.IsTrue(_eventPublisher.Events.OfType<LevyAddedToAccountEvent>().Any(e =>
+            Assert.IsTrue(_eventPublisher.Events.OfType<LevyAddedToAccount>().Any(e =>
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.Amount.Equals(decimal.One)));
 
-            Assert.IsTrue(_eventPublisher.Events.OfType<SetAccountLevyStatusCommand>().Any(e =>
+            Assert.IsTrue(_eventPublisher.Events.OfType<RefreshEmployerLevyDataCompletedEvent>().Any(e =>
                 e.AccountId.Equals(ExpectedAccountId)
-                && e.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.Levy)));
+                && e.LevyTransactionValue.Equals(decimal.One)));
         }
 
         [Test]
@@ -152,13 +152,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
             //Assert
             _levyRepository.Verify(x => x.ProcessDeclarations(ExpectedAccountId, ExpectedEmpRef), Times.Never);
 
-            Assert.IsFalse(_eventPublisher.Events.OfType<LevyAddedToAccountEvent>().Any(e =>
+            Assert.IsFalse(_eventPublisher.Events.OfType<LevyAddedToAccount>().Any(e =>
                 e.AccountId.Equals(ExpectedAccountId)
                 && e.Amount.Equals(decimal.One)));
 
-            Assert.IsTrue(_eventPublisher.Events.OfType<SetAccountLevyStatusCommand>().Any(e =>
+            Assert.IsTrue(_eventPublisher.Events.OfType<RefreshEmployerLevyDataCompletedEvent>().Any(e =>
                 e.AccountId.Equals(ExpectedAccountId)
-                && e.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy)));
+                && e.LevyTransactionValue.Equals(decimal.Zero)));
         }
 
         //[Test]
