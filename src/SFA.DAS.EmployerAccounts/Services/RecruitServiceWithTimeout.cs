@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         {
             try
             {
-                return await _pollyPolicy.ExecuteAsync(() => _recruitService.GetVacancies(hashedAccountId));
+                return await _pollyPolicy.ExecuteAsync(() => _recruitService.GetVacancies(hashedAccountId, maxVacanciesToGet));
             }
             catch (TimeoutRejectedException ex)
             {

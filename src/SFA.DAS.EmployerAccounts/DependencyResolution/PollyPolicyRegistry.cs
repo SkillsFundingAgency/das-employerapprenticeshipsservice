@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             var config = context.GetInstance<EmployerAccountsConfiguration>();
             var policyRegistry = new PolicyRegistry();
             var timeout = Policy
-                .TimeoutAsync(config.AddApprenticeCallToActionTimeout, TimeoutStrategy.Pessimistic
+                .TimeoutAsync(config.DefaultServiceTimeout, TimeoutStrategy.Pessimistic
                     , (pollyContext, timeSpan, task) =>
                     {
                         logger.Warn($"Error executing command for method {pollyContext.ExecutionKey} " +
