@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
@@ -41,24 +42,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(dest => dest.SignedDateText, opt => opt.Ignore())                             
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore());
 
-            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>()
-                .ForMember(dest => dest.PublishedInfo, opt => opt.MapFrom(src => GetPublishedInfo(src)));                
+            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>()                
+                .ForMember(dest => dest.PublishedDate , opt => opt.MapFrom(src => GetPublishedDate(src)));                
 
             CreateMap<AccountLegalEntityDto, AccountLegalEntityViewModel>();
         }
 
-        private string GetPublishedInfo(AgreementTemplateDto agreementTemplateDto)
+        private DateTime? GetPublishedDate(AgreementTemplateDto agreementTemplateDto)
         {
             switch (agreementTemplateDto.VersionNumber)
             {
                 case 1:
-                    return "Published 1 May 2017";                    
+                    return new DateTime(2017, 5, 1);                
                 case 2:
-                    return "Published 1 May 2018";
+                    return new DateTime(2018, 5, 1);
                 case 3:
-                    return "Published 9 January 2020";
+                    return new DateTime(2020, 1, 9);                    
                 default:
-                    return string.Empty;
+                    return null;
             }
         }
     }

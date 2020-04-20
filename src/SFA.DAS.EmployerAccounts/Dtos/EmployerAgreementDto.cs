@@ -13,8 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public long AccountLegalEntityId { get; set; }
         public AccountLegalEntityDto AccountLegalEntity { get; set; }
         public EmployerAgreementStatus StatusId { get; set; }
-        public AgreementTemplateDto Template { get; set; }
-        public int TemplateId { get; set; }
+        public AgreementTemplateDto Template { get; set; }        
         public string HashedAgreementId { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedLegalEntityId { get; set; }

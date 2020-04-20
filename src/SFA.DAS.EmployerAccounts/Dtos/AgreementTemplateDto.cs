@@ -10,6 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public string PartialViewName { get; set; }
         public int VersionNumber { get; set; }
         public AgreementType AgreementType { get; set; }
-        public DateTime PublishedDate { get; set; }
+        public DateTime? PublishedDate { get; set; }
     }
 }
