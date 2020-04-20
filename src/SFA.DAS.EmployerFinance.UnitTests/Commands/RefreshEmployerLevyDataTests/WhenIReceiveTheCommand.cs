@@ -18,9 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerFinance.Interfaces;
-using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Messages.Events;
 using SFA.DAS.NServiceBus.Testing.Services;
 
@@ -135,8 +133,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
                 && e.Amount.Equals(decimal.One)));
 
             Assert.IsTrue(_eventPublisher.Events.OfType<RefreshEmployerLevyDataCompletedEvent>().Any(e =>
-                e.AccountId.Equals(ExpectedAccountId)
-                && e.LevyTransactionValue.Equals(decimal.One)));
+                e.AccountId.Equals(ExpectedAccountId) &&
+                e.LevyImported.Equals(true) &&
+                e.LevyTransactionValue.Equals(decimal.One)));
         }
 
         [Test]
@@ -157,8 +156,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshEmployerLevyDataTest
                 && e.Amount.Equals(decimal.One)));
 
             Assert.IsTrue(_eventPublisher.Events.OfType<RefreshEmployerLevyDataCompletedEvent>().Any(e =>
-                e.AccountId.Equals(ExpectedAccountId)
-                && e.LevyTransactionValue.Equals(decimal.Zero)));
+                e.AccountId.Equals(ExpectedAccountId) &&
+                e.LevyImported.Equals(false) &&
+                e.LevyTransactionValue.Equals(decimal.Zero)));
         }
 
         //[Test]
