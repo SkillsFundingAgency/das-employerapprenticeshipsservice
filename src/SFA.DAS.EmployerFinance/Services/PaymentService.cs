@@ -99,16 +99,20 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             payment.CourseName = string.Empty;
 
-            if (payment.StandardCode.HasValue)
+            if (payment.StandardCode.HasValue && payment.StandardCode > 0)
             {
                 var standard = await GetStandard(payment.StandardCode.Value);
 
                 payment.CourseName = standard?.CourseName;
                 payment.CourseLevel = standard?.Level;
             }
-            else
+            else if(payment.FrameworkCode.HasValue && payment.FrameworkCode > 0)
             {
                 await GetFrameworkCourseDetails(payment);
+            }
+            else
+            {
+                _logger.Warn($"No framework code or standard code set on payment. Cannot get course details. PaymentId: {payment.Id}");
             }
         }
 
