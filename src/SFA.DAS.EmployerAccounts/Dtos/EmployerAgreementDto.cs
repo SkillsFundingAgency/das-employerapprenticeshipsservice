@@ -1,5 +1,4 @@
 ﻿using System;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Dtos
@@ -19,6 +18,6 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public string HashedAgreementId { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedLegalEntityId { get; set; }
-        public bool OrganisationLookupPossible { get; set; }
+        public bool OrganisationLookupPossible { get; set; }        
     }
 }

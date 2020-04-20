@@ -38,12 +38,28 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ConvertUsing(new AgreementInfoConverter());
 
             CreateMap<EmployerAgreementDto, OrganisationAgreementViewModel>()
-                .ForMember(dest => dest.SignedDateText, opt => opt.Ignore())
+                .ForMember(dest => dest.SignedDateText, opt => opt.Ignore())                             
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore());
 
-            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>();
+            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>()
+                .ForMember(dest => dest.PublishedInfo, opt => opt.MapFrom(src => GetPublishedInfo(src)));                
 
             CreateMap<AccountLegalEntityDto, AccountLegalEntityViewModel>();
+        }
+
+        private string GetPublishedInfo(AgreementTemplateDto agreementTemplateDto)
+        {
+            switch (agreementTemplateDto.VersionNumber)
+            {
+                case 1:
+                    return "Published 1 May 2017";                    
+                case 2:
+                    return "Published 1 May 2018";
+                case 3:
+                    return "Published 9 January 2020";
+                default:
+                    return string.Empty;
+            }
         }
     }
 }

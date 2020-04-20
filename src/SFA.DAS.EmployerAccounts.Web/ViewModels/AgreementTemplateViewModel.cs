@@ -10,5 +10,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string PartialViewName { get; set; }
         public int VersionNumber { get; set; }
         public AgreementType AgreementType { get; set; }
+        public string PublishedInfo { get; set; }
     }
 }

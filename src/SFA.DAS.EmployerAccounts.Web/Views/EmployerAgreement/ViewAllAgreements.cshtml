@@ -1,5 +1,4 @@
-﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@using SFA.DAS.EmployerAccounts.Web.Extensions
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
 @model OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
 
 @{  
@@ -35,7 +34,7 @@
                     <ul class="govuk-tabs__list">
                         <li class="govuk-tabs__list-item@(@item.Template.VersionNumber == 1 ? "" : " govuk-tabs__list-item--selected")">                        
                             <a class="govuk-tabs__tab" href="#v'@item.Template.VersionNumber'-agreement">
-                                @Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)
+                                @item.Template.PublishedInfo
                             </a>
                         </li>
                     </ul>
@@ -56,11 +55,11 @@
                                     <h3 class="govuk-heading-l govuk-!-margin-bottom-0">
                                         Agreement between @item.AccountLegalEntity.Name and <abbr>ESFA</abbr>
                                     </h3>
-
-                                    <span class="govuk-caption-m">@Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)</span>
+                                    
+                                    <span class="govuk-caption-m">@item.Template.PublishedInfo</span>
 
                                     <div class="govuk-inset-text">
-                                       @item.Template.GetInsetText()
+                                        @item.Template.InsetText()
                                     </div>
                                 </div>
                             </div>
@@ -82,7 +81,7 @@
                                         Agreement between @item.AccountLegalEntity.Name and <abbr>ESFA</abbr>
                                     </h3>
 
-                                    <span class="govuk-caption-m">@Html.GetAgreementHistoryTabTitle(@item.Template.VersionNumber)</span>
+                                    <span class="govuk-caption-m">@item.Template.PublishedInfo</span>
 
                                 </div>
                             </div>

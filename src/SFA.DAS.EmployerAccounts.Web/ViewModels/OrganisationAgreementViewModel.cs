@@ -1,5 +1,4 @@
 ﻿using System;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
@@ -17,9 +16,8 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public string HashedAccountId { get; set; }
         public string HashedLegalEntityId { get; set; }
         public string HashedAgreementId { get; set; }
-
+        
         public string AccountLegalEntityPublicHashedId => AccountLegalEntity.PublicHashedId;
         public string SignedDateText => SignedDate.HasValue ? SignedDate.Value.ToString("dd MMMM yyyy") : "";
-        
     }
 }
