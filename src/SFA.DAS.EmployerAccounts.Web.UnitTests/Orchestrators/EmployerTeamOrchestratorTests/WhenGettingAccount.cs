@@ -404,5 +404,34 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert                    
             Assert.AreEqual(1, result.Data.CallToActionViewModel.CohortsCount);            
         }
+
+        [Test]
+        [TestCase(false, false, false, false, false, Description = "All calls successful")]
+        [TestCase(true, false, false, false, true, Description = "Vacancy call failed")]
+        [TestCase(false, true, false, false, true, Description = "Vacancy call failed")]
+        [TestCase(false, false, true, false, true, Description = "Cohort call failed")]
+        public async Task ThenShouldSetUnableToDetermineCallToAction(
+            bool vacancyCallFailed, 
+            bool reservationsCallFailed, 
+            bool cohortCallFailed, 
+            bool apprenticeshipCallFailed, 
+            bool unableToDetermineCallToActionExpected)
+        {
+            //Arrange 
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>())).ReturnsAsync(new GetVacanciesResponse { Vacancies = new List<Vacancy>(), HasFailed = vacancyCallFailed });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetReservationsRequest>())).ReturnsAsync(new GetReservationsResponse { Reservations = new List<Reservation>(), HasFailed = reservationsCallFailed });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipsRequest>())).ReturnsAsync(new GetApprenticeshipsResponse{ Apprenticeships = new List<Apprenticeship>(), HasFailed = apprenticeshipCallFailed });
+
+            var cohort = new Cohort() { Id = 1, NumberOfDraftApprentices = 1, Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" } } };
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { Cohort = cohort, HasFailed = cohortCallFailed });           
+
+            //Act
+            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert                    
+            Assert.AreEqual(unableToDetermineCallToActionExpected, result.Data.CallToActionViewModel.UnableToDetermineCallToAction);
+        }
     }
 }

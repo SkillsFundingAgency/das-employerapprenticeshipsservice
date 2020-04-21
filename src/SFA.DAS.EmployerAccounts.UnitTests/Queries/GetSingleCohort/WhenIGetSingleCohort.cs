@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetSingleCohort
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(hashedAccountId)).Returns(_accountId);
 
-            RequestHandler = new GetSingleCohortRequestHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object);
+            RequestHandler = new GetSingleCohortRequestHandler(RequestValidator.Object, _commitmentV2Service.Object, _hashingService.Object, Mock.Of<ILog>());
 
             Query = new GetSingleCohortRequest
             {
