@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Polly;
 using Polly.Registry;
 using Polly.Timeout;
@@ -21,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             var config = context.GetInstance<EmployerAccountsConfiguration>();
             var policyRegistry = new PolicyRegistry();
             var timeout = Policy
-                .TimeoutAsync(config.DefaultServiceTimeout, TimeoutStrategy.Pessimistic
+                .TimeoutAsync(TimeSpan.Parse(config.DefaultServiceTimeout), TimeoutStrategy.Pessimistic
                     , (pollyContext, timeSpan, task) =>
                     {
                         logger.Warn($"Error executing command for method {pollyContext.ExecutionKey} " +

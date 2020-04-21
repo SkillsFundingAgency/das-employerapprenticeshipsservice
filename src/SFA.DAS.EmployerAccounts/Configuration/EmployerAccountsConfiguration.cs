@@ -48,6 +48,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string ZenDeskCobrowsingSnippetKey { get; set; }
         public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
         public RecruitClientApiConfiguration RecruitApi { get; set; }
-        public int DefaultServiceTimeout { get; set; }
+        public string DefaultServiceTimeout { get; set; }
     }
 }
