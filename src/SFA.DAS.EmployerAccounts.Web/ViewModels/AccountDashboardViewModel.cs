@@ -28,5 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public AgreementInfoViewModel AgreementInfo { get; set; }
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
         public CallToActionViewModel CallToActionViewModel { get; set; }
+        public bool HideTasksBar { get; set; }
     }
 }
