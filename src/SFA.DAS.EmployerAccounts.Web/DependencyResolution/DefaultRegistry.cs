@@ -8,7 +8,7 @@ using System.Web;
 using SFA.DAS.Authorization.Context;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.Authorization.Handlers;
-
+using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 {
@@ -31,7 +31,12 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
             var authorizationContextProvider = For<IAuthorizationContextProvider>().Use<AuthorizationContextProvider>();
             For<IAuthorizationContextProvider>().Use<ImpersonationAuthorizationContext>()
            .Ctor<IAuthorizationContextProvider>().Is(authorizationContextProvider);
-            For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();          
+            For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();
+
+            For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();
+
+            For<IAccountOrchestrator>().Use(c => c.GetInstance<EmployerTeamOrchestrator>());
+            For<IAccountOrchestrator>().DecorateAllWith<EmployerTeamOrchestratorWithCallToAction>();
         }
     }
     

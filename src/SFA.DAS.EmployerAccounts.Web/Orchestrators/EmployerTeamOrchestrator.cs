@@ -33,9 +33,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
@@ -43,7 +40,181 @@ using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
-    public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
+    public interface IAccountOrchestrator
+    {
+        Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId);
+    }
+
+    public class AccountContext
+    {
+        public string HashedAccountId { get; set; }
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
+    }
+
+    public class EmployerTeamOrchestratorWithCallToAction : IAccountOrchestrator
+    {
+        private const string AccountContextCookieName = "sfa-das-employerapprenticeshipsservice-accountcontext";
+        private readonly IAccountOrchestrator _accountOrchestrator;
+        private readonly ICookieStorageService<AccountContext> _accountContext;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
+
+        public EmployerTeamOrchestratorWithCallToAction(
+            IAccountOrchestrator accountOrchestrator, 
+            ICookieStorageService<AccountContext> accountContext,
+            IMediator mediator,
+            IMapper mapper)
+        {
+            _accountOrchestrator = accountOrchestrator;
+            _accountContext = accountContext;
+            _mediator = mediator;
+            _mapper = mapper;
+        }
+
+        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
+        {
+            var accountResponseTask = _accountOrchestrator.GetAccount(hashedAccountId, externalUserId);
+
+            if (TryGetAccountContext(hashedAccountId, out AccountContext accountContext))
+            {
+                if (accountContext.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
+                {
+                    var levyResponse = await accountResponseTask;
+                    SaveContext(levyResponse);
+                    return levyResponse;
+                }
+            }
+
+            // here we are either non levy or unknown caller context            
+            var callToActionResponse = await GetCallToAction(hashedAccountId, externalUserId);
+            var accountResponse = await accountResponseTask;
+            if (accountResponse.Status == HttpStatusCode.OK && callToActionResponse.Status == HttpStatusCode.OK)
+            {
+                accountResponse.Data.CallToActionViewModel = callToActionResponse.Data;
+                accountResponse.Data.CallToActionViewModel.AgreementsToSign = accountResponse.Data.RequiresAgreementSigning > 0;
+            }
+
+            SaveContext(accountResponse);
+            return accountResponse;
+        }
+
+        private void SaveContext(OrchestratorResponse<AccountDashboardViewModel> orchestratorResponse)
+        {
+            if (orchestratorResponse.Status == HttpStatusCode.OK)
+            {
+                _accountContext.Delete(AccountContextCookieName);
+
+                _accountContext.Create(
+                    new AccountContext
+                    {
+                        HashedAccountId = orchestratorResponse.Data.HashedAccountId,
+                        ApprenticeshipEmployerType = orchestratorResponse.Data.ApprenticeshipEmployerType
+                    }
+                , AccountContextCookieName);
+            }
+        }
+
+        private bool TryGetAccountContext(string hashedAccountId, out AccountContext accountContext)
+        {
+            if (_accountContext.Get(AccountContextCookieName) is AccountContext accountCookie)
+            {
+                if (accountCookie.HashedAccountId.Equals(hashedAccountId, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    accountContext = accountCookie;
+                    return true;
+                }
+            }
+
+            accountContext = null;
+            return false;
+        }
+
+        private async Task<OrchestratorResponse<CallToActionViewModel>> GetCallToAction(string hashedAccountId, string externalUserId)
+        {
+            try
+            {
+                var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
+
+                var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
+
+                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
+
+                var vacanciesResponseTask = _mediator.SendAsync(new GetVacanciesRequest
+                {
+                    HashedAccountId = hashedAccountId,
+                    ExternalUserId = externalUserId
+                });
+
+                await Task.WhenAll(reservationsResponseTask, vacanciesResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask).ConfigureAwait(false);
+
+                var reservationsResponse = reservationsResponseTask.Result;
+                var vacanciesResponse = vacanciesResponseTask.Result;
+                var apprenticeshipsResponse = apprenticeshipsResponseTask.Result;
+                var accountCohortResponse = accountCohortResponseTask.Result;
+
+                var viewModel = new CallToActionViewModel
+                {
+                    //AgreementsToSign = pendingAgreements.Count() > 0,
+                    Reservations = reservationsResponse.Reservations?.ToList(),
+                    VacanciesViewModel = vacanciesResponse.HasFailed ? new VacanciesViewModel() : new VacanciesViewModel
+                    {
+                        VacancyCount = vacanciesResponse.Vacancies.Count(),
+                        Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
+                    },
+                    Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),
+                    Cohorts = new List<CohortViewModel>
+                    {
+                        _mapper.Map<Cohort, CohortViewModel>(accountCohortResponse.Cohort)
+                    },
+                    UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed || accountCohortResponse.HasFailed || apprenticeshipsResponse.HasFailed
+                };
+
+                return new OrchestratorResponse<CallToActionViewModel>
+                {
+                    Status = HttpStatusCode.OK,
+                    Data = viewModel
+                };
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return new OrchestratorResponse<CallToActionViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = ex
+                };
+            }
+            catch (System.Net.Http.HttpRequestException ex)
+            {
+                return new OrchestratorResponse<CallToActionViewModel>
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account CallToAction: {hashedAccountId}", ex)
+                };
+            }
+            catch (Exception ex)
+            {
+                return new OrchestratorResponse<CallToActionViewModel>
+                {
+                    Status = HttpStatusCode.InternalServerError,
+                    Exception = ex
+                };
+            }
+        }
+    }
+
+    public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase, IAccountOrchestrator
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
@@ -190,42 +361,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest 
-                { 
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var vacanciesResponseTask = _mediator.SendAsync(new GetVacanciesRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask, vacanciesResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
                 var userResponse = userResponseTask.Result;
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
-                var reservationsResponse = reservationsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
-                var vacanciesResponse = vacanciesResponseTask.Result;
-                var accountCohort = accountCohortResponseTask.Result;
-                var apprenticeshipsResponse = apprenticeshipsResponseTask.Result;
 
                 var apprenticeshipEmployerType = (Common.Domain.Types.ApprenticeshipEmployerType)Enum.Parse(typeof(Common.Domain.Types.ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
@@ -259,22 +402,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
                     AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    CallToActionViewModel = new CallToActionViewModel
-                    {
-                        AgreementsToSign = pendingAgreements.Count() > 0,
-                        Reservations = reservationsResponse.Reservations?.ToList(),
-                        VacanciesViewModel = vacanciesResponse.HasFailed ? new VacanciesViewModel() : new VacanciesViewModel
-                        {
-                            VacancyCount = vacanciesResponse.Vacancies.Count(),
-                            Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
-                        },
-                        Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),
-                        Cohorts = new List<CohortViewModel>
-                        {
-                            _mapper.Map<Cohort, CohortViewModel>(accountCohort.Cohort)
-                        },
-                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed || accountCohort.HasFailed || apprenticeshipsResponse.HasFailed
-                    }
+                    CallToActionViewModel = new CallToActionViewModel()
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
