@@ -29,6 +29,10 @@
         }
 
         <h1 class="govuk-heading-xl">Are you sure you want to remove @Model.Name?</h1>
+        @if (Model.HasSignedAgreement)
+        {
+            <p class="govuk-body">This will end @Model.Name’s agreement with ESFA.</p>
+        }
         <form method="POST" action="@Url.Action(ControllerConstants.ConfirmRemoveOrganisationActionName)">
             @Html.AntiForgeryToken()
             @Html.HiddenFor(m => m.Name)
@@ -38,13 +42,6 @@
             @Html.HiddenFor(m => m.HashedAccountLegalEntitytId)
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="can-remove-organisation">
                 <fieldset class="govuk-fieldset" aria-describedby="can-remove-organisation">
-                    @if (Model.HasSignedAgreement)
-                    {
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                            <p>This will end @Model.Name’s agreement with ESFA.</p>
-                        </legend>
-                    }
-
                     @if (!ViewData.ModelState.IsValid)
                     {
                         <span class="govuk-error-message" aria-hidden="false" id="can-remove-organisation-error">
