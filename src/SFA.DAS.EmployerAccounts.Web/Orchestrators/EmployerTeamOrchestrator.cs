@@ -666,7 +666,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
             rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
 
-            if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
+            if (viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.Levy)
             {
                 rules.Add(120, EvaluateSingleApprenticeshipCallToActionRule);
                 rules.Add(121, EvaluateSingleApprenticeshipDraftStatusCallToActionRule);
@@ -696,7 +696,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateDraftVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -705,6 +705,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyDraft";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -714,7 +715,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutatePendingReviewVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -723,6 +724,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyPendingReview";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -732,7 +734,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateLiveVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -741,6 +743,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyLive";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -749,7 +752,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateClosedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -758,6 +761,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyClosed";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -767,7 +771,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvalutateRejectedVacancyCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount != 1 ||
-                viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.NonLevy)
+                viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
             {
                 return false;
             }
@@ -776,6 +780,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "VacancyRejected";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -800,6 +805,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "ContinueSetupForSingleReservation";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -812,6 +818,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "CheckFunding";
                 viewModel.PanelType = PanelType.Action;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -825,6 +832,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipApproved";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -840,11 +848,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.Draft))
-            {
-                viewModel.ViewName = "SingleApprenticeshipContinueSetup";
-                viewModel.PanelType = PanelType.Summary;
-                return true;
-            }
+                {
+                    viewModel.ViewName = "SingleApprenticeshipContinueSetup";
+                    viewModel.PanelType = PanelType.Summary;
+                    viewModel.Data.HideTasksBar = true;
+                    return true;
+                }
 
             return false;
         }
@@ -861,6 +870,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipWithTrainingProvider";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
             return false;
@@ -878,6 +888,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipContinueWithProvider";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 
@@ -896,6 +907,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 viewModel.ViewName = "SingleApprenticeshipReadyForReview";
                 viewModel.PanelType = PanelType.Summary;
+                viewModel.Data.HideTasksBar = true;
                 return true;
             }
 

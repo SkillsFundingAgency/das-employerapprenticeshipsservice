@@ -124,7 +124,7 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2103</Version>
     </PackageReference>
@@ -882,6 +882,7 @@
     <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

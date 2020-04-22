@@ -20,5 +20,6 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public string Sector { get; set; }
         public string Aorn { get; set; }
         public AgreementType AgreementType { get; set; }
+        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
     }
 }
