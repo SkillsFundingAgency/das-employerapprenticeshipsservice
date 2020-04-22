@@ -5,6 +5,7 @@ using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -96,7 +97,8 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                 PublicSectorDataSource = message.PublicSectorDataSource,
                 Sector = message.Sector,
                 Aorn = message.Aorn,
-                AgreementType = _authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest") ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Combined
+                AgreementType = _authorizationService.IsAuthorized("EmployerFeature.ExpressionOfInterest") ? AgreementType.NonLevyExpressionOfInterest : AgreementType.Combined,
+                ApprenticeshipEmployerType = ApprenticeshipEmployerType.Unknown
             });   
             
             var hashedAccountId = _hashingService.HashValue(createAccountResult.AccountId);
@@ -121,6 +123,15 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateAccount
                     message.OrganisationReferenceNumber, message.OrganisationAddress, message.OrganisationType, createdByName, externalUserId),
                 PublishAgreementCreatedMessage(createAccountResult.AccountId, createAccountResult.LegalEntityId, createAccountResult.EmployerAgreementId, message.OrganisationName, createdByName, externalUserId)
             );
+
+            if (!string.IsNullOrWhiteSpace(message.Aorn))
+            {
+                await _mediator.SendAsync(new AccountLevyStatusCommand
+                {
+                    AccountId = createAccountResult.AccountId,
+                    ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
+                });
+            }
 
             return new CreateAccountCommandResponse
             {

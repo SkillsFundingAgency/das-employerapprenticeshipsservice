@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using SFA.DAS.Audit.Types;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
@@ -97,9 +99,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
             await _mediator.SendAsync(new PublishGenericEventCommand { Event = genericEvent });
         }
 
-        private Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef, string aorn, string schemeName, string correlationId)
+        private async Task AddPayeScheme(string payeRef, long accountId, string userName, string userRef, string aorn, string schemeName, string correlationId)
         {
-            return _eventPublisher.Publish(new AddedPayeSchemeEvent
+            await _eventPublisher.Publish(new AddedPayeSchemeEvent
             {
                 PayeRef = payeRef,
                 AccountId = accountId,
@@ -110,6 +112,15 @@ namespace SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount
                 SchemeName = schemeName,
                 CorrelationId = correlationId
             });
+
+            if (!string.IsNullOrWhiteSpace(aorn))
+            {
+                await _mediator.SendAsync(new AccountLevyStatusCommand
+                {
+                    AccountId = accountId,
+                    ApprenticeshipEmployerType = ApprenticeshipEmployerType.NonLevy
+                });
+            }
         }
 
         private async Task AddAuditEntry(AddPayeToAccountCommand message, long accountId)

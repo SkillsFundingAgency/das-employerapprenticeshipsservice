@@ -6,6 +6,8 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AddPayeToAccount;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
@@ -122,6 +124,23 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.AddPayeToAccountTests
             message.AccountId.Should().Be(ExpectedAccountId);
             message.UserName.Should().Be(_user.FullName);
             message.UserRef.Should().Be(_user.Ref);
+
+            _mediator.Verify(x => x.SendAsync(It.IsAny<AccountLevyStatusCommand>()), Times.Never);
+        }
+
+        [Test]
+        public async Task ThenAnAccountLevyStatusCommandIsPublishedForAnAornPaye()
+        {
+            //Arrange
+            var command = AddPayeToNewLegalEntityCommandObjectMother.Create(aorn: "Aorn");
+
+            //Act
+            await _addPayeToAccountCommandHandler.Handle(command);
+
+            //Assert
+            _mediator.Verify(x => x.SendAsync(It.Is<AccountLevyStatusCommand>(c =>
+                c.AccountId.Equals(ExpectedAccountId) && 
+                c.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy))), Times.Once);
         }
 
         [Test]

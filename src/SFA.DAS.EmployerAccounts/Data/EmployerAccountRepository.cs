@@ -173,12 +173,12 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public Task SetAccountAsLevy(long accountId)
+        public Task SetAccountLevyStatus(long accountId, ApprenticeshipEmployerType apprenticeshipEmployerType)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@ApprenticeshipEmployerType", ApprenticeshipEmployerType.Levy, DbType.Byte);
+            parameters.Add("@apprenticeshipEmployerType", apprenticeshipEmployerType, DbType.Int16);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[UpdateAccount_SetAccountApprenticeshipEmployerType]",
