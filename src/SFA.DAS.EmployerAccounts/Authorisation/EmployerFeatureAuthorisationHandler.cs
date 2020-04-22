@@ -39,7 +39,8 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                 var feature = options.Single();
                 var featureToggle = _featureTogglesService.GetFeatureToggle(feature);
 
-                if (featureToggle.EnabledByAgreementVersion.GetValueOrDefault(0) > 0)
+                var featureToggleEnabledByAgreementVersion = featureToggle.EnabledByAgreementVersion;
+                if (featureToggleEnabledByAgreementVersion.GetValueOrDefault(0) > 0)
                 {
                     var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
 
@@ -51,7 +52,9 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                         .DefaultIfEmpty()
                         .Min();
 
-                    if (minAgreementVersion < featureToggle.EnabledByAgreementVersion || agreements.EmployerAgreements.Any(a => a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Pending))
+                    if (minAgreementVersion < featureToggleEnabledByAgreementVersion || 
+                        agreements.EmployerAgreements.Any(a => a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Pending &&
+                                                               a.TemplateId == featureToggleEnabledByAgreementVersion))
                     {
                         authorizationResult.AddError(new EmployerFeatureAgreementNotSigned());
                     }
