@@ -23,7 +23,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly IAccountOrchestrator _accountOrchestrator;
         private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamController(
@@ -38,13 +37,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
             EmployerTeamOrchestrator employerTeamOrchestrator,
-            IAuthorizationService authorizationService,
-            IAccountOrchestrator accountOrchestrator)
+            IAuthorizationService authorizationService)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _authorizationService = authorizationService;
-            _accountOrchestrator = accountOrchestrator;
         }
 
         [HttpGet]
@@ -623,7 +620,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
         {
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            var response = await _accountOrchestrator.GetAccount(hashedAccountId, externalUserId);
+            var response = await _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
 
             var flashMessage = GetFlashMessageViewModelFromCookie();
 

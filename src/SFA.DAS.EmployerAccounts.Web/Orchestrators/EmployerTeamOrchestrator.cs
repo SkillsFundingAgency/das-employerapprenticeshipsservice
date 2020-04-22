@@ -39,11 +39,7 @@ using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.Resour
 using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
-{
-    public interface IAccountOrchestrator
-    {
-        Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId);
-    }
+{   
 
     public class AccountContext
     {
@@ -51,29 +47,33 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
     }
 
-    public class EmployerTeamOrchestratorWithCallToAction : IAccountOrchestrator
+    public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
     {
         private const string AccountContextCookieName = "sfa-das-employerapprenticeshipsservice-accountcontext";
-        private readonly IAccountOrchestrator _accountOrchestrator;
+        private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
         private readonly ICookieStorageService<AccountContext> _accountContext;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
 
         public EmployerTeamOrchestratorWithCallToAction(
-            IAccountOrchestrator accountOrchestrator, 
-            ICookieStorageService<AccountContext> accountContext,
+            EmployerTeamOrchestrator employerTeamOrchestrator,
             IMediator mediator,
-            IMapper mapper)
+            ICurrentDateTime currentDateTime,
+            IAccountApiClient accountApiClient,
+            IMapper mapper,
+            IAuthorizationService authorizationService,            
+            ICookieStorageService<AccountContext> accountContext) 
+            : base(mediator, currentDateTime, accountApiClient, mapper, authorizationService)
         {
-            _accountOrchestrator = accountOrchestrator;
+            _employerTeamOrchestrator = employerTeamOrchestrator;
             _accountContext = accountContext;
             _mediator = mediator;
             _mapper = mapper;
         }
 
-        public async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
+        public override async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
         {
-            var accountResponseTask = _accountOrchestrator.GetAccount(hashedAccountId, externalUserId);
+            var accountResponseTask = _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
 
             if (TryGetAccountContext(hashedAccountId, out AccountContext accountContext))
             {
@@ -214,7 +214,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         }
     }
 
-    public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase, IAccountOrchestrator
+    public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
@@ -401,8 +401,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
-                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    CallToActionViewModel = new CallToActionViewModel()
+                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel)
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
@@ -797,6 +796,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
+            if(viewModel.Data.CallToActionViewModel == null)
+            {
+                return;
+            }
+
             var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
             rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
