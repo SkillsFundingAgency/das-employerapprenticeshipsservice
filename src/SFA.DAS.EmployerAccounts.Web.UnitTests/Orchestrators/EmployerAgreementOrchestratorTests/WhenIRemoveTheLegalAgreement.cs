@@ -20,46 +20,20 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         private Mock<IReferenceDataService> _referenceDataService;
         private EmployerAgreementOrchestrator _orchestrator;
 
-        private const string ExpectedHahsedAccountId = "RT456";
-        private const string ExpectedHashedAgreementId = "RRTE56";
+        private const string ExpectedHashedAccountId = "RT456";
+        private const string ExpectedHashedAccountLegalEntitytId = "RRTE56";
         private const string ExpectedUserId = "TYG68UY";
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            //RemoveLegalEntityCommand
-
+            
             _referenceDataService = new Mock<IReferenceDataService>();
 
             _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
         }
-
-        [Test]
-        public async Task ThenIfTheRemoveOrganisationConfirmCheckHasNotBeenSelectedTheFlashMessageIsPopulatedAndReturned()
-        {
-            //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { }, ExpectedUserId);
-
-            //Assert
-            Assert.IsNotNull(actual);
-            Assert.IsAssignableFrom<OrchestratorResponse<bool>>(actual);
-            Assert.IsNotNull(actual.FlashMessage);
-            Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
-        }
-
-        [Test]
-        public async Task ThenIfTheRemoveOrganisationCheckHasBeenSelectedAsNoThenNoChangesAreMade()
-        {
-            //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 1 }, ExpectedUserId);
-
-            //Assert
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(HttpStatusCode.Continue, actual.Status);
-        }
-
-
+        
         [Test]
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
         {
@@ -67,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveLegalEntityCommand>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2 }, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel(), ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
@@ -80,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveLegalEntityCommand>())).ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName" }, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName" }, ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
@@ -90,12 +64,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfTheCommandIsValidTheFlashMessageIsPopulated()
         {
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName", HashedAccountId = ExpectedHahsedAccountId, HashedAgreementId = ExpectedHashedAgreementId }, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName", HashedAccountId = ExpectedHashedAccountId, HashedAccountLegalEntitytId = ExpectedHashedAccountLegalEntitytId }, ExpectedUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<RemoveLegalEntityCommand>(
-                c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
-                && c.HashedLegalAgreementId.Equals(ExpectedHashedAgreementId)
+                c => c.HashedAccountId.Equals(ExpectedHashedAccountId)
+                && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntitytId)
                 && c.UserId.Equals(ExpectedUserId))), Times.Once);
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.FlashMessage);

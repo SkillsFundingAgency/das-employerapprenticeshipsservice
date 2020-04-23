@@ -14,9 +14,9 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<EmployerAgreementView> GetEmployerAgreement(long agreementId);
         Task SignAgreement(SignEmployerAgreement agreement);
         Task RemoveLegalEntityFromAccount(long agreementId);
-        Task<List<RemoveEmployerAgreementView>> GetEmployerAgreementsToRemove(long accountId);
         Task<AccountLegalEntityModel> GetAccountLegalEntity(long accountLegalEntityId);
         Task<IEnumerable<EmployerAgreement>> GetAccountAgreements(long accountId);
+        Task<IEnumerable<EmployerAgreement>> GetAccountLegalEntityAgreements(long accountLegalEntityId);
         Task<EmployerAgreementStatus?> GetEmployerAgreementStatus(long agreementId);
         Task SetAccountLegalEntityAgreementDetails(long accountLegalEntityId, long? pendingAgreementId, int? pendingAgreementVersion, long? signedAgreementId, int? signedAgreementVersion);
     }

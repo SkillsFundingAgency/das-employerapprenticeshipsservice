@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
-using Microsoft.Azure.Documents.SystemFunctions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -11,7 +9,6 @@ using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
@@ -29,50 +26,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
     public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementControllerTestFixtures>
     {
         [Test]
-        public Task GetOrganisationsToRemove_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetAccountsToRemove()
-        {
-            return RunAsync(
-                act: fixtures => fixtures.GetOrganisationsToRemove(),
-                assert: (fixtures, result) => fixtures.Orchestrator.Verify(x => x.GetLegalAgreementsToRemove(fixtures.HashedAccountId, fixtures.UserId), Times.Once));
-        }
-
-        [Test]
         public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
         {
             return RunAsync(
+                fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Data = new ConfirmOrganisationToRemoveViewModel()
+                    }),
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
                 assert: (fixtures, result) => fixtures.Orchestrator.Verify(
-                    x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId), Times.Once));
+                    x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAccountLegalEntityId, fixtures.HashedAccountId, fixtures.UserId), Times.Once));
         }
-
-        [Test]
-        public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheFlashMessageIsPopulatedFromTheCookieWhenGettingTheConfirmRemoveAction()
-        {
-            return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.FlashMessage
-                        .Setup(x => x.Get("sfa-das-employerapprenticeshipsservice-flashmessage"))
-                        .Returns(new FlashMessageViewModel { Headline = "" });
-
-                    fixtures.Orchestrator
-                        .Setup(x => x.GetConfirmRemoveOrganisationViewModel(fixtures.HashedAgreementId, fixtures.HashedAccountId, fixtures.UserId))
-                        .ReturnsAsync(new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>
-                        {
-                            Data = new ConfirmLegalAgreementToRemoveViewModel()
-                        });
-                },
-                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
-                assert: (fixtures, actualResult) =>
-                {
-                    Assert.IsNotNull(actualResult);
-                    var viewResult = actualResult as ViewResult;
-                    Assert.IsNotNull(viewResult);
-                    var actualModel = viewResult.Model as OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>;
-                    Assert.IsNotNull(actualModel);
-                    Assert.IsNotNull(actualModel.FlashMessage);
-                });
-        }    
 
         [Test]
         public Task ViewUnsignedAgreements_WhenIViewUnsignedAgreements_ThenIShouldGoStraightToTheUnsignedAgreementIfThereIsOnlyOne()
@@ -265,6 +230,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             public const string UserId = "AFV456TGF";
             public const string HashedAgreementId = "789UHY";
             public const long AccountLegalEntityId = 1234;
+            public const string HashedAccountLegalEntityId = "THGHFH";
             public const string LegalEntityName = "FIFTEEN LIMITED";
         }
 
@@ -273,6 +239,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public string HashedAgreementId => Constants.HashedAgreementId;
         public long AccountLegalEntityId => Constants.AccountLegalEntityId;
         public string LegalEntityName => Constants.LegalEntityName;
+        public string HashedAccountLegalEntityId => Constants.HashedAccountLegalEntityId;
 
         public GetEmployerAgreementRequest GetAgreementRequest { get; }
 
@@ -336,16 +303,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return controller;
         }
 
-        public Task<ActionResult> GetOrganisationsToRemove()
-        {
-            var controller = CreateController();
-            return controller.GetOrganisationsToRemove(HashedAccountId);
-        }
-
         public Task<ActionResult> ConfirmRemoveOrganisation()
         {
             var controller = CreateController();
-            return controller.ConfirmRemoveOrganisation(HashedAgreementId, HashedAccountId);
+            return controller.ConfirmRemoveOrganisation(HashedAccountLegalEntityId, HashedAccountId);
         }
 
         public async Task<RedirectToRouteResult> ViewUnsignedAgreements()

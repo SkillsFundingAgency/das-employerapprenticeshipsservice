@@ -1,27 +1,26 @@
 using System;
 using System.Threading.Tasks;
-using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
 {
-    public class GetAccountEmployerAgreementRemoveValidator : IValidator<GetAccountEmployerAgreementRemoveRequest>
+    public class GetAccountLegalEntityRemoveValidator : IValidator<GetAccountLegalEntityRemoveRequest>
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetAccountEmployerAgreementRemoveValidator(IMembershipRepository membershipRepository)
+        public GetAccountLegalEntityRemoveValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetAccountEmployerAgreementRemoveRequest item)
+        public ValidationResult Validate(GetAccountLegalEntityRemoveRequest item)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetAccountEmployerAgreementRemoveRequest item)
+        public async Task<ValidationResult> ValidateAsync(GetAccountLegalEntityRemoveRequest item)
         {
             var validationResult = new ValidationResult();
 
@@ -33,9 +32,9 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove
             {
                 validationResult.AddError(nameof(item.UserId));
             }
-            if (string.IsNullOrEmpty(item.HashedAgreementId))
+            if (string.IsNullOrEmpty(item.HashedAccountLegalEntityId))
             {
-                validationResult.AddError(nameof(item.HashedAgreementId));
+                validationResult.AddError(nameof(item.HashedAccountLegalEntityId));
             }
 
             if (!validationResult.IsValid())
