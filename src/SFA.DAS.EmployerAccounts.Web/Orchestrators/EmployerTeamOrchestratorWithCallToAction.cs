@@ -37,10 +37,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             ICurrentDateTime currentDateTime,
             IAccountApiClient accountApiClient,
             IMapper mapper,
-            IAuthorizationService authorizationService,            
             ICookieStorageService<AccountContext> accountContext,
             ILog logger) 
-            : base(mediator, currentDateTime, accountApiClient, mapper, authorizationService)
+            : base(mediator, currentDateTime, accountApiClient, mapper)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
             _accountContext = accountContext;

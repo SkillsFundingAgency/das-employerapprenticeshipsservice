@@ -136,7 +136,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                 _mockCurrentDateTime.Object, 
                 _mockAccountApiClient.Object, 
                 _mockMapper.Object, 
-                Mock.Of<IAuthorizationService>(),
                 _mockAccountContext.Object,
                 _mockLogger.Object);
         }
