@@ -1,15 +1,15 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Services;
-using FluentAssertions;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ReservationsApiClient
+namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Reservations
 {
     class WhenIGetReservationData
     {

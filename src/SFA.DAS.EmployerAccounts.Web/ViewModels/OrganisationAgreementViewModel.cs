@@ -19,5 +19,8 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         
         public string AccountLegalEntityPublicHashedId => AccountLegalEntity.PublicHashedId;
         public string SignedDateText => SignedDate.HasValue ? SignedDate.Value.ToString("dd MMMM yyyy") : "";
+
+        public string GetAgreementTabListId => $"#v{Template.VersionNumber}-agreement";
+        public string GetAgreementTabPanelId => $"v{Template.VersionNumber}-agreement";        
     }
 }

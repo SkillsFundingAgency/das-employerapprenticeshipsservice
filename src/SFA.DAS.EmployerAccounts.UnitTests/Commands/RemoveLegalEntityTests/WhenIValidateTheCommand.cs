@@ -64,7 +64,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string,string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string,string>("UserId","UserId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string,string>("HashedLegalAgreementId", "HashedLegalAgreementId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string,string>("HashedAccountLegalEntityId", "HashedAccountLegalEntityId has not been supplied"), actual.ValidationDictionary);
             _membershipRepository.Verify(x=>x.GetCaller(It.IsAny<string>(),It.IsAny<string>()), Times.Never);
         }
 
@@ -72,7 +72,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreConnectedToTheAccount()
         {
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand {HashedAccountId = ExpectedHashedAccountId, UserId = "TGB678", HashedLegalAgreementId = "ewr" });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand {HashedAccountId = ExpectedHashedAccountId, UserId = "TGB678", HashedAccountLegalEntityId = "ewr" });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
@@ -82,7 +82,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTheUserIsCheckedToSeeIfTheyAreAnOwnerOnTheAccount()
         {
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedNonOwnerUserId, HashedLegalAgreementId = "fdgd" });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId,  UserId = ExpectedNonOwnerUserId, HashedAccountLegalEntityId = "fdgd" });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
@@ -92,7 +92,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
         public async Task ThenTrueIsReturnedIfTheFieldsArePopulatedAndTheUserIsAnAccountOwner()
         {
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId= ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId= ExpectedUserId, HashedAccountLegalEntityId = ExpectedHashedLegalEntityId });
 
             //Assert
             Assert.IsTrue(actual.IsValid());
@@ -111,11 +111,11 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                 });
 
             //Act
-            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId, HashedLegalAgreementId = ExpectedHashedAgreementId });
+            var actual = await _removeLegalEntityCommandValidator.ValidateAsync(new RemoveLegalEntityCommand { HashedAccountId = ExpectedHashedAccountId, UserId = ExpectedUserId, HashedAccountLegalEntityId = ExpectedHashedLegalEntityId });
 
             //Assert
             Assert.IsFalse(actual.IsValid());
-            Assert.Contains(new KeyValuePair<string, string>("HashedLegalAgreementId", "There must be at least one legal entity on the account"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("HashedAccountLegalEntityId", "There must be at least one legal entity on the account"), actual.ValidationDictionary);
         }
     }
 }
