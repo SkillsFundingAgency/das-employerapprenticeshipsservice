@@ -124,7 +124,7 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2103</Version>
     </PackageReference>
@@ -282,6 +282,7 @@
     <Compile Include="ViewModels\ApprenticeshipViewModel.cs" />
     <Compile Include="ViewModels\CallToActionViewModel.cs" />
     <Compile Include="ViewModels\CohortViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmOrganisationToRemoveViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
@@ -297,7 +298,6 @@
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="ViewModels\CreateNewLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
@@ -800,7 +800,6 @@
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
-    <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2.cshtml" />
@@ -884,6 +883,8 @@
     <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
+    <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

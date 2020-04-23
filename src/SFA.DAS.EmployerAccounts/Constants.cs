@@ -11,5 +11,7 @@
         {
             public const decimal SenderMinTransferAllowance = 1;
         }
+
+        public const string DefaultServiceTimeout = "DefaultServiceTimeout";
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models;
@@ -55,6 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Data
 
             parameters.Add("@userId", userId, DbType.Int64);         
             parameters.Add("@employerName", employerName, DbType.String);
+            parameters.Add("@apprenticeshipEmployerType", ApprenticeshipEmployerType.Unknown, DbType.Int16);
             parameters.Add("@accountId", null, DbType.Int64, ParameterDirection.Output, 8);
             parameters.Add("@addedDate", DateTime.UtcNow, DbType.DateTime);
 
@@ -93,7 +95,8 @@ namespace SFA.DAS.EmployerAccounts.Data
             parameters.Add("@publicSectorDataSource", createParams.PublicSectorDataSource);
             parameters.Add("@sector", createParams.Sector, DbType.String);
             parameters.Add("@aorn", createParams.Aorn, DbType.String);
-            parameters.Add("@AgreementType", createParams.AgreementType, DbType.Int16);
+            parameters.Add("@agreementType", createParams.AgreementType, DbType.Int16);
+            parameters.Add("@apprenticeshipEmployerType", createParams.ApprenticeshipEmployerType, DbType.Int16);
             parameters.Add("@agreementVersion", null, DbType.Int32, ParameterDirection.Output);
 
             await _db.Value.Database.Connection.ExecuteAsync(

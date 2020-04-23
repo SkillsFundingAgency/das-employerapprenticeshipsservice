@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.EmployerAccounts.Interfaces;
