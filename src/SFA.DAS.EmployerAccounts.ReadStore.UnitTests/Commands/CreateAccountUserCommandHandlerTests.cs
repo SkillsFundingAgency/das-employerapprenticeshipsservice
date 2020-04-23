@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
-using NServiceBus.Logging;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
@@ -14,6 +13,7 @@ using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
+using Microsoft.Extensions.Logging;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 {
@@ -118,7 +118,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             UserRolesRepository = new Mock<IAccountUsersRepository>();
             UserRolesRepository.SetupInMemoryCollection(Users);
 
-            Handler = new CreateAccountUserCommandHandler(UserRolesRepository.Object, Mock.Of<ILog>());
+            Handler = new CreateAccountUserCommandHandler(UserRolesRepository.Object, Mock.Of<ILogger>());
 
             Command = new CreateAccountUserCommand(AccountId, UserRef, NewRole, MessageId, Created);
         }

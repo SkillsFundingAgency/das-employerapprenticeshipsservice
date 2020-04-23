@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using NServiceBus.Logging;
+using Microsoft.Extensions.Logging;
 using SFA.DAS.CosmosDb;
 using SFA.DAS.EmployerAccounts.ReadStore.Data;
 using SFA.DAS.EmployerAccounts.ReadStore.Exceptions;
@@ -13,9 +12,9 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
     internal class CreateAccountUserCommandHandler : IReadStoreRequestHandler<CreateAccountUserCommand, Unit>
     {
         private readonly IAccountUsersRepository _accountUsersRepository;
-        private readonly ILog _logger;
+        private readonly ILogger _logger;
 
-        public CreateAccountUserCommandHandler(IAccountUsersRepository accountUsersRepository, ILog logger)
+        public CreateAccountUserCommandHandler(IAccountUsersRepository accountUsersRepository, ILogger logger)
         {
             _accountUsersRepository = accountUsersRepository;
             _logger = logger;
@@ -40,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
             }
             catch (UserNotRemovedException exception)
             {
-                _logger.Warn("User has not been removed",exception);
+                _logger.LogWarning("User has not been removed", exception);
             }
             return Unit.Value;
         }
