@@ -14,32 +14,39 @@
     ViewBag.GaData.Vpv = "/accounts/teams/review/page-review-team-member";
 }
 
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">@Model.Data.Name</h1>
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-xl">@Model.Data.Name</h1>
     </div>
 </div>
-<div class="grid-row">
-    <div class="column-full">
-        <table class="responsive">
-            <thead>
-                <tr>
-                    <th scope="col">Email</th>
-                    <th scope="col">What they can do</th>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <table class="govuk-table das-table--responsive">
+            <caption class="govuk-table__caption govuk-visually-hidden">Table of what the team member can do</caption>
+            <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Email</th>
+                    <th scope="col" class="govuk-table__header">What they can do</th>
                     @if (Model.Data.IsUser)
                     {
-                        <th><span class="vh">Action</span></th>
+                        <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Action</span></th>
                     }
-                    </tr>
+                </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td data-label="Email">@Model.Data.Email</td>
-                    <td data-label="What they can do">@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
+            <tbody class="govuk-table__body">
+                <tr class="govuk-table__row">
+                    <td class="govuk-table__cell" data-label="Email">@Model.Data.Email</td>
+                    <td class="govuk-table__cell" data-label="What they can do">@RoleStrings.GetRoleDescription(@Model.Data.Role)</td>
                     @if (Model.Data.IsUser)
                     {
-                        <td class="link-right">
-                            <a href="@Url.Action("ChangeRole","EmployerTeam", new { Model.Data.Email })">Change <span class="vh">role for @Model.Data.Name</span></a>
+                        <td class="govuk-table__cell govuk-table__cell--numeric">
+                            <a href="@Url.Action("ChangeRole","EmployerTeam", new { Model.Data.Email })"
+                               class="govuk-link" aria-label="Change details for @Model.Data.Name" title="Change details for @Model.Data.Name">
+                                Change<span class="govuk-visually-hidden"> role for @Model.Data.Name</span>
+                            </a>
                         </td>
                     }
                 </tr>
@@ -48,30 +55,29 @@
 
         @if (@Model.Data.Status == InvitationStatus.Pending || @Model.Data.Status == InvitationStatus.Expired)
         {
-            <div class="form-group">
+            <div class="govuk-form-group">
                 <form action="@Url.Action("Resend")" method="POST">
                     @Html.AntiForgeryToken()
                     <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
                     <input type="hidden" id="Name" name="Name" value="@Model.Data.Name" />
-                    <button type="submit" class="button" id="resend_invitation">Resend Invitation</button>
+                    <button type="submit" id="resend_invitation" class="govuk-button">Resend Invitation</button>
                 </form>
-                <a href="@Url.Action("Cancel", "EmployerTeam",new {email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="button button-link">Cancel Invitation</a>
 
+                <a href="@Url.Action("Cancel", "EmployerTeam",new {email = Model.Data.Email, invitationId = Model.Data.HashedInvitationId })" class="govuk-button">Cancel Invitation</a>
             </div>
         }
         @if (@Model.Data.IsUser)
         {
             <form action="@Url.Action("Remove")" method="GET">
                 <input type="hidden" id="Email" name="Email" value="@Model.Data.Email" />
-                <button type="submit" class="button" id="delete_user">Remove team member</button>
+                <button type="submit" id="delete_user" class="govuk-button">Remove team member</button>
             </form>
-
         }
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="back-link">Back to your team</a>
+    <div class="govuk-breadcrumbs">
+        <a href="@Url.Action("ViewTeam", "EmployerTeam")" class="govuk-back-link">Back to your team</a>
     </div>
 }

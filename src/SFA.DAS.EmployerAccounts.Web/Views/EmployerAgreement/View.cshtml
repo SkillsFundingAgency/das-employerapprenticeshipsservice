@@ -22,29 +22,29 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <table class="govuk-table">
+        <table class="govuk-table das-table--responsive">
             <tbody class="govuk-table__body">
                 <tr>
-                    <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">Accepted by:</span>
+                    <th scope="row" class="govuk-table__header" data-label="Accepted by">
+                        <span class="das-no-wrap">Accepted by:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.SignedByName</td>
                 </tr>
                 <tr>
-                    <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">On behalf of:</span>
+                    <th scope="row" class="govuk-table__header" data-label="On behalf of">
+                        <span class="das-no-wrap">On behalf of:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.LegalEntityName</td>
                 </tr>
                 <tr>
-                    <th scope="row" class="govuk-table__header">Address:</th>
+                    <th scope="row" class="govuk-table__header" data-label="Address">Address:</th>
                     <td class="govuk-table__cell">
                         <span class="table-address">@Model.EmployerAgreement.LegalEntityAddress</span>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row" class="govuk-table__header">
-                        <span class="no-wrap">Accepted on:</span>
+                    <th scope="row" class="govuk-table__header" data-label="Accepted on">
+                        <span class="das-no-wrap">Accepted on:</span>
                     </th>
                     <td class="govuk-table__cell">@Model.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</td>
                 </tr>

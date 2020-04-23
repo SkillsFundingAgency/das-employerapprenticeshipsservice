@@ -5,62 +5,72 @@
     ViewBag.Section = "organisations";
     ViewBag.PageID = "update-organisation-details";
 }
-<div class="grid-row">
-    <div class="column-two-thirds">
-        <h1 class="heading-xlarge">Review your details</h1>
-        <p>Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.</p>
 
-        <div class="form-group">
-            <table class="details-list">
-                <tbody>
-                    <tr>
-                        <td>Information from</td>
-                        <td>@Model.Data.DataSourceFriendlyName</td>
-                    </tr>
-                    <tr>
-                        <td>Organisation name</td>
-                        <td>@Model.Data.RefreshedName</td>
-                    </tr>
-                    <tr>
-                        <td>Organisation address</td>
-                        <td>@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</td>
-                    </tr>
-                </tbody>
-            </table>
+@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
-            <div class="panel panel-border-wide">
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-xl">Review your details</h1>
+
+        <p class="govuk-body">Here are the most up-to-date details we found for your organisation. These details are the same as those previously held.</p>
+
+        <div class="govuk-form-group">
+            <dl class="das-definition-list das-definition-list--table das-definition-list--table">
+                <dt class="das-definition-list__title das-definition-list__title--spacer">Information from</dt>
+                <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.Data.DataSourceFriendlyName</dd>
+
+                <dt class="das-definition-list__title das-definition-list__title--spacer">Organisation name</dt>
+                <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Model.Data.RefreshedName</dd>
+
+                <dt class="das-definition-list__title das-definition-list__title--spacer">Organisation address</dt>
+                <dd class="das-definition-list__definition das-definition-list__definition--spacer">@Html.CommaSeperatedAddressToHtml(@Model.Data.RefreshedAddress)</dd>
+            </dl>
+
+            <div class="govuk-inset-text">
                 If these details are incorrect, you need to update them at @Model.Data.DataSourceFriendlyName. This update can take up to 7 working days to process.
             </div>
 
-            <p>If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")">contact support</a> for further help.</p>
-
-            <form action="@Url.Action("GoToPostUpdateSelection", "Organisation")" method="post">
-                <div class="form-group">
-                    <h2 class="heading-large">
-                        What's next?
-                    </h2>
-
-                    <div class="multiple-choice">
-                        <input type="radio" name="nextStep" value="dashboard" />
-                        <label for="acceptAgreement">Go to your organisations and agreements</label>
-                    </div>
-                    <div class="multiple-choice">
-                        <input type="radio" name="nextStep" value="homepage" />
-                        <label for="teamMembers">Go to the homepage</label>
-                    </div>
-                </div>
-                <button type="submit" class="button">Continue</button>
-            </form>
+            <p class="govuk-body">If you have done this and the updated information is still not displayed here, please <a href="@Url.Action("Help", "Home")" class="govuk-link govuk-link--no-visited-state">contact support</a> for further help.</p>
         </div>
-    </div>
 
+        <form action="@Url.Action("GoToPostUpdateSelection", "Organisation")" method="post">
+            <div class="govuk-form-group">
+                <fieldset class="govuk-fieldset">
+
+                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+                        <h1 class="govuk-fieldset__heading">What's next?</h1>
+                    </legend>
+
+                    <div class="govuk-radios">
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" id="review-opt-1" name="nextStep" value="dashboard">
+                            <label class="govuk-label govuk-radios__label" for="review-opt-1">
+                                Go to your organisations and agreements
+                            </label>
+                        </div>
+                        <div class="govuk-radios__item">
+                            <input class="govuk-radios__input" type="radio" id="review-opt-2" name="nextStep" value="homepage">
+                            <label class="govuk-label govuk-radios__label" for="review-opt-2">
+                                Go to the homepage
+                            </label>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+
+            <div class="govuk-form-group govuk-!-margin-top-5">
+                <button type="submit" class="govuk-button">Continue</button>
+            </div>
+        </form>
+
+    </div>
 </div>
 
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="@Url.Action("Index", "EmployerAgreement")" class="back-link">Back to your organisations</a></li>
-        </ol>
+    <div class="govuk-breadcrumbs">
+        <a href="@Url.Action("Index", "EmployerAgreement")" class="govuk-back-link">Back to your organisations</a>
     </div>
 }

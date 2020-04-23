@@ -69,6 +69,7 @@
     <Folder Include="Scripts\PreDeployment" />
     <Folder Include="Scripts\Manual" />
     <Folder Include="Functions" />
+    <Folder Include="Snapshots" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="StoredProcedures\Cleardown.sql" />
@@ -165,6 +166,7 @@
     <None Include="Scripts\PostDeployment\AML-3762-EOI-API.sql" />
     <None Include="Scripts\Manual\AML-3655_GenerateFinanceDataInserts.sql" />
     <None Include="Scripts\PostDeployment\UpdateAgreementTemplateV3.sql" />
+    <None Include="Snapshots\SFA.DAS.EAS.Employer_Account.Database_20200221_14-24-22.dacpac" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />
