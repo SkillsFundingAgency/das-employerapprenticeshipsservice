@@ -14,11 +14,13 @@
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string AmendOrganisationActionName = "AmendOrganisation";
         public const string AmendPayeActionName = "AmendPaye";
+        public const string CannotRemoveOrganisationViewName = "CannotRemoveOrganisation";
         public const string CodeKeyName = "code";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
+        public const string ConfirmRemoveOrganisationViewName = "ConfirmRemoveOrganisation";
         public const string DetailsActionName = "Details";
         public const string EmailClaimKeyName = "email";      
         public const string EmployerAccountControllerName = "EmployerAccount";
@@ -57,6 +59,7 @@
         public const string RegisterUserActionName = "RegisterUser";
         public const string RenameAccountActionName = "RenameAccount";
         public const string RemoveViewName = "Remove";
+        public const string RemoveOrganisationActionName = "ConfirmRemoveOrganisation";
         public const string ReportTrainingProviderViewName = "ReportTrainingProvider";
         public const string SearchOrganisationControllerName = "SearchOrganisation";
         public const string SearchForOrganisationActionName = "SearchForOrganisation";
@@ -100,5 +103,6 @@
         public const string ViewApprentice = "ViewApprentice";
         public const string ApproveOrRejectApprentice = "ApproveOrRejectApprentice";
         public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
+        public const string ViewAllAgreementActionName = "ViewAllAgreements";
     }
 }

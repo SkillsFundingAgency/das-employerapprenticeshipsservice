@@ -6,13 +6,13 @@ using SFA.DAS.Authorization;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreementRemove
 {
     public class WhenIValidateTheQuery
     {
-        private GetAccountEmployerAgreementRemoveValidator _validator;
+        private GetAccountLegalEntityRemoveValidator _validator;
         private Mock<IMembershipRepository> _membershipRepository;
 
         [SetUp]
@@ -21,20 +21,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
             _membershipRepository = new Mock<IMembershipRepository>();
             _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(new MembershipView { Role = Role.Owner });
 
-            _validator = new GetAccountEmployerAgreementRemoveValidator(_membershipRepository.Object);
+            _validator = new GetAccountLegalEntityRemoveValidator(_membershipRepository.Object);
         }
 
         [Test]
         public async Task ThenFalseIsReturnedAndTheDictionaryIsPopulatedIfNoValuesAreSupplied()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementRemoveRequest());
+            var actual = await _validator.ValidateAsync(new GetAccountLegalEntityRemoveRequest());
 
             //Assert
             Assert.IsFalse(actual.IsValid());
             Assert.Contains(new KeyValuePair<string, string>("HashedAccountId", "HashedAccountId has not been supplied"), actual.ValidationDictionary);
             Assert.Contains(new KeyValuePair<string, string>("UserId", "UserId has not been supplied"), actual.ValidationDictionary);
-            Assert.Contains(new KeyValuePair<string, string>("HashedAgreementId", "HashedAgreementId has not been supplied"), actual.ValidationDictionary);
+            Assert.Contains(new KeyValuePair<string, string>("HashedAccountLegalEntityId", "HashedAccountLegalEntityId has not been supplied"), actual.ValidationDictionary);
             _membershipRepository.Verify(x => x.GetCaller(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
         }
 
@@ -43,7 +43,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         {
             //Act
             _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(() => null);
-            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987", HashedAgreementId = "546TGF"});
+            var actual = await _validator.ValidateAsync(new GetAccountLegalEntityRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987", HashedAccountLegalEntityId = "546TGF"});
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
@@ -56,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
             _membershipRepository.Setup(x => x.GetCaller("ABC123", "XYZ987")).ReturnsAsync(new MembershipView { Role = Role.Viewer });
 
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987", HashedAgreementId = "546TGF" });
+            var actual = await _validator.ValidateAsync(new GetAccountLegalEntityRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987", HashedAccountLegalEntityId = "546TGF" });
 
             //Assert
             Assert.IsTrue(actual.IsUnauthorized);
@@ -66,7 +66,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetAccountEmployerAgreement
         public async Task ThenIfAllFieldsArePopulatedAndTheUserIsAnOWnerOfTheAccountTrueIsReturned()
         {
             //Act
-            var actual = await _validator.ValidateAsync(new GetAccountEmployerAgreementRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987", HashedAgreementId = "546TGF" });
+            var actual = await _validator.ValidateAsync(new GetAccountLegalEntityRemoveRequest { HashedAccountId = "ABC123", UserId = "XYZ987", HashedAccountLegalEntityId = "546TGF" });
 
             //Assert
             Assert.IsTrue(actual.IsValid());

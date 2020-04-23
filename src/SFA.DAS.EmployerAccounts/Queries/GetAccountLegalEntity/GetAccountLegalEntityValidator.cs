@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiy
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity
 {
     public class GetAccountLegalEntityValidator : IValidator<GetAccountLegalEntityRequest>
     {

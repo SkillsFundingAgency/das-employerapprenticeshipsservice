@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.Organisation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiy
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity
 {
     public class GetAccountLegalEntityResponse
     {

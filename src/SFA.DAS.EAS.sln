@@ -165,7 +165,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerAccounts.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerAccounts.Api.IntegrationTests", "SFA.DAS.EmployerAccounts.Api.IntegrationTests\SFA.DAS.EmployerAccounts.Api.IntegrationTests.csproj", "{BD68EB2C-A486-42B2-8685-776B164FD860}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.EmployerFinance.MessageHandlers.TestHarness", "SFA.DAS.EmployerFinance.MessageHandlers.TestHarness\SFA.DAS.EmployerFinance.MessageHandlers.TestHarness.csproj", "{73080F2E-1875-4DBC-BE84-381E2FD603D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.EmployerFinance.MessageHandlers.TestHarness", "SFA.DAS.EmployerFinance.MessageHandlers.TestHarness\SFA.DAS.EmployerFinance.MessageHandlers.TestHarness.csproj", "{73080F2E-1875-4DBC-BE84-381E2FD603D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

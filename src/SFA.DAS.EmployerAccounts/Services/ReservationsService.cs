@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 
 namespace SFA.DAS.EmployerAccounts.Services
-{    
+{
     public class ReservationsService : IReservationsService
     {
         private readonly IReservationsApiClient _client;

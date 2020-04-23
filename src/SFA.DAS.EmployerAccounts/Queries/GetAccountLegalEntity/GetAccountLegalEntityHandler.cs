@@ -4,7 +4,7 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiy
+namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity
 {
     public class GetAccountLegalEntityHandler : IAsyncRequestHandler<GetAccountLegalEntityRequest, GetAccountLegalEntityResponse>
     {
