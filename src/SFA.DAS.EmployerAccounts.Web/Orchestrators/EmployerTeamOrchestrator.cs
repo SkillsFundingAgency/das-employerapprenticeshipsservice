@@ -14,16 +14,13 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
-using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
-using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
-using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -33,187 +30,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
 using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
-{   
-
-    public class AccountContext
-    {
-        public string HashedAccountId { get; set; }
-        public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
-    }
-
-    public class EmployerTeamOrchestratorWithCallToAction : EmployerTeamOrchestrator
-    {
-        private const string AccountContextCookieName = "sfa-das-employerapprenticeshipsservice-accountcontext";
-        private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly ICookieStorageService<AccountContext> _accountContext;
-        private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
-
-        public EmployerTeamOrchestratorWithCallToAction(
-            EmployerTeamOrchestrator employerTeamOrchestrator,
-            IMediator mediator,
-            ICurrentDateTime currentDateTime,
-            IAccountApiClient accountApiClient,
-            IMapper mapper,
-            IAuthorizationService authorizationService,            
-            ICookieStorageService<AccountContext> accountContext) 
-            : base(mediator, currentDateTime, accountApiClient, mapper, authorizationService)
-        {
-            _employerTeamOrchestrator = employerTeamOrchestrator;
-            _accountContext = accountContext;
-            _mediator = mediator;
-            _mapper = mapper;
-        }
-
-        public override async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccount(string hashedAccountId, string externalUserId)
-        {
-            var accountResponseTask = _employerTeamOrchestrator.GetAccount(hashedAccountId, externalUserId);
-
-            if (TryGetAccountContext(hashedAccountId, out AccountContext accountContext))
-            {
-                if (accountContext.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy)
-                {
-                    var levyResponse = await accountResponseTask;
-                    SaveContext(levyResponse);
-                    return levyResponse;
-                }
-            }
-
-            // here we are either non levy or unknown caller context            
-            var callToActionResponse = await GetCallToAction(hashedAccountId, externalUserId);
-            var accountResponse = await accountResponseTask;
-            if (accountResponse.Status == HttpStatusCode.OK && callToActionResponse.Status == HttpStatusCode.OK)
-            {
-                accountResponse.Data.CallToActionViewModel = callToActionResponse.Data;
-                accountResponse.Data.CallToActionViewModel.AgreementsToSign = accountResponse.Data.RequiresAgreementSigning > 0;
-            }
-
-            SaveContext(accountResponse);
-            return accountResponse;
-        }
-
-        private void SaveContext(OrchestratorResponse<AccountDashboardViewModel> orchestratorResponse)
-        {
-            if (orchestratorResponse.Status == HttpStatusCode.OK)
-            {
-                _accountContext.Delete(AccountContextCookieName);
-
-                _accountContext.Create(
-                    new AccountContext
-                    {
-                        HashedAccountId = orchestratorResponse.Data.HashedAccountId,
-                        ApprenticeshipEmployerType = orchestratorResponse.Data.ApprenticeshipEmployerType
-                    }
-                , AccountContextCookieName);
-            }
-        }
-
-        private bool TryGetAccountContext(string hashedAccountId, out AccountContext accountContext)
-        {
-            if (_accountContext.Get(AccountContextCookieName) is AccountContext accountCookie)
-            {
-                if (accountCookie.HashedAccountId.Equals(hashedAccountId, StringComparison.InvariantCultureIgnoreCase))
-                {
-                    accountContext = accountCookie;
-                    return true;
-                }
-            }
-
-            accountContext = null;
-            return false;
-        }
-
-        private async Task<OrchestratorResponse<CallToActionViewModel>> GetCallToAction(string hashedAccountId, string externalUserId)
-        {
-            try
-            {
-                var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var vacanciesResponseTask = _mediator.SendAsync(new GetVacanciesRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                await Task.WhenAll(reservationsResponseTask, vacanciesResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask).ConfigureAwait(false);
-
-                var reservationsResponse = reservationsResponseTask.Result;
-                var vacanciesResponse = vacanciesResponseTask.Result;
-                var apprenticeshipsResponse = apprenticeshipsResponseTask.Result;
-                var accountCohortResponse = accountCohortResponseTask.Result;
-
-                var viewModel = new CallToActionViewModel
-                {
-                    //AgreementsToSign = pendingAgreements.Count() > 0,
-                    Reservations = reservationsResponse.Reservations?.ToList(),
-                    VacanciesViewModel = vacanciesResponse.HasFailed ? new VacanciesViewModel() : new VacanciesViewModel
-                    {
-                        VacancyCount = vacanciesResponse.Vacancies.Count(),
-                        Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
-                    },
-                    Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),
-                    Cohorts = new List<CohortViewModel>
-                    {
-                        _mapper.Map<Cohort, CohortViewModel>(accountCohortResponse.Cohort)
-                    },
-                    UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed || accountCohortResponse.HasFailed || apprenticeshipsResponse.HasFailed
-                };
-
-                return new OrchestratorResponse<CallToActionViewModel>
-                {
-                    Status = HttpStatusCode.OK,
-                    Data = viewModel
-                };
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                return new OrchestratorResponse<CallToActionViewModel>
-                {
-                    Status = HttpStatusCode.Unauthorized,
-                    Exception = ex
-                };
-            }
-            catch (System.Net.Http.HttpRequestException ex)
-            {
-                return new OrchestratorResponse<CallToActionViewModel>
-                {
-                    Status = HttpStatusCode.InternalServerError,
-                    Exception = new ResourceNotFoundException($"An error occured whilst trying to retrieve account CallToAction: {hashedAccountId}", ex)
-                };
-            }
-            catch (Exception ex)
-            {
-                return new OrchestratorResponse<CallToActionViewModel>
-                {
-                    Status = HttpStatusCode.InternalServerError,
-                    Exception = ex
-                };
-            }
-        }
-    }
-
+{
     public class EmployerTeamOrchestrator : UserVerificationOrchestratorBase
     {
         private readonly IMediator _mediator;
@@ -499,13 +321,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
 
-
             return new OrchestratorResponse<TeamMember>
             {
                 Status = response.TeamMember.AccountId == 0 ? HttpStatusCode.NotFound : HttpStatusCode.OK,
                 Data = response.TeamMember
             };
-
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId, string userId)
@@ -796,14 +616,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if(viewModel.Data.CallToActionViewModel == null)
-            {
-                return;
-            }
-
             var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
             rules.Add(100, EvalutateSignAgreementCallToActionRule);
-            rules.Add(101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction);
+            rules.Add(101, vm => viewModel.Data.CallToActionViewModel == null);
 
             if (viewModel.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.NonLevy)
             {
@@ -814,8 +629,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(124, EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule);
                 rules.Add(200, EvalutateSingleReservationCallToActionRule);
                 rules.Add(201, EvalutateHasReservationsCallToActionRule);
-
-
+                
                 rules.Add(150, EvalutateDraftVacancyCallToActionRule);
                 rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
                 rules.Add(152, EvalutateLiveVacancyCallToActionRule);
@@ -928,7 +742,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
+            if (viewModel.Data.CallToActionViewModel != null && viewModel.Data.CallToActionViewModel.AgreementsToSign)
             {
                 viewModel.ViewName = "SignAgreement";
                 return true;
@@ -1014,8 +828,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             return false;
         }
-
-
+        
         private bool EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1

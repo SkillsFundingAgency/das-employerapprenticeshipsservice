@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -42,13 +43,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenTheSignAgreementViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel
             {
-                AgreementsToSign = true
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = true
+                }
             };
-            
+
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
@@ -61,11 +64,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenTheTasksViewIsReturnedAtRow1Panel2()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel
             {
-                AgreementsToSign = true
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = true
+                }
             };
 
             //Act
@@ -80,11 +85,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenTheDashboardViewIsReturnedAtRow2Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel
             {
-                AgreementsToSign = true
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = true
+                }
             };
 
             //Act
@@ -99,11 +106,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenTheEmptyViewIsReturnedAtRow2Panel2()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel
             {
-                AgreementsToSign = true
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = true
+                }
             };
 
             //Act

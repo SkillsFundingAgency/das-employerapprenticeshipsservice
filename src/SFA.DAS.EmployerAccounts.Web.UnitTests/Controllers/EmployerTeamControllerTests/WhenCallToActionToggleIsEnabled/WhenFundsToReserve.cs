@@ -69,17 +69,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
+            var model = new AccountDashboardViewModel
             {
-                AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
-                VacanciesViewModel = new VacanciesViewModel()
+                PayeSchemeCount = 1,
+                CallToActionViewModel = new CallToActionViewModel
+                {
+                    AgreementsToSign = false,
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
+                    VacanciesViewModel = new VacanciesViewModel()
+                },
+
+                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };
-            
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            
+
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
