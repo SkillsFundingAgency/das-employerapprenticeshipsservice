@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Commands.ChangeTeamMemberRole;
@@ -33,9 +32,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
@@ -47,27 +43,24 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
     {
         private readonly IMediator _mediator;
         private readonly ICurrentDateTime _currentDateTime;
-        private readonly IAccountApiClient _accountApiClient;       
+        private readonly IAccountApiClient _accountApiClient;
         private readonly IMapper _mapper;
-        private readonly IAuthorizationService _authorizationService;
 
         public EmployerTeamOrchestrator(IMediator mediator,
             ICurrentDateTime currentDateTime,
-            IAccountApiClient accountApiClient,           
-            IMapper mapper,
-            IAuthorizationService authorizationService)
+            IAccountApiClient accountApiClient,
+            IMapper mapper)
             : base(mediator)
         {
             _mediator = mediator;
             _currentDateTime = currentDateTime;
-            _accountApiClient = accountApiClient;            
+            _accountApiClient = accountApiClient;
             _mapper = mapper;
-            _authorizationService = authorizationService;
         }
-
-        //Needed for tests
+        //Needed for tests	
         protected EmployerTeamOrchestrator()
         {
+            
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> Cancel(string email, string hashedAccountId, string externalUserId)
@@ -202,8 +195,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest 
-                { 
+                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest
+                {
                     HashedAccountId = hashedAccountId,
                     ExternalUserId = externalUserId
                 });
@@ -227,7 +220,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 var accountCohort = accountCohortResponseTask.Result;
                 var apprenticeshipsResponse = apprenticeshipsResponseTask.Result;
 
-                var apprenticeshipEmployerType = (Common.Domain.Types.ApprenticeshipEmployerType)Enum.Parse(typeof(Common.Domain.Types.ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
+                var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
                 var tasksResponse = await _mediator.SendAsync(new GetAccountTasksQuery
                 {
@@ -849,9 +842,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private bool EvaluateSingleApprenticeshipDraftStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
-                && viewModel.Data.CallToActionViewModel.CohortsCount == 1 
+                && viewModel.Data.CallToActionViewModel.CohortsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single() != null
-                && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0                
+                && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single().HasSingleDraftApprenticeship.Equals(true)
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.Draft))
@@ -898,14 +891,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 viewModel.Data.HideTasksBar = true;
                 return true;
             }
-            
+
             return false;
         }
 
         private bool EvaluateSingleApprenticeshipsWithReadyToReviewStatusCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.ReservationsCount == 1
-                && viewModel.Data.CallToActionViewModel.CohortsCount  == 1
+                && viewModel.Data.CallToActionViewModel.CohortsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single() != null
                 && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0
                 && viewModel.Data.CallToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1
@@ -917,7 +910,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 viewModel.Data.HideTasksBar = true;
                 return true;
             }
-       
+
             return false;
         }
     }

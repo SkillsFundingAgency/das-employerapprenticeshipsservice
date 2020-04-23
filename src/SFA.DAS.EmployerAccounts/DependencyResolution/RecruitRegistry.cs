@@ -9,6 +9,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
         public RecruitRegistry()
         {
             For<IRecruitService>().Use<RecruitService>();
+            For<IRecruitService>().DecorateAllWith<RecruitServiceWithTimeout>();
         }
     }
 }
