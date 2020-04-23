@@ -35,7 +35,6 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
 
             For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();
 
-            //For<IEmployerTeamOrchestrator>().Use(c => c.GetInstance<EmployerTeamOrchestrator>());
             For<EmployerTeamOrchestrator>().DecorateAllWith<EmployerTeamOrchestratorWithCallToAction>();
         }
     }
