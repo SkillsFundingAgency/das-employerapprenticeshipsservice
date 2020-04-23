@@ -33,8 +33,6 @@ namespace SFA.DAS.EmployerAccounts.Web.DependencyResolution
            .Ctor<IAuthorizationContextProvider>().Is(authorizationContextProvider);
             For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();
 
-            For<IDefaultAuthorizationHandler>().Use<Authorization.DefaultAuthorizationHandler>();
-
             For<EmployerTeamOrchestrator>().DecorateAllWith<EmployerTeamOrchestratorWithCallToAction>();
         }
     }
