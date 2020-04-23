@@ -53,4 +53,10 @@
     </AssemblyAttribute>
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="NServiceBus.Core">
+      <HintPath>..\..\..\..\..\..\..\Users\Shoma.Gujjar\.nuget\packages\nservicebus\7.0.1\lib\net452\NServiceBus.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

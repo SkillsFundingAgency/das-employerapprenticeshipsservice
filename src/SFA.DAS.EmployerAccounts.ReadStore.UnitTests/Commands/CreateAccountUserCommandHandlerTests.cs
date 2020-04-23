@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
+using NServiceBus.Logging;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
 using SFA.DAS.EmployerAccounts.ReadStore.Application.Commands;
@@ -117,7 +118,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             UserRolesRepository = new Mock<IAccountUsersRepository>();
             UserRolesRepository.SetupInMemoryCollection(Users);
 
-            Handler = new CreateAccountUserCommandHandler(UserRolesRepository.Object);
+            Handler = new CreateAccountUserCommandHandler(UserRolesRepository.Object, Mock.Of<ILog>());
 
             Command = new CreateAccountUserCommand(AccountId, UserRef, NewRole, MessageId, Created);
         }

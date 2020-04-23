@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SFA.DAS.EmployerAccounts.Web.Exceptions
+namespace SFA.DAS.EmployerAccounts.ReadStore.Exceptions
 {
     [Serializable]
     public class UserNotRemovedException : Exception
