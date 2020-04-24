@@ -49,7 +49,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
 
             var accountLegalEntityId = _accountLegalEntityPublicHashingService.DecodeValue(message.AccountLegalEntityHashedId);
 
-            var accountLegalEntity = await _employerAgreementRepository.GetOrganisationsAgreements(accountLegalEntityId);
+            var accountLegalEntity = await _employerAgreementRepository.GetOrganisationsAgreements(accountLegalEntityId);            
+
             if (accountLegalEntity == null) return new GetOrganisationAgreementsResponse();
 
             var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(accountLegalEntity.LegalEntity.Source);
@@ -69,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
                     });
                 });
 
-            return new GetOrganisationAgreementsResponse { Agreements = agreements };
+            return new GetOrganisationAgreementsResponse { Agreements = agreements.OrderByDescending(a => a.TemplateId).ToList() };
         }
     }
 }

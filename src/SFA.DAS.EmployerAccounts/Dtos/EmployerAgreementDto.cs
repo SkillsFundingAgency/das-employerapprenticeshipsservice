@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Dtos
         public string HashedAgreementId { get; set; }
         public string HashedAccountId { get; set; }
         public string HashedLegalEntityId { get; set; }
-        public bool OrganisationLookupPossible { get; set; }        
+        public bool OrganisationLookupPossible { get; set; }
+        public  int TemplateId { get; set; }
     }
 }
