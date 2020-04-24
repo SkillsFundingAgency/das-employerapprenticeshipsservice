@@ -42,18 +42,18 @@
 
                     @if (!string.IsNullOrEmpty(Model.Data.EmailError))
                     {
-                        <span id="error-message-email" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error: </span>@Model.Data.EmailError
-                        </span>
+                    <span id="error-message-email" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error: </span>@Model.Data.EmailError
+                    </span>
                     }
                     @if (!string.IsNullOrEmpty(Model.Data.ExistingMemberError))
                     {
-                        <span id="error-message-email" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error: </span>@Model.Data.ExistingMemberError
-                        </span>
+                    <span id="error-message-email" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error: </span>@Model.Data.ExistingMemberError
+                    </span>
                     }
 
-                    <input class="govuk-input" id="Email" name="Email" type="text" aria-describedby="email-hint @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? " error-message-email" : "")" aria-required="true" value="@Model.Data.Email">
+                    <input class="govuk-input@(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? " govuk-input--error" : "")" id="Email" name="Email" type="text" aria-describedby="email-hint @(!string.IsNullOrEmpty(Model.Data.EmailError) || !string.IsNullOrEmpty(Model.Data.ExistingMemberError) ? " error-message-email" : "")" aria-required="true" value="@Model.Data.Email">
                 </div>
 
                 <div class="govuk-form-group@(!string.IsNullOrEmpty(Model.Data.NameError) ? " govuk-form-group--error" : "")">
@@ -63,12 +63,12 @@
 
                     @if (!string.IsNullOrEmpty(Model.Data.NameError))
                     {
-                        <span id="error-message-name" class="govuk-error-message">
-                            <span class="govuk-visually-hidden">Error: </span>@Model.Data.NameError
-                        </span>
+                    <span id="error-message-name" class="govuk-error-message">
+                        <span class="govuk-visually-hidden">Error: </span>@Model.Data.NameError
+                    </span>
                     }
 
-                    <input class="govuk-input" id="Name" name="Name" type="text" @(!string.IsNullOrEmpty(Model.Data.NameError) ? " aria-describedby=error-message-name " : "")
+                    <input class="govuk-input@(!string.IsNullOrEmpty(Model.Data.NameError) ? " govuk-input--error" : "")" id="Name" name="Name" type="text" @(!string.IsNullOrEmpty(Model.Data.NameError) ? " aria-describedby=error-message-name " : "")
                            aria-required="true" value="@Model.Data.Name">
                 </div>
             </fieldset>
@@ -84,7 +84,7 @@
 
                 @if (!string.IsNullOrEmpty(Model.Data.RoleError))
                 {
-                    <span class="govuk-error-message" id="error-message-role">@Model.Data.RoleError</span>
+                <span class="govuk-error-message" id="error-message-role">@Model.Data.RoleError</span>
                 }
                 <div class="govuk-radios">
                     <div class="govuk-radios__item">
