@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
 using SFA.DAS.EAS.Web.ViewModels;
 
@@ -10,6 +11,13 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{hashedaccountId}/apprentices")]
     public class EmployerCommitmentsController : Controller
     {
+        private readonly EmployerApprenticeshipsServiceConfiguration _easConfig;
+
+        public EmployerCommitmentsController(EmployerApprenticeshipsServiceConfiguration easConfig) : base()
+        {
+            _easConfig = easConfig;
+        }
+
         [HttpGet]
         [Route("home", Name = "CommitmentsHome")]
         [Route("cohorts/review")]
@@ -112,9 +120,9 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName].EndsWith("/")
-                ? ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName]
-                : ConfigurationManager.AppSettings[ControllerConstants.EmployerCommitmentsBaseUrlKeyName] + "/";
+            var baseUrl = _easConfig.EmployerCommitmentsBaseUrl.EndsWith("/")
+                ? _easConfig.EmployerCommitmentsBaseUrl
+                : _easConfig.EmployerCommitmentsBaseUrl + "/";
 
             var path = Request.Url.AbsolutePath;
 

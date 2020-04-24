@@ -1,5 +1,4 @@
-﻿using SFA.DAS.EmployerAccounts.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels

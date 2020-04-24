@@ -5,17 +5,11 @@
 
 @{
     var culture = new CultureInfo("en-GB");
-    ViewBag.PageID = "page-course-payment-details";
+    ViewBag.PageID = "course-payment-summary";
     ViewBag.Title = "Payment: apprentice details";
     ViewBag.Section = "finance";
-
+    ViewBag.AnalyticsData.Vpv = $"/finance/{ViewBag.PageID}";
 }
-
-@*
-    Uncomment this line when the GaData handling branch is merged
-    @{
-        ViewBag.GaData.Vpv = "/accounts/balance/levyDeclaration/page-transaction-details";
-    }*@
 
 <div class="grid-row">
     <div class="column-two-thirds">

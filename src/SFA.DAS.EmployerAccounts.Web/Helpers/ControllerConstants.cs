@@ -57,6 +57,7 @@
         public const string RegisterUserActionName = "RegisterUser";
         public const string RenameAccountActionName = "RenameAccount";
         public const string RemoveViewName = "Remove";
+        public const string ReportTrainingProviderViewName = "ReportTrainingProvider";
         public const string SearchOrganisationControllerName = "SearchOrganisation";
         public const string SearchForOrganisationActionName = "SearchForOrganisation";
         public const string SearchForOrganisationViewName = "SearchForOrganisation";
@@ -73,6 +74,7 @@
         public const string SignOutActionName = "SignOut";
         public const string SkipRegistrationActionName = "SkipRegistration";
         public const string SummaryActionName = "Summary";
+        public const string UnsubscribedViewName = "Unsubscribed";
         public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
@@ -83,6 +85,10 @@
         public const string Settings = "Settings";
         public const string Details = "Details";
         public const string CookieConsent = "CookieConsent";
-        public const string Tier2UserClaim = "Tier2User";        
+        public const string Tier2UserClaim = "Tier2User";
+        public const string EditApprentice = "EditApprentice";
+        public const string ViewApprentice = "ViewApprentice";
+        public const string ApproveOrRejectApprentice = "ApproveOrRejectApprentice";
+        public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
     }
 }

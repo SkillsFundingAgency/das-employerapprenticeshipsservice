@@ -1,0 +1,41 @@
+﻿@using SFA.DAS.EmployerAccounts.Web.Extensions
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.ApprenticeshipViewModel
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large" id="call-to-action-continue-setting-up-an-apprenticeship">
+        Continue setting up an apprenticeship
+    </h2>
+    <p>You've added the following details:</p>
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Course
+            </th>
+            <td class="tw-65" id="course-name">                 
+                @(Model?.CourseName)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Training Provider
+            </th>
+            <td id="training-provider">                
+                @(Model?.TrainingProvider?.Name)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td  id="draft">
+                <span class="govuk-tag govuk-tag--inactive">DRAFT</span>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@Url.EmployerCommitmentsV2Action($"{Model.ViewOrEditApprenticeDetailsLink}")" role="button" draggable="false" class="button">
+            Add more details
+        </a>
+    </p>
+</section>
+

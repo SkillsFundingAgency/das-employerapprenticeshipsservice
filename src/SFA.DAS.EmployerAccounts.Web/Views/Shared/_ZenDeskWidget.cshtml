@@ -19,18 +19,7 @@
         }
     };
 </script>
-
 <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=@Html.GetZenDeskSnippetKey()"></script>
+@Html.SetZenDeskLabels(new string[] { ViewBag.ZenDeskLabel })
 
-@Html.SetZenDeskLabels(!string.IsNullOrWhiteSpace(ViewBag.Title) ? new[] {$"reg-{ViewBag.Title}"} : new string[] {ViewBag.ZenDeskLabel});
-
-<script type="text/javascript">
-    zE(function() {
-        zE.identify({
-            name: '@ViewBag.GaData.UserName',
-            email: '@ViewBag.GaData.UserEmail',
-            organization: '@ViewBag.GaData.Acc'
-        });
-    });
-</script>
 

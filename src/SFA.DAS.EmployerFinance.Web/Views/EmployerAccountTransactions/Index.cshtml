@@ -6,10 +6,10 @@
 @model OrchestratorResponse<FinanceDashboardViewModel>
 
 @{
-    ViewBag.PageID = "page-finance";
+    ViewBag.PageID = "finance";
     ViewBag.Section = "finance";
     ViewBag.Title = "Finance";
-    ViewBag.GaData.Vpv = "/accounts/finance";
+    ViewBag.AnalyticsData.Vpv = $"/finance/home";
     ViewBag.ZenDeskLabel = "eas-finance";
 
     var culture = new CultureInfo("en-GB");

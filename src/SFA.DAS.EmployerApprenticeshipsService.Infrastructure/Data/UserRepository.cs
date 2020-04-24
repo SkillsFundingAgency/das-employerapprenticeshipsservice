@@ -32,9 +32,10 @@ namespace SFA.DAS.EAS.Infrastructure.Data
                 parameters.Add("@userRef", new Guid(user.UserRef), DbType.Guid);
                 parameters.Add("@firstName", user.FirstName, DbType.String);
                 parameters.Add("@lastName", user.LastName, DbType.String);
+                parameters.Add("@correlationId", null, DbType.String);
 
                 return c.ExecuteAsync(
-                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName",
+                    sql: "[employer_account].[UpsertUser] @userRef, @email, @firstName, @lastName, @correlationId",
                     param: parameters,
                     commandType: CommandType.Text);
             });
