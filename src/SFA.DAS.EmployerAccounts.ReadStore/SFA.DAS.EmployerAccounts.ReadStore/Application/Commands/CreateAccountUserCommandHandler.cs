@@ -36,12 +36,14 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Application.Commands
                     user.Recreate(request.Role, request.Created, request.MessageId);
                     await _accountUsersRepository.Update(user, null, cancellationToken);
                 }
+                return Unit.Value;
             }
             catch (UserNotRemovedException exception)
             {
                 _logger.LogWarning("User has not been removed", exception);
+                throw;
             }
-            return Unit.Value;
+            
         }
     }
 }

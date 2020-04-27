@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
 using Microsoft.Extensions.Logging;
+using SFA.DAS.EmployerAccounts.ReadStore.Exceptions;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 {
@@ -47,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestExceptionAsync(f => f.AddMatchingUser(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f, r) => r.ShouldThrow<InvalidOperationException>());
+                (f, r) => r.ShouldThrow<UserNotRemovedException>());
         }
 
         [Test]
@@ -93,7 +94,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         {
             return TestExceptionAsync(f => f.AddMatchingViewUserWhichWasCreatedEarlierThanNewMessage(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f, r) => r.ShouldThrow<InvalidOperationException>());
+                (f, r) => r.ShouldThrow<UserNotRemovedException>());
         }
     }
 
