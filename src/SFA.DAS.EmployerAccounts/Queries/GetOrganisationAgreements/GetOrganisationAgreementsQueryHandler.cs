@@ -10,6 +10,7 @@ using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.HashingService;
 using SFA.DAS.Validation;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
 {
@@ -49,13 +50,13 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
 
             var accountLegalEntityId = _accountLegalEntityPublicHashingService.DecodeValue(message.AccountLegalEntityHashedId);
 
-            var accountLegalEntity = await _employerAgreementRepository.GetOrganisationsAgreements(accountLegalEntityId);            
-
+            var accountLegalEntity = await _employerAgreementRepository.GetOrganisationsAgreements(accountLegalEntityId);          
             if (accountLegalEntity == null) return new GetOrganisationAgreementsResponse();
 
             var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(accountLegalEntity.LegalEntity.Source);
 
-            var agreements = _mapper.Map<ICollection<EmployerAgreement>, ICollection<EmployerAgreementDto>>(accountLegalEntity.Agreements,
+            var agreements = _mapper.Map<ICollection<EmployerAgreement>, ICollection<EmployerAgreementDto>>
+                (accountLegalEntity.Agreements.Where(x => x.StatusId == EmployerAgreementStatus.Pending || x.StatusId == EmployerAgreementStatus.Signed).ToList(),
                 opt =>
                 {
                     opt.AfterMap((src, dest) =>

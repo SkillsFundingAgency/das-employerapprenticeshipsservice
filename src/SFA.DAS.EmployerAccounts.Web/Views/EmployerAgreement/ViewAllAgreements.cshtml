@@ -64,11 +64,15 @@
                                     Agreement between @item.AccountLegalEntity.Name and <abbr>ESFA</abbr>
                                 </h3>
 
-                                <span class="govuk-caption-m">@item.Template.PublishedInfo</span>
+                                <span class="govuk-caption-m govuk-!-margin-bottom-6">@item.Template.PublishedInfo</span>
 
-                                <div class="govuk-inset-text">
-                                    @item.Template.InsetText()
-                                </div>
+                                @if (@item.Template.InsetText() != string.Empty)
+                                {
+                                    <div class="govuk-inset-text">
+                                        @item.Template.InsetText()
+                                    </div>
+                                }
+
                             </div>
                         </div>
 
@@ -89,7 +93,14 @@
                                     Agreement between @item.AccountLegalEntity.Name and <abbr>ESFA</abbr>
                                 </h3>
 
-                                <span class="govuk-caption-m">@item.Template.PublishedInfo</span>
+                                <span class="govuk-caption-m govuk-!-margin-bottom-6">@item.Template.PublishedInfo</span>
+
+                                @if (@item.Template.InsetText() != string.Empty)
+                                {
+                                    <div class="govuk-inset-text">
+                                        @item.Template.InsetText()
+                                    </div>
+                                }
 
                             </div>
                         </div>
