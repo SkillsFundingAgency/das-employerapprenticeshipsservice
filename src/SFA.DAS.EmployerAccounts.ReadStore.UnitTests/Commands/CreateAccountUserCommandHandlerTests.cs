@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.CosmosDb.Testing;
@@ -13,8 +12,6 @@ using SFA.DAS.EmployerAccounts.ReadStore.Models;
 using SFA.DAS.EmployerAccounts.Types.Models;
 using SFA.DAS.Testing;
 using SFA.DAS.Testing.Builders;
-using Microsoft.Extensions.Logging;
-using SFA.DAS.EmployerAccounts.ReadStore.Exceptions;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
 {
@@ -28,7 +25,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                         p.AccountId == f.AccountId &&
                         p.UserRef == f.UserRef &&
                         p.Role.Equals(f.NewRole) &&
-                        p.Created == f.Created && 
+                        p.Created == f.Created &&
                         p.Id != Guid.Empty
                     ), null,
                     It.IsAny<CancellationToken>())));
@@ -41,14 +38,6 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                         p.OutboxData.Count(o => o.MessageId == f.MessageId) == 1
                     ), null,
                     It.IsAny<CancellationToken>())));
-        }
-
-        [Test]
-        public Task Handle_WhenUserIsActive_ThenShouldThrowException()
-        {
-            return TestExceptionAsync(f => f.AddMatchingUser(),
-                f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f, r) => r.ShouldThrow<UserNotRemovedException>());
         }
 
         [Test]
@@ -84,17 +73,38 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
                 f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
                         p.Role == UserRole.Viewer &&
-                        p.OutboxData.Count(o=>o.MessageId == f.Command.MessageId) == 1
+                        p.OutboxData.Count(o => o.MessageId == f.Command.MessageId) == 1
                     ), null,
                     It.IsAny<CancellationToken>())));
         }
 
         [Test]
-        public Task Handle_WhenUserIsActiveAndThisIsALaterCreateCommand_ThenShouldThrowException()
+        public Task Handle_WhenUserIsActive_ThenUpdateUserRoles()
         {
-            return TestExceptionAsync(f => f.AddMatchingViewUserWhichWasCreatedEarlierThanNewMessage(),
+            return TestAsync(f => f.AddMatchingViewUserWhichWasCreatedEarlierThanNewMessage(),
                 f => f.Handler.Handle(f.Command, CancellationToken.None),
-                (f, r) => r.ShouldThrow<UserNotRemovedException>());
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
+                        p.Updated != null &&
+                        p.Removed == null &&
+                        p.Role == UserRole.Owner &&
+                        p.OutboxData.Count(o => o.MessageId == f.Command.MessageId) == 1
+                    ), null,
+                    It.IsAny<CancellationToken>())));
+        }
+
+        [Test]
+        public Task Handle_WhenUserIsActive_MarkedAsRemoved_ThenUpdateUserRoles()
+        {
+            return TestAsync(f => f.AddRemovedMatchingViewUserWhichWasCreatedEarlierThanNewMessage(),
+                f => f.Handler.Handle(f.Command, CancellationToken.None),
+                f => f.UserRolesRepository.Verify(x => x.Update(It.Is<AccountUser>(p =>
+                        p.Created == f.Created &&
+                        p.Updated == null &&
+                        p.Removed == null &&
+                        p.Role == UserRole.Owner &&
+                        p.OutboxData.Count(o => o.MessageId == f.Command.MessageId) == 1
+                    ), null,
+                    It.IsAny<CancellationToken>())));
         }
     }
 
@@ -119,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             UserRolesRepository = new Mock<IAccountUsersRepository>();
             UserRolesRepository.SetupInMemoryCollection(Users);
 
-            Handler = new CreateAccountUserCommandHandler(UserRolesRepository.Object, Mock.Of<ILogger>());
+            Handler = new CreateAccountUserCommandHandler(UserRolesRepository.Object);
 
             Command = new CreateAccountUserCommand(AccountId, UserRef, NewRole, MessageId, Created);
         }
@@ -138,21 +148,34 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
             Users.Add(CreateBasicUser()
                 .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Created))
                 .Set(x => x.Created, Created.AddHours(-1))
-                .Set(x => x.Role, UserRole.Viewer));
+                .Set(x => x.Role, UserRole.Transactor));
+            return this;
+        }
+
+        public CreateAccountUserCommandHandlerTestsFixture AddRemovedMatchingViewUserWhichWasCreatedEarlierThanNewMessage()
+        {
+            Users.Add(CreateBasicUser()
+                .Add(x => x.OutboxData, new OutboxMessage(FirstMessageId, Created))
+                .Set(x => x.Created, Created.AddHours(-1))
+                .Set(x=>x.Removed, Created.AddSeconds(-5))
+                .Set(x => x.Role, UserRole.Transactor));
             return this;
         }
 
         public CreateAccountUserCommandHandlerTestsFixture AddMatchingUserWithMessageAlreadyProcessed()
         {
             Users.Add(CreateBasicUser()
-                .Add(x=>x.OutboxData, new OutboxMessage(MessageId, Created)));
+                .Add(x => x.OutboxData, new OutboxMessage(MessageId, Created)));
 
             return this;
         }
 
         public CreateAccountUserCommandHandlerTestsFixture AddMatchingRemovedUser()
         {
-            Users.Add(CreateBasicUser().Set(x=>x.Updated, Created.AddSeconds(-10)).Set(x=>x.Removed, Created.AddSeconds(-5)));
+            Users.Add(CreateBasicUser()
+               .Set(x => x.Updated,
+                Created.AddSeconds(-10))
+               .Set(x => x.Removed, Created.AddSeconds(-5)));
             return this;
         }
 
@@ -165,8 +188,8 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.UnitTests.Commands
         private AccountUser CreateBasicUser()
         {
             return ObjectActivator.CreateInstance<AccountUser>()
-                .Set(x=>x.AccountId, AccountId)
-                .Set(x=>x.UserRef, UserRef);
+                .Set(x => x.AccountId, AccountId)
+                .Set(x => x.UserRef, UserRef);
         }
     }
 }

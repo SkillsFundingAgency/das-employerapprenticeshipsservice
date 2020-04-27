@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
-using SFA.DAS.EmployerAccounts.ReadStore.Exceptions;
 using SFA.DAS.EmployerAccounts.Types.Models;
 
 namespace SFA.DAS.EmployerAccounts.ReadStore.Models
@@ -142,7 +141,7 @@ namespace SFA.DAS.EmployerAccounts.ReadStore.Models
         {
             if (Removed == null)
             {
-                throw new UserNotRemovedException("User has not been removed");
+                throw new InvalidOperationException("User has not been removed");
             }
         }
 
