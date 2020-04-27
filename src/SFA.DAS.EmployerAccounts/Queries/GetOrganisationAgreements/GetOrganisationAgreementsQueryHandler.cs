@@ -55,8 +55,10 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements
 
             var organisationLookupByIdPossible = await _referenceDataService.IsIdentifiableOrganisationType(accountLegalEntity.LegalEntity.Source);
 
+            var employerAgreements = accountLegalEntity.Agreements.Where(x => x.StatusId == EmployerAgreementStatus.Pending || x.StatusId == EmployerAgreementStatus.Signed).ToList();
+
             var agreements = _mapper.Map<ICollection<EmployerAgreement>, ICollection<EmployerAgreementDto>>
-                (accountLegalEntity.Agreements.Where(x => x.StatusId == EmployerAgreementStatus.Pending || x.StatusId == EmployerAgreementStatus.Signed).ToList(),
+                (employerAgreements,
                 opt =>
                 {
                     opt.AfterMap((src, dest) =>
