@@ -14,14 +14,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
         {
             CreateMap<AgreementDto, EmployerAccounts.Models.EmployerAgreement.EmployerAgreementView>()
                 .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.StatusId))
-                .ForMember(dest => dest.LegalEntityAddress, opt => opt.MapFrom(src => src.LegalEntity.RegisteredAddress))
-                .ForMember(dest => dest.LegalEntityInceptionDate, opt => opt.MapFrom(src => src.LegalEntity.DateOfIncorporation))
+                .ForMember(dest => dest.LegalEntityAddress,
+                    opt => opt.MapFrom(src => src.LegalEntity.RegisteredAddress))
+                .ForMember(dest => dest.LegalEntityInceptionDate,
+                    opt => opt.MapFrom(src => src.LegalEntity.DateOfIncorporation))
                 .ForMember(dest => dest.Sector, opt => opt.MapFrom(src => src.LegalEntity.Sector))
                 .ForMember(dest => dest.LegalEntitySource, opt => opt.MapFrom(src => src.LegalEntity.Source))
-                .ForMember(dest => dest.TemplatePartialViewName, opt => opt.MapFrom(src => src.Template.PartialViewName))
+                .ForMember(dest => dest.TemplatePartialViewName,
+                    opt => opt.MapFrom(src => src.Template.PartialViewName))
                 .ForMember(dest => dest.AgreementType, opt => opt.MapFrom(src => src.Template.AgreementType))
-                .ForMember(dest => dest.AccountLegalEntityId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityId))
-                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId))
+                .ForMember(dest => dest.AccountLegalEntityId,
+                    opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityId))
+                .ForMember(dest => dest.AccountLegalEntityPublicHashedId,
+                    opt => opt.MapFrom(src => src.LegalEntity.AccountLegalEntityPublicHashedId))
                 .ForMember(dest => dest.AgreementType, opts => opts.Ignore())
                 .ForMember(dest => dest.VersionNumber, opts => opts.Ignore());
 
@@ -39,28 +44,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ConvertUsing(new AgreementInfoConverter());
 
             CreateMap<EmployerAgreementDto, OrganisationAgreementViewModel>()
-                .ForMember(dest => dest.SignedDateText, opt => opt.Ignore())                             
+                .ForMember(dest => dest.SignedDateText, opt => opt.Ignore())
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore());
 
-            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>()                
-                .ForMember(dest => dest.PublishedDate , opt => opt.MapFrom(src => GetPublishedDate(src)));                
+            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>()
+                .ForMember(dest => dest.PublishedDate, opt => opt.Ignore());
 
             CreateMap<AccountLegalEntityDto, AccountLegalEntityViewModel>();
-        }
-
-        private DateTime? GetPublishedDate(AgreementTemplateDto agreementTemplateDto)
-        {
-            switch (agreementTemplateDto.VersionNumber)
-            {
-                case 1:
-                    return new DateTime(2017, 5, 1);                
-                case 2:
-                    return new DateTime(2018, 5, 1);
-                case 3:
-                    return new DateTime(2020, 1, 9);                    
-                default:
-                    return null;
-            }
         }
     }
 }
