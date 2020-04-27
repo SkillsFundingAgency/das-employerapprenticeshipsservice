@@ -32,11 +32,11 @@
         <h1 class="govuk-heading-xl">@ViewBag.Title</h1>
         <form method="POST" action="@Url.Action(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName)">
             @Html.AntiForgeryToken()
-            <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="which-course-your-apprentice-will-take">
-                <fieldset class="govuk-fieldset" aria-describedby="which-course-you-apprentice-will-take">
+            <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="have-you-chosen-a-training-provider">
+                <fieldset class="govuk-fieldset" aria-describedby="have-you-chosen-a-training-provider">
                     @if (!ViewData.ModelState.IsValid)
                     {
-                        <span class="govuk-error-message" aria-hidden="false" id="which-course-your-apprentice-will-take-error">
+                        <span class="govuk-error-message" aria-hidden="false" id="have-you-chosen-a-training-provider-error">
                             Select yes if you've chosen a training provider to deliver the apprenticeship training
                         </span>
                     }
@@ -55,7 +55,7 @@
             </div>
 
             <div class="govuk-form-group">
-                <button class="govuk-button" type="submit" id="which-course-your-apprentice-will-take-button">Continue</button>
+                <button class="govuk-button" type="submit" id="have-you-chosen-a-training-provider-button">Continue</button>
             </div>
         </form>
     </div>
