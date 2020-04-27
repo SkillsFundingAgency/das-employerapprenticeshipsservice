@@ -22,10 +22,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
         private Mock<IHashingService> _hashingService;
         private Reservation _reservation;
         private Mock<ILog> _logger;
-
         private string _hashedAccountId;
         private long _accountId;
 
+        
         [SetUp]
         public void Arrange()
         {
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetReservations
             _hashingService
                 .Setup(m => m.DecodeValue(_hashedAccountId))
                 .Returns(_accountId);
-
+            
             RequestHandler = new GetReservationsRequestHandler(RequestValidator.Object, _logger.Object, _reservationsService.Object, _hashingService.Object);
 
             Query = new GetReservationsRequest

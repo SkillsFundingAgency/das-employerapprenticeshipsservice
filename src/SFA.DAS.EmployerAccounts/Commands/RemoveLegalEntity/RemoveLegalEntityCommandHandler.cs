@@ -9,6 +9,7 @@ using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Factories;
+using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -27,6 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
         private readonly ILog _logger;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
         private readonly IMediator _mediator;
+        private readonly IAccountLegalEntityPublicHashingService _accountLegalEntityHashingService;
         private readonly IHashingService _hashingService;
         private readonly IGenericEventFactory _genericEventFactory;
         private readonly IEmployerAgreementEventFactory _employerAgreementEventFactory;
@@ -39,6 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             ILog logger,
             IEmployerAgreementRepository employerAgreementRepository,
             IMediator mediator,
+            IAccountLegalEntityPublicHashingService accountLegalEntityHashingService,
             IHashingService hashingService,
             IGenericEventFactory genericEventFactory,
             IEmployerAgreementEventFactory employerAgreementEventFactory,
@@ -50,6 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             _logger = logger;
             _employerAgreementRepository = employerAgreementRepository;
             _mediator = mediator;
+            _accountLegalEntityHashingService = accountLegalEntityHashingService;
             _hashingService = hashingService;
             _genericEventFactory = genericEventFactory;
             _employerAgreementEventFactory = employerAgreementEventFactory;
@@ -69,22 +73,26 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
             if (validationResult.IsUnauthorized)
             {
-                _logger.Info($"User {message.UserId} tried to remove {message.HashedLegalAgreementId} from Account {message.HashedAccountId}");
+                _logger.Info($"User {message.UserId} tried to remove {message.HashedAccountLegalEntityId} from Account {message.HashedAccountId}");
                 throw new UnauthorizedAccessException();
             }
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
-            var legalAgreementId = _hashingService.DecodeValue(message.HashedLegalAgreementId);
+            var accountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(message.HashedAccountLegalEntityId);
 
-            var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreementId);
+            var agreements = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
+            var legalAgreement = agreements.OrderByDescending(a => a.TemplateId).First();
+            var hashedLegalAgreementId = _hashingService.HashValue(legalAgreement.Id);
+
+            var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreement.Id);
 
             await ValidateLegalEntityHasNoCommitments(agreement, accountId, validationResult);
 
-            await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreementId);
+            await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreement.Id);
 
             await Task.WhenAll(
-                AddAuditEntry(accountId, message.HashedLegalAgreementId),
-                CreateEvent(message.HashedLegalAgreementId)
+                AddAuditEntry(accountId, hashedLegalAgreementId),
+                CreateEvent(hashedLegalAgreementId)
             );
 
             // it appears that an agreement is created whenever we create a legal entity, so there should always be an agreement associated with a legal entity
@@ -95,11 +103,11 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
                 var createdByName = caller.FullName();
 
                 await PublishLegalEntityRemovedMessage(
-                    accountId, 
-                    legalAgreementId,
-                    agreementSigned, 
-                    createdByName, 
-                    agreement.LegalEntityId, 
+                    accountId,
+                    legalAgreement.Id,
+                    agreementSigned,
+                    createdByName,
+                    agreement.LegalEntityId,
                     agreement.LegalEntityName,
                     agreement.AccountLegalEntityId,
                     message.UserId);

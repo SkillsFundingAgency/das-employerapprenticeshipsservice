@@ -20,13 +20,14 @@
 	@sector NVARCHAR(100),
 	@aorn VARCHAR(50),
 	@agreementType TINYINT,
+	@apprenticeshipEmployerType TINYINT,
 	@agreementVersion INT OUTPUT
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [employer_account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
+	INSERT INTO [employer_account].[Account](Name, CreatedDate, ApprenticeshipEmployerType) VALUES (@employerName, @addedDate, @apprenticeshipEmployerType);
 	SELECT @accountId = SCOPE_IDENTITY();
 
 	DECLARE @accountLegalEntityCreated AS BIT;
