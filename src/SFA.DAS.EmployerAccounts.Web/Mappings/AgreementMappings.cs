@@ -42,6 +42,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore());
 
             CreateMap<AccountLegalEntityDto, AccountLegalEntityViewModel>();
+
+            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>();
         }
     }
 }
