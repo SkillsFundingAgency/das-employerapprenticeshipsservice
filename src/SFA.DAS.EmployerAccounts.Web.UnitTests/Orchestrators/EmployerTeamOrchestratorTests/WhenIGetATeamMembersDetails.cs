@@ -4,8 +4,6 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.CommitmentsV2.Api.Client;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
@@ -23,8 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private const string HashedAccountId = "ABC123";
 
         private Mock<IMediator> _mediator;
-        private Mock<IAccountApiClient> _accountApiClient;
-        private Mock<ICommitmentsApiClient> _commitmentsApiClient;
+        private Mock<IAccountApiClient> _accountApiClient;       
         private Mock<IMapper> _mapper;
         private EmployerTeamOrchestrator _orchestrator;
         private GetMemberResponse _teamMemberResponse;
@@ -43,11 +40,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             };
 
             _mediator = new Mock<IMediator>();
-            _accountApiClient = new Mock<IAccountApiClient>();
-            _commitmentsApiClient = new Mock<ICommitmentsApiClient>();
+            _accountApiClient = new Mock<IAccountApiClient>();           
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _commitmentsApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object);
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetMemberRequest>()))
                 .ReturnsAsync(_teamMemberResponse);

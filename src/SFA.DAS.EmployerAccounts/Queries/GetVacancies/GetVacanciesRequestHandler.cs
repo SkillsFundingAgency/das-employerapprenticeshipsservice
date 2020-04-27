@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetVacancies
                     Vacancies = await _service.GetVacancies(message.HashedAccountId)
                 };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error(ex, $"Failed to get vacancies for {message.HashedAccountId}");
                 return new GetVacanciesResponse

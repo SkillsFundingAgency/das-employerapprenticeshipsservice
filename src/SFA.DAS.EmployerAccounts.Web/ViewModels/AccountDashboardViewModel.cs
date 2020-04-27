@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using SFA.DAS.Common.Domain.Types;
+﻿using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
@@ -27,6 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public bool HasPayeScheme => PayeSchemeCount > 0;
         public AgreementInfoViewModel AgreementInfo { get; set; }
         public ApprenticeshipEmployerType ApprenticeshipEmployerType { get; set; }
-        public CallToActionViewModel CallToActionViewModel {get; set;}
+        public CallToActionViewModel CallToActionViewModel { get; set; }
+        public bool HideTasksBar { get; set; }
     }
 }

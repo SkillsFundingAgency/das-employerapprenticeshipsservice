@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -19,6 +19,7 @@
     <PackageReference Include="HMRC.ESFA.Levy.Api.Types" version="1.0.43" />
     <PackageReference Include="MediatR" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Polly" Version="5.7.0" />
     <PackageReference Include="RestSharp" Version="105.2.3" />
     <PackageReference Include="SFA.DAS.ActiveDirectory" Version="1.0.3" />
     <PackageReference Include="SFA.DAS.Audit.Client" Version="1.0.0.20553" />    
@@ -31,11 +32,12 @@
     <PackageReference Include="SFA.DAS.Caches" Version="1.1.4" />
     <PackageReference Include="SFA.DAS.Commitments.Api.Client" Version="4.1.355" />
     <PackageReference Include="SFA.DAS.Commitments.Events" Version="2.1.1073" />
-    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client" Version="4.1.1013" />
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client" Version="4.1.1063" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
+    <PackageReference Include="SFA.DAS.Encoding" Version="1.1.61" />
     <PackageReference Include="SFA.DAS.EntityFramework" Version="1.0.1" />
-    <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.890" />
+    <PackageReference Include="SFA.DAS.EmployerFinance.Messages" Version="1.6.2933" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
     <PackageReference Include="SFA.DAS.Hmrc" Version="1.0.16" />
     <PackageReference Include="SFA.DAS.Notifications.Api.Client" Version="2.2.37" />
@@ -64,6 +66,7 @@
     <PackageReference Include="SFA.DAS.Validation" Version="5.1.167" />
     <PackageReference Include="StructureMap" Version="4.7.1" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="WindowsAzure.Storage" Version="8.7.0" />
     <PackageReference Include="Z.EntityFramework.Plus.QueryFuture.EF6" Version="1.7.19" />
   </ItemGroup>
