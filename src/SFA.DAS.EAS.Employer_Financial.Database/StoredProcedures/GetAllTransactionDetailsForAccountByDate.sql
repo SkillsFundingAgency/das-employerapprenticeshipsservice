@@ -128,12 +128,12 @@ SELECT		DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)		AS DateCreated,
 			NULL												AS TransferReceiverAccountName
 	FROM	[employer_financial].TransactionLine tl
 			LEFT JOIN [employer_financial].[TransactionLineTypes] tlt
-				ON tlt.TransactionType = 3
+				ON tlt.TransactionType = 5
 	WHERE	tl.AccountId = @accountId 
 			AND DateCreated >= @FromDate 
 			AND DateCreated < @ToDate
 			AND tl.TransactionType = 5
-			AND tl.Amount >= 0
+			AND tl.Amount <> 0
 			
 UNION ALL
 
