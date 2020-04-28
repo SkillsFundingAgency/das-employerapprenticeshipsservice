@@ -257,6 +257,7 @@
     <Compile Include="Mappings\VacancyMappings.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
+    <Compile Include="ViewModels\TriageViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
@@ -879,6 +880,16 @@
     <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage_CDN.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageWhichCourseYourApprenticeWillTake.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageHaveYouChosenATrainingProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageWillApprenticeshipTrainingStart.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetCourseProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageApprenticeForExistingEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipNewEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipExistingEmployee.cshtml" />
     <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueSetup.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipApproved.cshtml" />
