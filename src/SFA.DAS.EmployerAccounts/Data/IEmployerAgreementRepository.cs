@@ -19,5 +19,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<IEnumerable<EmployerAgreement>> GetAccountLegalEntityAgreements(long accountLegalEntityId);
         Task<EmployerAgreementStatus?> GetEmployerAgreementStatus(long agreementId);
         Task SetAccountLegalEntityAgreementDetails(long accountLegalEntityId, long? pendingAgreementId, int? pendingAgreementVersion, long? signedAgreementId, int? signedAgreementVersion);
+        Task<AccountLegalEntity> GetOrganisationsAgreements(long accountLegalEntityId);
     }
 }
