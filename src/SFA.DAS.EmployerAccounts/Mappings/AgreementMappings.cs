@@ -9,7 +9,10 @@ namespace SFA.DAS.EmployerAccounts.Mappings
     {
         public AgreementMappings()
         {
-            CreateMap<AgreementTemplate, AgreementTemplateDto>();
+            CreateMap<AgreementTemplate, AgreementTemplateDto>()
+                .ForMember(
+                    d => d.PublishedDate,
+                    o => o.Ignore());
 
             CreateMap<EmployerAgreement, AgreementDto>()
                 .ForMember(
@@ -53,6 +56,22 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                     v => v.AgreementType,
                     o => o.MapFrom(a => a.Template.AgreementType))
                 ;
+
+            CreateMap<EmployerAgreement, EmployerAgreementDto>()
+                  .ForMember(
+                    d => d.OrganisationLookupPossible,
+                    o => o.Ignore())               
+                .ForMember(
+                    d => d.HashedAccountId,
+                    o => o.Ignore())
+                .ForMember(
+                    d => d.HashedAgreementId,
+                    o => o.Ignore())
+                .ForMember(
+                    d => d.HashedLegalEntityId,
+                    o => o.Ignore());
+
+            CreateMap<AccountLegalEntity, AccountLegalEntityDto>();
         }
     }
 }

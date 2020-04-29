@@ -1,5 +1,6 @@
 ﻿using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
@@ -22,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-
+   
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
             : base(owinWrapper)
@@ -463,6 +464,183 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public ActionResult VacancyClosed(AccountDashboardViewModel model)
         {
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
+        }
+
+        [HttpGet]
+        [Route("triagewhichcourseyourapprenticewilltake")]
+        public ActionResult TriageWhichCourseYourApprenticeWillTake()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("triagewhichcourseyourapprenticewilltake")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return RedirectToAction(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("triagehaveyouchosenatrainingprovider")]
+        public ActionResult TriageHaveYouChosenATrainingProvider()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("triagehaveyouchosenatrainingprovider")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return RedirectToAction(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetprovider")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("triagewillapprenticeshiptrainingstart")]
+        public ActionResult TriageWillApprenticeshipTrainingStart()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("triagewillapprenticeshiptrainingstart")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return RedirectToAction(ControllerConstants.TriageApprenticeForExistingEmployeeActionName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName);
+                }
+
+                case TriageOptions.Unknown:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetstartdate")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("triageapprenticeforexistingemployee")]
+        public ActionResult TriageApprenticeForExistingEmployee()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("triageapprenticeforexistingemployee")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return View(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return View(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
         }
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
