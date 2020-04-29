@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <ProjectGuid>1266FC0D-0DBC-4A9F-ABEE-CAA308560F5F</ProjectGuid>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>Das</Authors>
     <Company>Das</Company>
