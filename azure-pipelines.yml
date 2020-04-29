@@ -16,7 +16,7 @@ variables:
   - name: buildConfiguration
     value: 'release'
   - name: buildPlatform
-    value: 'anycpu'
+    value: 'any cpu'
 
 pool:
   name: 'Continuous Integration 02 - SSD - 160ACU'
