@@ -10,8 +10,13 @@ workspace:
     clean: all
 
 variables:
-  buildConfiguration: 'release'
-  buildPlatform: 'any cpu'
+  - group: "ESFA - SonarCloud"
+  - name: sonarCloudProjectKey
+    value: "SkillsFundingAgency_das-employerapprenticeshipsservice"
+  - name: buildConfiguration
+    value: 'release'
+  - name: buildPlatform
+    value: 'anycpu'
 
 pool:
   name: 'Continuous Integration 02 - SSD - 160ACU'
@@ -33,6 +38,15 @@ steps:
   inputs:
     configFilePath: GitVersion.yml
     updateAssemblyInfo: true
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare Sonarcloud analysis configuration'
+  inputs:
+    SonarCloud: "$(SonarCloudConnectionId)"
+    organization: "$(SonarCloudOrganisationKey)"
+    scannerMode: 'MSBuild'
+    projectName: "$(Build.DefinitionName)"
+    projectKey: "$(sonarCloudProjectKey)"
 
 - task: VSBuild@1
   displayName: 'Restore solution EAS'
@@ -67,6 +81,14 @@ steps:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud analysis'
+
+- task: SonarCloudPublish@1
+  displayName: 'Publish results on build summary'
+  inputs:
+    pollingTimeoutSec: '300'
 
 - template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks    
     
