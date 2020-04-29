@@ -1,0 +1,18 @@
+﻿
+@model SFA.DAS.EmployerAccounts.Web.ViewModels.OrganisationAgreementViewModel
+
+
+<h3 class="govuk-heading-m">About the agreement</h3>
+
+<p class="govuk-body">
+    This agreement creates a legal contract between @Model.AccountLegalEntity.Name and <abbr>ESFA</abbr>. It allows you to transfer funds to other employers and pay training providers for apprenticeships.
+</p>
+
+<p class="govuk-body">
+    You need to ensure you have authority from your organisation before you accept this agreement on their behalf.
+</p>
+
+<form method="get" action="@Url.EmployerAccountsAction($"agreements/{Model.HashedAgreementId}/about-your-agreement")">
+    @Html.AntiForgeryToken()
+    <input class="govuk-button" type="submit" value="View agreement" />
+</form>

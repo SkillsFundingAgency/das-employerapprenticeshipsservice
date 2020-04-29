@@ -2,14 +2,16 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
+using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
 {
-    public class WhenNoPayeScheme
+    public class WhenIChooseIIfIKnowWhichTrainingProviderToDeliver
     {
         private EmployerTeamController _controller;
 
@@ -21,12 +23,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         [SetUp]
         public void Arrange()
         {
-            mockAuthenticationService = new Mock<IAuthenticationService>();
+            mockAuthenticationService = new Mock<IAuthenticationService>();            
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
 
-           _controller = new EmployerTeamController(
+            _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
@@ -34,20 +36,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenTheAddPayeViewIsReturnedAtRow1Panel1()
+        public void IfIChooseYesIContinueTheJourney()
         {
-            // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                PayeSchemeCount = 0
-            };
-
             //Act
-            var result = _controller.Row1Panel1(model) as PartialViewResult;
+            var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.Yes }) as RedirectToRouteResult;
 
             //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("AddPAYE", (result.Model as dynamic).ViewName);
+            Assert.AreEqual(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName, result.RouteValues["Action"]);
+        }
+
+        [Test]
+        public void IfIChooseNoICannotSetupAnApprentice()
+        {
+            //Act
+            var result = _controller.TriageHaveYouChosenATrainingProvider(new TriageViewModel { TriageOption = TriageOptions.No }) as RedirectToRouteResult;
+
+            //Assert
+            Assert.AreEqual(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName, result.RouteValues["Action"]);
         }
     }
 }

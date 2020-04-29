@@ -11,7 +11,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
-    public class WhenFundsToReserve
+    public class WhenSetupSingleReservation
     {
         private EmployerTeamController _controller;
 
@@ -36,66 +36,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         }
 
         [Test]
-        public void ThenForNonLevyTheCheckFundingViewIsReturnedAtRow1Panel1()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                PayeSchemeCount = 1,
-                CallToActionViewModel = new CallToActionViewModel
-                {
-                    AgreementsToSign = false
-                },
-
-                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
-            };
-
-            //Act
-            var result = _controller.Row1Panel1(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
-            Assert.AreEqual(PanelType.Action, (result.Model as dynamic).PanelType);
-        }
-
-        [Test]
-        public void ThenForLevyTheEmptyViewIsReturnedAtRow1Panel1()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel
-            {
-                PayeSchemeCount = 1,
-                CallToActionViewModel = new CallToActionViewModel
-                {
-                    AgreementsToSign = false
-                },
-
-                ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.Levy
-            };
-
-            //Act
-            var result = _controller.Row1Panel1(model) as PartialViewResult;
-
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("Empty", (result.Model as dynamic).ViewName);
-        }
-
-        [Test]
         public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
         {
             // Arrange
-            var model = new AccountDashboardViewModel
+            var model = new AccountDashboardViewModel()
             {
                 PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
                     VacanciesViewModel = new VacanciesViewModel()
                 },
-
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };
 
@@ -107,5 +58,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual("ContinueSetupForSingleReservation", (result.Model as dynamic).ViewName);
             Assert.AreEqual(PanelType.Summary, (result.Model as dynamic).PanelType);
         }
+
     }
 }

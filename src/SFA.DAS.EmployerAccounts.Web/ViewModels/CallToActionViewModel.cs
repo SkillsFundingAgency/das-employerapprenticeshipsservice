@@ -19,5 +19,10 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
         public int CohortsCount => Cohorts?.Count() ?? 0;        
         public bool HasSingleReservation => Reservations?.Count == 1 && CohortsCount == 1;
         public VacanciesViewModel VacanciesViewModel { get; set; }
+        
+        public CallToActionViewModel()
+        {
+            VacanciesViewModel = new VacanciesViewModel();
+        }
     }
 }
