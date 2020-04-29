@@ -70,6 +70,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             return configuration.ZenDeskSectionId;
         }
+        public static string GetZenDeskCobrowsingSnippetKey(this HtmlHelper html)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            return configuration.ZenDeskCobrowsingSnippetKey;
+        }
 
         public static IHeaderViewModel GetHeaderViewModel(this HtmlHelper html, bool useLegacyStyles = false)
         {

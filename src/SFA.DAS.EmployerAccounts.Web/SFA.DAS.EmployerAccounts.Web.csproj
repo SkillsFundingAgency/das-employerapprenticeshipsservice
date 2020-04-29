@@ -124,7 +124,7 @@
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.278" />
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2103</Version>
     </PackageReference>
@@ -222,6 +222,7 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Extensions\AgreementTemplateExtensions.cs" />
     <Compile Include="Extensions\CohortSummaryExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Mappings\VacancyMappings.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
+    <Compile Include="ViewModels\TriageViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
@@ -275,12 +277,16 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="ViewModels\AccountLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
+    <Compile Include="ViewModels\AgreementTemplateViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeshipViewModel.cs" />
     <Compile Include="ViewModels\CallToActionViewModel.cs" />
     <Compile Include="ViewModels\CohortViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmOrganisationToRemoveViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
+    <Compile Include="ViewModels\OrganisationAgreementViewModel.cs" />
     <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
@@ -295,7 +301,6 @@
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="ViewModels\CreateNewLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
@@ -798,7 +803,6 @@
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
-    <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2.cshtml" />
@@ -876,12 +880,27 @@
     <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
     <Content Include="Views\Shared\_NotSignedV3AgreementMessage_CDN.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageWhichCourseYourApprenticeWillTake.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageHaveYouChosenATrainingProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageWillApprenticeshipTrainingStart.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetCourseProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageApprenticeForExistingEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipNewEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipExistingEmployee.cshtml" />
     <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueSetup.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipApproved.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
+    <Content Include="Views\EmployerAgreement\ViewAllAgreements.cshtml" />
+    <Content Include="Views\Shared\_AcceptedAgreement.cshtml" />
+    <Content Include="Views\Shared\_NotAcceptedAgreement.cshtml" />
+    <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

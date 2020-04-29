@@ -240,63 +240,46 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("agreements/remove")]
-        public async Task<ActionResult> GetOrganisationsToRemove(string hashedAccountId)
+        [Route("agreements/{accountLegalEntityHashedId}/remove")]
+        public async Task<ActionResult> ConfirmRemoveOrganisation(string accountLegalEntityHashedId, string hashedAccountId)
         {
-            var model = await _orchestrator.GetLegalAgreementsToRemove(hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-            return View(model);
-        }
+            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(accountLegalEntityHashedId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
-        [HttpGet]
-        [Route("agreements/remove/{agreementId}")]
-        public async Task<ActionResult> ConfirmRemoveOrganisation(string agreementId, string hashedAccountId)
-        {
-            var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(agreementId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
-
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage != null)
-            {
-                model.FlashMessage = flashMessage;
-                model.Data.ErrorDictionary = model.FlashMessage.ErrorMessages;
-            }
-
-            return View(model);
+            return View(model.Data.CanBeRemoved ? ControllerConstants.ConfirmRemoveOrganisationActionName : ControllerConstants.CannotRemoveOrganisationViewName, model.Data);
         }
 
         [HttpPost]
-        [Route("agreements/remove/{agreementId}")]
+        [Route("agreements/{accountLegalEntityHashedId}/remove")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> RemoveOrganisation(string hashedAccountId, string agreementId, ConfirmLegalAgreementToRemoveViewModel model)
-
+        public async Task<ActionResult> RemoveOrganisation(ConfirmOrganisationToRemoveViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(ControllerConstants.ConfirmRemoveOrganisationViewName, model);
+            }
+
+            if (!model.Remove.HasValue || !model.Remove.Value) return RedirectToAction(ControllerConstants.IndexActionName);
+
             var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
             if (response.Status == HttpStatusCode.OK)
             {
                 AddFlashMessageToCookie(response.FlashMessage);
-
-                return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
+                return RedirectToAction(ControllerConstants.IndexActionName);
             }
 
-            if (response.Status == HttpStatusCode.BadRequest)
-            {
-                AddFlashMessageToCookie(response.FlashMessage);
-                return RedirectToAction(ControllerConstants.ConfirmRemoveOrganisationActionName, new { hashedAccountId, agreementId });
-            }
-
-            return RedirectToAction(ControllerConstants.IndexActionName, new { hashedAccountId });
+            AddFlashMessageToCookie(response.FlashMessage);
+            return View(ControllerConstants.ConfirmRemoveOrganisationViewName, model);
         }
 
-        private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(
-            GetEmployerAgreementRequest request)
+        private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
         {
             var response = await _mediator.SendAsync(request);
             var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(response);
 
-            var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest
-                {AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId});
-            viewModel.PreviouslySignedEmployerAgreement =
-                _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
+            var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest {AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId});
+            viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
+
             return viewModel;
         }
 
@@ -326,6 +309,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return View(new WhenDoYouWantToViewViewModel { EmployerAgreement = agreement.Data.EmployerAgreement, InError = true });
                 }
             }
+        }
+
+        [HttpGet]
+        [Route("organisations/{accountLegalEntityHashedId}/agreements")]
+        public async Task<ActionResult> ViewAllAgreements(string hashedAccountId, string accountLegalEntityHashedId)
+        {
+            var model = await _orchestrator.GetOrganisationAgreements(accountLegalEntityHashedId);
+            return View(model);
         }
     }
 }

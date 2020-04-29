@@ -7,7 +7,6 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -26,7 +25,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
-using SFA.DAS.EmployerAccounts.Web.Extensions;
 using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -200,7 +198,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
            
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object);
         }
         
         [Test]
@@ -403,6 +401,35 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert                    
             Assert.AreEqual(1, result.Data.CallToActionViewModel.CohortsCount);            
+        }
+
+        [Test]
+        [TestCase(false, false, false, false, false, Description = "All calls successful")]
+        [TestCase(true, false, false, false, true, Description = "Vacancy call failed")]
+        [TestCase(false, true, false, false, true, Description = "Vacancy call failed")]
+        [TestCase(false, false, true, false, true, Description = "Cohort call failed")]
+        public async Task ThenShouldSetUnableToDetermineCallToAction(
+            bool vacancyCallFailed, 
+            bool reservationsCallFailed, 
+            bool cohortCallFailed, 
+            bool apprenticeshipCallFailed, 
+            bool unableToDetermineCallToActionExpected)
+        {
+            //Arrange 
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>())).ReturnsAsync(new GetVacanciesResponse { Vacancies = new List<Vacancy>(), HasFailed = vacancyCallFailed });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetReservationsRequest>())).ReturnsAsync(new GetReservationsResponse { Reservations = new List<Reservation>(), HasFailed = reservationsCallFailed });
+
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipsRequest>())).ReturnsAsync(new GetApprenticeshipsResponse{ Apprenticeships = new List<Apprenticeship>(), HasFailed = apprenticeshipCallFailed });
+
+            var cohort = new Cohort() { Id = 1, NumberOfDraftApprentices = 1, Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" } } };
+            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { Cohort = cohort, HasFailed = cohortCallFailed });           
+
+            //Act
+            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
+
+            //Assert                    
+            Assert.AreEqual(unableToDetermineCallToActionExpected, result.Data.CallToActionViewModel.UnableToDetermineCallToAction);
         }
     }
 }

@@ -127,8 +127,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             return (!string.IsNullOrEmpty(hashedAccountId)) ? hashedAccountId : string.Empty;
         }
 
-
-
         public static bool ViewExists(this HtmlHelper html, string viewName)
         {
             var controllerContext = html.ViewContext.Controller.ControllerContext;

@@ -14,7 +14,7 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiy;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntity;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationById;
 using SFA.DAS.EmployerAccounts.Queries.GetPostcodeAddress;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;

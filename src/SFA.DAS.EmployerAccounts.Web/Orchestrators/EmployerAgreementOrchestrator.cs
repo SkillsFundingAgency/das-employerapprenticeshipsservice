@@ -9,12 +9,12 @@ using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
-using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreementsRemove;
+using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementType;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -161,33 +161,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
             }
         }
-        public virtual async Task<OrchestratorResponse<bool>> RemoveLegalAgreement(ConfirmLegalAgreementToRemoveViewModel model, string userId)
+
+        public virtual async Task<OrchestratorResponse<bool>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
         {
             var response = new OrchestratorResponse<bool>();
+            
             try
             {
-                if (model.RemoveOrganisation == null)
-                {
-                    response.Status = HttpStatusCode.BadRequest;
-                    response.FlashMessage =
-                        FlashMessageViewModel.CreateErrorFlashMessageViewModel(new Dictionary<string, string>
-                        {
-                            {"RemoveOrganisation", "Confirm you wish to remove the organisation"}
-                        });
-                    return response;
-                }
-
-                if (model.RemoveOrganisation == 1)
-                {
-                    response.Status = HttpStatusCode.Continue;
-                    return response;
-                }
-
                 await _mediator.SendAsync(new RemoveLegalEntityCommand
                 {
                     HashedAccountId = model.HashedAccountId,
                     UserId = userId,
-                    HashedLegalAgreementId = model.HashedAgreementId
+                    HashedAccountLegalEntityId = model.
+                    HashedAccountLegalEntitytId = model.HashedAccountLegalEntitytId
                 });
 
                 response.FlashMessage = new FlashMessageViewModel
@@ -195,6 +181,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Headline = $"You have removed {model.Name}.",
                     Severity = FlashMessageSeverityLevel.Success
                 };
+
+                response.Status = HttpStatusCode.OK;
                 response.Data = true;
             }
             catch (InvalidRequestException ex)
@@ -212,6 +200,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return response;
         }
+
         public async Task<OrchestratorResponse<EmployerAgreementPdfViewModel>> GetPdfEmployerAgreement(string hashedAccountId, string agreementId, string userId)
         {
             var pdfEmployerAgreement = new OrchestratorResponse<EmployerAgreementPdfViewModel>();
@@ -290,66 +279,32 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         }
 
-        public virtual async Task<OrchestratorResponse<LegalAgreementsToRemoveViewModel>> GetLegalAgreementsToRemove(string hashedAccountId, string userId)
+        public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string accountLegalEntityHashedId, string hashedAccountId, string userId)
         {
-            var response = new OrchestratorResponse<LegalAgreementsToRemoveViewModel>();
+            var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
+
             try
             {
-                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementsRemoveRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    UserId = userId
-                });
-
-                response.Data = new LegalAgreementsToRemoveViewModel
-                {
-                    Agreements = result.Agreements
-
-                };
-            }
-            catch (InvalidRequestException ex)
-            {
-                response.Status = HttpStatusCode.BadRequest;
-                response.FlashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Errors to fix",
-                    Message = "Check the following details:",
-                    ErrorMessages = ex.ErrorMessages,
-                    Severity = FlashMessageSeverityLevel.Error
-                };
-                response.Exception = ex;
-            }
-            catch (UnauthorizedAccessException ex)
-            {
-                response.Status = HttpStatusCode.Unauthorized;
-                response.Exception = ex;
-            }
-            return response;
-        }
-
-        public virtual async Task<OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>> GetConfirmRemoveOrganisationViewModel(string agreementId, string hashedAccountId, string userId)
-        {
-            var response = new OrchestratorResponse<ConfirmLegalAgreementToRemoveViewModel>();
-            try
-            {
-                var result = await _mediator.SendAsync(new GetAccountEmployerAgreementRemoveRequest
+                var result = await _mediator.SendAsync(new GetAccountLegalEntityRemoveRequest
                 {
                     HashedAccountId = hashedAccountId,
                     UserId = userId,
-                    HashedAgreementId = agreementId
+                    HashedAccountLegalEntityId = accountLegalEntityHashedId
                 });
-                response.Data = new ConfirmLegalAgreementToRemoveViewModel
+
+                response.Data = new ConfirmOrganisationToRemoveViewModel
                 {
-                    HashedAccountId = result.Agreement.HashedAccountId,
-                    HashedAgreementId = result.Agreement.HashedAgreementId,
-                    Id = result.Agreement.Id,
-                    Name = result.Agreement.Name,
-                    AgreementStatus = result.Agreement.Status
+                    HashedAccountId = hashedAccountId,
+                    HashedAccountLegalEntitytId = accountLegalEntityHashedId,
+                    HasSignedAgreement = result.HasSignedAgreement,
+                    CanBeRemoved = result.CanBeRemoved,
+                    Name = result.Name
                 };
             }
             catch (InvalidRequestException ex)
             {
                 response.Status = HttpStatusCode.BadRequest;
+
                 response.FlashMessage = new FlashMessageViewModel
                 {
                     Headline = "Errors to fix",
@@ -363,9 +318,42 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             {
                 response.Status = HttpStatusCode.Unauthorized;
                 response.Exception = ex;
+            }
+
+            return response;
+        }
+
+        public virtual async Task<OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>> GetOrganisationAgreements(string accountLegalEntityHashedId)
+        {
+            var response = new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>();
+
+            try
+            {
+                var result = await _mediator.SendAsync(new GetOrganisationAgreementsRequest
+                {
+                    AccountLegalEntityHashedId = accountLegalEntityHashedId
+                });
+                
+                response.Data = _mapper.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(result.Agreements);
+            }
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
+                {
+                    Status = HttpStatusCode.BadRequest,                    
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
             }
 
             return response;
         }
     }
 }
+   
