@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <ProjectGuid>45A6BEF6-18AE-4B16-B0E5-BD08952290B7</ProjectGuid>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Authors>DAS</Authors>
     <Description>Client for SFA.DAS.EmployerFinance.Api</Description>
