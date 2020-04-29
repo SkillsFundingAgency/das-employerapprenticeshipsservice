@@ -14,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
+using SFA.DAS.EmployerAccounts.Models.Recruit;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
@@ -23,7 +24,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
-using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
@@ -31,7 +31,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SFA.DAS.EmployerAccounts.Models.Recruit;
 using ResourceNotFoundException = SFA.DAS.EmployerAccounts.Web.Exceptions.ResourceNotFoundException;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -613,9 +612,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public void GetCallToActionViewName(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>();
-            rules.Add(100, EvalutateSignAgreementCallToActionRule);
-            rules.Add(101, vm => viewModel.Data.CallToActionViewModel == null);
+            var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>
+            {
+                { 100, EvalutateSignAgreementCallToActionRule },
+                { 101, vm => viewModel.Data.CallToActionViewModel == null }
+            };
 
             if (viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.Levy)
             {
