@@ -3,20 +3,18 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenHomePageToggleIsEnabled
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
     public class WhenVacancyInProgress
     {
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
@@ -25,19 +23,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void Arrange()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
+                mockEmployerTeamOrchestrator.Object);
         }
 
         [Test]
