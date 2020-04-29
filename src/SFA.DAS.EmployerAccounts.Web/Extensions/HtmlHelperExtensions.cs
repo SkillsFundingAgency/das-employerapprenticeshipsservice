@@ -1,13 +1,15 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
 using SFA.DAS.MA.Shared.UI.Models.Links;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -15,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     {
         public static MvcHtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
         {
-            var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<Configuration.EmployerAccountsConfiguration>().CdnBaseUrl;
+            var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>().CdnBaseUrl;
 
             var trimCharacters = new char[] { '/' };
             return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
@@ -131,6 +133,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             },
             useLegacyStyles: useLegacyStyles
             );
+        }
+
+        public static async Task<MvcHtmlString> GetContentBanner(this HtmlHelper html, int bannerId, bool useCDN)
+        {
+            var service = DependencyResolver.Current.GetService<IContentBannerService>();
+            var test = await service.GetBannerContent(bannerId, useCDN);
+            return MvcHtmlString.Create(test);
         }
     }
 }
