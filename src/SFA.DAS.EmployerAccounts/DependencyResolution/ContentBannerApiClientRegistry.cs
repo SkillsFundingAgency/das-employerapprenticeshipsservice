@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
 
             if (config.UseStub)
             {
-                httpClient = new HttpClient { BaseAddress = new Uri("https://sfa-stub-reservations.herokuapp.com/") };
+                httpClient = new HttpClient { BaseAddress = new Uri("https://sfa-stub-contentbanner.herokuapp.com/") };
             }
             else
             {                

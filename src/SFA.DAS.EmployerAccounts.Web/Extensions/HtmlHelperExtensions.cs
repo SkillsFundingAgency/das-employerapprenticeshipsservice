@@ -9,7 +9,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
