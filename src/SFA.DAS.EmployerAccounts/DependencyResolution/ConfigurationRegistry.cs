@@ -26,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<IHmrcConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().Hmrc).Singleton();
             For<IAzureActiveDirectoryClientConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().CommitmentsApi).Singleton();
             For<EncodingConfig>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<EncodingConfig>(ConfigurationKeys.EncodingConfig)).Singleton();
-            For<ContentBannerClientApiConfiguration>().Use(c => c.GetInstance<IAutoConfigurationService>().Get<ContentBannerClientApiConfiguration>(ConfigurationKeys.ContentBannerClientApiConfiguration)).Singleton();
         }
     }
 }

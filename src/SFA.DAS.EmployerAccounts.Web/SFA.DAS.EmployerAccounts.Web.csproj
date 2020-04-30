@@ -865,7 +865,6 @@
     <Content Include="Views\EmployerTeam\TriageApprenticeForExistingEmployee.cshtml" />
     <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipNewEmployee.cshtml" />
     <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipExistingEmployee.cshtml" />
-    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueSetup.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipApproved.cshtml" />
     <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />

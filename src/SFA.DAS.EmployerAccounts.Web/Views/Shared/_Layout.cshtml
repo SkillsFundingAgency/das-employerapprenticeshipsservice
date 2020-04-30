@@ -126,7 +126,14 @@
 
         @if (HttpContext.Current.User.Identity.IsAuthenticated)
         {
-            @Html.Partial("_COVID19GuidanceBanner")
+            if (ViewBag.UseCDN ?? false)
+             {
+                 @Html.GetContentBanner(1, false)
+             }
+             else
+             {
+                 @Html.GetContentBanner(1, true)
+             }
 
             if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
             {

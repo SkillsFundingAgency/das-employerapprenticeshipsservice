@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
-using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
     public class ContentBannerService : IContentBannerService
     {
-        private readonly IContentBannerApiClient _client;
+       private readonly IContentBannerApiClient _client;
 
         public ContentBannerService(IContentBannerApiClient client)
         {

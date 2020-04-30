@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
@@ -35,13 +34,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetContentBanner
 
             try
             {
-                var banner = await _service.GetBannerContent(message.BannerId, message.UseCDN); 
                 return new GetContentBannerResponse
                 {
-                    ContentBanner = MvcHtmlString.Create(banner)
+                    ContentBanner = await _service.GetBannerContent(message.BannerId, message.UseCDN)
                 };
             }
-        
+
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Failed to get ContentBanner for {message.BannerId}");
@@ -49,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetContentBanner
                 {
                     HasFailed = true
                 };
-}
+            }
         }
     }
 }

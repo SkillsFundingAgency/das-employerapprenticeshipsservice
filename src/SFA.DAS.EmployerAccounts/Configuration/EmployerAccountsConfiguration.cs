@@ -49,5 +49,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
         public RecruitClientApiConfiguration RecruitApi { get; set; }
         public long DefaultServiceTimeoutMilliseconds { get; set; }
+        public ContentBannerClientApiConfiguration ContentBannerApi { get; set; }
     }
 }

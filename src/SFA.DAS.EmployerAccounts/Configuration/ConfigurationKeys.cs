@@ -14,6 +14,5 @@
         public const string AuditApi = "SFA.DAS.AuditApiClient";
         public const string ReservationsClientApiConfiguration = "SFA.DAS.Reservations.Api.Client";
         public const string EncodingConfig = "SFA.DAS.Encoding";
-        public const string ContentBannerClientApiConfiguration = "SFA.DAS.ContentBanner.Api.Client";
     }
 }

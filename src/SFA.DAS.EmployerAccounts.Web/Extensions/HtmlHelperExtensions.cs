@@ -6,9 +6,9 @@ using SFA.DAS.MA.Shared.UI.Models.Links;
 using System;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Interfaces;
+using MediatR;
+using SFA.DAS.EmployerAccounts.Queries.GetContentBanner;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -134,11 +134,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             );
         }
 
-        public static async Task<MvcHtmlString> GetContentBanner(this HtmlHelper html, int bannerId, bool useCDN)
+        public static MvcHtmlString GetContentBanner(this HtmlHelper html, int bannerId, bool useCDN)
         {
-            var service = DependencyResolver.Current.GetService<IContentBannerService>();
-            var test = await service.GetBannerContent(bannerId, useCDN);
-            return MvcHtmlString.Create(test);
+            var mediator = DependencyResolver.Current.GetService<IMediator>();
+            var userResponse = mediator.SendAsync(new GetContentBannerRequest
+            {
+                BannerId = bannerId,
+                UseCDN = useCDN
+            });
+            var content = userResponse.Result;
+            return MvcHtmlString.Create(content.ContentBanner);
         }
     }
 }
