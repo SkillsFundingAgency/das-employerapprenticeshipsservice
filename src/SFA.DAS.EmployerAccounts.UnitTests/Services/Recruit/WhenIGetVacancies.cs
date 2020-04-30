@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -10,11 +9,9 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Recruit;
-using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Services;
-using SFA.DAS.NLog.Logger;
 
-namespace SFA.DAS.EmployerAccounts.UnitTests.Services.GetVacancies
+namespace SFA.DAS.EmployerAccounts.UnitTests.Services.Recruit
 {
     public class GetVacancies
     {   
@@ -30,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.GetVacancies
         private string _identifierUri;
         private string _tenent;
         private string _serviceJson;
-        private RecruitClientApiConfiguration _recruitClientApiConfiguration;
         private List<VacancySummary> _vacancies;
 
         private RecruitService _sut;
@@ -46,16 +42,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.GetVacancies
             _tenent = Guid.NewGuid().ToString();
             _vacancies = new List<VacancySummary> { new VacancySummary { } };
             _serviceJson = JsonConvert.SerializeObject(new VacanciesSummary { Vacancies = _vacancies });
-
-            _recruitClientApiConfiguration = new RecruitClientApiConfiguration
-            {
-                 ApiBaseUrl = _apiBaseUrl,
-                 ClientId = _clientId,
-                 ClientSecret = _clientSecret,
-                 IdentifierUri = _identifierUri,
-                 Tenant = _tenent
-            };
-
             _mockHttpService = new Mock<IHttpService>();
             _mockHttpServiceFactory = new Mock<IHttpServiceFactory>();
             _employerAccountsConfiguration = new EmployerAccountsConfiguration
