@@ -43,10 +43,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new AccountDashboardViewModel
             {
                 PayeSchemeCount = 1,
-                CallToActionViewModel = new CallToActionViewModel
-                {
-                    AgreementsToSign = true
-                }
+                PendingAgreements = new List<PendingAgreementsViewModel> { new PendingAgreementsViewModel() }
             };
 
             //Act

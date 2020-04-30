@@ -70,7 +70,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 if (callToActionResponse.Status == HttpStatusCode.OK)
                 {
                     accountResponse.Data.CallToActionViewModel = callToActionResponse.Data;
-                    accountResponse.Data.CallToActionViewModel.AgreementsToSign = accountResponse.Data.PendingAgreements?.Count() > 0;
                 }
                 else
                 {

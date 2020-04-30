@@ -6,7 +6,6 @@ namespace SFA.DAS.EmployerAccounts.Web.ViewModels
 {
     public class CallToActionViewModel
     {
-        public bool AgreementsToSign { get; set; }
         public List<Reservation> Reservations { get; set; }
         public bool HasReservations => ReservationsCount > 0;
         public int ReservationsCount => Reservations?.Count ?? 0;

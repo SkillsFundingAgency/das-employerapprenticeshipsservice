@@ -740,7 +740,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel != null && viewModel.Data.CallToActionViewModel.AgreementsToSign)
+            if (viewModel.Data.PendingAgreements?.Count() > 0)
             {
                 viewModel.ViewName = "SignAgreement";
                 return true;
