@@ -13,7 +13,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetContentBanner
             {
                 validationResult.AddError(nameof(item.BannerId), "BannerId has not been supplied");
             }
-
             return validationResult;
         }
 
