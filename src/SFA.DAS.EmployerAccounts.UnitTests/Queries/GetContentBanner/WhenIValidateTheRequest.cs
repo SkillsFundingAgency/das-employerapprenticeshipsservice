@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         }
 
         [Test]
-        public void ThenShouldReturnInvalidIfNoBannerIdIsProvided()
+        public void ThenShouldReturnInvalidIfInfoIsProvided()
         {
             //Act
             var result = _validator.Validate(new GetClientContentRequest());
@@ -38,10 +38,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         }
 
         [Test]
-        public void ThenShouldReturnInvalidIfBannerIdIsZero()
+        public void ThenShouldReturnInvalidIfContentTypeIdIsEmpty()
         {
             //Act
             var result = _validator.Validate(new GetClientContentRequest { ContentType = string.Empty});
+
+            //Assert
+            Assert.IsFalse(result.IsValid());
+        }
+
+        [Test]
+        public void ThenShouldReturnInvalidIfContentTypeIdIsInvalid()
+        {
+            //Act
+            var result = _validator.Validate(new GetClientContentRequest { ContentType = "Test", ClientId = "eas-acc"});
 
             //Assert
             Assert.IsFalse(result.IsValid());

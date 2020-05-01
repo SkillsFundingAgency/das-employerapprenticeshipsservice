@@ -10,15 +10,17 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
         {
             var validationResult = new ValidationResult();
 
-            var isValidType = Enum.TryParse(item.ContentType,true, out ContentType type);
-            
             if (string.IsNullOrEmpty(item.ContentType))
             {
                 validationResult.AddError(nameof(item.ContentType), "Type has not been supplied");
             }
-            if (!isValidType)
+            else
             {
-                validationResult.AddError(nameof(item.ContentType), "Not a valid ContentType");
+                var isValidType = Enum.TryParse(item.ContentType, true, out ContentType type);
+                if (!isValidType)
+                {
+                    validationResult.AddError(nameof(item.ContentType), "Not a valid ContentType");
+                }
             }
             if (string.IsNullOrEmpty(item.ClientId))
             {
