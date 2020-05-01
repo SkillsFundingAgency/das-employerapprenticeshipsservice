@@ -61,10 +61,9 @@ steps:
   inputs:
     solution: 'src/SFA.DAS.EAS.sln'
     vsVersion: 15.0
-    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish" /property:WarningLevel=0 /noconlog'
+    msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    logFileVerbosity: quiet
     
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
