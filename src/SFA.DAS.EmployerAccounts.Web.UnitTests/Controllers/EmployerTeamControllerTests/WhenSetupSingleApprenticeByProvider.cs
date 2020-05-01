@@ -3,7 +3,6 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
@@ -11,40 +10,34 @@ using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
-    public class WhenSetupSingleApprentice
+    public class WhenSetupSingleApprenticeByProvider
     {
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
-        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
+        private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;        
 
         [SetUp]
         public void Arrange()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
-            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
+            mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();            
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
-        }        
+                mockEmployerTeamOrchestrator.Object);
+        }
 
         [Test]
-        public void ThenForNonLevyTheContinueSetupForSingleApprenticeshipViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyContinueSetupForSingleApprenticeshipByProviderViewIsReturnedAtRow1Panel1()
         {
             //Arrange
             var model = new AccountDashboardViewModel()
@@ -53,19 +46,18 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },       
                     Cohorts = new List<CohortViewModel>
                     {
                         new CohortViewModel
-                        {                            
-                            NumberOfDraftApprentices = 1,
-                            CohortStatus =  CohortStatus.Draft,
-                            Apprenticeships = new List<ApprenticeshipViewModel>
+                        {   
+                            NumberOfDraftApprentices = 0,
+                            CohortStatus = CohortStatus.WithTrainingProvider,
+                            Apprenticeships = new List<ApprenticeshipViewModel>()
                             {
                                 new ApprenticeshipViewModel
                                 {
-                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft,
-                                    NumberOfDraftApprentices = 1
+                                    ApprenticeshipStatus = ApprenticeshipStatus.Draft
                                 }
                             }
                         }
@@ -78,8 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
 
             //Assert
             Assert.IsNotNull(result);
-            Assert.AreEqual("SingleApprenticeshipContinueSetup", (result.Model as dynamic).ViewName);
+            Assert.AreEqual("SingleApprenticeshipContinueWithProvider", (result.Model as dynamic).ViewName);
         }
-
     }
 }
