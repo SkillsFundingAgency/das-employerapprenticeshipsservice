@@ -9,7 +9,6 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
@@ -27,7 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
@@ -47,7 +45,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         public void SetUp()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
@@ -58,8 +55,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 
             _userId = "TestUser";
 
-            _claims = new List<Claim>();
-            _claims.Add(new Claim(ControllerConstants.UserRefClaimKeyName, _userId));
+            _claims = new List<Claim>
+            {
+                new Claim(ControllerConstants.UserRefClaimKeyName, _userId)
+            };
 
             mockPrincipal.Setup(m => m.Identity).Returns(mockClaimsIdentity.Object);
             mockClaimsIdentity.Setup(m => m.IsAuthenticated).Returns(_isAuthenticated);
@@ -71,13 +70,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
-
-            _controller.ControllerContext = mockControllerContext.Object;
+                mockEmployerTeamOrchestrator.Object)
+            {
+                ControllerContext = mockControllerContext.Object
+            };
             _viewDataContainerMock = new Mock<IViewDataContainer>();
-            _viewContext = new ViewContext();
-            _viewContext.Controller = _controller;
+            _viewContext = new ViewContext
+            {
+                Controller = _controller
+            };
 
 
             _mockMediator = new Mock<IMediator>();
