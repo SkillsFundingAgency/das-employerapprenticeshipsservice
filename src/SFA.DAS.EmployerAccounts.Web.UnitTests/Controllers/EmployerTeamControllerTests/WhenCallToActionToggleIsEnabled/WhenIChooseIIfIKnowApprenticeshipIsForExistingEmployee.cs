@@ -5,17 +5,17 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
 {
-    public class WhenAgreementToSign
+    public class WhenIChooseIIfIKnowApprenticeshipIsForExistingEmployee
     {
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
@@ -24,39 +24,35 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void Arrange()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.HomePage")).Returns(false);
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
+                mockEmployerTeamOrchestrator.Object);
         }
 
         [Test]
-        public void ThenTheSignAgreementViewIsReturnedAtRow1Panel1()
+        public void IfIChooseYesIContinueTheJourney()
         {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
-            {
-                AgreementsToSign = true
-            };
-
             //Act
-            var result = _controller.Row1Panel1(model) as PartialViewResult;
+            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.Yes }) as ViewResult;
 
             //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("SignAgreement", (result.Model as dynamic).ViewName);
-            Assert.AreEqual(PanelType.Interruption, (result.Model as dynamic).PanelType);
+            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName, result.ViewName);
+        }
+
+        [Test]
+        public void IfIChooseNoICannotSetupAnApprentice()
+        {
+            //Act
+            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.No }) as ViewResult;
+
+            //Assert
+            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName, result.ViewName);
         }
     }
 }

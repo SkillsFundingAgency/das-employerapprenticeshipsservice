@@ -3,21 +3,19 @@ using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests.WhenCallToActionToggleIsEnabled
+namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControllerTests
 {
-    public class WhenFundsToReserve
+    public class WhenSetupSingleReservation
     {
         private EmployerTeamController _controller;
 
         private Mock<IAuthenticationService> mockAuthenticationService;
-        private Mock<IAuthorizationService> mockAuthorizationService;
         private Mock<IMultiVariantTestingService> mockMultiVariantTestingService;
         private Mock<ICookieStorageService<FlashMessageViewModel>> mockCookieStorageService;
         private Mock<EmployerTeamOrchestrator> mockEmployerTeamOrchestrator;
@@ -26,23 +24,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         public void Arrange()
         {
             mockAuthenticationService = new Mock<IAuthenticationService>();
-            mockAuthorizationService = new Mock<IAuthorizationService>();
             mockMultiVariantTestingService = new Mock<IMultiVariantTestingService>();
             mockCookieStorageService = new Mock<ICookieStorageService<FlashMessageViewModel>>();
             mockEmployerTeamOrchestrator = new Mock<EmployerTeamOrchestrator>();
-
-            mockAuthorizationService.Setup(m => m.IsAuthorized("EmployerFeature.CallToAction")).Returns(true);
 
             _controller = new EmployerTeamController(
                 mockAuthenticationService.Object,
                 mockMultiVariantTestingService.Object,
                 mockCookieStorageService.Object,
-                mockEmployerTeamOrchestrator.Object,
-                mockAuthorizationService.Object);
+                mockEmployerTeamOrchestrator.Object);
         }
 
         [Test]
-        public void ThenForNonLevyTheCheckFundingViewIsReturnedAtRow1Panel1()
+        public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
         {
             // Arrange
             var model = new AccountDashboardViewModel()
@@ -50,36 +44,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
+                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
                     VacanciesViewModel = new VacanciesViewModel()
                 },
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };
-            
-            //Act
-            var result = _controller.Row1Panel1(model) as PartialViewResult;
 
-            //Assert
-            Assert.IsNotNull(result);
-            Assert.AreEqual("CheckFunding", (result.Model as dynamic).ViewName);
-            Assert.AreEqual(PanelType.Action, (result.Model as dynamic).PanelType);
-        }
-
-        [Test]
-        public void ThenForNonLevyTheContinueSetupForSingleReservationViewIsReturnedAtRow1Panel1()
-        {
-            // Arrange
-            var model = new AccountDashboardViewModel();
-            model.PayeSchemeCount = 1;
-            model.CallToActionViewModel = new CallToActionViewModel
-            {
-                AgreementsToSign = false,
-                Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
-                VacanciesViewModel = new VacanciesViewModel()
-            };
-            
-            model.ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy;
-            
             //Act
             var result = _controller.Row1Panel1(model) as PartialViewResult;
 
@@ -88,5 +58,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             Assert.AreEqual("ContinueSetupForSingleReservation", (result.Model as dynamic).ViewName);
             Assert.AreEqual(PanelType.Summary, (result.Model as dynamic).PanelType);
         }
+
     }
 }
