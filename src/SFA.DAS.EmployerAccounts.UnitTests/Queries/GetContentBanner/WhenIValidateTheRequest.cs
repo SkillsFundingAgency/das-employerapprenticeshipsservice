@@ -1,26 +1,26 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Queries.GetContentBanner;
+using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
 {
     public class WhenIValidateTheRequest
     {
-        private GetContentBannerRequestValidator _validator;
+        private GetClientContentRequestValidator _validator;
 
         [SetUp]
         public void Arrange()
         {
-            _validator = new GetContentBannerRequestValidator();
+            _validator = new GetClientContentRequestValidator();
         }
 
         [Test]
         public void ThenShouldReturnValidIfRequestIsValid()
         {
             //Act
-            var result = _validator.Validate(new GetContentBannerRequest()
+            var result = _validator.Validate(new GetClientContentRequest()
             {
-                BannerId = 1,
-                UseCDN = false
+                ContentType = "banner",
+                ClientId = "acc-eas"
             });
 
             //Assert
@@ -31,7 +31,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         public void ThenShouldReturnInvalidIfNoBannerIdIsProvided()
         {
             //Act
-            var result = _validator.Validate(new GetContentBannerRequest());
+            var result = _validator.Validate(new GetClientContentRequest());
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         public void ThenShouldReturnInvalidIfBannerIdIsZero()
         {
             //Act
-            var result = _validator.Validate(new GetContentBannerRequest { BannerId = 0 });
+            var result = _validator.Validate(new GetClientContentRequest { ContentType = string.Empty});
 
             //Assert
             Assert.IsFalse(result.IsValid());

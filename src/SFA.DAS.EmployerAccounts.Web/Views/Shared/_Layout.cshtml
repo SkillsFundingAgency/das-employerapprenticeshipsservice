@@ -120,38 +120,31 @@
 
     @Html.Partial("_Header", Html.GetHeaderViewModel(useLegacyStyles: true))
 
-    <main role="main" id="content">
-        @RenderSection("breadcrumb", required: false)
+<main role="main" id="content">
+    @RenderSection("breadcrumb", required: false)
 
 
-        @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    @if (HttpContext.Current.User.Identity.IsAuthenticated)
+    {
+        //@Html.GetClientContentByType(Request.QueryString["type"], Request.QueryString["clientId"])
+        @Html.GetClientContentByType("banner","eas-acc");
+        if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
         {
-            if (ViewBag.UseCDN ?? false)
-             {
-                 @Html.GetContentBanner(1, false)
-             }
-             else
-             {
-                 @Html.GetContentBanner(1, true)
-             }
-
-            if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
+            var userId = Html.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.User?.Claims.
+                     FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
+            var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
+            if (!string.IsNullOrEmpty(hashedAccountId))
             {
-                var userId = Html.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.User?.Claims.
-                         FirstOrDefault(x => x.Type == ControllerConstants.UserRefClaimKeyName)?.Value;
-                var hashedAccountId = Html.ViewContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName]?.ToString();
-                if (!string.IsNullOrEmpty(hashedAccountId))
+                if (Html.ShowExpiringAgreementBanner(userId, hashedAccountId))
                 {
-                    if (Html.ShowExpiringAgreementBanner(userId, hashedAccountId))
-                    {
-                        @Html.Partial(@"_NotSignedV3AgreementMessage")
-                    }
+                    @Html.Partial(@"_NotSignedV3AgreementMessage")
                 }
             }
         }
-        @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
-        @RenderBody()
-    </main>
+    }
+    @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)
+    @RenderBody()
+</main>
 
     @Html.Partial("_Footer", Html.GetFooterViewModel(useLegacyStyles: true))
     

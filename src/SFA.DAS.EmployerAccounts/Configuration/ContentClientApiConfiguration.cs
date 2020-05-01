@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Configuration
 {
-    public class ContentBannerClientApiConfiguration : IContentBannerClientApiConfiguration
+    public class ContentClientApiConfiguration : IContentClientApiConfiguration
     {
         public string ApiBaseUrl { get; set; }
         public string Tenant { get; set; }

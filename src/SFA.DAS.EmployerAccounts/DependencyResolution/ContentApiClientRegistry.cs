@@ -9,18 +9,18 @@ using StructureMap;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {
-    public class ContentBannerApiClientRegistry : Registry
+    public class ContentApiClientRegistry : Registry
     {
-        public ContentBannerApiClientRegistry()
+        public ContentApiClientRegistry()
         {
-            For<ContentBannerClientApiConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().ContentBannerApi);
-            For<IContentBannerClientApiConfiguration>().Use(c => c.GetInstance<ContentBannerClientApiConfiguration>());
-            For<IContentBannerApiClient>().Use<ContentBannerApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c));
+            For<ContentClientApiConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().ContentClientApi);
+            For<IContentClientApiConfiguration>().Use(c => c.GetInstance<ContentClientApiConfiguration>());
+            For<IClientContentApiClient>().Use<ClientContentApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c));
         }
 
         private HttpClient CreateClient(IContext context)
         {
-            var config = context.GetInstance<EmployerAccountsConfiguration>().ContentBannerApi;
+            var config = context.GetInstance<EmployerAccountsConfiguration>().ContentClientApi;
 
             HttpClient httpClient = new HttpClientBuilder()
                     .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))

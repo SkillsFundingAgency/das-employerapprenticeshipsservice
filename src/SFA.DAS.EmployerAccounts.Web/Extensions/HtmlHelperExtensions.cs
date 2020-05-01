@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Queries.GetContentBanner;
+using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -134,13 +134,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             );
         }
 
-        public static MvcHtmlString GetContentBanner(this HtmlHelper html, int bannerId, bool useCDN)
+        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, string clientId)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
-            var userResponse = mediator.SendAsync(new GetContentBannerRequest
+            var userResponse = mediator.SendAsync(new GetClientContentRequest
             {
-                BannerId = bannerId,
-                UseCDN = useCDN
+                ContentType = type,
+                ClientId = clientId
             });
             var content = userResponse.Result;
             return MvcHtmlString.Create(content.ContentBanner);

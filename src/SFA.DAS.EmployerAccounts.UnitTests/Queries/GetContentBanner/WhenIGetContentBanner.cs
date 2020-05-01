@@ -2,44 +2,46 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetContentBanner;
+using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
 {
-    public class WhenIGetContentBanner : QueryBaseTest<GetContentBannerRequestHandler, GetContentBannerRequest, GetContentBannerResponse>
+    public class WhenIGetContentBanner : QueryBaseTest<GetClientContentRequestHandler, GetClientContentRequest, GetClientContentResponse>
     {
-        public override GetContentBannerRequest Query { get; set; }
-        public override GetContentBannerRequestHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetContentBannerRequest>> RequestValidator { get; set; }
+        public override GetClientContentRequest Query { get; set; }
+        public override GetClientContentRequestHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetClientContentRequest>> RequestValidator { get; set; }
 
-        private Mock<IContentBannerService> _contentBannerService;
-        private string _contentBanner;
-        private int _bannerId;
-        private bool _useCDN;
+        public Mock<ICacheStorageService> MockCacheStorageService;
+        private Mock<IClientContentService> _contentBannerService;
+        private ContentType _contentType;
+        private string _clientId;
         private Mock<ILog> _logger;
+        public string ContentBanner;
 
         [SetUp]
         public void Arrange()
         {
             SetUp();
-
-            _contentBanner = "<p>find out how you can pause your apprenticeships<p>";
-            _bannerId = 123;
-            _useCDN = false;
+            MockCacheStorageService = new Mock<ICacheStorageService>();
+            ContentBanner = "<p>find out how you can pause your apprenticeships<p>";
+            _contentType = ContentType.Banner;
+            _clientId = "eas-acc";
             _logger = new Mock<ILog>();
-            _contentBannerService = new Mock<IContentBannerService>();
+            _contentBannerService = new Mock<IClientContentService>();
             _contentBannerService
-                .Setup(cbs => cbs.GetBannerContent(_bannerId, _useCDN))
-                .ReturnsAsync(_contentBanner);
+                .Setup(cbs => cbs.GetContentByClientId(_contentType, _clientId))
+                .ReturnsAsync(ContentBanner);
 
-            RequestHandler = new GetContentBannerRequestHandler(RequestValidator.Object, _logger.Object, _contentBannerService.Object);
+            RequestHandler = new GetClientContentRequestHandler(RequestValidator.Object, _logger.Object, 
+                _contentBannerService.Object, MockCacheStorageService.Object);
 
-            Query = new GetContentBannerRequest
+            Query = new GetClientContentRequest
             {
-                BannerId = _bannerId,
-                UseCDN = _useCDN
+                ContentType = "banner",
+                ClientId = _clientId
             };
         }
 
@@ -50,7 +52,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             await RequestHandler.Handle(Query);
 
             //Assert
-            _contentBannerService.Verify(x => x.GetBannerContent(_bannerId,_useCDN), Times.Once);
+            _contentBannerService.Verify(x => x.GetContentByClientId(_contentType, _clientId), Times.Once);
         }
 
         public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
@@ -65,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             var response = await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.AreEqual(_contentBanner, response.ContentBanner);
+            Assert.AreEqual(ContentBanner, response.ContentBanner);
         }
     }
 }

@@ -3,31 +3,29 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 using SFA.DAS.EmployerAccounts.Services;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
 {
     class WhenIGetContentBanner
     {
-        private Mock<IContentBannerApiClient> _mockContentBannerApiClient;
-        private IContentBannerService _sut;
+        private Mock<IClientContentApiClient> _mockContentBannerApiClient;
+        private IClientContentService _sut;
         private string _testData;
-        private bool _useCDN;
-        int _bannerId;
-
+        
         [SetUp]
         public void Arrange()
         {
-            _bannerId = 123;
             _testData = "<h1>My First Heading</h1>" +
                         "<p>My first paragraph.</p>";
 
-            _mockContentBannerApiClient = new Mock<IContentBannerApiClient>();
+            _mockContentBannerApiClient = new Mock<IClientContentApiClient>();
             _mockContentBannerApiClient
-                .Setup(m => m.GetBanner(_bannerId, _useCDN))
+                .Setup(m => m.GetContentByClientId(ContentType.Banner, "eas-acc"))
                 .ReturnsAsync(_testData);
 
-            _sut = new ContentBannerService(_mockContentBannerApiClient.Object);
+            _sut = new ClientContentService(_mockContentBannerApiClient.Object);
         }
 
         [Test]
@@ -36,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
             // arrange
 
             // act
-            var result = await _sut.GetBannerContent(_bannerId,_useCDN);
+            var result = await _sut.GetContentByClientId(ContentType.Banner, "eas-acc");
 
             // assert            
             result.Should().Be(_testData);
