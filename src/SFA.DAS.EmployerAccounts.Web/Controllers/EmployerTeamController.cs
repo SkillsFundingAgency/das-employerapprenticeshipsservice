@@ -23,8 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerTeamController : BaseController
     {
         private readonly EmployerTeamOrchestrator _employerTeamOrchestrator;
-        private readonly IAuthorizationService _authorizationService;
-
+   
         public EmployerTeamController(
             IAuthenticationService owinWrapper)
             : base(owinWrapper)
@@ -36,12 +35,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             IAuthenticationService owinWrapper,
             IMultiVariantTestingService multiVariantTestingService,
             ICookieStorageService<FlashMessageViewModel> flashMessage,
-            EmployerTeamOrchestrator employerTeamOrchestrator,
-            IAuthorizationService authorizationService)
+            EmployerTeamOrchestrator employerTeamOrchestrator)
             : base(owinWrapper, multiVariantTestingService, flashMessage)
         {
             _employerTeamOrchestrator = employerTeamOrchestrator;
-            _authorizationService = authorizationService;
         }
 
         [HttpGet]
@@ -399,44 +396,10 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 viewModel.ViewName = "AddPAYE";                
             }
-            else if (_authorizationService.IsAuthorized("EmployerFeature.CallToAction"))
+            else
             {
                 _employerTeamOrchestrator.GetCallToActionViewName(viewModel);
             }
-
-            return PartialView(viewModel);
-        }
-
-        [ChildActionOnly]
-        public ActionResult Row1Panel2(AccountDashboardViewModel model)
-        {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Tasks", Data = model };
-
-            if (model.PayeSchemeCount == 0)
-            {
-                viewModel.ViewName = "Empty";
-            }
-
-            return PartialView(viewModel);
-        }
-
-        [ChildActionOnly]
-        public ActionResult Row2Panel1(AccountDashboardViewModel model)
-        {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Dashboard", Data = model };
-
-            if (model.PayeSchemeCount == 0)
-            {
-                viewModel.ViewName = "Empty";
-            }
-
-            return PartialView(viewModel);
-        }
-
-        [ChildActionOnly]
-        public ActionResult Row2Panel2(AccountDashboardViewModel model)
-        {
-            var viewModel = new PanelViewModel<AccountDashboardViewModel> { ViewName = "Empty", Data = model };
 
             return PartialView(viewModel);
         }
@@ -448,78 +411,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [ChildActionOnly]
-        public ActionResult V2AddPAYE(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
         public ActionResult SignAgreement(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }        
 
         [ChildActionOnly]
-        public ActionResult V2SignAgreement(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
         public ActionResult Empty(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult Tasks(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult Dashboard(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult ProviderPermissions(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult ProviderPermissionsMultiple(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult ProviderPermissionsDenied(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult FinancialTransactions(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        public ActionResult SingleProvider(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult SavedProviders(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult AccountSettings(AccountDashboardViewModel model)
         {
             return PartialView(model);
         }
@@ -536,18 +434,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var reservation = model.CallToActionViewModel.Reservations?.FirstOrDefault();
             var viewModel = new ReservationViewModel(reservation);
             return PartialView(viewModel);
-        }
-
-        [ChildActionOnly]
-        public ActionResult V2CheckFunding(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
-        }
-
-        [ChildActionOnly]
-        public ActionResult FundingComplete(AccountDashboardViewModel model)
-        {
-            return PartialView(model);
         }
 
         [ChildActionOnly]
@@ -580,42 +466,182 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             return PartialView(model.CallToActionViewModel.VacanciesViewModel.Vacancies.First(m => m.Status == EmployerAccounts.Models.Recruit.VacancyStatus.Closed));
         }
 
-        [ChildActionOnly]
-        public ActionResult CreateVacancy(AccountDashboardViewModel model)
+        [HttpGet]
+        [Route("triagewhichcourseyourapprenticewilltake")]
+        public ActionResult TriageWhichCourseYourApprenticeWillTake()
         {
-            return PartialView(model);
+            return View();
         }
 
-        [ChildActionOnly]
-        public ActionResult MultipleVacancies(AccountDashboardViewModel model)
+        [HttpPost]
+        [Route("triagewhichcourseyourapprenticewilltake")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageWhichCourseYourApprenticeWillTake(TriageViewModel model)
         {
-            return PartialView(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return RedirectToAction(ControllerConstants.TriageHaveYouChosenATrainingProviderActionName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
         }
 
-        [ChildActionOnly]
-        public ActionResult PrePayeRecruitment(AccountDashboardViewModel model)
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetcourseprovider")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetCourseProvider()
         {
-            return PartialView(model);
+            return View();
         }
 
-        [ChildActionOnly]
-        public ActionResult SearchBar()
+        [HttpGet]
+        [Route("triagehaveyouchosenatrainingprovider")]
+        public ActionResult TriageHaveYouChosenATrainingProvider()
         {
-            return PartialView();
+            return View();
         }
 
-        [ChildActionOnly]
-        public ActionResult MostActiveLinks(AccountDashboardViewModel model)
+        [HttpPost]
+        [Route("triagehaveyouchosenatrainingprovider")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageHaveYouChosenATrainingProvider(TriageViewModel model)
         {
-            return PartialView(model);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return RedirectToAction(ControllerConstants.TriageWillApprenticeshipTrainingStartActionName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetProviderActionName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
         }
 
-        [ChildActionOnly]
-        public ActionResult OtherTasksPanel(AccountDashboardViewModel model)
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetprovider")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetProvider()
         {
-            return PartialView(model);
+            return View();
         }
-        
+
+        [HttpGet]
+        [Route("triagewillapprenticeshiptrainingstart")]
+        public ActionResult TriageWillApprenticeshipTrainingStart()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("triagewillapprenticeshiptrainingstart")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageWillApprenticeshipTrainingStart(TriageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return RedirectToAction(ControllerConstants.TriageApprenticeForExistingEmployeeActionName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetStartDateActionName);
+                }
+
+                case TriageOptions.Unknown:
+                {
+                    return RedirectToAction(ControllerConstants.TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
+        }
+
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetstartdate")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetStartDate()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("triageyoucannotsetupanapprenticeshipyetapproximatestartdate")]
+        public ActionResult TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        [Route("triageapprenticeforexistingemployee")]
+        public ActionResult TriageApprenticeForExistingEmployee()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [Route("triageapprenticeforexistingemployee")]
+        [ValidateAntiForgeryToken]
+        public ActionResult TriageApprenticeForExistingEmployee(TriageViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            switch (model.TriageOption)
+            {
+                case TriageOptions.Yes:
+                {
+                    return View(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName);
+                }
+
+                case TriageOptions.No:
+                {
+                    return View(ControllerConstants.TriageSetupApprenticeshipNewEmployeeViewName);
+                }
+
+                default:
+                {
+                    return View(model);
+                }
+            }
+        }
 
         private async Task<OrchestratorResponse<AccountDashboardViewModel>> GetAccountInformation(string hashedAccountId)
         {

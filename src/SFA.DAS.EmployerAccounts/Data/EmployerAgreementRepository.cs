@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.Organisation;
@@ -159,6 +160,20 @@ namespace SFA.DAS.EmployerAccounts.Data
             legalEntity.SignedAgreementId = signedAgreementId;
             legalEntity.SignedAgreementVersion = signedAgreementVersion;
             await _db.Value.SaveChangesAsync();
+        }
+
+        public async Task<AccountLegalEntity> GetOrganisationsAgreements(long accountLegalEntityId)
+        {
+            var accountLegalEntity = await _db.Value.AccountLegalEntities
+             .Where(ale => ale.Id == accountLegalEntityId
+                           && ale.Deleted == null
+                           && ale.Agreements.Any(ea =>
+                               ea.StatusId == EmployerAgreementStatus.Pending ||
+                               ea.StatusId == EmployerAgreementStatus.Signed))
+             .SingleOrDefaultAsync()
+             .ConfigureAwait(false);
+
+            return accountLegalEntity;
         }
     }
 }

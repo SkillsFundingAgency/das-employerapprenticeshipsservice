@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -13,6 +14,7 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementType;
+using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
@@ -320,5 +322,38 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
             return response;
         }
+
+        public virtual async Task<OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>> GetOrganisationAgreements(string accountLegalEntityHashedId)
+        {
+            var response = new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>();
+
+            try
+            {
+                var result = await _mediator.SendAsync(new GetOrganisationAgreementsRequest
+                {
+                    AccountLegalEntityHashedId = accountLegalEntityHashedId
+                });
+                
+                response.Data = _mapper.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(result.Agreements);
+            }
+            catch (InvalidRequestException ex)
+            {
+                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
+                {
+                    Status = HttpStatusCode.BadRequest,                    
+                    Exception = ex
+                };
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return new OrchestratorResponse<ICollection<OrganisationAgreementViewModel>>
+                {
+                    Status = HttpStatusCode.Unauthorized
+                };
+            }
+
+            return response;
+        }
     }
 }
+   
