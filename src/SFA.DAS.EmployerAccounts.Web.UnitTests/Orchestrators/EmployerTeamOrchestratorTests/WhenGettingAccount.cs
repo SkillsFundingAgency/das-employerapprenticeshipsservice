@@ -87,12 +87,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
                     Tasks = _tasks
                 });
 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>()))
-                .ReturnsAsync(new GetVacanciesResponse
-                {
-                     Vacancies = new List<Vacancy>()
-                });
-
             _mediator.Setup(m => m.SendAsync(It.Is<GetUserAccountRoleQuery>(q => q.ExternalUserId == UserId)))
                      .ReturnsAsync(new GetUserAccountRoleResponse
                      {
@@ -140,54 +134,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
-
-
-            _mediator.Setup(m => m.SendAsync(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId)))
-                   .ReturnsAsync(new GetReservationsResponse
-                   {
-                       Reservations = new List<Reservation>
-                       {
-                             new Reservation
-                             {
-                                 AccountId = 123
-                             }
-                       }
-                   });
-
-            _mediator.Setup(m => m.SendAsync(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == HashedAccountId)))
-                 .ReturnsAsync(new GetApprenticeshipsResponse
-                 {
-                    Apprenticeships = new List<Apprenticeship>
-                    {
-                        new Apprenticeship { FirstName = "FirstName" }
-                    }
-                 });           
-
-
-            var Cohort = new Cohort()
-            {
-                Id = 1,              
-                CohortStatus = EmployerAccounts.Models.CommitmentsV2.CohortStatus.WithTrainingProvider,
-                NumberOfDraftApprentices = 1,
-                Apprenticeships = new List<Apprenticeship> 
-                        {
-                            new Apprenticeship()
-                            {
-                                Id = 2,
-                                FirstName = "FirstName",
-                                LastName = "LastName",
-                                CourseStartDate = new DateTime(2020,5,1),
-                                CourseEndDate = new DateTime(2022,1,1),
-                                CourseName = "CourseName"                               
-                            }
-                        }
-            };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>()))
-                    .ReturnsAsync(new GetSingleCohortResponse 
-                    {  
-                        Cohort = Cohort
-
-                    });
 
             _currentDateTime = new Mock<ICurrentDateTime>();
 
@@ -253,36 +199,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             //Assert
             Assert.IsNotNull(actual.Data);
             Assert.IsEmpty(actual.Data.Tasks);
-        }
-
-        [Test]
-        public async Task ThenShouldReturnTheVacancies()
-        {
-            //Arrange            
-            var vacancy = new Vacancy { Title = Guid.NewGuid().ToString() };
-            var vacancies = new List<Vacancy> { vacancy };
-
-            var expectedtitle = Guid.NewGuid().ToString();
-            var expectedvacancy = new VacancyViewModel { Title = expectedtitle };
-            var expectedVacancies = new List<VacancyViewModel> { expectedvacancy };
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>()))
-               .ReturnsAsync(new GetVacanciesResponse
-               {     
-                   Vacancies = vacancies
-               });
-
-            _mapper.Setup(m => m.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacancies))
-                .Returns(expectedVacancies);
-
-            // Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.IsNotNull(actual.Data);
-            Assert.AreEqual(1, actual.Data.CallToActionViewModel.VacanciesViewModel.VacancyCount);
-            Assert.AreEqual(expectedvacancy.Title,  actual.Data.CallToActionViewModel.VacanciesViewModel.Vacancies.First().Title);
-            _mapper.Verify(m => m.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacancies), Times.Once);
         }
 
         [Test]
@@ -354,82 +270,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         {
             var model = await _orchestrator.GetAccountSummary(HashedAccountId, UserId);
             Assert.IsNotNull(model.Data);
-        }
-
-        [Test]
-        public async Task ThenShouldGetReservationsCount()
-        {
-            // Act
-            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.AreEqual(1, result.Data.CallToActionViewModel.ReservationsCount);
-        }
-
-        [Test]
-        public async Task ThenShouldGetApprenticeshipResponse()
-        {
-            //Arrange
-            var apprenticeships = new List<Apprenticeship>  { new Apprenticeship { FirstName = "FirstName" } };
-            _mediator.Setup(m => m.SendAsync(It.Is<GetApprenticeshipsRequest>(q => q.HashedAccountId == HashedAccountId)))
-                .ReturnsAsync(new GetApprenticeshipsResponse  { Apprenticeships = apprenticeships });
-            var expectedApprenticeship = new List<ApprenticeshipViewModel>() {new ApprenticeshipViewModel { ApprenticeshipFullName = "FullName" }};
-            _mapper.Setup(m => m.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeships)).Returns(expectedApprenticeship);
-            
-            //Act
-            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.IsTrue(result.Data.CallToActionViewModel.Apprenticeships.Count().Equals(1));
-        }
-
-        [Test]
-        public async Task ThenShouldGetCohortResponse()
-        {
-            //Arrange 
-            var Cohort = new Cohort() { Id = 1, NumberOfDraftApprentices = 1,  Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" }  } };            
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { Cohort = Cohort });            
-            var expectedCohort = new CohortViewModel()
-            {                
-                NumberOfDraftApprentices = 1,
-                Apprenticeships = new List<ApprenticeshipViewModel> { new ApprenticeshipViewModel { ApprenticeshipFullName = "FullName" } }
-            };            
-            _mapper.Setup(m => m.Map<Cohort, CohortViewModel>(Cohort)).Returns(expectedCohort);
-
-            //Act
-            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert                    
-            Assert.AreEqual(1, result.Data.CallToActionViewModel.CohortsCount);            
-        }
-
-        [Test]
-        [TestCase(false, false, false, false, false, Description = "All calls successful")]
-        [TestCase(true, false, false, false, true, Description = "Vacancy call failed")]
-        [TestCase(false, true, false, false, true, Description = "Vacancy call failed")]
-        [TestCase(false, false, true, false, true, Description = "Cohort call failed")]
-        public async Task ThenShouldSetUnableToDetermineCallToAction(
-            bool vacancyCallFailed, 
-            bool reservationsCallFailed, 
-            bool cohortCallFailed, 
-            bool apprenticeshipCallFailed, 
-            bool unableToDetermineCallToActionExpected)
-        {
-            //Arrange 
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetVacanciesRequest>())).ReturnsAsync(new GetVacanciesResponse { Vacancies = new List<Vacancy>(), HasFailed = vacancyCallFailed });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetReservationsRequest>())).ReturnsAsync(new GetReservationsResponse { Reservations = new List<Reservation>(), HasFailed = reservationsCallFailed });
-
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetApprenticeshipsRequest>())).ReturnsAsync(new GetApprenticeshipsResponse{ Apprenticeships = new List<Apprenticeship>(), HasFailed = apprenticeshipCallFailed });
-
-            var cohort = new Cohort() { Id = 1, NumberOfDraftApprentices = 1, Apprenticeships = new List<Apprenticeship> { new Apprenticeship { FirstName = "FirstName" } } };
-            _mediator.Setup(x => x.SendAsync(It.IsAny<GetSingleCohortRequest>())).ReturnsAsync(new GetSingleCohortResponse { Cohort = cohort, HasFailed = cohortCallFailed });           
-
-            //Act
-            var result = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert                    
-            Assert.AreEqual(unableToDetermineCallToActionExpected, result.Data.CallToActionViewModel.UnableToDetermineCallToAction);
         }
     }
 }
