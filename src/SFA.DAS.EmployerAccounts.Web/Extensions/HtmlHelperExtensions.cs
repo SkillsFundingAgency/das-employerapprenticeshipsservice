@@ -143,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 ClientId = clientId
             });
             var content = userResponse.Result;
-            return MvcHtmlString.Create(content.ContentBanner);
+            return MvcHtmlString.Create(content.Content);
         }
     }
 }

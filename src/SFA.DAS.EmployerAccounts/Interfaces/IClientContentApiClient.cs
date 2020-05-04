@@ -5,6 +5,6 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface IClientContentApiClient
     {
-        Task<string> GetContentByClientId(ContentType type, string clientId);
+        Task<string> GetContent(ContentType type, string clientId);
     }
 }

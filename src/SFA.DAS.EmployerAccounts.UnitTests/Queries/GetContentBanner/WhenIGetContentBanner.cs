@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             var response = await RequestHandler.Handle(Query);
 
             //Assert
-            Assert.AreEqual(ContentBanner, response.ContentBanner);
+            Assert.AreEqual(ContentBanner, response.Content);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             var result = await requestHandler1.Handle(query1);
 
             //assert
-            Assert.AreEqual(result.ContentBanner, contentBanner1);
+            Assert.AreEqual(result.Content, contentBanner1);
             cacheStorageService1.Verify(x => x.RetrieveFromCache<string>(query1.ClientId), Times.Once);
         }
 
@@ -114,7 +114,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
              var result = await requestHandler1.Handle(Query1);
 
             //assert
-            Assert.AreEqual(result.ContentBanner, ContentBanner1);
+            Assert.AreEqual(result.Content, ContentBanner1);
         }
 
         private static void SetupEmptyCache(GetClientContentRequest query, Mock<ICacheStorageService> cacheStorageService)

@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         {
         }
 
-        public Task<string> GetContentByClientId(ContentType type, string clientId)
+        public Task<string> GetContent(ContentType type, string clientId)
         {
             string banner =string.Empty;
             switch (type)

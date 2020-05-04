@@ -16,7 +16,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
             }
             else
             {
-                var isValidType = Enum.TryParse(item.ContentType, true, out ContentType type);
+                var isValidType = Enum.TryParse(item.ContentType, true, out ContentType _);
                 if (!isValidType)
                 {
                     validationResult.AddError(nameof(item.ContentType), "Not a valid ContentType");

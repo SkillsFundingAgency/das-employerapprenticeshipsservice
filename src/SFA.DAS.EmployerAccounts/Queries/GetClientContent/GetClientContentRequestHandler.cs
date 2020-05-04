@@ -39,18 +39,15 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                 var type = (ContentType)Enum.Parse(typeof(ContentType), message.ContentType, true);
                 var cacheKey = message.ClientId;
 
-                if (!string.IsNullOrWhiteSpace(cacheKey))
-                {
-                    var cachedContentBanner =
+                var cachedContentBanner =
                         await _cacheStorageService.RetrieveFromCache<string>(cacheKey);
 
-                    if (cachedContentBanner != null)
+                if (cachedContentBanner != null)
+                {
+                    return new GetClientContentResponse
                     {
-                        return new GetClientContentResponse
-                        {
-                            ContentBanner = cachedContentBanner
-                        };
-                    }
+                        Content = cachedContentBanner
+                    };
                 }
                 var contentBanner = await _service.GetContentByClientId(type, message.ClientId);
 
@@ -60,12 +57,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                 }
                 return new GetClientContentResponse
                 {
-                    ContentBanner = contentBanner
+                    Content = contentBanner
                 };
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Failed to get ContentBanner for {message.ClientId}");
+                _logger.Error(ex, $"Failed to get Content for {message.ClientId}");
 
                 return new GetClientContentResponse
                 {

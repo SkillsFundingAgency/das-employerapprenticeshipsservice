@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
 
             _mockContentBannerApiClient = new Mock<IClientContentApiClient>();
             _mockContentBannerApiClient
-                .Setup(m => m.GetContentByClientId(ContentType.Banner, "eas-acc"))
+                .Setup(m => m.GetContent(ContentType.Banner, "eas-acc"))
                 .ReturnsAsync(_testData);
 
             _sut = new ClientContentService(_mockContentBannerApiClient.Object);

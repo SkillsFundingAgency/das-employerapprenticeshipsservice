@@ -15,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public async Task<string> GetContentByClientId(ContentType type, string clientId)
         {
-            var cachedContent = await _client.GetContentByClientId(type, clientId);
+            var cachedContent = await _client.GetContent(type, clientId);
 
             return cachedContent;
         }

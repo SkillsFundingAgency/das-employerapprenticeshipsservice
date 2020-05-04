@@ -2,7 +2,7 @@
 {
     public class GetClientContentResponse
     {
-        public string ContentBanner { get; set; }
+        public string Content { get; set; }
         public bool HasFailed { get; set; }
     }
 }
