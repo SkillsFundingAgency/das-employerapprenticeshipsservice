@@ -40,10 +40,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             // Arrange
             var model = new AccountDashboardViewModel
             {
-                PayeSchemeCount = 1,                
+                PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
                     Reservations = new List<EmployerAccounts.Models.Reservations.Reservation> { new EmployerAccounts.Models.Reservations.Reservation { Status = EmployerAccounts.Models.Reservations.ReservationStatus.Completed } },
                     VacanciesViewModel = new VacanciesViewModel
                     {
@@ -73,7 +72,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
                     Reservations = new List<EmployerAccounts.Models.Reservations.Reservation> { new EmployerAccounts.Models.Reservations.Reservation { Status = EmployerAccounts.Models.Reservations.ReservationStatus.Completed } },
                     VacanciesViewModel = new VacanciesViewModel
                     {
@@ -103,7 +101,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
                     Reservations = new List<EmployerAccounts.Models.Reservations.Reservation> { new EmployerAccounts.Models.Reservations.Reservation { Status = EmployerAccounts.Models.Reservations.ReservationStatus.Completed } },
                     VacanciesViewModel = new VacanciesViewModel
                     {
@@ -133,7 +130,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
                     Reservations = new List<EmployerAccounts.Models.Reservations.Reservation> { new EmployerAccounts.Models.Reservations.Reservation { Status = EmployerAccounts.Models.Reservations.ReservationStatus.Completed } },
                     VacanciesViewModel = new VacanciesViewModel
                     {
@@ -163,7 +159,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
                     Reservations = new List<EmployerAccounts.Models.Reservations.Reservation> { new EmployerAccounts.Models.Reservations.Reservation { Status = EmployerAccounts.Models.Reservations.ReservationStatus.Completed } },
                     VacanciesViewModel = new VacanciesViewModel
                     {

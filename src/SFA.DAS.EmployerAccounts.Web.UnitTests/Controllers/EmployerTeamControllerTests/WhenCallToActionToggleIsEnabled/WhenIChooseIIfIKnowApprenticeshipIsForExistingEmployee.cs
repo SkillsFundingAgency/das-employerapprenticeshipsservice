@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
@@ -38,16 +39,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
         [Test]
         public void IfIChooseYesIContinueTheJourney()
         {
-            //Act
-            var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.Yes }) as ViewResult;
+            // Arrange
+            var model = new AccountDashboardViewModel
+            {
+                PayeSchemeCount = 1,
+                PendingAgreements = new List<PendingAgreementsViewModel> { new PendingAgreementsViewModel() }
+            };
 
-            //Assert
-            Assert.AreEqual(ControllerConstants.TriageSetupApprenticeshipExistingEmployeeViewName, result.ViewName);
-        }
-
-        [Test]
-        public void IfIChooseNoICannotSetupAnApprentice()
-        {
             //Act
             var result = _controller.TriageApprenticeForExistingEmployee(new TriageViewModel { TriageOption = TriageOptions.No }) as ViewResult;
 
