@@ -18,25 +18,14 @@
                 </h2>
             }
             <div class="govuk-error-summary__body">
-                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.Message))
-                {
-                    <p class="govuk-body">@Html.Raw(viewModel.FlashMessage.Message)</p>
-                }
-                @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
-                {
-                    <p class="govuk-body">@Html.Raw(viewModel.FlashMessage.SubMessage)</p>
-                }
-                @if (viewModel.FlashMessage.ErrorMessages.Any())
-                {
-                    <ul class="govuk-list govuk-error-summary__list">
-                        @foreach (var errorMessage in viewModel.FlashMessage.ErrorMessages)
-                        {
-                            <li>
-                                <a href="#@errorMessage.Key">@errorMessage.Value</a>
-                            </li>
-                        }
-                    </ul>
-                }
+                <ul class="govuk-list govuk-error-summary__list">
+                    @foreach (var errorMessage in viewModel.FlashMessage.ErrorMessages)
+                    {
+                        <li>
+                            <a href="#@errorMessage.Key">@errorMessage.Value</a>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
     }
@@ -53,7 +42,7 @@
             }
             @if (!string.IsNullOrEmpty(viewModel.FlashMessage.SubMessage))
             {
-                <p class="das-notification__body">@Html.Raw(viewModel.FlashMessage.SubMessage)</p>                
+                <p class="das-notification__body">@Html.Raw(viewModel.FlashMessage.SubMessage)</p>
             }
         </div>
     }
