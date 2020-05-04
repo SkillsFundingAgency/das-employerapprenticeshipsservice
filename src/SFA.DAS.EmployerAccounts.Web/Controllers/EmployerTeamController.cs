@@ -359,15 +359,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ChildActionOnly]
         public ActionResult SingleApprenticeshipContinueWithProvider(AccountDashboardViewModel model)
         {
-            model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>() 
-            { 
-                new ApprenticeshipViewModel() 
-                { 
-                    CourseName = model.CallToActionViewModel.Reservations?.Single().Course?.CourseDescription,
+            model.CallToActionViewModel.Cohorts.Single().Apprenticeships = new List<ApprenticeshipViewModel>()
+            {
+                new ApprenticeshipViewModel()
+                {
+                    CourseName = GetCourseName(model.CallToActionViewModel),
                     HashedCohortId = model.CallToActionViewModel.Cohorts?.Single().HashedCohortId,
                     TrainingProvider = model.CallToActionViewModel.Cohorts?.Single().TrainingProvider.First()
                 }
-            };           
+            };          
             return PartialView(model.CallToActionViewModel.Cohorts.Single().Apprenticeships.Single());
         }
 
@@ -664,6 +664,19 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (externalUserId != null)
                 ViewBag.UserId = externalUserId;
+        }
+
+        private string GetCourseName(CallToActionViewModel callToActionViewModel)
+        {
+            if (callToActionViewModel.CohortsCount == 1 && callToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1)
+            {
+                return callToActionViewModel.Cohorts?.Single().Apprenticeships?.Single().CourseName;
+            }
+            else if (callToActionViewModel.ReservationsCount == 1)
+            {
+                return callToActionViewModel.Reservations?.Single().Course?.CourseDescription;
+            }
+            return string.Empty;
         }
     }
 }
