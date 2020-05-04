@@ -126,7 +126,6 @@
 
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
-        //@Html.GetClientContentByType(Request.QueryString["type"], Request.QueryString["clientId"])
         @Html.GetClientContentByType("banner","eas-acc");
         if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
         {

@@ -47,18 +47,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         }
 
         [Test]
-        public async Task ThenIfTheMessageIsValidTheServiceIsCalled()
+        public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
-            //Act
             await RequestHandler.Handle(Query);
 
             //Assert
             _contentBannerService.Verify(x => x.GetContentByClientId(_contentType, _clientId), Times.Once);
-        }
-
-        public override Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
-        {
-            throw new System.NotImplementedException();
         }
 
         [Test]

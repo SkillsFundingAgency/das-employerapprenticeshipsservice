@@ -36,40 +36,33 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
 
             try
             {
-                var type = (ContentType) Enum.Parse(typeof(ContentType), message.ContentType, true);
-
+                var type = (ContentType)Enum.Parse(typeof(ContentType), message.ContentType, true);
                 var cacheKey = message.ClientId;
 
                 if (!string.IsNullOrWhiteSpace(cacheKey))
                 {
-                    var result =
+                    var cachedContentBanner =
                         await _cacheStorageService.RetrieveFromCache<string>(cacheKey);
 
-                    if (result != null)
+                    if (cachedContentBanner != null)
                     {
                         return new GetClientContentResponse
                         {
-
-                            ContentBanner = result
+                            ContentBanner = cachedContentBanner
                         };
                     }
                 }
-                var cachedContentBanner = await _service.GetContentByClientId(type, message.ClientId);
+                var contentBanner = await _service.GetContentByClientId(type, message.ClientId);
 
-                if (cachedContentBanner == null)
+                if (contentBanner != null)
                 {
-                    throw new CachedContentBannerNotFoundException(message.ClientId);
+                    await _cacheStorageService.SaveToCache(message.ClientId, contentBanner, 1);
                 }
-
-                await _cacheStorageService.SaveToCache(message.ClientId, cachedContentBanner, 1);
-                
                 return new GetClientContentResponse
                 {
-
-                    ContentBanner = cachedContentBanner
+                    ContentBanner = contentBanner
                 };
             }
-
             catch (Exception ex)
             {
                 _logger.Error(ex, $"Failed to get ContentBanner for {message.ClientId}");
@@ -79,25 +72,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                     HasFailed = true
                 };
             }
-        }
-    }
-
-    [Serializable]
-    public class CachedContentBannerNotFoundException : Exception
-    {
-        public int BannerId { get; }
-
-        public CachedContentBannerNotFoundException() { }
-        public CachedContentBannerNotFoundException(string message) : base(message) { }
-        public CachedContentBannerNotFoundException(string message, Exception inner) : base(message, inner) { }
-        protected CachedContentBannerNotFoundException(
-            System.Runtime.Serialization.SerializationInfo info,
-            System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-
-        public CachedContentBannerNotFoundException(int bannerId)
-            : base($"No reservation was found with id [{bannerId}].")
-        {
-            BannerId = bannerId;
         }
     }
 }
