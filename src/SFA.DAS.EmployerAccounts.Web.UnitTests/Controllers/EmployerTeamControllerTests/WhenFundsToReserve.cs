@@ -42,11 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new AccountDashboardViewModel
             {
                 PayeSchemeCount = 1,
-                CallToActionViewModel = new CallToActionViewModel
-                {
-                    AgreementsToSign = false
-                },
-
+                CallToActionViewModel = new CallToActionViewModel(),
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy
             };
 
@@ -66,11 +62,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
             var model = new AccountDashboardViewModel
             {
                 PayeSchemeCount = 1,
-                CallToActionViewModel = new CallToActionViewModel
-                {
-                    AgreementsToSign = false
-                },
-
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.Levy
             };
 
@@ -91,7 +82,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 CallToActionViewModel = new CallToActionViewModel
                 {
-                    AgreementsToSign = false,
                     Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Pending } },
                     VacanciesViewModel = new VacanciesViewModel()
                 },
