@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                         Content = cachedContentBanner
                     };
                 }
-                var contentBanner = await _service.GetContent(message.ContentType, cacheKey);
+                var contentBanner = await _service.Get(message.ContentType, cacheKey);
 
                 if (contentBanner != null)
                 {

@@ -51,6 +51,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public long DefaultServiceTimeoutMilliseconds { get; set; }
         public ContentClientApiConfiguration ContentClientApi { get; set; }
         public string ApplicationId { get; set; }
-        public int DefaultCacheExpirationInHours { get; set; }
+        public int DefaultCacheExpirationInMinutes { get; set; }
     }
 }

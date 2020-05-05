@@ -30,7 +30,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             EmployerAccountsConfiguration = new EmployerAccountsConfiguration()
             {
                 ApplicationId = "eas-acc",
-                DefaultCacheExpirationInHours = 1
+                DefaultCacheExpirationInMinutes = 1
             };
             ContentBanner = "<p>find out how you can pause your apprenticeships<p>";
             MockCacheStorageService = new Mock<ICacheStorageService>();
@@ -39,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             _logger = new Mock<ILog>();
             _contentBannerService = new Mock<IClientContentService>();
             _contentBannerService
-                .Setup(cbs => cbs.GetContent(_contentType, _clientId))
+                .Setup(cbs => cbs.Get(_contentType, _clientId))
                 .ReturnsAsync(ContentBanner);
 
             Query = new GetClientContentRequest
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             await RequestHandler.Handle(Query);
 
             //Assert
-            _contentBannerService.Verify(x => x.GetContent(_contentType, _clientId), Times.Once);
+            _contentBannerService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
         }
 
         [Test]
@@ -83,7 +83,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
 
             requestValidator1.Setup(r => r.Validate(query1)).Returns(new ValidationResult());
 
-            clientMockontentService.Setup(c => c.GetContent("banner", key));
+            clientMockontentService.Setup(c => c.Get("banner", key));
 
             requestHandler1 = new GetClientContentRequestHandler(requestValidator1.Object, logger.Object, clientMockontentService.Object,
                 cacheStorageService1.Object, EmployerAccountsConfiguration);
@@ -113,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             requestValidator1.Setup(r => r.Validate(query1)).Returns(new ValidationResult());
 
            
-            clientMockContentService.Setup(c => c.GetContent(query1.ContentType, key))
+            clientMockContentService.Setup(c => c.Get(query1.ContentType, key))
                 .ReturnsAsync(contentBanner1);
 
             requestHandler1 = new GetClientContentRequestHandler(requestValidator1.Object, logger.Object, clientMockContentService.Object,

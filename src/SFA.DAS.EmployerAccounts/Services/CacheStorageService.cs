@@ -21,7 +21,7 @@ namespace SFA.DAS.EmployerAccounts.Services
         public async Task Save<T>(string key, T item, int expirationInHours)
         {
             var json = JsonConvert.SerializeObject(item);
-            await _distributedCache.SetCustomValueAsync(key, json, TimeSpan.FromHours(_config.DefaultCacheExpirationInHours));
+            await _distributedCache.SetCustomValueAsync(key, json, TimeSpan.FromMinutes(_config.DefaultCacheExpirationInMinutes));
         }
 
         public bool TryGet(string key, out string value)

@@ -12,9 +12,9 @@ namespace SFA.DAS.EmployerAccounts.Services
             _client = client;
         }
 
-        public async Task<string> GetContent(string type, string clientId)
+        public async Task<string> Get(string type, string applicationId)
         {
-            var cachedContent = await _client.GetContent(type, clientId);
+            var cachedContent = await _client.Get(type, applicationId);
 
             return cachedContent;
         }

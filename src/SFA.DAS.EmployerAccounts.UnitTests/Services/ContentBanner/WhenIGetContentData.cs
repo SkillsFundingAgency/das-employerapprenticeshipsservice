@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
 
             _mockContentBannerApiClient = new Mock<IClientContentApiClient>();
             _mockContentBannerApiClient
-                .Setup(m => m.GetContent("banner","eas-acc"))
+                .Setup(m => m.Get("banner","eas-acc"))
                 .ReturnsAsync(_testData);
 
             _sut = new ClientContentService(_mockContentBannerApiClient.Object);
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
             // arrange
 
             // act
-            var result = await _sut.GetContent("banner", "eas-acc");
+            var result = await _sut.Get("banner", "eas-acc");
 
             // assert            
             result.Should().Be(_testData);

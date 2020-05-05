@@ -11,14 +11,14 @@ namespace SFA.DAS.EmployerAccounts.Services
         {
         }
 
-        public Task<string> GetContent(string type, string clientId)
+        public Task<string> Get(string type, string applicationId)
         {
             string banner =string.Empty;
             switch (type)
             {
                 case "banner":
                     {
-                        if (clientId.Contains("_legacy"))
+                        if (applicationId.Contains("_legacy"))
                         {
                             banner = "<div class=\"das-notification\">" +
                                      "<p class=\"das-notification__heading govuk-!-margin-bottom-0\">" +
