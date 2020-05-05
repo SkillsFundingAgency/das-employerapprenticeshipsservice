@@ -4,7 +4,8 @@
     [PartialViewName] NVARCHAR(50) NOT NULL,
     [CreatedDate] DATETIME NOT NULL, 
     [VersionNumber] INT NOT NULL,
-	[AgreementType] TINYINT NOT NULL DEFAULT 0
+	[AgreementType] TINYINT NOT NULL DEFAULT 0,
+	[PublishedDate]  DATETIME NULL
 )
 GO
 

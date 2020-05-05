@@ -19,15 +19,11 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers;
-using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetInvitation;
 using SFA.DAS.EmployerAccounts.Queries.GetMember;
-using SFA.DAS.EmployerAccounts.Queries.GetReservations;
-using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUser;
-using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System;
@@ -183,42 +179,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId
                 });
 
-                var reservationsResponseTask = _mediator.SendAsync(new GetReservationsRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var apprenticeshipsResponseTask = _mediator.SendAsync(new GetApprenticeshipsRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var accountCohortResponseTask = _mediator.SendAsync(new GetSingleCohortRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                var vacanciesResponseTask = _mediator.SendAsync(new GetVacanciesRequest
-                {
-                    HashedAccountId = hashedAccountId,
-                    ExternalUserId = externalUserId
-                });
-
-                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask, reservationsResponseTask, apprenticeshipsResponseTask, accountCohortResponseTask, vacanciesResponseTask).ConfigureAwait(false);
+                await Task.WhenAll(apiGetAccountTask, accountStatsResponseTask, userRoleResponseTask, userResponseTask, accountStatsResponseTask, agreementsResponseTask).ConfigureAwait(false);
 
                 var accountResponse = accountResponseTask.Result;
                 var userRoleResponse = userRoleResponseTask.Result;
                 var userResponse = userResponseTask.Result;
                 var accountStatsResponse = accountStatsResponseTask.Result;
                 var agreementsResponse = agreementsResponseTask.Result;
-                var reservationsResponse = reservationsResponseTask.Result;
                 var accountDetailViewModel = apiGetAccountTask.Result;
-                var vacanciesResponse = vacanciesResponseTask.Result;
-                var accountCohort = accountCohortResponseTask.Result;
-                var apprenticeshipsResponse = apprenticeshipsResponseTask.Result;
 
                 var apprenticeshipEmployerType = (ApprenticeshipEmployerType)Enum.Parse(typeof(ApprenticeshipEmployerType), accountDetailViewModel.ApprenticeshipEmployerType, true);
 
@@ -251,23 +219,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     SignedAgreementCount = agreementsResponse.EmployerAgreements.Count(x => x.HasSignedAgreement),
                     PendingAgreements = pendingAgreements,
                     ApprenticeshipEmployerType = apprenticeshipEmployerType,
-                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel),
-                    CallToActionViewModel = new CallToActionViewModel
-                    {
-                        AgreementsToSign = pendingAgreements.Count() > 0,
-                        Reservations = reservationsResponse.Reservations?.ToList(),
-                        VacanciesViewModel = vacanciesResponse.HasFailed ? new VacanciesViewModel() : new VacanciesViewModel
-                        {
-                            VacancyCount = vacanciesResponse.Vacancies.Count(),
-                            Vacancies = _mapper.Map<IEnumerable<Vacancy>, IEnumerable<VacancyViewModel>>(vacanciesResponse.Vacancies)
-                        },
-                        Apprenticeships = _mapper.Map<IEnumerable<Apprenticeship>, IEnumerable<ApprenticeshipViewModel>>(apprenticeshipsResponse?.Apprenticeships),
-                        Cohorts = new List<CohortViewModel>
-                        {
-                            _mapper.Map<Cohort, CohortViewModel>(accountCohort.Cohort)
-                        },
-                        UnableToDetermineCallToAction = vacanciesResponse.HasFailed || reservationsResponse.HasFailed || accountCohort.HasFailed || apprenticeshipsResponse.HasFailed
-                    }
+                    AgreementInfo = _mapper.Map<AccountDetailViewModel, AgreementInfoViewModel>(accountDetailViewModel)
                 };
 
                 //note: ApprenticeshipEmployerType is already returned by GetEmployerAccountHashedQuery, but we need to transition to calling the api instead.
@@ -365,13 +317,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 OnlyIfMemberIsActive = onlyIfMemberIsActive
             });
 
-
             return new OrchestratorResponse<TeamMember>
             {
                 Status = response.TeamMember.AccountId == 0 ? HttpStatusCode.NotFound : HttpStatusCode.OK,
                 Data = response.TeamMember
             };
-
         }
 
         public async Task<OrchestratorResponse<EmployerTeamMembersViewModel>> GetTeamMembers(string hashedId, string userId)
@@ -665,7 +615,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             var rules = new Dictionary<int, EvalutateCallToActionRuleDelegate>
             {
                 { 100, EvalutateSignAgreementCallToActionRule },
-                { 101, vm => vm.Data.CallToActionViewModel.UnableToDetermineCallToAction }
+                { 101, vm => viewModel.Data.CallToActionViewModel == null }
             };
 
             if (viewModel.Data.ApprenticeshipEmployerType != ApprenticeshipEmployerType.Levy)
@@ -677,8 +627,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 rules.Add(124, EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule);
                 rules.Add(200, EvalutateSingleReservationCallToActionRule);
                 rules.Add(201, EvalutateHasReservationsCallToActionRule);
-
-
+                
                 rules.Add(150, EvalutateDraftVacancyCallToActionRule);
                 rules.Add(151, EvalutatePendingReviewVacancyCallToActionRule);
                 rules.Add(152, EvalutateLiveVacancyCallToActionRule);
@@ -791,7 +740,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         private bool EvalutateSignAgreementCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.AgreementsToSign)
+            if (viewModel.Data.PendingAgreements?.Count() > 0)
             {
                 viewModel.ViewName = "SignAgreement";
                 return true;
@@ -877,8 +826,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
             return false;
         }
-
-
+        
         private bool EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
             if (viewModel.Data.CallToActionViewModel.CohortsCount == 1
