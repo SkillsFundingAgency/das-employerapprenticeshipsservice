@@ -134,13 +134,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             );
         }
 
-        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, string clientId)
+        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
             var userResponse = mediator.SendAsync(new GetClientContentRequest
             {
-                ContentType = type,
-                ClientId = clientId
+                ContentType = type
             });
             var content = userResponse.Result;
             return MvcHtmlString.Create(content.Content);

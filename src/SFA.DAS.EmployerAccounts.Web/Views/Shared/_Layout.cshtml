@@ -126,7 +126,7 @@
 
     @if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
-        @Html.GetClientContentByType("banner","eas-acc");
+        @Html.GetClientContentByType("banner")
         if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
         {
             var userId = Html.ViewContext.RequestContext.HttpContext.GetOwinContext().Authentication.User?.Claims.

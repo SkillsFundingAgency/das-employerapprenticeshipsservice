@@ -19,8 +19,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             //Act
             var result = _validator.Validate(new GetClientContentRequest()
             {
-                ContentType = "banner",
-                ClientId = "acc-eas"
+                ContentType = "banner"
             });
 
             //Assert
@@ -51,7 +50,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         public void ThenShouldReturnInvalidIfContentTypeIdIsInvalid()
         {
             //Act
-            var result = _validator.Validate(new GetClientContentRequest { ContentType = "Test", ClientId = "eas-acc"});
+            var result = _validator.Validate(new GetClientContentRequest { ContentType = "Test"});
 
             //Assert
             Assert.IsFalse(result.IsValid());

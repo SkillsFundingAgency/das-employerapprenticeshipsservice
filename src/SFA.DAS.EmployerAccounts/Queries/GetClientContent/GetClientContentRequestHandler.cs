@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
@@ -13,16 +14,18 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
         private readonly ILog _logger;
         private readonly IClientContentService _service;
         private readonly ICacheStorageService _cacheStorageService;
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
         public GetClientContentRequestHandler(
             IValidator<GetClientContentRequest> validator,
             ILog logger,
-            IClientContentService service, ICacheStorageService cacheStorageService)
+            IClientContentService service, ICacheStorageService cacheStorageService, EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _validator = validator;
             _logger = logger;
             _service = service;
             _cacheStorageService = cacheStorageService;
+            _employerAccountsConfiguration = employerAccountsConfiguration;
         }
 
         public async Task<GetClientContentResponse> Handle(GetClientContentRequest message)
@@ -34,26 +37,22 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
+            var cacheKey = _employerAccountsConfiguration.ApplicationId;
+
             try
             {
-                var type = (ContentType)Enum.Parse(typeof(ContentType), message.ContentType, true);
-                var cacheKey = message.ClientId;
-
-                var cachedContentBanner =
-                        await _cacheStorageService.RetrieveFromCache<string>(cacheKey);
-
-                if (cachedContentBanner != null)
+                if (_cacheStorageService.TryGet(cacheKey, out string cachedContentBanner))
                 {
                     return new GetClientContentResponse
                     {
                         Content = cachedContentBanner
                     };
                 }
-                var contentBanner = await _service.GetContentByClientId(type, message.ClientId);
+                var contentBanner = await _service.GetContent(message.ContentType, cacheKey);
 
                 if (contentBanner != null)
                 {
-                    await _cacheStorageService.SaveToCache(message.ClientId, contentBanner, 1);
+                    await _cacheStorageService.Save(cacheKey, contentBanner, 1);
                 }
                 return new GetClientContentResponse
                 {
@@ -62,7 +61,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Failed to get Content for {message.ClientId}");
+                _logger.Error(ex, $"Failed to get Content for {cacheKey}");
 
                 return new GetClientContentResponse
                 {

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using SFA.DAS.Caches;
 using Newtonsoft.Json;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.Services
@@ -9,19 +10,27 @@ namespace SFA.DAS.EmployerAccounts.Services
     public class CacheStorageService : ICacheStorageService
     {
         private readonly IDistributedCache _distributedCache;
+        private readonly EmployerAccountsConfiguration _config;
 
-        public CacheStorageService(IDistributedCache distributedCache)
+        public CacheStorageService(IDistributedCache distributedCache, EmployerAccountsConfiguration config)
         {
             _distributedCache = distributedCache;
+            _config = config;
         }
 
-        public async Task SaveToCache<T>(string key, T item, int expirationInHours)
+        public async Task Save<T>(string key, T item, int expirationInHours)
         {
             var json = JsonConvert.SerializeObject(item);
-            await _distributedCache.SetCustomValueAsync(key, json, new TimeSpan(1, 0, 0));
+            await _distributedCache.SetCustomValueAsync(key, json, TimeSpan.FromHours(_config.DefaultCacheExpirationInHours));
         }
 
-        public async Task<T> RetrieveFromCache<T>(string key)
+        public bool TryGet(string key, out string value)
+        {
+            value = Get<string>(key).Result;
+            return value != null;
+        }
+
+        private async Task<T> Get<T>(string key)
         {
             var json = string.Empty;
             if (await _distributedCache.ExistsAsync(key))
@@ -31,7 +40,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             return JsonConvert.DeserializeObject<T>(json);
         }
 
-        public async Task DeleteFromCache(string key)
+        public async Task Delete(string key)
         {
             await _distributedCache.RemoveFromCache(key);
         }

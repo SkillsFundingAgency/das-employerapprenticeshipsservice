@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -13,7 +12,7 @@ namespace SFA.DAS.EmployerAccounts.Services
             _client = client;
         }
 
-        public async Task<string> GetContentByClientId(ContentType type, string clientId)
+        public async Task<string> GetContent(string type, string clientId)
         {
             var cachedContent = await _client.GetContent(type, clientId);
 

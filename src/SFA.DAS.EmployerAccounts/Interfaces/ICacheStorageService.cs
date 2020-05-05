@@ -4,8 +4,9 @@ namespace SFA.DAS.EmployerAccounts.Interfaces
 {
     public interface ICacheStorageService
     {
-        Task<T> RetrieveFromCache<T>(string key);
-        Task SaveToCache<T>(string key, T item, int expirationInHours);
-        Task DeleteFromCache(string key);
+        //Task<T> TryGet<T>(string key);
+        Task Save<T>(string key, T item, int expirationInHours);
+        Task Delete(string key);
+        bool TryGet(string key, out string value);
     }
 }

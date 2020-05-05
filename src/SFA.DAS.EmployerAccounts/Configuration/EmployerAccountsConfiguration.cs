@@ -50,5 +50,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public RecruitClientApiConfiguration RecruitApi { get; set; }
         public long DefaultServiceTimeoutMilliseconds { get; set; }
         public ContentClientApiConfiguration ContentClientApi { get; set; }
+        public string ApplicationId { get; set; }
+        public int DefaultCacheExpirationInHours { get; set; }
     }
 }

@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -12,12 +11,12 @@ namespace SFA.DAS.EmployerAccounts.Services
         {
         }
 
-        public Task<string> GetContent(ContentType type, string clientId)
+        public Task<string> GetContent(string type, string clientId)
         {
             string banner =string.Empty;
             switch (type)
             {
-                case ContentType.Banner:
+                case "banner":
                     {
                         if (clientId.Contains("_legacy"))
                         {
@@ -39,7 +38,6 @@ namespace SFA.DAS.EmployerAccounts.Services
                     }
                     break;
             }
-
             return Task.FromResult(banner);
         }
     }
