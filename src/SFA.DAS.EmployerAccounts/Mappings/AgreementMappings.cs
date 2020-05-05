@@ -9,10 +9,7 @@ namespace SFA.DAS.EmployerAccounts.Mappings
     {
         public AgreementMappings()
         {
-            CreateMap<AgreementTemplate, AgreementTemplateDto>()
-                .ForMember(
-                    d => d.PublishedDate,
-                    o => o.Ignore());
+            CreateMap<AgreementTemplate, AgreementTemplateDto>();
 
             CreateMap<EmployerAgreement, AgreementDto>()
                 .ForMember(
