@@ -40,17 +40,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         public void ThenShouldReturnInvalidIfContentTypeIdIsEmpty()
         {
             //Act
-            var result = _validator.Validate(new GetClientContentRequest { ContentType = string.Empty});
-
-            //Assert
-            Assert.IsFalse(result.IsValid());
-        }
-
-        [Test]
-        public void ThenShouldReturnInvalidIfContentTypeIdIsInvalid()
-        {
-            //Act
-            var result = _validator.Validate(new GetClientContentRequest { ContentType = "Test"});
+            var result = _validator.Validate(new GetClientContentRequest { ContentType = string.Empty });
 
             //Assert
             Assert.IsFalse(result.IsValid());
