@@ -73,16 +73,7 @@
                         }
                     </td>
                     <td class="govuk-table__cell">
-                        @if (employerAgreement.HasPendingAgreement)
-                        {
-                            <a href="@Url.Action(ControllerConstants.AboutYourAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new { agreementid = employerAgreement.Pending.HashedAgreementId })" title="View agreement for @employerAgreement.LegalEntity.Name">Accept agreement</a>
-                        }
-                        else if (employerAgreement.HasSignedAgreement)
-                        {                            
-                            <a href="@Url.Action(ControllerConstants.ViewAllAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" title="View all agreements">
-                                View all agreements
-                            </a>
-                        }
+                        <a href="@Url.Action(ControllerConstants.ViewAllAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" title="View all agreements">View all agreements</a>
                     </td>
                     <td class="govuk-table__cell">
                         @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Count > 1)
