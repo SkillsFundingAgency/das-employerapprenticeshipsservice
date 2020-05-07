@@ -9,16 +9,16 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
 {
-    public class GetUnsignedEmployerAgreementQueryHandler : IAsyncRequestHandler<GetUnsignedEmployerAgreementRequest, GetUnsignedEmployerAgreementResponse>
+    public class GetNextUnsignedEmployerAgreementQueryHandler : IAsyncRequestHandler<GetNextUnsignedEmployerAgreementRequest, GetNextUnsignedEmployerAgreementResponse>
     {
         private readonly Lazy<EmployerAccountsDbContext> _db;
         private readonly IHashingService _hashingService;
-        private readonly IValidator<GetUnsignedEmployerAgreementRequest> _validator;
+        private readonly IValidator<GetNextUnsignedEmployerAgreementRequest> _validator;
 
-        public GetUnsignedEmployerAgreementQueryHandler(
+        public GetNextUnsignedEmployerAgreementQueryHandler(
             Lazy<EmployerAccountsDbContext> db,
             IHashingService hashingService,
-            IValidator<GetUnsignedEmployerAgreementRequest> validator
+            IValidator<GetNextUnsignedEmployerAgreementRequest> validator
         )
         {
             _db = db;
@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
             _validator = validator;
         }
 
-        public async Task<GetUnsignedEmployerAgreementResponse> Handle(GetUnsignedEmployerAgreementRequest message)
+        public async Task<GetNextUnsignedEmployerAgreementResponse> Handle(GetNextUnsignedEmployerAgreementRequest message)
         {
             var validationResult = await _validator.ValidateAsync(message);
 
@@ -43,14 +43,12 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
 
             var pendingAgreementId = await _db.Value.AccountLegalEntities
-                .Where(x => x.AccountId == accountId && x.PendingAgreementId != null)
-                .Select(x => x.PendingAgreementId)
-                .Take(2)
-                .ToListAsync();
+             .Where(x => x.AccountId == accountId && x.PendingAgreementId != null)
+             .Select(x => x.PendingAgreementId).FirstOrDefaultAsync();
 
-            return new GetUnsignedEmployerAgreementResponse
+            return new GetNextUnsignedEmployerAgreementResponse
             {
-                HashedAgreementId = pendingAgreementId.Count() == 1 ? _hashingService.HashValue(pendingAgreementId.Single().Value) : null
+                HashedAgreementId = pendingAgreementId.HasValue ? _hashingService.HashValue(pendingAgreementId.Value) : null
             };
         }
     }

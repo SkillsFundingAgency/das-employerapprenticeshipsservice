@@ -5,22 +5,22 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
 {
-    public class GetUnsignedEmployerAgreementValidator : IValidator<GetUnsignedEmployerAgreementRequest> 
+    public class GetNextUnsignedEmployerAgreementValidator : IValidator<GetNextUnsignedEmployerAgreementRequest> 
     {
         private readonly IMembershipRepository _membershipRepository;
 
-        public GetUnsignedEmployerAgreementValidator(IMembershipRepository membershipRepository)
+        public GetNextUnsignedEmployerAgreementValidator(IMembershipRepository membershipRepository)
         {
             _membershipRepository = membershipRepository;
         }
 
-        public ValidationResult Validate(GetUnsignedEmployerAgreementRequest item)
+        public ValidationResult Validate(GetNextUnsignedEmployerAgreementRequest item)
         {
             var task = Task.Run(async () => await ValidateAsync(item));
             return task.Result;
         }
 
-        public async Task<ValidationResult> ValidateAsync(GetUnsignedEmployerAgreementRequest item)
+        public async Task<ValidationResult> ValidateAsync(GetNextUnsignedEmployerAgreementRequest item)
         {
             var validationResult = new ValidationResult();
 

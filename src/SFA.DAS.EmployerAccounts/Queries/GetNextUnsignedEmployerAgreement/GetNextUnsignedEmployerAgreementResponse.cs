@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement
 {
-    public class GetUnsignedEmployerAgreementResponse
+    public class GetNextUnsignedEmployerAgreementResponse
     {
         public string HashedAgreementId { get; set; }
     }
