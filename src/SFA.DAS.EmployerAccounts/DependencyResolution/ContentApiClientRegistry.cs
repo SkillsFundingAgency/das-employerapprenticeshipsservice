@@ -13,14 +13,14 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
     {
         public ContentApiClientRegistry()
         {
-            For<ContentClientApiConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().ContentClientApi);
+            For<ContentClientApiConfiguration>().Use(c => c.GetInstance<EmployerAccountsConfiguration>().ContentApi);
             For<IContentClientApiConfiguration>().Use(c => c.GetInstance<ContentClientApiConfiguration>());
             For<IClientContentApiClient>().Use<ClientContentApiClient>().Ctor<HttpClient>().Is(c => CreateClient(c));
         }
 
         private HttpClient CreateClient(IContext context)
         {
-            var config = context.GetInstance<EmployerAccountsConfiguration>().ContentClientApi;
+            var config = context.GetInstance<EmployerAccountsConfiguration>().ContentApi;
 
             HttpClient httpClient = new HttpClientBuilder()
                     .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
