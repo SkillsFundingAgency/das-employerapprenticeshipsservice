@@ -58,12 +58,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 ViewBag.HideNav = true;
             }
 
-            var flashMessage = GetFlashMessageViewModelFromCookie();
-            if (flashMessage != null)
-            {
-                response.FlashMessage = flashMessage;
-            }
-
             return View(response);
         }
 
