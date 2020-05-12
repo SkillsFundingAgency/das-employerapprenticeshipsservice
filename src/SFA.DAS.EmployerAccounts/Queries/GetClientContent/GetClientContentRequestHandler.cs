@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var cacheKey = _employerAccountsConfiguration.ApplicationId;
+            var cacheKey = message.UseLegacyStyles ? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;
 
             try
             {
