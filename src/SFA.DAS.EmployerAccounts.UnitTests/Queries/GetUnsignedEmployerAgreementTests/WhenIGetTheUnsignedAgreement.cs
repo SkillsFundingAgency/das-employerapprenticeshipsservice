@@ -14,9 +14,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
 {
     public class WhenIGetTheUnsignedAgreement
     {
-        private GetUnsignedEmployerAgreementQueryHandler _handler;
+        private GetNextUnsignedEmployerAgreementQueryHandler _handler;
         private Mock<IHashingService> _hashingService;
-        private Mock<IValidator<GetUnsignedEmployerAgreementRequest>> _validator;
+        private Mock<IValidator<GetNextUnsignedEmployerAgreementRequest>> _validator;
         private Mock<EmployerAccountsDbContext> _db;
         private DbSetStub<AccountLegalEntity> _accountLegalEntityDbSet;
         private AccountLegalEntity _accountLegalEntity;
@@ -25,8 +25,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         public void Arrange()
         {
             _hashingService = new Mock<IHashingService>();
-            _validator = new Mock<IValidator<GetUnsignedEmployerAgreementRequest>>();
-            _validator.Setup(x => x.ValidateAsync(It.IsAny<GetUnsignedEmployerAgreementRequest>())).ReturnsAsync(new ValidationResult());
+            _validator = new Mock<IValidator<GetNextUnsignedEmployerAgreementRequest>>();
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<GetNextUnsignedEmployerAgreementRequest>())).ReturnsAsync(new ValidationResult());
             _db = new Mock<EmployerAccountsDbContext>();
 
             _accountLegalEntity = new AccountLegalEntity();
@@ -34,13 +34,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
 
             _db.Setup(d => d.AccountLegalEntities).Returns(_accountLegalEntityDbSet);
 
-            _handler = new GetUnsignedEmployerAgreementQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _hashingService.Object, _validator.Object);
+            _handler = new GetNextUnsignedEmployerAgreementQueryHandler(new Lazy<EmployerAccountsDbContext>(() => _db.Object), _hashingService.Object, _validator.Object);
         }
 
         [Test]
         public async Task WhenTheRequestIsInvalidThenAValidationExceptionIsThrown()
         {
-            var request = new GetUnsignedEmployerAgreementRequest();
+            var request = new GetNextUnsignedEmployerAgreementRequest();
             _validator.Setup(x => x.ValidateAsync(request)).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "A", "B" }}});
 
             Assert.ThrowsAsync<InvalidRequestException>(() => _handler.Handle(request));
@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         [Test]
         public async Task WhenTheRequestIsUnauthorizedThenAnUnauthorizedExceptionIsThrown()
         {
-            var request = new GetUnsignedEmployerAgreementRequest();
+            var request = new GetNextUnsignedEmployerAgreementRequest();
             _validator.Setup(x => x.ValidateAsync(request)).ReturnsAsync(new ValidationResult { IsUnauthorized = true });
 
             Assert.ThrowsAsync<UnauthorizedAccessException>(() => _handler.Handle(request));
@@ -62,7 +62,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
             var agreementId = 324345;
             var hashedAgreementId = "ABC345";
 
-            var request = new GetUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" };
+            var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" };
             _hashingService.Setup(x => x.DecodeValue(request.HashedAccountId)).Returns(accountId);
 
             _accountLegalEntity.AccountId = accountId;
@@ -79,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         {
             var accountId = 1234;
             
-            var request = new GetUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" };
+            var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" };
             _hashingService.Setup(x => x.DecodeValue(request.HashedAccountId)).Returns(accountId);
 
             _accountLegalEntity.AccountId = accountId;

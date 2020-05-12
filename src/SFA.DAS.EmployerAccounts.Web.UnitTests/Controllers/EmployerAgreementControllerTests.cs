@@ -45,8 +45,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return RunAsync(
                 arrange: fixtures =>
                 {
-                    fixtures.Mediator.Setup(x => x.SendAsync(It.Is<GetUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId)))
-                        .ReturnsAsync(new GetUnsignedEmployerAgreementResponse
+                    fixtures.Mediator.Setup(x => x.SendAsync(It.Is<GetNextUnsignedEmployerAgreementRequest>(y => y.HashedAccountId == fixtures.HashedAccountId)))
+                        .ReturnsAsync(new GetNextUnsignedEmployerAgreementResponse
                         {
                             HashedAgreementId = fixtures.HashedAgreementId
                         });

@@ -96,7 +96,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [Route("agreements/unsigned/view")]
         public async Task<ActionResult> ViewUnsignedAgreements(string hashedAccountId)
         {
-            var unsignedAgreementResponse = await _mediator.SendAsync(new GetUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
+            var unsignedAgreementResponse = await _mediator.SendAsync(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
 
             if (string.IsNullOrEmpty(unsignedAgreementResponse.HashedAgreementId)) return RedirectToAction(ControllerConstants.IndexActionName);
 
@@ -186,7 +186,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 }
                 else if (response.Data.HasFurtherPendingAgreements)
                 {
-                    flashMessage.Message = "You've successfully signed an organisation agreement. There are outstanding agreements to be signed. Review the list below to sign all remaining agreements.";
+                    flashMessage.Headline = "Agreement accepted";
+                    flashMessage.Message = "You've successfully accepted an agreement. You still need to review and accept your other agreements.";
 
                     result = RedirectToAction(
                         ControllerConstants.IndexActionName,
@@ -197,7 +198,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 else
                 {
                     flashMessage.Headline = "Agreement accepted";
-                    flashMessage.Message = "You’ve successfully accepted your organisation agreement(s)";
+                    flashMessage.Message = "You’ve successfully accepted all of your organisation’s agreements.";
                     result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
                 }
 
