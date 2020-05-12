@@ -37,7 +37,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var cacheKey = message.UseLegacyStyles ? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;
+            var applicationId = message.UseLegacyStyles? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;
+            var cacheKey = $"{applicationId}_{message.ContentType}";
 
             try
             {
@@ -48,7 +49,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                         Content = cachedContentBanner
                     };
                 }
-                var contentBanner = await _service.Get(message.ContentType, cacheKey);
+                
+                var contentBanner = await _service.Get(message.ContentType, applicationId);
 
                 if (contentBanner != null)
                 {

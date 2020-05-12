@@ -242,7 +242,6 @@
     </Compile>
     <Compile Include="Helpers\AccountLegalEntitiesHelper.cs" />
     <Compile Include="Helpers\AccountTaskHelper.cs" />
-    <Compile Include="Helpers\AsyncHelper.cs" />
     <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Logging\LoggingConfig.cs" />

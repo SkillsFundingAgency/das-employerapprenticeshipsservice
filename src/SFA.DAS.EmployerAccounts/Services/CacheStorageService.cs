@@ -4,6 +4,7 @@ using SFA.DAS.Caches;
 using Newtonsoft.Json;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
@@ -26,7 +27,7 @@ namespace SFA.DAS.EmployerAccounts.Services
 
         public bool TryGet(string key, out string value)
         {
-            value = Get<string>(key).Result;
+            value = AsyncHelper.RunSync(() => Get<string>(key));
             return value != null;
         }
 
