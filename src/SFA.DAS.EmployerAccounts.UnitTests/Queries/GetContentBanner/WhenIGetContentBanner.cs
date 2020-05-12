@@ -79,6 +79,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             Mock<IClientContentService> clientMockontentService)
         {
             query1.ContentType = "Banner";
+            query1.UseLegacyStyles = false;
+
             var key = EmployerAccountsConfiguration.ApplicationId;
 
             requestValidator1.Setup(r => r.Validate(query1)).Returns(new ValidationResult());
@@ -109,10 +111,14 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             //Arrange
             var key = EmployerAccountsConfiguration.ApplicationId;
             query1.ContentType = "Banner";
+            query1.UseLegacyStyles = false;
 
             requestValidator1.Setup(r => r.Validate(query1)).Returns(new ValidationResult());
 
-           
+            string nullCacheString = null;
+            cacheStorageService1.Setup(c => c.TryGet(key, out nullCacheString))
+                .Returns(false);
+
             clientMockContentService.Setup(c => c.Get(query1.ContentType, key))
                 .ReturnsAsync(contentBanner1);
 
