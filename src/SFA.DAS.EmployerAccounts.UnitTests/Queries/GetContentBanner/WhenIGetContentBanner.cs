@@ -90,14 +90,15 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             requestHandler1 = new GetClientContentRequestHandler(requestValidator1.Object, logger.Object, clientMockontentService.Object,
                 cacheStorageService1.Object, EmployerAccountsConfiguration);
 
-            cacheStorageService1.Setup(c => c.TryGet(key, out contentBanner1))
+            var cacheKey = key + "_banner";
+            cacheStorageService1.Setup(c => c.TryGet(cacheKey, out contentBanner1))
                 .Returns(true);
             //Act
             var result = await requestHandler1.Handle(query1);
 
             //assert
             Assert.AreEqual(result.Content, contentBanner1);
-            cacheStorageService1.Verify(x => x.TryGet(key, out contentBanner1), Times.Once);
+            cacheStorageService1.Verify(x => x.TryGet(cacheKey, out contentBanner1), Times.Once);
         }
 
         [Test, RecursiveMoqAutoData]
@@ -116,7 +117,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             requestValidator1.Setup(r => r.Validate(query1)).Returns(new ValidationResult());
 
             string nullCacheString = null;
-            cacheStorageService1.Setup(c => c.TryGet(key, out nullCacheString))
+            var cacheKey = key + "_banner";
+            cacheStorageService1.Setup(c => c.TryGet(cacheKey, out nullCacheString))
                 .Returns(false);
 
             clientMockContentService.Setup(c => c.Get(query1.ContentType, key))

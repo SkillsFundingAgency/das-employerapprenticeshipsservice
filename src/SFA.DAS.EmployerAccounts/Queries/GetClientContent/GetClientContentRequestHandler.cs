@@ -38,7 +38,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
             }
 
             var applicationId = message.UseLegacyStyles? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;
-            var cacheKey = $"{applicationId}_{message.ContentType}";
+            var cacheKey = $"{applicationId}_{message.ContentType}".ToLowerInvariant();
 
             try
             {
