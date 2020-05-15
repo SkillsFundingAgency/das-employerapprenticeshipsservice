@@ -363,7 +363,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 new ApprenticeshipViewModel()
                 {
-                    CourseName = model.CallToActionViewModel.Cohorts?.Single()?.Apprenticeships?.Single()?.CourseName,
+                    CourseName = model.CallToActionViewModel.Cohorts?.Single()?.CohortApprenticeshipsCount > 0 ? model.CallToActionViewModel.Cohorts?.Single()?.Apprenticeships?.Single()?.CourseName : string.Empty,
                     HashedCohortId = model.CallToActionViewModel.Cohorts?.Single().HashedCohortId,
                     TrainingProvider = model.CallToActionViewModel.Cohorts?.Single().TrainingProvider.First()
                 }
