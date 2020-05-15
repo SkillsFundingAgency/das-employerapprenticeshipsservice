@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Caches;
-using SFA.DAS.Configuration;
 using SFA.DAS.EmployerAccounts.Configuration;
 using StructureMap;
 

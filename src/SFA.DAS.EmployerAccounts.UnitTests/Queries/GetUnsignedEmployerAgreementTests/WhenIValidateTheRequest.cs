@@ -11,20 +11,20 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
     public class WhenIValidateTheRequest
     {
         private Mock<IMembershipRepository> _membershipRepository;
-        private GetUnsignedEmployerAgreementValidator _validator;
+        private GetNextUnsignedEmployerAgreementValidator _validator;
 
         [SetUp]
         public void Arrange()
         {
             _membershipRepository = new Mock<IMembershipRepository>();
-            _validator = new GetUnsignedEmployerAgreementValidator(_membershipRepository.Object);
+            _validator = new GetNextUnsignedEmployerAgreementValidator(_membershipRepository.Object);
         }
 
         [Test]
         public async Task ThenShouldReturnValidIfRequestIsValid()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() });
+            var result = await _validator.ValidateAsync(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() });
 
             //Assert
             Assert.IsTrue(result.IsValid());
@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         public async Task ThenShouldReturnInvalidIfNoAccountIdIsProvided()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetUnsignedEmployerAgreementRequest { ExternalUserId = Guid.NewGuid().ToString() });
+            var result = await _validator.ValidateAsync(new GetNextUnsignedEmployerAgreementRequest { ExternalUserId = Guid.NewGuid().ToString() });
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         public async Task ThenShouldReturnInvalidIfNoUserIdIsProvided()
         {
             //Act
-            var result = await _validator.ValidateAsync(new GetUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" });
+            var result = await _validator.ValidateAsync(new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123" });
 
             //Assert
             Assert.IsFalse(result.IsValid());
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         [Test]
         public async Task ThenShouldReturnAuthorisedIfTheUserIsAssociatedToTheAccount()
         {
-            var request = new GetUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() };
+            var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() };
 
             _membershipRepository.Setup(x => x.GetCaller(request.HashedAccountId, request.ExternalUserId)).ReturnsAsync(new MembershipView());
 
@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetUnsignedEmployerAgreemen
         [Test]
         public async Task ThenShouldReturnUnauthorisedIfTheUserIsAssociatedToTheAccount()
         {
-            var request = new GetUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() };
+            var request = new GetNextUnsignedEmployerAgreementRequest { HashedAccountId = "ABC123", ExternalUserId = Guid.NewGuid().ToString() };
 
             _membershipRepository.Setup(x => x.GetCaller(request.HashedAccountId, request.ExternalUserId)).ReturnsAsync((MembershipView)null);
 

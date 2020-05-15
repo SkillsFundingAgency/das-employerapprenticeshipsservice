@@ -1,6 +1,5 @@
 ﻿using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
 using SFA.DAS.MA.Shared.UI.Models.Links;
@@ -8,6 +7,9 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
+using MediatR;
+using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
+using SFA.DAS.EmployerAccounts.Helpers;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -15,7 +17,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
     {
         public static MvcHtmlString CdnLink(this HtmlHelper html, string folderName, string fileName)
         {
-            var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<Configuration.EmployerAccountsConfiguration>().CdnBaseUrl;
+            var cdnLocation = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>().CdnBaseUrl;
 
             var trimCharacters = new char[] { '/' };
             return new MvcHtmlString($"{cdnLocation.Trim(trimCharacters)}/{folderName.Trim(trimCharacters)}/{fileName.Trim(trimCharacters)}");
@@ -131,6 +133,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             },
             useLegacyStyles: useLegacyStyles
             );
+        }
+
+        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
+        {
+            var mediator = DependencyResolver.Current.GetService<IMediator>();
+            
+            var userResponse = AsyncHelper.RunSync(() => mediator.SendAsync(new GetClientContentRequest
+            {
+                UseLegacyStyles = useLegacyStyles,
+                ContentType = type
+            }));
+            
+            var content = userResponse;
+            return MvcHtmlString.Create(content.Content);
         }
     }
 }

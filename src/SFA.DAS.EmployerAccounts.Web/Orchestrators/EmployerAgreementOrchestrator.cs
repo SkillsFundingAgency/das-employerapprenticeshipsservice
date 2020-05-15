@@ -128,7 +128,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     HashedAgreementId = agreementid
                 });
 
-                var unsignedAgreement = await _mediator.SendAsync(new GetUnsignedEmployerAgreementRequest
+                var unsignedAgreement = await _mediator.SendAsync(new GetNextUnsignedEmployerAgreementRequest
                 { 
                     ExternalUserId = externalUserId,
                     HashedAccountId = hashedId
