@@ -363,7 +363,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 new ApprenticeshipViewModel()
                 {
-                    CourseName = GetCourseName(model.CallToActionViewModel),
+                    CourseName = model.CallToActionViewModel.Cohorts?.Single()?.Apprenticeships?.Single()?.CourseName,
                     HashedCohortId = model.CallToActionViewModel.Cohorts?.Single().HashedCohortId,
                     TrainingProvider = model.CallToActionViewModel.Cohorts?.Single().TrainingProvider.First()
                 }
@@ -664,19 +664,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
             if (externalUserId != null)
                 ViewBag.UserId = externalUserId;
-        }
-
-        private string GetCourseName(CallToActionViewModel callToActionViewModel)
-        {
-            if (callToActionViewModel.CohortsCount == 1 && callToActionViewModel.Cohorts?.Single().CohortApprenticeshipsCount == 1)
-            {
-                return callToActionViewModel.Cohorts?.Single().Apprenticeships?.Single().CourseName;
-            }
-            else if (callToActionViewModel.ReservationsCount == 1)
-            {
-                return callToActionViewModel.Reservations?.Single().Course?.CourseDescription;
-            }
-            return string.Empty;
         }
     }
 }
