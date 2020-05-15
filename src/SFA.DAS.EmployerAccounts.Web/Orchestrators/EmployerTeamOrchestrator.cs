@@ -829,7 +829,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         
         private bool EvaluateContinueSetupForSingleApprenticeshipByProviderCallToActionRule(PanelViewModel<AccountDashboardViewModel> viewModel)
         {
-            if (viewModel.Data.CallToActionViewModel.CohortsCount == 1
+            if (viewModel.Data.CallToActionViewModel.ReservationsCount < 2
+                && viewModel.Data.CallToActionViewModel.CohortsCount == 1
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single() != null
                 && viewModel.Data.CallToActionViewModel.ApprenticeshipsCount == 0                
                 && viewModel.Data.CallToActionViewModel.Cohorts.Single().CohortStatus.Equals(CohortStatus.WithTrainingProvider))
