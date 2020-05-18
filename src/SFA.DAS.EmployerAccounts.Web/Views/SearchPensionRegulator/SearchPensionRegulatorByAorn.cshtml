@@ -72,7 +72,13 @@
 </div>
 
 @section breadcrumb {
-    <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-back-link">Back</a>
+    <div class="das-js-show govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list" role="navigation">
+            <li class="govuk-breadcrumbs__list-item">
+                <a href="javascript:history.back()" class="govuk-breadcrumbs__link govuk-back-link">Back</a>
+            </li>
+        </ol>
+    </div>
 }
 
 @section pageSpecificJS {
