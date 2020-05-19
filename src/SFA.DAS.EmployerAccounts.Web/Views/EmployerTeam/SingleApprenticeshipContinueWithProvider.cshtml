@@ -7,14 +7,17 @@
     </h2>
 
     <table class="responsive">
-        <tr>
-            <th scope="row">
-                Course
-            </th>
-            <td id="course-name">
-                @(Model.CourseName)                
-            </td>
-        </tr>
+        @if (@Model.CourseName != string.Empty)
+        {
+            <tr>
+                <th scope="row">
+                    Course
+                </th>
+                <td id="course-name">
+                     @(Model.CourseName)
+                </td>
+            </tr>
+        }
         <tr>
             <th scope="row">
                 Training Provider
