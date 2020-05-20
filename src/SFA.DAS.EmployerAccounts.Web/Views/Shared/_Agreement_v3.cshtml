@@ -1210,7 +1210,7 @@
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                 <strong class="govuk-warning-text__text">
                     <span class="govuk-warning-text__assistive">Warning</span>
-                    The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaks it, we could close their account and stop them running apprenticeships.
+                    The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaches the terms, we could stop them hiring apprentices, claim back funding or close its account.
                 </strong>
             </div>
 
@@ -1221,11 +1221,11 @@
                     <div class="@("govuk-form-group " + (!ViewData.ModelState.IsValid ? "govuk-form-group--error" : string.Empty))">
                         <fieldset class="govuk-fieldset" aria-describedby="accept-hint no-choice-selected">
 
-                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                                <h1 class="govuk-fieldset__heading">
-                                    Do you accept the agreement?
-                                </h1>
-                            </legend>
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                            <h1 class="govuk-fieldset__heading">
+                                Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName?
+                            </h1>
+                        </legend>
 
                             <span id="accept-hint" class="govuk-hint">
                                 By accepting, you confirm that @Model.EmployerAgreement.LegalEntityName agrees to the terms and conditions and is entering into a legally binding agreement with <abbr>ESFA</abbr>.
