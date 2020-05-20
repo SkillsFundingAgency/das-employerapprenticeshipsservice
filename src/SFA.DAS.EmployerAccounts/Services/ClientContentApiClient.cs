@@ -16,17 +16,17 @@ namespace SFA.DAS.EmployerAccounts.Services
                 : configuration.ApiBaseUrl + "/";
         }
 
-        public Task<string> Get(string type, string applicationId)
+        public async Task<string> Get(string type, string applicationId)
         {
             string banner = string.Empty;
             switch (type)
             {
                 case "banner":
                     var uri = $"{ApiBaseUrl}api/content?applicationId={applicationId}&type={type}";
-                    banner = GetAsync(uri).Result;
+                    banner = await GetAsync(uri);
                     break;
             }
-            return Task.FromResult(banner);
+            return banner;
         }
     }
 }
