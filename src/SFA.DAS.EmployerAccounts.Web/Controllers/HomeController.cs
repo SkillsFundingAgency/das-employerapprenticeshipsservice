@@ -54,6 +54,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 await OwinWrapper.UpdateClaims();
 
+                var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
+
+                if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
+                }
+
                 var userRef = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 var email = OwinWrapper.GetClaimValue(ControllerConstants.EmailClaimKeyName);
                 var firstName = OwinWrapper.GetClaimValue(DasClaimTypes.GivenName);
@@ -61,12 +68,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
                 await _homeOrchestrator.SaveUpdatedIdentityAttributes(userRef, email, firstName, lastName);
 
-                var partialLogin = OwinWrapper.GetClaimValue(DasClaimTypes.RequiresVerification);
-
-                if (partialLogin.Equals("true", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    return Redirect(ConfigurationFactory.Current.Get().AccountActivationUrl);
-                }
                 accounts = await _homeOrchestrator.GetUserAccounts(userId);
             }
             else
