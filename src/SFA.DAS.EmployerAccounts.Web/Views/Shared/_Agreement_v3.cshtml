@@ -21,9 +21,21 @@
 
         @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
         {
+            <div class="govuk-error-summary @hiddenClass" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+                <h2 class="govuk-error-summary__title" id="error-summary-heading">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            <a href="#no-choice-selected">Select whether you accept the agreement or want to finish creating an account first</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             <h1 class="govuk-heading-xl">Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName<span>?</span></h1>
         }
-
+        
         <p class="govuk-body govuk-!-margin-bottom-6">The points to note and guidance notes are not part of the employer agreement.</p>
 
         <div id="agreement-header" class="grey-background call-to-action">
@@ -56,7 +68,7 @@
     <div class="govuk-grid-column-one-quarter">
 
         <p class="govuk-body-s govuk-!-font-weight-regular" id="sections-title">Clauses of the agreement<span class="govuk-visually-hidden">:</span></p>
-        <nav>
+        <nav data-jumptoscrolltxt="Causes" data-module="jumpToScroll">
             <ol class="govuk-list govuk-!-font-size-16 contents">
                 <li><a class="govuk-link--no-visited-state" href="#background">Background </a></li>
                 <li><a class="govuk-link--no-visited-state" href="#1"><span class="number">1. </span>Agreed Terms</a></li>
@@ -1221,7 +1233,7 @@
                     <div class="@("govuk-form-group " + (!ViewData.ModelState.IsValid ? "govuk-form-group--error" : string.Empty))">
                         <fieldset class="govuk-fieldset" aria-describedby="accept-hint no-choice-selected">
 
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                             <h1 class="govuk-fieldset__heading">
                                 Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName?
                             </h1>
@@ -1258,6 +1270,5 @@
                 </div>
             </form>
         }
-
     </div>
 </div>
