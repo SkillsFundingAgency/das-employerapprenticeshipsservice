@@ -142,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
                 
-                ModelState.AddModelError(nameof(agreement.Choice), "Select whether you accept the agreement");
+                ModelState.AddModelError(nameof(agreement.Choice), "Select whether you accept the agreement or want to finish creating an account first");
                 
                 return View(ControllerConstants.SignAgreementViewName, agreement);
             }
