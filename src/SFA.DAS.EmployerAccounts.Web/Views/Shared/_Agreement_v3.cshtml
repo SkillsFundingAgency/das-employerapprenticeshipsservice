@@ -1,14 +1,24 @@
 ﻿@using SFA.DAS.EmployerAccounts.Models.EmployerAgreement
 @model SignEmployerAgreementViewModel
 
-@{
-    var hiddenClass = Model.NoChoiceSelected ? "" : "das-hidden";
-    var errorClass = Model.NoChoiceSelected ? "govuk-form-group--error" : "";
-    var errorClassMsg = Model.NoChoiceSelected ? "govuk-error-message" : "";
-}
-
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="govuk-error-summary" role="alert" aria-labelledby="error-summary-heading" tabindex="-1">
+                <h2 class="govuk-error-summary__title" id="error-summary-heading">
+                    There is a problem
+                </h2>
+                <div class="govuk-error-summary__body">
+                    <ul class="govuk-list govuk-error-summary__list">
+                        <li>
+                            <a href="#want-to-sign">@ViewData.ModelState[nameof(Model.Choice)].Errors[0].ErrorMessage</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        }
+
         @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
         {
             <h1 class="govuk-heading-xl">Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName<span>?</span></h1>
@@ -1193,7 +1203,7 @@
         <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
         <p class="govuk-body"><a href="@Url.Action("GetPdfAgreement","EmployerAgreement")" class="govuk-link" target="_blank">Download the agreement</a> (<abbr>PDF</abbr>, 304<abbr>KB</abbr>)</p>
-        
+
         @if (Model.EmployerAgreement.Status != EmployerAgreementStatus.Signed)
         {
             <div class="govuk-warning-text">
@@ -1206,41 +1216,45 @@
 
             <form method="post" action="@Url.Action("Sign", "EmployerAgreement")#no-choice-selected">
                 @Html.AntiForgeryToken()
-                <div class="govuk-form-group @errorClass">
-                    <fieldset class="govuk-fieldset" aria-describedby="accept-hint no-choice-selected">
 
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                            <h1 class="govuk-fieldset__heading">
-                                Do you accept the agreement?
-                            </h1>
-                        </legend>
+                <div>
+                    <div class="@("govuk-form-group " + (!ViewData.ModelState.IsValid ? "govuk-form-group--error" : string.Empty))">
+                        <fieldset class="govuk-fieldset" aria-describedby="accept-hint no-choice-selected">
 
-                        <span id="accept-hint" class="govuk-hint">
-                            By accepting, you confirm that @Model.EmployerAgreement.LegalEntityName agrees to the terms and conditions and is entering into a legally binding agreement with <abbr>ESFA</abbr>.
-                        </span>
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                                <h1 class="govuk-fieldset__heading">
+                                    Do you accept the agreement?
+                                </h1>
+                            </legend>
 
-                        <span class="govuk-error-message @hiddenClass @errorClassMsg" id="no-choice-selected">
-                            Please select an option to continue
-                        </span>
+                            <span id="accept-hint" class="govuk-hint">
+                                By accepting, you confirm that @Model.EmployerAgreement.LegalEntityName agrees to the terms and conditions and is entering into a legally binding agreement with <abbr>ESFA</abbr>.
+                            </span>
 
-                        <div class="govuk-radios">
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="want-to-sign" name="choice" type="radio" value="2">
-                                <label class="govuk-label govuk-radios__label" for="want-to-sign">
-                                    Yes, I accept the agreement
-                                </label>
+                            @if (!ViewData.ModelState.IsValid)
+                            {
+                                <span class="govuk-error-message" aria-hidden="false" id="no-choice-selected">
+                                    @ViewData.ModelState[nameof(Model.Choice)].Errors[0].ErrorMessage
+                                </span>
+                            }
+
+                            <div class="govuk-radios">
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="want-to-sign" name="choice" type="radio" value="@SignEmployerAgreementViewModel.SignAgreementNow">
+                                    <label class="govuk-label govuk-radios__label" for="want-to-sign">
+                                        Yes, I accept the agreement
+                                    </label>
+                                </div>
+                                <div class="govuk-radios__item">
+                                    <input class="govuk-radios__input" id="do-not-want-to-sign" name="choice" type="radio" value="@SignEmployerAgreementViewModel.ReviewAgreementLater">
+                                    <label class="govuk-label govuk-radios__label" for="do-not-want-to-sign">
+                                        Not yet, I'll finish creating an account first
+                                    </label>
+                                </div>
                             </div>
-                            <div class="govuk-radios__item">
-                                <input class="govuk-radios__input" id="do-not-want-to-sign" name="choice" type="radio" value="1">
-                                <label class="govuk-label govuk-radios__label" for="do-not-want-to-sign">
-                                    Not yet, I'll finish creating an account first
-                                </label>
-                            </div>
-                        </div>
-
-                    </fieldset>
-
-                    <input class="govuk-button govuk-!-margin-top-6" type="submit" value="Continue"/>
+                        </fieldset>
+                    </div>
+                    <input class="govuk-button govuk-!-margin-top-6" type="submit" value="Continue" />
                 </div>
             </form>
         }
