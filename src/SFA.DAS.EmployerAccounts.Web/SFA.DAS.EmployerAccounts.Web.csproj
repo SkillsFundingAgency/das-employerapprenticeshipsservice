@@ -874,6 +874,7 @@
     <Content Include="Views\Shared\_NotAcceptedAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerTeam\Empty.cshtml" />
+    <Content Include="Views\EmployerAgreement\AcceptedEmployerAgreement.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

@@ -120,7 +120,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         {
             try
             {
-                await _mediator.SendAsync(new SignEmployerAgreementCommand
+                var agreement = await _mediator.SendAsync(new SignEmployerAgreementCommand
                 {
                     HashedAccountId = hashedId,
                     ExternalUserId = externalUserId,
@@ -141,7 +141,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Data = new SignAgreementViewModel
                     {
                         HasFurtherPendingAgreements = !string.IsNullOrEmpty(unsignedAgreement.HashedAgreementId),
-                        SignedAgreementType = agreementType.AgreementType
+                        SignedAgreementType = agreement.AgreementType,
+                        LegalEntityName = agreement.LegalEntityName
                     }
                 };
             }
