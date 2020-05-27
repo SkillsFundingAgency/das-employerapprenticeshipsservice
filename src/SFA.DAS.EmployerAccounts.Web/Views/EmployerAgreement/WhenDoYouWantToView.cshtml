@@ -27,33 +27,34 @@
                 <div class="govuk-error-summary__body">
                     <ul class="govuk-list govuk-error-summary__list">
                         <li>
-                            <a href="#view-it-now">Select if you want to view the employer agreement now or later</a>
+                            <a href="#view-it-now">Select whether you want to view the employer agreement now or later</a>
                         </li>
                     </ul>
                 </div>
             </div>
         }
 
-        <div class="govuk-form-group @errorClassFormGroup">
-            <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
-                @Html.AntiForgeryToken()
-                <fieldset class="govuk-fieldset" aria-describedby="intro-hint">
+        
+        <form method="POST" action="@Url.Action(ControllerConstants.WhenDoYouWantToView)">
+            @Html.AntiForgeryToken()
+            <fieldset class="govuk-fieldset" aria-describedby="intro-hint">
 
-                    <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
-                        <h1 class="govuk-fieldset__heading">
-                            When do you want to view the employer agreement?
-                        </h1>
-                    </legend>
+                <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                    <h1 class="govuk-fieldset__heading">
+                        When do you want to view the employer agreement?
+                    </h1>
+                </legend>
 
-                    <span id="intro-hint" class="govuk-hint govuk-!-margin-top-2">
-                        This agreement is between @Model.EmployerAgreement.LegalEntityName and the Education and Skills Funding Agency (<abbr>ESFA</abbr>).
-                    </span>
+                <p id="intro-hint" class="govuk-body govuk-!-margin-top-4">
+                    The employer agreement is between @Model.EmployerAgreement.LegalEntityName and the Education and Skills Funding Agency (<abbr>ESFA</abbr>).
+                </p>
 
-                    <span class="error-message @hiddenClass @errorClass" aria-hidden="@ariaHidden" id="select-option">
+                <div class="govuk-form-group @errorClassFormGroup">
+                    <span class="@hiddenClass @errorClass" aria-hidden="@ariaHidden" id="select-option">
                         <span class="govuk-visually-hidden">Error:</span> Select whether you want to view the employer agreement now or later
                     </span>
 
-                    <div class="govuk-radios govuk-!-margin-top-6 govuk-!-margin-bottom-7" id="agreementCheck">
+                    <div class="govuk-radios govuk-!-margin-top-3 govuk-!-margin-bottom-7" id="agreementCheck">
                         <div class="govuk-radios__item">
                             <input class="govuk-radios__input" type="radio" name="choice" id="view-it-now" value="1">
                             <label class="govuk-label govuk-radios__label" for="view-it-now">
@@ -72,13 +73,15 @@
                         </div>
                     </div>
 
-                    <button class="govuk-button" type="submit" id="submit-when-do-you-want-to-view-button">
-                        Continue
-                    </button>
+                </div>
 
-                </fieldset>
-            </form>
-        </div>
+                <button class="govuk-button" type="submit" id="submit-when-do-you-want-to-view-button">
+                    Continue
+                </button>
+
+            </fieldset>
+        </form>
+        
 
     </div>
 </div>
