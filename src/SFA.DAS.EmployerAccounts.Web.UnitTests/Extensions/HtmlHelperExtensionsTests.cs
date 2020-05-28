@@ -10,8 +10,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Dtos;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.EAS.Portal.Client;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
@@ -39,6 +37,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         private bool _isAuthenticated = true;
         private List<Claim> _claims;
         private string _userId;
+        private HtmlHelper _sut;
         private HtmlHelper htmlHelper;
         private Mock<IViewDataContainer> _viewDataContainerMock;
         private ViewContext _viewContext;
