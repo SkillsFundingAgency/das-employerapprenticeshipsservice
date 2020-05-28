@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Web.Authorization;
 using System.Net;
 using System.Web.Routing;
 using System.Security.Claims;
+using SFA.DAS.EmployerAccounts.Web.dist;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -18,7 +19,8 @@ namespace SFA.DAS.EmployerAccounts.Web
             filters.AddUnitOfWorkFilter();
             filters.Add(new GoogleAnalyticsFilter());            
             filters.AddDasEmployerAccountsAuthorizationFilter();
-            filters.AddDasEmployerAccountsUnauthorizedAccessExceptionFilter();            
+            filters.AddDasEmployerAccountsUnauthorizedAccessExceptionFilter();
+            filters.Add(new AnalyticsFilter());
         }
     }
 

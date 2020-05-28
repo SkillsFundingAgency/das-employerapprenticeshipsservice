@@ -221,6 +221,7 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="dist\AnalyticsFilter.cs" />
     <Compile Include="Exceptions\ResourceNotFoundException.cs" />
     <Compile Include="Extensions\AgreementTemplateExtensions.cs" />
     <Compile Include="Extensions\CohortSummaryExtension.cs" />
@@ -874,6 +875,7 @@
     <Content Include="Views\Shared\_NotAcceptedAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerTeam\Empty.cshtml" />
+    <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
