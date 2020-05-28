@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
-namespace SFA.DAS.EmployerAccounts.Web.dist
+namespace SFA.DAS.EmployerAccounts.Web.Filters
 {
     public class AnalyticsFilter : ActionFilterAttribute
     {
@@ -10,6 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Web.dist
         {
             string userId = null;
             string hashedAccountId = null;
+            string agreementId = null;
             string userEmail = null;
             string userName = null;
 
@@ -25,15 +27,17 @@ namespace SFA.DAS.EmployerAccounts.Web.dist
             {
                 hashedAccountId = filterContext.ActionParameters["hashedAccountId"] as string;
             }
-            else if(filterContext.Controller.ControllerContext.RouteData.Values.ContainsKey("hashedAccountId"))
+
+            if (filterContext.ActionParameters.ContainsKey("agreementId"))
             {
-                hashedAccountId = filterContext.Controller.ControllerContext.RouteData.Values["hashedAccountId"] as string;
+                agreementId = filterContext.ActionParameters["agreementId"] as string;
             }
 
-            filterContext.Controller.ViewBag.AnalyticsData = new AnalyticsData
+            filterContext.Controller.ViewBag.GaData = new GaData
             {
                 UserId = userId,
                 Acc = hashedAccountId,
+                AgreementId = agreementId,
                 UserEmail = userEmail,
                 UserName = userName
             };
@@ -41,16 +45,38 @@ namespace SFA.DAS.EmployerAccounts.Web.dist
             base.OnActionExecuting(filterContext);
         }
 
+        public override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            if (!(filterContext?.Controller?.ViewBag?.GaData is GaData))
+            {
+                base.OnActionExecuted(filterContext);
+                return;
+            }
+
+            (filterContext.Controller.ViewBag.GaData as GaData).LevyFlag 
+                = (filterContext.Controller.ViewData.Model as OrchestratorResponse<AccountDashboardViewModel>)?.Data?.ApprenticeshipEmployerType.ToString();
+
+            base.OnActionExecuted(filterContext);
+        }
+
         public string DataLoaded { get; set; }
 
-        public class AnalyticsData
+        public class GaData
         {
+            public GaData()
+            {
+
+            }
             public string DataLoaded { get; set; } = "dataLoaded";
             public string UserId { get; set; }
             public string UserEmail { get; set; }
             public string UserName { get; set; }
+
             public string Vpv { get; set; }
             public string Acc { get; set; }
+
+            public string AgreementId { get; set; }
+            public string LevyFlag { get; set; }
 
             public IDictionary<string, string> Extras { get; set; } = new Dictionary<string, string>();
         }
