@@ -27,7 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerAgreementController : BaseController
     {
         private const int InvitationComplete = 4;
-        private const int ReviewAgreementLater = 1;
         private readonly EmployerAgreementOrchestrator _orchestrator;
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -137,18 +136,20 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
         {
-            if (choice == ReviewAgreementLater)
-            {
-                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
-            }
-
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-            
+
             if (choice == null)
             {
                 var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
-                agreement.NoChoiceSelected = true;
+                
+                ModelState.AddModelError(nameof(agreement.Choice), "Select whether you accept the agreement");
+                
                 return View(ControllerConstants.SignAgreementViewName, agreement);
+            }
+            
+            if (choice == SignEmployerAgreementViewModel.ReviewAgreementLater)
+            {
+                return RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
             }
 
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow);

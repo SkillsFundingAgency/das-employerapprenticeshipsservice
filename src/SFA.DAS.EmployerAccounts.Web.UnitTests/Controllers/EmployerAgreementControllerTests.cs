@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
@@ -132,10 +133,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 fixtures => fixtures.Sign(null),
                 (fixtures, result) =>
                 {
-                    var viewResult = result as ViewResult;
+                    var viewResult = result.Item1 as ViewResult;
+                    var model = viewResult.Model as SignEmployerAgreementViewModel;
+                    var modelState = result.Item2 as ModelStateDictionary;
+
                     Assert.AreEqual(viewResult.ViewName, ControllerConstants.SignAgreementViewName);
-                    Assert.AreEqual(fixtures.GetSignAgreementViewModel, viewResult.Model);
-                    Assert.IsTrue(((SignEmployerAgreementViewModel) viewResult.Model).NoChoiceSelected);
+                    Assert.AreEqual(fixtures.GetSignAgreementViewModel, model);
+                    Assert.IsTrue(modelState[nameof(model.Choice)].Errors.Count == 1);
                 });
         }
 
@@ -323,11 +327,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             return ViewResult;
         }
 
-        public async Task<ActionResult> Sign(int? choice)
+        public async Task<Tuple<ViewResult, ModelStateDictionary>> Sign(int? choice)
         {
             var controller = CreateController();
             var result = await controller.Sign(HashedAgreementId, HashedAccountId, choice) as ViewResult;
-            return result;
+            return new Tuple<ViewResult, ModelStateDictionary>(result, controller.ModelState);
         }
 
         public async Task<ViewResult> AboutYourAgreement()

@@ -45,8 +45,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.EmployerTeamControl
                 PayeSchemeCount = 1,
                 ApprenticeshipEmployerType = Common.Domain.Types.ApprenticeshipEmployerType.NonLevy,
                 CallToActionViewModel = new CallToActionViewModel
-                {
-                    Reservations = new List<Reservation> { new Reservation { Status = ReservationStatus.Completed } },       
+                {          
                     Cohorts = new List<CohortViewModel>
                     {
                         new CohortViewModel

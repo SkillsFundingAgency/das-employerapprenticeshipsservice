@@ -1,4 +1,4 @@
-using SFA.DAS.Provider.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Client.Configuration;
 
 namespace SFA.DAS.EAS.Domain.Configuration
 {
@@ -10,5 +10,9 @@ namespace SFA.DAS.EAS.Domain.Configuration
         public string ServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString { get; set; }
         public bool PaymentsDisabled { get; set; }
+        public string Tenant { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string IdentifierUri { get; set; }
     }
 }
