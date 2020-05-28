@@ -7,15 +7,24 @@
     ViewBag.Section = "organisations";
     ViewBag.GaData.Vpv = "/accounts/agreements/accepted-employer-agreement";
     ViewBag.ZenDeskLabel = "eas-accepted-employer-agreement";
+    ViewBag.HideNav = true;
 }
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <div class="govuk-panel govuk-panel--confirmation">
-            <h1 class="govuk-panel__title">
+        <div class="das-panel das-panel--muted">
+            <h1 class="das-panel__title">
                 You’ve accepted the employer agreement
             </h1>
         </div>
+
+        <p class="govuk-body">
+            <a class="govuk-link" href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank">
+                Download your accepted agreement
+            </a>
+            &nbsp;(<abbr>PDF</abbr>, 304<abbr>KB</abbr>)
+        </p>
+
         <h3 class="govuk-heading-m">What happens next</h3>
         <p class="govuk-body">@ViewBag.CompanyName can now get funding for apprenticeship training.</p>
         <p class="govuk-body">If you’ve already started using your account, you can:</p>
@@ -23,7 +32,7 @@
             <li>submit any adverts you’ve created</li>
             <li>approve any apprentice details you’ve added</li>
         </ul>
-        
+
         @if (ViewBag.HasFurtherPendingAgreements)
         {
             <div class="govuk-inset-text">

@@ -13,7 +13,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
-using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementType;
 using SFA.DAS.EmployerAccounts.Queries.GetOrganisationAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
@@ -133,8 +132,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     ExternalUserId = externalUserId,
                     HashedAccountId = hashedId
                 });
-
-                var agreementType = await _mediator.SendAsync(new GetEmployerAgreementTypeRequest { HashedAgreementId = agreementid });
 
                 return new OrchestratorResponse<SignAgreementViewModel>
                 {
