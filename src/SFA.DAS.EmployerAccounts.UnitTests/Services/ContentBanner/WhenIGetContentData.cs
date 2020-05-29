@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
         }
 
         [Test]
-        public async Task ThenTheReservationsAreReturnedFromTheApi()
+        public async Task ThenThContentAreReturnedFromTheApi()
         {
             // arrange
 
