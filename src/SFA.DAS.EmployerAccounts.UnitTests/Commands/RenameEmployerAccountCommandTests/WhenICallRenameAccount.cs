@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RenameEmployerAccountComma
             {
                 AccountId = 1234,
                 UserId = 9876,
-                UserRef = Guid.NewGuid().ToString(),
+                UserRef = Guid.NewGuid(),
                 Email = "test@test.com",
                 FirstName = "Bob",
                 LastName = "Green"

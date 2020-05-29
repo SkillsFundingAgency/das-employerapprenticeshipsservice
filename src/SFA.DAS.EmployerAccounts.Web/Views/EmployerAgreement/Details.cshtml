@@ -4,6 +4,7 @@
     ViewBag.PageID = "organisations-agreements-details";
     ViewBag.Title = "Employer agreement";
     ViewBag.Section = "organisations";
+    ViewBag.ZenDeskLabel = "eas-your-esfa-agreement";
 }
 
 @{
@@ -84,10 +85,10 @@
 <hr />
 <div class="grid-row">
     <div class="column-two-thirds">
-        <h3 class="heading-medium">This agreement has been signed</h3>
+        <h3 class="heading-medium">This agreement has been accepted</h3>
         <table>
             <tr>
-                <th scope="row">Signed by:</th>
+                <th scope="row">Accepted by:</th>
                 <td>@Model.Data.EmployerAgreement.SignedByName</td>
             </tr>
             <tr>
@@ -99,8 +100,8 @@
                 <td><span class="table-address">@Model.Data.EmployerAgreement.LegalEntityAddress</span></td>
             </tr>
             <tr>
-                <th scope="row"><span class="no-wrap">Signed on:</span></th>
-                <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToLongDateString()</td>
+                <th scope="row"><span class="no-wrap">Accepted on:</span></th>
+                <td>@Model.Data.EmployerAgreement.SignedDate.Value.ToString("d MMMM yyyy")</td>
             </tr>
         </table>
     </div>

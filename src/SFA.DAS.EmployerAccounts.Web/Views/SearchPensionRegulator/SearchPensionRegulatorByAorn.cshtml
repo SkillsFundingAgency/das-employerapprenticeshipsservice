@@ -72,7 +72,7 @@
 </div>
 
 @section breadcrumb {
-    <a href="@Url.Action(ControllerConstants.GetApprenticeshipFundingActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-back-link">Back</a>
+    <div class="das-js-back-link"></div>
 }
 
 @section pageSpecificJS {
@@ -82,5 +82,3 @@
         });
     </script>
 }
-
-@Html.SetZenDeskLabels(ZenDeskLabels.EnteredTheWrongPAYESchemeDetails)

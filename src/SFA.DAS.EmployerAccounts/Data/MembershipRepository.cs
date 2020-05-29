@@ -6,6 +6,7 @@ using Dapper;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Sql.Client;
 
@@ -37,15 +38,15 @@ namespace SFA.DAS.EmployerAccounts.Data
             return result.SingleOrDefault();
         }
 
-        public async Task<Membership> Get(long userId, long accountId)
+        public async Task<TeamMember> Get(long userId, long accountId)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", accountId, DbType.Int64);
             parameters.Add("@userId", userId, DbType.Int64);
 
-            var result = await _db.Value.Database.Connection.QueryAsync<Membership>(
-                sql: "SELECT * FROM [employer_account].[Membership] WHERE AccountId = @accountId AND UserId = @userId;",
+            var result = await _db.Value.Database.Connection.QueryAsync<TeamMember>(
+                sql: "SELECT * FROM [employer_account].[GetTeamMembers] WHERE AccountId = @accountId AND Id = @userId",               
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -87,10 +88,10 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@AccountId", accountId, DbType.Int64);
-            parameters.Add("@externalUserId", externalUserId, DbType.String);
+            parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
             var result = await _db.Value.Database.Connection.QueryAsync<MembershipView>(
-                sql: "SELECT * FROM [employer_account].[MembershipView] m inner join [employer_account].account a on a.id=m.accountid WHERE a.Id = @AccountId AND UserRef = @externalUserId;",
+                sql: "SELECT * FROM [employer_account].[MembershipView] m WHERE m.AccountId = @AccountId AND UserRef = @externalUserId;",
                 param: parameters,
                 transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
@@ -103,7 +104,7 @@ namespace SFA.DAS.EmployerAccounts.Data
             var parameters = new DynamicParameters();
 
             parameters.Add("@hashedAccountId", hashedAccountId, DbType.String);
-            parameters.Add("@externalUserId", externalUserId, DbType.String);
+            parameters.Add("@externalUserId", Guid.Parse(externalUserId), DbType.Guid);
 
             var result = await _db.Value.Database.Connection.QueryAsync<MembershipView>(
                 sql: "[employer_account].[GetTeamMember]",

@@ -18,6 +18,8 @@ using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
+using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.Validation;
@@ -76,7 +78,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 HashedAgreementId = "124GHJG",
                 LegalEntityId = LegalEntityId,
                 LegalEntityName = OrganisationName,
-                AgreementType = AgreementType
+                AgreementType = AgreementType,
+                AccountId = AccountId,
+                Id = AgreementId
             };
 
             _agreementRepository = new Mock<IEmployerAgreementRepository>();
@@ -94,6 +98,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
 
             _genericEventFactory = new Mock<IGenericEventFactory>();
             _mediator = new Mock<IMediator>();
+
+            _mediator.Setup(x => x.SendAsync(It.Is<GetUserByRefQuery>(s => s.UserRef == _command.ExternalUserId ))).ReturnsAsync(new GetUserByRefResponse { User = new User { CorrelationId = "CORRELATION_ID" } });
 
             _commintmentService = new Mock<ICommitmentService>();
 
@@ -119,7 +125,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 Role = Role.Owner,
                 FirstName = "Fred",
                 LastName = "Bloggs",
-                UserRef = Guid.NewGuid().ToString()
+                UserRef = Guid.NewGuid()
             };
 
             _membershipRepository.Setup(x => x.GetCaller(_command.HashedAccountId, _command.ExternalUserId))
@@ -175,6 +181,16 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                                   && c.SignedById.Equals(_owner.UserId)
                                   && c.SignedByName.Equals($"{_owner.FirstName} {_owner.LastName}")
                                 )));
+        }
+
+        [Test]
+        public async Task ThenIfTheCommandIsValidTheAccountLegalEntityAgreementDetailsShouldBeUpdated()
+        {
+            //Act
+            await _handler.Handle(_command);
+
+            //Assert
+            _agreementRepository.Verify(x => x.SetAccountLegalEntityAgreementDetails(_agreement.AccountLegalEntityId, (long?)null, (int?)null, _agreement.Id, _agreement.VersionNumber));
         }
 
         [Test]

@@ -1,6 +1,5 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
 using SFA.DAS.EmployerFinance.Models.Levy;
 using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Models.Transaction;
@@ -11,7 +10,6 @@ using SFA.DAS.HashingService;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;

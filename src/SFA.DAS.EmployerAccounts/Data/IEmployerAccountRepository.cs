@@ -1,6 +1,7 @@
 ﻿using SFA.DAS.EmployerAccounts.Models.Account;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using SFA.DAS.Common.Domain.Types;
 
 namespace SFA.DAS.EmployerAccounts.Data
 {
@@ -13,6 +14,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId);
         Task<AccountStats> GetAccountStats(long accountId);
         Task RenameAccount(long id, string name);
-        Task SetAccountAsLevy(long accountId);
+        Task SetAccountLevyStatus(long accountId, ApprenticeshipEmployerType apprenticeshipEmployerType);
     }
 }

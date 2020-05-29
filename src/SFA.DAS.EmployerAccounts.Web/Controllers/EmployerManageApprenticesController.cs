@@ -1,7 +1,6 @@
-﻿using Microsoft.Azure;
-using SFA.DAS.EmployerAccounts.Web.Helpers;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -9,6 +8,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     [RoutePrefix("accounts/{hashedAccountId}/apprentices/manage")]
     public class EmployerManageApprenticesController : Controller
     {
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+
+        public EmployerManageApprenticesController(EmployerAccountsConfiguration employerAccountsConfiguration)
+        {
+            _employerAccountsConfiguration = employerAccountsConfiguration;
+        }
+
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
@@ -63,14 +69,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName).EndsWith("/")
-                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)
-                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName) + "/";
+            var baseUrl = _employerAccountsConfiguration.EmployerCommitmentsBaseUrl.EndsWith("/")
+                ? _employerAccountsConfiguration.EmployerCommitmentsBaseUrl
+                : _employerAccountsConfiguration.EmployerCommitmentsBaseUrl + "/";
 
             var path = Request.Url.AbsolutePath;
 
             return RedirectPermanent($"{baseUrl}{path}");
-
         }
     }
 }

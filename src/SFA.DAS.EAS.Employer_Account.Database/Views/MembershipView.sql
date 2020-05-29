@@ -6,11 +6,11 @@ m.UserId,
 m.Role, 
 m.CreatedDate, 
 m.ShowWizard, 
-CONVERT(varchar(64), 
-u.UserRef) AS UserRef, 
+UserRef, 
 u.Email, 
 u.FirstName, 
 u.LastName, 
+u.CorrelationId,
 a.Name AS AccountName, 
 a.HashedId AS HashedAccountId
 FROM employer_account.Membership AS m 

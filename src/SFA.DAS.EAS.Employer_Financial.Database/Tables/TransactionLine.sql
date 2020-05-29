@@ -36,6 +36,9 @@ GO
 CREATE INDEX [IX_TransactionLine_AccountId_DateCreated] ON [employer_financial].[TransactionLine] (AccountId, DateCreated) WITH (ONLINE = ON)
 GO
 
+CREATE INDEX [IX_TransactionLine_AccountId_TransactionDate_TransactionType] ON [employer_financial].[TransactionLine] (AccountId, TransactionDate, TransactionType) INCLUDE (Amount) WITH (ONLINE = ON)
+GO
+
 CREATE INDEX [IX_TransactionLine_Account_TransactionType] ON [employer_financial].[TransactionLine] (AccountId, TransactionType) INCLUDE (DateCreated) WITH (ONLINE = ON)
 GO
 

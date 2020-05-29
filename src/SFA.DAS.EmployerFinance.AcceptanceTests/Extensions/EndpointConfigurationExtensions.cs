@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Configuration;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.Azure;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.NLog.Logger;
@@ -12,7 +12,6 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 {
     public static class EndpointConfigurationExtensions
     {
-
         private static readonly ILog _log = new NLogLogger(typeof(EndpointConfigurationExtensions));
 
         public static EndpointConfiguration UseAzureServiceBusTransport(this EndpointConfiguration config)
@@ -40,7 +39,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
             transportSettings?.Invoke(config1);
 
             config1.Transactions(TransportTransactionMode.ReceiveOnly);
-            routing((RoutingSettings) config1.Routing<LearningTransport>());
+            routing((RoutingSettings)config1.Routing<LearningTransport>());
             return config;
         }
 
@@ -48,8 +47,8 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
         {
             // The learning transport requires a folder name, which defaults to the sln folder. When running on the build
             // agent there is no sln folder, so learning transport will throw an exception. A folder can be set using
-            // the .StorageDirectory() extension so we'll set this from config. We won't know exactly what the folder 
-            // will be so instead we'll allow the config value to be formatted as $(EnvVariableName) so that we can 
+            // the .StorageDirectory() extension so we'll set this from config. We won't know exactly what the folder
+            // will be so instead we'll allow the config value to be formatted as $(EnvVariableName) so that we can
             // use a build agent variable to specify the folder.
             if (TryGetStorageFolder(out var storageFolder))
             {
@@ -61,7 +60,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
 
         private static bool TryGetStorageFolder(out string storageFolder)
         {
-            storageFolder = CloudConfigurationManager.GetSetting("LearningTransportFolder");
+            storageFolder = ConfigurationManager.AppSettings["LearningTransportFolder"];
 
             if (TryToInterpretConfigValueAsEnvVariable(storageFolder, out string envVariableName))
             {
@@ -93,7 +92,7 @@ namespace SFA.DAS.EmployerFinance.AcceptanceTests.Extensions
                 var m = Regex.Match(configVariableName, @"\$\((.*)\)");
 
                 if (m.Groups.Count > 1)
-                { 
+                {
                     var envVariable = m.Groups[1];
 
                     envVariableName = envVariable.Value.ConvertVSTSVariableToEnvName();

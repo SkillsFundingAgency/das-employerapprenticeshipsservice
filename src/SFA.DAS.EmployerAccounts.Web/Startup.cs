@@ -1,27 +1,26 @@
-﻿using Microsoft.Azure;
-using Microsoft.Owin;
+﻿using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
 using NLog;
 using Owin;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Web;
 using SFA.DAS.EmployerAccounts.Web.Authentication;
-using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Web.Extensions;
+using SFA.DAS.EmployerAccounts.Web.Models;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.OidcMiddleware;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using System.Web.Mvc;
-using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models.Account;
-using SFA.DAS.EmployerAccounts.Web.Models;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -30,31 +29,56 @@ namespace SFA.DAS.EmployerAccounts.Web
     public class Startup
     {
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
-        private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";
+        private const string AccountDataCookieName = "sfa-das-employerapprenticeshipsservice-employeraccount";        
+        private const string CookieAuthenticationTypeTempState = "TempState";
 
         public void Configuration(IAppBuilder app)
-        {
+        {           
             var config = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<EmployerAccountsConfiguration>();
             var accountDataCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<EmployerAccountData>>();
             var hashedAccountIdCookieStorageService = StructuremapMvc.StructureMapDependencyScope.Container.GetInstance<ICookieStorageService<HashedAccountIdModel>>();
             var constants = new Constants(config.Identity);
-            var urlHelper = new UrlHelper();
-
+            
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationType = "Cookies",
+                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
                 ExpireTimeSpan = new TimeSpan(0, 10, 0),
                 SlidingExpiration = true
             });
 
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
-                AuthenticationType = "TempState",
+                AuthenticationType = CookieAuthenticationTypeTempState,
                 AuthenticationMode = AuthenticationMode.Passive
             });
 
-            app.UseCodeFlowAuthentication(new OidcMiddlewareOptions
+            app.UseSupportConsoleAuthentication(new SupportConsoleAuthenticationOptions 
+            { 
+                AdfsOptions = new ADFSOptions
+                {
+                   
+                    MetadataAddress = config.AdfsMetadata , 
+                    Wreply = config.EmployerAccountsBaseUrl , 
+                    Wtrealm = config.EmployerAccountsBaseUrl ,
+                    BaseUrl = config.Identity.BaseAddress                     
+                },
+                Logger = Logger
+            });
+
+            app.UseCodeFlowAuthentication(GetOidcMiddlewareOptions(config, accountDataCookieStorageService, hashedAccountIdCookieStorageService, constants));
+
+            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
+            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
+        }    
+
+        private static OidcMiddlewareOptions GetOidcMiddlewareOptions(EmployerAccountsConfiguration config,
+            ICookieStorageService<EmployerAccountData> accountDataCookieStorageService,
+            ICookieStorageService<HashedAccountIdModel> hashedAccountIdCookieStorageService,
+            Constants constants)
+        {
+            return new OidcMiddlewareOptions
             {
+                AuthenticationType = CookieAuthenticationDefaults.AuthenticationType,
                 BaseUrl = config.Identity.BaseAddress,
                 ClientId = config.Identity.ClientId,
                 ClientSecret = config.Identity.ClientSecret,
@@ -67,20 +91,13 @@ namespace SFA.DAS.EmployerAccounts.Web
                 AuthenticatedCallback = identity =>
                 {
                     PostAuthentiationAction(
-                        identity,                     
+                        identity,
                         constants,
                         accountDataCookieStorageService,
                         hashedAccountIdCookieStorageService);
                 }
-            });
-
-            ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
-            JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-
-            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/password/change")}";
-            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode(config.EmployerAccountsBaseUrl + "/service/email/change")}";
+            };
         }
-
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
         {
             if (!useCertificate)
@@ -96,7 +113,7 @@ namespace SFA.DAS.EmployerAccounts.Web
 
                 try
                 {
-                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var thumbprint = ConfigurationManager.AppSettings["TokenCertificateThumbprint"];
                     var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
 
                     if (certificates.Count < 1)
@@ -121,7 +138,7 @@ namespace SFA.DAS.EmployerAccounts.Web
             Logger.Info("Retrieving claims from OIDC server.");
 
             var userRef = identity.Claims.FirstOrDefault(claim => claim.Type == constants.Id())?.Value;
-          
+
             Logger.Info($"Retrieved claims from OIDC server for user with external ID '{userRef}'.");
 
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, identity.Claims.First(c => c.Type == constants.Id()).Value));

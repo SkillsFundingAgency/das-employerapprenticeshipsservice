@@ -6,9 +6,9 @@ using FluentAssertions;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.AccountLevyStatus;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.CreateAccount;
 using SFA.DAS.EmployerAccounts.Data;
@@ -183,7 +183,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
         }
 
         [TestCase(true, AgreementType.NonLevyExpressionOfInterest)]
-        [TestCase(false, AgreementType.Levy)]
+        [TestCase(false, AgreementType.Combined)]
         public async Task WillCreateNewAccountWithCorrectAgreementType(bool eoiWhitelisted, AgreementType agreementType)
         {
             const int accountId = 23;
@@ -200,8 +200,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                 AccessToken = Guid.NewGuid().ToString(),
                 RefreshToken = Guid.NewGuid().ToString(),
                 OrganisationStatus = "active",
-                EmployerRefName = "Paye Scheme 1",
-                Aorn = "Aorn"
+                EmployerRefName = "Paye Scheme 1"
             };
 
             _mockAuthorizationService.Setup(x => x.IsAuthorized("EmployerFeature.ExpressionOfInterest")).Returns(eoiWhitelisted);
@@ -230,6 +229,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
                     y.PublicSectorDataSource == cmd.PublicSectorDataSource &&
                     y.Sector == cmd.Sector &&
                     y.Aorn == cmd.Aorn &&
+                    y.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Unknown &&
                     y.AgreementType == agreementType
                 )));
         }
@@ -362,6 +362,34 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.CreateAccountCommandTests
             addedLegalEntityEvent.OrganisationReferenceNumber.Should().Be(ExpectedOrganisationReferenceNumber);
             addedLegalEntityEvent.OrganisationAddress.Should().Be(ExpectedOrganisationAddress);
             addedLegalEntityEvent.OrganisationType.Should().Be(expectedOrganisationType);
+        }
+
+        [Test]
+        public async Task ThenAnAccountLevyStatusCommandIsPublishedForAnAornAccount()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = "Org", Aorn = "Aorn",ExternalUserId = _user.Ref.ToString() };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+           _mediator.Verify(x => x.SendAsync(It.Is<AccountLevyStatusCommand>(c => 
+               c.AccountId.Equals(ExpectedAccountId) && 
+               c.ApprenticeshipEmployerType.Equals(ApprenticeshipEmployerType.NonLevy))), Times.Once);
+        }
+
+        [Test]
+        public async Task ThenAnAccountLevyStatusCommandIsNotPublishedForANonAornAccount()
+        {
+            //Arrange
+            var createAccountCommand = new CreateAccountCommand { PayeReference = "123EDC", AccessToken = "123rd", RefreshToken = "45YT", OrganisationStatus = "active", OrganisationName = "Org", ExternalUserId = _user.Ref.ToString() };
+
+            //Act
+            await _handler.Handle(createAccountCommand);
+
+            //Assert
+           _mediator.Verify(x => x.SendAsync(It.IsAny<AccountLevyStatusCommand>()), Times.Never);
         }
     }
 }

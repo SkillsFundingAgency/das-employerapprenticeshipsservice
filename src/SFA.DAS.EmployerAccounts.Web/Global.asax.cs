@@ -6,7 +6,6 @@ using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Logging;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Logging;
-using SFA.DAS.NServiceBus;
 using SFA.DAS.Web.Policy;
 using System;
 using System.Collections.Generic;
@@ -23,14 +22,12 @@ using SFA.DAS.NServiceBus.Configuration.NewtonsoftJsonSerializer;
 using SFA.DAS.NServiceBus.Configuration.NLog;
 using SFA.DAS.NServiceBus.SqlServer.Configuration;
 using SFA.DAS.NServiceBus.Configuration.StructureMap;
-using SFA.DAS.UnitOfWork.NServiceBus;
 using System.Configuration;
 using Microsoft.ApplicationInsights.Extensibility;
 using SFA.DAS.Audit.Client;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Audit.Client.Web;
 using SFA.DAS.AutoConfiguration;
-using SFA.DAS.EmployerAccounts.Web.FeatureToggles;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using SFA.DAS.NServiceBus.Configuration;
 using SFA.DAS.UnitOfWork.NServiceBus.Configuration;
@@ -57,9 +54,6 @@ namespace SFA.DAS.EmployerAccounts.Web
             WebMessageBuilders.Register();
             WebMessageBuilders.UserIdClaim = DasClaimTypes.Id;
             WebMessageBuilders.UserEmailClaim = DasClaimTypes.Email;
-
-            ViewEngines.Engines.Clear();
-            ViewEngines.Engines.Add(new NewHomepageViewEngine());
 
             AuditMessageFactory.RegisterBuilder(m =>
             {
@@ -149,7 +143,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 .UseSqlServerPersistence(() => container.GetInstance<DbConnection>())
                 .UseNewtonsoftJsonSerializer()
                 .UseNLogFactory()
-                .UseOutbox()
+                .UseOutbox(true)
                 .UseStructureMapBuilder(container)
                 .UseUnitOfWork();
 

@@ -1,6 +1,7 @@
-﻿using System.Web.Mvc;
-using Microsoft.Azure;
+﻿using System.Configuration;
+using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
 
 namespace SFA.DAS.EAS.Web.Controllers
@@ -9,6 +10,13 @@ namespace SFA.DAS.EAS.Web.Controllers
     [RoutePrefix("accounts/{hashedAccountId}/apprentices/manage")]
     public class EmployerManageApprenticesController : Controller
     {
+        private readonly EmployerApprenticeshipsServiceConfiguration _easConfig;
+
+        public EmployerManageApprenticesController(EmployerApprenticeshipsServiceConfiguration easConfig) : base()
+        {
+            _easConfig = easConfig;
+        }
+
         [HttpGet]
         [Route("all")]
         [OutputCache(CacheProfile = "NoCache")]
@@ -63,14 +71,13 @@ namespace SFA.DAS.EAS.Web.Controllers
 
         private RedirectResult RedirectPermanentCommitmentsUrl()
         {
-            var baseUrl = CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName).EndsWith("/")
-                ? CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName)
-                : CloudConfigurationManager.GetSetting(ControllerConstants.EmployerCommitmentsBaseUrlKeyName) + "/";
+            var baseUrl = _easConfig.EmployerCommitmentsBaseUrl.EndsWith("/")
+                ? _easConfig.EmployerCommitmentsBaseUrl
+                : _easConfig.EmployerCommitmentsBaseUrl + "/";
 
             var path = Request.Url.AbsolutePath;
 
             return RedirectPermanent($"{baseUrl}{path}");
-
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EAS.Domain.Configuration;
-using SFA.DAS.Provider.Events.Api.Client;
+using SFA.DAS.Provider.Events.Api.Client.Configuration;
 using StructureMap;
 
 namespace SFA.DAS.EAS.Application.DependencyResolution

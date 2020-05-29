@@ -6,6 +6,7 @@
     ViewBag.Title = "Select your organisation";
     ViewBag.HideNav = !Model.Data.IsExistingAccount;
     ViewBag.Section = "organisations";
+    ViewBag.ZenDeskLabel = "eas-select-your-organisation";
 }
 
 @{
@@ -132,7 +133,7 @@
                 @if (Model.Data.Results.PageNumber == Model.Data.Results.TotalPages || Model.Data.Results.TotalPages == 0)
                 {
                     <li>
-                        <span class="govuk-heading-s">Can't find your organisation?</span>          <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>. <br>You can also <a href="@Url.Action("AddOtherOrganisationDetails")" class="govuk-link">enter your details manually.</a>
+                        <span class="govuk-heading-s">Can't find your organisation?</span>          <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>.
                     </li>
                 }
 
@@ -143,7 +144,7 @@
             <ul class="govuk-list das-govuk-list-forms">
                 <li>
                     <span class="govuk-heading-s"><strong>No results found.</strong></span> <br>
-                    <span>Can't find your organisation?</span> <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>. <br>You can also <a href="@Url.Action("AddOtherOrganisationDetails")" class="govuk-link">enter your details manually.</a>
+                    <span>Can't find your organisation?</span> <br>Check the spelling and <a href="#searchTerm" class="govuk-link">search again</a>.
                 </li>
             </ul>
         }
@@ -204,11 +205,5 @@
 
 
 @section breadcrumb {
-    <div class="govuk-breadcrumbs">
-        <ol class="govuk-breadcrumbs__list" role="navigation">
-            <li class="govuk-breadcrumbs__list-item">
-                <a href="@Url.Action("SearchForOrganisation")" class="back-link">Back</a>
-            </li>
-        </ol>
-    </div>
+    <div class="das-js-back-link"></div>
 }

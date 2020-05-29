@@ -1,0 +1,32 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large">
+        Your apprenticeship advert
+    </h2>
+    <p>You've created an advert for your apprenticeship.</p>
+
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Title
+            </th>
+            <td class="tw-65">
+                @(Model?.Title)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td>
+                <strong class="govuk-tag govuk-tag--error">REJECTED</strong>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@Model.ManageVacancyUrl" role="button" draggable="false" class="button">
+            Review your advert
+        </a>
+    </p>
+</section>

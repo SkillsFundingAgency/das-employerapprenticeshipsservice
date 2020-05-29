@@ -3,6 +3,7 @@ using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using AccountLegalEntityViewModel = SFA.DAS.EmployerAccounts.Web.ViewModels.AccountLegalEntityViewModel;
 
 namespace SFA.DAS.EmployerAccounts.Web.Mappings
 {
@@ -24,12 +25,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Mappings
                 .ForMember(dest => dest.VersionNumber, opts => opts.Ignore());
 
             CreateMap<GetEmployerAgreementResponse, EmployerAgreementViewModel>()
-                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opt => opt.MapFrom(src => src.LastSignedAgreement))
-                .ForMember(dest => dest.OrganisationLookupPossible, opt => opt.Ignore())
-                .ForMember(dest => dest.NoChoiceSelected, opts => opts.Ignore());
+                .ForMember(dest => dest.NoChoiceSelected, opts => opts.Ignore())
+                .ForMember(dest => dest.LegalEntitiesCount, opts => opts.Ignore())
+                .ForMember(dest => dest.OrganisationLookupPossible, opt => opt.Ignore());
+
+            CreateMap<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>()
+                .ForMember(dest => dest.PreviouslySignedEmployerAgreement, opts => opts.Ignore())
+                .ForMember(dest => dest.Choice, opts => opts.Ignore())
+                .ForMember(dest => dest.LegalEntitiesCount, opts => opts.Ignore());
 
             CreateMap<AccountDetailViewModel, AgreementInfoViewModel>()
                 .ConvertUsing(new AgreementInfoConverter());
+
+            CreateMap<EmployerAgreementDto, OrganisationAgreementViewModel>()
+                .ForMember(dest => dest.SignedDateText, opt => opt.Ignore())
+                .ForMember(dest => dest.AccountLegalEntityPublicHashedId, opts => opts.Ignore());
+
+            CreateMap<AgreementTemplateDto, AgreementTemplateViewModel>();
+
+            CreateMap<AccountLegalEntityDto, AccountLegalEntityViewModel>();
         }
     }
 }

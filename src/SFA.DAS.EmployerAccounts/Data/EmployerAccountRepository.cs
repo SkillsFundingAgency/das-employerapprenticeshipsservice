@@ -82,34 +82,43 @@ namespace SFA.DAS.EmployerAccounts.Data
         }
 
         public async Task<AccountDetail> GetAccountDetailByHashedId(string hashedAccountId)
-        {        
-            var accountDetail = await _db.Value.Accounts
-                .Where(ac => ac.HashedId == hashedAccountId)
-                .Select(ac => new AccountDetail
-                {
-                    AccountId = ac.Id,
-                    HashedId = ac.HashedId,
-                    PublicHashedId = ac.PublicHashedId,
-                    Name = ac.Name,
-                    CreatedDate = ac.CreatedDate,
-                    ApprenticeshipEmployerType = (ApprenticeshipEmployerType) ac.ApprenticeshipEmployerType
-                }).FirstOrDefaultAsync();
+        {
+            var account = await _db.Value.Accounts
+                .Include(x => x.AccountLegalEntities.Select(y => y.Agreements))
+                .SingleOrDefaultAsync(x => x.HashedId == hashedAccountId);
 
-            if (accountDetail == null)
-            {             
+            if (account == null)
+            {
                 return null;
             }
 
-            accountDetail.OwnerEmail = await _db.Value.Memberships
-                .Where(m => m.AccountId == accountDetail.AccountId && m.Role == Role.Owner)
+            var accountDetail = new AccountDetail
+            {
+                AccountId = account.Id,
+                HashedId = account.HashedId,
+                PublicHashedId = account.PublicHashedId,
+                Name = account.Name,
+                CreatedDate = account.CreatedDate,
+                ApprenticeshipEmployerType = (ApprenticeshipEmployerType)account.ApprenticeshipEmployerType
+            };
+
+            var activeLegalEntities = account.AccountLegalEntities.Where(x =>
+                x.Deleted == null && x.Agreements.Any(ea =>
+                    ea.StatusId == EmployerAgreementStatus.Pending ||
+                    ea.StatusId == EmployerAgreementStatus.Signed));
+
+            accountDetail.LegalEntities = activeLegalEntities.Select(x => x.Id).ToList();
+            accountDetail.AccountAgreementTypes = account.AccountLegalEntities.SelectMany(x => x.Agreements).Select(x => x.Template.AgreementType).Distinct().ToList();
+
+            accountDetail.OwnerEmail = account.Memberships
+                .Where(m => m.Role == Role.Owner)
                 .OrderBy(m => m.CreatedDate)
                 .Select(m => m.User.Email)
-                .FirstOrDefaultAsync();
+                .FirstOrDefault();
 
-            accountDetail.PayeSchemes = await _db.Value.AccountHistory
-                .Where(ach => ach.AccountId == accountDetail.AccountId)
+            accountDetail.PayeSchemes = account.AccountHistory
                 .Select(ach => ach.PayeRef)
-                .ToListAsync();
+                .ToList();
 
             accountDetail.LegalEntities = await _db.Value.AccountLegalEntities
                 .Where(ale => ale.AccountId == accountDetail.AccountId
@@ -121,7 +130,7 @@ namespace SFA.DAS.EmployerAccounts.Data
                 .ToListAsync();
 
             var templateIds = await _db.Value.Agreements
-                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId))
+                .Where(x => accountDetail.LegalEntities.Contains(x.AccountLegalEntity.LegalEntityId) && x.SignedDate.HasValue)
                 .Select(x => x.TemplateId)
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -164,12 +173,12 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
         }
 
-        public Task SetAccountAsLevy(long accountId)
+        public Task SetAccountLevyStatus(long accountId, ApprenticeshipEmployerType apprenticeshipEmployerType)
         {
             var parameters = new DynamicParameters();
 
             parameters.Add("@accountId", accountId, DbType.Int64);
-            parameters.Add("@ApprenticeshipEmployerType", ApprenticeshipEmployerType.Levy, DbType.Byte);
+            parameters.Add("@apprenticeshipEmployerType", apprenticeshipEmployerType, DbType.Int16);
 
             return _db.Value.Database.Connection.ExecuteAsync(
                 sql: "[employer_account].[UpdateAccount_SetAccountApprenticeshipEmployerType]",

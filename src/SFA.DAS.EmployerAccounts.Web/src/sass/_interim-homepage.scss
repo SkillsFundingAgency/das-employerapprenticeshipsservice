@@ -132,7 +132,7 @@ hr.dashboard-heading-separator {
     }
 }
 
-.das-panel--featured {
+.das-panel--interruption {
     background: $govuk-blue;
     color: #fff;
     margin-top: 20px;
@@ -158,12 +158,55 @@ hr.dashboard-heading-separator {
         color: #fff;
         font-weight: 700;
 
-        &:hover {
-            text-decoration: non
+        &:focus {
+            color: #000;
         }
+
+        &:hover {
+            text-decoration: none
+        }
+    }
+}
+
+.das-panel--popular {
+    margin-top: 20px;
+    background: $mauve;
+    color: #fff;
+
+    .das-panel__link {
+        color: #fff;
+        font-weight: 700;
 
         &:focus {
             color: #000;
+        }
+    }
+    .list {
+        margin-bottom: -5px;
+    }
+}
+
+.das-panel--summary {
+    padding: 0px;
+    margin-top: 30px;
+}
+
+.das-panel--action {
+    background: $grey-3;
+    color: #000;
+    margin-top: 20px;
+
+    & > p {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .das-panel__link {
+        font-weight: 700;
+
+        &:hover {
+            text-decoration: none
         }
     }
 }
@@ -179,6 +222,15 @@ hr.dashboard-heading-separator {
     }
 
     .das-panel--featured & {
+        font-size: 24px;
+
+        @include media(tablet) {
+            font-size: 36px;
+            line-height: 1.2;
+        }
+    }
+
+    .das-panel--action & {
         font-size: 24px;
 
         @include media(tablet) {

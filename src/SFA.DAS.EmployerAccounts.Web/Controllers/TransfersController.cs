@@ -5,8 +5,6 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.Authorization.EmployerUserRoles.Options;
 using SFA.DAS.Authorization.Mvc.Attributes;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Mvc;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccountDetail;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferAllowance;
 using SFA.DAS.EmployerAccounts.Queries.GetTransferConnectionInvitationAuthorization;

@@ -49,13 +49,12 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="5.1.1" />
     <PackageReference Include="BrockAllen.CookieTempData.dll" Version="1.3.0" />
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.8.1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.8.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
     <PackageReference Include="Microsoft.AspNet.Razor">
       <Version>3.2.7</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNet.TelemetryCorrelation" Version="1.0.4" />
     <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages">
       <Version>3.2.7</Version>
@@ -73,22 +72,22 @@
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20510" />
     <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.0.2</Version>
+      <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.WebApi">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.AutoConfiguration">
       <Version>2.0.1</Version>
@@ -172,10 +171,11 @@
     <Compile Include="DependencyResolution\IoC.cs" />
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
+    <Compile Include="Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
     <Compile Include="Filters\LevyEmployerTypeOnly.cs" />
-    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
+    <Compile Include="Filters\AnalyticsFilter.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -292,6 +292,7 @@
     <Content Include="dist\javascripts\apprentice\dropdown.js" />
     <Content Include="dist\javascripts\apprentice\select2.min.js" />
     <Content Include="dist\javascripts\character-limit.js" />
+    <Content Include="dist\javascripts\cookiebanner.js" />
     <Content Include="dist\javascripts\govuk-template.js" />
     <Content Include="dist\javascripts\ie.js" />
     <Content Include="dist\javascripts\jquery-1.11.0.min.js" />
@@ -632,6 +633,13 @@
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Shared\BadRequest.cshtml" />
     <Content Include="src\sass\_finance.scss" />
+    <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="src\sass\_cookiebanner.scss" />
+    <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
+    <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
+    <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

@@ -6,7 +6,6 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization.Services;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EmployerAccounts.Commands.RemoveTeamMember;
 using SFA.DAS.EmployerAccounts.Interfaces;
@@ -24,7 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         const string Email = "test@test.com";
 
         private Mock<IMediator> _mediator;
-        private Mock<IAccountApiClient> _accountApiClient;
+        private Mock<IAccountApiClient> _accountApiClient;        
         private Mock<IMapper> _mapper;
 
         private EmployerTeamOrchestrator _orchestrator;
@@ -33,10 +32,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            _accountApiClient = new Mock<IAccountApiClient>();
+            _accountApiClient = new Mock<IAccountApiClient>();            
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, Mock.Of<ICurrentDateTime>(), _accountApiClient.Object, _mapper.Object);
             
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountTeamMembersQuery>()))
                      .ReturnsAsync(new GetAccountTeamMembersResponse

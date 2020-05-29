@@ -13,6 +13,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
+        public string EmployerCommitmentsV2BaseUrl { get; set; }
         public string EmployerFinanceBaseUrl { get; set; }
         public string EmployerPortalBaseUrl { get; set; }
         public string EmployerProjectionsBaseUrl { get; set; }
@@ -24,6 +25,7 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string Hashstring { get; set; }
         public HmrcConfiguration Hmrc { get; set; }
         public PensionRegulatorConfiguration PensionRegulatorApi { get; set; }
+        public ProviderRegistrationsConfiguration ProviderRegistrationsApi { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
@@ -39,5 +41,16 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public AccountApiConfiguration AccountApi { get; set; }
         public UserAornPayeLockConfiguration UserAornPayeLock { get; set; }
         public string ZenDeskHelpCentreUrl { get; set; }
+        public string ReportTrainingProviderEmailAddress { get; set; }
+        public string AdfsMetadata { get; set; }
+        public string ZenDeskSnippetKey { get; set; }
+        public string ZenDeskSectionId { get; set; }
+        public string ZenDeskCobrowsingSnippetKey { get; set; }
+        public CommitmentsApiV2ClientConfiguration CommitmentsApi { get; set; }
+        public RecruitClientApiConfiguration RecruitApi { get; set; }
+        public long DefaultServiceTimeoutMilliseconds { get; set; }
+        public ContentClientApiConfiguration ContentApi { get; set; }
+        public string ApplicationId { get; set; }
+        public int DefaultCacheExpirationInMinutes { get; set; }
     }
 }

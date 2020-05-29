@@ -47,10 +47,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controllers\AccountLegalEntitiesController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\StatisticsController.cs" />
     <Compile Include="Controllers\TransferConnectionsController.cs" />
     <Compile Include="ExceptionLoggers\ErrorLogger.cs" />
-    <Compile Include="Helpers\ControllerConstants.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Attributes\ApiAuthorizeAttribute.cs" />
     <Compile Include="Controllers\AccountTransactionsController.cs" />
@@ -116,7 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.Web">
-      <Version>2.11.1</Version>
+      <Version>2.11.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi">
       <Version>5.2.6</Version>
@@ -168,6 +168,9 @@
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe">
       <Version>4.6.0</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

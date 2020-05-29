@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,9 +7,6 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.Authorization;
-using SFA.DAS.Authorization.Services;
-using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EAS.Account.Api.Client;
 using SFA.DAS.EAS.Account.Api.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
@@ -16,7 +14,10 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
+using SFA.DAS.EmployerAccounts.Models.Recruit;
+using SFA.DAS.EmployerAccounts.Models.CommitmentsV2;
 using SFA.DAS.EmployerAccounts.Models.Reservations;
+using SFA.DAS.EmployerAccounts.Queries.GetSingleCohort;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountStats;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountTasks;
@@ -24,7 +25,10 @@ using SFA.DAS.EmployerAccounts.Queries.GetEmployerAccount;
 using SFA.DAS.EmployerAccounts.Queries.GetReservations;
 using SFA.DAS.EmployerAccounts.Queries.GetTeamUser;
 using SFA.DAS.EmployerAccounts.Queries.GetUserAccountRole;
+using SFA.DAS.EmployerAccounts.Queries.GetVacancies;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
+using SFA.DAS.EmployerAccounts.Queries.GetApprenticeship;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrchestratorTests
 {
@@ -35,7 +39,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         private const string UserId = "USER1";
 
         private Mock<IMediator> _mediator;
-        private EmployerTeamOrchestrator _orchestrator;
+        private EmployerTeamOrchestrator _orchestrator;        
         private AccountStats _accountStats;
         private Mock<ICurrentDateTime> _currentDateTime;
         private Mock<IAccountApiClient> _accountApiClient;
@@ -131,27 +135,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountStatsQuery>()))
                      .ReturnsAsync(new GetAccountStatsResponse {Stats = _accountStats});
 
-            _mediator.Setup(m => m.SendAsync(It.Is<GetReservationsRequest>(q => q.HashedAccountId == HashedAccountId)))
-                    .ReturnsAsync(new GetReservationsResponse
-                    {
-                        Reservations = new List<Reservation>
-                        {
-                             new Reservation
-                             {
-                                 AccountId = 123
-                             }
-                        }
-                    });
-
             _currentDateTime = new Mock<ICurrentDateTime>();
 
             _accountApiClient = new Mock<IAccountApiClient>();
+
             _accountApiClient.Setup(c => c.GetAccount(HashedAccountId)).ReturnsAsync(new AccountDetailViewModel
                 {ApprenticeshipEmployerType = "Levy"});
-
+           
             _mapper = new Mock<IMapper>();
 
-            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object, _mapper.Object, Mock.Of<IAuthorizationService>());
+            _orchestrator = new EmployerTeamOrchestrator(_mediator.Object, _currentDateTime.Object, _accountApiClient.Object,  _mapper.Object);
         }
         
         [Test]
@@ -168,22 +161,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
         }
 
         [Test]
-        public async Task ThenShouldGetReservationsCount()
-        {
-            // Act
-            var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
-
-            //Assert
-            Assert.AreEqual(1, actual.Data.ReservationsCount);
-        }
-
-        [Test]
         public async Task ThenShouldReturnTasks()
         {
             // Act
             var actual = await _orchestrator.GetAccount(HashedAccountId, UserId);
 
             //Assert
+            _mediator.Verify(m => m.SendAsync(It.IsAny<GetAccountTasksQuery>()), Times.Once);
             Assert.IsNotNull(actual.Data);
             Assert.Contains(_testTask, actual.Data.Tasks.ToArray());
         }
@@ -264,9 +248,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
             Assert.AreEqual(4, actual.Data.RequiresAgreementSigning);
         }
 
-        [TestCase(ApprenticeshipEmployerType.Levy, "Levy")]
-        [TestCase(ApprenticeshipEmployerType.NonLevy, "NonLevy")]
-        public async Task ThenShouldReturnCorrectApprenticeshipEmployerTypeFromAccountApi(ApprenticeshipEmployerType expectedApprenticeshipEmployerType, string apiApprenticeshipEmployerType)
+        [TestCase(Common.Domain.Types.ApprenticeshipEmployerType.Levy, "Levy")]
+        [TestCase(Common.Domain.Types.ApprenticeshipEmployerType.NonLevy, "NonLevy")]
+        public async Task ThenShouldReturnCorrectApprenticeshipEmployerTypeFromAccountApi(Common.Domain.Types.ApprenticeshipEmployerType expectedApprenticeshipEmployerType, string apiApprenticeshipEmployerType)
         {
             //Arrange
             _accountApiClient
@@ -279,6 +263,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerTeamOrche
 
             //Assert
             Assert.AreEqual(expectedApprenticeshipEmployerType, model.Data.ApprenticeshipEmployerType);
+        }
+        
+        [Test]
+        public async Task ThenReturnAccountSummary()
+        {
+            var model = await _orchestrator.GetAccountSummary(HashedAccountId, UserId);
+            Assert.IsNotNull(model.Data);
         }
     }
 }

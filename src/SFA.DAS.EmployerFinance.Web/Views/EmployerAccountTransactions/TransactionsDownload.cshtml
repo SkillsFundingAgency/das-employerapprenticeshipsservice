@@ -6,7 +6,8 @@
     ViewBag.PageID = "download-transactions";
     ViewBag.Section = "finance";
     ViewBag.Title = "Download transactions";
-    ViewBag.GaData.Vpv = "/accounts/finance/downloadtransactions";
+    ViewBag.AnalyticsData.Vpv = $"/finance/{ViewBag.PageID}";
+    ViewBag.ZenDeskLabel = "eas-download-transactions";
 }
 
 @Html.Partial("_ValidationSummary", ViewData.ModelState)

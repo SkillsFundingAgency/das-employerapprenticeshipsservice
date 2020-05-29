@@ -28,6 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         private string _expectedFirstName;
         private string _expectedLastName;
         private string _expectedReturnUrl;
+        private string _expectedCorrelationId;
         private ActionResult _actualResult;
 
         [SetUp]
@@ -70,7 +71,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
         [Test]
         public void ThenTheUpdatedIdentityAttributesAreSaved()
         {
-            _homeOrchestrator.Verify(x => x.SaveUpdatedIdentityAttributes(_expectedId, _expectedEmail, _expectedFirstName, _expectedLastName));
+            _homeOrchestrator.Verify(x => x.SaveUpdatedIdentityAttributes(_expectedId, _expectedEmail, _expectedFirstName, _expectedLastName, _expectedCorrelationId));
         }
 
         [Test]

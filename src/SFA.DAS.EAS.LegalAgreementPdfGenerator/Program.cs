@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System.Configuration;
+using System.IO;
 using System.Net;
 using Aspose.Pdf;
-using Microsoft.Azure;
 using Microsoft.WindowsAzure.Storage;
 
 namespace SFA.DAS.EAS.LegalAgreementPdfGenerator
@@ -16,8 +16,6 @@ namespace SFA.DAS.EAS.LegalAgreementPdfGenerator
 
         private static void CreatePdfDocument(bool withSubFields)
         {
-
-            
             using (var licenseStream = GetBlobDataFromAzure("legal-agreements", "Aspose.Total.lic"))
             {
                 var license = new License();
@@ -25,16 +23,15 @@ namespace SFA.DAS.EAS.LegalAgreementPdfGenerator
                 license.SetLicense(licenseStream);
             }
 
-
             // Create a request for the URL.
-            var httpsLocalhostServiceCreatelegalagreementTrue = withSubFields 
+            var httpsLocalhostServiceCreatelegalagreementTrue = withSubFields
                 ? "https://localhost:44344/service/CreateLegalAgreement/true"
                 : "https://localhost:44344/service/CreateLegalAgreement/false";
-            
+
             var request = WebRequest.Create(httpsLocalhostServiceCreatelegalagreementTrue);
             request.Credentials = CredentialCache.DefaultCredentials;
 
-            using (var response = (HttpWebResponse) request.GetResponse())
+            using (var response = (HttpWebResponse)request.GetResponse())
             {
                 using (var dataStream = response.GetResponseStream())
                 {
@@ -44,28 +41,24 @@ namespace SFA.DAS.EAS.LegalAgreementPdfGenerator
                         var stream = new MemoryStream(System.Text.Encoding.UTF8.GetBytes(responseFromServer));
                         var options = new HtmlLoadOptions(httpsLocalhostServiceCreatelegalagreementTrue);
 
-
                         // Load HTML file
                         var pdfDocument = new Document(stream, options);
 
                         options.PageInfo.IsLandscape = false;
                         pdfDocument.Info.Title = "SFA Agreement";
-                        
+
                         // Save output as PDF format
                         var legalAgreementSubPdf = withSubFields ? @".\_NonLevy_Agreement_V2_Sub.pdf" : @".\_NonLevy_Agreement_V2.pdf";
                         pdfDocument.Save(legalAgreementSubPdf);
                     }
-                        
                 }
-                    
             }
-            
         }
+
         public static MemoryStream GetBlobDataFromAzure(string blobContainer, string blobName)
         {
-            
             var storageAccount =
-                CloudStorageAccount.Parse(CloudConfigurationManager.GetSetting("StorageConnectionString"));
+                CloudStorageAccount.Parse(ConfigurationManager.AppSettings["StorageConnectionString"]);
 
             var client = storageAccount.CreateCloudBlobClient();
 
@@ -78,7 +71,6 @@ namespace SFA.DAS.EAS.LegalAgreementPdfGenerator
             blob.DownloadRangeToStream(stream, 0, null);
 
             return stream;
-            
         }
     }
 }

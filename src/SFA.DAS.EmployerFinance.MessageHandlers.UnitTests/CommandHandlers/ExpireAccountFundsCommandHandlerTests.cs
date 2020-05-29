@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoFixture.NUnit3;
 using Moq;
 using NServiceBus;
+using NServiceBus.MessageInterfaces.MessageMapper.Reflection;
+using NServiceBus.Testing;
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Data;
@@ -17,6 +20,7 @@ using SFA.DAS.EmployerFinance.Models.Payments;
 using SFA.DAS.EmployerFinance.Types.Models;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
 {
@@ -29,6 +33,42 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             return RunAsync(f => f.Handle(),
                 f => f.MockExpiredFundsRepository.Verify(x =>
                     x.Create(f.ExpectedAccountId, It.Is<IEnumerable<ExpiredFund>>(ex => f.AreExpiredFundsEqual(ex, f.ExpiredFunds)), f.Now), Times.Once));
+        }
+
+        [Test, MoqAutoData]
+        public async Task Then_If_There_Is_No_Expiry_Returned_Then_Zero_Is_Added_For_Message_Date_Value(
+            ExpireAccountFundsCommand message,
+            [Frozen] Mock<ICurrentDateTime> currentDateTime,
+            [Frozen] Mock<ILevyFundsInRepository> levyFundsInRepository,
+            [Frozen] Mock<IPaymentFundsOutRepository> paymentFundsOutRepository,
+            [Frozen] Mock<IExpiredFunds> expiredFunds,
+            [Frozen] Mock<IExpiredFundsRepository> expiredFundsRepository,
+            ExpireAccountFundsCommandHandler handler
+        )
+        {
+            //Arrange
+            currentDateTime.Setup(x => x.Now).Returns(DateTime.UtcNow);
+            paymentFundsOutRepository.Setup(x => x.GetPaymentFundsOut(message.AccountId))
+                .ReturnsAsync(new List<PaymentFundsOut>());
+            levyFundsInRepository.Setup(x => x.GetLevyFundsIn(message.AccountId))
+                .ReturnsAsync(new List<LevyFundsIn>());
+            expiredFunds.Setup(x => x.GetExpiringFunds(
+                It.IsAny<IDictionary<CalendarPeriod, decimal>>(),
+                It.IsAny<IDictionary<CalendarPeriod, decimal>>(),
+                It.IsAny<IDictionary<CalendarPeriod, decimal>>(),
+                It.IsAny<int>())).Returns(new Dictionary<CalendarPeriod, decimal>());
+
+            //Act
+            await handler.Handle(message, new TestableMessageHandlerContext(new MessageMapper()));
+
+            //Assert
+            expiredFundsRepository.Verify(x => x.Create(message.AccountId,
+                It.Is<IEnumerable<ExpiredFund>>(c => c.First().Amount.Equals(0)
+                                                     && c.Count() == 1
+                                                     && c.First().CalendarPeriodYear.Equals(DateTime.UtcNow.Year)
+                                                     && c.First().CalendarPeriodMonth.Equals(DateTime.UtcNow.Month)
+                ),
+                It.IsAny<DateTime>()), Times.Once);
         }
 
         [Test]
@@ -109,7 +149,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             ExpiredFunds = new Dictionary<CalendarPeriod, decimal>
             {
                 { new CalendarPeriod(2018, 03), 1000 },
-                { new CalendarPeriod(2018, 04), 1000 }
+                { new CalendarPeriod(2018, 04), 1000 },
+                { new CalendarPeriod(2018, 05), 0 },
+                { new CalendarPeriod(Now.Year, Now.Month), 0 }
             };
 
             MockCurrentDateTime = new Mock<ICurrentDateTime>();

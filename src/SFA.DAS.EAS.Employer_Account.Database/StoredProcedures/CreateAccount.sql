@@ -19,13 +19,15 @@
 	@employerRefName varchar(500) null,
 	@sector NVARCHAR(100),
 	@aorn VARCHAR(50),
-	@agreementType TINYINT
+	@agreementType TINYINT,
+	@apprenticeshipEmployerType TINYINT,
+	@agreementVersion INT OUTPUT
 )
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO [employer_account].[Account](Name, CreatedDate) VALUES (@employerName, @addedDate);
+	INSERT INTO [employer_account].[Account](Name, CreatedDate, ApprenticeshipEmployerType) VALUES (@employerName, @addedDate, @apprenticeshipEmployerType);
 	SELECT @accountId = SCOPE_IDENTITY();
 
 	DECLARE @accountLegalEntityCreated AS BIT;
@@ -44,7 +46,8 @@ BEGIN
 		@legalEntityId = @legalEntityId OUTPUT,
 		@employerAgreementId = @employerAgreementId OUTPUT,
 		@accountLegalentityId = @accountLegalentityId OUTPUT,
-		@accountLegalEntityCreated = @accountLegalEntityCreated OUTPUT;
+		@accountLegalEntityCreated = @accountLegalEntityCreated OUTPUT,
+		@agreementVersion = @agreementVersion OUTPUT;
 
 	IF EXISTS(select 1 from [employer_account].[Paye] where Ref = @employerRef)
 	BEGIN

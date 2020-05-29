@@ -1,0 +1,53 @@
+﻿@model SFA.DAS.EmployerAccounts.Web.ViewModels.VacancyViewModel
+
+@{
+    var applicationsTextSuffix = !Model.NoOfApplications.GetValueOrDefault().Equals(0) ? (Model.NoOfApplications.Value.Equals(1) ? "application" : "applications") : "";
+    var applicationsTextPrefix = !Model.NoOfApplications.GetValueOrDefault().Equals(0) ? "View" : "";
+}
+
+<section class="dashboard-section">
+    <h2 class="section-heading heading-large">
+        Your apprenticeship advert
+    </h2>
+    <p>You've created an advert for your apprenticeship.</p>
+
+    <table class="responsive">
+        <tr>
+            <th scope="row" class="tw-35">
+                Title
+            </th>
+            <td class="tw-65">
+                @(Model?.Title)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row" class="tw-35">
+                Closing date
+            </th>
+            <td class="tw-65">
+                @(Model.ClosedDateText)
+            </td>
+        </tr>
+        <tr>
+            <th scope="row" class="tw-35">
+                Applications
+            </th>
+            <td class="tw-65">
+                <a href="@Model.ManageVacancyUrl" class="govuk-link">@applicationsTextPrefix @(!Model.NoOfApplications.GetValueOrDefault().Equals(0) ? $"{Model.NoOfApplications.Value}" : "No applications yet")  @applicationsTextSuffix</a>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">
+                Status
+            </th>
+            <td>
+                <strong class="govuk-tag govuk-tag--inactive">CLOSED</strong>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <a href="@Url.EmployerCommitmentsAction("apprentices/inform")" role="button" draggable="false" class="button">
+            Add apprentice details
+        </a>
+    </p>
+</section>

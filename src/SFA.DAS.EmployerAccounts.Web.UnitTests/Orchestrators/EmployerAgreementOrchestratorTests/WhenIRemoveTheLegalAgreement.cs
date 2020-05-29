@@ -7,11 +7,9 @@ using MediatR;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
-using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
@@ -19,56 +17,23 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
     public class WhenIRemoveTheLegalAgreement
     {
         private Mock<IMediator> _mediator;
-        private Mock<ILog> _logger;
         private Mock<IReferenceDataService> _referenceDataService;
-
-        private EmployerApprenticeshipsServiceConfiguration _configuration;
         private EmployerAgreementOrchestrator _orchestrator;
 
-        private const string ExpectedHahsedAccountId = "RT456";
-        private const string ExpectedHashedAgreementId = "RRTE56";
+        private const string ExpectedHashedAccountId = "RT456";
+        private const string ExpectedHashedAccountLegalEntitytId = "RRTE56";
         private const string ExpectedUserId = "TYG68UY";
 
         [SetUp]
         public void Arrange()
         {
             _mediator = new Mock<IMediator>();
-            //RemoveLegalEntityCommand
-
-            _logger = new Mock<ILog>();
-
-            _configuration = new EmployerApprenticeshipsServiceConfiguration();
-
+            
             _referenceDataService = new Mock<IReferenceDataService>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _logger.Object, Mock.Of<IMapper>(), _configuration, _referenceDataService.Object);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
         }
-
-        [Test]
-        public async Task ThenIfTheRemoveOrganisationConfirmCheckHasNotBeenSelectedTheFlashMessageIsPopulatedAndReturned()
-        {
-            //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { }, ExpectedUserId);
-
-            //Assert
-            Assert.IsNotNull(actual);
-            Assert.IsAssignableFrom<OrchestratorResponse<bool>>(actual);
-            Assert.IsNotNull(actual.FlashMessage);
-            Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
-        }
-
-        [Test]
-        public async Task ThenIfTheRemoveOrganisationCheckHasBeenSelectedAsNoThenNoChangesAreMade()
-        {
-            //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 1 }, ExpectedUserId);
-
-            //Assert
-            Assert.IsNotNull(actual);
-            Assert.AreEqual(HttpStatusCode.Continue, actual.Status);
-        }
-
-
+        
         [Test]
         public async Task ThenIfAnInvalidRequestExceptionIsThrownTheOrchestratorResponseContainsTheError()
         {
@@ -76,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveLegalEntityCommand>())).ThrowsAsync(new InvalidRequestException(new Dictionary<string, string>()));
 
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2 }, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel(), ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
@@ -89,7 +54,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             _mediator.Setup(x => x.SendAsync(It.IsAny<RemoveLegalEntityCommand>())).ThrowsAsync(new UnauthorizedAccessException());
 
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName" }, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName" }, ExpectedUserId);
 
             //Assert
             Assert.AreEqual(HttpStatusCode.Unauthorized, actual.Status);
@@ -99,12 +64,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         public async Task ThenIfTheCommandIsValidTheFlashMessageIsPopulated()
         {
             //Act
-            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmLegalAgreementToRemoveViewModel { RemoveOrganisation = 2, Name = "TestName", HashedAccountId = ExpectedHahsedAccountId, HashedAgreementId = ExpectedHashedAgreementId }, ExpectedUserId);
+            var actual = await _orchestrator.RemoveLegalAgreement(new ConfirmOrganisationToRemoveViewModel { Name = "TestName", HashedAccountId = ExpectedHashedAccountId, HashedAccountLegalEntitytId = ExpectedHashedAccountLegalEntitytId }, ExpectedUserId);
 
             //Assert
             _mediator.Verify(x => x.SendAsync(It.Is<RemoveLegalEntityCommand>(
-                c => c.HashedAccountId.Equals(ExpectedHahsedAccountId)
-                && c.HashedLegalAgreementId.Equals(ExpectedHashedAgreementId)
+                c => c.HashedAccountId.Equals(ExpectedHashedAccountId)
+                && c.HashedAccountLegalEntityId.Equals(ExpectedHashedAccountLegalEntitytId)
                 && c.UserId.Equals(ExpectedUserId))), Times.Once);
             Assert.IsNotNull(actual);
             Assert.IsNotNull(actual.FlashMessage);

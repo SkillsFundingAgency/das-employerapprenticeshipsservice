@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Extensions;
-using SFA.DAS.UnitOfWork.Mvc.Extensions;
 
 namespace SFA.DAS.EAS.Web
 {
@@ -8,7 +7,6 @@ namespace SFA.DAS.EAS.Web
     {
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
-            filters.AddUnitOfWorkFilter();
             filters.AddAuthorizationFilter();
             filters.AddUnauthorizedAccessExceptionFilter();
         }

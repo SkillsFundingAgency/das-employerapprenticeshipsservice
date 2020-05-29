@@ -5,7 +5,8 @@
 
 AS
 
-	SELECT	tl.DateCreated									AS DateCreated,
+SELECT	tl.DateCreated									AS DateCreated,
+			tl.[AccountId]									AS AccountId,
 			tlt.[Description]								AS TransactionType,
 			tl.EmpRef										AS PayeScheme,
 			ld.PayrollYear									AS PayrollYear,
@@ -21,7 +22,11 @@ AS
 			CONVERT(DECIMAL(18,4), NULL)					AS PaidFromLevy,
 			CONVERT(DECIMAL(18,4), NULL)					AS EmployerContribution,
 			CONVERT(DECIMAL(18,4), NULL)					AS GovermentContribution,
-			tl.Amount										AS Total
+			tl.Amount										AS Total,
+			NULL											AS TransferSenderAccountId,
+			NULL											AS TransferSenderAccountName,
+			NULL											AS TransferReceiverAccountId,
+			NULL											AS TransferReceiverAccountName
 	FROM	[employer_financial].TransactionLine tl
 			LEFT JOIN [employer_financial].[TransactionLineTypes] tlt 
 				ON tlt.TransactionType = IIF(Amount >= 0, 1, 2)
@@ -38,6 +43,7 @@ UNION ALL
 
 	SELECT DISTINCT 
 		funds.DateCreated					AS DateCreated,
+		funds.AccountId						AS AccountId,
 		funds.TransactionTypeDesc			AS TransactionType,
 		CONVERT(VARCHAR(50), NULL)			AS PayeScheme,
 		CONVERT(VARCHAR(50), NULL)			AS PayrollYear,
@@ -53,7 +59,11 @@ UNION ALL
 		funds.FundedFromLevy				AS PaidFromLevy,
 		funds.FundedFromEmployer			AS EmployerContribution,
 		funds.FundedFromGoverment			AS GovermentContribution,
-		funds.fundedTotal					AS Total
+		funds.fundedTotal					AS Total,
+		NULL								AS TransferSenderAccountId,
+		NULL								AS TransferSenderAccountName,
+		NULL								AS TransferReceiverAccountId,
+		NULL								AS TransferReceiverAccountName
 	FROM (SELECT 	transLine.DateCreated,
 				p.AccountId, 
 				p.Ukprn, 
@@ -95,6 +105,7 @@ UNION ALL
 UNION ALL
 
 SELECT		DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)		AS DateCreated,
+			tl.[AccountId]										AS AccountId,
 			tlt.[Description]									AS TransactionType,
 			tl.EmpRef											AS PayeScheme,
 			NULL												AS PayrollYear,
@@ -110,11 +121,77 @@ SELECT		DATEADD(dd, DATEDIFF(dd, 0, tl.DateCreated), 0)		AS DateCreated,
 			NULL												AS PaidFromLevy,
 			NULL												AS EmployerContribution,
 			NULL												AS GovermentContribution,
-			tl.Amount											AS Total
+			tl.Amount											AS Total,
+			NULL												AS TransferSenderAccountId,
+			NULL												AS TransferSenderAccountName,
+			NULL												AS TransferReceiverAccountId,
+			NULL												AS TransferReceiverAccountName
 	FROM	[employer_financial].TransactionLine tl
 			LEFT JOIN [employer_financial].[TransactionLineTypes] tlt
-				ON tlt.TransactionType = 3
+				ON tlt.TransactionType = 5
 	WHERE	tl.AccountId = @accountId 
 			AND DateCreated >= @FromDate 
 			AND DateCreated < @ToDate
 			AND tl.TransactionType = 5
+			AND tl.Amount <> 0
+			
+UNION ALL
+
+-- sender transfers
+SELECT  DATEADD(dd, DATEDIFF(dd, 0, [employer_financial].[AccountTransfers].CreatedDate), 0)	AS DateCreated,
+		[employer_financial].[AccountTransfers].SenderAccountId									AS AccountId,
+		'Transfer'																				AS TransactionType,
+		NULL																					AS PayeScheme,
+		NULL																					AS PayrollYear,
+		NULL																					AS PayrollMonth,
+		NULL																					AS LevyDeclared,
+		NULL																					AS EnglishFraction,
+		NULL																					AS TenPercentTopUp,
+		NULL																					AS TrainingProvider,
+		NULL																					AS Uln,
+		NULL																					AS Apprentice,
+		[employer_financial].[AccountTransfers].CourseName										AS ApprenticeTrainingCourse,
+		[employer_financial].[AccountTransfers].CourseLevel										AS ApprenticeTrainingCourseLevel,
+		cast([AccountTransfers].[Amount]as decimal(18,4))										AS PaidFromLevy,
+		NULL																					AS EmployerContribution,
+		NULL																					AS GovermentContribution,
+		cast([AccountTransfers].[Amount] as decimal(18,4))										AS Total,
+		[employer_financial].[AccountTransfers].SenderAccountID									AS TransferSenderAccountId,
+		[employer_financial].[AccountTransfers].[SenderAccountName]								AS TransferSenderAccountName,
+		[employer_financial].[AccountTransfers].[ReceiverAccountId]								AS TransferReceiverAccountId,
+		[employer_financial].[AccountTransfers].[ReceiverAccountName]							AS TransferReceiverAccountName 
+	FROM [employer_financial].[AccountTransfers]
+	WHERE SenderAccountId = @AccountId
+		AND [employer_financial].[AccountTransfers].[CreatedDate] >= @FromDate
+		AND [employer_financial].[AccountTransfers].[CreatedDate] < @ToDate
+
+UNION ALL
+
+-- receiver transfers
+SELECT  DATEADD(dd, DATEDIFF(dd, 0, [employer_financial].[AccountTransfers].CreatedDate), 0)	AS DateCreated,
+		[employer_financial].[AccountTransfers].SenderAccountId									AS AccountId,
+		'Transfer'																				AS TransactionType,
+		NULL																					AS PayeScheme,
+		NULL																					AS PayrollYear,
+		NULL																					AS PayrollMonth,
+		NULL																					AS LevyDeclared,
+		NULL																					AS EnglishFraction,
+		NULL																					AS TenPercentTopUp,
+		NULL																					AS TrainingProvider,
+		NULL																					AS Uln,
+		NULL																					AS Apprentice,
+		[employer_financial].[AccountTransfers].CourseName										AS ApprenticeTrainingCourse,
+		[employer_financial].[AccountTransfers].CourseLevel										AS ApprenticeTrainingCourseLevel,
+		cast([AccountTransfers].[Amount] as decimal(18,4))										AS PaidFromLevy,
+		NULL																					AS EmployerContribution,
+		NULL																					AS GovermentContribution,
+		cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))					AS Total,
+		[employer_financial].[AccountTransfers].SenderAccountID									AS TransferSenderAccountId,
+		[employer_financial].[AccountTransfers].[SenderAccountName]								AS TransferSenderAccountName,
+		[employer_financial].[AccountTransfers].[ReceiverAccountId]								AS TransferReceiverAccountId,
+		[employer_financial].[AccountTransfers].[ReceiverAccountName]							AS TransferReceiverAccountName
+	FROM [employer_financial].[AccountTransfers]
+	WHERE [employer_financial].[AccountTransfers].[ReceiverAccountId] = @AccountId
+		AND [employer_financial].[AccountTransfers].[CreatedDate] >= @FromDate
+		AND [employer_financial].[AccountTransfers].[CreatedDate] < @ToDate
+	ORDER BY datecreated

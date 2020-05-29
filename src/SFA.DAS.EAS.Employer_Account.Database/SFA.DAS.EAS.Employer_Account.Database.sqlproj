@@ -110,7 +110,6 @@
     <Build Include="StoredProcedures\GetPaye_ByRef.sql" />
     <Build Include="StoredProcedures\UpdatePayeName_ByRef.sql" />
     <Build Include="StoredProcedures\RemoveLegalEntityFromAccount.sql" />
-    <Build Include="StoredProcedures\GetEmployerAgreementsToRemove_ByAccountId.sql" />
     <Build Include="Tables\UserAccountSettings.sql" />
     <Build Include="StoredProcedures\RemoveMembership.sql" />
     <Build Include="StoredProcedures\GetUserAccountSettings.sql" />
@@ -138,7 +137,6 @@
     <None Include="Scripts\PostDeployment\AML-2119-RestoreAgreementDetails.sql" />
     <Build Include="Functions\GetAccountLegalEntityId.sql" />
     <Build Include="StoredProcedures\CreateAccountLegalEntity.sql" />
-    <Build Include="StoredProcedures\EvaluateEmployerLegalEntityAgreementStatus.sql" />
     <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetNameAndAddress.sql" />
     <Build Include="StoredProcedures\UpdateAccountLegalEntity_SetPublicHashedId.sql" />
     <None Include="Scripts\PreDeployment\AML-2434-DeleteOrphanedUserAccountSettings.sql" />
@@ -165,6 +163,7 @@
     <None Include="Scripts\Manual\CON-91-DeleteLegalEntitiesWithNoAgreements.sql" />
     <None Include="Scripts\PostDeployment\AML-3762-EOI-API.sql" />
     <None Include="Scripts\Manual\AML-3655_GenerateFinanceDataInserts.sql" />
+    <None Include="Scripts\PostDeployment\UpdateAgreementTemplateV3.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Invitation.sql" />

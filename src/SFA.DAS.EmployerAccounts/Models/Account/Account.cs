@@ -3,6 +3,7 @@ using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 
 namespace SFA.DAS.EmployerAccounts.Models.Account
 {
@@ -20,6 +21,8 @@ namespace SFA.DAS.EmployerAccounts.Models.Account
         public virtual byte ApprenticeshipEmployerType { get; set; }
         public virtual ICollection<TransferConnectionInvitation> ReceivedTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
         public virtual ICollection<TransferConnectionInvitation> SentTransferConnectionInvitations { get; set; } = new List<TransferConnectionInvitation>();
+        public virtual ICollection<Membership> Memberships { get; set; } = new List<Membership>();
+        public virtual ICollection<AccountHistory> AccountHistory { get; set; } = new List<AccountHistory>();
 
         public bool IsTransferConnectionInvitationSender()
         {

@@ -1,8 +1,9 @@
-﻿using System;
+﻿using SFA.DAS.EmployerAccounts.Interfaces;
+using System;
 
 namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
 {
-    public class TeamMember
+    public class TeamMember : IAccountIdentifier
     {
         public bool IsUser { get; set; }
         public long Id { get; set; }
@@ -10,7 +11,7 @@ namespace SFA.DAS.EmployerAccounts.Models.AccountTeam
         public string HashedAccountId { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
-        public string UserRef { get; set; }
+        public Guid UserRef { get; set; }
         public Role Role { get; set; }
         public InvitationStatus Status { get; set; }
         public DateTime ExpiryDate { get; set; }

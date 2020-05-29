@@ -129,7 +129,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.CreateInvitation
                 }
             });
 
-            var callerExternalUserId = Guid.Parse(caller.UserRef);
+            var callerExternalUserId = caller.UserRef;
 
             await PublishUserInvitedEvent(caller.AccountId, message.NameOfPersonBeingInvited, caller.FullName(), callerExternalUserId);
         }

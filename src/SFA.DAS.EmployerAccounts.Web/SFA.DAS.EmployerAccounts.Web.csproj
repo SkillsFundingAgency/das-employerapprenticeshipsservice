@@ -53,64 +53,78 @@
     <PackageReference Include="FluentValidation">
       <Version>6.2.1</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.8.1" />
-    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.8.1" />
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
     <PackageReference Include="Microsoft.AspNet.Razor">
       <Version>3.2.4</Version>
     </PackageReference>
-    <PackageReference Include="Microsoft.AspNet.TelemetryCorrelation" Version="1.0.4" />
     <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages">
       <Version>3.2.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions">
+      <Version>2.2.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Azure.DocumentDB.Core">
       <Version>2.4.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="1.0.8" />
+    <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
+      <Version>5.2.6</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Protocol.Extensions">
+      <Version>1.0.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
       <Version>2.2.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging">
       <Version>2.2.0</Version>
     </PackageReference>
+    <PackageReference Include="Microsoft.IdentityModel.Protocols">
+      <Version>5.6.0</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Net.Compilers" Version="2.6.1" />
     <PackageReference Include="Microsoft.Owin" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.0.1" />
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.0.1" />
+    <PackageReference Include="Microsoft.Owin.Security.WsFederation">
+      <Version>3.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Web.Infrastructure">
       <Version>1.0.0</Version>
     </PackageReference>
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="SFA.DAS.Audit.Client.Web" Version="1.0.0.20553" />
     <PackageReference Include="SFA.DAS.Authorization">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerFeatures">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.EmployerUserRoles">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authorization.Mvc">
-      <Version>6.0.33</Version>
+      <Version>6.0.52</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.AutoConfiguration">
       <Version>2.0.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Authentication">
-      <Version>1.0.2</Version>
+      <Version>1.1.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Caches">
       <Version>1.1.4</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.CommitmentsV2.Api.Client">
+      <Version>4.1.1063</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.CommitmentsV2.Messages">
       <Version>2.1.1395</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.276" />
-    <PackageReference Include="SFA.DAS.EAS.Portal.Client">
-      <Version>1.6.2515</Version>
-    </PackageReference>
+    <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
       <Version>1.6.2103</Version>
     </PackageReference>
@@ -124,6 +138,9 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Hmrc">
       <Version>1.0.16</Version>
+    </PackageReference>
+    <PackageReference Include="SFA.DAS.MA.Shared.UI">
+      <Version>1.1.42</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -154,6 +171,8 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -165,8 +184,12 @@
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
+    <Compile Include="Authorization\AuthorizationConstants.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
+    <Compile Include="Authorization\DefaultAuthorizationHandler.cs" />
+    <Compile Include="Authorization\ImpersonationAuthorizationContext.cs" />
     <Compile Include="Authorization\RouteValueKeys.cs" />
+    <Compile Include="Authorization\Tier2UserAccesNotGranted.cs" />
     <Compile Include="Binders\TrimStringModelBinder.cs" />
     <Compile Include="Controllers\AccessDeniedController.cs" />
     <Compile Include="Controllers\ActivitiesController.cs" />
@@ -185,9 +208,11 @@
     <Compile Include="Controllers\InvitationController.cs" />
     <Compile Include="Controllers\OrganisationController.cs" />
     <Compile Include="Controllers\OrganisationSharedController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\SearchPensionRegulatorController.cs" />
     <Compile Include="Controllers\SearchOrganisationController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\SupportErrorController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
     <Compile Include="Controllers\TransferConnectionInvitationsController.cs" />
     <Compile Include="Controllers\TransfersController.cs" />
@@ -197,17 +222,20 @@
     <Compile Include="DependencyResolution\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyResolution\StructureMapScopeModule.cs" />
     <Compile Include="Exceptions\ResourceNotFoundException.cs" />
+    <Compile Include="Extensions\AgreementTemplateExtensions.cs" />
+    <Compile Include="Extensions\CohortSummaryExtension.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Exceptions\InvalidStateException.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\HtmlHelperExtensions.cs" />
+    <Compile Include="Extensions\SupportUserExtensions.cs" />
+    <Compile Include="Extensions\SecurityExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\TimeSpanExtensions.cs" />
     <Compile Include="Extensions\TransferConnectionInvitationDtoExtensions.cs" />
     <Compile Include="Extensions\AccountDashboardViewModelExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="FeatureToggles\FeatureToggleViewEngine.cs" />
     <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -220,15 +248,20 @@
     <Compile Include="Logging\LoggingContext.cs" />
     <Compile Include="Mappings\AgreementInfoConverter.cs" />
     <Compile Include="Mappings\AgreementMappings.cs" />
+    <Compile Include="Mappings\CohortMapping.cs" />
     <Compile Include="Mappings\HealthCheckMappings.cs" />
     <Compile Include="Mappings\OrganisationMappings.cs" />
     <Compile Include="Mappings\TransferMappings.cs" />
+    <Compile Include="Mappings\VacancyMappings.cs" />
+    <Compile Include="Models\AccountContext.cs" />
     <Compile Include="Models\ReturnUrlModel.cs" />
     <Compile Include="Models\HashedAccountIdModel.cs" />
+    <Compile Include="ViewModels\TriageViewModel.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\EmployerAccountOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAgreementOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerAccountPayeOrchestrator.cs" />
+    <Compile Include="Orchestrators\EmployerTeamOrchestratorWithCallToAction.cs" />
     <Compile Include="Orchestrators\EmployerTeamOrchestrator.cs" />
     <Compile Include="Orchestrators\EmployerVerificationOrchestratorBase.cs" />
     <Compile Include="Orchestrators\HomeOrchestrator.cs" />
@@ -237,14 +270,24 @@
     <Compile Include="Orchestrators\OrganisationOrchestrator.cs" />
     <Compile Include="Orchestrators\SearchPensionRegulatorOrchestrator.cs" />
     <Compile Include="Orchestrators\SearchOrganisationOrchestrator.cs" />
+    <Compile Include="Orchestrators\SupportErrorOrchestrator.cs" />
     <Compile Include="Orchestrators\TaskOrchestrator.cs" />
     <Compile Include="Orchestrators\UserSettingsOrchestrator.cs" />
     <Compile Include="Orchestrators\UserVerificationOrchestratorBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Validation\OrganisationDetailsViewModelValidator.cs" />
+    <Compile Include="ViewModels\AccountLegalEntityViewModel.cs" />
+    <Compile Include="ViewModels\AccountSummaryViewModel.cs" />
     <Compile Include="ViewModels\AgreementInfoViewModel.cs" />
+    <Compile Include="ViewModels\AgreementTemplateViewModel.cs" />
+    <Compile Include="ViewModels\ApprenticeshipViewModel.cs" />
+    <Compile Include="ViewModels\CallToActionViewModel.cs" />
+    <Compile Include="ViewModels\CohortViewModel.cs" />
+    <Compile Include="ViewModels\ConfirmOrganisationToRemoveViewModel.cs" />
     <Compile Include="ViewModels\CreateUserAccountViewModel.cs" />
+    <Compile Include="ViewModels\OrganisationAgreementViewModel.cs" />
+    <Compile Include="ViewModels\SignEmployerAgreementViewModel.cs" />
     <Compile Include="ViewModels\PensionRegulatorDetailsViewModel.cs" />
     <Compile Include="ViewModels\PanelViewModel.cs" />
     <Compile Include="ViewModels\PendingAgreementsViewModel.cs" />
@@ -258,7 +301,6 @@
     <Compile Include="ViewModels\AddOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\AddressViewModel.cs" />
     <Compile Include="ViewModels\ApprovedTransferConnectionInvitationViewModel.cs" />
-    <Compile Include="ViewModels\ConfirmLegalAgreementToRemoveViewModel.cs" />
     <Compile Include="Models\CreateAccountModel.cs" />
     <Compile Include="ViewModels\CreateNewLegalEntityViewModel.cs" />
     <Compile Include="ViewModels\DeletedTransferConnectionInvitationViewModel.cs" />
@@ -286,10 +328,12 @@
     <Compile Include="ViewModels\OrganisationAddedNextStepsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationDetailsViewModel.cs" />
     <Compile Include="ViewModels\OrganisationUpdatedNextStepsViewModel.cs" />
+    <Compile Include="ViewModels\ProviderInvitationViewModel.cs" />
     <Compile Include="ViewModels\ReceiveTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RejectedTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\RemovePayeSchemeViewModel.cs" />
     <Compile Include="ViewModels\RenameEmployerAccountViewModel.cs" />
+    <Compile Include="ViewModels\ReservationViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorByAornViewModel.cs" />
     <Compile Include="ViewModels\SearchPensionRegulatorResultsViewModel.cs" />
     <Compile Include="ViewModels\SearchOrganisationResultsViewModel.cs" />
@@ -298,11 +342,16 @@
     <Compile Include="ViewModels\SendTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SentTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SignAgreementViewModel.cs" />
+    <Compile Include="ViewModels\AccessDeniedViewModel.cs" />
+    <Compile Include="ViewModels\SupportUserBannerViewModel.cs" />
     <Compile Include="ViewModels\SignInViewModel.cs" />
     <Compile Include="ViewModels\StartTransferConnectionInvitationViewModel.cs" />
     <Compile Include="ViewModels\SummaryUnsubscribeViewModel.cs" />
     <Compile Include="ViewModels\SummaryViewModel.cs" />
+    <Compile Include="ViewModels\SupportUserHeaderViewModel.cs" />
     <Compile Include="ViewModels\SystemDetailsViewModel.cs" />
+    <Compile Include="Models\TrainingDateModel.cs" />
+    <Compile Include="ViewModels\TrainingProviderViewModel.cs" />
     <Compile Include="ViewModels\TransferAllowanceViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationAuthorizationViewModel.cs" />
     <Compile Include="ViewModels\TransferConnectionInvitationsViewModel.cs" />
@@ -311,11 +360,12 @@
     <Compile Include="ViewModels\UpdateOrganisationAddressViewModel.cs" />
     <Compile Include="ViewModels\UserAccountsViewModel.cs" />
     <Compile Include="ViewModels\UserInvitationsViewModel.cs" />
-    <Compile Include="ViewModels\UserLinksViewModel.cs" />
     <Compile Include="ViewModels\UserViewModel.cs" />
     <Compile Include="ViewModels\ApprenticeDetailsViewModel.cs" />
-    <Compile Include="ViewModels\VacancyStatusViewModel.cs" />
+    <Compile Include="ViewModels\VacancyViewModel.cs" />
+    <Compile Include="ViewModels\VacanciesViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
+    <Compile Include="ViewModels\WhenDoYouWantToViewViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="dist\css\external-links\external-link-24x24.png" />
@@ -753,7 +803,6 @@
     <Content Include="Views\EmployerAgreement\Details.cshtml" />
     <Content Include="Views\EmployerAgreement\View.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourAgreement.cshtml" />
-    <Content Include="Views\EmployerAgreement\GetOrganisationsToRemove.cshtml" />
     <Content Include="Views\EmployerAgreement\ConfirmRemoveOrganisation.cshtml" />
     <Content Include="Views\Shared\_Agreement_v1.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2.cshtml" />
@@ -768,46 +817,24 @@
     <Content Include="Views\EmployerAccountPaye\Remove.cshtml" />
     <Content Include="Views\Shared\_WhatIsEnglishPercentage.cshtml" />
     <Content Include="Views\EmployerAccount\GetApprenticeshipFunding.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\Index.cshtml" />
-    <Content Include="Views\Shared\_Layout_v2.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\Row1Panel1.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\Row1Panel2.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\Row2Panel2.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\Row2Panel1.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\V2SignAgreement.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\ProviderPermissions.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\AccountSettings.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\V2CheckFunding.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\ProviderPermissionsDenied.cshtml" />
+    <Content Include="Views\EmployerTeam\Row1Panel1.cshtml" />
     <Content Include="Views\EmployerAccount\PayeError.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\CreateVacancy.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\FundingComplete.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\FinancialTransactions.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\ApprenticeshipDetails.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\SearchBar.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\MostActiveLinks.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\PrePayeRecruitment.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\V2AddPaye.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\OtherTasksPanel.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\SingleProvider.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\ProviderPermissionsMultiple.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorResults.cshtml" />
     <Content Include="Views\SearchPensionRegulator\SearchPensionRegulatorByAorn.cshtml" />
     <Content Include="Views\EmployerAgreement\SignAgreement.cshtml" />
     <Content Include="Views\Shared\_NonLevy_Agreement_V1.cshtml" />
     <Content Include="Views\Shared\_Agreement_v2_body.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\MultipleVacancies.cshtml" />
     <Content Include="Views\Shared\_NonLevy_Agreement_V1_body.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\VacancyStatus.cshtml" />
     <Content Include="Views\EmployerAgreement\AboutYourDocument.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_Layout_CDN.cshtml" />
     <Content Include="Views\Shared\_SuccessMessage_CDN.cshtml" />
+    <Content Include="Views\Home\Unsubscribe.cshtml" />
+    <Content Include="Views\Home\Unsubscribed.cshtml" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
-    <Content Include="Views\EmployerTeam\V2\Empty.cshtml" />
-    <Content Include="Views\EmployerTeam\Tasks.cshtml" />
-    <Content Include="Views\EmployerTeam\Dashboard.cshtml" />
+    <Content Include="Views\EmployerAgreement\WhenDoYouWantToView.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v3.cshtml" />
     <Content Include="Views\EmployerTeam\AddPAYE.cshtml" />
     <Content Include="Views\EmployerTeam\SignAgreement.cshtml" />
     <Content Include="Views\EmployerTeam\CheckFunding.cshtml" />
@@ -816,6 +843,37 @@
     <Content Include="Views\CookieConsent\Details.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_CookieBanner.cshtml" />
+    <Content Include="Views\Report\ReportTrainingProvider.cshtml" />
+    <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
+    <Content Include="Views\EmployerTeam\ContinueSetupCreateAdvert.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyDraft.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyPendingReview.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyLive.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyRejected.cshtml" />
+    <Content Include="Views\EmployerTeam\VacancyClosed.cshtml" />
+    <Content Include="Views\Shared\_NotSignedV3AgreementMessage.cshtml" />
+    <Content Include="Views\Shared\_NotSignedV3AgreementMessage_CDN.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageWhichCourseYourApprenticeWillTake.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageHaveYouChosenATrainingProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageWillApprenticeshipTrainingStart.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetCourseProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageApprenticeForExistingEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipNewEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\TriageSetupApprenticeshipExistingEmployee.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueSetup.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipApproved.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipWithTrainingProvider.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipReadyForReview.cshtml" />
+    <Content Include="Views\EmployerTeam\SingleApprenticeshipContinueWithProvider.cshtml" />
+    <Content Include="Views\EmployerAgreement\ViewAllAgreements.cshtml" />
+    <Content Include="Views\Shared\_AcceptedAgreement.cshtml" />
+    <Content Include="Views\Shared\_NotAcceptedAgreement.cshtml" />
+    <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
+    <Content Include="Views\EmployerTeam\Empty.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

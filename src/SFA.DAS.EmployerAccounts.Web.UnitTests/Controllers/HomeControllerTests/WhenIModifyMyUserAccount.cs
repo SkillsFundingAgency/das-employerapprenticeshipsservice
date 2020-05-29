@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -105,6 +106,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
             var expectedId = "123456";
             var expectedFirstName = "Test";
             var expectedLastName = "tester";
+           
             _owinWrapper.Setup(x => x.GetClaimValue("email")).Returns(expectedEmail);
             _owinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(expectedId);
             _owinWrapper.Setup(x => x.GetClaimValue(DasClaimTypes.GivenName)).Returns(expectedFirstName);
@@ -115,7 +117,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers.HomeControllerTests
 
             //Assert
             _owinWrapper.Verify(x => x.UpdateClaims(), Times.Once);
-            _homeOrchestrator.Verify(x => x.SaveUpdatedIdentityAttributes(expectedId, expectedEmail, expectedFirstName, expectedLastName));
+            _homeOrchestrator.Verify(x => x.SaveUpdatedIdentityAttributes(expectedId, expectedEmail, expectedFirstName, expectedLastName, null));
         }
     }
 }

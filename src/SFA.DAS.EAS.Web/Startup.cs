@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Microsoft.Azure;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Microsoft.Owin.Security.Cookies;
@@ -82,18 +82,18 @@ namespace SFA.DAS.EAS.Web
 
             return () =>
             {
-                var store = new X509Store(StoreLocation.LocalMachine);
+                var store = new X509Store(StoreLocation.CurrentUser);
 
                 store.Open(OpenFlags.ReadOnly);
 
                 try
                 {
-                    var thumbprint = CloudConfigurationManager.GetSetting("TokenCertificateThumbprint");
+                    var thumbprint = ConfigurationManager.AppSettings["TokenCertificateThumbprint"];
                     var certificates = store.Certificates.Find(X509FindType.FindByThumbprint, thumbprint, false);
 
                     if (certificates.Count < 1)
                     {
-                        throw new Exception($"Could not find certificate with thumbprint '{thumbprint}' in LocalMachine store.");
+                        throw new Exception($"Could not find certificate with thumbprint '{thumbprint}' in CurrentUser store.");
                     }
 
                     return certificates[0];

@@ -14,11 +14,13 @@
         public const string AddOtherOrganisationDetailsViewName = "AddOtherOrganisationDetails";
         public const string AmendOrganisationActionName = "AmendOrganisation";
         public const string AmendPayeActionName = "AmendPaye";
+        public const string CannotRemoveOrganisationViewName = "CannotRemoveOrganisation";
         public const string CodeKeyName = "code";
         public const string ControllerKeyName = "Controller";
         public const string ConfirmOrganisationDetailsViewName = "../OrganisationShared/ConfirmOrganisationDetails";
         public const string ConfirmPayeSchemeActionName = "ConfirmPayeScheme";
         public const string ConfirmRemoveOrganisationActionName = "ConfirmRemoveOrganisation";
+        public const string ConfirmRemoveOrganisationViewName = "ConfirmRemoveOrganisation";
         public const string DetailsActionName = "Details";
         public const string EmailClaimKeyName = "email";      
         public const string EmployerAccountControllerName = "EmployerAccount";
@@ -57,6 +59,8 @@
         public const string RegisterUserActionName = "RegisterUser";
         public const string RenameAccountActionName = "RenameAccount";
         public const string RemoveViewName = "Remove";
+        public const string RemoveOrganisationActionName = "ConfirmRemoveOrganisation";
+        public const string ReportTrainingProviderViewName = "ReportTrainingProvider";
         public const string SearchOrganisationControllerName = "SearchOrganisation";
         public const string SearchForOrganisationActionName = "SearchForOrganisation";
         public const string SearchForOrganisationViewName = "SearchForOrganisation";
@@ -73,15 +77,32 @@
         public const string SignOutActionName = "SignOut";
         public const string SkipRegistrationActionName = "SkipRegistration";
         public const string SummaryActionName = "Summary";
+        public const string UnsubscribedViewName = "Unsubscribed";
         public const string ViewAccountsActionName = "ViewAccounts";
         public const string ViewTeamActionName = "ViewTeam";
         public const string ViewTeamViewName = "ViewTeam";
+        public const string TriageApprenticeForExistingEmployeeActionName = "TriageApprenticeForExistingEmployee";
+        public const string TriageSetupApprenticeshipExistingEmployeeViewName = "TriageSetupApprenticeshipExistingEmployee";
+        public const string TriageSetupApprenticeshipNewEmployeeViewName = "TriageSetupApprenticeshipNewEmployee";
+        public const string TriageHaveYouChosenATrainingProviderActionName = "TriageHaveYouChosenATrainingProvider";
+        public const string TriageWhichCourseYourApprenticeWillTakeActionName = "TriageWhichCourseYourApprenticeWillTake";
+        public const string TriageWillApprenticeshipTrainingStartActionName = "TriageWillApprenticeshipTrainingStart";
+        public const string TriageYouCannotSetupAnApprenticeshipYetCourseProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetCourseProvider";
+        public const string TriageYouCannotSetupAnApprenticeshipYetProviderActionName = "TriageYouCannotSetupAnApprenticeshipYetProvider";
+        public const string TriageYouCannotSetupAnApprenticeshipYetStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetStartDate";
+        public const string TriageYouCannotSetupAnApprenticeshipYetApproximateStartDateActionName = "TriageYouCannotSetupAnApprenticeshipYetApproximateStartDate";
         public const string TransfersControllerName = "Transfers";
         public const string UserRefClaimKeyName = "sub";
-        public const string WaysToAddPayeSchemeActionName = "WaysToAdd";
+        public const string WhenDoYouWantToView = "WhenDoYouWantToView";
         public const string SearchUsingAornViewName = "SearchPensionRegulatorByAorn";
         public const string Settings = "Settings";
         public const string Details = "Details";
         public const string CookieConsent = "CookieConsent";
+        public const string Tier2UserClaim = "Tier2User";
+        public const string EditApprentice = "EditApprentice";
+        public const string ViewApprentice = "ViewApprentice";
+        public const string ApproveOrRejectApprentice = "ApproveOrRejectApprentice";
+        public const string ViewApprenticeBeforeApprove = "ViewApprenticeBeforeApprove";
+        public const string ViewAllAgreementActionName = "ViewAllAgreements";
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Net.Http;
-using SFA.DAS.AutoConfiguration;
+﻿using SFA.DAS.AutoConfiguration;
 using SFA.DAS.Commitments.Api.Client;
 using SFA.DAS.Commitments.Api.Client.Configuration;
 using SFA.DAS.Commitments.Api.Client.Interfaces;
@@ -8,6 +7,7 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using StructureMap;
+using System.Net.Http;
 
 namespace SFA.DAS.EmployerAccounts.DependencyResolution
 {

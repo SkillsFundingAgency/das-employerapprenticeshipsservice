@@ -108,7 +108,7 @@
       <Version>1.0.43</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.IdentityModel.Clients.ActiveDirectory">
-      <Version>5.0.5</Version>
+      <Version>5.2.6</Version>
     </PackageReference>
     <PackageReference Include="Moq">
       <Version>4.5.28</Version>
@@ -117,7 +117,7 @@
       <Version>11.0.1</Version>
     </PackageReference>
     <PackageReference Include="NLog">
-      <Version>4.5.3</Version>
+      <Version>4.6.8</Version>
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.10.1</Version>
@@ -133,9 +133,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger">
       <Version>1.2.1</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.TokenService.Api.Client">
-      <Version>1.1.16</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
