@@ -19,38 +19,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [Route("accounts/{HashedAccountId}/cookieConsent/{saved}", Order = 0)]
-        [Route("accounts/{HashedAccountId}/cookieConsent", Order = 1)]
-        [Route("cookieConsent/{saved}", Order = 2)]
-        [Route("cookieConsent", Order = 3)]        
+        [Route("accounts/{HashedAccountId}/cookieConsent", Order = 0)]
+        [Route("cookieConsent", Order = 1)]        
         public ActionResult Settings(bool saved = false)
         {
             return View(new { Saved = saved });
-        }
-
-        [HttpPost]
-        [Route("accounts/{HashedAccountId}/cookieConsent", Order = 0)]
-        [Route("cookieConsent", Order = 1)]        
-        public ActionResult Settings(bool analyticsConsent, bool marketingConsent)
-        {
-            var domain = Request.IsLocal ? Request.Url.Host :
-                Request.Url.Host.IndexOf('.') > 0 ? Request.Url.Host.Substring(Request.Url.Host.IndexOf('.')) :
-                Request.Url.Host;
-
-            var cookies = new List<HttpCookie>
-            {
-                new HttpCookie("DASSeenCookieMessage", true.ToString().ToLower()),
-                new HttpCookie("AnalyticsConsent", analyticsConsent.ToString().ToLower()),
-                new HttpCookie("MarketingConsent", marketingConsent.ToString().ToLower())
-            };
-
-            cookies.ForEach(x =>
-            {
-                x.Domain = domain;
-                ControllerContext.HttpContext.Response.Cookies.Add(x);
-            });
-
-            return RedirectToAction("Settings", new { saved = true });
         }
 
         [HttpGet]
