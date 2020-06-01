@@ -4723,7 +4723,7 @@ hr.dashboard-heading-separator {
   margin-left: auto; }
 
 .das-cookie-banner {
-  display: block;
+  display: none;
   padding: 15px 0;
   box-sizing: border-box;
   width: 100%;
