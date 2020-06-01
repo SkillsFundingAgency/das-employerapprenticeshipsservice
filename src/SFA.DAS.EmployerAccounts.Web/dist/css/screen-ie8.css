@@ -4752,7 +4752,9 @@ hr.dashboard-heading-separator {
   display: none; }
 
 .das-cookie-banner__confirmation-message {
-  margin: 0; }
+  margin: 0;
+  font-size: 16px;
+  font-size: 19px; }
 
 .das-cookie-banner__hide-button {
   outline: 0;
@@ -4763,41 +4765,18 @@ hr.dashboard-heading-separator {
   padding: 0;
   margin-top: 10px;
   cursor: pointer;
+  font-size: 16px;
   position: absolute;
   right: 5px;
   top: 5px;
-  margin: 0; }
+  margin: 0;
+  font-size: 19px; }
   .das-cookie-banner__hide-button:hover {
     color: #2b8cc4; }
   .das-cookie-banner__hide-button:focus {
     color: #2b8cc4;
     background: #ffbf47;
     outline: 3px solid #ffbf47; }
-
-.das-cookie-settings__confirmation {
-  display: none; }
-
-.js-enabled .das-cookie-settings__no-js {
-  display: none; }
-
-.das-cookie-settings__has-js {
-  display: none; }
-
-.js-enabled .das-cookie-settings__has-js {
-  display: block; }
-
-.das-cookie-settings__confirmation {
-  margin: 20px 0;
-  border: 5px solid #006435;
-  padding: 20px; }
-
-.das-notification__heading {
-  font-weight: bold;
-  font-size: 19px;
-  margin: 0; }
-
-.das-notification__body {
-  display: none; }
 
 .govuk-tag {
   display: inline-block;
