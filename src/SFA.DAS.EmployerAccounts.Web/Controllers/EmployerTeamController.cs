@@ -384,7 +384,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
             }
 
-            var consoleUserType = OwinWrapper.GetClaimValue(ClaimTypes.Role) == "Tier2User" ? "Service user<span>(T2 Support)</ span >" : "Standard user";
+            var consoleUserType = OwinWrapper.GetClaimValue(ClaimTypes.Role) == "Tier2User" ? "Service user (T2 Support)" : "Standard user";
             
             return PartialView("_SupportUserBanner", new SupportUserBannerViewModel
             {
