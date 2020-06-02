@@ -1,9 +1,12 @@
 ﻿using System.Net;
 using System.Web.Mvc;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
-    public class ErrorController : Controller
+    public class ErrorController : BaseController
     {
         [Route("accessdenied")]
         public ActionResult AccessDenied()
@@ -27,6 +30,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.NotFound;
 
             return View();
-        }      
+        }
+
+        public ErrorController(IAuthenticationService owinWrapper, IMultiVariantTestingService multiVariantTestingService, ICookieStorageService<FlashMessageViewModel> flashMessage) : base(owinWrapper, multiVariantTestingService, flashMessage)
+        {
+        }
+
+        public ErrorController(IAuthenticationService owinWrapper) : base(owinWrapper)
+        {
+        }
     }
 }
