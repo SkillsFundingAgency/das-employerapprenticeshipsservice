@@ -36,11 +36,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         [Route("account/{id}")]
         public async Task<ActionResult> Index(string id)
         {
-            _log.Info($"AccountController-Index : Getting FindOrganisations Response for id : {id}");
-
-            var response = await _accountHandler.FindOrganisations(id);
-
-            _log.Info($"AccountController-Index : FindOrganisations Response : {response}"); 
+            var response = await _accountHandler.FindOrganisations(id);            
 
             if (response.StatusCode == SearchResponseCodes.Success)
             {
@@ -53,19 +49,14 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
 
                 return View(vm);
             }
-
-            _log.Info($"AccountController-Index : HttpNotFound for id : {id} ");
+            
             return HttpNotFound();
         }
 
         [Route("account/payeschemes/{id}")]
         public async Task<ActionResult> PayeSchemes(string id)
-        {
-            _log.Info($"AccountController-PayeSchemes : Getting FindPayeSchemes Response for id : {id}");
-            
+        {            
             var response = await _accountHandler.FindPayeSchemes(id);
-
-            _log.Info($"AccountController-PayeSchemes : FindPayeSchemes Response : {response}");
 
             if (response.StatusCode == SearchResponseCodes.Success)
             {
@@ -77,24 +68,17 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
 
                 return View(vm);
             }
-
-            _log.Info($"AccountController-PayeSchemes : HttpNotFound for id : {id} ");
+            
             return new HttpNotFoundResult();
         }
 
         [Route("account/header/{id}")]
         public async Task<ActionResult> Header(string id)
         {
-            _log.Info($"AccountController-Header : Find Header by id : {id}");
-
-            var response = await _accountHandler.Find(id);
-
-            _log.Info($"AccountController-Header : Header Response : {response}");
+            var response = await _accountHandler.Find(id);            
 
             if (response.StatusCode != SearchResponseCodes.Success)
                 return HttpNotFound();
-
-            _log.Info($"AccountController-Header : HttpNotFound for id : {id} ");
 
             return View("SubHeader", response.Account);
         }
@@ -102,11 +86,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         [Route("account/team/{id}")]
         public async Task<ActionResult> Team(string id)
         {
-            _log.Info($"AccountController-Team : Getting FindTeamMembers Response for id : {id}");
-
             var response = await _accountHandler.FindTeamMembers(id);
-
-            _log.Info($"AccountController-Team : FindTeamMembers Response : {response}");
 
             if (response.StatusCode == SearchResponseCodes.Success)
             {
@@ -120,19 +100,13 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 return View(vm);
             }
 
-            _log.Info($"AccountController-Team : HttpNotFound for id : {id} ");
-
             return HttpNotFound();
         }
 
         [Route("account/finance/{id}")]
         public async Task<ActionResult> Finance(string id)
         {
-            _log.Info($"AccountController-Finance : Find Finance by id : {id}");
-
             var response = await _accountHandler.FindFinance(id);
-
-            _log.Info($"AccountController-Finance : FindFinance Response : {response}");
 
             if (response.StatusCode == SearchResponseCodes.Success)
             {
@@ -145,19 +119,13 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
                 return View(vm);
             }
 
-            _log.Info($"AccountController-Finance : HttpNotFound for id : {id} ");
-
             return HttpNotFound();
         }
 
         [Route("account/levysubmissions/{id}/{payeSchemeId}")]
         public async Task<ActionResult> PayeSchemeLevySubmissions(string id, string payeSchemeId)
         {
-            _log.Info($"AccountController-PayeSchemeLevySubmissions : Getting PayeLevySubmissionsResponseCodes Response for id : {id}");
-
             var response = await _payeLevySubmissionsHandler.FindPayeSchemeLevySubmissions(id, payeSchemeId);
-
-            _log.Info($"AccountController-PayeSchemeLevySubmissions : PayeLevySubmissionsResponseCodes Response : {response}");
 
             if (response.StatusCode != PayeLevySubmissionsResponseCodes.AccountNotFound)
             {
@@ -168,8 +136,6 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
 
                 return View(model);
             }
-
-            _log.Info($"AccountController-PayeLevySubmissionsResponseCodes : HttpNotFound for id : {id} ");
 
             return HttpNotFound();
         }
