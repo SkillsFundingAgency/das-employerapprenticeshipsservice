@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
+@{ Layout = "~/Views/Shared/_Layout_CDN.cshtml"; }
 
 @{
     ViewBag.PageID = "accepted-employer-agreement";
@@ -19,10 +19,10 @@
         </div>
 
         <p class="govuk-body">
-            <a class="govuk-link" href="@Url.Action("GetPdfAgreement","EmployerAgreement")" target="_blank">
+            <a class="govuk-link" href="@Url.Action(ControllerConstants.GetSignedPdfAgreementActionName, ControllerConstants.EmployerAgreementControllerName)" target="_blank">
                 Download your accepted agreement
             </a>
-            &nbsp;(<abbr>PDF</abbr>, 304<abbr>KB</abbr>)
+            &nbsp;(<abbr>PDF</abbr>, 334<abbr>KB</abbr>)
         </p>
 
         <h3 class="govuk-heading-m">What happens next</h3>
