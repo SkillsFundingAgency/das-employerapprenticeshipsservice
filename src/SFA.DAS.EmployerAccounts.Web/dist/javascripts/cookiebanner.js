@@ -116,7 +116,21 @@ window.GOVUK.getDomain = function () {
       : window.location.hostname;
 }
 
+// Legacy cookie clean up
+
+var currentDomain = window.location.hostname;
+var cookieDomain = window.GOVUK.getDomain();
+
+if (currentDomain !== cookieDomain) {
+    // Delete the 3 legacy cookies without the domain attribute defined
+    document.cookie = "DASSeenCookieMessage=false; path=/;SameSite=None; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    document.cookie = "AnalyticsConsent=false; path=/;SameSite=None; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+    document.cookie = "MarketingConsent=false; path=/;SameSite=None; expires=Thu, 01 Jan 1970 00:00:01 GMT";
+}
+
 var $cookieBanner = document.querySelector('[data-module="cookie-banner"]');
 if ($cookieBanner != null) {
     new CookieBanner($cookieBanner);
 }
+
+console.log(123)
