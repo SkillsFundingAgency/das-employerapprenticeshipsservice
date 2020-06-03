@@ -236,7 +236,7 @@
     <Compile Include="Extensions\AccountDashboardViewModelExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
+    <Compile Include="Filters\AnalyticsFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -875,6 +875,7 @@
     <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerTeam\Empty.cshtml" />
     <Content Include="Views\EmployerAgreement\AcceptedEmployerAgreement.cshtml" />
+    <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

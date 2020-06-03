@@ -16,9 +16,9 @@ namespace SFA.DAS.EmployerAccounts.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.AddUnitOfWorkFilter();
-            filters.Add(new GoogleAnalyticsFilter());            
+            filters.Add(new AnalyticsFilter());            
             filters.AddDasEmployerAccountsAuthorizationFilter();
-            filters.AddDasEmployerAccountsUnauthorizedAccessExceptionFilter();            
+            filters.AddDasEmployerAccountsUnauthorizedAccessExceptionFilter();
         }
     }
 
