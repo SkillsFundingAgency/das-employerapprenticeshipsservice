@@ -1,4 +1,8 @@
 ﻿using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.MA.Shared.UI.Configuration;
+using SFA.DAS.MA.Shared.UI.Models;
+using SFA.DAS.MA.Shared.UI.Models.Links;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -41,6 +45,63 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
         {
             var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
             return configuration.ZenDeskCobrowsingSnippetKey;
+        }
+
+        public static IHeaderViewModel GetHeaderViewModel(this HtmlHelper html, bool useLegacyStyles = false)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+
+            var headerModel = new HeaderViewModel(new HeaderConfiguration
+            {
+                ManageApprenticeshipsBaseUrl = configuration.EmployerAccountsBaseUrl,
+                ApplicationBaseUrl = configuration.EmployerAccountsBaseUrl,
+                EmployerCommitmentsBaseUrl = configuration.EmployerCommitmentsBaseUrl,
+                EmployerFinanceBaseUrl = configuration.EmployerFinanceBaseUrl,
+                AuthenticationAuthorityUrl = configuration.Identity.BaseAddress,
+                ClientId = configuration.Identity.ClientId,
+                EmployerRecruitBaseUrl = configuration.EmployerRecruitBaseUrl,
+                SignOutUrl = new Uri($"{configuration.EmployerAccountsBaseUrl}/service/signOut"),
+                ChangeEmailReturnUrl = new System.Uri(configuration.EmployerAccountsBaseUrl + "/service/email/change"),
+                ChangePasswordReturnUrl = new System.Uri(configuration.EmployerAccountsBaseUrl + "/service/password/change")
+            },
+            new UserContext
+            {
+                User = html.ViewContext.HttpContext.User,
+                HashedAccountId = html.ViewContext.RouteData.Values["HashedAccountId"]?.ToString()
+            },
+            useLegacyStyles: useLegacyStyles
+            );
+
+            headerModel.SelectMenu(html.ViewContext.RouteData.Values["Controller"].ToString() == "EmployerCommitments" ? "EmployerCommitments" : html.ViewBag.Section);
+
+            if (html.ViewBag.HideNav != null && html.ViewBag.HideNav)
+            {
+                headerModel.HideMenu();
+            }
+
+            if (html.ViewData.Model?.GetType().GetProperty("HideHeaderSignInLink") != null)
+            {
+                headerModel.RemoveLink<SignIn>();
+            }
+
+            return headerModel;
+        }
+
+        public static IFooterViewModel GetFooterViewModel(this HtmlHelper html, bool useLegacyStyles = false)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+
+            return new FooterViewModel(new FooterConfiguration
+            {
+                ManageApprenticeshipsBaseUrl = configuration.EmployerAccountsBaseUrl
+            },
+            new UserContext
+            {
+                User = html.ViewContext.HttpContext.User,
+                HashedAccountId = html.ViewContext.RouteData.Values["HashedAccountId"]?.ToString()
+            },
+            useLegacyStyles: useLegacyStyles
+            );
         }
     }
 }   
