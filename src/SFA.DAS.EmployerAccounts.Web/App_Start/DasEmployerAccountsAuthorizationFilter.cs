@@ -1,20 +1,22 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Web.Mvc;
 using System.Web.Routing;
 using SFA.DAS.Authorization.Mvc.Filters;
 using SFA.DAS.Authorization.Services;
-using SFA.DAS.EmployerAccounts.Extensions;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
     public class DasEmployerAccountsAuthorizationFilter : AuthorizationFilter
     {
-        private readonly IUserContext _userContext;
-        public DasEmployerAccountsAuthorizationFilter(Func<IAuthorizationService> authorizationService, IUserContext userContext) : base(authorizationService)
+        private readonly EmployerAccountsConfiguration _config;
+        public DasEmployerAccountsAuthorizationFilter(Func<IAuthorizationService> authorizationService, EmployerAccountsConfiguration config) : base(authorizationService)
         {
-            _userContext = userContext;
+            _config = config;
         }
         
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -24,14 +26,20 @@ namespace SFA.DAS.EmployerAccounts.Web
             if (filterContext.Result is HttpStatusCodeResult)
             {
                 if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) &&
-                    _userContext.IsSupportConsoleUser())
+                    IsSupportConsoleUser(filterContext))
                 {
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
-                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "SupportError", action = $"accessdenied/{accountHashedId}" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
                     }
                 }
             }
+        }
+
+        private bool IsSupportConsoleUser(ActionExecutingContext filterContext)
+        {
+            var requiredRoles = _config.SupportConsoleUsers.Split(',');
+            return requiredRoles.Any(role => filterContext.HttpContext.User.IsInRole(role));
         }
     }
 }

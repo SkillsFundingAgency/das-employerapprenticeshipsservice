@@ -7,6 +7,7 @@ using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using System.Net;
 using System.Web.Routing;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web
@@ -41,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 {   
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
-                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "SupportError", action = $"accessdenied/{accountHashedId}" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
 
                     }
                     else
@@ -58,7 +59,7 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         public static void AddDasEmployerAccountsAuthorizationFilter(this GlobalFilterCollection filters)
         {
-            filters.Add(new DasEmployerAccountsAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>(), DependencyResolver.Current.GetService<IUserContext>()));
+            filters.Add(new DasEmployerAccountsAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>(), DependencyResolver.Current.GetService<EmployerAccountsConfiguration>()));
         }
 
 

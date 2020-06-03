@@ -11,7 +11,6 @@ using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.Authorization.Mvc.Filters;
 using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Configuration;
-using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
@@ -29,7 +28,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         public string[] ControllerOptions { get; set; }
         private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
         private const string HashedAccountId = "HashedAccountId";
-        private IUserContext _userContext ;
         private readonly Mock<HttpRequestBase> mockRequest = new Mock<HttpRequestBase>();
         private readonly Mock<HttpContextBase> mockContext = new Mock<HttpContextBase>();
         private readonly Mock<HttpResponseBase> mockResponse = new Mock<HttpResponseBase>();
@@ -60,7 +58,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
             MockActionDescriptor.Setup(d => d.GetCustomAttributes(typeof(DasAuthorizeAttribute), true)).Returns(new object[] { new DasAuthorizeAttribute(ActionOptions) });
             mockContext.Setup(htx => htx.Request).Returns(mockRequest.Object);
             mockContext.Setup(htx => htx.Response).Returns(mockResponse.Object);
-            _userContext = new UserContext(_mockAuthenticationService.Object,_config);
+
         }
 
         [Test]
@@ -88,8 +86,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
         public void OnActionExecuting_WhenActionIsExecutingAndControllerIsDecoratedWithDasAuthorizeAttributeAndControllerOptionsAreNotAuthorized_ThenReturnAccessDenied(string role)
         {
             //Arrange           
-            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() => 
-                MockAuthorizationService.Object,_userContext);
+            AuthorizationFilter = new DasEmployerAccountsAuthorizationFilter(() =>
+                MockAuthorizationService.Object, _config);
             _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
             mockContext.Setup(x => x.User.IsInRole(role)).Returns(true);
             RouteData = new RouteData();
@@ -101,9 +99,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
             AuthorizationFilter.OnActionExecuting(ActionExecutingContext);
 
             //Assert
-            var redirectToRouteResult = ActionExecutingContext.Result as RedirectToRouteResult;            
+            var redirectToRouteResult = ActionExecutingContext.Result as RedirectToRouteResult;
             Assert.That(redirectToRouteResult, Is.Not.Null);
-            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("SupportError"));
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("Error"));
             Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo($"accessdenied/{HashedAccountId}"));
         }
 
