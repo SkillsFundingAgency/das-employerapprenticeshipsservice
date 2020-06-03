@@ -238,7 +238,7 @@
       <Version>15.0.25</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Provider.Events.Api.Client">
-      <Version>2.1.95</Version>
+      <Version>2.1.97</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Tasks.Api.Types">
       <Version>1.8.44</Version>
