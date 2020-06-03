@@ -67,7 +67,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Filters
             //Assert
             var redirectToRouteResult = ExceptionContext.Result as RedirectToRouteResult;
             Assert.That(redirectToRouteResult, Is.Not.Null);
-            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("Error"));
+            Assert.That(redirectToRouteResult.RouteValues["controller"], Is.EqualTo("SupportError"));
             Assert.That(redirectToRouteResult.RouteValues["action"], Is.EqualTo($"accessdenied/{HashedAccountId}"));
         }
 
