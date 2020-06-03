@@ -3,8 +3,7 @@
     this.settings = {
         seenCookieName: 'DASSeenCookieMessage',
         cookiePolicy: {
-            AnalyticsConsent: false,
-            MarketingConsent: false
+            AnalyticsConsent: false
         }
     }
     if ( !window.GOVUK.cookie(this.settings.seenCookieName) ) {
