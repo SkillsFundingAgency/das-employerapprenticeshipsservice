@@ -41,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 {   
                     if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
-                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "SupportError", action = $"accessdenied/{accountHashedId}" }));
 
                     }
                     else
