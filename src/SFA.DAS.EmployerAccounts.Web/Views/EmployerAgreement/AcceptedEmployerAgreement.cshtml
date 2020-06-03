@@ -12,8 +12,8 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <div class="das-panel das-panel--muted">
-            <h1 class="das-panel__title">
+        <div class="govuk-panel govuk-panel--confirmation">
+            <h1 class="govuk-panel__title">
                 You’ve accepted the employer agreement
             </h1>
         </div>
@@ -36,7 +36,7 @@
         @if (ViewBag.HasFurtherPendingAgreements)
         {
             <div class="govuk-inset-text">
-                You still need to <a class="govuk-link" href="@Url.Action(ControllerConstants.IndexActionName)">review and accept your other agreements.</a>
+                You still need to <a class="govuk-link" href="@Url.Action(ControllerConstants.IndexActionName)">review and accept your other agreements</a>.
             </div>
         }
 
