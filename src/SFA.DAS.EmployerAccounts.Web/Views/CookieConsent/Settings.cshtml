@@ -40,8 +40,10 @@
                 <li>securefunding.manage-apprenticeships.service.gov.uk</li>
                 <li>beta-login.manage-apprenticeships.service.gov.uk</li>
                 <li>selection.manage-apprenticeships.service.gov.uk</li>
+                <li>recruit.manage-apprenticeships.service.gov.uk</li>
+                <li>approvals.manage-apprenticeships.service.gov.uk</li>
             </ul>
-            <p>We use 3 types of cookie. You can choose which cookies you're happy for us to use.</p>
+            <p>We use 2 types of cookie. You can choose which cookies you're happy for us to use.</p>
             <hr class="govuk-section-break govuk-section-break--l" />
             <form data-module="cookie-settings">
                 <div class="govuk-form-group">
@@ -71,29 +73,14 @@
                     </fieldset>
                 </div>
                 <hr class="govuk-section-break govuk-section-break--l" />
-                <div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset" aria-describedby="hint-cookie-2">
-                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Cookies that help with our communications and marketing</legend>
-                        <div id="hint-cookie-2" class="govuk-hint">
-                            <p>These cookies help us improve the relevancy of advertising campaigns you receive from us.</p>
-                            <p>We also share information about your use of this service with our social media, advertising and analytics partner. They combine it with other information that they&rsquo;ve collected from your use of our services to guide the advertising that you receive.</p>
-                            <ul class="govuk-list govuk-list--bullet govuk-hint">
-                                <li>Use cookies that help with communications and marketing</li>
-                                <li>Do not use cookies that help with communications and marketing</li>
-                            </ul>
-                        </div>
-                        <div class="govuk-radios">
-                            <div class="gem-c-radio govuk-radios__item">
-                                <input type="radio" name="cookies-MarketingConsent" id="radio-cookie-marketing-0" value="on" class="govuk-radios__input">
-                                <label for="radio-cookie-marketing-0" class="govuk-label govuk-radios__label">Use cookies that help with communications and marketing</label>
-                            </div>
-                            <div class="gem-c-radio govuk-radios__item">
-                                <input type="radio" name="cookies-MarketingConsent" id="radio-cookie-marketing-1" value="off" class="govuk-radios__input">
-                                <label for="radio-cookie-marketing-1" class="govuk-label govuk-radios__label">Do not use cookies that help with communications and marketing</label>
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
+                <h3 class="govuk-heading-m">Strictly necessary cookies</h3>
+                <p>These essential cookies remember:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>your progress through a form (for example a licence application)</li>
+                    <li>the notifications you've seen so we do not show them to you again</li>
+                </ul>
+                <p>They always need to be on.</p>
+                <p><a href="@Url.Action("Details")" class="govuk-link">Find out more about cookies on this service</a>.</p>
                 <hr class="govuk-section-break govuk-section-break--l" />
                 <button class="govuk-button" type="submit">Save changes</button>
             </form>
