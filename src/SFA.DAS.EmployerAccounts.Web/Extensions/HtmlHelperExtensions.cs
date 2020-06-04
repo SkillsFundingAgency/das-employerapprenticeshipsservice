@@ -139,7 +139,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
 
-            return new CookieBannerViewModel(new FooterConfiguration
+            return new CookieBannerViewModel(new CookieBannerConfiguration
             {
                 ManageApprenticeshipsBaseUrl = configuration.EmployerAccountsBaseUrl
             },
