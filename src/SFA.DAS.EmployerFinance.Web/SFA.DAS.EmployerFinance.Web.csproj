@@ -208,7 +208,6 @@
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
-    <Compile Include="ViewModels\UserLinksViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\.keep" />
