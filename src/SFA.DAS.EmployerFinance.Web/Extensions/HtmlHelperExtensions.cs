@@ -50,6 +50,8 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
         public static IHeaderViewModel GetHeaderViewModel(this HtmlHelper html, bool useLegacyStyles = false)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+            
+            var requestUrl = html.ViewContext.HttpContext.Request.Url;
 
             var headerModel = new HeaderViewModel(new HeaderConfiguration
             {
@@ -60,9 +62,9 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
                 AuthenticationAuthorityUrl = configuration.Identity.BaseAddress,
                 ClientId = configuration.Identity.ClientId,
                 EmployerRecruitBaseUrl = configuration.EmployerRecruitBaseUrl,
-                SignOutUrl = new Uri($"{configuration.EmployerAccountsBaseUrl}/service/signOut"),
-                ChangeEmailReturnUrl = new System.Uri(configuration.EmployerAccountsBaseUrl + "/service/email/change"),
-                ChangePasswordReturnUrl = new System.Uri(configuration.EmployerAccountsBaseUrl + "/service/password/change")
+                SignOutUrl = new Uri($"{configuration.EmployerFinanceBaseUrl}/services/signOut/"),
+                ChangeEmailReturnUrl = requestUrl,
+                ChangePasswordReturnUrl = requestUrl
             },
             new UserContext
             {
