@@ -5,7 +5,7 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 
 namespace SFA.DAS.EmployerAccounts.Web.Filters
 {
-    public class GoogleAnalyticsFilter : ActionFilterAttribute
+    public class AnalyticsFilter : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
