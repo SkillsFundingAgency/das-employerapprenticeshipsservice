@@ -174,6 +174,9 @@
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage">
       <Version>1.0.0.53229</Version>
     </PackageReference>
+    <PackageReference Include="SFA.DAS.NLog.Targets.Redis">
+      <Version>1.2.1</Version>
+    </PackageReference>
     <PackageReference Include="SFA.DAS.Web.Policy">
       <Version>1.1.0.44309</Version>
     </PackageReference>
@@ -214,7 +217,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>19724</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44349/</IISUrl>
+          <IISUrl>https://localhost:44350/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

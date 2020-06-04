@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EAS.Support.ApplicationServices;
 using SFA.DAS.EAS.Support.Web.Controllers;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
 {
@@ -16,6 +17,7 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
         protected Mock<HttpRequestBase> MockRequestBase;
         protected Mock<HttpResponseBase> MockResponseBase;
         protected Mock<IPrincipal> MockUser;
+        protected Mock<ILog> _logger;
         protected RouteData RouteData;
         protected ChallengeController Unit;
         protected ControllerContext UnitControllerContext;
@@ -24,7 +26,8 @@ namespace SFA.DAS.EAS.Support.Web.Tests.Controllers.Challenge
         public void Setup()
         {
             MockChallengeHandler = new Mock<IChallengeHandler>();
-            Unit = new ChallengeController(MockChallengeHandler.Object);
+            _logger = new Mock<ILog>();
+            Unit = new ChallengeController(MockChallengeHandler.Object, _logger.Object);
 
             RouteData = new RouteData();
             MockContextBase = new Mock<HttpContextBase>();
