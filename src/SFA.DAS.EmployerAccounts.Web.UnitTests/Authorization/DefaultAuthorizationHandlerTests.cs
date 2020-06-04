@@ -12,6 +12,9 @@ using AuthorizationContext = SFA.DAS.Authorization.Context.AuthorizationContext;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizationContext;
 using System;
+using SFA.DAS.Authentication;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
 
@@ -25,46 +28,59 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         public DefaultAuthorizationHandler SutDefaultAuthorizationHandler { get; set; }
         public AuthorizationContextTestsFixture AuthorizationContextTestsFixture { get; set; }
         private Mock<IAuthorisationResourceRepository> MockIAuthorisationResourceRepository { get; set; }
-        private List<AuthorizationResource> resourceList { get; set; }
-        private AuthorizationResource testAuthorizationResource;
+        private List<AuthorizationResource> ResourceList { get; set; }
+        private AuthorizationResource _testAuthorizationResource;
+        private EmployerAccountsConfiguration _configuration;
+        private Mock<IAuthenticationService> _mockAuthenticationService;
+        private readonly string SupportConsoleUsers = "Tier1User,Tier2User";
+        private IUserContext _userContext;
 
         [SetUp]
         public void Arrange()
         {
+            _configuration = new EmployerAccountsConfiguration
+            {
+                SupportConsoleUsers = SupportConsoleUsers
+            };
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
             AuthorizationContextTestsFixture = new AuthorizationContextTestsFixture();
             MockIAuthorisationResourceRepository = new Mock<IAuthorisationResourceRepository>();
             Options = new List<string>();
-            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockIAuthorisationResourceRepository.Object);
-            testAuthorizationResource = new AuthorizationResource
+            _userContext = new UserContext(_mockAuthenticationService.Object,_configuration);
+            SutDefaultAuthorizationHandler = new DefaultAuthorizationHandler(MockIAuthorisationResourceRepository.Object,_userContext);
+            _testAuthorizationResource = new AuthorizationResource
             {
                 Name = "Test",
                 Value = Guid.NewGuid().ToString()
             };
-            resourceList = new List<AuthorizationResource>
+            ResourceList = new List<AuthorizationResource>
             {
-                testAuthorizationResource
+                _testAuthorizationResource
             };
 
-            MockIAuthorisationResourceRepository.Setup(x => x.Get(It.IsAny<ClaimsIdentity>())).Returns(resourceList);
+            MockIAuthorisationResourceRepository.Setup(x => x.Get(It.IsAny<ClaimsIdentity>())).Returns(ResourceList);
             AuthorizationContext = new AuthorizationContext();
         }
         
 
         [Test]
-        public async Task GetAuthorizationResult_WhenTheUserInRoleIsNotTier2_ThenAuthorizedTheUser()
+        public async Task GetAuthorizationResult_WhenTheUserInRoleIsNotSupportConsole_ThenAuthorizedTheUser()
         {
             //Act                        
             var authorizationResult = await SutDefaultAuthorizationHandler.GetAuthorizationResult(Options, AuthorizationContext);
 
             //Assert
             authorizationResult.IsAuthorized.Should().Be(true);
-        }        
-        
-        [Test]
-        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2_ThenAllowTheUserToViewTeamPage()
+        }
+
+        [Theory]
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        [TestCase("TierUser")]
+        public void GetAuthorizationResult_WhenTheUserIsConsoleUser_ThenAllowTheUserToViewTeamPage(string role)
         {
             //Arrange
-             AuthorizationContextTestsFixture.SetData(testAuthorizationResource.Value);
+             AuthorizationContextTestsFixture.SetData(_testAuthorizationResource.Value,role);
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
@@ -75,11 +91,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         }
 
         [Test]
-        public void GetAuthorizationResult_WhenTheUserInRoleIsTier2AndResourceNotSet_ThenAuthorizedTheUser()
+        [Theory]
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public void GetAuthorizationResult_WhenTheUserInRoleIsSupportConsoleAndResourceNotSet_ThenAuthorizedTheUser(string role)
         {
             //Arrange
-            AuthorizationContextTestsFixture.SetDataTier2UserNoResource();
+            AuthorizationContextTestsFixture.SetDataSupportConsoleUserNoResource(role);
 
+            _mockAuthenticationService.Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role)).Returns(true);
+            
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
 
@@ -89,10 +110,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         }
 
         [Test]
-        public void GetAuthorizationResult_WhenTheUserInRoleINotTier2AndClaimsSet_ThenAuthorizedTheUser()
+        public void GetAuthorizationResult_WhenTheUserInRoleINotSupportConsoleAndClaimsSet_ThenAuthorizedTheUser()
         {
             //Arrange
-            AuthorizationContextTestsFixture.SetDataNotTier2User();
+            AuthorizationContextTestsFixture.SetDataNotSupportConsoleUser();
 
             //Act
             AuthorizationContextTestsFixture.AuthorizationContext.ToString();
@@ -123,13 +144,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
         }
 
 
-        public AuthorizationContextTestsFixture SetData(string url)
+        public AuthorizationContextTestsFixture SetData(string url, string role)
         {
             var resource = new Resource { Value = url };
             AuthorizationContext.Set("Resource", resource);
 
             var claimsIdentity = new ClaimsIdentity();
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
+            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, role));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
@@ -137,7 +158,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             return this;
         }
         
-        public AuthorizationContextTestsFixture SetDataTier2UserNoResource()
+        public AuthorizationContextTestsFixture SetDataSupportConsoleUserNoResource(string role)
         {
             var claimsIdentity = new ClaimsIdentity(new[]
             {
@@ -145,7 +166,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
                 new Claim(DasClaimTypes.Email, "Email"),
                 new Claim("sub", "UserRef"),
             });
-            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, AuthorizationConstants.Tier2User));
+            claimsIdentity.AddClaim(new Claim(claimsIdentity.RoleClaimType, role));
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
@@ -153,13 +174,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Authorization
             return this;
         }
         
-        public AuthorizationContextTestsFixture SetDataNotTier2User()
+        public AuthorizationContextTestsFixture SetDataNotSupportConsoleUser()
         {
             var claimsIdentity = new ClaimsIdentity();
             var principal = new ClaimsPrincipal(claimsIdentity);
             MockContextBase.Setup(c => c.User).Returns(principal);
             AuthorizationContext.Set("ClaimsIdentity", claimsIdentity);
-
             return this;
         }
     }

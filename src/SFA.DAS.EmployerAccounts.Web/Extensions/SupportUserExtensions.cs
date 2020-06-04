@@ -23,6 +23,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         private const string HashedAccountId = "HashedAccountId";
         private const string ServiceClaimTier2Role = "ESF";
         private const string Tier2User = "Tier2User";
+        private const string Tier1User = "Tier1User";
         private const string ConsoleUser = "ConsoleUser";
         private const string ServiceClaimTier1Role = "ESS";
         private const string serviceClaimType = "http://service/service";
@@ -104,6 +105,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             }
             else if (notification.AuthenticationTicket.Identity.HasClaim(serviceClaimType, ServiceClaimTier1Role))
             {
+                Logger.Debug("Adding Tier1 Role");
+                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, Tier1User));
+
                 Logger.Debug("Adding ConsoleUser Role");
                 claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, ConsoleUser));
             }

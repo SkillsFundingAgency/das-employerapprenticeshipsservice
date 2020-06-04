@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -380,11 +381,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             {
                 var externalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
                 var response = AsyncHelper.RunSync(() => _employerTeamOrchestrator.GetAccountSummary(model.HashedAccountId, externalUserId));
-
                 account = response.Status != HttpStatusCode.OK ? null : response.Data.Account;
             }
 
-            return PartialView("_SupportUserBanner", new SupportUserBannerViewModel() { Account = account });
+            var consoleUserType = OwinWrapper.GetClaimValue(ClaimTypes.Role) == "Tier2User" ? "Service user (T2 Support)" : "Standard user";
+            
+            return PartialView("_SupportUserBanner", new SupportUserBannerViewModel
+            {
+                Account = account,
+                ConsoleUserType = consoleUserType
+            });
         }
 
         [ChildActionOnly]

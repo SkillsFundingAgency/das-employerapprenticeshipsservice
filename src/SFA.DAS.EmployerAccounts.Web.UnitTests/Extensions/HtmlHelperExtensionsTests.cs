@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Dtos;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
@@ -36,10 +37,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         private bool _isAuthenticated = true;
         private List<Claim> _claims;
         private string _userId;
+        private HtmlHelper _sut;
         private HtmlHelper htmlHelper;
         private Mock<IViewDataContainer> _viewDataContainerMock;
         private ViewContext _viewContext;
         private Mock<IMediator> _mockMediator;
+        private EmployerAccountsConfiguration _employerConfirguration;
+        private readonly string _supportConsoleUsers = "Tier1User,Tier2User";
 
         [SetUp]
         public void SetUp()
@@ -52,7 +56,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             mockHttpContext = new Mock<HttpContextBase>();
             mockPrincipal = new Mock<IPrincipal>();
             mockClaimsIdentity = new Mock<ClaimsIdentity>();
+            _employerConfirguration = new EmployerAccountsConfiguration()
+            {
+                SupportConsoleUsers = _supportConsoleUsers
 
+            };
             _userId = "TestUser";
 
             _claims = new List<Claim>
@@ -82,6 +90,19 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 
 
             _mockMediator = new Mock<IMediator>();
+
+            _sut = new HtmlHelper(_viewContext, _viewDataContainerMock.Object);
+
+            var serviceProviderMock = new Mock<IServiceProvider>();
+            serviceProviderMock.Setup(provider => provider.GetService(typeof(EmployerAccountsConfiguration)))
+                .Returns(_employerConfirguration);
+
+            var dependencyResolver = new Mock<IDependencyResolver>();
+            dependencyResolver
+                .Setup(mock => mock.GetService(typeof(EmployerAccountsConfiguration)))
+                .Returns(_employerConfirguration);
+
+            DependencyResolver.SetResolver(dependencyResolver.Object);
 
             htmlHelper = new HtmlHelper(_viewContext, _viewDataContainerMock.Object);
         }
