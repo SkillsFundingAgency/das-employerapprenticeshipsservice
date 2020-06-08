@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
 using SFA.DAS.EmployerAccounts.Helpers;
+using SFA.DAS.EmployerAccounts.Configuration;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
@@ -34,12 +35,15 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         public static bool IsSupportUser(this HtmlHelper htmlHelper)
         {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var requiredRoles = configuration.SupportConsoleUsers.Split(',');
             if (!(htmlHelper.ViewContext.Controller.ControllerContext.HttpContext.User.Identity is ClaimsIdentity claimsIdentity) || !claimsIdentity.IsAuthenticated)
             {
                 return false;
             }
-
-            return claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(ControllerConstants.Tier2UserClaim));
+            
+            return requiredRoles.Any(role =>
+                claimsIdentity.Claims.Any(c => c.Type == claimsIdentity.RoleClaimType && c.Value.Equals(role)));
         }
 
         public static MvcHtmlString SetZenDeskLabels(this HtmlHelper html, params string[] labels)

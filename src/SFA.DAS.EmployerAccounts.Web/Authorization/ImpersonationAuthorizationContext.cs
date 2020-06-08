@@ -8,6 +8,7 @@ using SFA.DAS.EmployerAccounts.Models;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web.Routing;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
@@ -17,21 +18,21 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
         private readonly HttpContextBase _httpContext;
         private readonly IAuthorizationContextProvider _authorizationContextProvider;
         private readonly IEmployerAccountTeamRepository _employerAccountTeamRepository;
-
+        private readonly IUserContext _userContext;
         public ImpersonationAuthorizationContext(HttpContextBase httpContext,
             IAuthorizationContextProvider authorizationContextProvider,
-            IEmployerAccountTeamRepository employerAccountTeamRepository)
+            IEmployerAccountTeamRepository employerAccountTeamRepository, IUserContext userContext)
         {
             _httpContext = httpContext;
             _authorizationContextProvider = authorizationContextProvider;
             _employerAccountTeamRepository = employerAccountTeamRepository;
+            _userContext = userContext;
         }
 
         public IAuthorizationContext GetAuthorizationContext()
         {
-            if (!_httpContext.User.IsInRole(AuthorizationConstants.Tier2User))
+            if (!_userContext.IsSupportConsoleUser())
                 return _authorizationContextProvider.GetAuthorizationContext();
-
             
             if (!_httpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
             {

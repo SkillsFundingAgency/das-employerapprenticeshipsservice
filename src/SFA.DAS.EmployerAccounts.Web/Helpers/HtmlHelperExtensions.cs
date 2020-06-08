@@ -8,13 +8,13 @@ using MediatR;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using SFA.DAS.EmployerAccounts.Web.Extensions;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 
 namespace SFA.DAS.EmployerAccounts.Web.Helpers
 {
     public static class HtmlHelperExtensions
     {
-        public const string Tier2User = "Tier2User";
         private static readonly ILogger Logger = LogManager.GetCurrentClassLogger();
 
         public static AuthorizationResult GetAuthorizationResult(this HtmlHelper htmlHelper, string featureType)
@@ -65,44 +65,44 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
         public static string ReturnToHomePageButtonHref(this HtmlHelper htmlHelper, string accountId)
         {
-            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
+            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-            Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
+            Logger.Debug($"ReturnToHomePageButtonHref :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
 
-            return isTier2User && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : isAccountIdSet ? $"/accounts/{accountId}/teams" : "/";
+            return isConsoleUser && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : isAccountIdSet ? $"/accounts/{accountId}/teams" : "/";
         }
 
         public static string ReturnToHomePageButtonText(this HtmlHelper htmlHelper, string accountId)
         {
-            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
+            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-            Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
+            Logger.Debug($"ReturnToHomePageButtonText :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
 
-            return isTier2User && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Go back to the account home page" : "Go back to the service home page";
+            return isConsoleUser && isAccountIdSet ? "Return to your team" : isAccountIdSet ? "Go back to the account home page" : "Go back to the service home page";
         }
 
         public static string ReturnToHomePageLinkHref(this HtmlHelper htmlHelper, string accountId)
         {
-            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
+            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-            Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
+            Logger.Debug($"ReturnToHomePageLinkHref :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
 
-            return isTier2User && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : "/";
+            return isConsoleUser && isAccountIdSet ? $"/accounts/{accountId}/teams/view" : "/";
         }
 
         public static string ReturnToHomePageLinkText(this HtmlHelper htmlHelper, string accountId)
         {
-            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isTier2User, out bool isAccountIdSet);
+            accountId = GetHashedAccountId(htmlHelper, accountId, out bool isConsoleUser, out bool isAccountIdSet);
 
-            Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsTier2User : {isTier2User}  IsAccountIdSet : {isAccountIdSet} ");
+            Logger.Debug($"ReturnToHomePageLinkText :: Accountid : {accountId} IsConsoleUser : {isConsoleUser}  IsAccountIdSet : {isAccountIdSet} ");
 
-            return isTier2User && isAccountIdSet ? "Back" : isAccountIdSet ? "Back to the homepage" : "Back";
+            return isConsoleUser && isAccountIdSet ? "Back" : isAccountIdSet ? "Back to the homepage" : "Back";
         }
 
-        private static string GetHashedAccountId(HtmlHelper htmlHelper, string accountId, out bool isTier2User, out bool isAccountIdSet)
+        private static string GetHashedAccountId(HtmlHelper htmlHelper, string accountId, out bool isConsoleUser, out bool isAccountIdSet)
         {
-            isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
-            if (isTier2User && string.IsNullOrEmpty(accountId))
+            isConsoleUser = IsSupportConsoleUser(htmlHelper);
+            if (IsSupportConsoleUser(htmlHelper) && string.IsNullOrEmpty(accountId))
             {
                 accountId = htmlHelper.ViewContext.RequestContext.HttpContext.User.Identity.HashedAccountId();
             }
@@ -112,9 +112,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
 
         public static string ReturnParagraphContent(this HtmlHelper htmlHelper)
         {
-            bool isTier2User = htmlHelper.ViewContext.RequestContext.HttpContext.User?.IsInRole(Tier2User) ?? false;
-
-            return isTier2User ? "You do not have permission to access this part of the service." : "If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.";
+            return IsSupportConsoleUser(htmlHelper) ? "You do not have permission to access this part of the service." : "If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.";
         }
 
         public static string GetClaimsHashedAccountId(this HtmlHelper htmlHelper)
@@ -133,6 +131,13 @@ namespace SFA.DAS.EmployerAccounts.Web.Helpers
             var result = ViewEngines.Engines.FindView(controllerContext, viewName, null);
 
             return result.View != null;
+        }
+
+        public static bool IsSupportConsoleUser(HtmlHelper htmlHelper)
+        {
+            var config = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var requiredRoles = config.SupportConsoleUsers.Split(',');
+            return requiredRoles.Any(role => htmlHelper.ViewContext.RequestContext.HttpContext.User.IsInRole(role));
         }
     }
 }
