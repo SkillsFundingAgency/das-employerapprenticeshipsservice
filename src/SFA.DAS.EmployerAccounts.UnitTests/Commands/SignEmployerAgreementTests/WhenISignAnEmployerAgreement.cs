@@ -172,7 +172,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(agreementId);
 
             //Act
-            await _handler.Handle(_command);
+            var response = await _handler.Handle(_command);
 
             //Assert
             _agreementRepository.Verify(x => x.SignAgreement(It.Is<SignEmployerAgreement>(c => c.SignedDate.Equals(_command.SignedDate)
@@ -181,6 +181,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                                   && c.SignedById.Equals(_owner.UserId)
                                   && c.SignedByName.Equals($"{_owner.FirstName} {_owner.LastName}")
                                 )));
+
+            Assert.AreEqual(OrganisationName, response.LegalEntityName);
+            Assert.AreEqual(AgreementType, response.AgreementType);
         }
 
         [Test]

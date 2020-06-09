@@ -3,7 +3,7 @@ using MediatR;
 
 namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 {
-    public class SignEmployerAgreementCommand : IAsyncRequest
+    public class SignEmployerAgreementCommand : IAsyncRequest<SignEmployerAgreementCommandResponse>
     {
         public string HashedAccountId { get; set; }
         public string ExternalUserId { get; set; }

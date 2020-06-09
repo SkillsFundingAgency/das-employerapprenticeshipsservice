@@ -7,6 +7,7 @@
         public const string AboutYourDocumentViewName = "AboutYourDocument";
         public const string AccessDeniedViewName = "AccessDenied";     
         public const string AccountHashedIdRouteKeyName = "HashedAccountId";
+        public const string AcceptedEmployerAgreementViewName = "AcceptedEmployerAgreement";
         public const string ActionKeyName = "Action";
         public const string ActivitiesUnavailableMessage = "Activities are currently unavailable.";
         public const string AddOrganisationAddressViewName = "../OrganisationShared/AddOrganisationAddress";
