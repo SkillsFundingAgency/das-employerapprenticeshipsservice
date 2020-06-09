@@ -6,6 +6,7 @@ using SFA.DAS.EAS.Support.Core.Models;
 using SFA.DAS.EAS.Support.Infrastructure.Models;
 using SFA.DAS.EAS.Support.Web.Models;
 using SFA.DAS.Support.Shared.Authentication;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Support.Web.Controllers
 {
@@ -13,17 +14,23 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
     public class ChallengeController : Controller
     {
         private readonly IChallengeHandler _handler;
+        private readonly ILog _log;
 
-        public ChallengeController(IChallengeHandler handler)
+        public ChallengeController(IChallengeHandler handler, ILog log)
         {
             _handler = handler;
+            _log = log;
         }
 
         [HttpGet]
         [Route("challenge/{id}")]
         public async Task<ActionResult> Index(string id)
         {
+            _log.Info($"ChallengeController-Index : Getting Response for id : {id}");
+
             var response = await _handler.Get(id);
+
+            _log.Info($"ChallengeController-Index : Response : {response}");
 
             if (response.StatusCode != SearchResponseCodes.Success)
                 return HttpNotFound($"There was a problem finding the account {id}");

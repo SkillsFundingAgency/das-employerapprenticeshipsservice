@@ -66,8 +66,6 @@ namespace SFA.DAS.EmployerFinance.Web
 
             ConfigurationFactory.Current = new IdentityServerConfigurationFactory(config);
             JwtSecurityTokenHandler.InboundClaimTypeMap = new Dictionary<string, string>();
-            UserLinksViewModel.ChangePasswordLink = $"{constants.ChangePasswordLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/password/change")}";
-            UserLinksViewModel.ChangeEmailLink = $"{constants.ChangeEmailLink()}{urlHelper.Encode("https://" + config.DashboardUrl + "/service/email/change")}";
         }
 
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)

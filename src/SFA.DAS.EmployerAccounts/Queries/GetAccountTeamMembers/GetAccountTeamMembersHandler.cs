@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MediatR;
-using SFA.DAS.Authentication;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.Validation;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
@@ -17,20 +16,19 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
         private readonly IEmployerAccountTeamRepository _repository;
         private readonly IMembershipRepository _membershipRepository;
         private readonly IMediator _mediator;
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IUserContext _userContext;
 
         public GetAccountTeamMembersHandler(
             IValidator<GetAccountTeamMembersQuery> validator, 
             IEmployerAccountTeamRepository repository,
-            IAuthenticationService authenticationService,
             IMediator mediator, 
-            IMembershipRepository membershipRepository)
+            IMembershipRepository membershipRepository, IUserContext userContext)
         {
             _validator = validator;
             _repository = repository;
-            _authenticationService = authenticationService;
             _mediator = mediator;
             _membershipRepository = membershipRepository;
+            _userContext = userContext;
         }
 
         public async Task<GetAccountTeamMembersResponse> Handle(GetAccountTeamMembersQuery message)
@@ -49,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountTeamMembers
 
             var accounts = await _repository.GetAccountTeamMembersForUserId(message.HashedAccountId, message.ExternalUserId);
 
-            if (_authenticationService.IsSupportUser())
+            if (_userContext.IsSupportConsoleUser())
             {
                 await AuditAccess(message);
             }

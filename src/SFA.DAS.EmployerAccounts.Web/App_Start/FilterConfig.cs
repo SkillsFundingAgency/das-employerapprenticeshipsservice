@@ -7,7 +7,8 @@ using SFA.DAS.Authorization.Services;
 using SFA.DAS.EmployerAccounts.Web.Authorization;
 using System.Net;
 using System.Web.Routing;
-using System.Security.Claims;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web
 {
@@ -16,14 +17,19 @@ namespace SFA.DAS.EmployerAccounts.Web
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.AddUnitOfWorkFilter();
-            filters.Add(new GoogleAnalyticsFilter());            
+            filters.Add(new AnalyticsFilter());            
             filters.AddDasEmployerAccountsAuthorizationFilter();
-            filters.AddDasEmployerAccountsUnauthorizedAccessExceptionFilter();            
+            filters.AddDasEmployerAccountsUnauthorizedAccessExceptionFilter();
         }
     }
 
     public class DasEmployerAccountsUnauthorizedAccessExceptionFilter : UnauthorizedAccessExceptionFilter
     {
+        private readonly IUserContext _userContext;
+        public DasEmployerAccountsUnauthorizedAccessExceptionFilter(IUserContext userContext)
+        {
+            _userContext = userContext;
+        }
         public override void OnException(ExceptionContext filterContext) 
         {
             base.OnException(filterContext);
@@ -31,47 +37,21 @@ namespace SFA.DAS.EmployerAccounts.Web
             if (filterContext.Exception is UnauthorizedAccessException)
             {
                 
-                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) && filterContext.HttpContext.User.IsInRole(AuthorizationConstants.Tier2User))
-                {
-                    filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var hashedAccountIdObj);
-                    var hashedAccountId = hashedAccountIdObj != null ? hashedAccountIdObj.ToString() : ((ClaimsIdentity)filterContext.HttpContext.User.Identity)?.FindFirst("HashedAccountId")?.Value;
-                    if (!string.IsNullOrEmpty(hashedAccountId))
+                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) &&
+                    _userContext.IsSupportConsoleUser())
+                {   
+                    if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
                     {
-                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{hashedAccountId}" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
 
                     }
                     else
                     {
-                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied" }));
+                        filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = "accessdenied" }));
                     }
 
                 }
             }
-        }
-    }
-
-    public class DasEmployerAccountsAuthorizationFilter : AuthorizationFilter
-    {       
-        public DasEmployerAccountsAuthorizationFilter(Func<IAuthorizationService> authorizationService) : base(authorizationService)
-        {           
-        }
-        
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            base.OnActionExecuting(filterContext);
-
-           if (filterContext.Result is HttpStatusCodeResult)
-           {
-                if (((HttpStatusCodeResult)filterContext.Result).StatusCode.Equals((int)HttpStatusCode.Forbidden) && filterContext.HttpContext.User.IsInRole(AuthorizationConstants.Tier2User))
-                {
-                    if (filterContext.HttpContext.Request.RequestContext.RouteData.Values.TryGetValue(RouteValueKeys.AccountHashedId, out var accountHashedId))
-                    {
-                        filterContext.Result = new System.Web.Mvc.RedirectToRouteResult(new RouteValueDictionary(new { controller = "Error", action = $"accessdenied/{accountHashedId}" }));
-                    }
-                }
-                
-            }
-
         }
     }
 
@@ -79,13 +59,13 @@ namespace SFA.DAS.EmployerAccounts.Web
     {
         public static void AddDasEmployerAccountsAuthorizationFilter(this GlobalFilterCollection filters)
         {
-            filters.Add(new DasEmployerAccountsAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>()));
+            filters.Add(new DasEmployerAccountsAuthorizationFilter(() => DependencyResolver.Current.GetService<IAuthorizationService>(), DependencyResolver.Current.GetService<EmployerAccountsConfiguration>()));
         }
 
 
         public static void AddDasEmployerAccountsUnauthorizedAccessExceptionFilter(this GlobalFilterCollection filters)
         {
-            filters.Add(new DasEmployerAccountsUnauthorizedAccessExceptionFilter());
+            filters.Add(new DasEmployerAccountsUnauthorizedAccessExceptionFilter(DependencyResolver.Current.GetService<IUserContext>()));
         }
     }
 }

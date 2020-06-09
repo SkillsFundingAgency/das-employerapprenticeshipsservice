@@ -27,6 +27,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             Response.StatusCode = (int)HttpStatusCode.NotFound;
 
             return View();
-        }      
+        }
     }
 }

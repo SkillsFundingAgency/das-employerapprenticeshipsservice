@@ -1,14 +1,16 @@
 ﻿using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.Account;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
+using SFA.DAS.EmployerAccounts.Extensions;
+
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
     public class AuthorisationResourceRepository : IAuthorisationResourceRepository
     {
+        private readonly IUserContext _userContext;
+
         private const string TeamViewRoute = "accounts/{hashedaccountid}/teams/view";
         private const string TeamInvite = "accounts/{hashedaccountid}/teams/invite";
         private const string TeamInviteComplete = "accounts/{hashedaccountid}/teams/invite/next";
@@ -18,13 +20,16 @@ namespace SFA.DAS.EmployerAccounts.Services
         private const string TeamMemberInviteResend = "accounts/{hashedaccountid}/teams/resend";
         private const string TeamMemberInviteCancel = "accounts/{hashedaccountid}/teams/{invitationId}/cancel";
         private const string ErrorAccessDenied = "error/accessdenied/{hashedaccountid}";
-        private const string Tier2User = "Tier2User";
+
+        public AuthorisationResourceRepository(IUserContext userContext)
+        {
+            _userContext = userContext;
+        }
 
         public IEnumerable<AuthorizationResource> Get(ClaimsIdentity claimsIdentity)
         {
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
-            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(Tier2User, StringComparison.OrdinalIgnoreCase)))            
-            {
+            if(_userContext.IsSupportConsoleUser())
+           {
                 return new List<AuthorizationResource>
                 {
                     new AuthorizationResource { Name = nameof(TeamViewRoute), Value = TeamViewRoute },
@@ -38,7 +43,6 @@ namespace SFA.DAS.EmployerAccounts.Services
                     new AuthorizationResource { Name = nameof(ErrorAccessDenied), Value = ErrorAccessDenied },
                 };
             }
-
             return new List<AuthorizationResource>();
         }
     }

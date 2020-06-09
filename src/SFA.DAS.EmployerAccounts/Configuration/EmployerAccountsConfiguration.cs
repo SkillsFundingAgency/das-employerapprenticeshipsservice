@@ -52,5 +52,6 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public ContentClientApiConfiguration ContentApi { get; set; }
         public string ApplicationId { get; set; }
         public int DefaultCacheExpirationInMinutes { get; set; }
+        public string SupportConsoleUsers { get; set; }
     }
 }
