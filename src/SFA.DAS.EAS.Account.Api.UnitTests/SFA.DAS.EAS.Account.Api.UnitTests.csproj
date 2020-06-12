@@ -168,7 +168,7 @@
       <Version>1.2.1</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NServiceBus">
-      <Version>15.0.25</Version>
+      <Version>16.0.2</Version>
     </PackageReference>
     <PackageReference Include="StructureMap">
       <Version>4.7.1</Version>

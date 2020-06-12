@@ -245,7 +245,7 @@
       <Version>2.2.37</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NServiceBus">
-      <Version>15.0.25</Version>
+      <Version>16.0.2</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Provider.Events.Api.Client">
       <Version>2.1.97</Version>
