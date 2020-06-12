@@ -842,7 +842,6 @@
     <Content Include="Views\CookieConsent\Settings.cshtml" />
     <Content Include="Views\CookieConsent\Details.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
-    <Content Include="Views\Shared\_CookieBanner.cshtml" />
     <Content Include="Views\Report\ReportTrainingProvider.cshtml" />
     <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
