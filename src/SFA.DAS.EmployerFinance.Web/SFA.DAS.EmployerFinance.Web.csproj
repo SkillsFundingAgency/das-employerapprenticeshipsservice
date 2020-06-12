@@ -98,7 +98,7 @@
       <Version>1.0.5</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.1.42</Version>
+      <Version>1.1.53</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -635,7 +635,6 @@
     <Content Include="src\sass\_welcome.scss" />
     <Content Include="Views\Shared\BadRequest.cshtml" />
     <Content Include="src\sass\_finance.scss" />
-    <Content Include="Views\Shared\_CookieBanner.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
     <Content Include="Views\Shared\_ZenDeskWidget.cshtml" />
     <Content Include="Views\Shared\_COVID19GuidanceBanner.cshtml" />

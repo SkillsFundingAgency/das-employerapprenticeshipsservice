@@ -48,7 +48,7 @@
 </div>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <table class="govuk-table govuk-!-font-size- govuk-!-margin-bottom-8">
+        <table class="govuk-table govuk-!-margin-bottom-8">
             <caption class="govuk-table__caption govuk-heading-l govuk-visually-hidden">Organisations</caption>
             <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
@@ -73,12 +73,12 @@
                         }
                     </td>
                     <td class="govuk-table__cell">
-                        <a href="@Url.Action(ControllerConstants.ViewAllAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" title="View all agreements">View all agreements</a>
+                        <a href="@Url.Action(ControllerConstants.ViewAllAgreementActionName, ControllerConstants.EmployerAgreementControllerName, new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" class="govuk-link">View all agreements</a>
                     </td>
-                    <td class="govuk-table__cell">
+                    <td class="govuk-table__cell govuk-table__cell--numeric">
                         @if (Model.Data.EmployerAgreementsData.EmployerAgreements.Count > 1)
                         {
-                            <a href="@Url.Action(ControllerConstants.RemoveOrganisationActionName ,ControllerConstants.EmployerAgreementControllerName,new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})">Remove organisation</a>
+                            <a href="@Url.Action(ControllerConstants.RemoveOrganisationActionName ,ControllerConstants.EmployerAgreementControllerName,new {accountLegalEntityHashedId = employerAgreement.LegalEntity.AccountLegalEntityPublicHashedId})" class="govuk-link">Remove organisation</a>
                         }
                     </td>
                 </tr>
