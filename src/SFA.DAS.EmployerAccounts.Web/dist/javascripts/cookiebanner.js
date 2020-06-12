@@ -140,7 +140,7 @@ window.GOVUK.cookie = function (name, value, options) {
     if (domain.indexOf("pp-") >= 0) {
       return "PP"
     }
-    return null;
+    return "";
   }
 
 // Legacy cookie clean up
