@@ -105,5 +105,21 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             useLegacyStyles: useLegacyStyles
             );
         }
+
+        public static ICookieBannerViewModel GetCookieBannerViewModel(this HtmlHelper html)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerFinanceConfiguration>();
+
+            return new CookieBannerViewModel(new CookieBannerConfiguration
+            {
+                ManageApprenticeshipsBaseUrl = configuration.EmployerAccountsBaseUrl
+            },
+            new UserContext
+            {
+                User = html.ViewContext.HttpContext.User,
+                HashedAccountId = html.ViewContext.RouteData.Values["accountHashedId"]?.ToString()
+            }
+            );
+        }
     }
 }   
