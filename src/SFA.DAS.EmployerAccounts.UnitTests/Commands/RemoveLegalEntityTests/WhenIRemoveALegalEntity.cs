@@ -71,7 +71,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.RemoveLegalEntityTests
                     {
                         AccountLegalEntityId = ExpectedAccountLegalEntityId,
                         TemplateId = 1,
-                        Id = ExpectedEmployerAgreementId
+                        Id = ExpectedEmployerAgreementId,
+                        SignedDate = DateTime.Now
                     }
                 });
             

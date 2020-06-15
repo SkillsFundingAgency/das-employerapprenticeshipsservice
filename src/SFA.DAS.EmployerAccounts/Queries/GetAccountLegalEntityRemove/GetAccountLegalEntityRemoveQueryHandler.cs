@@ -55,7 +55,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove
             var result = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
             if (result == null) return new GetAccountLegalEntityRemoveResponse();
 
-            if (result.Any(x => x.StatusId == EmployerAgreementStatus.Signed))
+            if (result.Any(x => x.SignedDate.HasValue))
             {
                 return new GetAccountLegalEntityRemoveResponse
                 {
