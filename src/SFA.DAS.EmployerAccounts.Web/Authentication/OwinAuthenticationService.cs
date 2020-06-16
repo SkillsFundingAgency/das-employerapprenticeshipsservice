@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Authentication
 
         public bool HasClaim(string type, string value)
         {
-            return ((ClaimsIdentity)_httpContext.User.Identity).HasClaim(type, value);
+            return _httpContext.User != null && ((ClaimsIdentity)_httpContext.User?.Identity).HasClaim(type, value);
         }
 
         public bool IsUserAuthenticated()

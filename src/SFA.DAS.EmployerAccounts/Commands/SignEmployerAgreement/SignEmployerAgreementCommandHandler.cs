@@ -23,7 +23,7 @@ using IGenericEventFactory = SFA.DAS.EmployerAccounts.Factories.IGenericEventFac
 
 namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 {
-    public class SignEmployerAgreementCommandHandler : AsyncRequestHandler<SignEmployerAgreementCommand>
+    public class SignEmployerAgreementCommandHandler : IAsyncRequestHandler<SignEmployerAgreementCommand, SignEmployerAgreementCommandResponse>
     {
         private readonly IMembershipRepository _membershipRepository;
         private readonly IEmployerAgreementRepository _employerAgreementRepository;
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             _commitmentService = commitmentService;
         }
 
-        protected override async Task HandleCore(SignEmployerAgreementCommand message)
+        public async Task<SignEmployerAgreementCommandResponse> Handle(SignEmployerAgreementCommand message)
         {
             await ValidateRequest(message);
             var owner = await VerifyUserIsAccountOwner(message);
@@ -70,11 +70,18 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
             var hashedLegalEntityId = _hashingService.HashValue((long)agreement.LegalEntityId);
+
             await Task.WhenAll(
                 AddAuditEntry(message, agreement.AccountId, agreementId),
                 _employerAgreementRepository.SetAccountLegalEntityAgreementDetails(agreement.AccountLegalEntityId, null, null, agreement.Id, agreement.VersionNumber),
                 PublishEvents(message, hashedLegalEntityId, agreement, owner, userResponse.User.CorrelationId)
             );
+
+            return new SignEmployerAgreementCommandResponse
+            {
+                AgreementType = agreement.AgreementType,
+                LegalEntityName = agreement.LegalEntityName
+            };
         }
 
         private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, EmployerAgreementView agreement, MembershipView owner, string correlationId)
