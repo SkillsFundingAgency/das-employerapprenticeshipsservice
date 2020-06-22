@@ -93,7 +93,7 @@ The configuration is loaded from azure table storage.
 * SFA.DAS.EmployerApprenticeshipsService._1.0
 * SFA.DAS.EmployerFinance_1.0
 * SFA.DAS.EmployerFinanceV2_1.0
-* SFA.DAS.EmployerAccounts._1.0
+* SFA.DAS.EmployerAccounts_1.0
 
 ##### Set up enivronment variables
 
