@@ -45,7 +45,6 @@
 - Open Visual Studio as an administrator
 - Open the solution
 - Set the following as the startup projects:
-	- SFA.DAS.CloudService
 	- SFA.DAS.EmployerAccounts.Web
 	- SFA.DAS.EmployerFinance.Web
 - Running the solution will launch the site in your browser
@@ -76,14 +75,6 @@ Steps:
 
 ![Select Local > ProjectsV13](/docs/img/db3.PNG)
 
-To publish the CosmosDB necessary for the homepage follow these steps:
-
-* Open the SFA.DAS.EAS.Portal.sln
-* Set SFA.DAS.EAS.Portal.Worker as the startup project
-* Build and run the solution to build the database
-
-** TODO replace the publish with a post deploy step on building**
-
 ##### Add configuration to Azure Storage Emulator
 
 The configuration is loaded from azure table storage.
@@ -99,10 +90,10 @@ The configuration is loaded from azure table storage.
 
 - Create an [Azure] account and set up a table storage
 - Create a table called Configuration and copy across these 4 rows from the employer config setup above changing the PartitionKey to "Development" from "LOCAL":
-* SFA.DAS.EmployerApprenticeshipsService.Portal_1.0
-* SFA.DAS.CommitmentsAPI_1.0
-* SFA.DAS.ApprenticeshipInfoServiceAPI_1.0
-* SFA.DAS.EmployerApprenticeshipsService.Portal.Client_1.0
+* SFA.DAS.EmployerApprenticeshipsService._1.0
+* SFA.DAS.EmployerFinance_1.0
+* SFA.DAS.EmployerFinanceV2_1.0
+* SFA.DAS.EmployerAccounts_1.0
 
 ##### Set up enivronment variables
 
