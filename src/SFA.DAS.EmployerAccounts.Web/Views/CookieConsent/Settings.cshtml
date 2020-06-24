@@ -1,140 +1,100 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@{
-    var savedClass = Model?.GetType().GetProperty("Saved").GetValue(Model) ? "" : "hidden";
-    var analyticsConsentOnChecked = Request.Cookies["analyticsConsent"]?.Value == "true" || Request.Cookies["analyticsConsent"] == null ? "checked" : "";
-    var marketingConsentOnChecked = Request.Cookies["marketingConsent"]?.Value == "true" ? "checked" : "";
-    var analyticsConsentOffChecked = Request.Cookies["analyticsConsent"]?.Value == "false" ? "checked" : "";
-    var marketingConsentOffChecked = Request.Cookies["marketingConsent"]?.Value == "false" || Request.Cookies["marketingConsent"] == null ? "checked" : "";
+@{ 
+    ViewBag.Title = "Cookie settings";
+    ViewBag.PageID = "page-cookie-settings";
+    ViewBag.GaData.Vpv = "/page-cookie-settings";
+    Layout = "~/Views/Shared/_Layout_CDN.cshtml";
 }
-<div class="grid-row">
+<div class="das-cookie-settings" id="cookie-settings">
+    <div class="das-cookie-settings__inner-wrap" id="cookie-settings">
+        <div class="das-notification das-notification--success das-cookie-settings__confirmation" data-cookie-confirmation="true" tabindex="0">
+            <section aria-live="polite" role="region">
+                <h2 class="das-notification__heading">Your cookie settings were saved</h2>
+                <p class="das-notification__body"><a class="govuk-link govuk-link--no-visited-state cookie-settings__prev-page" href="#" data-module="track-click">Go back to the page you were looking at</a></p>
+            </section>
+        </div>
+        <h1 class="govuk-heading-xl">Cookies</h1>
 
-    <div class="column-two-thirds">
-        <p>
-            <div class="@savedClass" data-cookie-confirmation="true">
-                <section aria-live="polite" role="region">
-                    <div style="width: 66.6%; background: #00703c; padding: 10px 20px 20px 20px; text-align: center; min-width: 220px;">
-                        <h2 style="color: #fff;" class="heading-medium">Your cookie settings were saved</h2>
-                    </div>
-                </section>
-            </div>
-        </p>
+        <p>Cookies are files saved on your phone, tablet or computer when you visit a website.</p>
+        <p>We use cookies to store information about how you use this service, such as the pages you visit.</p>
 
-        <header class="page-header">
-            <div>
-                <h1 class="heading-xlarge">
-                    Cookies
-                </h1>
-            </div>
-        </header>
+        <h2 class="govuk-heading-l">Cookie settings</h2>
 
-        <p>
-            Cookies are files saved on your phone, tablet or computer when you visit a website.
-        </p>
-
-        <p>
-            We use cookies to store information about how you use the website, such as the pages you visit.
-        </p>
-
-
-        <h2 class="heading-large">Cookie settings</h2>
-
-        <p>
-            We use 3 types of cookie. You can choose which cookies you're happy for us to use.
-        </p>
-
-
-        <form method="POST" action="@Url.Action(ControllerConstants.Settings)">
-            @Html.AntiForgeryToken()
-
-            <div class="form-group">
-                <fieldset class="inline" aria-describedby="hint-cookie-1">
-                    <legend>
-                        <h3 class="heading-medium">Cookies that measure website use</h3>
-                    </legend>
-
-                    <div id="hint-cookie-1" class="form-hint">
-                        <p>
-                            We use Google Analytics to measure how you use the website so we can improve it based on user needs. Google Analytics sets cookies that store anonymised information about:
-                        </p>
-                        <ul class="list list-bullet">
-                            <li>
-                                how you got to the site
-                            </li>
-                            <li>the pages you visit on the service and how long you spend on each page</li>
-                            <li>
-                                what you click on while you're visiting the site
-                            </li>
-                        </ul>
-                        <p>
-                            We do not allow Google to use or share the data about how you use this site.
-                        </p>
-                        <p>
-                            Cookies may be set by other third-party websites to do things like measure how you view YouTube videos that are on the service.
-                        </p>
-                        <p>If you register an account with the Find an apprenticeship service or the Manage apprenticeships service, both provided by the Education and Skills Funding Agency, the information collected using analytics cookies will be linked to your account to help us make the service work better for you.</p>
-                    </div>
-
-                    <label for="radio-cookie-analytics-0" class="block-label selection-button-radio">
-                        <input type="radio" name="analyticsConsent" id="radio-cookie-analytics-0" value="true" @analyticsConsentOnChecked>
-                        On
-                    </label>
-
-                    <label for="radio-cookie-analytics-1" class="block-label selection-button-radio">
-                        <input type="radio" name="analyticsConsent" id="radio-cookie-analytics-1" value="false" @analyticsConsentOffChecked>
-                        Off
-                    </label>
-
-                </fieldset>
-            </div>
-
-            <div class="form-group">
-                <fieldset class="inline" aria-describedby="hint-cookie-1">
-                    <legend>
-                        <h3 class="heading-medium">Cookies that help with our communications and marketing</h3>
-                    </legend>
-
-                    <div id="hint-cookie-1" class="form-hint">
-                        <p>These cookies help us improve the relevancy of advertising campaigns you receive from us. </p>
-                        <p>We also share information about your use of our site with our social media, advertising and analytics partners, who may combine it with other information that they’ve collected from your use of their services to guide the advertising that you receive on their service.</p>
-                    </div>
-
-                    <label for="radio-cookie-marketing-0" class="block-label selection-button-radio">
-                        <input type="radio" name="marketingConsent" id="radio-cookie-marketing-0" value="true" @marketingConsentOnChecked>
-                        On
-                    </label>
-
-                    <label for="radio-cookie-marketing-1" class="block-label selection-button-radio">
-                        <input type="radio" name="marketingConsent" id="radio-cookie-marketing-1" value="false" @marketingConsentOffChecked>
-                        Off
-                    </label>
-
-                </fieldset>
-            </div>
-
-            <h3 class="heading-medium">
-                Strictly necessary cookies
-            </h3>
-            <p>These essential cookies do things like:</p>
-            <ul class="list list-bullet">
-                <li>remember the notifications you've seen so we do not show them to you again</li>
-                <li>remember your progress through a form</li>
+        <div class="das-js-hide">
+            <p>We use Javascript to set most of our cookies. Unfortunately Javascript is not running on your browser, so you cannot change your settings. You can try:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>reloading the page</li>
+                <li>turning on Javascript in your browser</li>
             </ul>
-            <p>They always need to be on.</p>
-            <p><a href="@Url.Action(ControllerConstants.Details)">Find out more about cookies on this service</a></p>
+        </div>
 
-
-            <button class="button" type="submit" id="btn-save-cookie-settings">Save changes</button>
-        </form>
-
-
+        <div class="das-js-show das-cookie-settings__form-wrapper">
+            <p>This service is delivered over a set of subdomains.</p>
+            <p>Your cookie preferences on this service automatically apply to the following domains:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>accounts.manage-apprenticeships.service.gov.uk</li>
+                <li>manage-apprenticeships.service.gov.uk</li>
+                <li>finance.manage-apprenticeships.service.gov.uk</li>
+                <li>reporting.manage-apprenticeships.service.gov.uk</li>
+                <li>permissions.manage-apprenticeships.service.gov.uk</li>
+                <li>securefunding.manage-apprenticeships.service.gov.uk</li>
+                <li>beta-login.manage-apprenticeships.service.gov.uk</li>
+                <li>selection.manage-apprenticeships.service.gov.uk</li>
+                <li>recruit.manage-apprenticeships.service.gov.uk</li>
+                <li>approvals.manage-apprenticeships.service.gov.uk</li>
+            </ul>
+            <p>We use 2 types of cookie. You can choose which cookies you're happy for us to use.</p>
+            <hr class="govuk-section-break govuk-section-break--l" />
+            <form data-module="cookie-settings">
+                <div class="govuk-form-group">
+                    <fieldset class="govuk-fieldset" aria-describedby="hint-cookie-1">
+                        <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">Cookies that measure website use</legend>
+                        <div id="hint-cookie-1" class="govuk-hint">
+                            <p>We use Google Analytics to measure how you use the webservice so we can improve it based on user needs. We do not allow Google to use or share the data about how you use this service.</p>
+                            <p>Google Analytics sets cookies that store anonymised information about:</p>
+                            <ul class="govuk-list govuk-list--bullet govuk-hint">
+                                <li>how you got to the service</li>
+                                <li>the pages you visit on GOV.UK and government digital services, and how long you spend on each page</li>
+                                <li>what you click on while you're visiting the service</li>
+                            </ul>
+                            <p>Cookies may be set by other third-party services to do things like measure how you view YouTube videos that are on the service.</p>
+                            <p>If you have an account with other services provided by the Education and Skills Funding Agency, the information collected using analytics cookies will be linked to your account. This will help us make the service work better for you.</p>
+                        </div>
+                        <div class="govuk-radios">
+                            <div class="gem-c-radio govuk-radios__item">
+                                <input type="radio" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-0" value="on" class="govuk-radios__input">
+                                <label for="radio-cookie-analytics-0" class="govuk-label govuk-radios__label">Use cookies that measure my service use</label>
+                            </div>
+                            <div class="gem-c-radio govuk-radios__item">
+                                <input type="radio" name="cookies-AnalyticsConsent" id="radio-cookie-analytics-1" value="off" class="govuk-radios__input">
+                                <label for="radio-cookie-analytics-1" class="govuk-label govuk-radios__label">Do not use cookies that measure my service use</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+                <hr class="govuk-section-break govuk-section-break--l" />
+                <h3 class="govuk-heading-m">Strictly necessary cookies</h3>
+                <p>These essential cookies remember:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>your progress through a form (for example a licence application)</li>
+                    <li>the notifications you've seen so we do not show them to you again</li>
+                </ul>
+                <p>They always need to be on.</p>
+                <p><a href="@Url.Action("Details")" class="govuk-link">Find out more about cookies on this service</a>.</p>
+                <hr class="govuk-section-break govuk-section-break--l" />
+                <button class="govuk-button" type="submit">Save changes</button>
+            </form>
+        </div>
     </div>
 </div>
 
 @section breadcrumb {
-    <div class="breadcrumbs">
-        <ol role="navigation">
-            <li><a href="/">Your accounts</a></li>
-            <li>Cookies</li>
+    <div class="govuk-breadcrumbs">
+        <ol class="govuk-breadcrumbs__list">
+            <li class="govuk-breadcrumbs__list-item">
+                <a href="/" class="govuk-breadcrumbs__link">Your accounts</a>
+            </li>
+            <li class="govuk-breadcrumbs__list-item" aria-current="page">Cookies</li>
         </ol>
     </div>
 }

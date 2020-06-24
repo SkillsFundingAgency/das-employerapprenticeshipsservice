@@ -54,7 +54,7 @@ else
                 <div class="grid-row">
                     <div class="column-two-thirds">
                         <h2 class="section-heading heading-large">Apprenticeships</h2>
-                        <p class="section-description">Manage your apprentices, recruit apprentice and set training provider permissions</p>
+                        <p class="section-description">Manage your apprentices, advertise apprenticeships and set training provider permissions</p>
                     </div>
                 </div>
                 <div class="cards">
@@ -65,8 +65,8 @@ else
                     @if (Html.IsAuthorized("EmployerFeature.Recruitments"))
                     {
                         <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.EmployerRecruitAction()">Recruitment</a></h3>
-                            <p>Recruit an apprentice by creating a vacancy. This vacancy will be advertised on Find an apprenticeship.</p>
+                            <h3 class="heading-medium"><a href="@Url.EmployerRecruitAction()">Your apprenticeship adverts</a></h3>
+                            <p>Create adverts to post on Find an apprenticeship, view applications and view previous adverts.</p>
                         </div>
                     }
                     @if (Html.IsAuthorized("EmployerFeature.ProviderRelationships"))

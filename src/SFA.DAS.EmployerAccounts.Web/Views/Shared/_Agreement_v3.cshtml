@@ -56,7 +56,7 @@
     <div class="govuk-grid-column-one-quarter">
 
         <p class="govuk-body-s govuk-!-font-weight-regular" id="sections-title">Clauses of the agreement<span class="govuk-visually-hidden">:</span></p>
-        <nav>
+        <nav data-jumptoscrolltxt="Clauses" data-module="jumpToScroll">
             <ol class="govuk-list govuk-!-font-size-16 contents">
                 <li><a class="govuk-link--no-visited-state" href="#background">Background </a></li>
                 <li><a class="govuk-link--no-visited-state" href="#1"><span class="number">1. </span>Agreed Terms</a></li>
@@ -1210,20 +1210,20 @@
                 <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
                 <strong class="govuk-warning-text__text">
                     <span class="govuk-warning-text__assistive">Warning</span>
-                    The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaks it, we could close their account and stop them running apprenticeships.
+                    The agreement is legally binding. If @Model.EmployerAgreement.LegalEntityName breaches the terms, we could stop them hiring apprentices, claim back funding or close their account.
                 </strong>
             </div>
 
-            <form method="post" action="@Url.Action("Sign", "EmployerAgreement")#no-choice-selected">
+            <form method="post" action="@Url.Action("Sign", "EmployerAgreement")">
                 @Html.AntiForgeryToken()
 
                 <div>
                     <div class="@("govuk-form-group " + (!ViewData.ModelState.IsValid ? "govuk-form-group--error" : string.Empty))">
                         <fieldset class="govuk-fieldset" aria-describedby="accept-hint no-choice-selected">
 
-                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--xl">
+                            <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
                                 <h1 class="govuk-fieldset__heading">
-                                    Do you accept the agreement?
+                                    Do you accept the employer agreement on behalf of @Model.EmployerAgreement.LegalEntityName?
                                 </h1>
                             </legend>
 
@@ -1248,7 +1248,7 @@
                                 <div class="govuk-radios__item">
                                     <input class="govuk-radios__input" id="do-not-want-to-sign" name="choice" type="radio" value="@SignEmployerAgreementViewModel.ReviewAgreementLater">
                                     <label class="govuk-label govuk-radios__label" for="do-not-want-to-sign">
-                                        Not yet, I'll finish creating an account first
+                                        Not yet
                                     </label>
                                 </div>
                             </div>
@@ -1258,6 +1258,5 @@
                 </div>
             </form>
         }
-
     </div>
 </div>

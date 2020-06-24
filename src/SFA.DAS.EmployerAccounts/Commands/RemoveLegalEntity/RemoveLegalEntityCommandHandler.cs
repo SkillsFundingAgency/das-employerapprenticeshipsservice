@@ -79,14 +79,16 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
 
             var accountId = _hashingService.DecodeValue(message.HashedAccountId);
             var accountLegalEntityId = _accountLegalEntityHashingService.DecodeValue(message.HashedAccountLegalEntityId);
-
-            var agreements = await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId);
+            var agreements = (await _employerAgreementRepository.GetAccountLegalEntityAgreements(accountLegalEntityId)).ToList();
             var legalAgreement = agreements.OrderByDescending(a => a.TemplateId).First();
             var hashedLegalAgreementId = _hashingService.HashValue(legalAgreement.Id);
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(legalAgreement.Id);
 
-            await ValidateLegalEntityHasNoCommitments(agreement, accountId, validationResult);
+            if (agreements.Any(x => x.SignedDate.HasValue))
+            {
+                await ValidateLegalEntityHasNoCommitments(agreement, accountId, validationResult);
+            }
 
             await _employerAgreementRepository.RemoveLegalEntityFromAccount(legalAgreement.Id);
 
@@ -114,25 +116,19 @@ namespace SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity
             }
         }
 
-        private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId,
-            ValidationResult validationResult)
+        private async Task ValidateLegalEntityHasNoCommitments(EmployerAgreementView agreement, long accountId, ValidationResult validationResult)
         {
-            if (agreement.Status == EmployerAgreementStatus.Signed)
+            var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
+
+            var commitment = commitments.FirstOrDefault(c =>
+                !string.IsNullOrEmpty(c.LegalEntityIdentifier)
+                && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
+                && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
+
+            if (commitment != null && (commitment.ActiveCount + commitment.PausedCount + commitment.PendingApprovalCount) != 0)
             {
-                var commitments = await _employerCommitmentApi.GetEmployerAccountSummary(accountId);
-
-                var returnValue = commitments.FirstOrDefault(c =>
-                    !string.IsNullOrEmpty(c.LegalEntityIdentifier)
-                    && c.LegalEntityIdentifier.Equals(agreement.LegalEntityCode)
-                    && c.LegalEntityOrganisationType == agreement.LegalEntitySource);
-
-                if (returnValue != null &&
-                    (returnValue.ActiveCount + returnValue.PausedCount + returnValue.PendingApprovalCount) != 0)
-                {
-                    validationResult.AddError(nameof(agreement.HashedAgreementId),
-                        "Agreement has already been signed and has active commitments");
-                    throw new InvalidRequestException(validationResult.ValidationDictionary);
-                }
+                validationResult.AddError(nameof(agreement.HashedAgreementId), "Agreement has already been signed and has active commitments");
+                throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
         }
 
