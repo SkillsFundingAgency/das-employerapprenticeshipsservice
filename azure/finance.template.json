@@ -14,6 +14,12 @@
         "sharedAppServicePlanResourceGroup": {
             "type": "string"
         },
+        "sharedEnvResourceGroup": {
+            "type": "string"
+        },
+        "sharedServiceBusName": {
+            "type": "string"
+        },
         "ApiAppServiceName": {
             "type": "string"
         },
@@ -391,6 +397,34 @@
             "dependsOn": [
                 "WorkerAppServicePlan"
             ]
+        },
+        {
+            "apiVersion": "2017-05-10",
+            "name": "[concat('role-assignments-', copyIndex())]",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'role-assignment.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "principalId": {
+                        "value": "[createArray(reference('UIAppService').outputs.managedServiceIdentityId.value, reference('UIAppService').outputs.stagingManagedServiceIdentityId.value, reference('ApiAppService').outputs.managedServiceIdentityId.value, reference('ApiAppService').outputs.stagingManagedServiceIdentityId.value, reference('WorkerAppService').outputs.managedServiceIdentityId.value)[copyIndex()]]"
+                    },
+                    "assignmentType": {
+                        "value": "ServiceBusOwner"
+                    },
+                    "resourceName": {
+                        "value": "[parameters('sharedServiceBusName')]"
+                    }
+                }
+            },
+            "copy": {
+                "name": "role-assignments",
+                "count": 5
+            }
         }
     ],
     "outputs": {
