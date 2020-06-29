@@ -27,7 +27,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
                 .Where(l =>
                     l.LegalEntityId == message.LegalEntityId &&
                     l.Account.HashedId == message.AccountHashedId && 
-                    (l.PendingAgreementId != null || l.SignedAgreementId != null))
+                    (l.PendingAgreementId != null || l.SignedAgreementId != null) &&
+                    l.Deleted == null) 
                 .ProjectTo<LegalEntity>(_configurationProvider, new
                 {
                     accountHashedId = message.AccountHashedId
