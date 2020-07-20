@@ -16,9 +16,7 @@ variables:
 pool:
   name: 'DAS - Continuous Integration'
   demands: 
-  - msbuild
-  - visualstudio
-  - Agent.OS -equals Windows_NT
+  - Agent.OS -equals Windows_NT 
 
 resources:
   repositories:
