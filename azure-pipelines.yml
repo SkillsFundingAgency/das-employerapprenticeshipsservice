@@ -18,6 +18,7 @@ pool:
   demands: 
   - msbuild
   - visualstudio
+  - Agent.OS -equals Windows_NT
 
 resources:
   repositories:
