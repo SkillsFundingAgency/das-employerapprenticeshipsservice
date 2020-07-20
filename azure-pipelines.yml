@@ -32,6 +32,11 @@ steps:
   inputs:
     configFilePath: GitVersion.yml
     updateAssemblyInfo: true
+    
+- task: NuGetCommand@2
+  displayName: 'NuGet restore'
+  inputs:
+    restoreSolution: 'src/SFA.DAS.EAS.sln'
 
 - task: VSBuild@1
   displayName: 'Restore solution EAS'
