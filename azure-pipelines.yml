@@ -14,7 +14,9 @@ variables:
   buildPlatform: 'any cpu'
 
 pool:
-  name: 'DAS - Continuous Integration' 
+  name: 'DAS - Continuous Integration'
+  demands:
+    - Agent.OS -equals Linux
 
 resources:
   repositories:
