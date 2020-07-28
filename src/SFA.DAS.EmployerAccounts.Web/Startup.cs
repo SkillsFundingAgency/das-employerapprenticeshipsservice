@@ -60,7 +60,8 @@ namespace SFA.DAS.EmployerAccounts.Web
                     MetadataAddress = config.AdfsMetadata , 
                     Wreply = config.EmployerAccountsBaseUrl , 
                     Wtrealm = config.EmployerAccountsBaseUrl ,
-                    BaseUrl = config.Identity.BaseAddress                     
+                    BaseUrl = config.Identity.BaseAddress,
+                    
                 },
                 Logger = Logger
             });
@@ -98,6 +99,7 @@ namespace SFA.DAS.EmployerAccounts.Web
                 }
             };
         }
+
         private static Func<X509Certificate2> GetSigningCertificate(bool useCertificate)
         {
             if (!useCertificate)

@@ -36,7 +36,7 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
         [Route("account/{id}")]
         public async Task<ActionResult> Index(string id)
         {
-            var response = await _accountHandler.FindOrganisations(id);
+            var response = await _accountHandler.FindOrganisations(id);            
 
             if (response.StatusCode == SearchResponseCodes.Success)
             {
@@ -49,13 +49,13 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
 
                 return View(vm);
             }
-
+            
             return HttpNotFound();
         }
 
         [Route("account/payeschemes/{id}")]
         public async Task<ActionResult> PayeSchemes(string id)
-        {
+        {            
             var response = await _accountHandler.FindPayeSchemes(id);
 
             if (response.StatusCode == SearchResponseCodes.Success)
@@ -68,14 +68,14 @@ namespace SFA.DAS.EAS.Support.Web.Controllers
 
                 return View(vm);
             }
-
+            
             return new HttpNotFoundResult();
         }
 
         [Route("account/header/{id}")]
         public async Task<ActionResult> Header(string id)
         {
-            var response = await _accountHandler.Find(id);
+            var response = await _accountHandler.Find(id);            
 
             if (response.StatusCode != SearchResponseCodes.Success)
                 return HttpNotFound();

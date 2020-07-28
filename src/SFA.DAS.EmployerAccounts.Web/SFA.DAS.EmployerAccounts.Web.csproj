@@ -1,7 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
-  <Import Project="$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props" Condition="Exists('$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -26,7 +24,6 @@
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <WebGreaseLibPath>$(USERPROFILE)\.nuget\packages\WebGrease\1.5.2\lib</WebGreaseLibPath>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -140,7 +137,7 @@
       <Version>1.0.16</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.MA.Shared.UI">
-      <Version>1.1.42</Version>
+      <Version>1.1.56</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.NLog.Logger" Version="1.2.1" />
     <PackageReference Include="SFA.DAS.NLog.Targets.Redis" Version="1.2.1" />
@@ -179,12 +176,12 @@
   <ItemGroup>
     <Compile Include="App_Start\BinderConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DasEmployerAccountsAuthorizationFilter.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\StructuremapMvc.cs" />
     <Compile Include="Authentication\IdentityServerConfigurationFactory.cs" />
     <Compile Include="Authentication\OwinAuthenticationService.cs" />
-    <Compile Include="Authorization\AuthorizationConstants.cs" />
     <Compile Include="Authorization\AuthorizationContextProvider.cs" />
     <Compile Include="Authorization\DefaultAuthorizationHandler.cs" />
     <Compile Include="Authorization\ImpersonationAuthorizationContext.cs" />
@@ -236,7 +233,7 @@
     <Compile Include="Extensions\AccountDashboardViewModelExtensions.cs" />
     <Compile Include="Extensions\TransferRequestDtoExtensions.cs" />
     <Compile Include="Extensions\UrlHelperExtensions.cs" />
-    <Compile Include="Filters\GoogleAnalyticsFilter.cs" />
+    <Compile Include="Filters\AnalyticsFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -842,7 +839,6 @@
     <Content Include="Views\CookieConsent\Settings.cshtml" />
     <Content Include="Views\CookieConsent\Details.cshtml" />
     <Content Include="src\sass\_cookiebanner.scss" />
-    <Content Include="Views\Shared\_CookieBanner.cshtml" />
     <Content Include="Views\Report\ReportTrainingProvider.cshtml" />
     <Content Include="Views\Shared\_SupportUserBanner.cshtml" />
     <Content Include="Views\EmployerTeam\ContinueSetupForSingleReservation.cshtml" />
@@ -874,6 +870,8 @@
     <Content Include="Views\Shared\_NotAcceptedAgreement.cshtml" />
     <Content Include="Views\EmployerAgreement\CannotRemoveOrganisation.cshtml" />
     <Content Include="Views\EmployerTeam\Empty.cshtml" />
+    <Content Include="Views\EmployerAgreement\AcceptedEmployerAgreement.cshtml" />
+    <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
@@ -937,13 +935,6 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '$(USERPROFILE)\.nuget\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform\1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
-    <Error Condition="!Exists('$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '$(USERPROFILE)\.nuget\packages\Microsoft.Net.Compilers\2.6.1\build\Microsoft.Net.Compilers.props'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

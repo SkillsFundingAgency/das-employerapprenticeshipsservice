@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
@@ -171,41 +172,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (response.Status == HttpStatusCode.OK)
             {
-                FlashMessageViewModel flashMessage = new FlashMessageViewModel
-                {
-                    Headline = "Agreement(s) signed",
-                    Severity = FlashMessageSeverityLevel.Success
-                };
-
-                ActionResult result;
-
-                if (response.Data.SignedAgreementType == AgreementType.NonLevyExpressionOfInterest)
-                {
-                    flashMessage.Headline = "Memorandum of Understanding signed";
-                    flashMessage.Message = "You’ve successfully signed the Memorandum of Understanding for your organisation.";
-                    result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
-                }
-                else if (response.Data.HasFurtherPendingAgreements)
-                {
-                    flashMessage.Headline = "Agreement accepted";
-                    flashMessage.Message = "You've successfully accepted an agreement. You still need to review and accept your other agreements.";
-
-                    result = RedirectToAction(
-                        ControllerConstants.IndexActionName,
-                        ControllerConstants.EmployerAgreementControllerName,
-                        new { hashedAccountId, agreementSigned = true }
-                    );
-                }
-                else
-                {
-                    flashMessage.Headline = "Agreement accepted";
-                    flashMessage.Message = "You’ve successfully accepted all of your organisation’s agreements.";
-                    result = RedirectToAction(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName);
-                }
-
-                AddFlashMessageToCookie(flashMessage);
-
-                return result;
+                ViewBag.CompanyName = response.Data.LegalEntityName;
+                ViewBag.HasFurtherPendingAgreements = response.Data.HasFurtherPendingAgreements;
+                return View(ControllerConstants.AcceptedEmployerAgreementViewName);
             }
 
             return RedirectToAction(ControllerConstants.SignAgreementActionName, new GetEmployerAgreementRequest { AgreementId = agreementId, ExternalUserId = userInfo, HashedAccountId = hashedAccountId });

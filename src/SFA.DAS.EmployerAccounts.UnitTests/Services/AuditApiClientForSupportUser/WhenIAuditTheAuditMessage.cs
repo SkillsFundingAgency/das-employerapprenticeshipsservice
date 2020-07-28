@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using SFA.DAS.EmployerUsers.WebClientComponents;
 using System;
+using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUser
 {
@@ -15,18 +17,27 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
     {
         private EmployerAccounts.Services.AuditApiClientForSupportUser _sut;
         private AuditMessage _auditMessage;
-
+        private string SupportConsoleUsers = "Tier1User,Tier2User";
         private Mock<IAuditApiClient> _mockInnerClient;
         private Mock<IAuthenticationService> _mockAuthenticationService;
+        private EmployerAccountsConfiguration _config;
+        private IUserContext _userContext;
 
         private string _impersonatedUser;
         private string _impersonatedUserEmail;
         private string _supportUserUpn;
         private string _supportUserEmail;
+        
 
         [SetUp]
         public void Arrange()
-        {            
+        {
+            _config = new EmployerAccountsConfiguration()
+            {
+                SupportConsoleUsers = SupportConsoleUsers
+            };
+            _mockAuthenticationService = new Mock<IAuthenticationService>();
+            _userContext = new UserContext(_mockAuthenticationService.Object, _config);
             _impersonatedUser = Guid.NewGuid().ToString();
             _impersonatedUserEmail = $"{Guid.NewGuid().ToString()}@test.co.uk";
             _supportUserUpn = Guid.NewGuid().ToString();
@@ -36,8 +47,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
             _auditMessage.ChangedBy = new Actor { Id = _impersonatedUser, EmailAddress = _impersonatedUserEmail };
 
             _mockInnerClient = new Mock<IAuditApiClient>();
-            _mockAuthenticationService = new Mock<IAuthenticationService>();
-
+            
+            
             _mockAuthenticationService
                 .Setup(m => m.GetClaimValue(DasClaimTypes.Id))
                 .Returns(_impersonatedUser);
@@ -54,11 +65,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
                 .Setup(m => m.GetClaimValue(ClaimTypes.Email))
                 .Returns(_supportUserEmail);
 
-            _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _mockAuthenticationService.Object);
+            _sut = new EmployerAccounts.Services.AuditApiClientForSupportUser(_mockInnerClient.Object, _userContext);
         }
 
         [Test]
-        public async Task ThenTheAuthenticationServiceIsCalledToIdentifyASupportUser()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public async Task ThenTheAuthenticationServiceIsCalledToIdentifyASupportUser(string role)
         {
             // arrange
 
@@ -66,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
             await _sut.Audit(_auditMessage);
 
             // assert
-            _mockAuthenticationService.Verify(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "Tier2User"), Times.Once);
+            _mockAuthenticationService.Verify(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role), Times.Once);
         }
 
         [Test]
@@ -87,11 +100,13 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.AuditApiClientForSupportUs
         }
 
         [Test]
-        public async Task ThenTheInnerClientIsCalledWithModifiedFieldsForASupportUser()
+        [TestCase("Tier1User")]
+        [TestCase("Tier2User")]
+        public async Task ThenTheInnerClientIsCalledWithModifiedFieldsForASupportUser(string role)
         {
             // arrange
             _mockAuthenticationService
-                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, "Tier2User"))
+                .Setup(m => m.HasClaim(ClaimsIdentity.DefaultRoleClaimType, role))
                 .Returns(true);
 
             // act

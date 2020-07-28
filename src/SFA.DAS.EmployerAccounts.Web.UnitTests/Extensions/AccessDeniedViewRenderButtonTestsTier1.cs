@@ -12,14 +12,13 @@ using SFA.DAS.EmployerAccounts.Configuration;
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 {
     [TestFixture]
-    public class AccessDeniedViewRenderButtonTests
+    public class AccessDeniedViewRenderButtonTestsTier1
     {
         private Mock<IViewDataContainer> MockViewDataContainer;
         private Mock<ViewContext> MockViewContext;        
         private Mock<HttpContextBase> MockContextBase;            
         private Mock<IPrincipal> MockIPrincipal;
         private Mock<ClaimsIdentity> MockClaimsIdentity;
-        private const string Tier2User = "Tier2User";
         private const string Tier1User = "Tier1User";
         private const string HashedAccountId = "HashedAccountId";
         private readonly List<Claim> claims = new List<Claim>();
@@ -43,7 +42,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
             MockClaimsIdentity = new Mock<ClaimsIdentity>();
             MockClaimsIdentity.Setup(m => m.Claims).Returns(claims);
             MockIPrincipal.Setup(m => m.Identity).Returns(MockClaimsIdentity.Object);
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
             MockContextBase.Setup(c => c.User).Returns(MockIPrincipal.Object);
             MockViewContext = new Mock<ViewContext>();
             MockViewContext.Setup(x => x.HttpContext).Returns(MockContextBase.Object);
@@ -53,11 +52,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         [TestCase(false, null, "Back")]
         [TestCase(true, null, "Back")]
         [TestCase(false, "12345", "Back to the homepage")]
-        public void RenderReturnToHomePageLinkText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnLinkText(bool isTier2User,
+        public void RenderReturnToHomePageLinkText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnLinkText(bool isTier1User,
             string accountId, string expectedText)
         {
             //Arrange
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -68,11 +67,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         }
 
         [Test]
-        public void TestTier2UserWithNoAccountIdSetAndNoClaimSet()
+        public void TestTier1UserWithNoAccountIdSetAndNoClaimSet()
         {
             //Arrange
             MockClaimsIdentity.Setup(m => m.Claims).Returns(claims);
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -85,11 +84,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         [TestCase(false, null, "/")]
         [TestCase(true, "12345", "/accounts/12345/teams/view")]
         [TestCase(false, "12345", "/")]
-        public void RenderReturnToHomePageLinkText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnLink(bool isTier2User,
+        public void RenderReturnToHomePageLinkText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnLink(bool isTier1User,
            string accountId, string expectedLink)
         {
             //Arrange            
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -100,11 +99,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         }
 
         [Test]
-        public void WhenTheUserIsTier2UserAndAccountIdandClaimsNotSet_ThenReturnLink()
+        public void WhenTheUserIsTier1UserAndAccountIdandClaimsNotSet_ThenReturnLink()
         {
             //Arrange
             MockClaimsIdentity.Setup(m => m.Claims).Returns(claims);
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -117,11 +116,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         [TestCase(false, null, "Go back to the service home page")]
         [TestCase(true, "12345", "Return to your team")]
         [TestCase(false, "12345", "Go back to the account home page")]
-        public void ReturnToHomePageButtonText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnButtonText(bool isTier2User,
+        public void ReturnToHomePageButtonText_WhenTheUserRoleAndAccountIdHasValues_ThenReturnButtonText(bool isTier1User,
             string accountId, string expectedText)
         {
             //Arrange            
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -133,11 +132,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 
 
         [Test]
-        public void WhenTheUserIsTier2UserAndAccountIdandClaimsNotSet_ThenReturnButtonText()
+        public void WhenTheUserIsTier1UserAndAccountIdandClaimsNotSet_ThenReturnButtonText()
         {
             //Arrange
             MockClaimsIdentity.Setup(m => m.Claims).Returns(claims);
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -151,11 +150,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         [TestCase(false, null, "/")]
         [TestCase(true, "12345", "/accounts/12345/teams/view")]
         [TestCase(false, "12345", "/accounts/12345/teams")]
-        public void ReturnToHomePageButtonHreft_WhenTheUserRoleAndAccountIdHasValues_ThenReturnButtonHref(bool isTier2User,
+        public void ReturnToHomePageButtonHreft_WhenTheUserRoleAndAccountIdHasValues_ThenReturnButtonHref(bool isTier1User,
          string accountId, string expectedLink)
         {
             //Arrange          
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -167,11 +166,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 
 
         [Test]
-        public void WhenTheUserIsTier2UserAndAccountIdandClaimsNotSet_ThenReturnButtonHref()
+        public void WhenTheUserIsTier1UserAndAccountIdandClaimsNotSet_ThenReturnButtonHref()
         {
             //Arrange
             MockClaimsIdentity.Setup(m => m.Claims).Returns(claims);
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(true);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(true);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act
@@ -183,10 +182,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
 
         [TestCase(true, "You do not have permission to access this part of the service.")]
         [TestCase(false, "If you are experiencing difficulty accessing the area of the site you need, first contact an/the account owner to ensure you have the correct role assigned to your account.")]
-        public void ReturnParagraphContent_WhenTheUserIsTier2OrTier1_ThenContentOfTheParagraph(bool isTier2User, string expectedContent)
+        public void ReturnParagraphContent_WhenTheUserIsTier1_ThenContentOfTheParagraph(bool isTier1User, string expectedContent)
         {
             //Arrange
-            MockIPrincipal.Setup(x => x.IsInRole(Tier2User)).Returns(isTier2User);
+            MockIPrincipal.Setup(x => x.IsInRole(Tier1User)).Returns(isTier1User);
             var htmlHelper = new HtmlHelper(MockViewContext.Object, MockViewDataContainer.Object);
 
             //Act

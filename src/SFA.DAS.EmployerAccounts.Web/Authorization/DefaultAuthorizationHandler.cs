@@ -9,24 +9,27 @@ using static SFA.DAS.EmployerAccounts.Web.Authorization.ImpersonationAuthorizati
 using System;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.Authorization.Errors;
+using SFA.DAS.EmployerAccounts.Extensions;
 
 namespace SFA.DAS.EmployerAccounts.Web.Authorization
 {
     public class DefaultAuthorizationHandler : IDefaultAuthorizationHandler
     {
         private IAuthorisationResourceRepository _authorisationResourceRepository;
+        private readonly IUserContext _userContext;
 
-        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository)
+        public DefaultAuthorizationHandler(IAuthorisationResourceRepository authorisationResourceRepository,IUserContext userContext)
         {
             _authorisationResourceRepository = authorisationResourceRepository;
+            _userContext = userContext;
         }
 
         public Task<AuthorizationResult> GetAuthorizationResult(IReadOnlyCollection<string> options, IAuthorizationContext authorizationContext)
         {
-            if (!IsTier2User(authorizationContext)){
+            if (!_userContext.IsSupportConsoleUser())
+            {
                 return IsAuthorizedResult();
             }
-
             if (!IsAuthorized(GetResource(authorizationContext), authorizationContext)) {
                 return IsNotAuthorizedResult(new Tier2UserAccessNotGranted());
             }
@@ -57,19 +60,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Authorization
             authorizationContext.TryGet<Resource>("Resource", out var resource);
             return resource != null ? resource.Value : "default";
         }
-
-        private bool IsTier2User(IAuthorizationContext authorizationContext)
-        {
-            authorizationContext.TryGet<ClaimsIdentity>("ClaimsIdentity", out var claimsIdentity);
-            var userRoleClaims = claimsIdentity?.Claims.Where(c => c.Type == claimsIdentity?.RoleClaimType);
-            if (userRoleClaims != null && userRoleClaims.Any(claim => claim.Value.Equals(AuthorizationConstants.Tier2User, StringComparison.OrdinalIgnoreCase)))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
     }   
 
 }
