@@ -103,6 +103,14 @@ else
                         <h3 class="heading-medium"><a href="@Url.EmployerFinanceAction("finance")">Your finances</a></h3>
                         <p>View your financial transactions, connect with other employers and @(Model.Data.ApprenticeshipEmployerType == ApprenticeshipEmployerType.Levy ? "send or " : "")receive transfer funds.</p>
                     </div>
+
+                    @if (Html.IsAuthorized("EmployerFeature.EmployerIncentives"))
+                    {
+                        <div class="card">
+                            <h3 class="heading-medium"><a href="@Url.EmployerIncentivesAction()">Apply for the hire a new apprentice payment</a></h3>
+                            <p>You can apply for the payment if you take on new apprentices between 1 August 2020 and 31 January 2021.</p>
+                        </div>
+                    }
                 </div>
             </section>
 

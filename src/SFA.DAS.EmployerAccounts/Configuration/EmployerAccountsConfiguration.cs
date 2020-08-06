@@ -13,8 +13,9 @@ namespace SFA.DAS.EmployerAccounts.Configuration
         public string DatabaseConnectionString { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
-        public string EmployerCommitmentsV2BaseUrl { get; set; }
+        public string EmployerCommitmentsV2BaseUrl { get; set; }        
         public string EmployerFinanceBaseUrl { get; set; }
+        public string EmployerIncentivesUrl { get; set; }
         public string EmployerPortalBaseUrl { get; set; }
         public string EmployerProjectionsBaseUrl { get; set; }
         public string EmployerRecruitBaseUrl { get; set; }

@@ -46,6 +46,16 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return AccountAction(helper, baseUrl, path);
         }
 
+        public static string EmployerIncentivesAction(this UrlHelper helper)
+        {
+            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
+            var baseUrl = configuration.EmployerIncentivesUrl;
+            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
+            var employerIncentiveUrl = hashedAccountId == null ? $"{baseUrl}" : $"{baseUrl}/{hashedAccountId}";
+
+            return employerIncentiveUrl;
+        }
+
         public static string EmployerProjectionsAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
@@ -108,7 +118,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var commitmentPath = hashedAccountId == null ? $"{path}" : $"{hashedAccountId}/{path}";
            
             return Action(baseUrl, commitmentPath);
-        }
+        }       
 
         private static string Action(string baseUrl, string path)
         {
