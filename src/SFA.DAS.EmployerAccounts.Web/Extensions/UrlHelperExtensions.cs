@@ -51,9 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
             var baseUrl = configuration.EmployerIncentivesUrl;
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-            var employerIncentiveUrl = hashedAccountId == null ? $"{baseUrl}" : $"{baseUrl}/{hashedAccountId}";
-
-            return employerIncentiveUrl;
+            return Action(baseUrl, hashedAccountId.ToString());
         }
 
         public static string EmployerProjectionsAction(this UrlHelper helper, string path)
