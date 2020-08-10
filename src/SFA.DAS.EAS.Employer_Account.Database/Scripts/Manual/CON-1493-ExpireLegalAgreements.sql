@@ -21,10 +21,10 @@ WHERE  PendingAgreementVersion = 3
 INSERT INTO [employer_account].[EmployerAgreement] (TemplateId, StatusId, AccountLegalEntityId)
 SELECT 5, 1, Id
 FROM   [employer_account].[AccountLegalEntity] 
-WHERE  PendingAgreementVersion IS NULL AND PendingAgreementId IS NULL AND Deleted IS NULL
+WHERE  (PendingAgreementVersion IS NULL OR PendingAgreementVersion = 4) AND Deleted IS NULL
 
 UPDATE ale
 SET    PendingAgreementVersion = 4, PendingAgreementId = ea.Id
 FROM   [employer_account].[AccountLegalEntity] ale 
 JOIN   [employer_account].[EmployerAgreement] ea ON ea.AccountLegalEntityId = ale.Id AND ea.TemplateId = 5 AND ea.StatusId = 1
-WHERE  PendingAgreementVersion IS NULL AND PendingAgreementId IS NULL AND Deleted IS NULL
+WHERE  (PendingAgreementVersion IS NULL OR PendingAgreementVersion = 4) AND Deleted IS NULL
