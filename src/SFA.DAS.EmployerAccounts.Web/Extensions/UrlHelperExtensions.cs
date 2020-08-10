@@ -49,7 +49,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
         public static string EmployerIncentivesAction(this UrlHelper helper)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var baseUrl = configuration.EmployerIncentivesUrl;
+            var baseUrl = configuration.EmployerIncentivesBaseUrl;
             var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
             return Action(baseUrl, hashedAccountId.ToString());
         }
