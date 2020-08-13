@@ -13,7 +13,7 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly IDistributedCache _distributedCache;
         private readonly EmployerFinanceConfiguration _config;
 
-        public CacheStorageService(IDistributedCache distributedCache, EmployerAccountsConfiguration config)
+        public CacheStorageService(IDistributedCache distributedCache, EmployerFinanceConfiguration config)
         {
             _distributedCache = distributedCache;
             _config = config;
