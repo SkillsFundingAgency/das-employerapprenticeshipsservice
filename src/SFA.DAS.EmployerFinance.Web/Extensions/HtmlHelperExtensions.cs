@@ -1,4 +1,7 @@
-﻿using SFA.DAS.EmployerFinance.Configuration;
+﻿using MediatR;
+using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Helpers;
+using SFA.DAS.EmployerFinance.Queries.GetClientContent;
 using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
 using SFA.DAS.MA.Shared.UI.Models.Links;
@@ -120,6 +123,20 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
                 HashedAccountId = html.ViewContext.RouteData.Values["accountHashedId"]?.ToString()
             }
             );
+        }
+
+        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
+        {
+            var mediator = DependencyResolver.Current.GetService<IMediator>();
+
+            var response = AsyncHelper.RunSync(() => mediator.SendAsync(new GetClientContentRequest
+            {
+                UseLegacyStyles = useLegacyStyles,
+                ContentType = type
+            }));
+
+            var content = response;
+            return MvcHtmlString.Create(content.Content);
         }
     }
 }   

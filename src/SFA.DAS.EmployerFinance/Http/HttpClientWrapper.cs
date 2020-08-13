@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.Http
                 var serializeObject = JsonConvert.SerializeObject(content);
                 var response = await httpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, url)
                 {
-                    Content = new StringContent(serializeObject, Encoding.UTF8, "application/json")
+                    Content = new StringContent(serializeObject, System.Text.Encoding.UTF8, "application/json")
                 });
                 await EnsureSuccessfulResponse(response);
 

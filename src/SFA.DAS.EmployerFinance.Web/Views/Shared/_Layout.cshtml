@@ -114,7 +114,7 @@
 
         @if (HttpContext.Current.User.Identity.IsAuthenticated)
         {
-            @Html.Partial("_COVID19GuidanceBanner")
+            @Html.GetClientContentByType("banner", useLegacyStyles: true)
         }
 
         @Html.Partial(@"_SuccessMessage", Model as OrchestratorResponse)

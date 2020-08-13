@@ -38,5 +38,6 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public string ZenDeskSnippetKey { get; set; }
         public string ZenDeskSectionId { get; set; }
         public string ZenDeskCobrowsingSnippetKey { get; set; }
+        public ContentClientApiConfiguration ContentApi { get; set; }
     }
 }
