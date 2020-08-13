@@ -66,10 +66,10 @@
 
                                 <span class="govuk-caption-m govuk-!-margin-bottom-6">@item.Template.PublishedInfo</span>
 
-                                @if (@item.Template.InsetText(Model.Data) != string.Empty)
+                                @if (@item.Template.InsetText() != string.Empty)
                                 {
                                     <div class="govuk-inset-text">
-                                        @item.Template.InsetText(Model.Data)                                
+                                        @item.Template.InsetText()                                
                                     </div>
                                 }
 
@@ -95,10 +95,10 @@
 
                                 <span class="govuk-caption-m govuk-!-margin-bottom-6">@item.Template.PublishedInfo</span>
 
-                                @if (@item.Template.InsetText(Model.Data) != string.Empty)
+                                @if (@item.Template.InsetText() != string.Empty)
                                 {
                                     <div class="govuk-inset-text">
-                                        @item.Template.InsetText(Model.Data)
+                                        @item.Template.InsetText()
                                     </div>
                                 }
 

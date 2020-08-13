@@ -1,22 +1,11 @@
 ﻿using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using System.Collections.Generic;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class AgreementTemplateExtensions
     {
-        public static string InsetText(this AgreementTemplateViewModel agreementTemplate, ICollection<OrganisationAgreementViewModel> organisationAgreementViewModel)
+        public static string InsetText(this AgreementTemplateViewModel agreementTemplate)
         {
-
-            bool v3Accepted = false;
-            foreach(var organisation in organisationAgreementViewModel)
-            {                
-                if (organisation.SignedDateText != string.Empty && organisation.Template.VersionNumber == 3)
-                {
-                    v3Accepted = true;
-                }
-            }
-            
             switch (agreementTemplate.VersionNumber)
             {
                 case 1:
@@ -26,7 +15,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 case 3:
                     return "This is a new agreement.";
                 case 4:
-                    return v3Accepted ? "This is a variation to the agreement we published 9 January 2020. You only need to accept it if you want to access incentive payments for hiring a new apprentice." : "This is a new agreement.";
+                    return "This is a new agreement. You only need to accept it if you want to apply for the 'hire a new apprentice' payment.";
                 default:
                     return string.Empty;
             }
