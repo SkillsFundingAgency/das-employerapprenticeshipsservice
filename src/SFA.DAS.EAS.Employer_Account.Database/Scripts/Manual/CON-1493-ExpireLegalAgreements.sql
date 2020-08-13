@@ -5,8 +5,12 @@ SET    StatusId = 4,
 WHERE  StatusId IN (1, 2) AND TemplateId IN (1, 2)
 
 UPDATE [employer_account].[AccountLegalEntity]
-SET    SignedAgreementVersion = NULL, SignedAgreementId = NULL, PendingAgreementVersion = NULL, PendingAgreementId = NULL
+SET    SignedAgreementVersion = NULL, SignedAgreementId = NULL
 WHERE  SignedAgreementVersion IN (1, 2) AND Deleted IS NULL
+
+UPDATE [employer_account].[AccountLegalEntity]
+SET    PendingAgreementVersion = NULL, PendingAgreementId = NULL
+WHERE  PendingAgreementVersion IN (1, 2) AND Deleted IS NULL
 
 -- Replace all pending v3 agreements with pending v4 agreement
 UPDATE [employer_account].[EmployerAgreement] 
