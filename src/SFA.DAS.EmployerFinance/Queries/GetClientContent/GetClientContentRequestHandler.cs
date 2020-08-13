@@ -5,8 +5,6 @@ using MediatR;
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
-//using SFA.DAS.EmployerAccounts.Configuration;
-//using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
@@ -25,7 +23,6 @@ namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
             ILog logger,
             IClientContentService service,
             ICacheStorageService cacheStorageService,
-            //EmployerAccountsConfiguration employerAccountsConfiguration)
             EmployerFinanceConfiguration employerFinanceConfiguration
             )
         {
@@ -45,10 +42,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            //var applicationId = message.UseLegacyStyles ? _employerFinanceConfiguration.ApplicationId + "-legacy" : _employerFinanceConfiguration.ApplicationId;
-
-            //var applicationId = message.UseLegacyStyles ? "das-employeraccounts-web-legacy" : "das-employeraccounts-web";
-            var applicationId = message.UseLegacyStyles ? "das-employerfinance-web-legacy" : "das-employerfinance-web";
+            var applicationId = message.UseLegacyStyles ? _employerFinanceConfiguration.ApplicationId + "-legacy" : _employerFinanceConfiguration.ApplicationId;
 
             var cacheKey = $"{applicationId}_{message.ContentType}".ToLowerInvariant();
 

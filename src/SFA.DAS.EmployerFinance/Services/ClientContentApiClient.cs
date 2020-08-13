@@ -23,15 +23,9 @@ namespace SFA.DAS.EmployerFinance.Services
 
         public async Task<string> Get(string type, string applicationId)
         {
-            string banner = string.Empty;
-            switch (type)
-            {
-                case "banner":
-                    var uri = $"{ApiBaseUrl}api/content?applicationId={applicationId}&type={type}";
-                    banner = await GetAsync(uri);
-                    break;
-            }
-            return banner;
+            var uri = $"{ApiBaseUrl}api/content?applicationId={applicationId}&type={type}";
+            
+            return await GetAsync(uri); 
         }
     }
 }

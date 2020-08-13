@@ -1,11 +1,9 @@
 ﻿using Newtonsoft.Json;
 using SFA.DAS.Caches;
+using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Helpers;
 using SFA.DAS.EmployerFinance.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Services
@@ -13,18 +11,18 @@ namespace SFA.DAS.EmployerFinance.Services
     public class CacheStorageService : ICacheStorageService
     {
         private readonly IDistributedCache _distributedCache;
-        //private readonly EmployerAccountsConfiguration _config;
+        private readonly EmployerFinanceConfiguration _config;
 
-        public CacheStorageService(IDistributedCache distributedCache) //, EmployerAccountsConfiguration config)
+        public CacheStorageService(IDistributedCache distributedCache, EmployerAccountsConfiguration config)
         {
             _distributedCache = distributedCache;
-           //_config = config;
+            _config = config;
         }
 
         public async Task Save<T>(string key, T item, int expirationInMinutes)
         {
             var json = JsonConvert.SerializeObject(item);
-            await _distributedCache.SetCustomValueAsync(key, json, TimeSpan.FromMinutes(5)); //_config.DefaultCacheExpirationInMinutes));
+            await _distributedCache.SetCustomValueAsync(key, json, TimeSpan.FromMinutes(_config.DefaultCacheExpirationInMinutes));
         }
 
         public bool TryGet(string key, out string value)
