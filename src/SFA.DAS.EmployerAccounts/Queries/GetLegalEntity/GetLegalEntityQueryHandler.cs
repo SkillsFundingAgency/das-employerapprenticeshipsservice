@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
 
         private async Task SetEmailAddressForSignatures(LegalEntity legalEntity)
         {
-            var userIds = legalEntity?.Agreements?.Select(a => a.SignedById).ToArray();
+            var userIds = legalEntity?.Agreements?.Where(a=>a.SignedById != null).Select(a => a.SignedById).ToArray();
 
             if (userIds != null && userIds.Any())
             {
