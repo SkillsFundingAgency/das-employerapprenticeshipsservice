@@ -29,11 +29,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
         private Mock<ILog> MockLogger;
         private Mock<IClientContentService> MockClientContentService;
         private Mock<ICacheStorageService> MockCacheStorageService;
-        private Mock<IValidator<GetClientContentRequest>> MockValidator;
 
         [SetUp]
         public void Arrange()
         {
+            SetUp();
             _clientId = "eas-fin";
             _contentType = "banner";
 
@@ -43,12 +43,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
                 DefaultCacheExpirationInMinutes = 1
             };
             Content = "<p> Example content </p>";
-            CacheKey = EmployerFinanceConfiguration.ApplicationId;
+            CacheKey = EmployerFinanceConfiguration.ApplicationId + "_banner";
 
             MockLogger = new Mock<ILog>();
             MockClientContentService = new Mock<IClientContentService>();
             MockCacheStorageService = new Mock<ICacheStorageService>();
-            MockValidator = new Mock<IValidator<GetClientContentRequest>>();
+            
 
             MockClientContentService
                 .Setup(cs => cs.Get(_contentType, _clientId))
@@ -66,6 +66,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
         [Test]
         public override async Task ThenIfTheMessageIsValidTheRepositoryIsCalled()
         {
+            NotStoredInCacheSetup();
+
             await RequestHandler.Handle(Query);
 
             MockClientContentService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
@@ -74,13 +76,15 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
         [Test]
         public override async Task ThenIfTheMessageIsValidTheValueIsReturnedInTheResponse()
         {
+            NotStoredInCacheSetup();
+
             await RequestHandler.Handle(Query);
 
             MockClientContentService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
         }
 
         [Test]
-        public async Task AND_it_is_stored_in_the_cache_THEN_return_content()
+        public async Task AND_ItIsStoredInTheCache_THEN_ReturnContent()
         {
             StoredInCacheSetup();
 
@@ -91,7 +95,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
         }
 
         [Test]
-        public async Task AND_it_is_stored_in_the_cache_THEN_content_api_is_not_called()
+        public async Task AND_ItIsStoredInTheCache_THEN_ContentApiIsNotCalled()
         {
             StoredInCacheSetup();
 
@@ -101,12 +105,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
         }
 
         [Test]
-        public async Task AND_it_is_not_stored_in_the_cache_THEN_call_from_client()
+        public async Task AND_ItIsNotStoredInTheCache_THEN_CallFromClient()
         {
-            MockValidator.Setup(r => r.Validate(Query)).Returns(new ValidationResult());
-            MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out Content)).Returns(false);
-            MockClientContentService.Setup(c => c.Get("banner", CacheKey))
-                .ReturnsAsync(Content);
+            NotStoredInCacheSetup();
 
             var result = await RequestHandler.Handle(Query);
 
@@ -115,9 +116,17 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
 
         private void StoredInCacheSetup()
         {
-            MockValidator.Setup(r => r.Validate(Query)).Returns(new ValidationResult());
+           // RequestValidator.Setup(r => r.Validate(Query)).Returns(new ValidationResult());
             MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out Content)).Returns(true);
             MockClientContentService.Setup(c => c.Get("banner", CacheKey));
+        }
+
+        private void NotStoredInCacheSetup()
+        {
+            //RequestValidator.Setup(r => r.Validate(Query)).Returns(new ValidationResult());
+            MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out Content)).Returns(false);
+            MockClientContentService.Setup(c => c.Get("banner", CacheKey))
+                .ReturnsAsync(Content);
         }
     }
 }

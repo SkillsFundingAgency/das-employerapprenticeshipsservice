@@ -28,7 +28,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ClientContentServiceTests
             ClientContentService = new ClientContentService(MockClientContentApiClient.Object);
         }
 
-        public async Task THEN_Content_is_returned_from_api()
+        [Test]
+        public async Task THEN_ContentIsReturnedFromApi()
         {
             var result = await ClientContentService.Get("banner", "eas-fin");
 
