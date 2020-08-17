@@ -44,32 +44,18 @@ namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
 
             var applicationId = message.UseLegacyStyles ? _employerFinanceConfiguration.ApplicationId + "-legacy" : _employerFinanceConfiguration.ApplicationId;
 
-            var cacheKey = $"{applicationId}_{message.ContentType}".ToLowerInvariant();
-
             try
             {
-                if (_cacheStorageService.TryGet(cacheKey, out string cachedContentBanner))
-                {
-                    return new GetClientContentResponse
-                    {
-                        Content = cachedContentBanner
-                    };
-                }
+                var content = await _service.Get(message.ContentType, applicationId);
 
-                var contentBanner = await _service.Get(message.ContentType, applicationId);
-
-                if (contentBanner != null)
-                {
-                    await _cacheStorageService.Save(cacheKey, contentBanner, 1);
-                }
                 return new GetClientContentResponse
                 {
-                    Content = contentBanner
+                    Content = content
                 };
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Failed to get Content for {cacheKey}");
+                _logger.Error(ex, $"Failed to get Content {message.ContentType} for {applicationId}");
 
                 return new GetClientContentResponse
                 {

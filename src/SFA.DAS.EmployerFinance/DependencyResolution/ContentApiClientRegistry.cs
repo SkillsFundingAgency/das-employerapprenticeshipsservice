@@ -5,12 +5,7 @@ using SFA.DAS.Http;
 using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using StructureMap;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
 {
@@ -35,6 +30,5 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
 
             return httpClient;
         }
-
     }
 }

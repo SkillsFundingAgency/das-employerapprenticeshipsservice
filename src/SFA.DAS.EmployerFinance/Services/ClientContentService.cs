@@ -14,9 +14,9 @@ namespace SFA.DAS.EmployerFinance.Services
 
         public async Task<string> Get(string type, string applicationId)
         {
-            var cachedContent = await _client.Get(type, applicationId);
+            var content = await _client.Get(type, applicationId);
 
-            return cachedContent;
+            return content;
         }
     }
 }

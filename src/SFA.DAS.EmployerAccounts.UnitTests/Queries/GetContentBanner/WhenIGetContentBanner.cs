@@ -71,37 +71,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         }
 
         [Test, RecursiveMoqAutoData]
-        public async Task Check_Cache_ReturnIfExists(GetClientContentRequest query1, string contentBanner1,
-            Mock<ICacheStorageService> cacheStorageService1,
-            GetClientContentRequestHandler requestHandler1,
-            Mock<IValidator<GetClientContentRequest>> requestValidator1,
-            Mock<ILog> logger,
-            Mock<IClientContentService> clientMockontentService)
-        {
-            query1.ContentType = "Banner";
-            query1.UseLegacyStyles = false;
-
-            var key = EmployerAccountsConfiguration.ApplicationId;
-
-            requestValidator1.Setup(r => r.Validate(query1)).Returns(new ValidationResult());
-
-            clientMockontentService.Setup(c => c.Get("banner", key));
-
-            requestHandler1 = new GetClientContentRequestHandler(requestValidator1.Object, logger.Object, clientMockontentService.Object,
-                cacheStorageService1.Object, EmployerAccountsConfiguration);
-
-            var cacheKey = key + "_banner";
-            cacheStorageService1.Setup(c => c.TryGet(cacheKey, out contentBanner1))
-                .Returns(true);
-            //Act
-            var result = await requestHandler1.Handle(query1);
-
-            //assert
-            Assert.AreEqual(result.Content, contentBanner1);
-            cacheStorageService1.Verify(x => x.TryGet(cacheKey, out contentBanner1), Times.Once);
-        }
-
-        [Test, RecursiveMoqAutoData]
         public async Task Check_Cache_ReturnNull_CallFromClient(GetClientContentRequest query1, string contentBanner1,
             Mock<ICacheStorageService> cacheStorageService1,
             GetClientContentRequestHandler requestHandler1,

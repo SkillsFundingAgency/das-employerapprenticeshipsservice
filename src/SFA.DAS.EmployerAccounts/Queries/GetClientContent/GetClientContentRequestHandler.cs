@@ -37,25 +37,13 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                 throw new InvalidRequestException(validationResult.ValidationDictionary);
             }
 
-            var applicationId = message.UseLegacyStyles? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;
-            var cacheKey = $"{applicationId}_{message.ContentType}".ToLowerInvariant();
+            var applicationId = message.UseLegacyStyles? _employerAccountsConfiguration.ApplicationId + "-legacy" : _employerAccountsConfiguration.ApplicationId;            
 
             try
-            {
-                if (_cacheStorageService.TryGet(cacheKey, out string cachedContentBanner))
-                {
-                    return new GetClientContentResponse
-                    {
-                        Content = cachedContentBanner
-                    };
-                }
-                
+            {                
                 var contentBanner = await _service.Get(message.ContentType, applicationId);
 
-                if (contentBanner != null)
-                {
-                    await _cacheStorageService.Save(cacheKey, contentBanner, 1);
-                }
+                
                 return new GetClientContentResponse
                 {
                     Content = contentBanner
@@ -63,7 +51,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Failed to get Content for {cacheKey}");
+                _logger.Error(ex, $"Failed to get Content {message.ContentType} for {applicationId}");
 
                 return new GetClientContentResponse
                 {

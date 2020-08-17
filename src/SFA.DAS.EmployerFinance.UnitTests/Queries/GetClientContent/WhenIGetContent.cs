@@ -83,47 +83,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
             MockClientContentService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
         }
 
-        [Test]
-        public async Task AND_ItIsStoredInTheCache_THEN_ReturnContent()
-        {
-            StoredInCacheSetup();
-
-            var result = await RequestHandler.Handle(Query);
-
-            Assert.AreEqual(Content, result.Content);
-            MockCacheStorageService.Verify(c => c.TryGet(CacheKey, out Content), Times.Once);
-        }
-
-        [Test]
-        public async Task AND_ItIsStoredInTheCache_THEN_ContentApiIsNotCalled()
-        {
-            StoredInCacheSetup();
-
-            var result = await RequestHandler.Handle(Query);
-
-            MockClientContentService.Verify(c => c.Get(_contentType, _clientId), Times.Never);
-        }
-
-        [Test]
-        public async Task AND_ItIsNotStoredInTheCache_THEN_CallFromClient()
-        {
-            NotStoredInCacheSetup();
-
-            var result = await RequestHandler.Handle(Query);
-
-            Assert.AreEqual(Content, result.Content);
-        }
-
-        private void StoredInCacheSetup()
-        {
-           // RequestValidator.Setup(r => r.Validate(Query)).Returns(new ValidationResult());
-            MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out Content)).Returns(true);
-            MockClientContentService.Setup(c => c.Get("banner", CacheKey));
-        }
-
         private void NotStoredInCacheSetup()
         {
-            //RequestValidator.Setup(r => r.Validate(Query)).Returns(new ValidationResult());
             MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out Content)).Returns(false);
             MockClientContentService.Setup(c => c.Get("banner", CacheKey))
                 .ReturnsAsync(Content);
