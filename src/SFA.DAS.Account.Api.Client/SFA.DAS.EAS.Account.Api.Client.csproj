@@ -26,7 +26,7 @@
     <Authors>Esfa</Authors>
     <Title>Client library for accessing Employer Account API</Title>
     <Description>Client library for accessing Employer Account API</Description>
-    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</RepositoryUrl>
     <PackageTags>Esfa;Das;</PackageTags>
