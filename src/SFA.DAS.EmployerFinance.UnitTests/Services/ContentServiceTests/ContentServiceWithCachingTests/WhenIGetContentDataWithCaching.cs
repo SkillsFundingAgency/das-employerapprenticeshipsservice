@@ -5,14 +5,14 @@ using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Services;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.Services.ClientContentServiceTests.ClientContentServiceWithCachingTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Services.ContentServiceTests.ContentServiceWithCachingTests
 {
     class WhenIGetContentDataWithCaching
     {
         private string _contentType;
         private string _clientId;
 
-        private Mock<IClientContentService> MockClientContentService;
+        private Mock<IContentService> MockContentService;
         private Mock<ICacheStorageService> MockCacheStorageService;
 
         private string CacheKey;
@@ -20,7 +20,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ClientContentServiceTests.C
         private string ContentFromApi;
         private EmployerFinanceConfiguration EmployerFinanceConfig;
 
-        private IClientContentService ClientContentServiceWithCaching;
+        private IContentService ContentServiceWithCaching;
 
         [SetUp]
         public void Arrange()
@@ -37,17 +37,17 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ClientContentServiceTests.C
             ContentFromApi = "<p> Example content from api </p>";
             CacheKey = EmployerFinanceConfig.ApplicationId + "_banner";
 
-            MockClientContentService = new Mock<IClientContentService>();
+            MockContentService = new Mock<IContentService>();
             MockCacheStorageService = new Mock<ICacheStorageService>();
 
-            ClientContentServiceWithCaching = new ClientContentServiceWithCaching(MockClientContentService.Object, MockCacheStorageService.Object, EmployerFinanceConfig);
+            ContentServiceWithCaching = new ContentServiceWithCaching(MockContentService.Object, MockCacheStorageService.Object, EmployerFinanceConfig);
         }
         [Test]
         public async Task AND_ItIsStoredInTheCache_THEN_ReturnContent()
         {
             StoredInCacheSetup();
 
-            var result = await ClientContentServiceWithCaching.Get(_contentType, EmployerFinanceConfig.ApplicationId);
+            var result = await ContentServiceWithCaching.Get(_contentType, EmployerFinanceConfig.ApplicationId);
 
             Assert.AreEqual(ContentFromCache, result);
             MockCacheStorageService.Verify(c => c.TryGet(CacheKey, out ContentFromCache), Times.Once);
@@ -58,9 +58,9 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ClientContentServiceTests.C
         {
             StoredInCacheSetup();
 
-            var result = await ClientContentServiceWithCaching.Get(_contentType, EmployerFinanceConfig.ApplicationId);
+            var result = await ContentServiceWithCaching.Get(_contentType, EmployerFinanceConfig.ApplicationId);
 
-            MockClientContentService.Verify(c => c.Get(_contentType, _clientId), Times.Never);
+            MockContentService.Verify(c => c.Get(_contentType, _clientId), Times.Never);
         }
 
         [Test]
@@ -68,22 +68,22 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ClientContentServiceTests.C
         {
             NotStoredInCacheSetup();
 
-            var result = await ClientContentServiceWithCaching.Get(_contentType, EmployerFinanceConfig.ApplicationId);
+            var result = await ContentServiceWithCaching.Get(_contentType, EmployerFinanceConfig.ApplicationId);
 
-            MockClientContentService.Verify(c => c.Get(_contentType, _clientId), Times.Once);
+            MockContentService.Verify(c => c.Get(_contentType, _clientId), Times.Once);
             Assert.AreEqual(ContentFromApi, result);
         }
         private void StoredInCacheSetup()
         {
             MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out ContentFromCache)).Returns(true);
-            MockClientContentService.Setup(c => c.Get("banner", CacheKey));
+            MockContentService.Setup(c => c.Get("banner", CacheKey));
         }
 
         private void NotStoredInCacheSetup()
         {
             
             MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out ContentFromCache)).Returns(false);
-            MockClientContentService.Setup(c => c.Get("banner", EmployerFinanceConfig.ApplicationId))
+            MockContentService.Setup(c => c.Get("banner", EmployerFinanceConfig.ApplicationId))
                 .ReturnsAsync(ContentFromApi);
         }
     }

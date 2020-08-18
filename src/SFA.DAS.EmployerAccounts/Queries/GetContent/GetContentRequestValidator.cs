@@ -2,11 +2,11 @@
 using System.Threading.Tasks;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
+namespace SFA.DAS.EmployerAccounts.Queries.GetContent
 {
-    public class GetClientContentRequestValidator : IValidator<GetClientContentRequest>
+    public class GetContentRequestValidator : IValidator<GetContentRequest>
     {
-        public ValidationResult Validate(GetClientContentRequest item)
+        public ValidationResult Validate(GetContentRequest item)
         {
             var validationResult = new ValidationResult();
 
@@ -17,7 +17,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(GetClientContentRequest item)
+        public Task<ValidationResult> ValidateAsync(GetContentRequest item)
         {
             return Task.FromResult(Validate(item));
         }

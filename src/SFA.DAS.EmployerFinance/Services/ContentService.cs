@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
-    public class ClientContentService : IClientContentService
+    public class ContentService : IContentService
     {
-        private readonly IClientContentApiClient _client;
+        private readonly IContentApiClient _client;
 
-        public ClientContentService(IClientContentApiClient client)
+        public ContentService(IContentApiClient client)
         {
             _client = client;
         }

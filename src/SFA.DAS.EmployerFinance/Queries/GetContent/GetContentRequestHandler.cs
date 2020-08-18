@@ -8,20 +8,20 @@ using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
+namespace SFA.DAS.EmployerFinance.Queries.GetContent
 {
-    public class GetClientContentRequestHandler : IAsyncRequestHandler<GetClientContentRequest, GetClientContentResponse>
+    public class GetContentRequestHandler : IAsyncRequestHandler<GetContentRequest, GetContentResponse>
     {
-        private readonly IValidator<GetClientContentRequest> _validator;
+        private readonly IValidator<GetContentRequest> _validator;
         private readonly ILog _logger;
-        private readonly IClientContentService _service;
+        private readonly IContentService _service;
         private readonly ICacheStorageService _cacheStorageService;
         private readonly EmployerFinanceConfiguration _employerFinanceConfiguration;
 
-        public GetClientContentRequestHandler(
-            IValidator<GetClientContentRequest> validator,
+        public GetContentRequestHandler(
+            IValidator<GetContentRequest> validator,
             ILog logger,
-            IClientContentService service,
+            IContentService service,
             ICacheStorageService cacheStorageService,
             EmployerFinanceConfiguration employerFinanceConfiguration
             )
@@ -33,7 +33,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
             _employerFinanceConfiguration = employerFinanceConfiguration;
         }
 
-        public async Task<GetClientContentResponse> Handle(GetClientContentRequest message)
+        public async Task<GetContentResponse> Handle(GetContentRequest message)
         {
             var validationResult = _validator.Validate(message);
 
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
             {
                 var content = await _service.Get(message.ContentType, applicationId);
 
-                return new GetClientContentResponse
+                return new GetContentResponse
                 {
                     Content = content
                 };
@@ -57,7 +57,7 @@ namespace SFA.DAS.EmployerFinance.Queries.GetClientContent
             {
                 _logger.Error(ex, $"Failed to get Content {message.ContentType} for {applicationId}");
 
-                return new GetClientContentResponse
+                return new GetContentResponse
                 {
                     HasFailed = true
                 };

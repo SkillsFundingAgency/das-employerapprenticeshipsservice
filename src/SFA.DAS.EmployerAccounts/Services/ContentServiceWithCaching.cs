@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
-    public class ClientContentServiceWithCaching : IClientContentService
+    public class ContentServiceWithCaching : IContentService
     {
-        private readonly IClientContentService _contentService;
+        private readonly IContentService _contentService;
         private readonly ICacheStorageService _cacheStorageService;
         private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
-        public ClientContentServiceWithCaching(IClientContentService contentService, ICacheStorageService cacheStorageService, EmployerAccountsConfiguration employerAccountsConfiguration)
+        public ContentServiceWithCaching(IContentService contentService, ICacheStorageService cacheStorageService, EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _contentService = contentService;
             _cacheStorageService = cacheStorageService;

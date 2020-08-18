@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Web.Mvc;
 using MediatR;
-using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
+using SFA.DAS.EmployerAccounts.Queries.GetContent;
 using SFA.DAS.EmployerAccounts.Helpers;
 using SFA.DAS.EmployerAccounts.Configuration;
 
@@ -155,11 +155,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             );
         }
 
-        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
+        public static MvcHtmlString GetContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
             
-            var userResponse = AsyncHelper.RunSync(() => mediator.SendAsync(new GetClientContentRequest
+            var userResponse = AsyncHelper.RunSync(() => mediator.SendAsync(new GetContentRequest
             {
                 UseLegacyStyles = useLegacyStyles,
                 ContentType = type

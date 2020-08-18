@@ -13,8 +13,8 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public ServicesRegistry()
         {
-            For<IClientContentService>().Use<ClientContentService>();
-            For<IClientContentService>().DecorateAllWith<ClientContentServiceWithCaching>();
+            For<IContentService>().Use<ContentService>();
+            For<IContentService>().DecorateAllWith<ContentServiceWithCaching>();
         }
     }
 }

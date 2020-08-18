@@ -6,20 +6,20 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 
-namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
+namespace SFA.DAS.EmployerAccounts.Queries.GetContent
 {
-    public class GetClientContentRequestHandler : IAsyncRequestHandler<GetClientContentRequest, GetClientContentResponse>
+    public class GetContentRequestHandler : IAsyncRequestHandler<GetContentRequest, GetContentResponse>
     {
-        private readonly IValidator<GetClientContentRequest> _validator;
+        private readonly IValidator<GetContentRequest> _validator;
         private readonly ILog _logger;
-        private readonly IClientContentService _service;
+        private readonly IContentService _service;
         private readonly ICacheStorageService _cacheStorageService;
         private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
-        public GetClientContentRequestHandler(
-            IValidator<GetClientContentRequest> validator,
+        public GetContentRequestHandler(
+            IValidator<GetContentRequest> validator,
             ILog logger,
-            IClientContentService service, ICacheStorageService cacheStorageService, EmployerAccountsConfiguration employerAccountsConfiguration)
+            IContentService service, ICacheStorageService cacheStorageService, EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _validator = validator;
             _logger = logger;
@@ -28,7 +28,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
             _employerAccountsConfiguration = employerAccountsConfiguration;
         }
 
-        public async Task<GetClientContentResponse> Handle(GetClientContentRequest message)
+        public async Task<GetContentResponse> Handle(GetContentRequest message)
         {
             var validationResult = _validator.Validate(message);
 
@@ -44,7 +44,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
                 var contentBanner = await _service.Get(message.ContentType, applicationId);
 
                 
-                return new GetClientContentResponse
+                return new GetContentResponse
                 {
                     Content = contentBanner
                 };
@@ -53,7 +53,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetClientContent
             {
                 _logger.Error(ex, $"Failed to get Content {message.ContentType} for {applicationId}");
 
-                return new GetClientContentResponse
+                return new GetContentResponse
                 {
                     HasFailed = true
                 };

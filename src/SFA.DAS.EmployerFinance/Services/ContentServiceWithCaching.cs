@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
-    public class ClientContentServiceWithCaching : IClientContentService
+    public class ContentServiceWithCaching : IContentService
     {
-        private readonly IClientContentService _contentService;
+        private readonly IContentService _contentService;
         private readonly ICacheStorageService _cacheStorageService;
         private readonly EmployerFinanceConfiguration _employerFinanceConfiguration;
 
-        public ClientContentServiceWithCaching(IClientContentService contentService, ICacheStorageService cacheStorageService, EmployerFinanceConfiguration employerFinanceConfiguration)
+        public ContentServiceWithCaching(IContentService contentService, ICacheStorageService cacheStorageService, EmployerFinanceConfiguration employerFinanceConfiguration)
         {
             _contentService = contentService;
             _cacheStorageService = cacheStorageService;

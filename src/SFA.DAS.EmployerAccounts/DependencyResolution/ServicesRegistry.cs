@@ -18,8 +18,8 @@ namespace SFA.DAS.EmployerAccounts.DependencyResolution
             For<IReservationsService>().DecorateAllWith<ReservationsServiceWithTimeout>();
             For<ICommitmentV2Service>().Use<CommitmentsV2Service>();
             For<ICommitmentV2Service>().DecorateAllWith<CommitmentsV2ServiceWithTimeout>();
-            For<IClientContentService>().Use<ClientContentService>();
-            For<IClientContentService>().DecorateAllWith<ClientContentServiceWithCaching>();
+            For<IContentService>().Use<ContentService>();
+            For<IContentService>().DecorateAllWith<ContentServiceWithCaching>();
         }
     }
 }

@@ -9,29 +9,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.Services.ClientContentServiceTests
+namespace SFA.DAS.EmployerFinance.UnitTests.Services.ContentServiceTests
 {
     class WhenIGetContentData
     {
-        private Mock<IClientContentApiClient> MockClientContentApiClient;
-        private IClientContentService ClientContentService;
+        private Mock<IContentApiClient> MockContentApiClient;
+        private IContentService ContentService;
         private string TestContent = "<h1My First Heading</h1><p>My First Paragraph</p>";
 
         [SetUp]
         public void SetUp()
         {
-            MockClientContentApiClient = new Mock<IClientContentApiClient>();
-            MockClientContentApiClient
+            MockContentApiClient = new Mock<IContentApiClient>();
+            MockContentApiClient
                 .Setup(c => c.Get("banner", "eas-fin"))
                 .ReturnsAsync(TestContent);
 
-            ClientContentService = new ClientContentService(MockClientContentApiClient.Object);
+            ContentService = new ContentService(MockContentApiClient.Object);
         }
 
         [Test]
         public async Task THEN_ContentIsReturnedFromApi()
         {
-            var result = await ClientContentService.Get("banner", "eas-fin");
+            var result = await ContentService.Get("banner", "eas-fin");
 
             result.Should().Be(TestContent);
         }

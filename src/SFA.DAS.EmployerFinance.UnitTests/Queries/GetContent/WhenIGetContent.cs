@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Interfaces;
-using SFA.DAS.EmployerFinance.Queries.GetClientContent;
+using SFA.DAS.EmployerFinance.Queries.GetContent;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Validation;
 using System;
@@ -11,13 +11,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
+namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetContent
 {
-    public class WhenIGetContent : QueryBaseTest<GetClientContentRequestHandler, GetClientContentRequest, GetClientContentResponse>
+    public class WhenIGetContent : QueryBaseTest<GetContentRequestHandler, GetContentRequest, GetContentResponse>
     {
-        public override GetClientContentRequest Query { get; set; }
-        public override GetClientContentRequestHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetClientContentRequest>> RequestValidator { get; set; }
+        public override GetContentRequest Query { get; set; }
+        public override GetContentRequestHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetContentRequest>> RequestValidator { get; set; }
 
         private string _contentType;
         private string _clientId;
@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
         public EmployerFinanceConfiguration EmployerFinanceConfiguration;
 
         private Mock<ILog> MockLogger;
-        private Mock<IClientContentService> MockClientContentService;
+        private Mock<IContentService> MockContentService;
         private Mock<ICacheStorageService> MockCacheStorageService;
 
         [SetUp]
@@ -46,21 +46,21 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
             CacheKey = EmployerFinanceConfiguration.ApplicationId + "_banner";
 
             MockLogger = new Mock<ILog>();
-            MockClientContentService = new Mock<IClientContentService>();
+            MockContentService = new Mock<IContentService>();
             MockCacheStorageService = new Mock<ICacheStorageService>();
             
 
-            MockClientContentService
+            MockContentService
                 .Setup(cs => cs.Get(_contentType, _clientId))
                 .ReturnsAsync(Content);
 
-            Query = new GetClientContentRequest
+            Query = new GetContentRequest
             {
                 ContentType = "banner"
             };
 
-            RequestHandler = new GetClientContentRequestHandler(RequestValidator.Object, MockLogger.Object,
-                MockClientContentService.Object, MockCacheStorageService.Object, EmployerFinanceConfiguration);
+            RequestHandler = new GetContentRequestHandler(RequestValidator.Object, MockLogger.Object,
+                MockContentService.Object, MockCacheStorageService.Object, EmployerFinanceConfiguration);
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
 
             await RequestHandler.Handle(Query);
 
-            MockClientContentService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
+            MockContentService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
         }
 
         [Test]
@@ -80,13 +80,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetClientContent
 
             await RequestHandler.Handle(Query);
 
-            MockClientContentService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
+            MockContentService.Verify(x => x.Get(_contentType, _clientId), Times.Once);
         }
 
         private void NotStoredInCacheSetup()
         {
             MockCacheStorageService.Setup(c => c.TryGet(CacheKey, out Content)).Returns(false);
-            MockClientContentService.Setup(c => c.Get("banner", CacheKey))
+            MockContentService.Setup(c => c.Get("banner", CacheKey))
                 .ReturnsAsync(Content);
         }
     }

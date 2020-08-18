@@ -3,21 +3,21 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Queries.GetClientContent;
+using SFA.DAS.EmployerAccounts.Queries.GetContent;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing.AutoFixture;
 using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
 {
-    public class WhenIGetContentBanner : QueryBaseTest<GetClientContentRequestHandler, GetClientContentRequest, GetClientContentResponse>
+    public class WhenIGetContentBanner : QueryBaseTest<GetContentRequestHandler, GetContentRequest, GetContentResponse>
     {
-        public override GetClientContentRequest Query { get; set; }
-        public override GetClientContentRequestHandler RequestHandler { get; set; }
-        public override Mock<IValidator<GetClientContentRequest>> RequestValidator { get; set; }
+        public override GetContentRequest Query { get; set; }
+        public override GetContentRequestHandler RequestHandler { get; set; }
+        public override Mock<IValidator<GetContentRequest>> RequestValidator { get; set; }
 
         public Mock<ICacheStorageService> MockCacheStorageService;
-        private Mock<IClientContentService> _contentBannerService;
+        private Mock<IContentService> _contentBannerService;
         private string _contentType;
         private string _clientId;
         private Mock<ILog> _logger;
@@ -37,17 +37,17 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             _contentType = "banner";
             _clientId = "eas-acc";
             _logger = new Mock<ILog>();
-            _contentBannerService = new Mock<IClientContentService>();
+            _contentBannerService = new Mock<IContentService>();
             _contentBannerService
                 .Setup(cbs => cbs.Get(_contentType, _clientId))
                 .ReturnsAsync(ContentBanner);
 
-            Query = new GetClientContentRequest
+            Query = new GetContentRequest
             {
                 ContentType = "banner"
             };
 
-            RequestHandler = new GetClientContentRequestHandler(RequestValidator.Object, _logger.Object,
+            RequestHandler = new GetContentRequestHandler(RequestValidator.Object, _logger.Object,
                 _contentBannerService.Object, MockCacheStorageService.Object, EmployerAccountsConfiguration);
         }
 
@@ -71,12 +71,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
         }
 
         [Test, RecursiveMoqAutoData]
-        public async Task Check_Cache_ReturnNull_CallFromClient(GetClientContentRequest query1, string contentBanner1,
+        public async Task Check_Cache_ReturnNull_CallFromClient(GetContentRequest query1, string contentBanner1,
             Mock<ICacheStorageService> cacheStorageService1,
-            GetClientContentRequestHandler requestHandler1,
-            Mock<IValidator<GetClientContentRequest>> requestValidator1,
+            GetContentRequestHandler requestHandler1,
+            Mock<IValidator<GetContentRequest>> requestValidator1,
             Mock<ILog> logger,
-            Mock<IClientContentService> clientMockContentService)
+            Mock<IContentService> MockContentService)
         {
             //Arrange
             var key = EmployerAccountsConfiguration.ApplicationId;
@@ -90,10 +90,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetContentBanner
             cacheStorageService1.Setup(c => c.TryGet(cacheKey, out nullCacheString))
                 .Returns(false);
 
-            clientMockContentService.Setup(c => c.Get(query1.ContentType, key))
+            MockContentService.Setup(c => c.Get(query1.ContentType, key))
                 .ReturnsAsync(contentBanner1);
 
-            requestHandler1 = new GetClientContentRequestHandler(requestValidator1.Object, logger.Object, clientMockContentService.Object,
+            requestHandler1 = new GetContentRequestHandler(requestValidator1.Object, logger.Object, MockContentService.Object,
                 cacheStorageService1.Object, EmployerAccountsConfiguration);
 
             //Act

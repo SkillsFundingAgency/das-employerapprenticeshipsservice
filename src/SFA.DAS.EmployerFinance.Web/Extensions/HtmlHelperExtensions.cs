@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.EmployerFinance.Configuration;
 using SFA.DAS.EmployerFinance.Helpers;
-using SFA.DAS.EmployerFinance.Queries.GetClientContent;
+using SFA.DAS.EmployerFinance.Queries.GetContent;
 using SFA.DAS.MA.Shared.UI.Configuration;
 using SFA.DAS.MA.Shared.UI.Models;
 using SFA.DAS.MA.Shared.UI.Models.Links;
@@ -125,11 +125,11 @@ namespace SFA.DAS.EmployerFinance.Web.Extensions
             );
         }
 
-        public static MvcHtmlString GetClientContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
+        public static MvcHtmlString GetContentByType(this HtmlHelper html, string type, bool useLegacyStyles = false)
         {
             var mediator = DependencyResolver.Current.GetService<IMediator>();
 
-            var response = AsyncHelper.RunSync(() => mediator.SendAsync(new GetClientContentRequest
+            var response = AsyncHelper.RunSync(() => mediator.SendAsync(new GetContentRequest
             {
                 UseLegacyStyles = useLegacyStyles,
                 ContentType = type
