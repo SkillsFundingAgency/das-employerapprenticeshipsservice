@@ -151,6 +151,7 @@
     <None Include="Scripts\PreDeployment\AML-3784-AgreementTypeChanges.sql" />
     <Build Include="StoredProcedures\GetPayeSchemesAddedByGovernmentGateway_ByAccountId.sql" />
     <Build Include="StoredProcedures\UpdateAccount_SetAccountApprenticeshipEmployerType.sql" />
+    <None Include="Scripts\Manual\CON-1493-ExpireLegalAgreements.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="SFA.DAS.EmployerApprenticeshipsService.Database.refactorlog" />
