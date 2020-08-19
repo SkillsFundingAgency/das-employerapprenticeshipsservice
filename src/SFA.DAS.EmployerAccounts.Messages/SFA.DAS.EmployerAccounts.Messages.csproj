@@ -5,7 +5,7 @@
     
     <Description>NServiceBus messages published by SFA.DAS.EmployerAccounts</Description>
     <Authors>DAS</Authors>
-    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</PackageProjectUrl>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
