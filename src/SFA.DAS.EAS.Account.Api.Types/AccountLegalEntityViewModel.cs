@@ -6,5 +6,6 @@
         public long AccountLegalEntityId { get; set; }
         public string AccountLegalEntityPublicHashedId { get; set; }
         public long LegalEntityId { get; set; }
+        public string Name { get; set; }
     }
 }
