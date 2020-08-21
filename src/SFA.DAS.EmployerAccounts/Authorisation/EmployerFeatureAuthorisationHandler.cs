@@ -44,14 +44,9 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                     var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
 
                     var agreements = await _mediator.SendAsync(new GetEmployerAgreementsByAccountIdRequest { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
+                    var minAgreementVersion = agreements.EmployerAgreements.Select(ea => ea.AccountLegalEntity.SignedAgreementVersion.GetValueOrDefault(0)).Min();
 
-                    var minAgreementVersion = agreements.EmployerAgreements.
-                        Where(a => a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Signed &&
-                        a.AccountLegalEntity.SignedAgreementVersion.GetValueOrDefault(0) > 0).Select(b => b.AccountLegalEntity.SignedAgreementVersion ?? 0)
-                        .DefaultIfEmpty()
-                        .Min();
-
-                    if (minAgreementVersion < featureToggle.EnabledByAgreementVersion || agreements.EmployerAgreements.Any(a => a.StatusId == Models.EmployerAgreement.EmployerAgreementStatus.Pending))
+                    if (minAgreementVersion < featureToggle.EnabledByAgreementVersion)
                     {
                         authorizationResult.AddError(new EmployerFeatureAgreementNotSigned());
                     }

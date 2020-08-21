@@ -8,7 +8,7 @@
         
     <Authors>DAS</Authors>
     <Description>Messages for SFA.DAS.EmployerFinance</Description>
-    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-servicebus-tools/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-servicebus-tools/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-servicebus-tools</PackageProjectUrl>
 
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
