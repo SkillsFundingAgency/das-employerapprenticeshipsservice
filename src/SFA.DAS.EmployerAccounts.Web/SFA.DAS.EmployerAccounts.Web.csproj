@@ -872,6 +872,7 @@
     <Content Include="Views\EmployerTeam\Empty.cshtml" />
     <Content Include="Views\EmployerAgreement\AcceptedEmployerAgreement.cshtml" />
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v4.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
