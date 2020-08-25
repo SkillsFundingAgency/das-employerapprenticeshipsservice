@@ -27,6 +27,11 @@ resources:
     endpoint: "GitHub (SFA)"  
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk 2.2.x'
+  inputs:
+    version: 2.2.x
+
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:

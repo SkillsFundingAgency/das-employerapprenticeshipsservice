@@ -77,7 +77,7 @@
         "idaTenant": {
             "type": "string"
         },
-        "idaAudience": {
+        "accountsApiIdentifierUri": {
             "type": "string"
         },
         "appServiceAllowedIPs": {
@@ -307,8 +307,8 @@
                                 "value": "[parameters('idaTenant')]"
                             },
                             {
-                                "name": "IdaAudience",
-                                "value": "[parameters('idaAudience')]"
+                                "name": "AccountsApiIdentifierUri",
+                                "value": "[parameters('accountsApiIdentifierUri')]"
                             }
                         ]
                     },

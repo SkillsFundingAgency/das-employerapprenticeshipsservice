@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var commitments = await _commitmentService.GetEmployerCommitments(agreement.AccountId);
             var accountHasCommitments = commitments?.Any() ?? false;
 
-            await PublishAgreementSignedMessage(agreement.AccountId, agreement.LegalEntityId, agreement.LegalEntityName,
+            await PublishAgreementSignedMessage(agreement.AccountId, agreement.AccountLegalEntityId, agreement.LegalEntityId, agreement.LegalEntityName,
                 agreement.Id, accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType,
                 agreement.VersionNumber, correlationId);
         }
@@ -141,7 +141,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         }
 
         private Task PublishAgreementSignedMessage(
-            long accountId, long legalEntityId, string legalEntityName, long agreementId,
+            long accountId, long accountLegalEntityId, long legalEntityId, string legalEntityName, long agreementId,
             bool cohortCreated, string currentUserName, Guid currentUserRef, 
             AgreementType agreementType, int versionNumber, string correlationId)
         {
@@ -149,6 +149,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             {
                 AccountId = accountId,
                 AgreementId = agreementId,
+                AccountLegalEntityId = accountLegalEntityId,
                 LegalEntityId = legalEntityId,
                 OrganisationName = legalEntityName,
                 CohortCreated = cohortCreated,
