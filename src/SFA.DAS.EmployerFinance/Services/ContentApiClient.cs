@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Azure.Services.AppAuthentication;
+using NLog.Internal;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -26,10 +28,13 @@ namespace SFA.DAS.EmployerFinance.Services
 
         private async Task AddAuthenticationHeader()
         {
-            var azureServiceTokenProvider = new AzureServiceTokenProvider();
-            var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);
+            if (ConfigurationManager.AppSettings["EnvironmentName"].ToUpper() != "LOCAL")
+            {
+                var azureServiceTokenProvider = new AzureServiceTokenProvider();
+                var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);
 
-            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+                _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+            }
         }
 
         public async Task<string> Get(string type, string applicationId)
