@@ -2,7 +2,6 @@
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.Http;
-using SFA.DAS.Http.TokenGenerators;
 using SFA.DAS.NLog.Logger.Web.MessageHandlers;
 using StructureMap;
 using System.Net.Http;
@@ -22,8 +21,7 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
             var config = context.GetInstance<EmployerFinanceConfiguration>().ContentApi;
   
             HttpClient httpClient = new HttpClientBuilder()
-                    .WithBearerAuthorisationHeader(new AzureActiveDirectoryBearerTokenGenerator(config))
-                    .WithHandler(new RequestIdMessageRequestHandler())
+                .WithHandler(new RequestIdMessageRequestHandler())
                     .WithHandler(new SessionIdMessageRequestHandler())
                     .WithDefaultHeaders()
                     .Build();
