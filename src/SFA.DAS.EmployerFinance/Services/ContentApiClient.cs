@@ -1,29 +1,42 @@
 ﻿
 using SFA.DAS.Authentication.Extensions.Legacy;
 using SFA.DAS.EmployerFinance.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Azure.Services.AppAuthentication;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
     public class ContentApiClient : ApiClientBase, IContentApiClient
     {
-        private readonly string ApiBaseUrl;
+        private readonly string _apiBaseUrl;
+        private readonly string _identifierUri;
+        private readonly HttpClient _client;
 
         public ContentApiClient(HttpClient client, IContentClientApiConfiguration configuration) : base(client) 
         {
-            ApiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
+            _apiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
                 ? configuration.ApiBaseUrl
                 : configuration.ApiBaseUrl + "/";
+
+            _identifierUri = configuration.IdentifierUri;
+            _client = client;
+        }
+
+        private async Task AddAuthenticationHeader()
+        {
+            var azureServiceTokenProvider = new AzureServiceTokenProvider();
+            var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(_identifierUri);
+
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         public async Task<string> Get(string type, string applicationId)
         {
-            var uri = $"{ApiBaseUrl}api/content?applicationId={applicationId}&type={type}";
+            await AddAuthenticationHeader();
+
+            var uri = $"{_apiBaseUrl}api/content?applicationId={applicationId}&type={type}";
             
             return await GetAsync(uri); 
         }
