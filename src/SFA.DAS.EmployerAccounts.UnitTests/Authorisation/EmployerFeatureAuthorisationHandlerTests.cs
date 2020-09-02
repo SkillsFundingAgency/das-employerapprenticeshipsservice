@@ -146,9 +146,9 @@ namespace SFA.DAS.Authorization.Features.UnitTests.Handlers
                         StatusId = agreementStatus,
                         AccountLegalEntity = new AccountLegalEntity
                         {
-                            SignedAgreementVersion = agreementVersion
+                            SignedAgreementVersion = agreementStatus == EmployerAgreementStatus.Signed ? (int?)agreementVersion : null,
+                            PendingAgreementVersion = agreementStatus == EmployerAgreementStatus.Pending ? (int?)agreementVersion : null
                         }
-
                     }
                 }
             };

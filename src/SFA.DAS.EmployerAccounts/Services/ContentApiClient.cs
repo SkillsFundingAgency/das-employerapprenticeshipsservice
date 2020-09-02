@@ -5,11 +5,11 @@ using SFA.DAS.EmployerAccounts.Interfaces;
 
 namespace SFA.DAS.EmployerAccounts.Services
 {
-    public class ClientContentApiClient : ApiClientBase, IClientContentApiClient
+    public class ContentApiClient : ApiClientBase, IContentApiClient
     {
         private readonly string ApiBaseUrl;
 
-        public ClientContentApiClient(HttpClient client, IContentClientApiConfiguration configuration) : base(client)
+        public ContentApiClient(HttpClient client, IContentClientApiConfiguration configuration) : base(client)
         {
             ApiBaseUrl = configuration.ApiBaseUrl.EndsWith("/")
                 ? configuration.ApiBaseUrl

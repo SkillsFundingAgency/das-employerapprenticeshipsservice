@@ -49,6 +49,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         private const long LegalEntityId = 111333;
         private const string OrganisationName = "Foo";
         private const string HashedLegalEntityId = "2635JHG";
+        private const long AccountLegalEntityId = 9568456;
         private const AgreementType AgreementType = Common.Domain.Types.AgreementType.NonLevyExpressionOfInterest;
 
         [SetUp]
@@ -80,6 +81,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 LegalEntityName = OrganisationName,
                 AgreementType = AgreementType,
                 AccountId = AccountId,
+                AccountLegalEntityId = AccountLegalEntityId,
                 Id = AgreementId
             };
 
@@ -230,6 +232,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             message.AccountId.Should().Be(AccountId);
             message.AgreementId.Should().Be(AgreementId);
             message.OrganisationName.Should().Be(OrganisationName);
+            message.AccountLegalEntityId.Should().Be(AccountLegalEntityId);
             message.LegalEntityId.Should().Be(LegalEntityId);
             message.CohortCreated.Should().BeTrue();
             message.UserName.Should().Be(_owner.FullName());
@@ -255,6 +258,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             message.AccountId.Should().Be(AccountId);
             message.AgreementId.Should().Be(AgreementId);
             message.OrganisationName.Should().Be(OrganisationName);
+            message.AccountLegalEntityId.Should().Be(AccountLegalEntityId);
             message.LegalEntityId.Should().Be(LegalEntityId);
             message.CohortCreated.Should().BeFalse();
             message.UserName.Should().Be(_owner.FullName());

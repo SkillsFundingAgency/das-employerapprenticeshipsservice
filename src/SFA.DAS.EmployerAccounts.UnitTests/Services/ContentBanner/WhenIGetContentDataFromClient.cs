@@ -14,7 +14,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
 {
     class WhenIGetContentDataFromService
     {
-        private IClientContentApiClient _sut;
+        private IContentApiClient _sut;
         private ContentClientApiConfiguration _configuration;
         private string _testData;
 
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
 
             var httpClient = new HttpClient(_mockHttpMessageHandler.Object);
 
-            _sut = new ClientContentApiClient(httpClient, _configuration);
+            _sut = new ContentApiClient(httpClient, _configuration);
         }
 
         [Test]
