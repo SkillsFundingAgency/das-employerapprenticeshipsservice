@@ -42,6 +42,8 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         protected void Application_Start()
         {
+            Logger.Log(LogLevel.Info, "Application_Start");
+
             AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
             AntiForgeryConfig.RequireSsl = true;
             AreaRegistration.RegisterAllAreas();
@@ -95,7 +97,19 @@ namespace SFA.DAS.EmployerAccounts.Web
 
         protected void Application_End()
         {
+            Logger.Log(LogLevel.Info, "Application_End");
+
             StopServiceBusEndpoint();
+        }
+
+        protected void Session_Start(object sender, EventArgs e)
+        {
+            Logger.Log(LogLevel.Info, "Session_Start");
+        }
+        
+        protected void Session_End(Object sender, EventArgs E)
+        {
+            Logger.Log(LogLevel.Info, "Session_End");
         }
 
         protected void Application_Error(object sender, EventArgs e)
