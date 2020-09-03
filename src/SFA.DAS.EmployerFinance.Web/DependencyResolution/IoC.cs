@@ -4,7 +4,6 @@ using SFA.DAS.Authorization.EmployerUserRoles.DependencyResolution.StructureMap;
 using SFA.DAS.EmployerFinance.Api.Client;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.DependencyResolution;
-using SFA.DAS.UnitOfWork.EntityFramework;
 using SFA.DAS.UnitOfWork.EntityFramework.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus.DependencyResolution.StructureMap;
 using SFA.DAS.UnitOfWork.NServiceBus.Features.ClientOutbox.DependencyResolution.StructureMap;
@@ -37,6 +36,8 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<DefaultRegistry>();
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
                 c.AddRegistry<EmployerUserRolesAuthorizationRegistry>();
+                c.AddRegistry<ContentApiClientRegistry>();
+                c.AddRegistry<ServicesRegistry>();
             });
         }
     }

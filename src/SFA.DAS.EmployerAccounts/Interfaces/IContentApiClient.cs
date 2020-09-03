@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Interfaces
 {
-    public interface IClientContentService
+    public interface IContentApiClient
     {
         Task<string> Get(string type, string applicationId);
     }

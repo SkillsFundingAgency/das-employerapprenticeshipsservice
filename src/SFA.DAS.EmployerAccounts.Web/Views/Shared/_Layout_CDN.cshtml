@@ -156,7 +156,7 @@
         <main class="govuk-main-wrapper" id="main-content" role="main">
             @if (HttpContext.Current.User.Identity.IsAuthenticated)
             {
-                @Html.GetClientContentByType("banner")
+                @Html.GetContentByType("banner")
 
                 if (Html.IsAuthorized("EmployerFeature.V3AgreementBanner"))
                 {
