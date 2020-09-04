@@ -93,8 +93,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                                 new UnsubscribeNotificationCommand
                                 {
                                     UserRef = userRef,
-                                    AccountId = accountId,
-                                    NotificationSettingUrl = settingUrl
+                                    AccountId = accountId
                                 });
 
                             _logger.Info("Unsubscribed from alerts for user {userRef} in account {accountId}");

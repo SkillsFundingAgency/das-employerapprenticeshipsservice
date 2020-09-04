@@ -7,7 +7,5 @@ namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
         public string UserRef { get; set; }
 
         public long AccountId { get; set; }
-
-        public string NotificationSettingUrl { get; set; }
     }
 }

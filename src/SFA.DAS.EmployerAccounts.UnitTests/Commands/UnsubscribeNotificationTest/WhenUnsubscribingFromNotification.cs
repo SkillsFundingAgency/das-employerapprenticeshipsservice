@@ -133,22 +133,5 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
             var setting = list.SingleOrDefault(m => m.AccountId == _command.AccountId);
             setting.ReceiveNotifications.Should().BeFalse();
         }
-
-        [Test]
-        public async Task ShouldSendEmail()
-        {
-            Email mask = null;
-            _command.NotificationSettingUrl = "this/is/url";
-            _notiApi.Setup(n => n.SendEmail(It.IsAny<Email>()))
-                .Callback<Email>(m => mask = m)
-                .Returns(Task.FromResult(1));
-                
-            await _sut.Handle(_command);
-            mask.RecipientsAddress.Should().Be("email@email.com");
-            mask.Subject.Should().Be("UnsubscribeSuccessful");
-            mask.Tokens["name"].Should().Be("First name");
-            mask.Tokens["account_name"].Should().Be("Account Name");
-            mask.Tokens["link_notification_page"].Should().Be(_command.NotificationSettingUrl);
-        }
     }
 }
