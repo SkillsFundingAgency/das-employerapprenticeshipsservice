@@ -8,7 +8,13 @@
         "sharedFrontendAppServicePlanName": {
             "type": "string"
         },
+        "sharedFrontEndSubnetResourceId": {
+            "type": "string"
+        },
         "sharedBackendAppServicePlanName": {
+            "type": "string"
+        },
+        "sharedBackEndSubnetResourceId": {
             "type": "string"
         },
         "sharedAppServicePlanResourceGroup": {
@@ -71,6 +77,18 @@
             "type": "array",
             "defaultValue": [
             ]
+        },
+        "sharedEnvVirtualNetworkName": {
+            "type": "string"
+        },
+        "financeWorkerSubnetObject": {
+            "type": "object"
+        },
+        "subnetServiceEndpointList": {
+            "type": "array"
+        },
+        "subnetDelegations": {
+            "type": "array"
         }
     },
     "variables": {
@@ -164,6 +182,9 @@
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[parameters('sharedAppServicePlanResourceGroup')]"
+                    },
+                    "subnetResourceId": {
+                        "value": "[parameters('sharedFrontEndSubnetResourceId')]"
                     },
                     "appServiceAppSettings": {
                         "value": [
@@ -265,6 +286,9 @@
                     "appServicePlanResourceGroup": {
                         "value": "[parameters('SharedAppServicePlanResourceGroup')]"
                     },
+                    "subnetResourceId": {
+                        "value": "[parameters('sharedBackEndSubnetResourceId')]"
+                    },
                     "appServiceAppSettings": {
                         "value": [
                             {
@@ -306,6 +330,36 @@
             ]
         },
         {
+            "apiVersion": "2017-05-10",
+            "name": "worker-subnet",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
+            "type": "Microsoft.Resources/deployments",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'subnet.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "virtualNetworkName": {
+                        "value": "[parameters('sharedEnvVirtualNetworkName')]"
+                    },
+                    "subnetName": {
+                        "value": "[parameters('financeWorkerSubnetObject').name]"
+                    },
+                    "subnetAddressPrefix": {
+                        "value": "[parameters('financeWorkerSubnetObject').addressSpace]"
+                    },
+                    "serviceEndpointList": {
+                        "value": "[parameters('subnetServiceEndpointList')]"
+                    },
+                    "delegations": {
+                        "value": "[parameters('subnetDelegations')]"
+                    }
+                }
+            }
+        },
+        {
             "apiVersion": "2017-08-01",
             "name": "WorkerAppServicePlan",
             "type": "Microsoft.Resources/deployments",
@@ -326,7 +380,7 @@
                         "value": 1
                     },
                     "nonASETier": {
-                        "value": "Basic"
+                        "value": "Standard"
                     }
                 }
             }
@@ -350,6 +404,9 @@
                     },
                     "appServicePlanResourceGroup": {
                         "value": "[resourceGroup().name]"
+                    },
+                    "subnetResourceId": {
+                        "value": "[reference('worker-subnet').outputs.SubnetResourceId.value]"
                     },
                     "appServiceAppSettings": {
                         "value": [
