@@ -33,8 +33,11 @@
 
 ##### Install SSL certificates for HTTPS on IIS express
 
+- Request a SAS connection to the certs blob storage from from Dev Ops
+- Download DasIDPCert.pfx to the das-employerapprenticeshipsservice/src folder
 - Open PowerShell as an administrator
 - Run src\DevInstall.ps1
+- DO NOT COMMIT THE UPDATED CERTIFICATE TO GIT
 
 ##### Install Elastic Search
 
