@@ -59,6 +59,22 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
             result.LegalEntity.Agreements.First(a => a.TemplateVersionNumber == 1 && a.Status == Api.Types.EmployerAgreementStatus.Signed).SignedByEmail.Should().Be(f.UserB.Email);
             result.LegalEntity.Agreements.First(a => a.TemplateVersionNumber == 2 && a.Status == Api.Types.EmployerAgreementStatus.Signed).SignedByEmail.Should().Be(f.UserA.Email);
         }
+
+
+        [Test]
+        public async Task Handle_WhenGettingLegalEntity_ThenShouldMapRequiredFields()
+        {
+            var f = new GetLegalEntityQueryTestsFixture();
+            var result = await f.Handle(false);
+
+            var actual = result.LegalEntity;
+
+            actual.Address.Should().NotBeNullOrEmpty();
+            actual.Address.Should().Be(f.LegalEntity.AccountLegalEntities.First().Address);
+            actual.Name.Should().NotBeNullOrEmpty();
+            actual.Name.Should().Be(f.LegalEntity.AccountLegalEntities.First().Name);
+            actual.Should().ShouldBeEquivalentTo(f.LegalEntity, opt => opt.ExcludingMissingMembers());
+        }
     }
 
     public class GetLegalEntityQueryTestsFixture : FluentTestFixture
@@ -124,7 +140,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
             Account = new Account
             {
                 Id = 111111,
-                HashedId = "ABC123"
+                HashedId = "ABC123",
+                Name = "ABC123 CORP"
             };
 
             return this;
@@ -159,7 +176,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
         {
             LegalEntity = new LegalEntity
             {
-                Id = 222222
+                Id = 222222,
+                Code = "0123456",
+                Sector = "Some Sector",
+                Status = "Some Status"
             };
 
             LegalEntities.Add(LegalEntity);
@@ -174,7 +194,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetLegalEntityQueryTests
                 Account = Account,
                 AccountId = Account.Id,
                 LegalEntity = LegalEntity,
-                LegalEntityId = LegalEntity.Id
+                LegalEntityId = LegalEntity.Id,
+                Address = "123 High Street",
+                Name = "AccountLegalEntity Name"
             };
 
             LegalEntity.AccountLegalEntities.Add(AccountLegalEntity);
