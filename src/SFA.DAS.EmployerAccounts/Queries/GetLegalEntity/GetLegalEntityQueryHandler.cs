@@ -69,6 +69,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
                         SignedDate = a.SignedDate
 
                     }).ToList(),
+                Address = accountLegalEntity.Address,
+                Name = accountLegalEntity.Name,
                 DasAccountId = message.AccountHashedId,
                 AccountLegalEntityId = accountLegalEntity.Id,
                 AccountLegalEntityPublicHashedId = accountLegalEntity.PublicHashedId,
@@ -82,7 +84,7 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetLegalEntity
                     accountLegalEntity.LegalEntity.Source == OrganisationType.Charities ? "Charities" :
                     accountLegalEntity.LegalEntity.Source == OrganisationType.PublicBodies ? "Public Bodies" :
                     accountLegalEntity.LegalEntity.Source == OrganisationType.PensionsRegulator ? "Pensions Regulator" : "Other",
-                SourceNumeric = (short)accountLegalEntity.LegalEntity.Source,
+                SourceNumeric = (short)accountLegalEntity.LegalEntity.Source
             };
         }
 
