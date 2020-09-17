@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Web.Http;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.EmployerAccounts.Api.Attributes;
 using SFA.DAS.EmployerAccounts.Api.Types;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetLegalEntity;
 using SFA.DAS.Validation;
 using SFA.DAS.Validation.WebApi;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Web.Http;
 
 namespace SFA.DAS.EmployerAccounts.Api.Controllers
 {
@@ -68,9 +68,10 @@ namespace SFA.DAS.EmployerAccounts.Api.Controllers
         [HttpNotFoundForNullModel]
         public async Task<IHttpActionResult> GetLegalEntity(
             string hashedAccountId,
-            long legalEntityId)
+            long legalEntityId,
+            bool includeAllAgreements = false)
         {
-            var response = await _mediator.SendAsync(new GetLegalEntityQuery(hashedAccountId, legalEntityId));
+            var response = await _mediator.SendAsync(request: new GetLegalEntityQuery(hashedAccountId, legalEntityId, includeAllAgreements));
             return Ok(response.LegalEntity);
         }
     }
