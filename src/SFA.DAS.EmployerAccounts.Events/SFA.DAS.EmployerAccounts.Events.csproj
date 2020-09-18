@@ -47,7 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Messages\DeletedTransferConnectionInvitationEvent.cs" />
     <Compile Include="Messages\AccountNameChangedMessage.cs" />
     <Compile Include="Messages\AgreementCreatedMessage.cs" />
     <Compile Include="Messages\ApprovedTransferConnectionInvitationEvent.cs" />
