@@ -13,7 +13,7 @@
     <PackageReference Include="NUnit" Version="3.10.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.Types" Version="1.6.2103" />
-    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.36-con-1360-expired0001" />
+    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.37" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
     <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.165" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />

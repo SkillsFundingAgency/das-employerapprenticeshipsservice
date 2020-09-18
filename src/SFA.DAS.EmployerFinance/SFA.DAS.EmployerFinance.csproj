@@ -31,7 +31,7 @@
     <PackageReference Include="SFA.DAS.Configuration" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.AzureTableStorage" Version="1.0.0.53229" />
     <PackageReference Include="SFA.DAS.Configuration.FileStorage" Version="1.0.0.49931" />
-    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.36-con-1360-expired0001" />
+    <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.37" />
     <PackageReference Include="SFA.DAS.EntityFramework" Version="1.0.1" />
     <PackageReference Include="SFA.DAS.Events.Api.Client" Version="1.20.0.26497" />
     <PackageReference Include="SFA.DAS.Events.Api.Types" Version="2.0.0.36524" />
