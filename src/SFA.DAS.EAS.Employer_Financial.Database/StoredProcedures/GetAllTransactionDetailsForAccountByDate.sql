@@ -69,7 +69,7 @@ UNION ALL
 				p.Ukprn, 
 				p.Uln, 
 				p.PeriodEnd, 
-				SUM(CASE WHEN p.FundingSource = 1 THEN -p.Amount ELSE 0 END) AS fundedFromLevy, 
+				SUM(CASE WHEN p.FundingSource in (1,5) THEN -p.Amount ELSE 0 END) AS fundedFromLevy, 
 				SUM(CASE WHEN p.FundingSource = 2 THEN -p.Amount ELSE 0 END) AS fundedFromGoverment, 
 				SUM(CASE WHEN p.FundingSource = 3 THEN -p.Amount ELSE 0 END) AS fundedFromEmployer, 
 				SUM(-p.Amount) AS fundedTotal, 
@@ -90,7 +90,7 @@ UNION ALL
 		WHERE  p.AccountId = @AccountId
 				AND transLine.DateCreated >= @FromDate 
 				AND transLine.DateCreated <= @ToDate
-				AND p.FundingSource in (1,2,3)
+				AND p.FundingSource in (1,2,3,5)
 		GROUP BY transLine.DateCreated,
 				p.AccountId, 
 				p.Ukprn, 
