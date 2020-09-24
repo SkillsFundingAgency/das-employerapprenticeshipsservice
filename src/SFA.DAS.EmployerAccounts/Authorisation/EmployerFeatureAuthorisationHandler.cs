@@ -44,11 +44,14 @@ namespace SFA.DAS.EmployerAccounts.AuthorisationExtensions
                     var (accountId, _) = authorizationContext.GetEmployerFeatureValues();
 
                     var agreements = await _mediator.SendAsync(new GetEmployerAgreementsByAccountIdRequest { AccountId = accountId.GetValueOrDefault(0) }).ConfigureAwait(false);
-                    var minAgreementVersion = agreements.EmployerAgreements.Select(ea => ea.AccountLegalEntity.SignedAgreementVersion.GetValueOrDefault(0)).Min();
-
-                    if (minAgreementVersion < featureToggle.EnabledByAgreementVersion)
+                    if (agreements.EmployerAgreements.Any())
                     {
-                        authorizationResult.AddError(new EmployerFeatureAgreementNotSigned());
+                        var minAgreementVersion = agreements.EmployerAgreements.Select(ea => ea.AccountLegalEntity.SignedAgreementVersion.GetValueOrDefault(0)).Min();
+
+                        if (minAgreementVersion < featureToggle.EnabledByAgreementVersion)
+                        {
+                            authorizationResult.AddError(new EmployerFeatureAgreementNotSigned());
+                        }
                     }
                 }
             }
