@@ -85,8 +85,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 assert: fixtures => Assert.AreEqual(user.FullName, fixtures.Response.EmployerAgreement.SignedByName));
         }
 
-        [Test]
-        public Task ThenIfTheUserIsNotConnectedToTheAccountAnUnauthorizedErrorIsReturned()
+       public Task ThenIfTheUserIsNotConnectedToTheAccountAnUnauthorizedErrorIsReturned()
         {
             EmployerAgreement signedAgreement = null;
             User user = null;
@@ -101,9 +100,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 assert: (f, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
         }
 
-        [TestCase(Role.Transactor)]
-        [TestCase(Role.Viewer)]
-        [TestCase(Role.None)]
         public Task ThenIfTheUserIsNotAnOwnerOnTheAccountAndItIsNotSignedAnUnauthorizedErrorIsReturned(Role role)
         {
             EmployerAgreement pendingAgreement = null;
@@ -136,7 +132,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 assert: fixtures => Assert.AreEqual(signedAgreement.Id, fixtures.Response.EmployerAgreement.Id));
         }
 
-        [Test]
         public Task ThenIfTheAgreementIsNotConnectedToTheAccountTheRequestIsNotAuthorized()
         {
             EmployerAgreement pendingAgreement = null;
