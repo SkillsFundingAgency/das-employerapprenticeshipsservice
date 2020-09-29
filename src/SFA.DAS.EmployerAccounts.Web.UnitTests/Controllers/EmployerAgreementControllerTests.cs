@@ -12,15 +12,12 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
-using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.TestCommon;
-using SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTests;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -160,9 +157,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 fixtures =>
                 {
                     fixtures.WithUnsignedEmployerAgreement();
-                    fixtures.Orchestrator.Setup(o =>
-                            o.GetSignedAgreementViewModel(It.IsAny<GetEmployerAgreementRequest>()))
-                        .ReturnsAsync(new SignEmployerAgreementViewModel());
                     fixtures.Orchestrator.Setup(o => o
                             .UserIsAuthorizedToSignUnsignedAgreement(It.IsAny<EmployerAgreementView>(),
                                 It.IsAny<GetEmployerAgreementRequest>()))
@@ -314,7 +308,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
             Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
                 .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
-
+            Orchestrator.Setup(o =>
+                    o.GetSignedAgreementViewModel(It.IsAny<GetEmployerAgreementRequest>()))
+                .ReturnsAsync(GetSignAgreementViewModel);
             return this;
         }
 
