@@ -87,7 +87,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> View(string agreementId, string hashedAccountId,
             FlashMessageViewModel flashMessage)
         {
-            var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
+            var agreement = await _orchestrator.GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName) });
 
             return View(agreement);
         }
@@ -124,7 +124,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             request.ExternalUserId = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
 
-            var viewModel = await GetSignedAgreementViewModel(request);
+            var viewModel = await _orchestrator.GetSignedAgreementViewModel(request);
             var entities = await _mediator.SendAsync(new GetAccountLegalEntitiesCountByHashedAccountIdRequest { HashedAccountId = request.HashedAccountId });
 
             viewModel.LegalEntitiesCount = entities.LegalEntitiesCount;
@@ -138,11 +138,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         public async Task<ActionResult> Sign(string agreementId, string hashedAccountId, int? choice)
         {
             var userInfo = OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName);
-
+            
             if (choice == null)
             {
-                var agreement = await GetSignedAgreementViewModel(new GetEmployerAgreementRequest { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
-                
+                var agreement = await _orchestrator.GetSignedAgreementViewModel(new GetEmployerAgreementRequest
+                    { AgreementId = agreementId, HashedAccountId = hashedAccountId, ExternalUserId = userInfo });
+
                 ModelState.AddModelError(nameof(agreement.Choice), "Select whether you accept the agreement");
                 
                 return View(ControllerConstants.SignAgreementViewName, agreement);
@@ -154,6 +155,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow);
+            
+            if (response.Status == HttpStatusCode.Unauthorized)
+            {
+                return View(response);
+            }
 
             var user = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = userInfo });
 
@@ -177,7 +183,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                 return View(ControllerConstants.AcceptedEmployerAgreementViewName);
             }
 
-            return RedirectToAction(ControllerConstants.SignAgreementActionName, new GetEmployerAgreementRequest { AgreementId = agreementId, ExternalUserId = userInfo, HashedAccountId = hashedAccountId });
+           return RedirectToAction(ControllerConstants.SignAgreementActionName, new GetEmployerAgreementRequest { AgreementId = agreementId, ExternalUserId = userInfo, HashedAccountId = hashedAccountId });
         }
 
         [HttpGet]
@@ -241,17 +247,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             AddFlashMessageToCookie(response.FlashMessage);
             return View(ControllerConstants.ConfirmRemoveOrganisationViewName, model);
-        }
-
-        private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
-        {
-            var response = await _mediator.SendAsync(request);
-            var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(response);
-
-            var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest {AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId});
-            viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
-
-            return viewModel;
         }
 
         [HttpGet]

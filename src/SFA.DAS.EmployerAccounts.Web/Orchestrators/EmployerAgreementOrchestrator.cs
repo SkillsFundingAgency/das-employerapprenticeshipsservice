@@ -6,8 +6,10 @@ using AutoMapper;
 using MediatR;
 using SFA.DAS.EmployerAccounts.Commands.RemoveLegalEntity;
 using SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountEmployerAgreements;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
@@ -18,6 +20,9 @@ using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
+using System.Linq;
+using System.Data.Entity;
+using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 {
@@ -26,6 +31,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly IReferenceDataService _referenceDataService;
+        private readonly Lazy<EmployerAccountsDbContext> _database;
 
         protected EmployerAgreementOrchestrator()
         {
@@ -34,11 +40,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public EmployerAgreementOrchestrator(
             IMediator mediator,
             IMapper mapper,
-            IReferenceDataService referenceDataService) : base(mediator)
+            IReferenceDataService referenceDataService, Lazy<EmployerAccountsDbContext> database) : base(mediator)
         {
             _mediator = mediator;
             _mapper = mapper;
             _referenceDataService = referenceDataService;
+            _database = database;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
@@ -115,10 +122,30 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
+        public virtual async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
+        {
+            var response = await _mediator.SendAsync(request);
+            var viewModel = _mapper.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(response);
+
+            var signedAgreementResponse = await _mediator.SendAsync(new GetLastSignedAgreementRequest { AccountLegalEntityId = response.EmployerAgreement.LegalEntity.AccountLegalEntityId });
+            viewModel.PreviouslySignedEmployerAgreement = _mapper.Map<EmployerAgreementView>(signedAgreementResponse.LastSignedAgreement);
+
+            return viewModel;
+        }
+
         public async Task<OrchestratorResponse<SignAgreementViewModel>> SignAgreement(string agreementid, string hashedId, string externalUserId, DateTime signedDate)
         {
             try
             {
+                var request = new GetEmployerAgreementRequest
+                    { AgreementId = agreementid, HashedAccountId = hashedId, ExternalUserId = externalUserId };
+                var signedAgreement = await GetSignedAgreementViewModel(request);
+
+                if (!await UserIsAuthorizedToSignUnsignedAgreement(signedAgreement.EmployerAgreement, request))
+                {
+                    throw new UnauthorizedAccessException();
+                }
+
                 var agreement = await _mediator.SendAsync(new SignEmployerAgreementCommand
                 {
                     HashedAccountId = hashedId,
@@ -158,6 +185,23 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                     Status = HttpStatusCode.Unauthorized
                 };
             }
+        }
+
+        public virtual async Task<bool> UserIsAuthorizedToSignUnsignedAgreement(EmployerAgreementView employerAgreement, GetEmployerAgreementRequest message)
+        {
+            var userRef = Guid.Parse(message.ExternalUserId);
+            var caller = await _database.Value.Memberships.Where(x => x.AccountId == employerAgreement.AccountId && x.User.Ref == userRef).SingleOrDefaultAsync();
+
+            if (caller == null)
+            {
+                return false;
+            }
+
+            if (employerAgreement.HashedAccountId != message.HashedAccountId || (employerAgreement.Status != EmployerAgreementStatus.Signed && caller.Role != Role.Owner))
+            {
+                return false;
+            }
+            return true;
         }
 
         public virtual async Task<OrchestratorResponse<bool>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)

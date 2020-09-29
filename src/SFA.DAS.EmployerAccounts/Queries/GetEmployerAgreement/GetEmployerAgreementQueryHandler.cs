@@ -53,11 +53,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
             employerAgreement.HashedAgreementId = _hashingService.HashValue(employerAgreement.Id);
             employerAgreement.HashedLegalEntityId = _hashingService.HashValue(employerAgreement.LegalEntityId);
 
-            if (!await UserIsAuthorizedToSignUnsignedAgreement(employerAgreement, message))
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             if (employerAgreement.StatusId != EmployerAgreementStatus.Signed)
             {
                 employerAgreement.SignedByName = GetUserFullName(message.ExternalUserId);
@@ -67,24 +62,6 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement
             {
                 EmployerAgreement = employerAgreement
             };
-        }
-
-        private async Task<bool> UserIsAuthorizedToSignUnsignedAgreement(AgreementDto employerAgreement, GetEmployerAgreementRequest message)
-        {
-            var userRef = Guid.Parse(message.ExternalUserId);
-            var caller = await _database.Value.Memberships.Where(x => x.AccountId == employerAgreement.AccountId && x.User.Ref == userRef).SingleOrDefaultAsync();
-            
-            if (caller == null)
-            {
-                return false;
-            }
-
-            if (employerAgreement.HashedAccountId != message.HashedAccountId || (employerAgreement.StatusId != EmployerAgreementStatus.Signed && caller.Role != Role.Owner))
-            {
-                return false;
-            }
-
-            return true;
         }
 
         private string GetUserFullName(string userId)

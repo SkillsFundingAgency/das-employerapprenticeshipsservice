@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using AutoMapper;
 using MediatR;
 using Moq;
@@ -9,23 +12,29 @@ using SFA.DAS.Authentication;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
+using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccountId;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
+using SFA.DAS.EmployerAccounts.TestCommon;
+using SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTests;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
-using SFA.DAS.Testing;
+using FluentTestFixture = SFA.DAS.Testing.FluentTestFixture;
 
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 {
     [TestFixture]
-    public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementControllerTestFixtures>
+    public class EmployerAgreementControllerTests : Testing.FluentTest<EmployerAgreementControllerTestFixtures>
     {
+        private EmployerAgreementBuilder EmployerAgreementBuilder { get; }
+
         [Test]
         public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
         {
@@ -61,7 +70,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     Assert.AreEqual(result.RouteValues["agreementId"], fixtures.HashedAgreementId);
                 });
         }
-        
+
         [Test]
         public Task ViewAgreementToSign_ShouldReturnAgreements()
         {
@@ -93,7 +102,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 act: fixtures => fixtures.AboutYourAgreement(),
                 assert: (fixtures, actualResult) =>
                 {
-                    Assert.IsNotNull(actualResult);                   
+                    Assert.IsNotNull(actualResult);
                     Assert.AreEqual(actualResult.ViewName, "AboutYourAgreement");
                 });
         }
@@ -144,6 +153,32 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         }
 
         [Test]
+
+        public Task ViewAgreementToSign_WhenIAmNotAuthorised_ThenAnErrorIsDisplayed()
+        {
+            return RunAsync(
+                fixtures =>
+                {
+                    fixtures.WithUnsignedEmployerAgreement();
+                    fixtures.Orchestrator.Setup(o =>
+                            o.GetSignedAgreementViewModel(It.IsAny<GetEmployerAgreementRequest>()))
+                        .ReturnsAsync(new SignEmployerAgreementViewModel());
+                    fixtures.Orchestrator.Setup(o => o
+                            .UserIsAuthorizedToSignUnsignedAgreement(It.IsAny<EmployerAgreementView>(),
+                                It.IsAny<GetEmployerAgreementRequest>()))
+                        .ReturnsAsync(false);
+                },
+                fixtures => fixtures.Sign(2),
+                (fixtures, result) =>
+                {
+                    var viewResult = result.Item1;
+                    var viewBag = result.Item1.ViewData[EmployerAgreementControllerTestFixtures.Constants.AccountId];
+                    Assert.AreEqual(viewResult.ViewName, ControllerConstants.AccessDeniedViewName);
+                    Assert.AreEqual(viewBag, EmployerAgreementControllerTestFixtures.Constants.HashedAccountId);
+                });
+        }
+
+        [Test]
         public Task WhenDoYouWantToView_WhenILandOnThePage_ThenTheLegalEntityNameIsCorrect()
         {
             return RunAsync(
@@ -184,7 +219,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public Task WhenDoYouWantToView_WhenISelectLater_ThenTheHomepageIsShown()
         {
             return RunAsync(
-                act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel{ EmployerAgreement = new EmployerAgreementView() }),
+                act: fixtures => fixtures.WhenDoYouWantToView(2, new WhenDoYouWantToViewViewModel { EmployerAgreement = new EmployerAgreementView() }),
                 assert: (fixtures, actualResult) =>
                 {
                     Assert.IsNotNull(actualResult);
@@ -236,6 +271,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             public const long AccountLegalEntityId = 1234;
             public const string HashedAccountLegalEntityId = "THGHFH";
             public const string LegalEntityName = "FIFTEEN LIMITED";
+            public const string AccountId = "AccountId";
         }
 
         public string HashedAccountId => Constants.HashedAccountId;
@@ -278,7 +314,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
             Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
                 .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
-      
+
             return this;
         }
 
@@ -290,7 +326,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                     x.SendAsync(
                         It.Is<GetLastSignedAgreementRequest>(r => r.AccountLegalEntityId == AccountLegalEntityId)))
                 .ReturnsAsync(response);
-            
+
             return this;
         }
 
@@ -329,7 +365,21 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
         public async Task<Tuple<ViewResult, ModelStateDictionary>> Sign(int? choice)
         {
+            var routeData = new RouteData();
+            var request = new Mock<HttpRequestBase>();
+            routeData.Values.Add(ControllerConstants.AccountHashedIdRouteKeyName, Constants.HashedAccountId);
             var controller = CreateController();
+
+            var requestParams = new NameValueCollection
+            {
+                { ControllerConstants.AccountHashedIdRouteKeyName, Constants.HashedAccountId}
+            };
+
+            request.SetupGet(x => x.Params).Returns(requestParams);
+
+            var context = new Mock<HttpContextBase>();
+            context.SetupGet(x => x.Request).Returns(request.Object);
+            controller.ControllerContext = new ControllerContext(context.Object, routeData, controller);
             var result = await controller.Sign(HashedAgreementId, HashedAccountId, choice) as ViewResult;
             return new Tuple<ViewResult, ModelStateDictionary>(result, controller.ModelState);
         }
