@@ -17,7 +17,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntitiesCountByHashedAccou
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
-using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.EmployerAccounts.Web.Controllers;
 using SFA.DAS.EmployerAccounts.Web.Helpers;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
@@ -30,8 +29,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
     [TestFixture]
     public class EmployerAgreementControllerTests : Testing.FluentTest<EmployerAgreementControllerTestFixtures>
     {
-        private EmployerAgreementBuilder EmployerAgreementBuilder { get; }
-
         [Test]
         public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
         {
