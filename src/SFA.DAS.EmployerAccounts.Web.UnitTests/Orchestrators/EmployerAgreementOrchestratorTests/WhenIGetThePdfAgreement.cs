@@ -7,7 +7,6 @@ using AutoMapper;
 using MediatR;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
@@ -21,12 +20,10 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         private Mock<IMediator> _mediator;
         private Mock<IReferenceDataService> _referenceDataService;
         private EmployerAgreementOrchestrator _orchestrator;
-        private Mock<IAccountRepository> _accountRepository;
-
+        
         [SetUp]
         public void Arrange()
         {
-            _accountRepository = new Mock<IAccountRepository>();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementPdfRequest>()))
                 .ReturnsAsync(new GetEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
@@ -35,7 +32,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
 
             _referenceDataService = new Mock<IReferenceDataService>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, _accountRepository.Object);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object);
         }
 
         [Test]

@@ -13,16 +13,16 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
 {
-    public class UnsubscribeNotificationHandler : AsyncRequestHandler<UnsubscribeNotificationCommand>
+    public class UserIsAuthorizedToSignUnsignedAgreementHandler : AsyncRequestHandler<UserIsAuthorizedToSignUnsignedAgreementCommand>
     {
-        private readonly IValidator<UnsubscribeNotificationCommand> _validator;
+        private readonly IValidator<UserIsAuthorizedToSignUnsignedAgreementCommand> _validator;
         private readonly INotificationsApi _notificationsApi;
         private readonly IUserRepository _userRepository;
         private readonly IAccountRepository _accountRepository;
         private readonly ILog _logger;
 
-        public UnsubscribeNotificationHandler(
-            IValidator<UnsubscribeNotificationCommand> validator,
+        public UserIsAuthorizedToSignUnsignedAgreementHandler(
+            IValidator<UserIsAuthorizedToSignUnsignedAgreementCommand> validator,
             INotificationsApi notificationsApi,
             IUserRepository userRepository,
             IAccountRepository accountRepository,
@@ -35,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
             _logger = logger;
         }
 
-        protected override async Task HandleCore(UnsubscribeNotificationCommand command)
+        protected override async Task HandleCore(UserIsAuthorizedToSignUnsignedAgreementCommand command)
         {
             _validator.Validate(command);
             

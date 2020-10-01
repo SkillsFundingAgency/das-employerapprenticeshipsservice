@@ -90,7 +90,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                         if (userNotificationSettings.ReceiveNotifications)
                         {
                             await _mediator.SendAsync(
-                                new UnsubscribeNotificationCommand
+                                new UserIsAuthorizedToSignUnsignedAgreementCommand
                                 {
                                     UserRef = userRef,
                                     AccountId = accountId

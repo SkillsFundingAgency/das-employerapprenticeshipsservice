@@ -7,19 +7,19 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
     [TestFixture]
     public  class WhenValidatingUnsubscribeCommand
     {
-        private UnsubscribeNotificationValidator _sut;
+        private UserIsAuthorizedToSignUnsignedAgreementValidator _sut;
 
         [SetUp]
         public void SetUp()
         {
-            _sut = new UnsubscribeNotificationValidator();
+            _sut = new UserIsAuthorizedToSignUnsignedAgreementValidator();
         }
 
         [TestCase("")]
         [TestCase(null)]
         public void ThenUserIdIsNull(string userId)
         {
-            var command = new UnsubscribeNotificationCommand { UserRef = userId, AccountId = 123456 };
+            var command = new UserIsAuthorizedToSignUnsignedAgreementCommand { UserRef = userId, AccountId = 123456 };
             var result = _sut.Validate(command);
 
             result.IsValid().Should().BeFalse();
@@ -29,7 +29,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
         [TestCase(-2)]
         public void AccountIdIsLessThan1(long accountId)
         {
-            var command = new UnsubscribeNotificationCommand { UserRef = "ABBA123", AccountId = accountId };
+            var command = new UserIsAuthorizedToSignUnsignedAgreementCommand { UserRef = "ABBA123", AccountId = accountId };
             var result = _sut.Validate(command);
 
             result.IsValid().Should().BeFalse();
@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
 
         public void CommandIsValid()
         {
-            var command = new UnsubscribeNotificationCommand { UserRef = "ABBA123", AccountId = 123456 };
+            var command = new UserIsAuthorizedToSignUnsignedAgreementCommand { UserRef = "ABBA123", AccountId = 123456 };
             var result = _sut.Validate(command);
 
             result.IsValid().Should().BeTrue();

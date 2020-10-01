@@ -3,9 +3,9 @@ using SFA.DAS.Validation;
 
 namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
 {
-    public class UnsubscribeNotificationValidator : IValidator<UnsubscribeNotificationCommand>
+    public class UserIsAuthorizedToSignUnsignedAgreementValidator : IValidator<UserIsAuthorizedToSignUnsignedAgreementCommand>
     {
-        public ValidationResult Validate(UnsubscribeNotificationCommand item)
+        public ValidationResult Validate(UserIsAuthorizedToSignUnsignedAgreementCommand item)
         {
             var validationResult = new ValidationResult();
 
@@ -22,7 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
             return validationResult;
         }
 
-        public Task<ValidationResult> ValidateAsync(UnsubscribeNotificationCommand item)
+        public Task<ValidationResult> ValidateAsync(UserIsAuthorizedToSignUnsignedAgreementCommand item)
         {
             throw new System.NotImplementedException();
         }

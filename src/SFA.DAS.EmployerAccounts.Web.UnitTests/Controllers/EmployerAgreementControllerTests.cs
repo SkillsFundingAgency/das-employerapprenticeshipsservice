@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -10,6 +11,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.Authentication;
 using SFA.DAS.Common.Domain.Types;
+using SFA.DAS.EmployerAccounts.Commands.IsUserAuthorizedToSignUnsignedAgreement;
 using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
@@ -148,16 +150,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
         [Test]
 
-        public Task ViewAgreementToSign_WhenIAmNotAuthorised_ThenAnErrorIsDisplayed()
+        public Task ViewAgreementToSign_WhenIAmNotAuthorised_ThenAnAccessDeniedViewIsDisplayed()
         {
             return RunAsync(
                 fixtures =>
                 {
                     fixtures.WithUnsignedEmployerAgreement();
-                    fixtures.Orchestrator.Setup(o => o
-                            .UserIsAuthorizedToSignUnsignedAgreement(It.IsAny<EmployerAgreementView>(),
-                                It.IsAny<GetEmployerAgreementRequest>()))
-                        .ReturnsAsync(false);
                 },
                 fixtures => fixtures.Sign(2),
                 (fixtures, result) =>
@@ -251,7 +249,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 EmployerAgreement = new EmployerAgreementView()
             };
 
-            GetSignAgreementViewModel = new SignEmployerAgreementViewModel();
+            GetSignAgreementViewModel = new SignEmployerAgreementViewModel()
+            {
+                EmployerAgreement = new EmployerAgreementView()
+                {
+                    HashedAccountId = HashedAccountId,
+                    HashedAgreementId = HashedAgreementId
+                }
+            };
+
         }
 
         public static class Constants
@@ -294,6 +300,11 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 LegalEntitiesCount = 1
             };
 
+            var isAuthorizedResponse = new OrchestratorResponse<SignAgreementViewModel>
+            {
+                Status = HttpStatusCode.Unauthorized
+            };
+
             Mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntitiesCountByHashedAccountIdRequest>()))
                 .ReturnsAsync(entitiesCountResponse);
 
@@ -305,9 +316,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
             Orchestrator.Setup(x => x.GetById(GetAgreementRequest.AgreementId, GetAgreementRequest.HashedAccountId, GetAgreementRequest.ExternalUserId))
                 .ReturnsAsync(new OrchestratorResponse<EmployerAgreementViewModel> { Data = GetAgreementToSignViewModel });
+
             Orchestrator.Setup(o =>
                     o.GetSignedAgreementViewModel(It.IsAny<GetEmployerAgreementRequest>()))
                 .ReturnsAsync(GetSignAgreementViewModel);
+
+            Orchestrator.Setup(o =>
+                    o.SignAgreement(HashedAgreementId, HashedAccountId, UserId, It.IsAny<DateTime>()))
+                .ReturnsAsync(isAuthorizedResponse);
             return this;
         }
 

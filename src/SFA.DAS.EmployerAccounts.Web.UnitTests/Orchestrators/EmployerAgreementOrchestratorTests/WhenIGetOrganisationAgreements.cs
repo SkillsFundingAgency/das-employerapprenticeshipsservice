@@ -13,7 +13,10 @@ using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System.Linq;
-using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Commands.IsUserAuthorizedToSignUnsignedAgreement;
+using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreement;
+using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -24,12 +27,17 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         private Mock<IMapper> _mapper;
         private EmployerAgreementOrchestrator _orchestrator;
         public string AccountLegalEntityHashedId = "2K7J94";
-        private Mock<IAccountRepository> _accountRepository;
+        public const string HashedAccountId = "ABC123";
+        public const string UserId = "AFV456TGF";
+        public const string HashedAgreementId = "789UHY";
+        public const long AccountLegalEntityId = 1234;
+        public const string HashedAccountLegalEntityId = "THGHFH";
+        public const string LegalEntityName = "FIFTEEN LIMITED";
+        public const string AccountId = "AccountId";
 
         [SetUp]
         public void Arrange()
         {
-            _accountRepository = new Mock<IAccountRepository>();
             _mediator = new Mock<IMediator>();
             _mapper = new Mock<IMapper>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationAgreementsRequest>()))
@@ -39,7 +47,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
                     {
                         new EmployerAgreementDto { SignedDate = DateTime.UtcNow }
                     }
-                });             
+                });
 
             var organisationAgreementViewModel = new List<OrganisationAgreementViewModel>()
             {
@@ -48,7 +56,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
 
             _referenceDataService = new Mock<IReferenceDataService>();
             _mapper.Setup(m => m.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(It.IsAny<ICollection<EmployerAgreementDto>>())).Returns(organisationAgreementViewModel);
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _mapper.Object, _referenceDataService.Object, _accountRepository.Object);
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _mapper.Object, _referenceDataService.Object);
         }
 
         [Test]
@@ -96,7 +104,72 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             var actual = await _orchestrator.GetOrganisationAgreements(AccountLegalEntityHashedId);
 
             //Assert
-            Assert.IsNotNull(actual.Data.Any());            
+            Assert.IsNotNull(actual.Data.Any());
+        }
+
+        [Test]
+        public async Task ThrowUnauthorizedException_IfUserIsNotAuthorized()
+        {
+            //Arrange
+            var signAgreementViewModel = new SignEmployerAgreementViewModel()
+            {
+                EmployerAgreement = new EmployerAgreementView()
+                {
+                    HashedAccountId = HashedAccountId,
+                    HashedAgreementId = HashedAgreementId
+                }
+            };
+
+            var employerAgreementResponse = new GetEmployerAgreementResponse()
+            {
+                EmployerAgreement = new AgreementDto()
+                {
+                    LegalEntity = new AccountSpecificLegalEntityDto()
+                    {
+                        AccountLegalEntityId = AccountLegalEntityId
+                    },
+                    HashedAccountId = HashedAccountId,
+                    HashedAgreementId = HashedAgreementId
+                }
+            };
+
+            var agreementDto = new AgreementDto()
+            {
+                HashedAccountId = HashedAccountId,
+                HashedAgreementId = HashedAgreementId,
+                LegalEntity = new AccountSpecificLegalEntityDto()
+                {
+                    AccountLegalEntityId = AccountLegalEntityId
+                }
+            };
+
+            var lastSignedAgreementResponse = new GetLastSignedAgreementResponse
+            {
+                LastSignedAgreement = agreementDto
+            };
+
+            _mediator.Setup(x => x
+                    .SendAsync(It.IsAny<GetEmployerAgreementRequest>()))
+                .ReturnsAsync(employerAgreementResponse);
+
+            _mediator.Setup(x => x
+                    .SendAsync(It.IsAny<GetLastSignedAgreementRequest>()))
+                .ReturnsAsync(lastSignedAgreementResponse);
+
+
+            _mediator.Setup(x => x
+                    .SendAsync(It.IsAny<UserIsAuthorizedToSignUnsignedAgreementCommand>()))
+                .ReturnsAsync(new UserIsAuthorizedToSignUnsignedAgreementCommandResponse { IsAuthorized = false });
+
+            _mapper.Setup(m => m.Map<GetEmployerAgreementResponse, SignEmployerAgreementViewModel>(It.IsAny<GetEmployerAgreementResponse>())).Returns(signAgreementViewModel);
+            
+            _mapper.Setup(m => m.Map<EmployerAgreementView, AgreementDto>(It.IsAny<EmployerAgreementView>())).Returns(agreementDto);
+            
+            //Act
+            var actual = await _orchestrator.SignAgreement(HashedAgreementId,HashedAccountId,UserId,It.IsAny<DateTime>());
+
+            //Assert
+            Assert.AreEqual(HttpStatusCode.Unauthorized,actual.Status);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
 {
-    public class UnsubscribeNotificationCommand : IAsyncRequest
+    public class UserIsAuthorizedToSignUnsignedAgreementCommand : IAsyncRequest
     {
         public string UserRef { get; set; }
 
