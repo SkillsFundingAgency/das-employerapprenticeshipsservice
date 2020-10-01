@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -12,7 +11,6 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
-using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.Validation;
 
@@ -23,11 +21,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         private Mock<IMediator> _mediator;
         private Mock<IReferenceDataService> _referenceDataService;
         private EmployerAgreementOrchestrator _orchestrator;
-        private EmployerAgreementBuilder EmployerAgreementBuilder { get; }
+        private Mock<IAccountRepository> _accountRepository;
 
         [SetUp]
         public void Arrange()
         {
+            _accountRepository = new Mock<IAccountRepository>();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetEmployerAgreementPdfRequest>()))
                 .ReturnsAsync(new GetEmployerAgreementPdfResponse { FileStream = new MemoryStream() });
@@ -36,7 +35,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
 
             _referenceDataService = new Mock<IReferenceDataService>();
 
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext));
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object, _accountRepository.Object);
         }
 
         [Test]
@@ -80,7 +79,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             var actual = await _orchestrator.GetSignedPdfEmployerAgreement("", "", "");
 
             //Assert
-            Assert.IsNotEmpty((IEnumerable) actual.FlashMessage.ErrorMessages);
+            Assert.IsNotEmpty(actual.FlashMessage.ErrorMessages);
             Assert.AreEqual(HttpStatusCode.BadRequest, actual.Status);
         }
 

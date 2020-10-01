@@ -20,8 +20,6 @@ using SFA.DAS.EmployerAccounts.Queries.GetSignedEmployerAgreementPdf;
 using SFA.DAS.EmployerAccounts.Queries.GetUnsignedEmployerAgreement;
 using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
-using System.Linq;
-using System.Data.Entity;
 using SFA.DAS.EmployerAccounts.Queries.GetLastSignedAgreement;
 
 namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
@@ -31,21 +29,22 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
         private readonly IReferenceDataService _referenceDataService;
-        private readonly Lazy<EmployerAccountsDbContext> _database;
+        private readonly IAccountRepository _accountRepository;
 
         protected EmployerAgreementOrchestrator()
         {
+
         }
 
         public EmployerAgreementOrchestrator(
             IMediator mediator,
             IMapper mapper,
-            IReferenceDataService referenceDataService, Lazy<EmployerAccountsDbContext> database) : base(mediator)
+            IReferenceDataService referenceDataService, IAccountRepository accountRepository) : base(mediator)
         {
             _mediator = mediator;
             _mapper = mapper;
             _referenceDataService = referenceDataService;
-            _database = database;
+            _accountRepository = accountRepository;
         }
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementListViewModel>> Get(string hashedId,
@@ -190,7 +189,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
         public virtual async Task<bool> UserIsAuthorizedToSignUnsignedAgreement(EmployerAgreementView employerAgreement, GetEmployerAgreementRequest message)
         {
             var userRef = Guid.Parse(message.ExternalUserId);
-            var caller = await _database.Value.Memberships.Where(x => x.AccountId == employerAgreement.AccountId && x.User.Ref == userRef).SingleOrDefaultAsync();
+            var caller = await _accountRepository.GetMembershipUser(employerAgreement.AccountId, userRef);
 
             if (caller == null)
             {

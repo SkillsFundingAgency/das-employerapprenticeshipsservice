@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
@@ -9,6 +10,7 @@ using SFA.DAS.EmployerAccounts.Configuration;
 using SFA.DAS.EmployerAccounts.MarkerInterfaces;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 using SFA.DAS.NLog.Logger;
@@ -215,6 +217,13 @@ namespace SFA.DAS.EmployerAccounts.Data
                 commandType: CommandType.StoredProcedure);
 
             return result.ToList();
+        }
+
+        public async Task<Membership> GetMembershipUser(long accountId, Guid userRef)
+        {
+            return await _db.Value.Memberships
+                .Where(x => x.AccountId == accountId && x.User.Ref == userRef)
+                .SingleOrDefaultAsync();
         }
 
         public Task RemovePayeFromAccount(long accountId, string payeRef)

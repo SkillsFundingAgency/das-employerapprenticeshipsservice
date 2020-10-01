@@ -9,7 +9,6 @@ using NUnit.Framework;
 using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Queries.GetAccountLegalEntityRemove;
-using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.EmployerAccounts.Web.Orchestrators;
 using SFA.DAS.Validation;
 
@@ -20,16 +19,16 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         private Mock<IMediator> _mediator;
         private Mock<IReferenceDataService> _referenceDataService;
         private EmployerAgreementOrchestrator _orchestrator;
-
+        private Mock<IAccountRepository> _accountRepository;
         private const string ExpectedHahsedAccountId = "RT456";
         private const string ExpectedHashedAccountLegalEntityId = "RRTE56";
         private const string ExpectedUserId = "TYG68UY";
         private const string ExpectedName = "Test Name";
-        private EmployerAgreementBuilder EmployerAgreementBuilder { get; }
 
         [SetUp]
         public void Arrange()
         {
+            _accountRepository = new Mock<IAccountRepository>();
             _mediator = new Mock<IMediator>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetAccountLegalEntityRemoveRequest>()))
                 .ReturnsAsync(new GetAccountLegalEntityRemoveResponse
@@ -42,7 +41,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
             _referenceDataService = new Mock<IReferenceDataService>();
 
             _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, Mock.Of<IMapper>(), _referenceDataService.Object,
-                new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext));
+                _accountRepository.Object);
         }
 
         [Test]

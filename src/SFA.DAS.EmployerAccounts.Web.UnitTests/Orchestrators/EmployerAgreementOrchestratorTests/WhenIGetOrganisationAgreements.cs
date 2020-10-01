@@ -14,7 +14,6 @@ using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using SFA.DAS.Validation;
 using System.Linq;
 using SFA.DAS.EmployerAccounts.Data;
-using SFA.DAS.EmployerAccounts.TestCommon;
 
 namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreementOrchestratorTests
 {
@@ -24,12 +23,13 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
         private Mock<IReferenceDataService> _referenceDataService;
         private Mock<IMapper> _mapper;
         private EmployerAgreementOrchestrator _orchestrator;
-        private EmployerAgreementBuilder EmployerAgreementBuilder { get; }
         public string AccountLegalEntityHashedId = "2K7J94";
+        private Mock<IAccountRepository> _accountRepository;
 
         [SetUp]
         public void Arrange()
         {
+            _accountRepository = new Mock<IAccountRepository>();
             _mediator = new Mock<IMediator>();
             _mapper = new Mock<IMapper>();
             _mediator.Setup(x => x.SendAsync(It.IsAny<GetOrganisationAgreementsRequest>()))
@@ -48,7 +48,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.EmployerAgreement
 
             _referenceDataService = new Mock<IReferenceDataService>();
             _mapper.Setup(m => m.Map<ICollection<EmployerAgreementDto>, ICollection<OrganisationAgreementViewModel>>(It.IsAny<ICollection<EmployerAgreementDto>>())).Returns(organisationAgreementViewModel);
-            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _mapper.Object, _referenceDataService.Object, new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext));
+            _orchestrator = new EmployerAgreementOrchestrator(_mediator.Object, _mapper.Object, _referenceDataService.Object, _accountRepository.Object);
         }
 
         [Test]

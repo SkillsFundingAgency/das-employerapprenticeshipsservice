@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SFA.DAS.EmployerAccounts.Models;
 using SFA.DAS.EmployerAccounts.Models.Account;
+using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.PAYE;
 
@@ -25,5 +26,6 @@ namespace SFA.DAS.EmployerAccounts.Data
         Task UpdateLegalEntityDetailsForAccount(long accountLegalEntityId, string name, string address);
         Task UpdateAccountLegalEntityPublicHashedId(long accountLegalEntityId);
         Task<long[]> GetAccountLegalEntitiesWithoutPublicHashId(long firstId, int count);
+        Task<Membership> GetMembershipUser(long accountId, Guid userRef);
     }
 }
