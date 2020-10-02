@@ -37,7 +37,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
                                AccountId = 123456
                            };
 
-            _mockValidator = new Mock<IValidator<UserIsAuthorizedToSignUnsignedAgreementCommand>>();
+            _mockValidator = new Mock<IValidator<UnsubscribeNotificationCommand>>();
             _notiApi = new Mock<INotificationsApi>();
             _userRepo = new Mock<IUserRepository>();
             _accountRepository = new Mock<IAccountRepository>();
@@ -65,7 +65,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
                                           }
                                   });
 
-            _sut = new UserIsAuthorizedToSignUnsignedAgreementHandler(
+            _sut = new UnsubscribeNotificationHandler(
                 _mockValidator.Object, 
                 _notiApi.Object, 
                 _userRepo.Object, 
