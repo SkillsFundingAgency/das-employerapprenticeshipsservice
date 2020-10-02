@@ -20,9 +20,9 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
     [TestFixture]
     public class WhenUnsubscribingFromNotification
     {
-        private UserIsAuthorizedToSignUnsignedAgreementHandler _sut;
-        private Mock<IValidator<UserIsAuthorizedToSignUnsignedAgreementCommand>> _mockValidator;
-        private UserIsAuthorizedToSignUnsignedAgreementCommand _command;
+        private UnsubscribeNotificationHandler _sut;
+        private Mock<IValidator<UnsubscribeNotificationCommand>> _mockValidator;
+        private UnsubscribeNotificationCommand _command;
         private Mock<IAccountRepository> _accountRepository;
         private Mock<IUserRepository> _userRepo;
 
@@ -31,8 +31,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.UnsubscribeNotificationTes
         [SetUp]
         public void SetUp()
         {
-            _command = new UserIsAuthorizedToSignUnsignedAgreementCommand
-                           {
+            _command = new UnsubscribeNotificationCommand
+            {
                                UserRef = "ABBA12",
                                AccountId = 123456
                            };
