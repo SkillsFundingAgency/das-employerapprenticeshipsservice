@@ -85,39 +85,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                 assert: fixtures => Assert.AreEqual(user.FullName, fixtures.Response.EmployerAgreement.SignedByName));
         }
 
-        [Test]
-        public Task ThenIfTheUserIsNotConnectedToTheAccountAnUnauthorizedErrorIsReturned()
-        {
-            EmployerAgreement signedAgreement = null;
-            User user = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                    .WithAccount(AccountId, HashedAccountId)
-                    .WithAccount(AccountId + 1, "XXX945")
-                    .WithSignedAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, DateTime.Now.AddDays(-20), out signedAgreement)
-                    .WithUser(AccountId + 1, "Buck", "Rogers", Role.Owner, out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
-                assert: (f, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
-        }
-
-        [TestCase(Role.Transactor)]
-        [TestCase(Role.Viewer)]
-        [TestCase(Role.None)]
-        public Task ThenIfTheUserIsNotAnOwnerOnTheAccountAndItIsNotSignedAnUnauthorizedErrorIsReturned(Role role)
-        {
-            EmployerAgreement pendingAgreement = null;
-            User user = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                    .WithAccount(AccountId, HashedAccountId)
-                    .WithPendingAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
-                    .WithUser(AccountId, "Buck", "Rogers", role, out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
-                assert: (f, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
-        }
-
         [TestCase(Role.Transactor)]
         [TestCase(Role.Viewer)]
         [TestCase(Role.Owner)]
@@ -134,22 +101,6 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Queries.GetEmployerAgreementQueryTe
                     .WithUser(AccountId, "Buck", "Rogers", role, out user),
                 act: fixtures => fixtures.Handle(HashedAccountId, signedAgreement.Id, user.Ref),
                 assert: fixtures => Assert.AreEqual(signedAgreement.Id, fixtures.Response.EmployerAgreement.Id));
-        }
-
-        [Test]
-        public Task ThenIfTheAgreementIsNotConnectedToTheAccountTheRequestIsNotAuthorized()
-        {
-            EmployerAgreement pendingAgreement = null;
-            User user = null;
-
-            return RunAsync(
-                arrange: fixtures => fixtures
-                    .WithAccount(AccountId, HashedAccountId)
-                    .WithAccount(AccountId + 1, "XXX945")
-                    .WithPendingAgreement(AccountId + 1, LegalEntityId, AccountLegalEntityId, 3, out pendingAgreement)
-                    .WithUser(AccountId, "Buck", "Rogers", Role.Owner, out user),
-                act: fixtures => fixtures.Handle(HashedAccountId, pendingAgreement.Id, user.Ref),
-                assert: (f, r) => r.ShouldThrowExactly<UnauthorizedAccessException>());
         }
     }
 

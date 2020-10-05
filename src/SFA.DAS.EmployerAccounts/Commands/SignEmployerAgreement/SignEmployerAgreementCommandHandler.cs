@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using SFA.DAS.Audit.Types;
 using SFA.DAS.Common.Domain.Types;
 using SFA.DAS.EmployerAccounts.Commands.AuditCommand;
 using SFA.DAS.EmployerAccounts.Commands.PublishGenericEvent;
 using SFA.DAS.EmployerAccounts.Data;
+using SFA.DAS.EmployerAccounts.Dtos;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
 using SFA.DAS.EmployerAccounts.Messages.Events;
@@ -34,7 +38,9 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         private readonly IMediator _mediator;
         private readonly IEventPublisher _eventPublisher;
         private readonly ICommitmentService _commitmentService;
-        
+        private readonly Lazy<EmployerAccountsDbContext> _database;
+        private readonly IConfigurationProvider _configurationProvider;
+
         public SignEmployerAgreementCommandHandler(
             IMembershipRepository membershipRepository,
             IEmployerAgreementRepository employerAgreementRepository,
@@ -44,8 +50,12 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             IGenericEventFactory genericEventFactory,
             IMediator mediator,
             IEventPublisher eventPublisher,
-            ICommitmentService commitmentService)
+            ICommitmentService commitmentService,
+            Lazy<EmployerAccountsDbContext> database, 
+            IConfigurationProvider configurationProvider)
         {
+            _database = database;
+            _configurationProvider = configurationProvider;
             _membershipRepository = membershipRepository;
             _employerAgreementRepository = employerAgreementRepository;
             _hashingService = hashingService;
@@ -60,16 +70,30 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         public async Task<SignEmployerAgreementCommandResponse> Handle(SignEmployerAgreementCommand message)
         {
             await ValidateRequest(message);
+
             var owner = await VerifyUserIsAccountOwner(message);
             var userResponse = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = message.ExternalUserId });
 
             var agreementId = _hashingService.DecodeValue(message.HashedAgreementId);
 
+            var employerAgreement = await _database.Value.Agreements.ProjectTo<AgreementDto>(_configurationProvider)
+                .SingleOrDefaultAsync(x => x.Id.Equals(agreementId));
+            
+            if (employerAgreement == null)
+                return new SignEmployerAgreementCommandResponse();
+
+            employerAgreement.HashedAccountId = _hashingService.HashValue(employerAgreement.AccountId);
+
+            if (!await UserIsAuthorizedToSignUnsignedAgreement(employerAgreement, message))
+            {
+                throw new UnauthorizedAccessException();
+            }
+
             await SignAgreement(message, agreementId, owner);
 
             var agreement = await _employerAgreementRepository.GetEmployerAgreement(agreementId);
 
-            var hashedLegalEntityId = _hashingService.HashValue((long)agreement.LegalEntityId);
+            var hashedLegalEntityId = _hashingService.HashValue(agreement.LegalEntityId);
 
             await Task.WhenAll(
                 AddAuditEntry(message, agreement.AccountId, agreementId),
@@ -84,15 +108,32 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             };
         }
 
+        private async Task<bool> UserIsAuthorizedToSignUnsignedAgreement(AgreementDto employerAgreement, SignEmployerAgreementCommand message)
+        {
+            var userRef = Guid.Parse(message.ExternalUserId);
+            var caller = await _database.Value.Memberships.Where(x => x.AccountId == employerAgreement.AccountId && x.User.Ref == userRef).SingleOrDefaultAsync();
+
+            if (caller == null)
+            {
+                return false;
+            }
+
+            if (employerAgreement.HashedAccountId != message.HashedAccountId || (employerAgreement.StatusId != EmployerAgreementStatus.Signed && caller.Role != Role.Owner))
+            {
+                return false;
+            }
+
+            return true;
+        }
         private async Task PublishEvents(SignEmployerAgreementCommand message, string hashedLegalEntityId, EmployerAgreementView agreement, MembershipView owner, string correlationId)
         {
             await Task.WhenAll(
                 PublishLegalGenericEvent(message, hashedLegalEntityId),
-                PublihAgreementSignedMessage(agreement, owner, correlationId)
+                PublishAgreementSignedMessage(agreement, owner, correlationId)
             );
         }
 
-        private async Task PublihAgreementSignedMessage(EmployerAgreementView agreement, MembershipView owner, string correlationId)
+        private async Task PublishAgreementSignedMessage(EmployerAgreementView agreement, MembershipView owner, string correlationId)
         {
             var commitments = await _commitmentService.GetEmployerCommitments(agreement.AccountId);
             var accountHasCommitments = commitments?.Any() ?? false;
