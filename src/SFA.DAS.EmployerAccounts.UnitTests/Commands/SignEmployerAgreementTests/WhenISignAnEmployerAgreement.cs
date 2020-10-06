@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using FluentAssertions;
 using MediatR;
 using Moq;
@@ -14,16 +13,13 @@ using SFA.DAS.EmployerAccounts.Data;
 using SFA.DAS.EmployerAccounts.Events.Agreement;
 using SFA.DAS.EmployerAccounts.Factories;
 using SFA.DAS.EmployerAccounts.Interfaces;
-using SFA.DAS.EmployerAccounts.Mappings;
 using SFA.DAS.EmployerAccounts.Messages.Events;
 using SFA.DAS.EmployerAccounts.Models;
-using SFA.DAS.EmployerAccounts.Models.Account;
 using SFA.DAS.EmployerAccounts.Models.AccountTeam;
 using SFA.DAS.EmployerAccounts.Models.Commitments;
 using SFA.DAS.EmployerAccounts.Models.EmployerAgreement;
 using SFA.DAS.EmployerAccounts.Models.UserProfile;
 using SFA.DAS.EmployerAccounts.Queries.GetUserByRef;
-using SFA.DAS.EmployerAccounts.TestCommon;
 using SFA.DAS.HashingService;
 using SFA.DAS.NServiceBus.Testing.Services;
 using SFA.DAS.Validation;
@@ -47,55 +43,36 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         private AgreementSignedEvent _agreementEvent;
         private Mock<ICommitmentService> _commintmentService;
         private TestableEventPublisher _eventPublisher;
+
         private const long AccountId = 223344;
         private const long AgreementId = 123433;
         private const long LegalEntityId = 111333;
         private const string OrganisationName = "Foo";
         private const string HashedLegalEntityId = "2635JHG";
         private const long AccountLegalEntityId = 9568456;
-        const string HashedAccountId = "ACC123";
         private const AgreementType AgreementType = Common.Domain.Types.AgreementType.NonLevyExpressionOfInterest;
-        private EmployerAgreementBuilder EmployerAgreementBuilder { get; set; }
-        private IConfigurationProvider ConfigurationProvider { get; set; }
 
         [SetUp]
         public void Setup()
         {
-            EmployerAgreementBuilder = new EmployerAgreementBuilder();
-            EmployerAgreementBuilder.EvaluateSignedAndPendingAgreementIdsForAllAccountLegalEntities();
-            EmployerAgreementBuilder.SetupMockDbContext();
-            EmployerAgreement agreement;
-            User user;
+            _command = new SignEmployerAgreementCommand
+            {
+                HashedAccountId = "1AVCFD",
+                HashedAgreementId = "2EQWE34",
+                ExternalUserId = Guid.NewGuid().ToString(),
+                SignedDate = DateTime.Now
+            };
 
-            EmployerAgreementBuilder.WithAccount(AccountId, HashedAccountId);
-            EmployerAgreementBuilder.WithAgreement(AccountId, LegalEntityId, AccountLegalEntityId, 1,
-                EmployerAgreementStatus.Pending, out agreement);
-            var account = EmployerAgreementBuilder.GetAccount(AccountId);
-            EmployerAgreementBuilder.WithUser(account.Id, "Buck", "Rogers", Role.Owner, out user);
-            
-            _command = BuildRequest(HashedAccountId, agreement.Id, user.Ref);
             _membershipRepository = new Mock<IMembershipRepository>();
 
             _hashingService = new Mock<IHashingService>();
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAccountId)).Returns(AccountId);
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(AgreementId);
             _hashingService.Setup(x => x.HashValue(It.IsAny<long>())).Returns(HashedLegalEntityId);
-            _hashingService.Setup(x => x.HashValue(AccountId)).Returns(HashedAccountId);
-            _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(agreement.Id);
 
             _validator = new Mock<IValidator<SignEmployerAgreementCommand>>();
-            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult
-            {
-                ValidationDictionary = new Dictionary<string, string>()
-            });
-            ConfigurationProvider = new MapperConfiguration(c =>
-            {
-                c.AddProfile<AccountMappings>();
-                c.AddProfile<AgreementMappings>();
-                c.AddProfile<EmploymentAgreementStatusMappings>();
-                c.AddProfile<LegalEntityMappings>();
+            _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string>() });
 
-            });
 
             _agreement = new EmployerAgreementView
             {
@@ -142,8 +119,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 _genericEventFactory.Object,
                 _mediator.Object,
                 _eventPublisher,
-                _commintmentService.Object,
-                new Lazy<EmployerAccountsDbContext>(() => EmployerAgreementBuilder.EmployerAccountDbContext), ConfigurationProvider);
+                _commintmentService.Object);
 
             _owner = new MembershipView
             {
@@ -158,23 +134,10 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
                 .ReturnsAsync(_owner);
         }
 
-        public SignEmployerAgreementCommand BuildRequest(string hashedAccountId, long agreementId, Guid externalUserId)
-        {
-            var agreementHashId = EmployerAgreementBuilder.HashingService.HashValue(agreementId);
-            var request = new SignEmployerAgreementCommand
-            {
-                HashedAccountId = hashedAccountId,
-                HashedAgreementId = agreementHashId,
-                ExternalUserId = externalUserId.ToString(),
-                SignedDate = DateTime.Now
-            };
-
-            return request;
-        }
-
         [Test]
         public void ThenTheValidatorIsCalledAndAnInvalidRequestExceptionIsThrownIfItIsNotValid()
         {
+            //Arrange
             _validator.Setup(x => x.ValidateAsync(It.IsAny<SignEmployerAgreementCommand>())).ReturnsAsync(new ValidationResult { ValidationDictionary = new Dictionary<string, string> { { "", "" } } });
 
             //Act Assert
@@ -207,7 +170,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
         public async Task ThenIfTheCommandIsValidTheRepositoryIsCalledWithThePassedParameters()
         {
             //Arrange
-            const int agreementId = 1000;
+            const int agreementId = 87761263;
             _hashingService.Setup(x => x.DecodeValue(_command.HashedAgreementId)).Returns(agreementId);
 
             //Act
@@ -232,7 +195,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             await _handler.Handle(_command);
 
             //Assert
-            _agreementRepository.Verify(x => x.SetAccountLegalEntityAgreementDetails(_agreement.AccountLegalEntityId, null, null, _agreement.Id, _agreement.VersionNumber));
+            _agreementRepository.Verify(x => x.SetAccountLegalEntityAgreementDetails(_agreement.AccountLegalEntityId, (long?)null, (int?)null, _agreement.Id, _agreement.VersionNumber));
         }
 
         [Test]
@@ -242,7 +205,7 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Commands.SignEmployerAgreementTests
             await _handler.Handle(_command);
 
             //Assert
-            _agreementRepository.Verify(x => x.GetEmployerAgreement(1000), Times.Once);
+            _agreementRepository.Verify(x => x.GetEmployerAgreement(AgreementId), Times.Once);
             _hashingService.Verify(x => x.HashValue(_agreement.LegalEntityId), Times.Once);
             _agreementEventFactory.Verify(x => x.CreateSignedEvent(_command.HashedAccountId, HashedLegalEntityId,
                 _command.HashedAgreementId), Times.Once);
