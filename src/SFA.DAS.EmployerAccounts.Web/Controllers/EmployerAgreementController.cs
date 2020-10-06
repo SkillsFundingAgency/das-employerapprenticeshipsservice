@@ -155,6 +155,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var response = await _orchestrator.SignAgreement(agreementId, hashedAccountId, userInfo, DateTime.UtcNow);
 
+            if (response.Status == HttpStatusCode.Unauthorized)
+            {
+                return View(response);
+            }
+
             var user = await _mediator.SendAsync(new GetUserByRefQuery { UserRef = userInfo });
 
             if (!string.IsNullOrWhiteSpace(user.User.CorrelationId))
@@ -169,6 +174,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
                     return Redirect(@Url.ProviderRelationshipsAction($"providers/invitation/{user.User.CorrelationId}"));
                 }
             }
+
 
             if (response.Status == HttpStatusCode.OK)
             {
