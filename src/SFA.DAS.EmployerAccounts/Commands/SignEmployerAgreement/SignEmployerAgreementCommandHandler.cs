@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         private readonly IMediator _mediator;
         private readonly IEventPublisher _eventPublisher;
         private readonly ICommitmentService _commitmentService;
-        
+
         public SignEmployerAgreementCommandHandler(
             IMembershipRepository membershipRepository,
             IEmployerAgreementRepository employerAgreementRepository,
@@ -142,7 +142,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
 
         private Task PublishAgreementSignedMessage(
             long accountId, long accountLegalEntityId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, Guid currentUserRef, 
+            bool cohortCreated, string currentUserName, Guid currentUserRef,
             AgreementType agreementType, int versionNumber, string correlationId)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
