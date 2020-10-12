@@ -23,7 +23,7 @@ namespace SFA.DAS.EmployerFinance.Formatters.TransactionDowloads
 			
 			var csvContent = builder.ToString();
 
-            return Encoding.UTF8.GetBytes(csvContent);
+            return System.Text.Encoding.UTF8.GetBytes(csvContent);
         }
 
         protected abstract string CreateHeaders();

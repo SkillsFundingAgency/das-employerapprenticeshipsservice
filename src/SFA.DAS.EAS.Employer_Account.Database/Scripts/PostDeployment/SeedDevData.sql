@@ -25,8 +25,8 @@
 			DECLARE @agreementVersion INT
 
 			SET IDENTITY_INSERT [employer_account].[Account] ON
-			INSERT INTO [employer_account].[Account] (Id, HashedId, PublicHashedId, Name, CreatedDate)
-			VALUES (@accountId, @accountHashedId, @accountPublicHashedId, @legalEntityName, GETDATE())
+			INSERT INTO [employer_account].[Account] (Id, HashedId, PublicHashedId, Name, CreatedDate, ApprenticeshipEmployerType)
+			VALUES (@accountId, @accountHashedId, @accountPublicHashedId, @legalEntityName, GETDATE(), 1)
 			SET IDENTITY_INSERT [employer_account].[Account] OFF
 		
 			INSERT INTO [employer_account].[Membership] (AccountId, UserId, Role)
@@ -65,7 +65,7 @@ DECLARE @userRef UNIQUEIDENTIFIER = '87df36f4-78ad-47c7-84d7-900ef4c39920'
 
 IF (NOT EXISTS (SELECT 1 FROM [employer_account].[User] WHERE UserRef = @userRef))
 BEGIN
-	EXECUTE [employer_account].[UpsertUser] @userRef, 'test@account.com', 'Test', 'Account' 
+	EXECUTE [employer_account].[UpsertUser] @userRef, 'test@account.com', 'Test', 'Account' , null
 END
 
 DECLARE @userId BIGINT = (SELECT Id FROM [employer_account].[User] WHERE UserRef = @userRef)

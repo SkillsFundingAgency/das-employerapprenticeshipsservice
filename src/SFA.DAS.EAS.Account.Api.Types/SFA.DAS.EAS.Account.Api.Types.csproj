@@ -11,7 +11,7 @@
     <Authors>Esfa</Authors>
     <Title>Types used by the DAS Employer Account Api</Title>
     <Description>Types used by the DAS Employer Account Api</Description>
-    <PackageLicenseUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicense>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/blob/master/LICENSE</PackageLicense>
     <PackageProjectUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice/tree/master/src/SFA.DAS.EAS.Account.Api.Types</PackageProjectUrl>
     <RepositoryUrl>https://github.com/SkillsFundingAgency/das-employerapprenticeshipsservice</RepositoryUrl>
     <PackageTags>Esfa;Das;</PackageTags>

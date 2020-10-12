@@ -52,6 +52,9 @@ namespace SFA.DAS.EmployerAccounts.Mappings
                 .ForMember(
                     v => v.AgreementType,
                     o => o.MapFrom(a => a.Template.AgreementType))
+                .ForMember(
+                    d => d.SignedByEmail, 
+                    o => o.Ignore());
                 ;
 
             CreateMap<EmployerAgreement, EmployerAgreementDto>()

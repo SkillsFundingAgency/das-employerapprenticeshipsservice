@@ -9,8 +9,8 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
 {
     class WhenIGetContentBanner
     {
-        private Mock<IClientContentApiClient> _mockContentBannerApiClient;
-        private IClientContentService _sut;
+        private Mock<IContentApiClient> _mockContentBannerApiClient;
+        private IContentService _sut;
         private string _testData;
         
         [SetUp]
@@ -19,12 +19,12 @@ namespace SFA.DAS.EmployerAccounts.UnitTests.Services.ContentBanner
             _testData = "<h1>My First Heading</h1>" +
                         "<p>My first paragraph.</p>";
 
-            _mockContentBannerApiClient = new Mock<IClientContentApiClient>();
+            _mockContentBannerApiClient = new Mock<IContentApiClient>();
             _mockContentBannerApiClient
                 .Setup(m => m.Get("banner","eas-acc"))
                 .ReturnsAsync(_testData);
 
-            _sut = new ClientContentService(_mockContentBannerApiClient.Object);
+            _sut = new ContentService(_mockContentBannerApiClient.Object);
         }
 
         [Test]

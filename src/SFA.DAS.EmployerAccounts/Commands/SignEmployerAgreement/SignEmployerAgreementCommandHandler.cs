@@ -34,7 +34,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         private readonly IMediator _mediator;
         private readonly IEventPublisher _eventPublisher;
         private readonly ICommitmentService _commitmentService;
-        
+
         public SignEmployerAgreementCommandHandler(
             IMembershipRepository membershipRepository,
             IEmployerAgreementRepository employerAgreementRepository,
@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
             var commitments = await _commitmentService.GetEmployerCommitments(agreement.AccountId);
             var accountHasCommitments = commitments?.Any() ?? false;
 
-            await PublishAgreementSignedMessage(agreement.AccountId, agreement.LegalEntityId, agreement.LegalEntityName,
+            await PublishAgreementSignedMessage(agreement.AccountId, agreement.AccountLegalEntityId, agreement.LegalEntityId, agreement.LegalEntityName,
                 agreement.Id, accountHasCommitments, owner.FullName(), owner.UserRef, agreement.AgreementType,
                 agreement.VersionNumber, correlationId);
         }
@@ -141,14 +141,15 @@ namespace SFA.DAS.EmployerAccounts.Commands.SignEmployerAgreement
         }
 
         private Task PublishAgreementSignedMessage(
-            long accountId, long legalEntityId, string legalEntityName, long agreementId,
-            bool cohortCreated, string currentUserName, Guid currentUserRef, 
+            long accountId, long accountLegalEntityId, long legalEntityId, string legalEntityName, long agreementId,
+            bool cohortCreated, string currentUserName, Guid currentUserRef,
             AgreementType agreementType, int versionNumber, string correlationId)
         {
             return _eventPublisher.Publish(new SignedAgreementEvent
             {
                 AccountId = accountId,
                 AgreementId = agreementId,
+                AccountLegalEntityId = accountLegalEntityId,
                 LegalEntityId = legalEntityId,
                 OrganisationName = legalEntityName,
                 CohortCreated = cohortCreated,

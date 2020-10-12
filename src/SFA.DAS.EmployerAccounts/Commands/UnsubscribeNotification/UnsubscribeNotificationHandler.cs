@@ -48,38 +48,6 @@ namespace SFA.DAS.EmployerAccounts.Commands.UnsubscribeNotification
 
             setting.ReceiveNotifications = false;
             await _accountRepository.UpdateUserAccountSettings(command.UserRef, settings);
-
-            try
-            {
-                var user = _userRepository.GetUserByRef(command.UserRef);
-                await Task.WhenAll(user);
-               _logger.Info($"Sending email to unsubscriber: {user.Result.Id}");
-                var email = CreateEmail(user.Result, setting.Name, command.NotificationSettingUrl);
-                await _notificationsApi.SendEmail(email);
-            }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Error sending email to notifications api");
-                throw;
-            }
-        }
-
-        private Email CreateEmail(User user, string accountName, string notificationSettingUrl)
-        {
-            return new Email
-            {
-                RecipientsAddress = user.Email,
-                TemplateId = "EmployerUnsubscribeAlertSummaryNotification",
-                ReplyToAddress = "noreply@sfa.gov.uk",
-                Subject = "UnsubscribeSuccessful",
-                SystemId = "x",
-                Tokens = new Dictionary<string, string>
-                        {
-                            { "name", user.FirstName },
-                            { "account_name", accountName },
-                            { "link_notification_page", notificationSettingUrl ?? string.Empty }
-                        }
-            };
         }
     }
 }

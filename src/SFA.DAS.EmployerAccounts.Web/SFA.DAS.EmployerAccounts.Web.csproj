@@ -123,7 +123,7 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Common.Domain" Version="1.4.283" />
     <PackageReference Include="SFA.DAS.EmployerAccounts.ReadStore">
-      <Version>1.6.2103</Version>
+      <Version>1.6.2978</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.EmployerUsers.WebClientComponents" Version="1.0.0.52781" />
     <PackageReference Include="SFA.DAS.HashingService" Version="1.0.183" />
@@ -872,6 +872,7 @@
     <Content Include="Views\EmployerTeam\Empty.cshtml" />
     <Content Include="Views\EmployerAgreement\AcceptedEmployerAgreement.cshtml" />
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v4.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">

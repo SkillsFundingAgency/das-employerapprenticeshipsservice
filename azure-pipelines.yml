@@ -27,6 +27,11 @@ resources:
     endpoint: "GitHub (SFA)"  
 
 steps:
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk 2.2.x'
+  inputs:
+    version: 2.2.x
+
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:
@@ -66,8 +71,6 @@ steps:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-
-- template: azure-pipelines-templates/dependency-check.yml@das-platform-building-blocks    
     
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'

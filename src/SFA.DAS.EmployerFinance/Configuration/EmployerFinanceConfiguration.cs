@@ -7,10 +7,13 @@ namespace SFA.DAS.EmployerFinance.Configuration
 {
     public class EmployerFinanceConfiguration : ITopicMessagePublisherConfiguration
     {
+        public string ApplicationId { get; set; }
         public string AllowedHashstringCharacters { get; set; }
         public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
+        public ContentClientApiConfiguration ContentApi { get; set; }
         public string DashboardUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
+        public int DefaultCacheExpirationInMinutes { get; set; }
         public string EmployerAccountsBaseUrl { get; set; }
         public string EmployerCommitmentsBaseUrl { get; set; }
         public string EmployerFinanceBaseUrl { get; set; }
