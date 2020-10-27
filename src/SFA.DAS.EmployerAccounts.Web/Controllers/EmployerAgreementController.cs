@@ -222,6 +222,11 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             var model = await _orchestrator.GetConfirmRemoveOrganisationViewModel(accountLegalEntityHashedId, hashedAccountId, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
 
+            if (model.Status == HttpStatusCode.Unauthorized)
+            {
+                return View(ControllerConstants.AccessDeniedViewName);
+            }
+
             return View(model.Data.CanBeRemoved ? ControllerConstants.ConfirmRemoveOrganisationActionName : ControllerConstants.CannotRemoveOrganisationViewName, model.Data);
         }
 

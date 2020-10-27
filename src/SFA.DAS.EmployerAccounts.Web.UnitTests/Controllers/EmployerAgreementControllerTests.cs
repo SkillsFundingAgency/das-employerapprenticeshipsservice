@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -26,6 +27,64 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
     [TestFixture]
     public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementControllerTestFixtures>
     {
+        [Test]
+        public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsUnauthorised_ThenAccessDeniedIsReturned()
+        {
+            return RunAsync(
+                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Exception = new UnauthorizedAccessException(),
+                        Status = HttpStatusCode.Unauthorized
+                    }),
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, result) =>
+                {
+                    ViewResult viewResult = result as ViewResult;
+                    Assert.AreEqual(ControllerConstants.AccessDeniedViewName, viewResult.ViewName);
+                });
+        }
+
+        [Test]
+        public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCanBeRemoved_ThenConfirmRemoveViewIsReturned()
+        {
+            return RunAsync(
+                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Data = new ConfirmOrganisationToRemoveViewModel()
+                        {
+                            CanBeRemoved = true
+                        }
+                    }),
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, result) =>
+                {
+                    ViewResult viewResult = result as ViewResult;
+                    Assert.AreEqual(ControllerConstants.ConfirmRemoveOrganisationViewName, viewResult.ViewName);
+                }) ;
+        }
+
+        [Test]
+        public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCannotBeRemoved_ThenCannotRemoveOrganisationViewIsReturned()
+        {
+            return RunAsync(
+                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Data = new ConfirmOrganisationToRemoveViewModel()
+                        {
+                            CanBeRemoved = false
+                        }
+                    }),
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, result) =>
+                {
+                    ViewResult viewResult = result as ViewResult;
+                    Assert.AreEqual(ControllerConstants.CannotRemoveOrganisationViewName, viewResult.ViewName);
+                });
+        }
+
         [Test]
         public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
         {
