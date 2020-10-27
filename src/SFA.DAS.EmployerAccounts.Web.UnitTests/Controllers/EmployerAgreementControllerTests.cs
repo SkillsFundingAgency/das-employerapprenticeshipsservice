@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
@@ -31,12 +32,15 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsUnauthorised_ThenAccessDeniedIsReturned()
         {
             return RunAsync(
-                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
-                    {
-                        Exception = new UnauthorizedAccessException(),
-                        Status = HttpStatusCode.Unauthorized
-                    }),
+                arrange: fixtures =>
+                {
+                    fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                        .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                        {
+                            Exception = new UnauthorizedAccessException(),
+                            Status = HttpStatusCode.Unauthorized
+                        });
+                },
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
                 assert: (fixtures, result) =>
                 {
@@ -271,7 +275,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             OwinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Constants.UserId);
             Mediator = new Mock<IMediator>();
             Mapper = new Mock<IMapper>();
-
+             
             GetAgreementRequest = new GetEmployerAgreementRequest
             {
                 ExternalUserId = UserId,
