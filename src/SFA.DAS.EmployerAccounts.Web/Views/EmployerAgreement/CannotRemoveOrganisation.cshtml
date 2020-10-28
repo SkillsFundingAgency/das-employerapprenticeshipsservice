@@ -1,5 +1,5 @@
 ﻿@using SFA.DAS.EmployerAccounts.Web.Helpers
-@model ConfirmOrganisationToRemoveViewModel
+@model OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
 
 @{
     ViewBag.PageID = "organisations-remove-cannot";
@@ -16,8 +16,8 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-xl">You cannot remove @Model.Name</h1>
-        <p class="govuk-body">This is because @Model.Name has apprenticeships in progress.</p>
+        <h1 class="govuk-heading-xl">You cannot remove @Model.Data.Name</h1>
+        <p class="govuk-body">This is because @Model.Data.Name has apprenticeships in progress.</p>
         <p class="govuk-body"><a href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerAgreementControllerName)" class="govuk-button">Return to your organisations and agreements</a></p>
     </div>
 </div>
