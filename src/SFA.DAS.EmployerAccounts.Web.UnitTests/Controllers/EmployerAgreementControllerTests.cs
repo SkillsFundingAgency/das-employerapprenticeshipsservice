@@ -377,7 +377,6 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             
             return controller;
         }
-           
 
         public Task<ActionResult> ConfirmRemoveOrganisation()
         {
