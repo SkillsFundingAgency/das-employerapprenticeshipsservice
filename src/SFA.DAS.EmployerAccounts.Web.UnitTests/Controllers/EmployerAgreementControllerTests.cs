@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
@@ -32,15 +33,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
         public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsUnauthorised_ThenAccessDeniedIsReturned()
         {
             return RunAsync(
-                arrange: fixtures =>
-                {
-                    fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
-                        .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
-                        {
-                            Exception = new UnauthorizedAccessException(),
-                            Status = HttpStatusCode.Unauthorized
-                        });
-                },
+                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Exception = new UnauthorizedAccessException(),
+                        Status = HttpStatusCode.Unauthorized
+                    }),
                 act: fixtures => fixtures.ConfirmRemoveOrganisation(),
                 assert: (fixtures, result) =>
                 {
@@ -359,6 +357,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
         public EmployerAgreementController CreateController()
         {
+            var httpRequestMock = new Mock<HttpRequestBase>();
+            var httpContextMock = new Mock<HttpContextBase>();
+            var controllerContext = new Mock<ControllerContext>();
+           
+            httpRequestMock.Setup(x => x.Params).Returns(new NameValueCollection { { ControllerConstants.AccountHashedIdRouteKeyName, HashedAccountId } });
+            httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
+            controllerContext.Setup(x => x.HttpContext).Returns(httpContextMock.Object);
+            
             var controller = new EmployerAgreementController(
                 OwinWrapper.Object,
                 Orchestrator.Object,
@@ -366,9 +372,12 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 FlashMessage.Object,
                 Mediator.Object,
                 Mapper.Object);
-
+            
+            controller.ControllerContext = controllerContext.Object;
+            
             return controller;
         }
+           
 
         public Task<ActionResult> ConfirmRemoveOrganisation()
         {
