@@ -232,9 +232,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(ControllerConstants.ConfirmRemoveOrganisationViewName, model);
+                return View(ControllerConstants.ConfirmRemoveOrganisationViewName, new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel> { Data = model });
             }
-
             if (!model.Remove.HasValue || !model.Remove.Value) return RedirectToAction(ControllerConstants.IndexActionName);
 
             var response = await _orchestrator.RemoveLegalAgreement(model, OwinWrapper.GetClaimValue(ControllerConstants.UserRefClaimKeyName));
@@ -246,7 +245,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
             }
 
             AddFlashMessageToCookie(response.FlashMessage);
-            return View(ControllerConstants.ConfirmRemoveOrganisationViewName, model);
+            return View(ControllerConstants.ConfirmRemoveOrganisationViewName, response);
         }
 
         private async Task<SignEmployerAgreementViewModel> GetSignedAgreementViewModel(GetEmployerAgreementRequest request)
