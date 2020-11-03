@@ -152,16 +152,16 @@ SELECT  DATEADD(dd, DATEDIFF(dd, 0, [employer_financial].[AccountTransfers].Crea
 		NULL																					AS Apprentice,
 		[employer_financial].[AccountTransfers].CourseName										AS ApprenticeTrainingCourse,
 		[employer_financial].[AccountTransfers].CourseLevel										AS ApprenticeTrainingCourseLevel,
-		cast([AccountTransfers].[Amount]as decimal(18,4))										AS PaidFromLevy,
+		cast([employer_financial].[AccountTransfers].[Amount]as decimal(18,4))					AS PaidFromLevy,
 		NULL																					AS EmployerContribution,
 		NULL																					AS GovermentContribution,
-		cast([AccountTransfers].[Amount] as decimal(18,4))										AS Total,
+		-cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))				AS Total,
 		[employer_financial].[AccountTransfers].SenderAccountID									AS TransferSenderAccountId,
 		[employer_financial].[AccountTransfers].[SenderAccountName]								AS TransferSenderAccountName,
 		[employer_financial].[AccountTransfers].[ReceiverAccountId]								AS TransferReceiverAccountId,
 		[employer_financial].[AccountTransfers].[ReceiverAccountName]							AS TransferReceiverAccountName 
 	FROM [employer_financial].[AccountTransfers]
-	WHERE SenderAccountId = @AccountId
+	WHERE [employer_financial].[AccountTransfers].[SenderAccountId] = @AccountId
 		AND [employer_financial].[AccountTransfers].[CreatedDate] >= @FromDate
 		AND [employer_financial].[AccountTransfers].[CreatedDate] < @ToDate
 
@@ -182,10 +182,10 @@ SELECT  DATEADD(dd, DATEDIFF(dd, 0, [employer_financial].[AccountTransfers].Crea
 		NULL																					AS Apprentice,
 		[employer_financial].[AccountTransfers].CourseName										AS ApprenticeTrainingCourse,
 		[employer_financial].[AccountTransfers].CourseLevel										AS ApprenticeTrainingCourseLevel,
-		cast([AccountTransfers].[Amount] as decimal(18,4))										AS PaidFromLevy,
+		cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))					AS PaidFromLevy,
 		NULL																					AS EmployerContribution,
 		NULL																					AS GovermentContribution,
-		cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))					AS Total,
+		cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))				AS Total,
 		[employer_financial].[AccountTransfers].SenderAccountID									AS TransferSenderAccountId,
 		[employer_financial].[AccountTransfers].[SenderAccountName]								AS TransferSenderAccountName,
 		[employer_financial].[AccountTransfers].[ReceiverAccountId]								AS TransferReceiverAccountId,
