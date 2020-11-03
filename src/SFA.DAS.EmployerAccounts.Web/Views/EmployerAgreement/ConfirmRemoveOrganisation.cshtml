@@ -35,11 +35,12 @@
         }
         <form method="POST" action="@Url.Action(ControllerConstants.ConfirmRemoveOrganisationActionName)">
             @Html.AntiForgeryToken()
-            @Html.HiddenFor(m => m.Data.Name)
-            @Html.HiddenFor(m => m.Data.CanBeRemoved)
-            @Html.HiddenFor(m => m.Data.HasSignedAgreement)
-            @Html.HiddenFor(m => m.Data.HashedAccountId)
-            @Html.HiddenFor(m => m.Data.HashedAccountLegalEntitytId)
+            <input type="hidden" value="@Model.Data.Name" name="Name" />
+            <input type="hidden" value="@Model.Data.CanBeRemoved.ToString()" name="CanBeRemoved" />
+            <input type="hidden" value="@Model.Data.HasSignedAgreement.ToString()" name="HasSignedAgreement" />
+            <input type="hidden" value="@Model.Data.HashedAccountId" name="HashedAccountId" />
+            <input type="hidden" value="@Model.Data.HashedAccountLegalEntitytId" name="HashedAccountLegalEntitytId" />
+
             <div class="govuk-form-group @(ViewData.ModelState.IsValid ? "" : "govuk-form-group--error")" id="can-remove-organisation">
                 <fieldset class="govuk-fieldset" aria-describedby="can-remove-organisation">
                     @if (!ViewData.ModelState.IsValid)
@@ -51,11 +52,11 @@
 
                     <div class="govuk-radios">
                         <div class="govuk-radios__item">
-                            @Html.RadioButtonFor(m => m.Data.Remove, true, new { @class = "govuk-radios__input", id = "yes" })
+                            <input class="govuk-radios__input" id="remove-yes" name="Remove" type="radio" value="true">
                             <label class="govuk-label govuk-radios__label" for="yes">Yes</label>
                         </div>
                         <div class="govuk-radios__item">
-                            @Html.RadioButtonFor(m => m.Data.Remove, false, new { @class = "govuk-radios__input", id = "no" })
+                            <input class="govuk-radios__input" id="remove-no" name="Remove" type="radio" value="false">
                             <label class="govuk-label govuk-radios__label" for="no">No</label>
                         </div>
                     </div>
