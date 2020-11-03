@@ -185,7 +185,7 @@ SELECT  DATEADD(dd, DATEDIFF(dd, 0, [employer_financial].[AccountTransfers].Crea
 		cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))					AS PaidFromLevy,
 		NULL																					AS EmployerContribution,
 		NULL																					AS GovermentContribution,
-		cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))				AS Total,
+		cast([employer_financial].[AccountTransfers].[Amount] as decimal(18,4))					AS Total,
 		[employer_financial].[AccountTransfers].SenderAccountID									AS TransferSenderAccountId,
 		[employer_financial].[AccountTransfers].[SenderAccountName]								AS TransferSenderAccountName,
 		[employer_financial].[AccountTransfers].[ReceiverAccountId]								AS TransferReceiverAccountId,
