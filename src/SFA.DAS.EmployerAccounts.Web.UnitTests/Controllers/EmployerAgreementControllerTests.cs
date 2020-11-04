@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper;
 using MediatR;
@@ -26,6 +29,64 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
     [TestFixture]
     public class EmployerAgreementControllerTests : FluentTest<EmployerAgreementControllerTestFixtures>
     {
+        [Test]
+        public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsUnauthorised_ThenAccessDeniedIsReturned()
+        {
+            return RunAsync(
+                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Exception = new UnauthorizedAccessException(),
+                        Status = HttpStatusCode.Unauthorized
+                    }),
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, result) =>
+                {
+                    ViewResult viewResult = result as ViewResult;
+                    Assert.AreEqual(ControllerConstants.AccessDeniedViewName, viewResult.ViewName);
+                });
+        }
+
+        [Test]
+        public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCanBeRemoved_ThenConfirmRemoveViewIsReturned()
+        {
+            return RunAsync(
+                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Data = new ConfirmOrganisationToRemoveViewModel()
+                        {
+                            CanBeRemoved = true
+                        }
+                    }),
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, result) =>
+                {
+                    ViewResult viewResult = result as ViewResult;
+                    Assert.AreEqual(ControllerConstants.ConfirmRemoveOrganisationViewName, viewResult.ViewName);
+                }) ;
+        }
+
+        [Test]
+        public Task WhenRequestingConfirmRemoveOrganisationPage_AndUserIsAuthorised_AndOrganisationCannotBeRemoved_ThenCannotRemoveOrganisationViewIsReturned()
+        {
+            return RunAsync(
+                arrange: fixtures => fixtures.Orchestrator.Setup(x => x.GetConfirmRemoveOrganisationViewModel(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                    .ReturnsAsync(new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>
+                    {
+                        Data = new ConfirmOrganisationToRemoveViewModel()
+                        {
+                            CanBeRemoved = false
+                        }
+                    }),
+                act: fixtures => fixtures.ConfirmRemoveOrganisation(),
+                assert: (fixtures, result) =>
+                {
+                    ViewResult viewResult = result as ViewResult;
+                    Assert.AreEqual(ControllerConstants.CannotRemoveOrganisationViewName, viewResult.ViewName);
+                });
+        }
+
         [Test]
         public Task ConfirmRemoveOrganisation_WhenIRemoveAlegalEntityFromAnAccount_ThenTheOrchestratorIsCalledToGetTheConfirmRemoveModel()
         {
@@ -212,7 +273,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
             OwinWrapper.Setup(x => x.GetClaimValue("sub")).Returns(Constants.UserId);
             Mediator = new Mock<IMediator>();
             Mapper = new Mock<IMapper>();
-
+             
             GetAgreementRequest = new GetEmployerAgreementRequest
             {
                 ExternalUserId = UserId,
@@ -296,6 +357,14 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
 
         public EmployerAgreementController CreateController()
         {
+            var httpRequestMock = new Mock<HttpRequestBase>();
+            var httpContextMock = new Mock<HttpContextBase>();
+            var controllerContext = new Mock<ControllerContext>();
+           
+            httpRequestMock.Setup(x => x.Params).Returns(new NameValueCollection { { ControllerConstants.AccountHashedIdRouteKeyName, HashedAccountId } });
+            httpContextMock.Setup(x => x.Request).Returns(httpRequestMock.Object);
+            controllerContext.Setup(x => x.HttpContext).Returns(httpContextMock.Object);
+            
             var controller = new EmployerAgreementController(
                 OwinWrapper.Object,
                 Orchestrator.Object,
@@ -303,7 +372,9 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Controllers
                 FlashMessage.Object,
                 Mediator.Object,
                 Mapper.Object);
-
+            
+            controller.ControllerContext = controllerContext.Object;
+            
             return controller;
         }
 

@@ -160,18 +160,17 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
             }
         }
 
-        public virtual async Task<OrchestratorResponse<bool>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
+        public virtual async Task<OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>> RemoveLegalAgreement(ConfirmOrganisationToRemoveViewModel model, string userId)
         {
-            var response = new OrchestratorResponse<bool>();
-            
+            var response = new OrchestratorResponse<ConfirmOrganisationToRemoveViewModel>();
+
             try
             {
                 await _mediator.SendAsync(new RemoveLegalEntityCommand
                 {
                     HashedAccountId = model.HashedAccountId,
                     UserId = userId,
-                    HashedAccountLegalEntityId = model.
-                    HashedAccountLegalEntitytId = model.HashedAccountLegalEntitytId
+                    HashedAccountLegalEntityId = model.HashedAccountLegalEntitytId
                 });
 
                 response.FlashMessage = new FlashMessageViewModel
@@ -181,7 +180,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
                 };
 
                 response.Status = HttpStatusCode.OK;
-                response.Data = true;
+                response.Data = model;
             }
             catch (InvalidRequestException ex)
             {
