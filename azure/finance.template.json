@@ -39,16 +39,16 @@
             "type": "string"
         },
         "configurationStorageConnectionString": {
-            "type": "string"
+            "type": "securestring"
         },
         "loggingRedisConnectionString": {
-            "type": "string"
+            "type": "securestring"
         },
         "loggingRedisKey": {
             "type": "string"
         },
         "storageConnectionString": {
-            "type": "string"
+            "type": "securestring"
         },
         "tokenCertificateThumbprint": {
             "type": "string"
@@ -170,7 +170,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service.json')]",
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-v2.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -187,40 +187,42 @@
                         "value": "[parameters('sharedFrontEndSubnetResourceId')]"
                     },
                     "appServiceAppSettings": {
-                        "value": [
-                            {
-                                "name": "LoggingRedisConnectionString",
-                                "value": "[parameters('loggingRedisConnectionString')]"
-                            },
-                            {
-                                "name": "LoggingRedisKey",
-                                "value": "[parameters('loggingRedisKey')]"
-                            },
-                            {
-                                "name": "ConfigurationStorageConnectionString",
-                                "value": "[parameters('configurationStorageConnectionString')]"
-                            },
-                            {
-                                "name": "EnvironmentName",
-                                "value": "[parameters('environmentName')]"
-                            },
-                            {
-                                "name": "StorageConnectionString",
-                                "value": "[parameters('storageConnectionString')]"
-                            },
-                            {
-                                "name": "InstrumentationKey",
-                                "value": "[reference('UIAppInsights').outputs.InstrumentationKey.value]"
-                            },
-                            {
-                                "name": "WEBSITE_LOAD_CERTIFICATES",
-                                "value": "[parameters('tokenCertificateThumbprint')]"
-                            },
-                            {
-                                "name": "TokenCertificateThumbprint",
-                                "value": "[parameters('tokenCertificateThumbprint')]"
-                            }
-                        ]
+                        "value": {
+                            "array": [
+                                {
+                                    "name": "LoggingRedisConnectionString",
+                                    "value": "[parameters('loggingRedisConnectionString')]"
+                                },
+                                {
+                                    "name": "LoggingRedisKey",
+                                    "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
+                                    "name": "ConfigurationStorageConnectionString",
+                                    "value": "[parameters('configurationStorageConnectionString')]"
+                                },
+                                {
+                                    "name": "EnvironmentName",
+                                    "value": "[parameters('environmentName')]"
+                                },
+                                {
+                                    "name": "StorageConnectionString",
+                                    "value": "[parameters('storageConnectionString')]"
+                                },
+                                {
+                                    "name": "InstrumentationKey",
+                                    "value": "[reference('UIAppInsights').outputs.InstrumentationKey.value]"
+                                },
+                                {
+                                    "name": "WEBSITE_LOAD_CERTIFICATES",
+                                    "value": "[parameters('tokenCertificateThumbprint')]"
+                                },
+                                {
+                                    "name": "TokenCertificateThumbprint",
+                                    "value": "[parameters('tokenCertificateThumbprint')]"
+                                }
+                            ]
+                        }
                     },
                     "customHostName": {
                         "value": "[parameters('uiCustomHostname')]"
@@ -273,7 +275,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service.json')]",
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-v2.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -290,28 +292,30 @@
                         "value": "[parameters('sharedBackEndSubnetResourceId')]"
                     },
                     "appServiceAppSettings": {
-                        "value": [
-                            {
-                                "name": "LoggingRedisConnectionString",
-                                "value": "[parameters('loggingRedisConnectionString')]"
-                            },
-                            {
-                                "name": "LoggingRedisKey",
-                                "value": "[parameters('loggingRedisKey')]"
-                            },
-                            {
-                                "name": "ConfigurationStorageConnectionString",
-                                "value": "[parameters('configurationStorageConnectionString')]"
-                            },
-                            {
-                                "name": "EnvironmentName",
-                                "value": "[parameters('environmentName')]"
-                            },
-                            {
-                                "name": "InstrumentationKey",
-                                "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
-                            }
-                        ]
+                        "value": {
+                            "array": [
+                                {
+                                    "name": "LoggingRedisConnectionString",
+                                    "value": "[parameters('loggingRedisConnectionString')]"
+                                },
+                                {
+                                    "name": "LoggingRedisKey",
+                                    "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
+                                    "name": "ConfigurationStorageConnectionString",
+                                    "value": "[parameters('configurationStorageConnectionString')]"
+                                },
+                                {
+                                    "name": "EnvironmentName",
+                                    "value": "[parameters('environmentName')]"
+                                },
+                                {
+                                    "name": "InstrumentationKey",
+                                    "value": "[reference('ApiAppInsights').outputs.InstrumentationKey.value]"
+                                }
+                            ]
+                        }
                     },
                     "customHostName": {
                         "value": "[parameters('apiCustomHostname')]"
@@ -392,7 +396,7 @@
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
-                    "uri": "[concat(variables('deploymentUrlBase'),'app-service.json')]",
+                    "uri": "[concat(variables('deploymentUrlBase'),'app-service-v2.json')]",
                     "contentVersion": "1.0.0.0"
                 },
                 "parameters": {
@@ -409,42 +413,46 @@
                         "value": "[reference('worker-subnet').outputs.SubnetResourceId.value]"
                     },
                     "appServiceAppSettings": {
-                        "value": [
-                            {
-                                "name": "LoggingRedisConnectionString",
-                                "value": "[parameters('loggingRedisConnectionString')]"
-                            },
-                            {
-                                "name": "LoggingRedisKey",
-                                "value": "[parameters('loggingRedisKey')]"
-                            },
-                            {
-                                "name": "ConfigurationStorageConnectionString",
-                                "value": "[parameters('configurationStorageConnectionString')]"
-                            },
-                            {
-                                "name": "EnvironmentName",
-                                "value": "[parameters('environmentName')]"
-                            },
-                            {
-                                "name": "StorageConnectionString",
-                                "value": "[parameters('storageConnectionString')]"
-                            }
-                        ]
+                        "value": {
+                            "array": [
+                                {
+                                    "name": "LoggingRedisConnectionString",
+                                    "value": "[parameters('loggingRedisConnectionString')]"
+                                },
+                                {
+                                    "name": "LoggingRedisKey",
+                                    "value": "[parameters('loggingRedisKey')]"
+                                },
+                                {
+                                    "name": "ConfigurationStorageConnectionString",
+                                    "value": "[parameters('configurationStorageConnectionString')]"
+                                },
+                                {
+                                    "name": "EnvironmentName",
+                                    "value": "[parameters('environmentName')]"
+                                },
+                                {
+                                    "name": "StorageConnectionString",
+                                    "value": "[parameters('storageConnectionString')]"
+                                }
+                            ]
+                        }
                     },
                     "appServiceConnectionStrings": {
-                        "value": [
-                            {
-                                "name": "AzureWebJobsDashboard",
-                                "connectionString": "[parameters('storageConnectionString')]",
-                                "type": "Custom"
-                            },
-                            {
-                                "name": "AzureWebJobsStorage",
-                                "connectionString": "[parameters('storageConnectionString')]",
-                                "type": "Custom"
-                            }
-                        ]
+                        "value": {
+                            "array": [
+                                {
+                                    "name": "AzureWebJobsDashboard",
+                                    "connectionString": "[parameters('storageConnectionString')]",
+                                    "type": "Custom"
+                                },
+                                {
+                                    "name": "AzureWebJobsStorage",
+                                    "connectionString": "[parameters('storageConnectionString')]",
+                                    "type": "Custom"
+                                }
+                            ]
+                        }
                     },
                     "deployStagingSlot": {
                         "value": false
