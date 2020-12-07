@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.Common.Domain.Types;
@@ -61,8 +63,8 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Orchestrators.OrganisationOrche
                 .ThrowsAsync(new UnauthorizedAccessException());
 
             //Act & Assert
-            Assert.ThrowsAsync<UnauthorizedAccessException>(async () => await _orchestrator.CreateLegalEntity(request));
-
+            var response = await _orchestrator.CreateLegalEntity(request);
+            Assert.AreEqual(HttpStatusCode.Unauthorized, response.Status);
         }
     }
 }
