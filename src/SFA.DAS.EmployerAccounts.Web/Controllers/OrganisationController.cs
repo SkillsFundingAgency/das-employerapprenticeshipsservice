@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             if (response.Status == HttpStatusCode.Unauthorized)
             {
-                return View(ControllerConstants.AccessDeniedViewName);
+                return View();
             }
 
             var flashMessage = new FlashMessageViewModel
