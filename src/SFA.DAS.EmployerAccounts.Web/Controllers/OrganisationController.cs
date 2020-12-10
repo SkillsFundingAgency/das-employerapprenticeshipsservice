@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using AutoMapper;
@@ -85,31 +86,26 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
 
             var response = await _orchestrator.CreateLegalEntity(request);
 
+            if (response.Status == HttpStatusCode.Unauthorized)
+            {
+                return View(response);
+            }
+
             var flashMessage = new FlashMessageViewModel
             {
                 HiddenFlashMessageInformation = "page-organisations-added",
                 Headline = $"{response.Data.EmployerAgreement.LegalEntityName} has been added",
                 Severity = FlashMessageSeverityLevel.Success
             };
-            AddFlashMessageToCookie(flashMessage);
-            if (newSearch)
-            {
-                return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsSearchActionName,
-                    new
-                    {
-                        hashedAccountId,
-                        organisationName = name,
-                        hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
-                    });
-            }
 
-            return RedirectToAction(ControllerConstants.OrganisationAddedNextStepsActionName,
-                new
-                {
-                    hashedAccountId,
-                    organisationName = name,
-                    hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
-                });
+            AddFlashMessageToCookie(flashMessage);
+
+            return RedirectToAction(newSearch ? ControllerConstants.OrganisationAddedNextStepsSearchActionName : ControllerConstants.OrganisationAddedNextStepsActionName, new
+            {
+                hashedAccountId,
+                organisationName = name,
+                hashedAgreementId = response.Data.EmployerAgreement.HashedAgreementId
+            });
         }
 
         [HttpPost]

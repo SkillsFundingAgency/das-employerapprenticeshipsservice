@@ -58,28 +58,47 @@ namespace SFA.DAS.EmployerAccounts.Web.Orchestrators
 
         public virtual async Task<OrchestratorResponse<EmployerAgreementViewModel>> CreateLegalEntity(CreateNewLegalEntityViewModel request)
         {
-            var result = await _mediator.SendAsync(new CreateLegalEntityCommand
+            try
             {
-                HashedAccountId = request.HashedAccountId,
-                Code = request.Code,
-                DateOfIncorporation = request.IncorporatedDate,
-                Status = request.LegalEntityStatus,
-                Source = request.Source,
-                PublicSectorDataSource = request.PublicSectorDataSource,
-                Sector = request.Sector,
-                Name = request.Name,
-                Address = request.Address,
-                ExternalUserId = request.ExternalUserId
-            });
-
-            return new OrchestratorResponse<EmployerAgreementViewModel>
-            {
-                Data = new EmployerAgreementViewModel
+                var result = await _mediator.SendAsync(new CreateLegalEntityCommand
                 {
-                    EmployerAgreement = result.AgreementView
-                },
-                Status = HttpStatusCode.OK
-            };
+                    HashedAccountId = request.HashedAccountId,
+                    Code = request.Code,
+                    DateOfIncorporation = request.IncorporatedDate,
+                    Status = request.LegalEntityStatus,
+                    Source = request.Source,
+                    PublicSectorDataSource = request.PublicSectorDataSource,
+                    Sector = request.Sector,
+                    Name = request.Name,
+                    Address = request.Address,
+                    ExternalUserId = request.ExternalUserId
+                });
+
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Data = new EmployerAgreementViewModel
+                    {
+                        EmployerAgreement = result.AgreementView
+                    },
+                    Status = HttpStatusCode.OK
+                };
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Status = HttpStatusCode.Unauthorized,
+                    Exception = e,
+                };
+            }
+            catch (InvalidRequestException e)
+            {
+                return new OrchestratorResponse<EmployerAgreementViewModel>
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Exception = e,
+                };
+            }
         }
 
         public virtual OrchestratorResponse<OrganisationDetailsViewModel> GetAddOtherOrganisationViewModel(string hashedAccountId)
