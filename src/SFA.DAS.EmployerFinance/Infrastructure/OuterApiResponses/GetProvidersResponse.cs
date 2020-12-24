@@ -12,7 +12,7 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
     public class ProviderResponseItem
     {
         [JsonProperty("ukprn")]
-        public long Ukprn { get; set; }
+        public int Ukprn { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

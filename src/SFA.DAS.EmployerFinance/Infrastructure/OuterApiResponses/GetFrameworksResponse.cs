@@ -24,21 +24,21 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
         public string Title { get; set; }
 
         [JsonProperty("level")]
-        public long Level { get; set; }
+        public int Level { get; set; }
 
         [JsonProperty("frameworkCode")]
-        public long FrameworkCode { get; set; }
+        public int FrameworkCode { get; set; }
 
         [JsonProperty("progType")]
-        public long ProgType { get; set; }
+        public int ProgType { get; set; }
 
         [JsonProperty("pathwayCode")]
-        public long PathwayCode { get; set; }
+        public int PathwayCode { get; set; }
 
         [JsonProperty("maxFunding")]
-        public long MaxFunding { get; set; }
+        public int MaxFunding { get; set; }
 
         [JsonProperty("duration")]
-        public long Duration { get; set; }       
+        public int Duration { get; set; }       
     }
 }

@@ -12,18 +12,18 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
     public class StandardResponseItem
     {
         [JsonProperty("id")]
-        public long Id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty("level")]
-        public long Level { get; set; }
+        public int Level { get; set; }
 
         [JsonProperty("title")]
         public string Title { get; set; }
 
         [JsonProperty("duration")]
-        public long Duration { get; set; }
+        public int Duration { get; set; }
 
         [JsonProperty("maxFunding")]
-        public long MaxFunding { get; set; }
+        public int MaxFunding { get; set; }
     }
 }
