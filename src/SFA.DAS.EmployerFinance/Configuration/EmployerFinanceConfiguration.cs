@@ -9,7 +9,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
     {
         public string ApplicationId { get; set; }
         public string AllowedHashstringCharacters { get; set; }
-        public ApprenticeshipInfoServiceConfiguration ApprenticeshipInfoService { get; set; }
+        public ManageApprenticeshipsOuterApiConfiguration ManageApprenticeshipsOuterApiConfiguration { get; set; }
         public ContentClientApiConfiguration ContentApi { get; set; }
         public string DashboardUrl { get; set; }
         public string DatabaseConnectionString { get; set; }
