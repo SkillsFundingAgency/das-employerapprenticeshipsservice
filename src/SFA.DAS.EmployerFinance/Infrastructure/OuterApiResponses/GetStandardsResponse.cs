@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure.OuterApiResponses
+namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
 {
     public class GetStandardsResponse
     {
