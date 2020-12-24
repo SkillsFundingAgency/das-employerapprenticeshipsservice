@@ -119,9 +119,6 @@
     <PackageReference Include="SFA.DAS.ActiveDirectory">
       <Version>1.0.3</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Apprenticeships.Api.Types">
-      <Version>0.11.98</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Audit.Client">
       <Version>1.0.0.20553</Version>
     </PackageReference>

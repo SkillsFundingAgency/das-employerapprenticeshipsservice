@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoFixture;
 using FluentAssertions;
@@ -10,7 +9,6 @@ using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
 using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Providers.Api.Client;
 
 namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.ProviderServiceRemote
 {
