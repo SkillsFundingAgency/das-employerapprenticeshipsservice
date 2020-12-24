@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoFixture;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Services;
 using SFA.DAS.NLog.Logger;
 using SFA.DAS.Providers.Api.Client;
@@ -13,29 +18,32 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
     {
         private EmployerFinance.Services.ProviderServiceRemote _sut;
         private Mock<IProviderService> _mockProviderService;
-        private Mock<IProviderApiClient> _mockProviderApiClient;
+        private Mock<IApiClient> _mockApiClient;
         private Mock<ILog> _mockLog;
 
         private string _providerName;
+        private ProviderResponseItem _provider;
 
         [SetUp]
         public void Arrange()
         {
+            var fixture = new Fixture();
+            _provider = fixture.Create<ProviderResponseItem>();
             _mockProviderService = new Mock<IProviderService>();
-            _mockProviderApiClient = new Mock<IProviderApiClient>();
+            _mockApiClient = new Mock<IApiClient>();
             _mockLog = new Mock<ILog>();
 
             _providerName = Guid.NewGuid().ToString();
 
-            _mockProviderApiClient
-                .Setup(m => m.GetAsync(It.IsAny<long>()))
-                .ReturnsAsync(new Apprenticeships.Api.Types.Providers.Provider { ProviderName = _providerName });
+            _mockApiClient
+                .Setup(m => m.Get<ProviderResponseItem>(It.IsAny<GetProviderRequest>()))
+                .ReturnsAsync(_provider);
 
             _mockLog
                 .Setup(m => m.Warn(It.IsAny<Exception>(), It.IsAny<string>()))
                 .Verifiable();
 
-            _sut = new EmployerFinance.Services.ProviderServiceRemote(_mockProviderService.Object, _mockProviderApiClient.Object, _mockLog.Object);
+            _sut = new EmployerFinance.Services.ProviderServiceRemote(_mockProviderService.Object, _mockApiClient.Object, _mockLog.Object);
         }
 
         [Test]
@@ -45,25 +53,18 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             long ukPrn = 1234567890;
 
             // act
-            var result = await _sut.Get(ukPrn);
+            var actual = await _sut.Get(ukPrn);
 
             // assert
-            _mockProviderApiClient.Verify(m => m.GetAsync(ukPrn), Times.Once);
+            _mockApiClient.Verify(m => m.Get<ProviderResponseItem>(It.Is<GetProviderRequest>(c=>c.GetUrl.Equals($"providers/{ukPrn}"))), Times.Once);
             _mockProviderService.Verify(m => m.Get(ukPrn), Times.Never);
+            actual.ShouldBeEquivalentTo(_provider, options=>options
+                .Excluding(c=>c.Id)
+                .Excluding(c=>c.NationalProvider)
+                .Excluding(c=>c.IsHistoricProviderName)
+            );
         }
 
-        [Test]
-        public async Task AndTheProviderExistsInTheRemoteRepository_ThenAValidProviderIsReturned()
-        {
-            // arrange 
-            long ukPrn = 1234567890;
-
-            // act
-            var result = await _sut.Get(ukPrn);
-
-            // assert
-            Assert.AreEqual(_providerName, result.Name);
-        }
 
         [Test]
         public async Task AndTheProviderIsNotInTheRemoteRepository_ThenTheProviderServiceIsCalled()
@@ -71,12 +72,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             // arrange
             long ukPrn = 1234567890;
 
-            _mockProviderApiClient
-                .Setup(m => m.GetAsync(It.IsAny<long>()))
-                .Returns(Task.FromResult< Apprenticeships.Api.Types.Providers.Provider>(null));
+            _mockApiClient
+                .Setup(m => m.Get<ProviderResponseItem>(It.IsAny<GetProviderRequest>()))
+                .ReturnsAsync((ProviderResponseItem)null);
 
             // act
-            var result = await _sut.Get(ukPrn);
+            await _sut.Get(ukPrn);
 
             // assert
             _mockProviderService.Verify(m => m.Get(ukPrn), Times.Once);
@@ -89,12 +90,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             long ukPrn = 1234567890;
             var exception = new Exception();
 
-            _mockProviderApiClient
-                .Setup(m => m.GetAsync(ukPrn))
+            _mockApiClient
+                .Setup(m => m.Get<ProviderResponseItem>(It.IsAny<GetProviderRequest>()))
                 .ThrowsAsync(exception);
 
             // act
-            var result = await _sut.Get(ukPrn);
+            await _sut.Get(ukPrn);
 
             // assert
             _mockLog.Verify(m => m.Warn(exception, $"Unable to get provider details with UKPRN {ukPrn} from apprenticeship API."), Times.Once);
@@ -107,12 +108,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
             long ukPrn = 1234567890;
             var exception = new Exception();
 
-            _mockProviderApiClient
-                .Setup(m => m.GetAsync(ukPrn))
+            _mockApiClient
+                .Setup(m => m.Get<ProviderResponseItem>(It.IsAny<GetProviderRequest>()))
                 .ThrowsAsync(exception);
 
             // act
-            var result = await _sut.Get(ukPrn);
+            await _sut.Get(ukPrn);
 
             // assert
             _mockProviderService.Verify(m => m.Get(ukPrn), Times.Once);

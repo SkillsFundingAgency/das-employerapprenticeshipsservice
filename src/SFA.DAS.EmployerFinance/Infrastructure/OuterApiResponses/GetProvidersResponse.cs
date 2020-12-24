@@ -17,9 +17,6 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("contactUrl")]
-        public string ContactUrl { get; set; }
-
         [JsonProperty("email")]
         public string Email { get; set; }
 

@@ -4,9 +4,9 @@ namespace SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests
 {
     public class GetProviderRequest : IGetApiRequest
     {
-        private readonly int _id;
+        private readonly long _id;
 
-        public GetProviderRequest (int id)
+        public GetProviderRequest (long id)
         {
             _id = id;
         }
