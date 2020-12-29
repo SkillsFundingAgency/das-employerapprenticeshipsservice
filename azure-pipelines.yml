@@ -24,14 +24,9 @@ resources:
     type: github
     name: SkillsFundingAgency/das-platform-building-blocks
     ref: refs/heads/master
-    endpoint: "GitHub (SFA)"  
+    endpoint: "GitHub (SFA)"
 
 steps:
-- task: UseDotNet@2
-  displayName: 'Use .NET Core sdk 2.2.x'
-  inputs:
-    version: 2.2.x
-
 - task: gittools.gitversion.gitversion-task.GitVersion@5
   displayName: GitVersion
   inputs:
@@ -56,7 +51,7 @@ steps:
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactstagingdirectory)/publish"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
@@ -71,13 +66,13 @@ steps:
     testAssemblyVer2: '**/bin/**/*UnitTests.dll'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    
+
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
     Contents: |
      azure/**
-     src/**/bin/**/*.dacpac     
+     src/**/bin/**/*.dacpac
     TargetFolder: '$(build.artifactstagingdirectory)/publish'
 
 - task: PublishBuildArtifacts@1
