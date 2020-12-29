@@ -1,5 +1,5 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "resourceEnvironmentName": {
@@ -18,12 +18,6 @@
             "type": "string"
         },
         "sharedBackEndSubnetResourceId": {
-            "type": "string"
-        },
-        "sharedFrontendAppServicePlanResourceGroup": {
-            "type": "string"
-        },
-        "sharedBackendAppServicePlanResourceGroup": {
             "type": "string"
         },
         "sharedEnvResourceGroup": {
@@ -92,6 +86,12 @@
             "type": "array",
             "defaultValue": [
             ]
+        },
+        "resourceGroupLocation": {
+            "type": "string"
+        },
+        "tags": {
+            "type": "object"
         }
     },
     "variables": {
@@ -99,13 +99,24 @@
         "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'), '-'))]",
         "uiAppServiceName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), 'ui-as')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), 'api-as')]",
-        "supportAppServiceName": "[concat(variables('resourceNamePrefix'), 's', parameters('serviceName'), '-as')]"
+        "supportAppServiceName": "[concat(variables('resourceNamePrefix'), 's', parameters('serviceName'), '-as')]",
+        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
     },
     "resources": [
         {
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
+            "name": "[variables('resourceGroupName')]",
+            "type": "Microsoft.Resources/resourceGroups",
+            "location": "[parameters('resourceGroupLocation')]",
+            "tags": "[parameters('tags')]",
+            "properties": {
+            }
+        },
+        {
+            "apiVersion": "2020-06-01",
             "name": "ui-app-insights",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -123,9 +134,10 @@
             }
         },
         {
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "name": "api-app-insights",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -146,10 +158,10 @@
         },
         {
             "condition": "[greater(length(parameters('uiCustomHostname')), 0)]",
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "ui-app-service-certificate",
-            "resourceGroup": "[parameters('sharedFrontendAppServicePlanResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -165,18 +177,15 @@
                     },
                     "keyVaultResourceGroup": {
                         "value": "[parameters('keyVaultResourceGroupName')]"
-                    },
-                    "serverFarmId": {
-                        "value": "[resourceId(parameters('sharedFrontendAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedFrontendAppServicePlanName'))]"
                     }
                 }
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "ui-token-signing-certificate",
-            "resourceGroup": "[parameters('sharedFrontendAppServicePlanResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -192,17 +201,15 @@
                     },
                     "keyVaultResourceGroup": {
                         "value": "[parameters('keyVaultResourceGroupName')]"
-                    },
-                    "serverFarmId": {
-                        "value": "[resourceId(parameters('sharedFrontendAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedFrontendAppServicePlanName'))]"
                     }
                 }
             }
         },
         {
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "name": "ui-app-service",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -217,7 +224,7 @@
                         "value": "[parameters('sharedFrontendAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
-                        "value": "[parameters('sharedFrontendAppServicePlanResourceGroup')]"
+                        "value": "[parameters('sharedEnvResourceGroup')]"
                     },
                     "subnetResourceId": {
                         "value": "[parameters('sharedFrontEndSubnetResourceId')]"
@@ -270,18 +277,14 @@
                         "value": "[parameters('appServiceAllowedIPs')]"
                     }
                 }
-            },
-            "dependsOn": [
-                "ui-app-insights",
-                "ui-app-service-certificate"
-            ]
+            }
         },
         {
             "condition": "[greater(length(parameters('apiCustomHostName')), 0)]",
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "api-app-service-certificate",
-            "resourceGroup": "[parameters('sharedBackendAppServicePlanResourceGroup')]",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -297,17 +300,15 @@
                     },
                     "keyVaultResourceGroup": {
                         "value": "[parameters('keyVaultResourceGroupName')]"
-                    },
-                    "serverFarmId": {
-                        "value": "[resourceId(parameters('sharedBackendAppServicePlanResourceGroup'), 'Microsoft.Web/serverfarms', parameters('sharedBackendAppServicePlanName'))]"
                     }
                 }
             }
         },
         {
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "name": "api-app-service",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -322,7 +323,7 @@
                         "value": "[parameters('SharedBackendAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
-                        "value": "[parameters('SharedBackendAppServicePlanResourceGroup')]"
+                        "value": "[parameters('SharedEnvResourceGroup')]"
                     },
                     "subnetResourceId": {
                         "value": "[parameters('sharedBackEndSubnetResourceId')]"
@@ -371,17 +372,14 @@
                         "value": "[parameters('appServiceAllowedIPs')]"
                     }
                 }
-            },
-            "dependsOn": [
-                "api-app-insights",
-                "api-app-service-certificate"
-            ]
+            }
         },
         {
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "name": "support-app-insights",
             "condition": "[parameters('deploySupportSite')]",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -399,11 +397,11 @@
             }
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "support-app-service-certificate",
-            "condition": "[and(greater(length(parameters('supportCustomHostname')), 0), parameters('deploySupportSite'))]",
-            "resourceGroup": "[parameters('sharedBackendAppServicePlanResourceGroup')]",
+            "condition": "[and(greater(length(parameters('supportCustomHostname')), 0), parameters('deploySupportSite'))]",            
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -424,10 +422,11 @@
             }
         },
         {
-            "apiVersion": "2019-05-01",
+            "apiVersion": "2020-06-01",
             "name": "support-app-service",
             "condition": "[parameters('deploySupportSite')]",
             "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
             "properties": {
                 "mode": "Incremental",
                 "templateLink": {
@@ -442,7 +441,7 @@
                         "value": "[parameters('sharedBackendAppServicePlanName')]"
                     },
                     "appServicePlanResourceGroup": {
-                        "value": "[parameters('sharedBackendAppServicePlanResourceGroup')]"
+                        "value": "[parameters('sharedEnvResourceGroup')]"
                     },
                     "subnetResourceId": {
                         "value": "[parameters('sharedBackEndSubnetResourceId')]"
@@ -494,7 +493,7 @@
             ]
         },
         {
-            "apiVersion": "2017-05-10",
+            "apiVersion": "2020-06-01",
             "name": "[concat('role-assignments-eas', copyIndex())]",
             "type": "Microsoft.Resources/deployments",
             "resourceGroup": "[parameters('sharedEnvResourceGroup')]",
@@ -523,15 +522,19 @@
         }
     ],
     "outputs": {
-        "legacyUIAppServiceName": {
+        "LegacyResourceGroupName": {
+            "type": "string",
+            "value": "[variables('resourceGroupName')]"
+        },
+        "LegacyUIAppServiceName": {
             "type": "string",
             "value": "[variables('uiAppServiceName')]"
         },
-        "legacyApiAppServiceName": {
+        "LegacyApiAppServiceName": {
             "type": "string",
             "value": "[variables('apiAppServiceName')]"
         },
-        "legacySupportAppServiceName": {
+        "LegacySupportAppServiceName": {
             "type": "string",
             "value": "[variables('supportAppServiceName')]"
         }
