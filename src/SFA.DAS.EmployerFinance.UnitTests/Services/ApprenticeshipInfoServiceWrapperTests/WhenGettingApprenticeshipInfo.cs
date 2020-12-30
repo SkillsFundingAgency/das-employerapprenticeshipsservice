@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoFixture;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -34,8 +34,16 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ApprenticeshipInfoServiceWr
         {
             //Arrange
             StandardsView returnData = null;
-            var fixture = new Fixture();
-            var apiResponse = fixture.Create<GetStandardsResponse>();
+            var apiResponse = new GetStandardsResponse
+            {
+                Standards = new List<StandardResponseItem>
+                {
+                    new StandardResponseItem
+                    {
+                        Id = 1
+                    }
+                }
+            };
             _apiClient.Setup(x => x.Get<GetStandardsResponse>(It.IsAny<GetStandardsRequest>()))
                 .ReturnsAsync(apiResponse);
             _cache.Setup(x => x.Exists("Standards")).Returns(false);
@@ -62,8 +70,16 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ApprenticeshipInfoServiceWr
         public async Task Then_Standards_Retrieved_From_Cache_If_Cached()
         {
             //Arrange
-            var fixture = new Fixture();
-            var cacheData = fixture.Create<StandardsView>();
+            var cacheData = new StandardsView
+            {
+                Standards = new List<Standard>
+                {
+                    new Standard
+                    {
+                        Code = 1
+                    }
+                }
+            };
             _cache.Setup(x => x.Exists("Standards")).Returns(true);
             _cache.Setup(x => x.Get<StandardsView>("Standards")).Returns(cacheData);
             
@@ -79,8 +95,19 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ApprenticeshipInfoServiceWr
         public async Task Then_The_Frameworks_Are_Retrieved_From_The_Api_And_Added_To_Cached()
         {
             //Arrange
-            var fixture = new Fixture();
-            var apiResponse = fixture.Create<GetFrameworksResponse>();
+            var apiResponse = new GetFrameworksResponse
+            {
+                Frameworks = new List<FrameworkResponseItem>
+                {
+                    new FrameworkResponseItem
+                    {
+                        Id = "123",
+                        FrameworkName = "test",
+                        PathwayName = "test",
+                        Title = "test"
+                    }
+                }
+            };
                 
             FrameworksView returnData = null;
             _apiClient.Setup(x => x.Get<GetFrameworksResponse>(It.IsAny<GetFrameworksRequest>()))
@@ -107,8 +134,16 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ApprenticeshipInfoServiceWr
         public async Task Then_Frameworks_Retrieved_From_Cache_If_Cached()
         {
             //Arrange
-            var fixture = new Fixture();
-            var cacheData = fixture.Create<FrameworksView>();
+            var cacheData = new FrameworksView
+            {
+                Frameworks = new List<Framework>
+                {
+                    new Framework
+                    {
+                        Id = "123"
+                    }
+                }
+            };
             _cache.Setup(x => x.Exists("Frameworks")).Returns(true);
             _cache.Setup(x => x.Get<FrameworksView>("Frameworks")).Returns(cacheData);
             

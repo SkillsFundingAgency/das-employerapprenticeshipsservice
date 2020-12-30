@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AutoFixture;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -25,8 +24,11 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Services.ProviderServiceTests.Provid
         [SetUp]
         public void Arrange()
         {
-            var fixture = new Fixture();
-            _provider = fixture.Create<ProviderResponseItem>();
+            
+            _provider = new ProviderResponseItem
+            {
+                Email = "test@test.com"
+            };
             _mockProviderService = new Mock<IProviderService>();
             _mockApiClient = new Mock<IApiClient>();
             _mockLog = new Mock<ILog>();
