@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <PackageReference Include="AutoFixture" Version="4.8.0" />
-    <PackageReference Include="AutoFixture.NUnit3" Version="4.8.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0" />
     <PackageReference Include="Moq" Version="4.5.28" />
     <PackageReference Include="NUnit" Version="3.10.1" />
@@ -24,7 +23,6 @@
     <PackageReference Include="SFA.DAS.Http" Version="3.2.28" />
     <PackageReference Include="SFA.DAS.NServiceBus.Testing" Version="15.0.25" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
-    <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
   </ItemGroup>
 

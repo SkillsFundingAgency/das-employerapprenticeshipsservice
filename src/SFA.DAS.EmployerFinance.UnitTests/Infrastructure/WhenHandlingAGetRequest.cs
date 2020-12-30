@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using Moq.Protected;
@@ -18,13 +17,13 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure
 {
     public class WhenHandlingAGetRequest
     {
-        [Test, AutoData]
-        public async Task Then_The_Endpoint_Is_Called_With_Authentication_Header_And_Data_Returned(
-            List<string> testObject, 
-            string key,
-            GetTestRequest getTestRequest)
+        [Test]
+        public async Task Then_The_Endpoint_Is_Called_With_Authentication_Header_And_Data_Returned()
         {
             //Arrange
+            var key = "123-abc-567";
+            var getTestRequest = new GetTestRequest();
+            var testObject = new List<string>();
             var config = new ManageApprenticeshipsOuterApiConfiguration {BaseUrl = "http://valid-url/", Key = key};
 
             var response = new HttpResponseMessage
@@ -43,12 +42,12 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Infrastructure
             actual.Should().BeEquivalentTo(testObject);
         }
         
-        [Test, AutoData]
-        public void Then_If_It_Is_Not_Successful_An_Exception_Is_Thrown(
-            string key,
-            GetTestRequest getTestRequest)
+        [Test]
+        public void Then_If_It_Is_Not_Successful_An_Exception_Is_Thrown()
         {
             //Arrange
+            var key = "123-abc-567";
+            var getTestRequest = new GetTestRequest();
             var config = new ManageApprenticeshipsOuterApiConfiguration {BaseUrl = "http://valid-url/", Key = key };
             var response = new HttpResponseMessage
             {
