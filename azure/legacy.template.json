@@ -100,7 +100,7 @@
         "uiAppServiceName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), 'ui-as')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), 'api-as')]",
         "supportAppServiceName": "[concat(variables('resourceNamePrefix'), 's', parameters('serviceName'), '-as')]",
-        "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
+        "resourceGroupName": "[concat(variables('resourceNamePrefix'), parameters('serviceName'), '-rg')]"
     },
     "resources": [
         {
