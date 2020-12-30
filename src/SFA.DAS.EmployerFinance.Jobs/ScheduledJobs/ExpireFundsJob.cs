@@ -9,15 +9,17 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
     public class ExpireFundsJob
     {
         private readonly IMessageSession _messageSession;
+        private readonly ILogger _logger;
 
-        public ExpireFundsJob(IMessageSession messageSession)
+        public ExpireFundsJob(IMessageSession messageSession, ILogger logger)
         {
             _messageSession = messageSession;
+            _logger = logger;
         }
 
-        public Task Run([TimerTrigger("0 0 0 28 * *")] TimerInfo timer, ILogger logger)
+        public Task Run([TimerTrigger("0 0 0 28 * *")] TimerInfo timer)
         {
-            logger.LogInformation($"ExpireFundsJob triggered");
+            _logger.LogInformation($"ExpireFundsJob triggered");
             return _messageSession.Send(new ExpireFundsCommand());
         }
     }

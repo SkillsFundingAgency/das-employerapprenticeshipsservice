@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
@@ -24,18 +25,20 @@ namespace SFA.DAS.EmployerFinance.Jobs.UnitTests.ScheduledJobs
     public class ExpireFundsJobTestsFixture
     {
         public Mock<IMessageSession> MessageSession { get; set; }
+        public Mock<ILogger> Logger { get; set; }
         public ExpireFundsJob Job { get; set; }
 
         public ExpireFundsJobTestsFixture()
         {
             MessageSession = new Mock<IMessageSession>();
+            Logger = new Mock<ILogger>();
 
-            Job = new ExpireFundsJob(MessageSession.Object);
+            Job = new ExpireFundsJob(MessageSession.Object, Logger.Object);
         }
 
         public Task Run()
         {
-            return Job.Run(null, null);
+            return Job.Run(null);
         }
     }
 }

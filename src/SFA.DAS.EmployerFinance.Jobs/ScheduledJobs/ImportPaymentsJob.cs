@@ -9,15 +9,17 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
     public class ImportPaymentsJob
     {
         private readonly IMessageSession _messageSession;
+        private readonly ILogger _logger;
 
-        public ImportPaymentsJob(IMessageSession messageSession)
+        public ImportPaymentsJob(IMessageSession messageSession, ILogger logger)
         {
             _messageSession = messageSession;
+            _logger = logger;
         }
 
-        public Task Run([TimerTrigger("0 0 * * * *")] TimerInfo timer, ILogger logger)
+        public Task Run([TimerTrigger("0 0 * * * *")] TimerInfo timer)
         {
-            logger.LogInformation($"ImportPaymentsJob triggered");
+            _logger.LogInformation($"ImportPaymentsJob triggered");
             return _messageSession.Send(new ImportPaymentsCommand());
         }
     }
