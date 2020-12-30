@@ -10,7 +10,7 @@ using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers;
 using SFA.DAS.EmployerFinance.Messages.Commands;
 using SFA.DAS.EmployerFinance.Models.Account;
-using SFA.DAS.EmployerFinance.Time;
+using SFA.DAS.NLog.Logger;
 using SFA.DAS.Testing;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
@@ -35,6 +35,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
         public DateTime Now { get; set; }
         public List<long> AccountIds { get; set; }
         public Mock<IMessageSession> MessageSession { get; set; }
+        public Mock<ILog> Logger { get; set; }
         public ExpireFundsCommand Command { get; set; }
         public Mock<IMessageHandlerContext> Context { get; set; }
         public Mock<ICurrentDateTime> CurrentDateTime { get; set; }
@@ -48,13 +49,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
             MessageSession = new Mock<IMessageSession>();
             Command = new ExpireFundsCommand();
             Context = new Mock<IMessageHandlerContext>();
+            Logger = new Mock<ILog>();
             CurrentDateTime = new Mock<ICurrentDateTime>();
             AccountRepository = new Mock<IEmployerAccountRepository>();
 
             CurrentDateTime.Setup(d => d.Now).Returns(Now);
             AccountRepository.Setup(r => r.GetAllAccounts()).ReturnsAsync(AccountIds.Select(i => new Account { Id = i }).ToList());
 
-            Handler = new ExpireFundsCommandHandler(CurrentDateTime.Object, AccountRepository.Object);
+            Handler = new ExpireFundsCommandHandler(CurrentDateTime.Object, AccountRepository.Object, Logger.Object);
         }
 
         public Task Handle()
