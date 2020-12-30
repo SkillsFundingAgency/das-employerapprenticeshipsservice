@@ -17,6 +17,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
 
         public Task Run([TimerTrigger("0 0 * * * *")] TimerInfo timer, ILogger logger)
         {
+            logger.LogInformation($"ImportPaymentsJob triggered");
             return _messageSession.Send(new ImportPaymentsCommand());
         }
     }

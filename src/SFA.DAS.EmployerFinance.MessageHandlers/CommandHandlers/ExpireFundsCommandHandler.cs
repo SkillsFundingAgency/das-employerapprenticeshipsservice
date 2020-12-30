@@ -4,6 +4,7 @@ using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
 using SFA.DAS.EmployerFinance.Interfaces;
 using SFA.DAS.EmployerFinance.Messages.Commands;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 {
@@ -11,11 +12,14 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
     {
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IEmployerAccountRepository _accountRepository;
+        private readonly ILog _logger;
 
-        public ExpireFundsCommandHandler(ICurrentDateTime currentDateTime, IEmployerAccountRepository accountRepository)
+
+        public ExpireFundsCommandHandler(ICurrentDateTime currentDateTime, IEmployerAccountRepository accountRepository, ILog logger)
         {
             _currentDateTime = currentDateTime;
             _accountRepository = accountRepository;
+            _logger = logger;
         }
 
         public async Task Handle(ExpireFundsCommand message, IMessageHandlerContext context)
@@ -24,8 +28,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var accounts = await _accountRepository.GetAllAccounts();
             var commands = accounts.Select(a => new ExpireAccountFundsCommand { AccountId = a.Id });
 
+            _logger.Info($"Creating ExpireFundsCommand for {accounts.Count} accounts");
+
             var tasks = commands.Select(c =>
             {
+                _logger.Info($"Created ExpireFundsCommand for account {c.AccountId}");
+
                 var sendOptions = new SendOptions();
 
                 sendOptions.RequireImmediateDispatch();
@@ -36,6 +44,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             });
 
             await Task.WhenAll(tasks);
+
+            _logger.Info($"Finished creating ExpireFundsCommand for {accounts.Count} accounts");
         }
     }
 }
