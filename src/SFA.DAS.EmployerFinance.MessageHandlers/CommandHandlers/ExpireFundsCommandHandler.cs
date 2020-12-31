@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Data;
@@ -24,11 +26,13 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
         public async Task Handle(ExpireFundsCommand message, IMessageHandlerContext context)
         {
+            var stopWatch = new Stopwatch();
             var now = _currentDateTime.Now;
             var accounts = await _accountRepository.GetAllAccounts();
             var commands = accounts.Select(a => new ExpireAccountFundsCommand { AccountId = a.Id });
 
             _logger.Info($"Creating ExpireFundsCommand for {accounts.Count} accounts");
+            stopWatch.Start();
 
             var tasks = commands.Select(c =>
             {
@@ -45,7 +49,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
             await Task.WhenAll(tasks);
 
-            _logger.Info($"Finished creating ExpireFundsCommand for {accounts.Count} accounts");
+            stopWatch.Stop();
+            _logger.Info($"Finished creating ExpireFundsCommand for {accounts.Count} accounts in {stopWatch.Elapsed.TotalMinutes}:{stopWatch.Elapsed.Seconds}");
         }
     }
 }

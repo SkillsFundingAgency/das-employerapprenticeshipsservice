@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using NServiceBus;
@@ -45,6 +46,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         {
             _logger.Info($"Expiring funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
 
+            var stopWatch = new Stopwatch();
+            stopWatch.Start();
+
             var now = _currentDateTime.Now;
             var fundsIn = await _levyFundsInRepository.GetLevyFundsIn(message.AccountId);
             var fundsOut = await _paymentFundsOutRepository.GetPaymentFundsOut(message.AccountId);
@@ -70,7 +74,9 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             if (expiredFunds.Any(ef => ef.Value != 0m))
                 await PublishAccountFundsExpiredEvent(context, message.AccountId);
 
-            _logger.Info($"Expired '{expiredFunds.Count}' month(s) of funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}'");
+            stopWatch.Stop();
+
+            _logger.Info($"Expired '{expiredFunds.Count}' month(s) of funds for account ID '{message.AccountId}' with expiry period '{_configuration.FundsExpiryPeriod}' in {stopWatch.Elapsed.TotalSeconds} seconds");
         }
 
         private async Task PublishAccountFundsExpiredEvent(IMessageHandlerContext context, long accountId)
