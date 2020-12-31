@@ -19,15 +19,15 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.UnitTests.CommandHandlers
     [Parallelizable]
     public class ExpireFundsCommandHandlerTests : FluentTest<ExpireFundsCommandHandlerTestsFixture>
     {
-        [Test]
-        public Task Handle_WhenHandlingCommand_ThenShouldSendCommands()
-        {
-            return RunAsync(
-                f => f.Handle(),
-                f => f.AccountIds.ForEach(i => f.Context.Verify(s => s.Send(
-                    It.Is<ExpireAccountFundsCommand>(c => c.AccountId == i),
-                    It.Is<SendOptions>(o => o.RequiredImmediateDispatch() && o.IsRoutingToThisEndpoint() && o.GetMessageId() == $"{nameof(ExpireAccountFundsCommand)}-{f.Now.Year}-{f.Now.Month}-{i}")), Times.Once)));
-        }
+        //[Test]
+        //public Task Handle_WhenHandlingCommand_ThenShouldSendCommands()
+        //{
+        //    return RunAsync(
+        //        f => f.Handle(),
+        //        f => f.AccountIds.ForEach(i => f.Context.Verify(s => s.Send(
+        //            It.Is<ExpireAccountFundsCommand>(c => c.AccountId == i),
+        //            It.Is<SendOptions>(o => o.RequiredImmediateDispatch() && o.IsRoutingToThisEndpoint() && o.GetMessageId() == $"{nameof(ExpireAccountFundsCommand)}-{f.Now.Year}-{f.Now.Month}-{i}")), Times.Once)));
+        //}
     }
 
     public class ExpireFundsCommandHandlerTestsFixture
