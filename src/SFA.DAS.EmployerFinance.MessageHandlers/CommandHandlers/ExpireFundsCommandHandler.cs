@@ -34,20 +34,20 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             _logger.Info($"Creating ExpireAccountFundsCommand for {accounts.Count} accounts");
             stopWatch.Start();
 
-            var tasks = commands.Select(c =>
-            {
-                _logger.Info($"Created ExpireAccountFundsCommand for account {c.AccountId}");
+            //var tasks = commands.Select(c =>
+            //{
+            //    _logger.Info($"Created ExpireAccountFundsCommand for account {c.AccountId}");
 
-                var sendOptions = new SendOptions();
+            //    var sendOptions = new SendOptions();
 
-                sendOptions.RequireImmediateDispatch();
-                sendOptions.RouteToThisEndpoint();
-                sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{c.AccountId}");
+            //    sendOptions.RequireImmediateDispatch();
+            //    sendOptions.RouteToThisEndpoint();
+            //    sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{c.AccountId}");
 
-                return context.Send(c, sendOptions);
-            });
+            //    return context.Send(c, sendOptions);
+            //});
 
-            await Task.WhenAll(tasks);
+            //await Task.WhenAll(tasks);
 
             stopWatch.Stop();
             _logger.Info($"Finished creating ExpireAccountFundsCommand for {accounts.Count} accounts in {stopWatch.Elapsed.TotalMinutes}:{stopWatch.Elapsed.Seconds}");
