@@ -31,12 +31,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             var accounts = await _accountRepository.GetAllAccounts();
             var commands = accounts.Select(a => new ExpireAccountFundsCommand { AccountId = a.Id });
 
-            _logger.Info($"Creating ExpireFundsCommand for {accounts.Count} accounts");
+            _logger.Info($"Creating ExpireAccountFundsCommand for {accounts.Count} accounts");
             stopWatch.Start();
 
             var tasks = commands.Select(c =>
             {
-                _logger.Info($"Created ExpireFundsCommand for account {c.AccountId}");
+                _logger.Info($"Created ExpireAccountFundsCommand for account {c.AccountId}");
 
                 var sendOptions = new SendOptions();
 
@@ -50,7 +50,7 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             await Task.WhenAll(tasks);
 
             stopWatch.Stop();
-            _logger.Info($"Finished creating ExpireFundsCommand for {accounts.Count} accounts in {stopWatch.Elapsed.TotalMinutes}:{stopWatch.Elapsed.Seconds}");
+            _logger.Info($"Finished creating ExpireAccountFundsCommand for {accounts.Count} accounts in {stopWatch.Elapsed.TotalMinutes}:{stopWatch.Elapsed.Seconds}");
         }
     }
 }
