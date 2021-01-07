@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NServiceBus;
 using NUnit.Framework;
@@ -52,7 +53,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.UnitTests.ScheduledJobs
 
         public Task Run()
         {
-            return Job.Run(null, null);
+            return Job.Run(null, Mock.Of<ILogger>());
         }
 
         internal void SetupAccounts(int numberOfAccounts)
