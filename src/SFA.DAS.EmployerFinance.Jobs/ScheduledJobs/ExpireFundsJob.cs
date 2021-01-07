@@ -33,16 +33,17 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
 
             var now = _currentDateTime.Now;
             var accounts = await _accountRepository.GetAllAccounts();
-            var commands = accounts.Select(a => new ExpireAccountFundsCommand { AccountId = a.Id });
 
-            var tasks = commands.Select(c =>
+            logger.LogInformation($"Queueing {nameof(ExpireAccountFundsCommand)} messages for {accounts.Count} accounts.");
+
+            var tasks = accounts.Select(a =>
             {
                 var sendOptions = new SendOptions();
 
                 sendOptions.RequireImmediateDispatch();
-                sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{c.AccountId}");
+                sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{a.Id}");
 
-                return _messageSession.Send(c, sendOptions);
+                return _messageSession.Send(new ExpireAccountFundsCommand { AccountId = a.Id }, sendOptions);
             });
 
             await Task.WhenAll(tasks);
