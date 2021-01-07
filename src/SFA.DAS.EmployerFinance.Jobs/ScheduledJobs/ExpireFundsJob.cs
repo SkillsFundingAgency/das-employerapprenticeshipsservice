@@ -29,6 +29,8 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             [TimerTrigger("0 0 0 28 * *")] TimerInfo timer, 
             ILogger logger)
         {
+            logger.LogInformation($"Starting {nameof(ExpireFundsJob)}");
+
             var now = _currentDateTime.Now;
             var accounts = await _accountRepository.GetAllAccounts();
             var commands = accounts.Select(a => new ExpireAccountFundsCommand { AccountId = a.Id });
@@ -44,6 +46,8 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
             });
 
             await Task.WhenAll(tasks);
+
+            logger.LogInformation($"{nameof(ExpireFundsJob)} completed.");
         }
     }
 }
