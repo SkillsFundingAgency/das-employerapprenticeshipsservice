@@ -15,7 +15,10 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
         private readonly ICurrentDateTime _currentDateTime;
         private readonly IEmployerAccountRepository _accountRepository;
 
-        public ExpireFundsJob(IMessageSession messageSession, ICurrentDateTime currentDateTime, IEmployerAccountRepository accountRepository)
+        public ExpireFundsJob(
+            IMessageSession messageSession, 
+            ICurrentDateTime currentDateTime, 
+            IEmployerAccountRepository accountRepository)
         {
             _messageSession = messageSession;
             _currentDateTime = currentDateTime;
@@ -35,7 +38,6 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
                 var sendOptions = new SendOptions();
 
                 sendOptions.RequireImmediateDispatch();
-                // sendOptions.RouteToThisEndpoint();
                 sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{c.AccountId}");
 
                 return _messageSession.Send(c, sendOptions);
