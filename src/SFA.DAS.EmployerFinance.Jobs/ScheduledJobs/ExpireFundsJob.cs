@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using NServiceBus;
@@ -36,17 +35,22 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
 
             logger.LogInformation($"Queueing {nameof(ExpireAccountFundsCommand)} messages for {accounts.Count} accounts.");
 
-            var tasks = accounts.Select(a =>
+            for (int i = 0; i < accounts.Count; i++)
             {
+                var account = accounts[i];
+
                 var sendOptions = new SendOptions();
 
                 sendOptions.RequireImmediateDispatch();
-                sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{a.Id}");
+                sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{account.Id}");
 
-                return _messageSession.Send(new ExpireAccountFundsCommand { AccountId = a.Id }, sendOptions);
-            });
+                await _messageSession.Send(new ExpireAccountFundsCommand { AccountId = account.Id }, sendOptions);
 
-            await Task.WhenAll(tasks);
+                if(i % 100 == 0)
+                {
+                    await Task.Delay(500);
+                }
+            }
 
             logger.LogInformation($"{nameof(ExpireFundsJob)} completed.");
         }
