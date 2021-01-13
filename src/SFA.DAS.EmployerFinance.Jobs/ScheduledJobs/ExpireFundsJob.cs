@@ -25,7 +25,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
         }
 
         public async Task Run(
-            [TimerTrigger("0 0 0 28 * *", RunOnStartup = true)] TimerInfo timer, 
+            [TimerTrigger("0 0 0 28 * *")] TimerInfo timer, 
             ILogger logger)
         {
             logger.LogInformation($"Starting {nameof(ExpireFundsJob)}");
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
 
                 await _messageSession.Send(new ExpireAccountFundsCommand { AccountId = account.Id }, sendOptions);
 
-                if(i % 100 == 0)
+                if (i % 100 == 0)
                 {
                     await Task.Delay(500);
                 }
