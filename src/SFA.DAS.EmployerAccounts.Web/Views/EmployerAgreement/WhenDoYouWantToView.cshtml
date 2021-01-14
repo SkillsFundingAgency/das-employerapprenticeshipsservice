@@ -86,6 +86,27 @@
     </div>
 </div>
 
+@section pageSpecificJS {
+    <script type="text/javascript">
+      $(function () {
+        var pageTitle = $('h1.govuk-heading-xl').text().trim();
+        $('.govuk-radios').each(function () {
+          var dataLayerObj
+          var radios = $(this).find('input:radio');
+          radios.on('change', function () {
+            dataLayerObj = {
+              event: 'radio button selected',
+              page: pageTitle,
+              radio: this.id
+            }
+            window.dataLayer.push(dataLayerObj)
+          })
+        });
+      });
+    </script>
+}
+
+
 
 @*<div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
