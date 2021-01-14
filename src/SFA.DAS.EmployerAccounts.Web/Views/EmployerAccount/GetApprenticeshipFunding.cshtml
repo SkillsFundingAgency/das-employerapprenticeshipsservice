@@ -107,8 +107,20 @@
 
 @section pageSpecificJS {
     <script type="text/javascript">
-        $(function () {
-            sfa.homePage.init();
+      $(function () {
+        var pageTitle = $('h1.govuk-heading-xl').text().trim();
+        $('.govuk-radios').each(function () {
+          var dataLayerObj
+          var radios = $(this).find('input:radio');
+          radios.on('change', function () {
+            dataLayerObj = {
+              event: 'radio button selected',
+              page: pageTitle,
+              radio: this.id
+            }
+            window.dataLayer.push(dataLayerObj)
+          })
         });
+      });
     </script>
 }
