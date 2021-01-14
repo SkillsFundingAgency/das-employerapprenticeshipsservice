@@ -41,14 +41,14 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
 
                 var sendOptions = new SendOptions();
 
-                sendOptions.RequireImmediateDispatch();
                 sendOptions.SetMessageId($"{nameof(ExpireAccountFundsCommand)}-{now.Year}-{now.Month}-{account.Id}");
 
                 await _messageSession.Send(new ExpireAccountFundsCommand { AccountId = account.Id }, sendOptions);
 
-                if (i % 100 == 0)
+                if (i % 1000 == 0)
                 {
-                    await Task.Delay(500);
+                    logger.LogInformation($"Queued {i} of {accounts.Count} messages.");
+                    await Task.Delay(5000);
                 }
             }
 
