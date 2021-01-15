@@ -20,8 +20,9 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 case 3:
                     return "This is a new agreement.";
                 case 4:
-                case 5:
                     return HasSignedVariationOfv3Agreement(organisationAgreementViewModel) ? "This is a variation to the agreement we published 9 January 2020. You only need to accept it if you want to access incentive payments for hiring a new apprentice." : "This is a new agreement.";
+                case 5:
+                    return HasSignedVariationOfv3Agreement(organisationAgreementViewModel) ? "This is a variation to the agreement we published 9 January 2020." : "This is a new agreement.";
                 default:
                     return string.Empty;
             }

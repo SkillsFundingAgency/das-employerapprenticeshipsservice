@@ -85,7 +85,7 @@ namespace SFA.DAS.EmployerAccounts.Web.UnitTests.Extensions
         [TestCase(2, "This is a variation of the agreement that we published 1 May 2017. We updated it to add clause 7 (transfer of funding).")]
         [TestCase(3, "This is a new agreement.")]
         [TestCase(4, "This is a variation to the agreement we published 9 January 2020. You only need to accept it if you want to access incentive payments for hiring a new apprentice.")]
-        [TestCase(5, "This is a variation to the agreement we published 9 January 2020. You only need to accept it if you want to access incentive payments for hiring a new apprentice.")]
+        [TestCase(5, "This is a variation to the agreement we published 9 January 2020.")]
         public void InsetTextSetCorrectlyForPreviouslySignedv3Agreements(int agreementVersion, string expectedResult)
         {
             var model = new AgreementTemplateViewModel
