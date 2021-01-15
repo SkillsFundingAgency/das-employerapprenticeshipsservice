@@ -177,17 +177,33 @@
 @section pageSpecificJS {
     <script>
         $(function () {
-            var filterForm = $('#filter');
-            //if (filterForm.length > 0) {
-            var radios = filterForm.find('input:radio');
+
+            var pageTitle = $('h1.govuk-heading-xl').text().trim();
+            var formFilter = $('form#filter');
+            var dataLayerObj
+            var radios = formFilter.find('input:radio');
+
             radios.on('change', function () {
-                var radioLabel = radios.filter(':checked').siblings('label').text();
-                dataLayer.push({
+
+                var radioLabel = $(this).siblings('label').text().trim().substring(0, 30)
+
+                dataLayerObj = {
+                    event: 'radio button selected',
+                    page: pageTitle,
+                    radio: radioLabel
+                }
+
+                window.dataLayer.push(dataLayerObj)
+
+                // Keep existing DL push
+                window.dataLayer.push({
                     'cd1': radioLabel
                 });
-                filterForm.submit();
-            });
-            //}
+
+                // Submit form
+                formFilter.submit()
+            })
+
         });
     </script>
 }
