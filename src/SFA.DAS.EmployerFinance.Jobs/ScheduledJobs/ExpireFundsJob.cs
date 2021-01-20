@@ -51,7 +51,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
                 if (sendCounter % 1000 == 0)
                 {
                     await Task.WhenAll(messageTasks);
-                    logger.LogInformation($"Queued {messageTasks.Count} of {accounts.Count} messages.");
+                    logger.LogInformation($"Queued {sendCounter} of {accounts.Count} messages.");
                     messageTasks.Clear();
                     await Task.Delay(1000);
                 }
