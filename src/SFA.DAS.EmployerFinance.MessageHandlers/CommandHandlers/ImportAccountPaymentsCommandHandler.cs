@@ -24,6 +24,12 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
         {
             _logger.Info($"Processing refresh payment command for Account ID: {message.AccountId} PeriodEnd: {message.PeriodEndRef}");
 
+            if(message.AccountId == 279)
+            {
+                _logger.Info($"Temporarily ignoring Import account payment commands for Account ID: {message.AccountId} PeriodEnd: {message.PeriodEndRef}");
+                return;
+            }
+
             await _mediator.SendAsync(new RefreshPaymentDataCommand
             {
                 AccountId = message.AccountId,
