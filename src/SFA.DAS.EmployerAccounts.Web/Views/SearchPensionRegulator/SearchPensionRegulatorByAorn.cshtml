@@ -33,6 +33,17 @@
                 </div>
             }
 
+            if () 
+            {
+                <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
+                    <h2 class="govuk-error-summary__title" id="error-summary-title" id="error-summary-heading">
+                        There is a problem
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                    </div>
+                </div>
+            }
+
             <h1 class="govuk-heading-xl">Enter your PAYE scheme details</h1>
             <p class="govuk-body">Enter your accounts office reference number and employer PAYE scheme reference. These details will be checked against the Pensions Regulator.</p>
 
@@ -45,7 +56,7 @@
                         <span class="govuk-hint">For example, 123PA12345678</span>
                         @if (!string.IsNullOrEmpty(Model.AornError))
                         {
-                            <span class="govukerror-message" id="error-message-aorn">@Model.AornError</span>
+                            <span class="govuk-error-message" id="error-message-aorn">@Model.AornError</span>
                         }
                         <input class="govuk-input govuk-!-width-three-quarters" id="aorn" name="aorn" type="text" value="@Model.Aorn" @(!string.IsNullOrEmpty(Model.AornError) ? "aria-invalid=true aria-describedby=error-message-aorn" : "")>
                     </div>
@@ -55,7 +66,7 @@
                         <span class="govuk-hint">For example, 123/AB12345</span>
                         @if (!string.IsNullOrEmpty(Model.PayeRefError))
                         {
-                            <span class="govukerror-message" id="error-message-payeRef">@Model.PayeRefError</span>
+                            <span class="govuk-error-message" id="error-message-payeRef">@Model.PayeRefError</span>
                         }
                         <input class="govuk-input govuk-!-width-three-quarters" id="payeRef" name="payeRef" type="text" value="@Model.PayeRef" @(!string.IsNullOrEmpty(Model.PayeRefError) ? "aria-invalid=true aria-describedby=error-message-payeRef" : "")>
                     </div>
@@ -63,7 +74,7 @@
 
                 <div class="govuk-form-group">
                     <button class="govuk-button" type="submit" id="submit-aorn-details">Continue</button>
-                    <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link das-link--button-aligned">Skip this step for now</a>
+                    <a href="@Url.Action(ControllerConstants.SkipRegistrationActionName, ControllerConstants.EmployerAccountControllerName)" class="govuk-link das-link--button-aligned govuk-link--no-visited-state">Skip this step for now</a>
                 </div>
 
             </form>
@@ -73,12 +84,4 @@
 
 @section breadcrumb {
     <div class="das-js-back-link"></div>
-}
-
-@section pageSpecificJS {
-    <script type="text/javascript">
-        $(function () {
-            sfa.homePage.init();
-        });
-    </script>
 }
