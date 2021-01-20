@@ -33,13 +33,27 @@
                 </div>
             }
 
-            if () 
+            if (!string.IsNullOrEmpty(Model.AornError) || !string.IsNullOrEmpty(Model.PayeRefError)) 
             {
                 <div class="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabindex="-1" data-module="govuk-error-summary">
                     <h2 class="govuk-error-summary__title" id="error-summary-title" id="error-summary-heading">
                         There is a problem
                     </h2>
                     <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__list">
+                            @if (!string.IsNullOrEmpty(Model.AornError))
+                            {
+                                <li>
+                                    <a href="#aorn">@Model.AornError</a>
+                                </li>
+                            }
+                            @if (!string.IsNullOrEmpty(Model.PayeRefError))
+                            {
+                                <li>
+                                    <a href="#payeRef">@Model.PayeRefError</a>
+                                </li>
+                            }
+                        </ul>
                     </div>
                 </div>
             }
