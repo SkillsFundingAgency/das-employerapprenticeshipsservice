@@ -69,11 +69,10 @@
         },
         "sharedApimName": {
             "type": "string"
-        },        
+        },
         "appServiceAllowedIPs": {
             "type": "array",
-            "defaultValue": [
-            ]
+            "defaultValue": []
         },
         "sharedEnvVirtualNetworkName": {
             "type": "string"
@@ -103,15 +102,13 @@
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
     },
-    "resources": [
-        {
+    "resources": [{
             "apiVersion": "2020-06-01",
             "name": "[variables('resourceGroupName')]",
             "type": "Microsoft.Resources/resourceGroups",
             "location": "[parameters('resourceGroupLocation')]",
             "tags": "[parameters('tags')]",
-            "properties": {
-            }
+            "properties": {}
         },
         {
             "apiVersion": "2020-06-01",
@@ -151,6 +148,27 @@
                     },
                     "attachedService": {
                         "value": "[variables('apiAppServiceName')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "2020-06-01",
+            "name": "WorkerAppInsights",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('resourceGroupName')]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('deploymentUrlBase'),'application-insights.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "appInsightsName": {
+                        "value": "[variables('workerAppServiceName')]"
+                    },
+                    "attachedService": {
+                        "value": "[variables('workerAppServiceName')]"
                     }
                 }
             }
@@ -206,8 +224,7 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
@@ -305,8 +322,7 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
@@ -424,8 +440,7 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
@@ -444,14 +459,17 @@
                                 {
                                     "name": "StorageConnectionString",
                                     "value": "[parameters('storageConnectionString')]"
+                                },
+                                {
+                                    "name": "InstrumentationKey",
+                                    "value": "[reference('WorkerAppInsights').outputs.InstrumentationKey.value]"
                                 }
                             ]
                         }
                     },
                     "appServiceConnectionStrings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "AzureWebJobsDashboard",
                                     "connectionString": "[parameters('storageConnectionString')]",
                                     "type": "Custom"
