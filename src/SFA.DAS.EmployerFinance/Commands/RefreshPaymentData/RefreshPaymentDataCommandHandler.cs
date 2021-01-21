@@ -56,25 +56,25 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
 
             try
             {
-                _logger.Info($"GetAccountPayments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+                _logger.Info($"GetAccountPayments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
-                payments = await _paymentService.GetAccountPayments(message.PeriodEnd, message.AccountId);
+                payments = await _paymentService.GetAccountPayments(message.PeriodEnd, message.AccountId, message.CorrelationId);
             }
             catch (WebException ex)
             {
-                _logger.Error(ex, $"Unable to get payment information for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+                _logger.Error(ex, $"Unable to get payment information for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
             }
 
             if (payments == null || !payments.Any())
             {
-                _logger.Info($"GetAccountPayments did not find any payments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+                _logger.Info($"GetAccountPayments did not find any payments for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
                 await PublishRefreshPaymentDataCompletedEvent(message, false);
 
                 return;
             }
 
-            _logger.Info($"GetAccountPaymentIds for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+            _logger.Info($"GetAccountPaymentIds for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
             var existingPaymentIds = await _dasLevyRepository.GetAccountPaymentIds(message.AccountId);
             var newPayments = payments.Where(p => !existingPaymentIds.Contains(p.Id)).ToArray();
@@ -88,7 +88,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
                 return;
             }
 
-            _logger.Info($"CreatePayments for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+            _logger.Info($"CreatePayments for new payments AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
             var newNonFullyFundedPayments = newPayments.Where(p => p.FundingSource != FundingSource.FullyFundedSfa);
 
@@ -97,7 +97,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshPaymentData
 
             await PublishRefreshPaymentDataCompletedEvent(message, true);
 
-            _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}'");
+            _logger.Info($"Finished publishing ProcessPaymentEvent and PaymentCreatedMessage messages for AccountId = '{message.AccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
         }
 
         private async Task PublishRefreshPaymentDataCompletedEvent(RefreshPaymentDataCommand message, bool hasPayments)

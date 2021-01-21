@@ -47,7 +47,9 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
             try
             {
-                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId);
+                _logger.Info($"Getting account transferts from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
+                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId, message.CorrelationId);                
 
                 //Handle multiple transfers for the same account, period end and commitment ID by grouping them together
                 //This can happen if delivery months are different by collection months are not for payments
@@ -69,11 +71,17 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                         };
                     }).ToArray();
 
+                _logger.Info($"Retrieved {transfers.Length} grouped account transferts from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
                 var transferSenderIds = transfers.Select(t => t.SenderAccountId).Distinct();
+
+                _logger.Info($"Getting sender account names for ids:[{string.Join(",", transferSenderIds.Select(x => x.ToString()))}] AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
                 var transferSenderAccountNames = await _accountRepository.GetAccountNames(transferSenderIds);
 
                 var transferReceiverAccountName = await _accountRepository.GetAccountName(message.ReceiverAccountId);
+
+                _logger.Info($"Getting receiver name AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
                 foreach (var transfer in transfers)
                 {
@@ -99,6 +107,8 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                 _logger.Error(ex, $"Could not process transfers for Account Id {message.ReceiverAccountId} and Period End {message.PeriodEnd}");
                 throw;
             }
+
+            _logger.Info($"Refresh account transfers handler complete for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
         }
     }
 }

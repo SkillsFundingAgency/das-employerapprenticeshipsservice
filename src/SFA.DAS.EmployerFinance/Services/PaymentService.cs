@@ -40,7 +40,7 @@ namespace SFA.DAS.EmployerFinance.Services
             _providerService = providerService;
         }
 
-        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
+        public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId, Guid correlationId)
         {
             var populatedPayments = new List<PaymentDetails>();
 
@@ -66,12 +66,14 @@ namespace SFA.DAS.EmployerFinance.Services
                 }
 
                 populatedPayments.AddRange(paymentDetails);
+
+                _logger.Info($"Populated payements page {index} of {totalPages} for AccountId = {employerAccountId}, periodEnd={periodEnd}, correlationId = {correlationId}");
             }
 
             return populatedPayments;
         }
 
-        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId)
+        public async Task<IEnumerable<AccountTransfer>> GetAccountTransfers(string periodEnd, long receiverAccountId, Guid correlationId)
         {
             var pageOfTransfers =
                 await _paymentsEventsApiClient.GetTransfers(periodEnd, receiverAccountId: receiverAccountId);
