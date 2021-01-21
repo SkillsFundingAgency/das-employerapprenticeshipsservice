@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using NServiceBus;
 using SFA.DAS.EmployerFinance.Commands.CreateTransferTransactions;
@@ -22,20 +23,23 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
 
         public async Task Handle(ImportAccountPaymentsCommand message, IMessageHandlerContext context)
         {
-            _logger.Info($"Processing refresh payment command for Account ID: {message.AccountId} PeriodEnd: {message.PeriodEndRef}");
+            var correlationId = Guid.NewGuid();
+            _logger.Info($"Processing refresh payment command for Account ID: {message.AccountId} PeriodEnd: {message.PeriodEndRef} CorrelationId: {correlationId}");
 
             await _mediator.SendAsync(new RefreshPaymentDataCommand
             {
                 AccountId = message.AccountId,
-                PeriodEnd = message.PeriodEndRef
-            });
+                PeriodEnd = message.PeriodEndRef,
+                CorrelationId = correlationId
+        });
 
-            _logger.Info($"Processing refresh account transfers command for AccountId:{message.AccountId} PeriodEnd:{message.PeriodEndRef}");
+            _logger.Info($"Processing refresh account transfers command for AccountId:{message.AccountId} PeriodEnd:{message.PeriodEndRef}, CorrelationId: {correlationId}");
 
             await _mediator.SendAsync(new RefreshAccountTransfersCommand
             {
                 ReceiverAccountId = message.AccountId,
-                PeriodEnd = message.PeriodEndRef
+                PeriodEnd = message.PeriodEndRef,
+                CorrelationId = correlationId
             });
 
             _logger.Info($"Processing create account transfer transactions command for AccountId:{message.AccountId} PeriodEnd:{message.PeriodEndRef}");
@@ -43,7 +47,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             await _mediator.SendAsync(new CreateTransferTransactionsCommand
             {
                 ReceiverAccountId = message.AccountId,
-                PeriodEnd = message.PeriodEndRef
+                PeriodEnd = message.PeriodEndRef,
+                CorrelationId = correlationId
             });
         }
     }
