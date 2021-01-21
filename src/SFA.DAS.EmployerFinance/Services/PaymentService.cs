@@ -56,13 +56,17 @@ namespace SFA.DAS.EmployerFinance.Services
 
                 var paymentDetails = payments.Items.Select(x => _mapper.Map<PaymentDetails>(x)).ToArray();
 
+                int paymentDetailsCount = 0;
                 foreach (var details in paymentDetails)
                 {
                     details.PeriodEnd = periodEnd;
 
-                    await GetProviderDetails(details);
-                    await GetApprenticeshipDetails(employerAccountId, details);
-                    await GetCourseDetails(details);
+                    var getProviderDetailsTask = GetProviderDetails(details);
+                    var getApprenticeshipDetailsTask = GetApprenticeshipDetails(employerAccountId, details);
+                    var getCourseDetailsTask = GetCourseDetails(details);
+
+                    await Task.WhenAll(getProviderDetailsTask, getApprenticeshipDetailsTask, getCourseDetailsTask);
+                    _logger.Info($"Metadata retrieved for payment {details.Id}, count: {++paymentDetailsCount}, correlationId = {correlationId}");
                 }
 
                 populatedPayments.AddRange(paymentDetails);
