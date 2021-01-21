@@ -108,7 +108,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshAccountTransfersTest
             await _handler.Handle(_command);
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId, Guid.NewGuid()), Times.Once);
+            _paymentService.Verify(x => x.GetAccountTransfers(_command.PeriodEnd, _command.ReceiverAccountId, It.IsAny<Guid>()), Times.Once);
         }
 
         [Test]

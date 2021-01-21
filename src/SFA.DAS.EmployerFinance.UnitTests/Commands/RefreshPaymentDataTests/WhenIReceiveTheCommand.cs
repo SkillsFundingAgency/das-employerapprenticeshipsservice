@@ -47,7 +47,8 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             _command = new RefreshPaymentDataCommand
             {
                 AccountId = AccountId,
-                PeriodEnd = PeriodEnd
+                PeriodEnd = PeriodEnd,
+                CorrelationId = Guid.NewGuid()
             };
 
             _existingPaymentIds = new List<Guid>
@@ -118,7 +119,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             await _handler.Handle(_command);
 
             //Assert
-            _paymentService.Verify(x => x.GetAccountPayments(_command.PeriodEnd, _command.AccountId, Guid.NewGuid()));
+            _paymentService.Verify(x => x.GetAccountPayments(_command.PeriodEnd, _command.AccountId, It.IsAny<Guid>()));
         }
 
         [Test]
@@ -191,7 +192,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
             _mediator.Verify(x => x.PublishAsync(It.IsAny<ProcessPaymentEvent>()), Times.Never);
 
             _logger.Verify(x => x.Error(It.IsAny<WebException>(),
-                $"Unable to get payment information for AccountId = '{AccountId}' and PeriodEnd = '{_command.PeriodEnd}'"));
+                $"Unable to get payment information for AccountId = '{AccountId}' and PeriodEnd = '{_command.PeriodEnd}' CorrelationId: {_command.CorrelationId}"));
         }
 
         [Test]
