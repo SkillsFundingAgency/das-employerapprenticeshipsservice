@@ -59,6 +59,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ApplicationInsights.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="App.Debug.config">
       <IsTransformFile>true</IsTransformFile>
       <DependentUpon>App.config</DependentUpon>
