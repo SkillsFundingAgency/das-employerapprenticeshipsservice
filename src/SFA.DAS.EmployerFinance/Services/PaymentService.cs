@@ -78,13 +78,11 @@ namespace SFA.DAS.EmployerFinance.Services
                     details.PeriodEnd = periodEnd;
                     var getCourseDetailsTask = GetCourseDetails(details);
 
-                    var provider = providerDetails[details.Ukprn];
+                    providerDetails.TryGetValue(details.Ukprn, out var provider);
                     details.ProviderName = provider?.Name;
                     details.IsHistoricProviderName = provider?.IsHistoricProviderName ?? false;
 
-                    var apprenticeship = apprenticeshipDetails[details.ApprenticeshipId];
-
-                    if (apprenticeship != null)
+                    if (apprenticeshipDetails.TryGetValue(details.ApprenticeshipId, out var apprenticeship))
                     {
                         details.ApprenticeName = $"{apprenticeship.FirstName} {apprenticeship.LastName}";
                         details.ApprenticeNINumber = apprenticeship.NINumber;
@@ -134,7 +132,9 @@ namespace SFA.DAS.EmployerFinance.Services
             //}
 
             var apprenticeships = await Task.WhenAll(taskList);
-            resultApprenticeships = apprenticeships.ToDictionary(app => app.Id, app => app);
+            resultApprenticeships = apprenticeships
+                .Where(app => app != null)
+                .ToDictionary(app => app.Id, app => app);
 
             return resultApprenticeships;
         }
