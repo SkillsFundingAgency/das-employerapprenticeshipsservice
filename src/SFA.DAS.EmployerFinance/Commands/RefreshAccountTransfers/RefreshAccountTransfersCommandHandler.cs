@@ -47,9 +47,11 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
             try
             {
-                _logger.Info($"Getting account transferts from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+                _logger.Info($"Getting account transfers from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
-                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId, message.CorrelationId);                
+                var paymentTransfers = await _paymentService.GetAccountTransfers(message.PeriodEnd, message.ReceiverAccountId, message.CorrelationId);
+
+                _logger.Info($"Retrieved payment transfers from payment api for AccountId = '{message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
                 //Handle multiple transfers for the same account, period end and commitment ID by grouping them together
                 //This can happen if delivery months are different by collection months are not for payments
@@ -87,7 +89,11 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                 {
                     transfer.PeriodEnd = message.PeriodEnd;
 
+                    _logger.Info($"Getting payment details for transfer AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+
                     var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
+
+                    _logger.Info($"Got payment details for transfer: {(paymentDetails == null ? "null payment details" : paymentDetails.CourseName)} AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
                     transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
                     transfer.CourseLevel = paymentDetails.CourseLevel;
@@ -100,11 +106,12 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                         _logger.Warn("Transfer total does not match transfer payments total");
                 }
 
+                _logger.Info($"Creating account transfers AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
                 await _transferRepository.CreateAccountTransfers(transfers);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, $"Could not process transfers for Account Id {message.ReceiverAccountId} and Period End {message.PeriodEnd}");
+                _logger.Error(ex, $"Could not process transfers for Account Id {message.ReceiverAccountId} and Period End {message.PeriodEnd}, CorrelationId = {message.CorrelationId}");
                 throw;
             }
 
