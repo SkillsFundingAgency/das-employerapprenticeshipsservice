@@ -99,3 +99,27 @@
 @section breadcrumb {
     <div class="das-js-back-link"></div>
 }
+
+@section pageSpecificJS {
+    <script type="text/javascript">
+      // DataLayer pushes when form validation message is shown
+      $(function () {
+        var errorSummary = $('.govuk-error-summary');
+        var pageTitle = $('h1.govuk-heading-xl').text();
+        errorSummary.each(function () {
+          var dataLayerObj
+          var numberOfErrors = $(this).find('ul.govuk-error-summary__list li').length;
+          var validationMessage = "Form validation";
+          if (numberOfErrors === 1) {
+            validationMessage = $(this).find('a').eq(0).text();
+          }
+          dataLayerObj = {
+            event: 'form submission error',
+            page: pageTitle,
+            message: validationMessage
+          }
+          window.dataLayer.push(dataLayerObj)
+        });
+      });
+    </script>
+}
