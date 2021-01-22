@@ -87,23 +87,32 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
                 foreach (var transfer in transfers)
                 {
-                    transfer.PeriodEnd = message.PeriodEnd;
+                    try
+                    {
+                        transfer.PeriodEnd = message.PeriodEnd;
 
-                    _logger.Info($"Getting payment details for transfer AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+                        _logger.Info($"Getting payment details for transfer AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
-                    var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
+                        var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
 
-                    _logger.Info($"Got payment details for transfer: {(paymentDetails == null ? "null payment details" : paymentDetails.CourseName)} AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
+                        _logger.Info($"Got payment details for transfer: {(paymentDetails == null ? "null payment details" : paymentDetails.CourseName)} AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
-                    transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
-                    transfer.CourseLevel = paymentDetails.CourseLevel;
-                    transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
+                        transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
+                        transfer.CourseLevel = paymentDetails.CourseLevel;
+                        transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
 
-                    transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
-                    transfer.ReceiverAccountName = transferReceiverAccountName;
+                        transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
+                        transfer.ReceiverAccountName = transferReceiverAccountName;
 
-                    if (transfer.Amount != paymentDetails.PaymentTotal)
-                        _logger.Warn("Transfer total does not match transfer payments total");
+                        if (transfer.Amount != paymentDetails.PaymentTotal)
+                            _logger.Warn("Transfer total does not match transfer payments total");
+                    }
+                    catch(Exception ex)
+                    {
+                        _logger.Error(ex, $"Failed to process transfer: ReceiverAccountId = {transfer.ReceiverAccountId}, PeriodEnd = {message.PeriodEnd}, ApprenticeshipId = {transfer.ApprenticeshipId}, CorrelationId = {message.CorrelationId}");
+                        throw;
+                    }
+                        
                 }
 
                 _logger.Info($"Creating account transfers AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
