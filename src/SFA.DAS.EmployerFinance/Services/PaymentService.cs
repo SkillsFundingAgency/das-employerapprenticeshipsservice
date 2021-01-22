@@ -121,12 +121,20 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             var resultApprenticeships = new Dictionary<long, Apprenticeship>();
 
-            foreach (var apprenticeshipId in apprenticeshipIdList)
+            var taskList = apprenticeshipIdList.Select(id =>
             {
-                if (resultApprenticeships.ContainsKey(apprenticeshipId)) continue;
-                var apprenticeship = await GetApprenticeship(employerAccountId, apprenticeshipId);
-                resultApprenticeships.Add(apprenticeshipId, apprenticeship);
-            }
+                return GetApprenticeship(employerAccountId, id);
+            });
+
+            //foreach (var apprenticeshipId in apprenticeshipIdList)
+            //{
+            //    if (resultApprenticeships.ContainsKey(apprenticeshipId)) continue;
+            //    var apprenticeship = await GetApprenticeship(employerAccountId, apprenticeshipId);
+            //    resultApprenticeships.Add(apprenticeshipId, apprenticeship);
+            //}
+
+            var apprenticeships = await Task.WhenAll(taskList);
+            resultApprenticeships = apprenticeships.ToDictionary(app => app.Id, app => app);
 
             return resultApprenticeships;
         }
