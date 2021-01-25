@@ -97,9 +97,12 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
 
                         _logger.Info($"Got payment details for transfer: {(paymentDetails == null ? "null payment details" : paymentDetails.CourseName)} AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
 
-                        transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
-                        transfer.CourseLevel = paymentDetails.CourseLevel;
-                        transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
+                        if (paymentDetails != null)
+                        {
+                            transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
+                            transfer.CourseLevel = paymentDetails.CourseLevel;
+                            transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
+                        }
 
                         transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
                         transfer.ReceiverAccountName = transferReceiverAccountName;
@@ -107,12 +110,12 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                         if (transfer.Amount != paymentDetails.PaymentTotal)
                             _logger.Warn("Transfer total does not match transfer payments total");
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         _logger.Error(ex, $"Failed to process transfer: ReceiverAccountId = {transfer.ReceiverAccountId}, PeriodEnd = {message.PeriodEnd}, ApprenticeshipId = {transfer.ApprenticeshipId}, CorrelationId = {message.CorrelationId}");
                         throw;
                     }
-                        
+
                 }
 
                 _logger.Info($"Creating account transfers AccountId = {message.ReceiverAccountId}' and PeriodEnd = '{message.PeriodEnd}' CorrelationId: {message.CorrelationId}");
