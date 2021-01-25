@@ -107,7 +107,7 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                         transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
                         transfer.ReceiverAccountName = transferReceiverAccountName;
 
-                        if (transfer.Amount != paymentDetails.PaymentTotal)
+                        if (transfer.Amount != (paymentDetails?.PaymentTotal ?? 0))
                             _logger.Warn("Transfer total does not match transfer payments total");
                     }
                     catch (Exception ex)
