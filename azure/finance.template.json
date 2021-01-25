@@ -461,7 +461,7 @@
                                     "value": "[parameters('storageConnectionString')]"
                                 },
                                 {
-                                    "name": "InstrumentationKey",
+                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
                                     "value": "[reference('WorkerAppInsights').outputs.InstrumentationKey.value]"
                                 }
                             ]
