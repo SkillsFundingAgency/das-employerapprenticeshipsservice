@@ -31,7 +31,6 @@ namespace SFA.DAS.EmployerFinance.Data
         {
             var result = await _db.Value.Database.Connection.QueryAsync<Account>(
                 sql: "select * from [employer_financial].[Account]",
-                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
                 commandType: CommandType.Text);
 
             return result.AsList();
