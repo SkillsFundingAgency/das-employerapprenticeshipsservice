@@ -107,12 +107,8 @@ else
                     @if (Html.IsAuthorized("EmployerFeature.EmployerIncentives"))
                     {
                         <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.EmployerIncentivesAction()">Apply for the hire a new apprentice payment</a></h3>
-                            <p>You can apply for the payment if you hire new apprentices from 1 August 2020 to 31 January 2021.</p>
-                        </div>
-                        <div class="card">
-                            <h3 class="heading-medium"><a href="@Url.EmployerIncentivesAction("payments/payment-applications")">Your hire a new apprentice payment applications</a></h3>
-                            <p>View your applications and estimated payments.</p>
+                            <h3 class="heading-medium"><a href="@Url.EmployerIncentivesAction()">Your hire a new apprentice payments</a></h3>
+                            <p>Apply for the payment, view applications and change your payment details.</p>
                         </div>
                     }
                 </div>
