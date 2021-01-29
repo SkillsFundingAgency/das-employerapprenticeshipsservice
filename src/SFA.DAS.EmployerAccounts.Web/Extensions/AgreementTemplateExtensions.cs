@@ -1,11 +1,12 @@
 ﻿using SFA.DAS.EmployerAccounts.Web.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class AgreementTemplateExtensions
     {
-        public const int AgreementVersionV3 = 3;
+        public static readonly int[] VariationsOfv3Agreement = {3, 4, 5};
 
         public static string InsetText(this AgreementTemplateViewModel agreementTemplate, ICollection<OrganisationAgreementViewModel> organisationAgreementViewModel)
         {
@@ -19,25 +20,25 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 case 3:
                     return "This is a new agreement.";
                 case 4:
-                    bool v3Accepted = GetV3AgreementStatus(organisationAgreementViewModel);
-                    return v3Accepted ? "This is a variation to the agreement we published 9 January 2020. You only need to accept it if you want to access incentive payments for hiring a new apprentice." : "This is a new agreement.";
+                case 5:
+                    return HasSignedVariationOfv3Agreement(organisationAgreementViewModel) ? "This is a variation to the agreement we published 9 January 2020. You only need to accept it if you want to access incentive payments for hiring a new apprentice." : "This is a new agreement.";
                 default:
                     return string.Empty;
             }
         }
 
-        private static bool GetV3AgreementStatus(ICollection<OrganisationAgreementViewModel> organisationAgreementViewModel)
+        private static bool HasSignedVariationOfv3Agreement(ICollection<OrganisationAgreementViewModel> organisationAgreementViewModel)
         {
-            bool v3Accepted = false;
             foreach (var organisation in organisationAgreementViewModel)
             {
-                if (organisation.SignedDateText != string.Empty && organisation.Template.VersionNumber == AgreementVersionV3)
+                if (organisation.SignedDateText != string.Empty && 
+                    VariationsOfv3Agreement.Contains(organisation.Template.VersionNumber))
                 {
-                    v3Accepted = true;
+                    return true;
                 }
             }
 
-            return v3Accepted;
+            return false;
         }
     }
 }
