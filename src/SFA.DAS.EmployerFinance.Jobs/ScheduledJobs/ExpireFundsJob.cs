@@ -26,7 +26,7 @@ namespace SFA.DAS.EmployerFinance.Jobs.ScheduledJobs
         }
 
         public async Task Run(
-            [TimerTrigger("0 0 0 28 * *")] TimerInfo timer, 
+            [TimerTrigger("0 0 0 30 * *")] TimerInfo timer, 
             ILogger logger)
         {
             logger.LogInformation($"Starting {nameof(ExpireFundsJob)}");
