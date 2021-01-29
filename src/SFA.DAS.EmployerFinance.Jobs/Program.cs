@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using SFA.DAS.AutoConfiguration;
 using SFA.DAS.EmployerFinance.Jobs.DependencyResolution;
 using SFA.DAS.EmployerFinance.Startup;
+using Microsoft.ApplicationInsights.Extensibility;
+using System.Configuration;
 
 namespace SFA.DAS.EmployerFinance.Jobs
 {
@@ -11,6 +13,8 @@ namespace SFA.DAS.EmployerFinance.Jobs
     {
         public static void Main()
         {
+            TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
+
             MainAsync().GetAwaiter().GetResult();
         }
 
