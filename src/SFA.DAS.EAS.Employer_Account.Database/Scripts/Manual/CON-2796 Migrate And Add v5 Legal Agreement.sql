@@ -11,7 +11,7 @@ WHERE  PendingAgreementVersion IN (3, 4)
 INSERT INTO [employer_account].[EmployerAgreement] (TemplateId, StatusId, AccountLegalEntityId)
 SELECT 6, 1, Id
 FROM   [employer_account].[AccountLegalEntity] 
-WHERE  PendingAgreementVersion IS NULL AND PendingAgreementId IS NULL AND Deleted IS NULL
+WHERE  PendingAgreementVersion IS NULL AND PendingAgreementId IS NULL AND Deleted IS NULL AND SignedAgreementVersion != 5
 
 UPDATE ale
 SET    PendingAgreementVersion = 5, PendingAgreementId = ea.Id
