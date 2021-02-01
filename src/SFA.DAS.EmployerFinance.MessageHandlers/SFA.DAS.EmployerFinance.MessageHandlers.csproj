@@ -10,7 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.ApplicationInsights" Version="2.11.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.Web" Version="2.11.2" />
     <PackageReference Include="Microsoft.Azure.WebJobs" Version="2.2.0" />
+    <PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="2.2.0" />
     <PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.1.66" />
     <PackageReference Include="NLog.Schema" Version="4.5.3" />
     <PackageReference Include="NServiceBus.Testing" Version="7.0.0" />
@@ -55,6 +58,16 @@
       <DependentUpon>App.config</DependentUpon>
       <IsTransformFile>True</IsTransformFile>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ApplicationInsights.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
