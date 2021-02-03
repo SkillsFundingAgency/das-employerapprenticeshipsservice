@@ -42,9 +42,10 @@
                             <td data-label="What you can do">
                                 @RoleStrings.GetRoleDescription(account.RoleName)
                             </td>
-                            <td class="link-right">
+                            <td>
                                 <a aria-label="View account homepage for @account.Name"
                                    title="View account homepage for @account.Name"
+                                   class="govuk-link govuk-link--no-visited-state" 
                                    href="@Url.Action(ControllerConstants.IndexActionName, ControllerConstants.EmployerTeamControllerName, new {HashedAccountId = account.HashedId})">
                                     Open<span class="vh"> @account.Name account homepage</span>
                                 </a>
