@@ -203,9 +203,6 @@
     <PackageReference Include="SFA.DAS.Activities.Client">
       <Version>1.2.71</Version>
     </PackageReference>
-    <PackageReference Include="SFA.DAS.Apprenticeships.Api.Client">
-      <Version>0.11.98</Version>
-    </PackageReference>
     <PackageReference Include="SFA.DAS.Audit.Client">
       <Version>1.0.0.20553</Version>
     </PackageReference>
@@ -268,9 +265,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.Provider.Events.Api.Client">
       <Version>2.1.97</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Providers.Api.Client">
-      <Version>0.11.39</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.ReferenceData.Api.Client">
       <Version>1.1.82</Version>

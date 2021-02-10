@@ -1,20 +1,22 @@
 ﻿using System;
 using System.Threading.Tasks;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.NLog.Logger;
-using SFA.DAS.Providers.Api.Client;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
     public class ProviderServiceRemote : IProviderService
     {
         private readonly IProviderService _providerService;
-        private readonly IProviderApiClient _providerApiClient;
+        private readonly IApiClient _apiClient;
         private readonly ILog _logger;
 
-        public ProviderServiceRemote(IProviderService providerService, IProviderApiClient providerApiClient, ILog logger)
+        public ProviderServiceRemote(IProviderService providerService, IApiClient apiClient, ILog logger)
         {
             _providerService = providerService;
-            _providerApiClient = providerApiClient;
+            _apiClient = apiClient;
             _logger = logger;
         }
      
@@ -22,7 +24,7 @@ namespace SFA.DAS.EmployerFinance.Services
         {
             try
             {                
-                var provider = await _providerApiClient.GetAsync(ukPrn);
+                var provider = await _apiClient.Get<ProviderResponseItem>(new GetProviderRequest(ukPrn));
                 if(provider != null)
                 {
                     return MapFrom(provider);
@@ -36,15 +38,14 @@ namespace SFA.DAS.EmployerFinance.Services
             return await _providerService.Get(ukPrn);
         }
 
-        private static Models.ApprenticeshipProvider.Provider MapFrom(Apprenticeships.Api.Types.Providers.Provider provider)
+        private static Models.ApprenticeshipProvider.Provider MapFrom(ProviderResponseItem provider)
         {
             return new Models.ApprenticeshipProvider.Provider()
             {
                 Ukprn = provider.Ukprn,
-                Name = provider.ProviderName,
+                Name = provider.Name,
                 Email = provider.Email,
-                Phone = provider.Phone,
-                NationalProvider = provider.NationalProvider
+                Phone = provider.Phone
             };
         }
     }

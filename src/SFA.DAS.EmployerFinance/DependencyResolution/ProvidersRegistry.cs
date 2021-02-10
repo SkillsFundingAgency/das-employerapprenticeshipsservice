@@ -1,6 +1,7 @@
-﻿using SFA.DAS.EmployerFinance.Configuration;
+﻿using System.Net.Http;
+using SFA.DAS.EmployerFinance.Infrastructure;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Services;
-using SFA.DAS.Providers.Api.Client;
 using StructureMap;
 
 namespace SFA.DAS.EmployerFinance.DependencyResolution
@@ -9,7 +10,6 @@ namespace SFA.DAS.EmployerFinance.DependencyResolution
     {
         public ProvidersRegistry()
         {
-            For<IProviderApiClient>().Use(c => new ProviderApiClient(c.GetInstance<EmployerFinanceConfiguration>().ApprenticeshipInfoService.BaseUrl));
             For<IProviderService>().Use<ProviderServiceFromDb>();
             For<IProviderService>().DecorateAllWith<ProviderServiceRemote>();
             For<IProviderService>().DecorateAllWith<ProviderServiceCache>();
