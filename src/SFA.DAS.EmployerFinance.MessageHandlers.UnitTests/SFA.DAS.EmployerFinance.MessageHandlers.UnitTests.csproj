@@ -15,7 +15,7 @@
     <PackageReference Include="SFA.DAS.EmployerAccounts.Types" Version="1.6.2103" />
     <PackageReference Include="SFA.DAS.EmployerFinance.Types" Version="0.2.37" />
     <PackageReference Include="SFA.DAS.Testing" Version="1.0.14" />
-    <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.165" />
+    <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />
     <PackageReference Include="SFA.DAS.Testing.EntityFramework" Version="2.0.5" />
   </ItemGroup>
 
