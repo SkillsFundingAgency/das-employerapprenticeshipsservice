@@ -24,8 +24,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]
-        [Route("{hashedApprenticeshipId}/details", Name = "OnProgrammeApprenticeshipDetails")]
+        [OutputCache(CacheProfile = "NoCache")]        
         [Route("{hashedApprenticeshipId}/details/statuschange", Name = "ChangeStatusSelectOption")]
         [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
         public ActionResult Details(string hashedAccountId, string hashedApprenticeshipId)
