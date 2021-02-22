@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EmployerAccounts.Web.Controllers
 {
@@ -9,10 +10,12 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
     public class EmployerManageApprenticesController : Controller
     {
         private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
+        private readonly ILog _logger;
 
-        public EmployerManageApprenticesController(EmployerAccountsConfiguration employerAccountsConfiguration)
+        public EmployerManageApprenticesController(EmployerAccountsConfiguration employerAccountsConfiguration, ILog logger)
         {
             _employerAccountsConfiguration = employerAccountsConfiguration;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -24,11 +27,14 @@ namespace SFA.DAS.EmployerAccounts.Web.Controllers
         }
 
         [HttpGet]
-        [OutputCache(CacheProfile = "NoCache")]        
+        [OutputCache(CacheProfile = "NoCache")]
+        [Route("{hashedApprenticeshipId}/details", Name = "OnProgrammeApprenticeshipDetails")]
         [Route("{hashedApprenticeshipId}/details/statuschange", Name = "ChangeStatusSelectOption")]
         [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
         public ActionResult Details(string hashedAccountId, string hashedApprenticeshipId)
-        {
+        {            
+            _logger.Info($"To track Apprentice V1 details UrlReferrer Request: {HttpContext.Request.UrlReferrer}");
+
             return RedirectPermanentCommitmentsUrl();
         }
 
