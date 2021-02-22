@@ -454,6 +454,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="public\images\icon-important.png" />
+    <Content Include="public\js\dataLayerPushes.js" />
     <Content Include="src\govuk_frontend_toolkit\images\accordian-arrow-2x.png" />
     <Content Include="src\govuk_frontend_toolkit\images\accordian-arrow.png" />
     <Content Include="src\govuk_frontend_toolkit\images\arrow-sprite.png" />
