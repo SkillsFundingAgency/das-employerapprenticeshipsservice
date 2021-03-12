@@ -19,7 +19,7 @@ namespace SFA.DAS.EAS.Support.Core.Models
         public string PayeRefWithOutSlash {
             get
             {
-                return Ref.Replace("/", string.Empty);
+                return (!string.IsNullOrEmpty(Ref)) ? Ref.Replace("/", string.Empty) : string.Empty;              
             }
         }
     }

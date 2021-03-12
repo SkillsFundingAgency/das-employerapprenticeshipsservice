@@ -155,7 +155,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                     return result;
                 case AccountFieldsSelection.Finance:
                     result.PayeSchemes = await MapToDomainPayeSchemeAsync(response);
-                    result.Transactions = await GetAccountTransactions(response.HashedAccountId); 
+                    result.Transactions = await GetAccountTransactions(response.HashedAccountId);
                     return result;
             }
 
@@ -193,33 +193,45 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<IEnumerable<PayeSchemeViewModel>> GetPayeSchemes(AccountDetailViewModel response)
         {
-            var result = new List<PayeSchemeViewModel>();
+            var payeTasks = new List<Task<PayeSchemeViewModel>>();
             foreach (var payeScheme in response.PayeSchemes ?? new ResourceList(new List<ResourceViewModel>()))
             {
-                var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
-                var paye = payeScheme.Id.Replace("/", "%252f");
-                _logger.Debug(
-                    $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
-                try
+                async Task<PayeSchemeViewModel> func()
                 {
-                    var payeSchemeViewModel = await _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
-
-                    if (IsValidPayeScheme(payeSchemeViewModel))
+                    var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
+                    var paye = payeScheme.Id.Replace("/", "%252f");
+                    _logger.Debug(
+                        $"IAccountApiClient.GetResource<PayeSchemeViewModel>(\"{payeScheme.Href.Replace(paye, obscured)}\");");
+                    try
                     {
-                        var item = new PayeSchemeViewModel
-                        {
-                            Ref = payeSchemeViewModel.Ref,
-                            DasAccountId = payeSchemeViewModel.DasAccountId,
-                            AddedDate = payeSchemeViewModel.AddedDate,
-                            RemovedDate = payeSchemeViewModel.RemovedDate,
-                            Name = payeSchemeViewModel.Name
-                        };
-                        result.Add(item);
+                        return await _accountApiClient.GetResource<PayeSchemeViewModel>(payeScheme.Href);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error(ex, $"Exception occured in Account API type of {nameof(PayeSchemeViewModel)} at {payeScheme.Href} id {payeScheme.Id}");
+                        return new PayeSchemeViewModel();
                     }
                 }
-                catch (Exception e)
+
+                payeTasks.Add(func());
+            }
+            await Task.WhenAll(payeTasks);
+            
+            var result = new List<PayeSchemeViewModel>();
+            foreach (var payeTask in payeTasks)
+            {
+                var payeSchemeViewModel = payeTask.Result;
+                if (IsValidPayeScheme(payeSchemeViewModel))
                 {
-                    _logger.Error(e, $"Exception occured in Account API type of {nameof(LegalEntityViewModel)} at  {payeScheme.Href} id {payeScheme.Id}");
+                    var item = new PayeSchemeViewModel
+                    {
+                        Ref = payeSchemeViewModel.Ref,
+                        DasAccountId = payeSchemeViewModel.DasAccountId,
+                        AddedDate = payeSchemeViewModel.AddedDate,
+                        RemovedDate = payeSchemeViewModel.RemovedDate,
+                        Name = payeSchemeViewModel.Name
+                    };
+                    result.Add(item);
                 }
             }
 
