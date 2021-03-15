@@ -201,7 +201,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             var payeTasks = new List<Task<PayeSchemeViewModel>>();
             foreach (var payeScheme in response.PayeSchemes ?? new ResourceList(new List<ResourceViewModel>()))
             {
-                async Task<PayeSchemeViewModel> func()
+                async Task<PayeSchemeViewModel> GetPayeSchemeResource()
                 {
                     var obscured = _payeSchemeObfuscator.ObscurePayeScheme(payeScheme.Id).Replace("/", "%252f");
                     var paye = payeScheme.Id.Replace("/", "%252f");
@@ -218,7 +218,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                     }
                 }
 
-                payeTasks.Add(func());
+                payeTasks.Add(GetPayeSchemeResource());
             }
             await Task.WhenAll(payeTasks);
             
