@@ -125,6 +125,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
                 try
                 {
                     var accountViewModel = await _accountApiClient.GetAccount(account.AccountHashId);
+                    _logger.Info($"GetAdditionalFields for account ID {account.AccountHashId}");
                     var accountWithDetails = await GetAdditionalFields(accountViewModel, AccountFieldsSelection.PayeSchemes);
                     accountsWithDetails.Add(accountWithDetails);
                 }
@@ -143,17 +144,21 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
             switch (selection)
             {
                 case AccountFieldsSelection.Organisations:
+                    _logger.Info($"Getting Organisations for the account {result.AccountId}");
                     var legalEntities = await GetLegalEntities(response.LegalEntities ?? new ResourceList(new List<ResourceViewModel>()));
                     result.LegalEntities = legalEntities;
                     break;
                 case AccountFieldsSelection.TeamMembers:
+                    _logger.Info($"Getting TeamMembers for the account {result.AccountId}");
                     var teamMembers = await GetAccountTeamMembers(result.HashedAccountId);
                     result.TeamMembers = teamMembers;
                     break;
                 case AccountFieldsSelection.PayeSchemes:
+                    _logger.Info($"Getting PayeSchemes for the account {result.AccountId}");
                     result.PayeSchemes = await MapToDomainPayeSchemeAsync(response);
                     return result;
                 case AccountFieldsSelection.Finance:
+                    _logger.Info($"Getting PayeSchemes and Transactions for the account {result.AccountId}");
                     result.PayeSchemes = await MapToDomainPayeSchemeAsync(response);
                     result.Transactions = await GetAccountTransactions(response.HashedAccountId);
                     return result;
@@ -302,7 +307,7 @@ namespace SFA.DAS.EAS.Support.Infrastructure.Services
 
         private async Task<IEnumerable<PayeSchemeModel>> MapToDomainPayeSchemeAsync(AccountDetailViewModel response)
         {
-            var mainPayeSchemes = await GetPayeSchemes(response);
+            var mainPayeSchemes = await GetPayeSchemes(response);            
 
             return mainPayeSchemes?.Select(payeScheme => new PayeSchemeModel
             {
