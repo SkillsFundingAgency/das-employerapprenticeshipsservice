@@ -1,25 +1,21 @@
-﻿using SFA.DAS.EmployerFinance.Configuration;
-using SFA.DAS.EmployerFinance.Interfaces;
-using SFA.DAS.NLog.Logger;
+﻿using SFA.DAS.EmployerAccounts.Configuration;
+using SFA.DAS.EmployerAccounts.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace SFA.DAS.EmployerFinance.Services
+namespace SFA.DAS.EmployerAccounts.Services
 {
-    public class ContentServiceWithCaching : IContentService
+    public class ContentApiClientWithCaching : IContentApiClient
     {
-        private readonly IContentService _contentService;
+        private readonly IContentApiClient _contentService;
         private readonly ICacheStorageService _cacheStorageService;
-        private readonly EmployerFinanceConfiguration _employerFinanceConfiguration;
+        private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
-        public ContentServiceWithCaching(IContentService contentService, ICacheStorageService cacheStorageService, EmployerFinanceConfiguration employerFinanceConfiguration)
+        public ContentApiClientWithCaching(IContentApiClient contentService, ICacheStorageService cacheStorageService, EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _contentService = contentService;
             _cacheStorageService = cacheStorageService;
-            _employerFinanceConfiguration = employerFinanceConfiguration;
+            _employerAccountsConfiguration = employerAccountsConfiguration;
         }
         public async Task<string> Get(string type, string applicationId)
         {
@@ -36,7 +32,7 @@ namespace SFA.DAS.EmployerFinance.Services
 
                 if (content != null)
                 {
-                    await _cacheStorageService.Save(cacheKey, content, _employerFinanceConfiguration.DefaultCacheExpirationInMinutes);
+                    await _cacheStorageService.Save(cacheKey, content, _employerAccountsConfiguration.DefaultCacheExpirationInMinutes);
                 }
 
                 return content;
@@ -46,5 +42,5 @@ namespace SFA.DAS.EmployerFinance.Services
                 throw new ArgumentException($"Failed to get content for {cacheKey}");
             }
         }
-    }
+    } 
 }

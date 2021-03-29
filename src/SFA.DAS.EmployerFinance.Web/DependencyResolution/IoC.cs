@@ -37,7 +37,6 @@ namespace SFA.DAS.EmployerFinance.Web.DependencyResolution
                 c.AddRegistry<EmployerFeaturesAuthorizationRegistry>();
                 c.AddRegistry<EmployerUserRolesAuthorizationRegistry>();
                 c.AddRegistry<ContentApiClientRegistry>();
-                c.AddRegistry<ServicesRegistry>();
             });
         }
     }
