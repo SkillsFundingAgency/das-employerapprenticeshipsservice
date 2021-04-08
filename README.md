@@ -39,9 +39,6 @@
 - Run src\DevInstall.ps1
 - DO NOT COMMIT THE UPDATED CERTIFICATE TO GIT
 
-##### Install Elastic Search
-
-- Follow the readme at [SFA.DAS.Activities] to install [Elastic Search]
 
 ##### Open the solution
 
