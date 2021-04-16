@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
 using SFA.DAS.EAS.Domain.Configuration;
 using SFA.DAS.EAS.Web.Helpers;
+using SFA.DAS.NLog.Logger;
 
 namespace SFA.DAS.EAS.Web.Controllers
 {
@@ -11,10 +12,12 @@ namespace SFA.DAS.EAS.Web.Controllers
     public class EmployerManageApprenticesController : Controller
     {
         private readonly EmployerApprenticeshipsServiceConfiguration _easConfig;
+        private readonly ILog _logger;
 
-        public EmployerManageApprenticesController(EmployerApprenticeshipsServiceConfiguration easConfig) : base()
+        public EmployerManageApprenticesController(EmployerApprenticeshipsServiceConfiguration easConfig, ILog logger) : base()
         {
             _easConfig = easConfig;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -32,6 +35,8 @@ namespace SFA.DAS.EAS.Web.Controllers
         [Route("{hashedApprenticeshipId}/edit", Name = "EditApprenticeship")]
         public ActionResult Details(string hashedAccountId, string hashedApprenticeshipId)
         {
+            _logger.Info($"To track Apprentice V1 details UrlReferrer Request: {HttpContext.Request.UrlReferrer}");
+
             return RedirectPermanentCommitmentsUrl();
         }
 

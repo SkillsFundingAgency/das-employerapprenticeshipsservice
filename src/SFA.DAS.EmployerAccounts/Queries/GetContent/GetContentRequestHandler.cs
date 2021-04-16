@@ -12,19 +12,17 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetContent
     {
         private readonly IValidator<GetContentRequest> _validator;
         private readonly ILog _logger;
-        private readonly IContentService _service;
-        private readonly ICacheStorageService _cacheStorageService;
+        private readonly IContentApiClient _contentApiClient;
         private readonly EmployerAccountsConfiguration _employerAccountsConfiguration;
 
         public GetContentRequestHandler(
             IValidator<GetContentRequest> validator,
             ILog logger,
-            IContentService service, ICacheStorageService cacheStorageService, EmployerAccountsConfiguration employerAccountsConfiguration)
+            IContentApiClient contentApiClient,  EmployerAccountsConfiguration employerAccountsConfiguration)
         {
             _validator = validator;
             _logger = logger;
-            _service = service;
-            _cacheStorageService = cacheStorageService;
+            _contentApiClient = contentApiClient;
             _employerAccountsConfiguration = employerAccountsConfiguration;
         }
 
@@ -41,9 +39,8 @@ namespace SFA.DAS.EmployerAccounts.Queries.GetContent
 
             try
             {                
-                var contentBanner = await _service.Get(message.ContentType, applicationId);
+                var contentBanner = await _contentApiClient.Get(message.ContentType, applicationId);
 
-                
                 return new GetContentResponse
                 {
                     Content = contentBanner

@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>NU1605</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -118,9 +121,6 @@
     </PackageReference>
     <PackageReference Include="SFA.DAS.ActiveDirectory">
       <Version>1.0.3</Version>
-    </PackageReference>
-    <PackageReference Include="SFA.DAS.Apprenticeships.Api.Types">
-      <Version>0.11.98</Version>
     </PackageReference>
     <PackageReference Include="SFA.DAS.Audit.Client">
       <Version>1.0.0.20553</Version>

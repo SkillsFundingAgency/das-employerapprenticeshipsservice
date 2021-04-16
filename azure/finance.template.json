@@ -102,8 +102,7 @@
         "workerAppServicePlanName": "[concat(variables('resourceNamePrefix'), 'wkr-asp')]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]"
     },
-    "resources": [
-        {
+    "resources": [{
             "apiVersion": "2020-06-01",
             "name": "[variables('resourceGroupName')]",
             "type": "Microsoft.Resources/resourceGroups",
@@ -225,8 +224,7 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
@@ -324,8 +322,7 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
@@ -443,8 +440,7 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "LoggingRedisConnectionString",
                                     "value": "[parameters('loggingRedisConnectionString')]"
                                 },
@@ -473,8 +469,7 @@
                     },
                     "appServiceConnectionStrings": {
                         "value": {
-                            "array": [
-                                {
+                            "array": [{
                                     "name": "AzureWebJobsDashboard",
                                     "connectionString": "[parameters('storageConnectionString')]",
                                     "type": "Custom"

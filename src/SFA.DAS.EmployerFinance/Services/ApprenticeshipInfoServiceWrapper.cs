@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using SFA.DAS.Apprenticeships.Api.Client;
-using SFA.DAS.Apprenticeships.Api.Types;
 using SFA.DAS.Caches;
-using SFA.DAS.EmployerFinance.Configuration;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiRequests;
+using SFA.DAS.EmployerFinance.Infrastructure.OuterApiResponses;
+using SFA.DAS.EmployerFinance.Interfaces.OuterApi;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse;
 using SFA.DAS.EmployerFinance.Models.ApprenticeshipProvider;
-using Framework = SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse.Framework;
-using Standard = SFA.DAS.EmployerFinance.Models.ApprenticeshipCourse.Standard;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
@@ -19,45 +17,39 @@ namespace SFA.DAS.EmployerFinance.Services
         private const string FrameworksKey = "Frameworks";
 
         private readonly IInProcessCache _cache;
-        private readonly string _apprenticeshipInfoServiceApiBase;
+        private readonly IApiClient _apiClient;
 
-        public ApprenticeshipInfoServiceWrapper(IInProcessCache cache, EmployerFinanceConfiguration config)
+        public ApprenticeshipInfoServiceWrapper(IInProcessCache cache, IApiClient apiClient)
         {
             _cache = cache ?? throw new ArgumentNullException(nameof(cache));
-            _apprenticeshipInfoServiceApiBase = config?.ApprenticeshipInfoService?.BaseUrl;
+            _apiClient = apiClient;
         }
 
-        public Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
+        public async Task<StandardsView> GetStandardsAsync(bool refreshCache = false)
         {
             if (!_cache.Exists(StandardsKey) || refreshCache)
             {
-                var api = new StandardApiClient(_apprenticeshipInfoServiceApiBase);
+                var response = await _apiClient.Get<GetStandardsResponse>(new GetStandardsRequest());
 
-                //BUG: FindAll should be FindAllAsync - currently a blocking call.
-                var standards = api.FindAll().OrderBy(x => x.Title).ToList();
-
-                _cache.Set(StandardsKey, MapFrom(standards));
+                _cache.Set(StandardsKey, MapFrom(response.Standards));
             }
 
-            return Task.FromResult(_cache.Get<StandardsView>(StandardsKey));
+            return _cache.Get<StandardsView>(StandardsKey);
         }
 
-        public Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false)
+        public async Task<FrameworksView> GetFrameworksAsync(bool refreshCache = false)
         {
             if (!_cache.Exists(FrameworksKey) || refreshCache)
             {
-                var api = new FrameworkApiClient(_apprenticeshipInfoServiceApiBase);
+                var response = await _apiClient.Get<GetFrameworksResponse>(new GetFrameworksRequest());
 
-                //BUG: FindAll should be FindAllAsync
-                var frameworks = api.FindAll().OrderBy(x => x.Title).ToList();
-
-                _cache.Set(FrameworksKey, MapFrom(frameworks));
+                _cache.Set(FrameworksKey, MapFrom(response.Frameworks));
             }
 
-            return Task.FromResult(_cache.Get<FrameworksView>(FrameworksKey));
+            return _cache.Get<FrameworksView>(FrameworksKey);
         }       
 
-        private static FrameworksView MapFrom(List<FrameworkSummary> frameworks)
+        private static FrameworksView MapFrom(List<FrameworkResponseItem> frameworks)
         {
             return new FrameworksView
             {
@@ -78,7 +70,7 @@ namespace SFA.DAS.EmployerFinance.Services
             };
         }
 
-        private static ProvidersView MapFrom(Apprenticeships.Api.Types.Providers.Provider provider)
+        private static ProvidersView MapFrom(ProviderResponseItem provider)
         {
             return new ProvidersView
             {
@@ -86,23 +78,23 @@ namespace SFA.DAS.EmployerFinance.Services
                 Provider = new Models.ApprenticeshipProvider.Provider()
                 {
                     Ukprn = provider.Ukprn,
-                    Name = provider.ProviderName,
+                    Name = provider.Name,
                     Email = provider.Email,
                     Phone = provider.Phone,
-                    NationalProvider = provider.NationalProvider
+                    NationalProvider = false // Obsolete - no longer valid at this level
                 }
             };
         }
 
-        private static StandardsView MapFrom(List<StandardSummary> standards)
+        private static StandardsView MapFrom(List<StandardResponseItem> standards)
         {
             return new StandardsView
             {
                 CreationDate = DateTime.UtcNow,
                 Standards = standards.Select(x => new Standard
                 {
-                    Id = x.Id,
-                    Code = long.Parse(x.Id),
+                    Id = x.Id.ToString(),
+                    Code = x.Id,
                     Level = x.Level,
                     Title = GetTitle(x.Title, x.Level) + " (Standard)",
                     CourseName = x.Title,

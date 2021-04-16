@@ -27,7 +27,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetContent
         public EmployerFinanceConfiguration EmployerFinanceConfiguration;
 
         private Mock<ILog> MockLogger;
-        private Mock<IContentService> MockContentService;
+        private Mock<IContentApiClient> MockContentService;
         private Mock<ICacheStorageService> MockCacheStorageService;
 
         [SetUp]
@@ -46,7 +46,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Queries.GetContent
             CacheKey = EmployerFinanceConfiguration.ApplicationId + "_banner";
 
             MockLogger = new Mock<ILog>();
-            MockContentService = new Mock<IContentService>();
+            MockContentService = new Mock<IContentApiClient>();
             MockCacheStorageService = new Mock<ICacheStorageService>();
             
 

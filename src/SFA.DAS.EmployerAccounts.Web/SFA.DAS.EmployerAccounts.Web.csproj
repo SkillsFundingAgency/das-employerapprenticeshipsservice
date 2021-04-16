@@ -454,6 +454,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="public\images\icon-important.png" />
+    <Content Include="public\js\dataLayerPushes.js" />
     <Content Include="src\govuk_frontend_toolkit\images\accordian-arrow-2x.png" />
     <Content Include="src\govuk_frontend_toolkit\images\accordian-arrow.png" />
     <Content Include="src\govuk_frontend_toolkit\images\arrow-sprite.png" />
@@ -873,6 +874,7 @@
     <Content Include="Views\EmployerAgreement\AcceptedEmployerAgreement.cshtml" />
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
     <Content Include="Views\Shared\_Agreement_v4.cshtml" />
+    <Content Include="Views\Shared\_Agreement_v5.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.Account.Api.Client\SFA.DAS.EAS.Account.Api.Client.csproj">
