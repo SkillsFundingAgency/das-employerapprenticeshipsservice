@@ -14,14 +14,14 @@ namespace SFA.DAS.EmployerFinance.Queries.GetContent
     {
         private readonly IValidator<GetContentRequest> _validator;
         private readonly ILog _logger;
-        private readonly IContentService _service;
+        private readonly IContentApiClient _service;
         private readonly ICacheStorageService _cacheStorageService;
         private readonly EmployerFinanceConfiguration _employerFinanceConfiguration;
 
         public GetContentRequestHandler(
             IValidator<GetContentRequest> validator,
             ILog logger,
-            IContentService service,
+            IContentApiClient service,
             ICacheStorageService cacheStorageService,
             EmployerFinanceConfiguration employerFinanceConfiguration
             )
