@@ -169,6 +169,7 @@
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -641,6 +642,7 @@
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
+    <Content Include="Views\Transfers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

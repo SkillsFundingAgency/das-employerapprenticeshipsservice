@@ -102,6 +102,16 @@ else
                             <p>Apply for the payment, view applications and change your payment details.</p>
                         </div>
                     }
+
+                    @if (Model.Data.ApprenticeshipEmployerType!= ApprenticeshipEmployerType.Levy 
+                         && Html.IsAuthorized("EmployerFeature.TransfersMatching"))
+                    {
+                        <div class="card">
+                            <h3 class="heading-medium"><a href="@Url.YourTransfersAction()">Your transfers</a></h3>
+                            <p>View your 25% transfers balance and manage your transfers, including finding a business to transfer your levy to.</p>
+                        </div>
+                    }
+
                 </div>
             </section>
 
