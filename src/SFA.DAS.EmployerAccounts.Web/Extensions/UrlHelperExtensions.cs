@@ -54,14 +54,6 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
             return Action(baseUrl, $"{hashedAccountId}/{path}");
         }
 
-        public static string YourTransfersAction(this UrlHelper helper, string path = "")
-        {
-            var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();
-            var baseUrl = configuration.EmployerFinanceBaseUrl;
-            var hashedAccountId = helper.RequestContext.RouteData.Values[ControllerConstants.AccountHashedIdRouteKeyName];
-            return Action(baseUrl, $"transfers/{hashedAccountId}");
-        }
-
         public static string EmployerProjectionsAction(this UrlHelper helper, string path)
         {
             var configuration = DependencyResolver.Current.GetService<EmployerAccountsConfiguration>();

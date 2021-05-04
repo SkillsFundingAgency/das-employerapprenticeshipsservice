@@ -4,11 +4,10 @@ using SFA.DAS.Authorization.Mvc.Attributes;
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [DasAuthorize("EmployerFeature.TransfersMatching")]
-    [RoutePrefix("transfers")]
-    public class TransfersController : Controller
+    [RoutePrefix("accounts/{HashedAccountId}")] public class TransfersController : Controller
     {
         [HttpGet]
-        [Route("{hashedAccountId}")]
+        [Route("transfers")]
         public ActionResult Index(string hashedAccountId)
         {
             return View();
