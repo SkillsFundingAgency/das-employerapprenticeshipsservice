@@ -6,7 +6,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 {
     public static class AgreementTemplateExtensions
     {
-        public static readonly int[] VariationsOfv3Agreement = {3, 4, 5};
+        public static readonly int[] VariationsOfv3Agreement = {3, 4, 5, 6};
 
         public static string InsetText(this AgreementTemplateViewModel agreementTemplate, ICollection<OrganisationAgreementViewModel> organisationAgreementViewModel)
         {
@@ -22,6 +22,7 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
                 case 4:
                     return HasSignedVariationOfv3Agreement(organisationAgreementViewModel) ? "This is a variation to the agreement we published 9 January 2020. You only need to accept it if you want to access incentive payments for hiring a new apprentice." : "This is a new agreement.";
                 case 5:
+                case 6:
                     return HasSignedVariationOfv3Agreement(organisationAgreementViewModel) ? "This is a variation to the agreement we published 9 January 2020." : "This is a new agreement.";
                 default:
                     return string.Empty;
@@ -30,16 +31,8 @@ namespace SFA.DAS.EmployerAccounts.Web.Extensions
 
         private static bool HasSignedVariationOfv3Agreement(ICollection<OrganisationAgreementViewModel> organisationAgreementViewModel)
         {
-            foreach (var organisation in organisationAgreementViewModel)
-            {
-                if (organisation.SignedDateText != string.Empty && 
-                    VariationsOfv3Agreement.Contains(organisation.Template.VersionNumber))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return organisationAgreementViewModel
+                .Any(agreement => !string.IsNullOrEmpty(agreement.SignedDateText) && VariationsOfv3Agreement.Contains(agreement.Template.VersionNumber));
         }
     }
 }
