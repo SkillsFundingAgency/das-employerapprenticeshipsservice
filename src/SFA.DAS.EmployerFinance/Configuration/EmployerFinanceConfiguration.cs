@@ -25,6 +25,7 @@ namespace SFA.DAS.EmployerFinance.Configuration
         public HmrcConfiguration Hmrc { get; set; }
         public IdentityServerConfiguration Identity { get; set; }
         public string LegacyServiceBusConnectionString { get; set; }
+        public string LevyTransferMatchingBaseUrl { get; set; }
         public string MessageServiceBusConnectionString => LegacyServiceBusConnectionString;
         public string NServiceBusLicense { get; set; }
         public string PublicAllowedHashstringCharacters { get; set; }

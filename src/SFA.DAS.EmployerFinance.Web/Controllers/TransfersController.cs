@@ -1,16 +1,27 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
 using SFA.DAS.Authorization.Mvc.Attributes;
+using SFA.DAS.EmployerFinance.Web.Orchestrators;
 
 namespace SFA.DAS.EmployerFinance.Web.Controllers
 {
     [DasAuthorize("EmployerFeature.TransfersMatching")]
     [RoutePrefix("accounts/{HashedAccountId}")] public class TransfersController : Controller
     {
+        private readonly TransfersOrcestrator _transfersOrcestrator;
+
+        public TransfersController(TransfersOrcestrator transfersOrcestrator)
+        {
+            _transfersOrcestrator = transfersOrcestrator;
+        }
+
         [HttpGet]
         [Route("transfers")]
-        public ActionResult Index(string hashedAccountId)
+        public async Task<ActionResult> Index(string hashedAccountId)
         {
-            return View();
+            var viewModel = await _transfersOrcestrator.Index();
+
+            return View(viewModel);
         }
     }
 }

@@ -193,6 +193,7 @@
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
+    <Compile Include="Orchestrators\TransfersOrcestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
@@ -208,6 +209,7 @@
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
+    <Compile Include="ViewModels\TransfersIndexViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
