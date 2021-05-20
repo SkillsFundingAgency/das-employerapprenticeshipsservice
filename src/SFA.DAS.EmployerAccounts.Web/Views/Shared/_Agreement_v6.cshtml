@@ -91,9 +91,16 @@
 
     <div id="agreement-list" class="govuk-grid-column-two-thirds">
 
-        <h2 class="govuk-heading-l">Agreement between @Model.EmployerAgreement.LegalEntityName and <abbr>ESFA</abbr></h2>
+    <h2 class="govuk-heading-l">Agreement between @Model.EmployerAgreement.LegalEntityName and <abbr>ESFA</abbr></h2>
 
-        <p class="govuk-body-lead">Updated on 20 January 2021.</p>
+        @if (Model.PreviouslySignedEmployerAgreement != null && Model.PreviouslySignedEmployerAgreement.TemplateId != Model.EmployerAgreement.TemplateId)
+        {
+            <p class="govuk-body-lead">Updated on 19 May 2021</p>
+        }
+        else
+        {
+            <p class="govuk-body-lead">Published on 19 May 2021</p>
+        }
 
         <p class="govuk-body">For use of the Apprenticeship Service to access funded apprenticeship training</p>
 
