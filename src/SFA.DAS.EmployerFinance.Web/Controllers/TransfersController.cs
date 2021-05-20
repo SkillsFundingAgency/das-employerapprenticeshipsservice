@@ -8,11 +8,11 @@ namespace SFA.DAS.EmployerFinance.Web.Controllers
     [DasAuthorize("EmployerFeature.TransfersMatching")]
     [RoutePrefix("accounts/{HashedAccountId}")] public class TransfersController : Controller
     {
-        private readonly TransfersOrcestrator _transfersOrcestrator;
+        private readonly TransfersOrchestrator _transfersOrcestrator;
 
-        public TransfersController(TransfersOrcestrator transfersOrcestrator)
+        public TransfersController(TransfersOrchestrator transfersOrchestrator)
         {
-            _transfersOrcestrator = transfersOrcestrator;
+            _transfersOrcestrator = transfersOrchestrator;
         }
 
         [HttpGet]

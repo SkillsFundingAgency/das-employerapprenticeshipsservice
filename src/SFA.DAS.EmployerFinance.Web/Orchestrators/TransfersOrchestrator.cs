@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 
 namespace SFA.DAS.EmployerFinance.Web.Orchestrators
 {
-    public class TransfersOrcestrator
+    public class TransfersOrchestrator
     {
         private readonly IAuthorizationService _authorizationService;
 
-        protected TransfersOrcestrator()
+        protected TransfersOrchestrator()
         {
 
         }
 
-        public TransfersOrcestrator(
+        public TransfersOrchestrator(
             IAuthorizationService authorizationService)
         {
             _authorizationService = authorizationService;
