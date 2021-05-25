@@ -1,13 +1,21 @@
-﻿
-@{ 
+﻿@model OrchestratorResponse<TransfersIndexViewModel>
+
+@{
     ViewBag.PageID = "transfers";
     ViewBag.Section = "transfers";
     ViewBag.Title = "Transfers";
-    ViewBag.AnalyticsData.Vpv = $"/finance/home";
+    ViewBag.AnalyticsData.Vpv = $"/finance/transfers";
     ViewBag.ZenDeskLabel = "eas-finance";
 }
 
 <h1 class="heading-xlarge">Your Transfers</h1>
+
+@if (Model.Data.RenderCreateTransfersPledgeButton)
+{
+<div class="govuk-button-group">
+    <a class="govuk-button" data-module="govuk-button" href="@Url.LevyMatchingTransfersAction("pledges")" id="CreateTransfersPledgeButton">Create a transfers pledge</a>
+</div>
+}
 
 @section breadcrumb {
     <div class="breadcrumbs">
