@@ -169,6 +169,7 @@
     <Compile Include="Controllers\EmployerTeamController.cs" />
     <Compile Include="Controllers\HealthCheckController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TransfersController.cs" />
     <Compile Include="DependencyResolution\ControllerConvention.cs" />
     <Compile Include="DependencyResolution\DefaultRegistry.cs" />
     <Compile Include="DependencyResolution\IoC.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="NServiceBusStartup.cs" />
     <Compile Include="OrchestratorResponse.cs" />
     <Compile Include="Orchestrators\EmployerAccountTransactionsOrchestrator.cs" />
+    <Compile Include="Orchestrators\TransfersOrchestrator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\AprrenticeshipPaymentSummaryViewModel.cs" />
@@ -207,6 +209,7 @@
     <Compile Include="ViewModels\TransactionLineViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewModel.cs" />
     <Compile Include="ViewModels\TransactionViewResultViewModel.cs" />
+    <Compile Include="ViewModels\TransfersIndexViewModel.cs" />
     <Compile Include="ViewModels\TransferTransactionDetailsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -641,6 +644,7 @@
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManagerNoScript.cshtml" />
     <Content Include="Views\Shared\_ZenDeskApiPush.cshtml" />
+    <Content Include="Views\Transfers\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <PropertyGroup>

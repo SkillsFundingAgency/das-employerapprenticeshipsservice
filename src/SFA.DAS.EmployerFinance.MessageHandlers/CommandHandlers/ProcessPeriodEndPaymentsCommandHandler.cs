@@ -39,6 +39,8 @@ namespace SFA.DAS.EmployerFinance.MessageHandlers.CommandHandlers
             }
 
             await Task.WhenAll(tasks);
+
+            _logger.Info($"Completed payment message queuing for period end ref: '{message.PeriodEndRef}'");
         }
     }
 }
