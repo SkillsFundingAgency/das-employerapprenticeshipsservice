@@ -17,7 +17,7 @@ namespace SFA.DAS.EAS.Account.Api
                 TokenValidationParameters = new System.IdentityModel.Tokens.TokenValidationParameters
                 {
                     RoleClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role",
-                    ValidAudience = ConfigurationManager.AppSettings["idaAudience"]
+                    ValidAudiences = ConfigurationManager.AppSettings["idaAudience"].Split(',')
                 }
             });
         }
