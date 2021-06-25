@@ -198,6 +198,7 @@
     <Build Include="Tables\TransactionLine_EOF.sql" />
     <Build Include="StoredProcedures\CreateDraftExpiredFunds.sql" />
     <Build Include="StoredProcedures\GetDraftExpiredFunds.sql" />
+    <Build Include="StoredProcedures\CreateAccountTransfersV1.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Database.publish.xml" />

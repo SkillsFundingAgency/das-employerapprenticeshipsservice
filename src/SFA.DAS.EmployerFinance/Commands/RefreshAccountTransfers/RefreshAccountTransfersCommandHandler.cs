@@ -62,37 +62,48 @@ namespace SFA.DAS.EmployerFinance.Commands.RefreshAccountTransfers
                             Amount = g.Sum(x => x.Amount),
                             ApprenticeshipId = firstGroupItem.ApprenticeshipId,
                             ReceiverAccountId = firstGroupItem.ReceiverAccountId,
+                            // assumption we are not getting this information back from payment, that is why we are getting it again from the local db
                             ReceiverAccountName = firstGroupItem.ReceiverAccountName,
                             SenderAccountId = firstGroupItem.SenderAccountId,
+                            // assumption we are not getting this information back from payment, that is why we are getting it again from the local db
                             SenderAccountName = firstGroupItem.SenderAccountName,
                             Type = firstGroupItem.Type
+                            // Not mapping the RequiredPaymentId - I assume this is not required, but we are trying to insert it into the transfers table.
                         };
                     }).ToArray();
 
                 var transferSenderIds = transfers.Select(t => t.SenderAccountId).Distinct();
 
+               /*
+                //The following two can be parallelized
                 var transferSenderAccountNames = await _accountRepository.GetAccountNames(transferSenderIds);
 
                 var transferReceiverAccountName = await _accountRepository.GetAccountName(message.ReceiverAccountId);
 
                 foreach (var transfer in transfers)
                 {
+                    // Can this be different? why assign again?
                     transfer.PeriodEnd = message.PeriodEnd;
-
+                    // can CreateAccountTransfers & the following procedure merged into one and just pass in the Id of transfer
+                    // so we don't event get the Names of Transfer Sender & Receiver.
                     var paymentDetails = await _transferRepository.GetTransferPaymentDetails(transfer);
 
                     transfer.CourseName = paymentDetails.CourseName ?? "Unknown Course";
                     transfer.CourseLevel = paymentDetails.CourseLevel;
+
+                    // Don't see this getting used any where
                     transfer.ApprenticeCount = paymentDetails.ApprenticeCount;
 
                     transfer.SenderAccountName = transferSenderAccountNames[transfer.SenderAccountId];
                     transfer.ReceiverAccountName = transferReceiverAccountName;
 
+                    // If it all goes into stored procedure we will lose this check.
                     if (transfer.Amount != paymentDetails.PaymentTotal)
                         _logger.Warn("Transfer total does not match transfer payments total");
                 }
+                */
 
-                await _transferRepository.CreateAccountTransfers(transfers);
+                await _transferRepository.CreateAccountTransfersV1(transfers);
             }
             catch (Exception ex)
             {

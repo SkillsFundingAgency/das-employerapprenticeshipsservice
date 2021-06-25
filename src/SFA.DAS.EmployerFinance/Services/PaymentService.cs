@@ -17,6 +17,14 @@ using Payment = SFA.DAS.Provider.Events.Api.Types.Payment;
 
 namespace SFA.DAS.EmployerFinance.Services
 {
+    public class ApprenticeshipCache
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string NINumber { get; set; }
+        public DateTime? StartDate { get; set; }
+        public long ApprenticeshipId { get; set; }
+    }
     public class PaymentService : IPaymentService
     {
         private readonly IPaymentsEventsApiClient _paymentsEventsApiClient;
@@ -26,6 +34,7 @@ namespace SFA.DAS.EmployerFinance.Services
         private readonly ILog _logger;
         private readonly IInProcessCache _inProcessCache;
         private readonly IProviderService _providerService;
+        private readonly List<ApprenticeshipCache> _apprenticeships;
 
         public PaymentService(IPaymentsEventsApiClient paymentsEventsApiClient,
             IEmployerCommitmentApi commitmentsApiClient, IApprenticeshipInfoServiceWrapper apprenticeshipInfoService,
@@ -38,6 +47,7 @@ namespace SFA.DAS.EmployerFinance.Services
             _logger = logger;
             _inProcessCache = inProcessCache;            
             _providerService = providerService;
+            _apprenticeships = new List<ApprenticeshipCache>();
         }
 
         public async Task<ICollection<PaymentDetails>> GetAccountPayments(string periodEnd, long employerAccountId)
@@ -150,11 +160,30 @@ namespace SFA.DAS.EmployerFinance.Services
             }
         }
 
-        private async Task<Apprenticeship> GetApprenticeship(long employerAccountId, long apprenticeshipId)
+        private async Task<ApprenticeshipCache> GetApprenticeship(long employerAccountId, long apprenticeshipId)
         {
             try
             {
-                return await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
+                var apprenticeshipFromCache =_apprenticeships.FirstOrDefault(x => x.ApprenticeshipId == apprenticeshipId);
+
+                if (apprenticeshipFromCache == null)
+                {
+                    var apprenticeship = await _commitmentsApiClient.GetEmployerApprenticeship(employerAccountId, apprenticeshipId);
+                    _apprenticeships.Add(new ApprenticeshipCache
+                    {
+                        FirstName = apprenticeship.FirstName,
+                        LastName = apprenticeship.LastName,
+                        NINumber = apprenticeship.NINumber,
+                        StartDate = apprenticeship.StartDate
+                    });
+                }
+                else
+                {
+                    _logger.Info("Found apprenticeship from cache :" + apprenticeshipFromCache.ApprenticeshipId);
+                }
+
+                _logger.Info("Cache apprenticeship size :" + _apprenticeships.Count());
+                return apprenticeshipFromCache;
             }
             catch (Exception e)
             {

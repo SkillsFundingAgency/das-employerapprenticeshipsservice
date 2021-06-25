@@ -36,6 +36,21 @@ namespace SFA.DAS.EmployerFinance.Data
                 commandType: CommandType.StoredProcedure);
         }
 
+        public Task CreateAccountTransfersV1(IEnumerable<AccountTransfer> transfers)
+        {
+            var accountTransfers = transfers as AccountTransfer[] ?? transfers.ToArray();
+            var transferDataTable = CreateTransferDataTable(accountTransfers);
+            var parameters = new DynamicParameters();
+
+            parameters.Add("@transfers", transferDataTable.AsTableValuedParameter("[employer_financial].[AccountTransferTable]"));
+
+            return _db.Value.Database.Connection.ExecuteAsync(
+                sql: "[employer_financial].[CreateAccountTransfersV1]",
+                param: parameters,
+                transaction: _db.Value.Database.CurrentTransaction.UnderlyingTransaction,
+                commandType: CommandType.StoredProcedure);
+        }
+
         public Task<IEnumerable<AccountTransfer>> GetReceiverAccountTransfersByPeriodEnd(long receiverAccountId, string periodEnd)
         {
             var parameters = new DynamicParameters();
