@@ -180,7 +180,7 @@ namespace SFA.DAS.EmployerFinance.UnitTests.Commands.RefreshPaymentDataTests
 
         public RefreshPaymentDataCommandHandlerTestsFixture SetIncomingPayments(List<PaymentDetails> paymentDetails)
         {
-            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>()))
+            _paymentService.Setup(x => x.GetAccountPayments(It.IsAny<string>(), It.IsAny<long>(), It.IsAny<Guid>()))
                 .ReturnsAsync(paymentDetails);
 
             return this;
