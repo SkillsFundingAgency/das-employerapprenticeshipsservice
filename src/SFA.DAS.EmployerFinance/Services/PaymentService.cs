@@ -70,9 +70,11 @@ namespace SFA.DAS.EmployerFinance.Services
                 {
                     details.PeriodEnd = periodEnd;
 
-                    await GetProviderDetails(details);
-                    await GetApprenticeshipDetails(employerAccountId, details);
-                    await GetCourseDetails(details);
+                    var providerDetailsTask = GetProviderDetails(details);
+                    var apprenticeshipDetailsTask = GetApprenticeshipDetails(employerAccountId, details);
+                    var courseDetailsTask = GetCourseDetails(details);
+
+                    await Task.WhenAll(providerDetailsTask, apprenticeshipDetailsTask, courseDetailsTask);
                 }
 
                 populatedPayments.AddRange(paymentDetails);
